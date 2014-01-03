@@ -9,16 +9,20 @@ type KeyValuePair struct {
 	Value     string
 }
 
-type Dictionary map[string]*KeyValuePair
+type Dictionary struct {
+	m map[string]*KeyValuePair
+}
 
-func NewDictionary() Dictionary {
-	return make(Dictionary)
+func NewDictionary() *Dictionary {
+	this := new(Dictionary)
+	this.m = make(map[string]*KeyValuePair)
+	return this
 }
 
 func (this *Dictionary) Get(key string) string {
 	lower_key := strings.ToLower(key)
 
-	node, ok := (*this)[lower_key]
+	node, ok := this.m[lower_key]
 	if ok {
 		return node.Value
 	} else {
@@ -27,7 +31,7 @@ func (this *Dictionary) Get(key string) string {
 }
 
 func (this *Dictionary) Remove(key string) {
-	delete(*this,strings.ToLower(key))
+	delete(this.m,strings.ToLower(key))
 }
 
 func (this *Dictionary) Set(key string, value string) {
@@ -39,18 +43,18 @@ func (this *Dictionary) Set(key string, value string) {
 	tmp.Key = key
 	tmp.Lower_key = strings.ToLower(key)
 	tmp.Value = value
-	(*this)[tmp.Lower_key] = tmp
+	this.m[tmp.Lower_key] = tmp
 }
 
 func (this *Dictionary) Iter() chan *KeyValuePair {
 	ch := make(chan *KeyValuePair, 0)
-	go func(this *Dictionary) {
-		for _, pair := range *this {
+	go func() {
+		for _, pair := range this.m {
 			ch <- pair
 		}
 		close(ch)
 		return
-	}(this)
+	}()
 	return ch
 }
 
@@ -72,7 +76,7 @@ func (this *KeyValueList) Swap(i, j int) {
 
 func (this *Dictionary) ToArray() []KeyValuePair {
 	list := []KeyValuePair{}
-	for _, pair := range *this {
+	for _, pair := range this.m {
 		list = append(list, *pair)
 	}
 	return list
