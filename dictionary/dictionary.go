@@ -31,7 +31,7 @@ func (this *Dictionary) Get(key string) string {
 }
 
 func (this *Dictionary) Remove(key string) {
-	delete(this.m,strings.ToLower(key))
+	delete(this.m, strings.ToLower(key))
 }
 
 func (this *Dictionary) Set(key string, value string) {
