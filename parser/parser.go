@@ -14,6 +14,29 @@ type StatementT struct {
 	term     string
 }
 
+var prefix[]string = []string{ " 0<"," 1>"," 2>" }
+
+func (this*StatementT)String()string{
+	var buffer bytes.Buffer
+	for _,arg := range this.argv {
+		buffer.WriteRune('[')
+		buffer.WriteString(arg)
+		buffer.WriteRune(']')
+	}
+	for i:=0;i<len(prefix);i++ {
+		if len(this.redirect[i].path) > 0 {
+			buffer.WriteString(prefix[i])
+			buffer.WriteString("[")
+			buffer.WriteString(this.redirect[i].path)
+			buffer.WriteString("]")
+		}
+	}
+	buffer.WriteString(" ")
+	buffer.WriteString(this.term)
+	return buffer.String()
+}
+
+
 func chomp(buffer *bytes.Buffer) {
 	original := buffer.String()
 	buffer.Reset()
@@ -90,7 +113,7 @@ const (
 	WORD_STDERR = 2
 )
 
-func Parse(text string) []StatementT {
+func Parse1(text string) []StatementT {
 	isQuoted := false
 	statements := make([]StatementT, 0)
 	argv := make([]string, 0)
@@ -159,4 +182,16 @@ func Parse(text string) []StatementT {
 	}
 	terminate(&statements, &nextword, &redirect, &buffer, &argv, " ")
 	return statements
+}
+
+func Parse2(statements[]StatementT) [][]StatementT {
+	result := make([][]StatementT,1)
+	result[0] = make([]StatementT,0)
+	for _,statement1 := range statements {
+		result[len(result)-1] = append(result[len(result)-1],statement1)
+		if statement1.term != "|" {
+			result = append(result,make([]StatementT,0))
+		}
+	}
+	return result
 }
