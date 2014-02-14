@@ -7,8 +7,8 @@ import "./interpreter"
 func main() {
 	for {
 		fmt.Print("$ ")
-		line := conio.ReadLine()
-		if line == "exit" {
+		line,cont := conio.ReadLine()
+		if line == "exit" || cont == conio.ABORT {
 			break
 		}
 		// fmt.Println(line)

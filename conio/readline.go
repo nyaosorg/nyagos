@@ -213,10 +213,18 @@ func KeyFuncBackSpace(this *ReadLineBuffer) KeyFuncResult { // Backspace
 	return CONTINUE
 }
 
-func KeyFuncDelete(this *ReadLineBuffer) KeyFuncResult { // Ctrl-D
+func KeyFuncDelete(this *ReadLineBuffer) KeyFuncResult { // Del
 	delw := this.Delete(this.cursor, 1)
 	this.Repaint(this.cursor, delw)
 	return CONTINUE
+}
+
+func KeyFuncDeleteOrAbort(this *ReadLineBuffer) KeyFuncResult { // Ctrl-D
+	if this.length > 0 {
+		return KeyFuncDelete(this)
+	} else {
+		return ABORT
+	}
 }
 
 func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
@@ -261,7 +269,7 @@ var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\x05': KeyFuncTail,
 	'\x06': KeyFuncForward,
 	'\b':   KeyFuncBackSpace,
-	'\x04': KeyFuncDelete,
+	'\x04': KeyFuncDeleteOrAbort,
 	'\x7F': KeyFuncDelete,
 }
 
@@ -285,7 +293,7 @@ var ZeroMap = map[uint16]func(*ReadLineBuffer) KeyFuncResult{
 	K_SHIFT: KeyFuncPass,
 }
 
-func ReadLine() string {
+func ReadLine() (string, KeyFuncResult) {
 	var this ReadLineBuffer
 	this.buffer = make([]rune, 20)
 	this.length = 0
@@ -309,9 +317,9 @@ func ReadLine() string {
 			}
 		}
 		rc := f(&this)
-		if rc == ENTER {
+		if rc != CONTINUE {
 			fmt.Print("\n")
-			return this.String()
+			return this.String(), rc
 		}
 	}
 }

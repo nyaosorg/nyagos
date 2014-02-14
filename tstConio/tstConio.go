@@ -5,6 +5,7 @@ import "fmt"
 
 func main() {
 	fmt.Print("conio.ReadLine>")
-	result := conio.ReadLine()
-	fmt.Println("Result=" + result)
+	result, rc := conio.ReadLine()
+	fmt.Println("Result=", result)
+	fmt.Println("Rc=", rc)
 }
