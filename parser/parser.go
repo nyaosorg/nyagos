@@ -3,36 +3,36 @@ package parser
 import "bytes"
 
 type RedirectT struct {
-	path     string
-	isAppend bool
+	Path     string
+	IsAppend bool
 }
 
 type StatementT struct {
-	argv     []string
-	redirect [3]RedirectT
-	isAppend [3]bool
-	term     string
+	Argv     []string
+	Redirect [3]RedirectT
+	IsAppend [3]bool
+	Term     string
 }
 
 var prefix []string = []string{" 0<", " 1>", " 2>"}
 
 func (this StatementT) String() string {
 	var buffer bytes.Buffer
-	for _, arg := range this.argv {
+	for _, arg := range this.Argv {
 		buffer.WriteRune('[')
 		buffer.WriteString(arg)
 		buffer.WriteRune(']')
 	}
 	for i := 0; i < len(prefix); i++ {
-		if len(this.redirect[i].path) > 0 {
+		if len(this.Redirect[i].Path) > 0 {
 			buffer.WriteString(prefix[i])
 			buffer.WriteString("[")
-			buffer.WriteString(this.redirect[i].path)
+			buffer.WriteString(this.Redirect[i].Path)
 			buffer.WriteString("]")
 		}
 	}
 	buffer.WriteString(" ")
-	buffer.WriteString(this.term)
+	buffer.WriteString(this.Term)
 	return buffer.String()
 }
 
@@ -81,27 +81,27 @@ func terminate(statements *[]StatementT,
 	var statement1 StatementT
 	if buffer.Len() > 0 {
 		if *nextword == WORD_ARGV {
-			statement1.argv = append(*argv, dequote(buffer))
+			statement1.Argv = append(*argv, dequote(buffer))
 		} else {
-			statement1.argv = *argv
-			(*redirect)[*nextword].path = dequote(buffer)
+			statement1.Argv = *argv
+			(*redirect)[*nextword].Path = dequote(buffer)
 			*nextword = WORD_ARGV
 		}
 		buffer.Reset()
 	} else {
-		statement1.argv = *argv
+		statement1.Argv = *argv
 	}
-	statement1.redirect[0] = redirect[0]
-	statement1.redirect[1] = redirect[1]
-	statement1.redirect[2] = redirect[2]
-	redirect[0].path = ""
-	redirect[0].isAppend = false
-	redirect[1].path = ""
-	redirect[1].isAppend = false
-	redirect[2].path = ""
-	redirect[2].isAppend = false
+	statement1.Redirect[0] = redirect[0]
+	statement1.Redirect[1] = redirect[1]
+	statement1.Redirect[2] = redirect[2]
+	redirect[0].Path = ""
+	redirect[0].IsAppend = false
+	redirect[1].Path = ""
+	redirect[1].IsAppend = false
+	redirect[2].Path = ""
+	redirect[2].IsAppend = false
 	*argv = make([]string, 0)
-	statement1.term = term
+	statement1.Term = term
 	*statements = append(*statements, statement1)
 }
 
@@ -133,7 +133,7 @@ func Parse1(text string) []StatementT {
 					if nextword == WORD_ARGV {
 						argv = append(argv, dequote(&buffer))
 					} else {
-						redirect[nextword].path = dequote(&buffer)
+						redirect[nextword].Path = dequote(&buffer)
 					}
 					buffer.Reset()
 					nextword = WORD_ARGV
@@ -142,13 +142,13 @@ func Parse1(text string) []StatementT {
 				terminate(&statements, &nextword, &redirect, &buffer, &argv, ";")
 			} else if ch == '|' {
 				if lastchar == '|' {
-					statements[len(statements)-1].term = "||"
+					statements[len(statements)-1].Term = "||"
 				} else {
 					terminate(&statements, &nextword, &redirect, &buffer, &argv, "|")
 				}
 			} else if ch == '&' {
 				if lastchar == '&' {
-					statements[len(statements)-1].term = "&&"
+					statements[len(statements)-1].Term = "&&"
 				} else {
 					terminate(&statements, &nextword, &redirect, &buffer, &argv, "&")
 				}
@@ -156,22 +156,22 @@ func Parse1(text string) []StatementT {
 				if lastchar == '1' {
 					chomp(&buffer)
 					nextword = WORD_STDOUT
-					redirect[1].isAppend = false
+					redirect[1].IsAppend = false
 					lastredirected = 1
 				} else if lastchar == '2' {
 					chomp(&buffer)
 					nextword = WORD_STDERR
-					redirect[2].isAppend = false
+					redirect[2].IsAppend = false
 					lastredirected = 2
 				} else if lastchar == '>' && lastredirected >= 0 {
-					redirect[lastredirected].isAppend = true
+					redirect[lastredirected].IsAppend = true
 				} else {
 					nextword = WORD_STDOUT
 					lastredirected = 1
 				}
 			} else if ch == '<' {
 				nextword = WORD_STDIN
-				redirect[0].isAppend = false
+				redirect[0].IsAppend = false
 				lastredirected = 0
 			} else {
 				buffer.WriteRune(ch)
@@ -187,7 +187,7 @@ func Parse2(statements []StatementT) [][]StatementT {
 	result := make([][]StatementT, 1)
 	for _, statement1 := range statements {
 		result[len(result)-1] = append(result[len(result)-1], statement1)
-		if statement1.term != "|" {
+		if statement1.Term != "|" {
 			result = append(result, make([]StatementT, 0))
 		}
 	}
