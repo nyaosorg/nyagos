@@ -186,12 +186,14 @@ func Parse1(text string) []StatementT {
 
 func Parse2(statements[]StatementT) [][]StatementT {
 	result := make([][]StatementT,1)
-	result[0] = make([]StatementT,0)
 	for _,statement1 := range statements {
 		result[len(result)-1] = append(result[len(result)-1],statement1)
 		if statement1.term != "|" {
 			result = append(result,make([]StatementT,0))
 		}
+	}
+	if len(result[ len(result)-1 ]) <= 0 {
+		result = result[0:len(result)-1]
 	}
 	return result
 }
