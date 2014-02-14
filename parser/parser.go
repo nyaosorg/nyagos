@@ -14,16 +14,16 @@ type StatementT struct {
 	term     string
 }
 
-var prefix[]string = []string{ " 0<"," 1>"," 2>" }
+var prefix []string = []string{" 0<", " 1>", " 2>"}
 
-func (this StatementT)String()string{
+func (this StatementT) String() string {
 	var buffer bytes.Buffer
-	for _,arg := range this.argv {
+	for _, arg := range this.argv {
 		buffer.WriteRune('[')
 		buffer.WriteString(arg)
 		buffer.WriteRune(']')
 	}
-	for i:=0;i<len(prefix);i++ {
+	for i := 0; i < len(prefix); i++ {
 		if len(this.redirect[i].path) > 0 {
 			buffer.WriteString(prefix[i])
 			buffer.WriteString("[")
@@ -183,16 +183,22 @@ func Parse1(text string) []StatementT {
 	return statements
 }
 
-func Parse2(statements[]StatementT) [][]StatementT {
-	result := make([][]StatementT,1)
-	for _,statement1 := range statements {
-		result[len(result)-1] = append(result[len(result)-1],statement1)
+func Parse2(statements []StatementT) [][]StatementT {
+	result := make([][]StatementT, 1)
+	for _, statement1 := range statements {
+		result[len(result)-1] = append(result[len(result)-1], statement1)
 		if statement1.term != "|" {
-			result = append(result,make([]StatementT,0))
+			result = append(result, make([]StatementT, 0))
 		}
 	}
-	if len(result[ len(result)-1 ]) <= 0 {
-		result = result[0:len(result)-1]
+	if len(result[len(result)-1]) <= 0 {
+		result = result[0 : len(result)-1]
 	}
 	return result
+}
+
+func Parse(text string) [][]StatementT {
+	result1 := Parse1(text)
+	result2 := Parse2(result1)
+	return result2
 }
