@@ -16,7 +16,7 @@ type StatementT struct {
 
 var prefix[]string = []string{ " 0<"," 1>"," 2>" }
 
-func (this*StatementT)String()string{
+func (this StatementT)String()string{
 	var buffer bytes.Buffer
 	for _,arg := range this.argv {
 		buffer.WriteRune('[')
@@ -35,7 +35,6 @@ func (this*StatementT)String()string{
 	buffer.WriteString(this.term)
 	return buffer.String()
 }
-
 
 func chomp(buffer *bytes.Buffer) {
 	original := buffer.String()
