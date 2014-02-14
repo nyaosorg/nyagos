@@ -88,7 +88,9 @@ func terminate(statements *[]StatementT,
 			*nextword = WORD_ARGV
 		}
 		buffer.Reset()
-	} else {
+	} else if len(*argv) <= 0 {
+		return
+	}else{
 		statement1.Argv = *argv
 	}
 	statement1.Redirect[0] = redirect[0]
