@@ -15,7 +15,7 @@ func TestParser(t *testing.T) {
 	}
 	result = Parse("")
 	fmt.Println("<empty-line>")
-	for i , st := range result {
+	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
 		for _, stsub := range st {
 			fmt.Printf("  %s\n", stsub)
