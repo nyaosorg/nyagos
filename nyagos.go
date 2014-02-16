@@ -4,6 +4,7 @@ import "fmt"
 import "os/exec"
 import "./conio"
 import "./interpreter"
+import "./completion"
 
 func hook(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
 	if cmd.Args[0] == "exit" {
@@ -14,6 +15,7 @@ func hook(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error
 }
 
 func main() {
+	conio.KeyMap['\t'] = completion.KeyFuncCompletion
 	for {
 		fmt.Print("$ ")
 		line, cont := conio.ReadLine()

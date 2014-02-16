@@ -14,7 +14,7 @@ func getCharWidth(n rune) int {
 	//}
 }
 
-func putRep(ch rune, n int) {
+func PutRep(ch rune, n int) {
 	for i := 0; i < n; i++ {
 		fmt.Printf("%c", ch)
 	}
@@ -48,9 +48,9 @@ func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
 }
 
 func (this *ReadLineBuffer) InsertString(pos int, s string) int {
-	list := make([]rune, len(s))
-	for i, r := range s {
-		list[i] = r
+	list := make([]rune, 0)
+	for _, r := range s {
+		list = append(list, r)
 	}
 	if this.Insert(pos, list) {
 		return len(list)
@@ -74,6 +74,25 @@ func (this *ReadLineBuffer) Delete(pos int, n int) int {
 	return delw
 }
 
+func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
+	n := this.Cursor - pos
+	this.Delete(pos, n)
+	this.InsertString(pos, str)
+	var start int
+	if pos < this.ViewStart {
+		PutRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
+		start = this.ViewStart
+	} else {
+		PutRep('\b', this.getWidthBetween(pos, this.Cursor))
+		start = pos
+	}
+	for this.getWidthBetween(start, this.Cursor) > this.ViewWidth {
+		start++
+		this.ViewStart = start
+	}
+	this.Repaint(start, 0)
+}
+
 func (this *ReadLineBuffer) getWidthBetween(from int, to int) int {
 	width := 0
 	for i := from; i < to; i++ {
@@ -92,11 +111,21 @@ func (this *ReadLineBuffer) Repaint(pos int, del int) {
 		if vp >= this.ViewWidth {
 			break
 		}
-		putRep(this.Buffer[i], 1)
+		PutRep(this.Buffer[i], 1)
 		bs += w1
 	}
-	putRep(' ', del)
-	putRep('\b', bs+del)
+	PutRep(' ', del)
+	PutRep('\b', bs+del)
+}
+
+func (this *ReadLineBuffer) RepaintAll(header string) {
+	for _, ch := range header {
+		PutRep(ch, 1)
+	}
+	for i := this.ViewStart; i < this.Cursor; i++ {
+		PutRep(this.Buffer[i], 1)
+	}
+	this.Repaint(this.Cursor, 0)
 }
 
 func (this ReadLineBuffer) String() string {
@@ -105,6 +134,37 @@ func (this ReadLineBuffer) String() string {
 		result.WriteRune(this.Buffer[i])
 	}
 	return result.String()
+}
+
+func (this *ReadLineBuffer) CurrentWordTop() (wordTop int) {
+	wordTop = -1
+	isQuoted := false
+	for i := 0; i < this.Cursor; i++ {
+		if this.Buffer[i] == '"' {
+			isQuoted = !isQuoted
+		}
+		if this.Buffer[i] == ' ' && !isQuoted {
+			wordTop = -1
+		} else if wordTop < 0 {
+			wordTop = i
+		}
+	}
+	if wordTop < 0 {
+		return this.Cursor
+	} else {
+		return wordTop
+	}
+}
+
+func (this *ReadLineBuffer) CurrentWord() (string, int) {
+	var buffer bytes.Buffer
+	start := this.CurrentWordTop()
+	for i := start; i < this.Cursor; i++ {
+		if this.Buffer[i] != '"' {
+			buffer.WriteRune(this.Buffer[i])
+		}
+	}
+	return buffer.String(), start
 }
 
 type KeyFuncResult int
@@ -124,7 +184,7 @@ func KeyFuncEnter(this *ReadLineBuffer) KeyFuncResult { // Ctrl-M
 }
 
 func KeyFuncHead(this *ReadLineBuffer) KeyFuncResult { // Ctrl-A
-	putRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
+	PutRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0
 	this.ViewStart = 0
 	this.Repaint(0, 1)
@@ -140,7 +200,7 @@ func KeyFuncBackword(this *ReadLineBuffer) KeyFuncResult { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		putRep('\b', getCharWidth(this.Buffer[this.Cursor]))
+		PutRep('\b', getCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -149,11 +209,11 @@ func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
 	allength := this.getWidthBetween(this.ViewStart, this.Length)
 	if allength < this.ViewWidth {
 		for ; this.Cursor < this.Length; this.Cursor++ {
-			putRep(this.Buffer[this.Cursor], 1)
+			PutRep(this.Buffer[this.Cursor], 1)
 		}
 	} else {
-		putRep('\a', 1)
-		putRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
+		PutRep('\a', 1)
+		PutRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := getCharWidth(this.Buffer[this.ViewStart])
 		for {
@@ -168,7 +228,7 @@ func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
 			this.ViewStart--
 		}
 		for this.Cursor = this.ViewStart; this.Cursor < this.Length; this.Cursor++ {
-			putRep(this.Buffer[this.Cursor], 1)
+			PutRep(this.Buffer[this.Cursor], 1)
 		}
 	}
 	return CONTINUE
@@ -181,19 +241,19 @@ func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
 	w := this.getWidthBetween(this.ViewStart, this.Cursor+1)
 	if w < this.ViewWidth {
 		// No Scroll
-		putRep(this.Buffer[this.Cursor], 1)
+		PutRep(this.Buffer[this.Cursor], 1)
 	} else {
 		// Right Scroll
-		putRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
+		PutRep('\b', this.getWidthBetween(this.ViewStart, this.Cursor))
 		if getCharWidth(this.Buffer[this.Cursor]) > getCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
 		this.ViewStart++
 		for i := this.ViewStart; i <= this.Cursor; i++ {
-			putRep(this.Buffer[i], 1)
+			PutRep(this.Buffer[i], 1)
 		}
-		putRep(' ', 1)
-		putRep('\b', 1)
+		PutRep(' ', 1)
+		PutRep('\b', 1)
 	}
 	this.Cursor++
 	return CONTINUE
@@ -204,7 +264,7 @@ func KeyFuncBackSpace(this *ReadLineBuffer) KeyFuncResult { // Backspace
 		this.Cursor--
 		delw := this.Delete(this.Cursor, 1)
 		if this.Cursor >= this.ViewStart {
-			putRep('\b', delw)
+			PutRep('\b', delw)
 		} else {
 			this.ViewStart = this.Cursor
 		}
@@ -236,16 +296,16 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 	w1 := getCharWidth(ch)
 	if w+w1 >= this.ViewWidth {
 		// scroll left
-		putRep('\b', w)
+		PutRep('\b', w)
 		if getCharWidth(this.Buffer[this.ViewStart]) < w1 {
 			this.ViewStart++
 		}
 		this.ViewStart++
 		for i := this.ViewStart; i <= this.Cursor; i++ {
-			putRep(this.Buffer[i], 1)
+			PutRep(this.Buffer[i], 1)
 		}
-		putRep(' ', 1)
-		putRep('\b', 1)
+		PutRep(' ', 1)
+		PutRep('\b', 1)
 	} else {
 		this.Repaint(this.Cursor, -w1)
 	}
