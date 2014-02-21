@@ -45,7 +45,7 @@ func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 }
 
 func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
-	str, pos := this.CurrentWord()
+	str, wordStart := this.CurrentWord()
 	list, err := listUpFiles(str)
 	if err == nil {
 		if len(list) == 1 {
@@ -57,11 +57,7 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 				buffer.WriteRune('"')
 				str = buffer.String()
 			}
-			this.ReplaceAndRepaint(pos, str)
-			for _, ch := range str {
-				conio.PutRep(ch, 1)
-				this.Cursor++
-			}
+			this.ReplaceAndRepaint(wordStart,str)
 		} else {
 			return KeyFuncCompletionList(this)
 		}
