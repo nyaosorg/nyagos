@@ -19,6 +19,13 @@ func listUpFiles(str string) ([]string, error) {
 	} else {
 		directory = path.Dir(str)
 	}
+	cutprefix := 0
+	if strings.HasPrefix(directory,"/") {
+		wd,_ := os.Getwd()
+		directory = wd[0:2] + directory
+		cutprefix = 2
+	}
+
 	fd, err := os.Open(directory)
 	if err != nil {
 		return nil, err
@@ -34,6 +41,9 @@ func listUpFiles(str string) ([]string, error) {
 		name := path.Join(directory, node1.Name())
 		if node1.IsDir() {
 			name += "/"
+		}
+		if cutprefix > 0 {
+			name = name[2:]
 		}
 		NAME := strings.ToUpper(name)
 		if strings.HasPrefix(NAME, STR) {
