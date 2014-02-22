@@ -15,6 +15,9 @@ func Print(nodes []string, width int, out io.Writer) {
 		}
 	}
 	nodePerLine := (width - 1) / (maxLen + 1)
+	if nodePerLine <= 0 {
+		nodePerLine = 1
+	}
 	nlines := (len(nodes) + nodePerLine - 1) / nodePerLine
 
 	lines := make([]bytes.Buffer, nlines)
