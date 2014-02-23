@@ -1,18 +1,11 @@
 package main
 
 import "fmt"
-import "os/exec"
-import "./conio"
-import "./interpreter"
-import "./completion"
 
-func hook(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
-	if cmd.Args[0] == "exit" {
-		return interpreter.SHUTDOWN, nil
-	} else {
-		return interpreter.THROUGH, nil
-	}
-}
+import "./completion"
+import "./conio"
+import "./internalcmd"
+import "./interpreter"
 
 func main() {
 	conio.KeyMap['\t'] = completion.KeyFuncCompletion
@@ -22,7 +15,7 @@ func main() {
 		if cont == conio.ABORT {
 			break
 		}
-		whatToDo, err := interpreter.Interpret(line, hook)
+		whatToDo, err := interpreter.Interpret(line, internalcmd.Exec)
 		if err != nil {
 			fmt.Println(err)
 		}
