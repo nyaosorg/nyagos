@@ -1,7 +1,10 @@
 package conio
 
+import "bufio"
 import "bytes"
 import "fmt"
+import "os"
+import "unicode"
 
 import "github.com/mattn/go-runewidth"
 
@@ -14,9 +17,11 @@ func getCharWidth(n rune) int {
 	//}
 }
 
+var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)
+
 func PutRep(ch rune, n int) {
 	for i := 0; i < n; i++ {
-		fmt.Printf("%c", ch)
+		stdOut.WriteRune(ch)
 	}
 }
 
@@ -143,7 +148,7 @@ func (this *ReadLineBuffer) CurrentWordTop() (wordTop int) {
 		if this.Buffer[i] == '"' {
 			isQuoted = !isQuoted
 		}
-		if this.Buffer[i] == ' ' && !isQuoted {
+		if unicode.IsSpace(this.Buffer[i]) && !isQuoted {
 			wordTop = -1
 		} else if wordTop < 0 {
 			wordTop = i
@@ -361,6 +366,7 @@ func ReadLine() (string, KeyFuncResult) {
 	this.ViewStart = 0
 	this.ViewWidth = 60
 	for {
+		stdOut.Flush()
 		this.Unicode, this.Keycode = GetKey()
 		var f func(*ReadLineBuffer) KeyFuncResult
 		var ok bool
@@ -378,7 +384,8 @@ func ReadLine() (string, KeyFuncResult) {
 		}
 		rc := f(&this)
 		if rc != CONTINUE {
-			fmt.Print("\n")
+			stdOut.WriteRune('\n')
+			stdOut.Flush()
 			return this.String(), rc
 		}
 	}
