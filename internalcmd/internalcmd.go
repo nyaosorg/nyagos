@@ -52,7 +52,12 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
-	function, ok := buildInCmd[strings.ToLower(cmd.Args[0])]
+	name := strings.ToLower(cmd.Args[0])
+	if len(name) == 2 && strings.HasSuffix(name,":") {
+		os.Chdir(name + ".")
+		return interpreter.CONTINUE, nil
+	}
+	function, ok := buildInCmd[name]
 	if ok {
 		return function(cmd), nil
 	} else {
