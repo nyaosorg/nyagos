@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "os"
 
 import "./completion"
 import "./conio"
@@ -10,7 +11,8 @@ import "./interpreter"
 func main() {
 	conio.KeyMap['\t'] = completion.KeyFuncCompletion
 	for {
-		fmt.Print("$ ")
+		wd, _ := os.Getwd()
+		fmt.Printf("[%s]\n$ ", wd)
 		line, cont := conio.ReadLine()
 		if cont == conio.ABORT {
 			break
