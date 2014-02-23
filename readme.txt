@@ -1,3 +1,4 @@
-The Nihongo Yet Another <Go!> Open Shell is under construction.
+The Nihongo Yet Another GOing Shell is under construction.
 
-Now, we are programming libraries for NYAGOS.
+How to get source :
+    git clone https://github.com/zetamatta/nyagos nyagos
