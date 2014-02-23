@@ -20,8 +20,8 @@ func listUpFiles(str string) ([]string, error) {
 		directory = path.Dir(str)
 	}
 	cutprefix := 0
-	if strings.HasPrefix(directory,"/") {
-		wd,_ := os.Getwd()
+	if strings.HasPrefix(directory, "/") {
+		wd, _ := os.Getwd()
 		directory = wd[0:2] + directory
 		cutprefix = 2
 	}
@@ -123,7 +123,7 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		}
 		commonStr = buffer.String()
 	}
-	if len(list) == 1 && ! strings.HasSuffix(commonStr,"/") && ! strings.HasSuffix(commonStr,"/\"") {
+	if len(list) == 1 && !strings.HasSuffix(commonStr, "/") && !strings.HasSuffix(commonStr, "/\"") {
 		commonStr += " "
 	}
 	if slashToBackSlash {
