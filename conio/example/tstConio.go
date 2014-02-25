@@ -1,6 +1,6 @@
 package main
 
-import "../conio"
+import "../../conio"
 import "fmt"
 
 func main() {
