@@ -8,8 +8,15 @@ import "unicode"
 
 import "github.com/mattn/go-runewidth"
 
+var widthCache = make(map[rune]int)
+
 func getCharWidth(n rune) int {
-	return runewidth.RuneWidth(n)
+	width, ok := widthCache[n]
+	if !ok {
+		width = runewidth.RuneWidth(n)
+		widthCache[n] = width
+	}
+	return width
 	// if n > 0xFF {
 	//	return 2;
 	//}else{
@@ -124,6 +131,7 @@ func (this *ReadLineBuffer) Repaint(pos int, del int) {
 }
 
 func (this *ReadLineBuffer) RepaintAll(header string) {
+	PutRep('\r', 1)
 	for _, ch := range header {
 		PutRep(ch, 1)
 	}
@@ -327,15 +335,45 @@ func KeyFuncInsertReport(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
+func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
+	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
+	i := this.Cursor
+	bs := 0
+	for i < this.Length && w < this.ViewWidth {
+		w1 := getCharWidth(this.Buffer[i])
+		PutRep(' ', w1)
+		i++
+		w += w1
+		bs += w1
+	}
+	PutRep('\b', bs)
+	this.Length = this.Cursor
+	return CONTINUE
+}
+
+func KeyFuncClear(this *ReadLineBuffer) KeyFuncResult {
+	KeyFuncClearAfter(this)
+	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
+	PutRep('\b', width)
+	PutRep(' ', width)
+	PutRep('\b', width)
+	this.Length = 0
+	this.Cursor = 0
+	this.ViewStart = 0
+	return CONTINUE
+}
+
 var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
-	'\r':   KeyFuncEnter,
-	'\x01': KeyFuncHead,
-	'\x02': KeyFuncBackword,
-	'\x05': KeyFuncTail,
-	'\x06': KeyFuncForward,
-	'\b':   KeyFuncBackSpace,
-	'\x04': KeyFuncDeleteOrAbort,
-	'\x7F': KeyFuncDelete,
+	'\r':         KeyFuncEnter,
+	'\x01':       KeyFuncHead,
+	'\x02':       KeyFuncBackword,
+	'\x05':       KeyFuncTail,
+	'\x06':       KeyFuncForward,
+	'\b':         KeyFuncBackSpace,
+	'\x04':       KeyFuncDeleteOrAbort,
+	'\x7F':       KeyFuncDelete,
+	('K' & 0x1F): KeyFuncClearAfter,
+	'\x1B':       KeyFuncClear,
 }
 
 const (
