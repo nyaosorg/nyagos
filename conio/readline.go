@@ -376,6 +376,8 @@ var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\x1B':       KeyFuncClear,
 }
 
+// KeyCode from
+// http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 const (
 	K_LEFT  = 0x25
 	K_RIGHT = 0x27
@@ -384,6 +386,8 @@ const (
 	K_END   = 0x23
 	K_CTRL  = 0x11
 	K_SHIFT = 0x10
+	K_UP    = 0x26
+	K_DOWN  = 0x28
 )
 
 var ZeroMap = map[uint16]func(*ReadLineBuffer) KeyFuncResult{
