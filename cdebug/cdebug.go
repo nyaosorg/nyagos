@@ -7,7 +7,7 @@ import "strings"
 var logDir string = ""
 var w *os.File = nil
 
-func prints(arg0 string, args []string) {
+func prints(args []string) {
 	if logDir == "" {
 		logDir = filepath.Join(filepath.ToSlash(os.TempDir()), "DEBUG")
 		fi, ok := os.Stat(logDir)
@@ -26,22 +26,21 @@ func prints(arg0 string, args []string) {
 		}
 	}
 	if w != nil {
-		w.WriteString(arg0)
-		for _, v := range args {
-			w.WriteString(" ")
-			w.WriteString(v)
-		}
+		w.WriteString( strings.Join(args," ") )
+	}
+}
+
+func Print(args ...string) {
+	prints(args)
+	if w != nil {
 		w.Sync()
 	}
 }
 
-func Print(arg0 string, args ...string) {
-	prints(arg0, args)
-}
-
-func Println(arg0 string, args ...string) {
-	prints(arg0, args)
+func Println(args ...string) {
+	prints(args)
 	if w != nil {
 		w.WriteString("\n")
+		w.Sync()
 	}
 }
