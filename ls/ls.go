@@ -15,13 +15,16 @@ var exeSuffixes = map[string]bool{
 }
 
 const (
-	STRIP_DIR = 1
-	LONG      = 2
+	O_STRIP_DIR = 1
+	O_LONG      = 2
+	O_INDICATOR = 4
 )
 
 func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
+	indicator := " "
 	if status.IsDir() {
 		io.WriteString(out, "d")
+		indicator = "/"
 	} else {
 		io.WriteString(out, "-")
 	}
@@ -38,15 +41,22 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	} else {
 		io.WriteString(out, "-")
 	}
-	if (perm&1) > 0 || exeSuffixes[strings.ToLower(path.Ext(name))] {
+	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
+	} else if exeSuffixes[strings.ToLower(path.Ext(name))] {
+		io.WriteString(out, "x")
+		indicator = "*"
 	} else {
 		io.WriteString(out, "-")
 	}
-	if (flag & STRIP_DIR) > 0 {
+	if (flag & O_STRIP_DIR) > 0 {
 		name = path.Base(name)
 	}
-	io.WriteString(out, fmt.Sprintf("%7d %s\n", status.Size(), name))
+	io.WriteString(out, fmt.Sprintf("%7d %s", status.Size(), name))
+	if (flag & O_INDICATOR) != 0 {
+		io.WriteString(out, indicator)
+	}
+	io.WriteString(out, "\n")
 }
 
 func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
@@ -59,7 +69,7 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 
 func lsLong(nodes []os.FileInfo, flag int, out io.Writer) {
 	for _, finfo := range nodes {
-		lsOneLong(finfo, STRIP_DIR, out)
+		lsOneLong(finfo, O_STRIP_DIR|flag, out)
 	}
 }
 
@@ -90,7 +100,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	if err != nil {
 		return err
 	}
-	if (flag & LONG) > 0 {
+	if (flag & O_LONG) > 0 {
 		lsLong(nodesArray.nodes, flag, out)
 	} else {
 		lsBox(nodesArray.nodes, flag, out)
@@ -135,7 +145,11 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 
 var option = map[rune](func(*int) error){
 	'l': func(flag *int) error {
-		*flag |= LONG
+		*flag |= O_LONG
+		return nil
+	},
+	'F': func(flag *int) error {
+		*flag |= O_INDICATOR
 		return nil
 	},
 }
