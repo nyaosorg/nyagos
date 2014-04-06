@@ -5,7 +5,7 @@ import "os"
 
 import "./completion"
 import "./conio"
-import "./internalcmd"
+import "./builtincmd"
 import "./interpreter"
 import "./history"
 
@@ -23,7 +23,7 @@ func main() {
 			break
 		}
 		history.Push(line)
-		whatToDo, err := interpreter.Interpret(line, internalcmd.Exec)
+		whatToDo, err := interpreter.Interpret(line, builtincmd.Exec)
 		if err != nil {
 			fmt.Println(err)
 		}

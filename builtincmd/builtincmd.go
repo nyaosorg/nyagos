@@ -1,4 +1,4 @@
-package internalcmd
+package builtincmd
 
 import "io"
 import "os"
