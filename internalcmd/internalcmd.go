@@ -6,6 +6,7 @@ import "os/exec"
 import "strings"
 
 import "../interpreter"
+import "../ls"
 
 func cmd_exit(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.SHUTDOWN
@@ -46,14 +47,20 @@ func cmd_cd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return cmd_pwd(cmd)
 }
 
+func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	ls.Main(cmd.Args[1:], cmd.Stdout)
+	return interpreter.CONTINUE
+}
+
 var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	"cd":   cmd_cd,
 	"exit": cmd_exit,
+	"ls":   cmd_ls,
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
 	name := strings.ToLower(cmd.Args[0])
-	if len(name) == 2 && strings.HasSuffix(name,":") {
+	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		os.Chdir(name + ".")
 		return interpreter.CONTINUE, nil
 	}
