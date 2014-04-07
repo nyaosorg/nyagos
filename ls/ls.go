@@ -5,6 +5,8 @@ import "io"
 import "os"
 import "path"
 import "strings"
+import "time"
+
 import "../box"
 
 var exeSuffixes = map[string]bool{
@@ -19,6 +21,25 @@ const (
 	O_LONG      = 2
 	O_INDICATOR = 4
 )
+
+type fileInfoT struct {
+	name string
+	info os.FileInfo
+}
+
+func (this fileInfoT) Name() string       { return this.name }
+func (this fileInfoT) Size() int64        { return this.info.Size() }
+func (this fileInfoT) Mode() os.FileMode  { return this.info.Mode() }
+func (this fileInfoT) ModTime() time.Time { return this.info.ModTime() }
+func (this fileInfoT) IsDir() bool        { return this.info.IsDir() }
+func (this fileInfoT) Sys() interface{}   { return this.info.Sys() }
+
+func newMyFileInfoT(name string, info os.FileInfo) *fileInfoT {
+	this := new(fileInfoT)
+	this.name = name
+	this.info = info
+	return this
+}
 
 func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	indicator := " "
@@ -53,7 +74,7 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 		name = path.Base(name)
 	}
 	io.WriteString(out, fmt.Sprintf("%7d %s", status.Size(), name))
-	if (flag & O_INDICATOR) != 0 {
+	if (flag & O_INDICATOR) > 0 {
 		io.WriteString(out, indicator)
 	}
 	io.WriteString(out, "\n")
@@ -69,21 +90,21 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 
 func lsLong(nodes []os.FileInfo, flag int, out io.Writer) {
 	for _, finfo := range nodes {
-		lsOneLong(finfo, O_STRIP_DIR|flag, out)
+		lsOneLong(finfo, flag, out)
 	}
 }
 
-type myFileInfo struct {
+type fileInfoCollection struct {
 	nodes []os.FileInfo
 }
 
-func (this *myFileInfo) Len() int {
+func (this *fileInfoCollection) Len() int {
 	return len(this.nodes)
 }
-func (this *myFileInfo) Less(i, j int) bool {
+func (this *fileInfoCollection) Less(i, j int) bool {
 	return this.nodes[i].Name() < this.nodes[j].Name()
 }
-func (this *myFileInfo) Swap(i, j int) {
+func (this *fileInfoCollection) Swap(i, j int) {
 	tmp := this.nodes[i]
 	this.nodes[i] = this.nodes[j]
 	this.nodes[j] = tmp
@@ -95,15 +116,15 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 		return err
 	}
 	defer fd.Close()
-	var nodesArray myFileInfo
+	var nodesArray fileInfoCollection
 	nodesArray.nodes, err = fd.Readdir(-1)
 	if err != nil {
 		return err
 	}
 	if (flag & O_LONG) > 0 {
-		lsLong(nodesArray.nodes, flag, out)
+		lsLong(nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
-		lsBox(nodesArray.nodes, flag, out)
+		lsBox(nodesArray.nodes, O_STRIP_DIR|flag, out)
 	}
 	return nil
 }
@@ -114,6 +135,7 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 	}
 	dirs := make([]string, 0)
 	printCount := 0
+	files := make([]os.FileInfo, 0)
 	for _, name := range paths {
 		status, err := os.Stat(name)
 		if err != nil {
@@ -121,10 +143,16 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 		}
 		if status.IsDir() {
 			dirs = append(dirs, name)
-		} else {
-			lsOneLong(status, flag, out)
+		} else if (flag & O_LONG) != 0 {
+			lsOneLong(newMyFileInfoT(name, status), flag, out)
 			printCount += 1
+		} else {
+			files = append(files, newMyFileInfoT(name, status))
 		}
+	}
+	if len(files) > 0 {
+		lsBox(files, flag, out)
+		printCount = len(files)
 	}
 	for _, name := range dirs {
 		if len(paths) > 1 {
