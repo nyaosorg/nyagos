@@ -32,6 +32,17 @@ func PutRep(ch rune, n int) {
 	}
 }
 
+func Backspace(n int) {
+	stdOut.Flush()
+	x, y := GetLocate()
+	Locate(x-n, y)
+}
+
+func shineCursor() {
+	x, y := GetLocate()
+	Locate(x, y)
+}
+
 type ReadLineBuffer struct {
 	Buffer    []rune
 	Length    int
@@ -91,9 +102,9 @@ func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 	this.Delete(pos, n)
 	this.InsertString(pos, str)
 	if pos < this.ViewStart {
-		PutRep('\b', this.GetWidthBetween(this.ViewStart, this.Cursor))
+		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	} else {
-		PutRep('\b', this.GetWidthBetween(pos, this.Cursor))
+		Backspace(this.GetWidthBetween(pos, this.Cursor))
 	}
 	this.Cursor = pos
 	for _, ch := range str {
@@ -127,7 +138,7 @@ func (this *ReadLineBuffer) Repaint(pos int, del int) {
 		bs += w1
 	}
 	PutRep(' ', del)
-	PutRep('\b', bs+del)
+	Backspace(bs + del)
 }
 
 func (this *ReadLineBuffer) RepaintAll(header string) {
@@ -197,7 +208,7 @@ func KeyFuncEnter(this *ReadLineBuffer) KeyFuncResult { // Ctrl-M
 }
 
 func KeyFuncHead(this *ReadLineBuffer) KeyFuncResult { // Ctrl-A
-	PutRep('\b', this.GetWidthBetween(this.ViewStart, this.Cursor))
+	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0
 	this.ViewStart = 0
 	this.Repaint(0, 1)
@@ -213,7 +224,7 @@ func KeyFuncBackword(this *ReadLineBuffer) KeyFuncResult { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		PutRep('\b', getCharWidth(this.Buffer[this.Cursor]))
+		Backspace(getCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -226,7 +237,7 @@ func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
 		}
 	} else {
 		PutRep('\a', 1)
-		PutRep('\b', this.GetWidthBetween(this.ViewStart, this.Cursor))
+		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := getCharWidth(this.Buffer[this.ViewStart])
 		for {
@@ -257,7 +268,7 @@ func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
 		PutRep(this.Buffer[this.Cursor], 1)
 	} else {
 		// Right Scroll
-		PutRep('\b', this.GetWidthBetween(this.ViewStart, this.Cursor))
+		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		if getCharWidth(this.Buffer[this.Cursor]) > getCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
@@ -266,7 +277,7 @@ func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
 			PutRep(this.Buffer[i], 1)
 		}
 		PutRep(' ', 1)
-		PutRep('\b', 1)
+		Backspace(1)
 	}
 	this.Cursor++
 	return CONTINUE
@@ -277,7 +288,7 @@ func KeyFuncBackSpace(this *ReadLineBuffer) KeyFuncResult { // Backspace
 		this.Cursor--
 		delw := this.Delete(this.Cursor, 1)
 		if this.Cursor >= this.ViewStart {
-			PutRep('\b', delw)
+			Backspace(delw)
 		} else {
 			this.ViewStart = this.Cursor
 		}
@@ -309,7 +320,7 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 	w1 := getCharWidth(ch)
 	if w+w1 >= this.ViewWidth {
 		// scroll left
-		PutRep('\b', w)
+		Backspace(w)
 		if getCharWidth(this.Buffer[this.ViewStart]) < w1 {
 			this.ViewStart++
 		}
@@ -318,7 +329,7 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 			PutRep(this.Buffer[i], 1)
 		}
 		PutRep(' ', 1)
-		PutRep('\b', 1)
+		Backspace(1)
 	} else {
 		this.Repaint(this.Cursor, -w1)
 	}
@@ -346,7 +357,7 @@ func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
 		w += w1
 		bs += w1
 	}
-	PutRep('\b', bs)
+	Backspace(bs)
 	this.Length = this.Cursor
 	return CONTINUE
 }
@@ -354,9 +365,9 @@ func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
 func KeyFuncClear(this *ReadLineBuffer) KeyFuncResult {
 	KeyFuncClearAfter(this)
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	PutRep('\b', width)
+	Backspace(width)
 	PutRep(' ', width)
-	PutRep('\b', width)
+	Backspace(width)
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -409,6 +420,7 @@ func ReadLine() (string, KeyFuncResult) {
 	this.ViewWidth = 60
 	for {
 		stdOut.Flush()
+		shineCursor()
 		this.Unicode, this.Keycode = GetKey()
 		var f func(*ReadLineBuffer) KeyFuncResult
 		var ok bool
