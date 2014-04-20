@@ -18,7 +18,7 @@ func GetLocate() (int, int) {
 	var x C.short
 	var y C.short
 	C.getLocate(hConout, &x, &y)
-	return int(x) & 0xFF, int(y) & 0xFF
+	return int(x), int(y)
 }
 
 func Locate(x, y int) {
