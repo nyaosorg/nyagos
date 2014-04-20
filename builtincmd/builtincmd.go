@@ -4,6 +4,7 @@ import "io"
 import "os"
 import "os/exec"
 import "strings"
+import "fmt"
 
 import "../interpreter"
 import "../ls"
@@ -52,10 +53,29 @@ func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
+func cmd_set(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	if len(cmd.Args) <= 1 {
+		for _, val := range os.Environ() {
+			fmt.Fprintf(cmd.Stdout, "%s\n", val)
+		}
+		return interpreter.CONTINUE
+	}
+	for _, arg := range cmd.Args[1:] {
+		eqlPos := strings.Index(arg, "=")
+		if eqlPos < 0 {
+			fmt.Fprintf(cmd.Stdout, "%s=%s\n", arg, os.Getenv(arg))
+		} else {
+			os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
+		}
+	}
+	return interpreter.CONTINUE
+}
+
 var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	"cd":   cmd_cd,
 	"exit": cmd_exit,
 	"ls":   cmd_ls,
+	"set":  cmd_set,
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
