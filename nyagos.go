@@ -23,7 +23,7 @@ func main() {
 			break
 		}
 		history.Push(line)
-		whatToDo, err := interpreter.Interpret(line, builtincmd.Exec)
+		whatToDo, err := interpreter.Interpret(line, builtincmd.Exec, nil)
 		if err != nil {
 			fmt.Println(err)
 		}

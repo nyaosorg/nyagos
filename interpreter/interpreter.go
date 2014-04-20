@@ -12,7 +12,7 @@ const (
 	SHUTDOWN WhatToDoAfterCmd = 2
 )
 
-func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToDoAfterCmd, error)) (WhatToDoAfterCmd, error) {
+func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToDoAfterCmd, error), stdio []*os.File) (WhatToDoAfterCmd, error) {
 	statements := parser.Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
@@ -22,9 +22,15 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToD
 			cmd.Args = state.Argv
 			cmd.Env = nil
 			cmd.Dir = ""
-			cmd.Stdout = os.Stdout
-			cmd.Stdin = os.Stdin
-			cmd.Stderr = os.Stderr
+			if stdio == nil {
+				cmd.Stdin = os.Stdin
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+			} else {
+				cmd.Stdin = stdio[0]
+				cmd.Stdout = stdio[1]
+				cmd.Stderr = stdio[2]
+			}
 			if pipeIn != nil {
 				cmd.Stdin = pipeIn
 				pipeIn = nil
