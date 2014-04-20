@@ -26,7 +26,7 @@ func prints(args []string) {
 		}
 	}
 	if w != nil {
-		w.WriteString( strings.Join(args," ") )
+		w.WriteString(strings.Join(args, " "))
 	}
 }
 
