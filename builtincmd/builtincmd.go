@@ -5,6 +5,9 @@ import "os"
 import "os/exec"
 import "strings"
 import "fmt"
+import "bytes"
+import "path/filepath"
+import "bufio"
 
 import "../interpreter"
 import "../ls"
@@ -71,11 +74,57 @@ func cmd_set(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
+func cmd_source(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	envTxtPath := filepath.Join(
+		os.TempDir(),
+		fmt.Sprintf("nyagos-%d.tmp", os.Getpid()))
+
+	var buffer bytes.Buffer
+
+	buffer.WriteString(cmd.Args[1])
+	buffer.WriteString(" & set > ")
+	buffer.WriteString(envTxtPath)
+
+	args := make([]string, 3)
+	args[0] = os.Getenv("COMSPEC")
+	args[1] = "/c"
+	args[2] = buffer.String()
+	var cmd2 exec.Cmd
+	cmd2.Path = args[0]
+	cmd2.Args = args
+	cmd2.Env = nil
+	cmd2.Dir = ""
+	err := cmd2.Run()
+	if err != nil {
+		fmt.Fprintf(cmd.Stderr, "%s\n", err.Error())
+	} else {
+		fp, err := os.Open(envTxtPath)
+		if err != nil {
+			fmt.Fprintf(cmd.Stderr, "%s\n", err.Error())
+			return interpreter.CONTINUE
+		}
+		defer os.Remove(envTxtPath)
+		defer fp.Close()
+
+		scr := bufio.NewScanner(fp)
+		for scr.Scan() {
+			line := scr.Text()
+			eqlPos := strings.Index(line, "=")
+			if eqlPos > 0 {
+				os.Setenv(line[:eqlPos], line[eqlPos+1:])
+			}
+		}
+	}
+	return interpreter.CONTINUE
+}
+
 var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
-	"cd":   cmd_cd,
-	"exit": cmd_exit,
-	"ls":   cmd_ls,
-	"set":  cmd_set,
+	"cd":     cmd_cd,
+	"exit":   cmd_exit,
+	"ls":     cmd_ls,
+	"set":    cmd_set,
+	".":      cmd_source,
+	"source": cmd_source,
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
