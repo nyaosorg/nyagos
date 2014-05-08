@@ -1,6 +1,7 @@
 package parser
 
 import "bytes"
+import "os"
 
 type RedirectT struct {
 	Path     string
@@ -54,9 +55,34 @@ func dequote(source *bytes.Buffer) string {
 	lastchar := '\000'
 	quote := false
 	for {
-		ch, _, ok := source.ReadRune()
-		if ok != nil {
+		ch, _, err := source.ReadRune()
+		if err != nil {
 			break
+		}
+		if ch == '%' {
+			var nameBuf bytes.Buffer
+			for {
+				ch, _, err = source.ReadRune()
+				if err != nil {
+					buffer.WriteRune('%')
+					buffer.WriteString(nameBuf.String())
+					return buffer.String()
+				}
+				if ch == '%' {
+					break
+				}
+				nameBuf.WriteRune(ch)
+			}
+			nameStr := nameBuf.String()
+			value := os.Getenv(nameStr)
+			if value != "" {
+				buffer.WriteString(value)
+			}else{
+				buffer.WriteRune('%')
+				buffer.WriteString(nameStr)
+				buffer.WriteRune('%')
+			}
+			continue
 		}
 		if ch == '"' {
 			quote = !quote
