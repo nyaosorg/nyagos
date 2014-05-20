@@ -10,6 +10,25 @@ import "unicode"
 import "../box"
 import "../conio"
 
+var pathHash []string
+
+func isExecutable(path string) bool {
+	path = strings.ToLower(path)
+	if strings.HasSuffix(path, ".exe") {
+		return true
+	}
+	if strings.HasSuffix(path, ".cmd") {
+		return true
+	}
+	if strings.HasSuffix(path, ".bat") {
+		return true
+	}
+	if strings.HasSuffix(path, ".com") {
+		return true
+	}
+	return false
+}
+
 func listUpFiles(str string) ([]string, error) {
 	str = strings.Replace(strings.Replace(str, "\\", "/", -1), "\"", "", -1)
 	var directory string
@@ -26,14 +45,14 @@ func listUpFiles(str string) ([]string, error) {
 		cutprefix = 2
 	}
 
-	fd, err := os.Open(directory)
-	if err != nil {
-		return nil, err
+	fd, fdErr := os.Open(directory)
+	if fdErr != nil {
+		return nil, fdErr
 	}
 	defer fd.Close()
-	files, err2 := fd.Readdir(-1)
-	if err2 != nil {
-		return nil, err2
+	files, filesErr := fd.Readdir(-1)
+	if filesErr != nil {
+		return nil, filesErr
 	}
 	commons := make([]string, 0)
 	STR := strings.ToUpper(str)
@@ -45,17 +64,62 @@ func listUpFiles(str string) ([]string, error) {
 		if cutprefix > 0 {
 			name = name[2:]
 		}
-		NAME := strings.ToUpper(name)
-		if strings.HasPrefix(NAME, STR) {
+		nameUpr := strings.ToUpper(name)
+		if strings.HasPrefix(nameUpr, STR) {
 			commons = append(commons, name)
 		}
 	}
 	return commons, nil
 }
 
+func listUpCommands(str string) ([]string, error) {
+	listTmp, listErr := listUpFiles(str)
+	if listErr != nil {
+		return nil, listErr
+	}
+	list := make([]string, 0)
+	for _, fname := range listTmp {
+		if strings.HasSuffix(fname, "/") || strings.HasSuffix(fname, "\\") || isExecutable(fname) {
+			list = append(list, fname)
+		}
+	}
+	pathEnv := os.Getenv("PATH")
+	dirList := strings.Split(pathEnv, ";")
+	strUpr := strings.ToUpper(str)
+	for _, dir1 := range dirList {
+		dirHandle, dirErr := os.Open(dir1)
+		if dirErr != nil {
+			continue
+		}
+		defer dirHandle.Close()
+		files, filesErr := dirHandle.Readdir(0)
+		if filesErr != nil {
+			continue
+		}
+		for _, file1 := range files {
+			name1Upr := strings.ToUpper(file1.Name())
+			if !strings.HasPrefix(name1Upr, strUpr) {
+				continue
+			}
+			if file1.IsDir() {
+				continue
+			}
+			name := file1.Name()
+			if isExecutable(name) {
+				list = append(list, path.Base(name))
+			}
+		}
+	}
+	return list, nil
+}
 func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
-	str, _ := this.CurrentWord()
-	list, _ := listUpFiles(str)
+	str, pos := this.CurrentWord()
+	var list []string
+	if pos > 0 {
+		list, _ = listUpFiles(str)
+	} else {
+		list, _ = listUpCommands(str)
+	}
 	if list == nil {
 		return conio.CONTINUE
 	}
@@ -100,7 +164,13 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		slashToBackSlash = false
 	}
 
-	list, err := listUpFiles(str)
+	var list []string
+	var err error
+	if wordStart > 0 {
+		list, err = listUpFiles(str)
+	} else {
+		list, err = listUpCommands(str)
+	}
 	if err != nil || len(list) <= 0 {
 		return conio.CONTINUE
 	}
