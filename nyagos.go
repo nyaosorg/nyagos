@@ -17,7 +17,7 @@ func main() {
 	conio.KeyMap['P'&0x1F] = history.KeyFuncHistoryUp
 	conio.KeyMap['N'&0x1F] = history.KeyFuncHistoryDown
 	for {
-		fmt.Printf("%s", prompt.Prompt(os.Getenv("PROMPT")))
+		fmt.Printf("%s", prompt.Format2Prompt(os.Getenv("PROMPT")))
 		line, cont := conio.ReadLine()
 		if cont == conio.ABORT {
 			break

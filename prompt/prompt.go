@@ -6,9 +6,9 @@ import "time"
 import "bytes"
 import "fmt"
 
-func Prompt(format string) string {
+func Format2Prompt(format string) string {
 	if format == "" {
-		format = "$P$G"
+		format = "[$P]$_$$$S"
 	}
 	var buffer bytes.Buffer
 	lastchar := '\000'
@@ -63,9 +63,10 @@ func Prompt(format string) string {
 				buffer.WriteRune('\n')
 			} else if c == '$' {
 				buffer.WriteRune('$')
+				ch = '\000'
 			} else {
 				buffer.WriteRune('$')
-				buffer.WriteRune(c)
+				buffer.WriteRune(ch)
 			}
 		} else if ch != '$' {
 			buffer.WriteRune(ch)
