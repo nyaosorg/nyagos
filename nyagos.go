@@ -3,11 +3,12 @@ package main
 import "fmt"
 import "os"
 
+import "./builtincmd"
 import "./completion"
 import "./conio"
-import "./builtincmd"
-import "./interpreter"
 import "./history"
+import "./interpreter"
+import "./prompt"
 
 func main() {
 	conio.KeyMap['\t'] = completion.KeyFuncCompletion
@@ -16,8 +17,7 @@ func main() {
 	conio.KeyMap['P'&0x1F] = history.KeyFuncHistoryUp
 	conio.KeyMap['N'&0x1F] = history.KeyFuncHistoryDown
 	for {
-		wd, _ := os.Getwd()
-		fmt.Printf("[%s]\n$ ", wd)
+		fmt.Printf("%s", prompt.Prompt(os.Getenv("PROMPT")))
 		line, cont := conio.ReadLine()
 		if cont == conio.ABORT {
 			break
