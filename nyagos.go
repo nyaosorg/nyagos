@@ -2,6 +2,9 @@ package main
 
 import "fmt"
 import "os"
+import "io"
+
+import "github.com/shiena/ansicolor"
 
 import "./builtincmd"
 import "./completion"
@@ -16,8 +19,9 @@ func main() {
 	conio.ZeroMap[conio.K_DOWN] = history.KeyFuncHistoryDown
 	conio.KeyMap['P'&0x1F] = history.KeyFuncHistoryUp
 	conio.KeyMap['N'&0x1F] = history.KeyFuncHistoryDown
+	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
 	for {
-		fmt.Printf("%s", prompt.Format2Prompt(os.Getenv("PROMPT")))
+		io.WriteString(ansiOut, prompt.Format2Prompt(os.Getenv("PROMPT")))
 		line, cont := conio.ReadLine()
 		if cont == conio.ABORT {
 			break

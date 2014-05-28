@@ -4,6 +4,8 @@ import "os"
 import "os/exec"
 import "../parser"
 
+import "github.com/shiena/ansicolor"
+
 type WhatToDoAfterCmd int
 
 const (
@@ -24,8 +26,8 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToD
 			cmd.Dir = ""
 			if stdio == nil {
 				cmd.Stdin = os.Stdin
-				cmd.Stdout = os.Stdout
-				cmd.Stderr = os.Stderr
+				cmd.Stdout = ansicolor.NewAnsiColorWriter(os.Stdout)
+				cmd.Stderr = ansicolor.NewAnsiColorWriter(os.Stderr)
 			} else {
 				cmd.Stdin = stdio[0]
 				cmd.Stdout = stdio[1]
