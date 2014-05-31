@@ -51,6 +51,7 @@ type ReadLineBuffer struct {
 	Keycode   uint16
 	ViewStart int
 	ViewWidth int
+	Prompt    func()
 }
 
 func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
@@ -141,10 +142,9 @@ func (this *ReadLineBuffer) Repaint(pos int, del int) {
 	Backspace(bs + del)
 }
 
-func (this *ReadLineBuffer) RepaintAll(header string) {
-	PutRep('\r', 1)
-	for _, ch := range header {
-		PutRep(ch, 1)
+func (this *ReadLineBuffer) RepaintAll() {
+	if this.Prompt != nil {
+		this.Prompt()
 	}
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRep(this.Buffer[i], 1)
@@ -420,13 +420,17 @@ var ZeroMap = map[uint16]func(*ReadLineBuffer) KeyFuncResult{
 	K_SHIFT: KeyFuncPass,
 }
 
-func ReadLine() (string, KeyFuncResult) {
+func ReadLine(prompt_ func()) (string, KeyFuncResult) {
 	var this ReadLineBuffer
 	this.Buffer = make([]rune, 20)
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
 	this.ViewWidth = 60
+	this.Prompt = prompt_
+	if this.Prompt != nil {
+		this.Prompt()
+	}
 	for {
 		stdOut.Flush()
 		shineCursor()

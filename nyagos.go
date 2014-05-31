@@ -67,8 +67,11 @@ func main() {
 	}
 
 	for {
-		io.WriteString(ansiOut, prompt.Format2Prompt(os.Getenv("PROMPT")))
-		line, cont := conio.ReadLine()
+		line, cont := conio.ReadLine(
+			func() {
+				io.WriteString(ansiOut,
+					prompt.Format2Prompt(os.Getenv("PROMPT")))
+			})
 		if cont == conio.ABORT {
 			break
 		}
