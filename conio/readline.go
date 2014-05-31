@@ -374,6 +374,14 @@ func KeyFuncClear(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
+func KeyFuncClearBefore(this *ReadLineBuffer) KeyFuncResult {
+	keta := this.Delete( 0 , this.Cursor )
+	Backspace(keta)
+	this.Cursor = 0
+	this.Repaint( 0 , keta )
+	return CONTINUE
+}
+
 var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\r':         KeyFuncEnter,
 	'\x01':       KeyFuncHead,
@@ -385,6 +393,7 @@ var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\x7F':       KeyFuncDelete,
 	('K' & 0x1F): KeyFuncClearAfter,
 	'\x1B':       KeyFuncClear,
+	('U' & 0x1F): KeyFuncClearBefore,
 }
 
 // KeyCode from
