@@ -33,7 +33,7 @@ const (
 	ANSI_DIR      = "\x1B[1;32m"
 	ANSI_NORM     = "\x1B[1;37m"
 	ANSI_READONLY = "\x1B[1;33m"
-	ANSI_END      = "\x1B[0;39m"
+	ANSI_END      = "\x1B[39m"
 )
 
 func (this fileInfoT) Name() string       { return this.name }
@@ -121,8 +121,10 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 				postfix += "/"
 			}
 		} else if (val.Mode().Perm() & 2) == 0 {
-			prefix = ANSI_READONLY
-			postfix = ANSI_END
+			if (flag & O_COLOR) != 0 {
+				prefix = ANSI_READONLY
+				postfix = ANSI_END
+			}
 		} else if exeSuffixes[strings.ToLower(path.Ext(val.Name()))] {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_DIR
