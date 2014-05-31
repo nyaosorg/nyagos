@@ -7,12 +7,10 @@ import "strings"
 import "../interpreter"
 import "../builtincmd"
 
-var table = map[string]string{
-	"l": "ls -oF",
-}
+var Table=map[string]string{}
 
 func Hook(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
-	baseStr, ok := table[strings.ToLower(cmd.Args[0])]
+	baseStr, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
 		return interpreter.THROUGH, nil
 	}

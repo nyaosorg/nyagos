@@ -4,6 +4,7 @@ import "fmt"
 import "os"
 import "io"
 import "os/exec"
+import "strings"
 
 import "github.com/shiena/ansicolor"
 
@@ -24,12 +25,35 @@ func commandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCm
 }
 
 func main() {
+	// KeyBind += completion Module
 	conio.KeyMap['\t'] = completion.KeyFuncCompletion
 	conio.ZeroMap[conio.K_UP] = history.KeyFuncHistoryUp
 	conio.ZeroMap[conio.K_DOWN] = history.KeyFuncHistoryDown
 	conio.KeyMap['P'&0x1F] = history.KeyFuncHistoryUp
 	conio.KeyMap['N'&0x1F] = history.KeyFuncHistoryDown
+
+	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
+
+	// Parameter Parsing
+	for i := 1; i < len(os.Args); i++ {
+		if os.Args[i][0] == '-' {
+			if os.Args[i][1] == 'a' {
+				equation := ""
+				if i+1 < len(os.Args) {
+					i++
+					equation = os.Args[i]
+					equationArray := strings.SplitN(equation, "=", 2)
+					if len(equationArray) >= 2 {
+						alias.Table[strings.ToLower(equationArray[0])] = equationArray[1]
+					} else {
+						delete(alias.Table, strings.ToLower(equationArray[0]))
+					}
+				}
+			}
+		}
+	}
+
 	for {
 		io.WriteString(ansiOut, prompt.Format2Prompt(os.Getenv("PROMPT")))
 		line, cont := conio.ReadLine()
