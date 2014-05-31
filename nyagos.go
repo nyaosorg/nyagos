@@ -3,15 +3,25 @@ package main
 import "fmt"
 import "os"
 import "io"
+import "os/exec"
 
 import "github.com/shiena/ansicolor"
 
+import "./alias"
 import "./builtincmd"
 import "./completion"
 import "./conio"
 import "./history"
 import "./interpreter"
 import "./prompt"
+
+func commandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
+	status, _ := alias.Hook(cmd, IsBackground)
+	if status != interpreter.THROUGH {
+		return status, nil
+	}
+	return builtincmd.Exec(cmd, IsBackground)
+}
 
 func main() {
 	conio.KeyMap['\t'] = completion.KeyFuncCompletion
@@ -27,7 +37,7 @@ func main() {
 			break
 		}
 		history.Push(line)
-		whatToDo, err := interpreter.Interpret(line, builtincmd.Exec, nil)
+		whatToDo, err := interpreter.Interpret(line, commandHooks, nil)
 		if err != nil {
 			fmt.Println(err)
 		}

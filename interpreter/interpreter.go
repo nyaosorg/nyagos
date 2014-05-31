@@ -1,7 +1,9 @@
 package interpreter
 
+import "io"
 import "os"
 import "os/exec"
+
 import "../parser"
 
 import "github.com/shiena/ansicolor"
@@ -14,7 +16,13 @@ const (
 	SHUTDOWN WhatToDoAfterCmd = 2
 )
 
-func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToDoAfterCmd, error), stdio []*os.File) (WhatToDoAfterCmd, error) {
+type Stdio struct {
+	Stdin  io.Reader
+	Stdout io.Writer
+	Stderr io.Writer
+}
+
+func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToDoAfterCmd, error), stdio *Stdio) (WhatToDoAfterCmd, error) {
 	statements := parser.Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
@@ -29,9 +37,9 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToD
 				cmd.Stdout = ansicolor.NewAnsiColorWriter(os.Stdout)
 				cmd.Stderr = ansicolor.NewAnsiColorWriter(os.Stderr)
 			} else {
-				cmd.Stdin = stdio[0]
-				cmd.Stdout = stdio[1]
-				cmd.Stderr = stdio[2]
+				cmd.Stdin = stdio.Stdin
+				cmd.Stdout = stdio.Stdout
+				cmd.Stderr = stdio.Stderr
 			}
 			if pipeIn != nil {
 				cmd.Stdin = pipeIn
