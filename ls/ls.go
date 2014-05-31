@@ -20,12 +20,21 @@ const (
 	O_STRIP_DIR = 1
 	O_LONG      = 2
 	O_INDICATOR = 4
+	O_COLOR     = 8
 )
 
 type fileInfoT struct {
 	name string
 	info os.FileInfo
 }
+
+const (
+	ANSI_EXEC     = "\x1B[1;35m"
+	ANSI_DIR      = "\x1B[1;32m"
+	ANSI_NORM     = "\x1B[1;37m"
+	ANSI_READONLY = "\x1B[1;33m"
+	ANSI_END      = "\x1B[0;39m"
+)
 
 func (this fileInfoT) Name() string       { return this.name }
 func (this fileInfoT) Size() int64        { return this.info.Size() }
@@ -43,9 +52,15 @@ func newMyFileInfoT(name string, info os.FileInfo) *fileInfoT {
 
 func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	indicator := " "
+	prefix := ""
+	postfix := ""
 	if status.IsDir() {
 		io.WriteString(out, "d")
 		indicator = "/"
+		if (flag & O_COLOR) != 0 {
+			prefix = ANSI_DIR
+			postfix = ANSI_END
+		}
 	} else {
 		io.WriteString(out, "-")
 	}
@@ -60,6 +75,10 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	if (perm & 2) > 0 {
 		io.WriteString(out, "w")
 	} else {
+		if (flag & O_COLOR) != 0 {
+			prefix = ANSI_READONLY
+			postfix = ANSI_END
+		}
 		io.WriteString(out, "-")
 	}
 	if (perm & 1) > 0 {
@@ -67,13 +86,21 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	} else if exeSuffixes[strings.ToLower(path.Ext(name))] {
 		io.WriteString(out, "x")
 		indicator = "*"
+		if (flag & O_COLOR) != 0 {
+			prefix = ANSI_EXEC
+			postfix = ANSI_END
+		}
 	} else {
 		io.WriteString(out, "-")
 	}
 	if (flag & O_STRIP_DIR) > 0 {
 		name = path.Base(name)
 	}
-	io.WriteString(out, fmt.Sprintf("%7d %s", status.Size(), name))
+	io.WriteString(out, fmt.Sprintf("%7d %s%s%s",
+		status.Size(),
+		prefix,
+		name,
+		postfix))
 	if (flag & O_INDICATOR) > 0 {
 		io.WriteString(out, indicator)
 	}
@@ -83,7 +110,29 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 	nodes_ := make([]string, len(nodes))
 	for key, val := range nodes {
-		nodes_[key] = val.Name()
+		prefix := ""
+		postfix := ""
+		if val.IsDir() {
+			if (flag & O_COLOR) != 0 {
+				prefix = ANSI_DIR
+				postfix = ANSI_END
+			}
+			if (flag & O_INDICATOR) != 0 {
+				postfix += "/"
+			}
+		} else if (val.Mode().Perm() & 2) == 0 {
+			prefix = ANSI_READONLY
+			postfix = ANSI_END
+		} else if exeSuffixes[strings.ToLower(path.Ext(val.Name()))] {
+			if (flag & O_COLOR) != 0 {
+				prefix = ANSI_DIR
+				postfix = ANSI_END
+			}
+			if (flag & O_INDICATOR) != 0 {
+				postfix += "*"
+			}
+		}
+		nodes_[key] = prefix + val.Name() + postfix
 	}
 	box.Print(nodes_, 80, out)
 }
@@ -178,6 +227,10 @@ var option = map[rune](func(*int) error){
 	},
 	'F': func(flag *int) error {
 		*flag |= O_INDICATOR
+		return nil
+	},
+	'o': func(flag *int) error {
+		*flag |= O_COLOR
 		return nil
 	},
 }

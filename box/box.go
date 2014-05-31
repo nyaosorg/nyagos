@@ -2,14 +2,17 @@ package box
 
 import "bytes"
 import "io"
+import "regexp"
 import "strings"
 
 import "github.com/mattn/go-runewidth"
 
+var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
+
 func Print(nodes []string, width int, out io.Writer) {
 	maxLen := 1
 	for _, finfo := range nodes {
-		length := runewidth.StringWidth(finfo)
+		length := runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))
 		if length > maxLen {
 			maxLen = length
 		}
@@ -25,7 +28,7 @@ func Print(nodes []string, width int, out io.Writer) {
 		lines[i%nlines].WriteString(finfo)
 		lines[i%nlines].WriteString(
 			strings.Repeat(" ", maxLen+1-
-				runewidth.StringWidth(finfo)))
+				runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))))
 	}
 	for _, line := range lines {
 		io.WriteString(out, line.String())
