@@ -31,7 +31,7 @@ func Print(nodes []string, width int, out io.Writer) {
 				runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))))
 	}
 	for _, line := range lines {
-		io.WriteString(out, line.String())
+		io.WriteString(out, strings.TrimSpace(line.String()))
 		io.WriteString(out, "\n")
 	}
 }
