@@ -375,10 +375,10 @@ func KeyFuncClear(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncClearBefore(this *ReadLineBuffer) KeyFuncResult {
-	keta := this.Delete( 0 , this.Cursor )
+	keta := this.Delete(0, this.Cursor)
 	Backspace(keta)
 	this.Cursor = 0
-	this.Repaint( 0 , keta )
+	this.Repaint(0, keta)
 	return CONTINUE
 }
 
