@@ -203,6 +203,5 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		return KeyFuncCompletionList(this)
 	}
 	this.ReplaceAndRepaint(wordStart, commonStr)
-	conio.PutRep('\a', 1)
 	return conio.CONTINUE
 }
