@@ -38,16 +38,28 @@ func main() {
 	// Parameter Parsing
 	for i := 1; i < len(os.Args); i++ {
 		if os.Args[i][0] == '-' {
-			if os.Args[i][1] == 'a' {
-				equation := ""
-				if i+1 < len(os.Args) {
+			for _, o := range os.Args[i][1:] {
+				switch o {
+				case 'a':
 					i++
-					equation = os.Args[i]
-					equationArray := strings.SplitN(equation, "=", 2)
-					if len(equationArray) >= 2 {
-						alias.Table[strings.ToLower(equationArray[0])] = equationArray[1]
-					} else {
-						delete(alias.Table, strings.ToLower(equationArray[0]))
+					if i < len(os.Args) {
+						equation := os.Args[i]
+						equationArray := strings.SplitN(equation, "=", 2)
+						if len(equationArray) >= 2 {
+							alias.Table[strings.ToLower(equationArray[0])] =
+								equationArray[1]
+						} else {
+							delete(alias.Table, strings.ToLower(
+								equationArray[0]))
+						}
+					}
+				case 'c', 'k':
+					i++
+					if i < len(os.Args) {
+						interpreter.Interpret(os.Args[i], commandHooks, nil)
+					}
+					if o == 'c' {
+						return
 					}
 				}
 			}
