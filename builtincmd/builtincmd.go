@@ -54,8 +54,8 @@ func cmd_cd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	err := ls.Main(cmd.Args[1:], cmd.Stdout)
 	if err != nil {
-		io.WriteString( cmd.Stderr , err.Error() )
-		io.WriteString( cmd.Stderr , "\n" )
+		io.WriteString(cmd.Stderr, err.Error())
+		io.WriteString(cmd.Stderr, "\n")
 	}
 	return interpreter.CONTINUE
 }

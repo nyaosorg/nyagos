@@ -77,7 +77,7 @@ func dequote(source *bytes.Buffer) string {
 			value := os.Getenv(nameStr)
 			if value != "" {
 				buffer.WriteString(value)
-			}else{
+			} else {
 				buffer.WriteRune('%')
 				buffer.WriteString(nameStr)
 				buffer.WriteRune('%')
