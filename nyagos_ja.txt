@@ -1,4 +1,4 @@
-                       Nihongo Yet Another GOing Shell
+                   NYAGOS - Nihongo Yet Another GOing Shell
 
 NYAGOS は、go言語による Windows 用コマンドラインシェルです。
 Nihongo とありますが、Unicode ベースなので、特に特定の自然言語に
@@ -14,6 +14,12 @@ Windows であまりストレスを感じないような環境を構築するために
 
 -a "名前=定義"
     コマンドの別名(エイリアス)を定義します。
+
+-c "コマンド"
+    コマンドを実行して、ただちに終了します。
+
+-k "コマンド"
+    コマンドを実行してから、通常起動します。
 
 内蔵コマンド
 ============
