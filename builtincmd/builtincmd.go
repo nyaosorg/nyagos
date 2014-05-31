@@ -11,6 +11,7 @@ import "bufio"
 
 import "../interpreter"
 import "../ls"
+import "github.com/shiena/ansicolor"
 
 func cmd_exit(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.SHUTDOWN
@@ -52,7 +53,7 @@ func cmd_cd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 }
 
 func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
-	err := ls.Main(cmd.Args[1:], cmd.Stdout)
+	err := ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
 	if err != nil {
 		io.WriteString(cmd.Stderr, err.Error())
 		io.WriteString(cmd.Stderr, "\n")
