@@ -110,7 +110,16 @@ func listUpCommands(str string) ([]string, error) {
 			}
 		}
 	}
-	return list, nil
+	// remove dupcalites
+	uniq := make([]string, 0)
+	lastone := ""
+	for _, cur := range list {
+		if cur != lastone {
+			uniq = append(uniq, cur)
+		}
+		lastone = cur
+	}
+	return uniq, nil
 }
 func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 	str, pos := this.CurrentWord()
