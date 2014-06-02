@@ -124,7 +124,7 @@ func cmd_source(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 }
 
 func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
-	io.WriteString(cmd.Stdout, strings.Join(cmd.Args[0:], " "))
+	io.WriteString(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
 	io.WriteString(cmd.Stdout, "\n")
 	return interpreter.CONTINUE
 }
