@@ -123,6 +123,12 @@ func cmd_source(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
+func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	io.WriteString(cmd.Stdout, strings.Join(cmd.Args[0:], " "))
+	io.WriteString(cmd.Stdout, "\n")
+	return interpreter.CONTINUE
+}
+
 var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	"cd":     cmd_cd,
 	"exit":   cmd_exit,
@@ -130,6 +136,8 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	"set":    cmd_set,
 	".":      cmd_source,
 	"source": cmd_source,
+	"pwd":    cmd_pwd,
+	"echo":   cmd_echo,
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
