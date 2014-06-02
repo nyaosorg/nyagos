@@ -2,6 +2,7 @@ package parser
 
 import "bytes"
 import "os"
+import "unicode"
 
 type RedirectT struct {
 	Path     string
@@ -52,12 +53,25 @@ func chomp(buffer *bytes.Buffer) {
 func dequote(source *bytes.Buffer) string {
 	var buffer bytes.Buffer
 
-	lastchar := '\000'
+	lastchar := ' '
 	quote := false
 	for {
 		ch, _, err := source.ReadRune()
 		if err != nil {
 			break
+		}
+		if ch == '~' && unicode.IsSpace(lastchar) {
+			home := os.Getenv("HOME")
+			if home == "" {
+				home = os.Getenv("USERPROFILE")
+			}
+			if home != "" {
+				buffer.WriteString(home)
+			} else {
+				buffer.WriteRune('~')
+			}
+			lastchar = '~'
+			continue
 		}
 		if ch == '%' {
 			var nameBuf bytes.Buffer
