@@ -9,5 +9,5 @@ fmt:
 clean :
 	del nyagos.exe
 
-nightly :
+snapshot :
 	zip -9 nyagos-%DATE:/=%.zip nyagos.cmd nyagos.exe nyagos_ja.txt
