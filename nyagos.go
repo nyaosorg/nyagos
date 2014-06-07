@@ -75,6 +75,12 @@ func main() {
 		if cont == conio.ABORT {
 			break
 		}
+		var isReplaced bool
+		line, isReplaced = history.Replace(line)
+		if isReplaced {
+			os.Stdout.WriteString(line)
+			os.Stdout.WriteString("\n")
+		}
 		history.Push(line)
 		whatToDo, err := interpreter.Interpret(line, commandHooks, nil)
 		if err != nil {
