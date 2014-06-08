@@ -3,26 +3,15 @@ package main
 import "fmt"
 import "os"
 import "io"
-import "os/exec"
-import "strings"
 
 import "github.com/shiena/ansicolor"
 
-import "./alias"
-import "./builtincmd"
 import "./completion"
 import "./conio"
 import "./history"
 import "./interpreter"
+import "./option"
 import "./prompt"
-
-func commandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
-	status, _ := alias.Hook(cmd, IsBackground)
-	if status != interpreter.THROUGH {
-		return status, nil
-	}
-	return builtincmd.Exec(cmd, IsBackground)
-}
 
 func main() {
 	// KeyBind += completion Module
@@ -36,35 +25,15 @@ func main() {
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
 
 	// Parameter Parsing
-	for i := 1; i < len(os.Args); i++ {
-		if os.Args[i][0] == '-' {
-			for _, o := range os.Args[i][1:] {
-				switch o {
-				case 'a':
-					i++
-					if i < len(os.Args) {
-						equation := os.Args[i]
-						equationArray := strings.SplitN(equation, "=", 2)
-						if len(equationArray) >= 2 {
-							alias.Table[strings.ToLower(equationArray[0])] =
-								equationArray[1]
-						} else {
-							delete(alias.Table, strings.ToLower(
-								equationArray[0]))
-						}
-					}
-				case 'c', 'k':
-					i++
-					if i < len(os.Args) {
-						interpreter.Interpret(os.Args[i], commandHooks, nil)
-					}
-					if o == 'c' {
-						return
-					}
-				}
-			}
+	argc := 0
+	option.Parse(func() (string, bool) {
+		argc++
+		if argc < len(os.Args) {
+			return os.Args[argc], true
+		} else {
+			return "", false
 		}
-	}
+	})
 
 	for {
 		line, cont := conio.ReadLine(
@@ -82,7 +51,7 @@ func main() {
 			os.Stdout.WriteString("\n")
 		}
 		history.Push(line)
-		whatToDo, err := interpreter.Interpret(line, commandHooks, nil)
+		whatToDo, err := interpreter.Interpret(line, option.CommandHooks, nil)
 		if err != nil {
 			fmt.Println(err)
 		}
