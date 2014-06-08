@@ -14,6 +14,23 @@ Windows であまりストレスを感じないような環境を構築するために
 
 -a "名前=定義"
     コマンドの別名(エイリアス)を定義します。
+    以下は、デフォルトで定義されています。
+	"assoc=%COMSPEC% /c assoc"
+	"attrib=%COMSPEC% /c attrib"
+	"copy=%COMSPEC% /c copy"
+	"del=%COMSPEC% /c del"
+	"dir=%COMSPEC% /c dir"
+	"for=%COMSPEC% /c for"
+	"md=%COMSPEC% /c md"
+	"mkdir=%COMSPEC% /c mkdir"
+	"mklink=%COMSPEC% /c mklink"
+	"move=%COMSPEC% /c move"
+	"rd=%COMSPEC% /c rd"
+	"ren=%COMSPEC% /c ren"
+	"rename=%COMSPEC% /c rename"
+	"rmdir=%COMSPEC% /c rmdir"
+	"start=%COMSPEC% /c start"
+	"type=%COMSPEC% /c type"
 
 -c "コマンド"
     コマンドを実行して、ただちに終了します。
@@ -70,6 +87,9 @@ source バッチファイル名
 
 ・コマンドや引数先頭の ~ を %HOME% あるいは %USERPROFILE% に置換
   します。
+
+・ヒストリ置換として !! (直前の入力内容) !n (n回目の入力内容) !-n (n回前
+  の入力内容) をサポートします。
 
 その他
 ======
