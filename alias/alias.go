@@ -20,6 +20,7 @@ var Table = map[string]string{
 	"mkdir":  "%COMSPEC% /c mkdir",
 	"mklink": "%COMSPEC% /c mklink",
 	"move":   "%COMSPEC% /c move",
+	"open":   "%COMSPEC% /c start",
 	"rd":     "%COMSPEC% /c rd",
 	"ren":    "%COMSPEC% /c ren",
 	"rename": "%COMSPEC% /c rename",
