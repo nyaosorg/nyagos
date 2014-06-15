@@ -1,9 +1,12 @@
 package history
 
 import "bytes"
+import "fmt"
+import "os/exec"
 import "strings"
 
 import "../conio"
+import "../interpreter"
 
 var histories = make([]string, 0)
 var pointor = 0
@@ -204,4 +207,11 @@ func insertHisotry(buffer *bytes.Buffer, reader *strings.Reader, history1 string
 		}
 		buffer.WriteString(history1)
 	}
+}
+
+func CmdHistory(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	for i, s := range histories {
+		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", i, s)
+	}
+	return interpreter.CONTINUE
 }

@@ -9,6 +9,7 @@ import "bytes"
 import "path/filepath"
 import "bufio"
 
+import "../history"
 import "../interpreter"
 import "../ls"
 import "github.com/shiena/ansicolor"
@@ -130,14 +131,15 @@ func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 }
 
 var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
-	"cd":     cmd_cd,
-	"exit":   cmd_exit,
-	"ls":     cmd_ls,
-	"set":    cmd_set,
-	".":      cmd_source,
-	"source": cmd_source,
-	"pwd":    cmd_pwd,
-	"echo":   cmd_echo,
+	".":       cmd_source,
+	"cd":      cmd_cd,
+	"echo":    cmd_echo,
+	"exit":    cmd_exit,
+	"history": history.CmdHistory,
+	"ls":      cmd_ls,
+	"pwd":     cmd_pwd,
+	"set":     cmd_set,
+	"source":  cmd_source,
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
