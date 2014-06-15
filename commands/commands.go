@@ -9,6 +9,7 @@ import "bytes"
 import "path/filepath"
 import "bufio"
 
+import alias "../alias/table"
 import "../history"
 import "../interpreter"
 import "../ls"
@@ -130,8 +131,35 @@ func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
+func cmd_alias(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	if len(cmd.Args) <= 1 {
+		for key, val := range alias.Table {
+			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val)
+		}
+		return interpreter.CONTINUE
+	}
+	for _, args := range cmd.Args[1:] {
+		if eqlPos := strings.IndexRune(args, '='); eqlPos >= 0 {
+			key := args[0:eqlPos]
+			val := args[eqlPos+1:]
+			if len(val) > 0 {
+				alias.Table[strings.ToLower(key)] = val
+			} else {
+				delete(alias.Table, strings.ToLower(key))
+			}
+		} else {
+			key := strings.ToLower(args)
+			val := alias.Table[key]
+
+			fmt.Printf("%s=%s\n", key, val)
+		}
+	}
+	return interpreter.CONTINUE
+}
+
 var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	".":       cmd_source,
+	"alias":   cmd_alias,
 	"cd":      cmd_cd,
 	"echo":    cmd_echo,
 	"exit":    cmd_exit,

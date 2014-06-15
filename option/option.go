@@ -4,6 +4,7 @@ import "os/exec"
 import "strings"
 
 import "../alias"
+import . "../alias/table"
 import "../commands"
 import "../interpreter"
 
@@ -30,10 +31,10 @@ func Parse(getArg func() (string, bool)) {
 				if equation, equationOk := getArg(); equationOk {
 					equationArray := strings.SplitN(equation, "=", 2)
 					if len(equationArray) >= 2 {
-						alias.Table[strings.ToLower(equationArray[0])] =
+						Table[strings.ToLower(equationArray[0])] =
 							equationArray[1]
 					} else {
-						delete(alias.Table, strings.ToLower(
+						delete(Table, strings.ToLower(
 							equationArray[0]))
 					}
 				}
