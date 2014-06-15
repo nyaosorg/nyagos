@@ -4,7 +4,7 @@ import "os/exec"
 import "strings"
 
 import "../alias"
-import "../builtincmd"
+import "../commands"
 import "../interpreter"
 
 func CommandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
@@ -12,7 +12,7 @@ func CommandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCm
 	if status != interpreter.THROUGH {
 		return status, nil
 	}
-	return builtincmd.Exec(cmd, IsBackground)
+	return commands.Exec(cmd, IsBackground)
 }
 
 func Parse(getArg func() (string, bool)) {

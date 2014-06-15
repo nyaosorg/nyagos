@@ -6,7 +6,7 @@ import "regexp"
 import "strconv"
 import "strings"
 
-import "../builtincmd"
+import "../commands"
 import "../interpreter"
 
 var Table = map[string]string{
@@ -68,6 +68,6 @@ func Hook(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error
 	stdio.Stderr = cmd.Stderr
 	return interpreter.Interpret(
 		cmdline,
-		builtincmd.Exec,
+		commands.Exec,
 		&stdio)
 }

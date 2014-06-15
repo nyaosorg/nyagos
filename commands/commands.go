@@ -1,4 +1,4 @@
-package builtincmd
+package commands
 
 import "io"
 import "os"
