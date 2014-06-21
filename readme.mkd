@@ -6,7 +6,6 @@ Required software
 
 * [go1.3 windows/386](http://golang.org)
 * [Mingw-Gcc 4.8.1-4](http://mingw.org)
-* [rsrc](https://github.com/akavel/rsrc) to embed icon to executable.
 * [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 
 How to Build
