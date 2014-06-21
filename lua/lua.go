@@ -14,6 +14,7 @@ from http://sourceforge.net/projects/luabinaries/files/5.2.3/Windows%20Libraries
 #include "lualib.h"
 #include "lauxlib.h"
 
+<<<<<<< HEAD
 static int gLua_pcall(lua_State* L,int x,int y,int z)
 { return lua_pcall(L,x,y,z); }
 
@@ -56,11 +57,6 @@ func NewLua() *Lua {
 	this.lua = C.luaL_newstate()
 	return this
 }
-func newLua(lua *C.lua_State) *Lua{
-	this := new(Lua)
-	this.lua = lua
-	return this
-}
 
 func (this *Lua) OpenLibs() {
 	C.luaL_openlibs(this.lua)
@@ -89,24 +85,4 @@ func (this *Lua) Call(fname string) error {
 		return errors.New(fname + ": " + this.ToString(-1))
 	}
 	return nil
-}
-
-func (this*Lua)SetFunctions(){
-	C.setfunctions(this.lua)
-}
-
-//export LuaAlias
-func LuaAlias(L*C.lua_State)int{
-	name := C.GoString(C.gLua_tostring(L,1))
-	value := C.GoString(C.gLua_tostring(L,2))
-	aliasTable.Table[ strings.ToLower(name) ] = value
-	return 0
-}
-
-//export LuaSetEnv
-func LuaSetEnv(L*C.lua_State)int{
-	name := C.GoString(C.gLua_tostring(L,1))
-	value := C.GoString(C.gLua_tostring(L,2))
-	os.Setenv(name,value)
-	return 0
 }
