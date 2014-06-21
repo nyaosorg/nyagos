@@ -13,6 +13,7 @@ import "./completion"
 import "./conio"
 import "./history"
 import "./interpreter"
+import "./lua"
 import "./option"
 import "./prompt"
 
@@ -39,6 +40,11 @@ func main() {
 	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
 
+	// Lua extension
+	L := lua.NewLua()
+	L.OpenLibs()
+	defer L.Close()
+
 	// Parameter Parsing
 	argc := 0
 	option.Parse(func() (string, bool) {
@@ -61,6 +67,10 @@ func main() {
 		fmt.Fprintln(os.Stderr, exeNameErr)
 	}
 	exeFolder := filepath.Dir(exeName)
+	nyagos_lua := filepath.Join(exeFolder, "nyagos.lua")
+	if _, err := os.Stat(nyagos_lua); err == nil {
+		L.Call(nyagos_lua)
+	}
 	rcPath := filepath.Join(exeFolder, "nyagos.rc")
 	if fd, err := os.Open(rcPath); err == nil {
 		defer fd.Close()
