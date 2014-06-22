@@ -1,0 +1,17 @@
+The Nihongo Yet Another GOing Shell
+===================================
+
+Required software
+-----------------
+
+* go1.3 windows/386
+* Mingw-Gcc 4.8.1-4
+
+How to Build
+------------
+
+On `%GOPATH%` folder,
+
+```text
+git clone https://github.com/zetamatta/nyagos nyagos
+```
