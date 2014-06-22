@@ -1,8 +1,9 @@
 package main
 
 import "fmt"
-import "os"
 import "io"
+import "os"
+import "path"
 
 import "github.com/shiena/ansicolor"
 
@@ -34,6 +35,12 @@ func main() {
 			return "", false
 		}
 	})
+
+	appData := path.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
+	os.Mkdir(appData, 0777)
+	histPath := path.Join(appData, "nyagos.history")
+	history.Load(histPath)
+	defer history.Save(histPath)
 
 	for {
 		line, cont := conio.ReadLine(

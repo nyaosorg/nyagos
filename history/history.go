@@ -1,7 +1,9 @@
 package history
 
+import "bufio"
 import "bytes"
 import "fmt"
+import "os"
 import "os/exec"
 import "strings"
 
@@ -214,4 +216,38 @@ func CmdHistory(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", i, s)
 	}
 	return interpreter.CONTINUE
+}
+
+const max_histories = 256
+
+func Save(path string) error {
+	var hist_ []string
+	if len(histories) > max_histories {
+		hist_ = histories[(len(histories) - max_histories):]
+	} else {
+		hist_ = histories
+	}
+	fd, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer fd.Close()
+	for _, s := range hist_ {
+		fd.WriteString(s)
+		fd.WriteString("\n")
+	}
+	return nil
+}
+
+func Load(path string) error {
+	fd, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	defer fd.Close()
+	sc := bufio.NewScanner(fd)
+	for sc.Scan() {
+		histories = append(histories, sc.Text())
+	}
+	return nil
 }
