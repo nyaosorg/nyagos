@@ -19,6 +19,7 @@ On `%GOPATH%` folder,
     go get github.com/shiena/ansicolor 
     go get github.com/zetamatta/clipboard 
     cd nyagos
+    git checkout Lua
     windres --output-format=coff -o nyagosico.syso nyagosico.rc
     cd lua
     unzip PATH\TO\lua-5.2.3_Win32_dllw4_lib.zip 
