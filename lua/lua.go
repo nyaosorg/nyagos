@@ -14,16 +14,38 @@ from http://sourceforge.net/projects/luabinaries/files/5.2.3/Windows%20Libraries
 #include "lualib.h"
 #include "lauxlib.h"
 
-int gLua_pcall(lua_State* L,int x,int y,int z)
+static int gLua_pcall(lua_State* L,int x,int y,int z)
 { return lua_pcall(L,x,y,z); }
-const char *gLua_tostring(lua_State* L,int i)
+
+static const char *gLua_tostring(lua_State* L,int i)
 { return lua_tostring(L,i); }
-int gLuaL_loadfile(lua_State* L,const char *filename)
+
+static int gLuaL_loadfile(lua_State* L,const char *filename)
 { return luaL_loadfile(L,filename); }
+
+static void gLua_pushcfunction(lua_State* L,lua_CFunction f)
+{
+	lua_pushcfunction(L,f);
+}
+
+extern int LuaAlias(lua_State*);
+extern int LuaSetEnv(lua_State*);
+
+static int setfunctions(lua_State* L)
+{
+	lua_pushcfunction(L,LuaAlias);
+	lua_setglobal(L,"alias");
+	lua_pushcfunction(L,LuaSetEnv);
+	lua_setglobal(L,"setenv");
+}
 
 */
 import "C"
 import "errors"
+import "strings"
+import "os"
+
+import "../alias/table"
 
 type Lua struct {
 	lua *C.lua_State
@@ -32,6 +54,11 @@ type Lua struct {
 func NewLua() *Lua {
 	this := new(Lua)
 	this.lua = C.luaL_newstate()
+	return this
+}
+func newLua(lua *C.lua_State) *Lua{
+	this := new(Lua)
+	this.lua = lua
 	return this
 }
 
@@ -62,4 +89,24 @@ func (this *Lua) Call(fname string) error {
 		return errors.New(fname + ": " + this.ToString(-1))
 	}
 	return nil
+}
+
+func (this*Lua)SetFunctions(){
+	C.setfunctions(this.lua)
+}
+
+//export LuaAlias
+func LuaAlias(L*C.lua_State)int{
+	name := C.GoString(C.gLua_tostring(L,1))
+	value := C.GoString(C.gLua_tostring(L,2))
+	aliasTable.Table[ strings.ToLower(name) ] = value
+	return 0
+}
+
+//export LuaSetEnv
+func LuaSetEnv(L*C.lua_State)int{
+	name := C.GoString(C.gLua_tostring(L,1))
+	value := C.GoString(C.gLua_tostring(L,2))
+	os.Setenv(name,value)
+	return 0
 }
