@@ -1,5 +1,6 @@
 package main
 
+import "bufio"
 import "fmt"
 import "io"
 import "os"
@@ -41,6 +42,16 @@ func main() {
 	histPath := path.Join(appData, "nyagos.history")
 	history.Load(histPath)
 	defer history.Save(histPath)
+
+	exeFolder := path.Dir(os.Args[0])
+	rcPath := path.Join(exeFolder, "nyagos.rc")
+	if fd, err := os.Open(rcPath); err == nil {
+		defer fd.Close()
+		scr := bufio.NewScanner(fd)
+		for scr.Scan() {
+			interpreter.Interpret(scr.Text(), option.CommandHooks, nil)
+		}
+	}
 
 	for {
 		line, cont := conio.ReadLine(
