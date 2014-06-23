@@ -5,6 +5,7 @@ import "bytes"
 import "fmt"
 import "os"
 import "os/exec"
+import "strconv"
 import "strings"
 
 import "../conio"
@@ -212,13 +213,30 @@ func insertHisotry(buffer *bytes.Buffer, reader *strings.Reader, history1 string
 }
 
 func CmdHistory(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
-	for i, s := range histories {
-		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", i, s)
+	var num int
+	if len(cmd.Args) >= 2 {
+		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
+		if err != nil {
+			fmt.Fprintf(cmd.Stderr, "%s\n", err.Error())
+			return interpreter.CONTINUE
+		}
+		num = int(num64)
+	} else {
+		num = 10
+	}
+	var start int
+	if len(histories) > num {
+		start = len(histories) - num
+	} else {
+		start = 0
+	}
+	for i, s := range histories[start:] {
+		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s)
 	}
 	return interpreter.CONTINUE
 }
 
-const max_histories = 256
+const max_histories = 2000
 
 func Save(path string) error {
 	var hist_ []string
