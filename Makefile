@@ -10,4 +10,4 @@ clean :
 	del nyagos.exe
 
 snapshot :
-	zip -9 nyagos-%DATE:/=%.zip nyagos.cmd nyagos.exe nyagos_ja.txt readme.txt
+	zip -9 nyagos-%DATE:/=%.zip nyagos.cmd nyagos.exe nyagos_ja.txt readme.mkd
