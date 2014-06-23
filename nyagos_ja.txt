@@ -61,8 +61,9 @@ echo 文字列
 exit
     NYAGOS を終了します。
 
-history
-    ヒストリ内容を表示します
+history [件数]
+    ヒストリ内容を表示します。件数を省略すると、最近の10件が
+    表示されます。
 
 ls [-オプション] …
     ディレクトリの一覧を表示します。
@@ -114,13 +115,16 @@ source バッチファイル名
 ・コマンドや引数先頭の ~ を %HOME% あるいは %USERPROFILE% に置換
   します。
 
-
 その他
 ======
 
-NYAGOS は go version 1.2 windows/386 を用いてビルドしています。
-言語標準モジュール以外では、以下のモジュールを利用させていただ
-いております。
+NYAGOS は
+
+- go version 1.3 windows/386 
+- Mingw-Gcc 4.8.1-4 
+
+を用いてビルドしています。言語標準以外では、以下のモジュールを
+利用させていただいております。
 
 - http://github.com/mattn/go-runewidth
     Unicode 一文字の文字幅を調べる(mattn様 作)
