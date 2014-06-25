@@ -97,8 +97,14 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	if (flag & O_STRIP_DIR) > 0 {
 		name = path.Base(name)
 	}
-	io.WriteString(out, fmt.Sprintf(" %8d %s%s%s",
+	stamp := status.ModTime()
+	io.WriteString(out, fmt.Sprintf(" %8d %04d-%02d-%02d %02d:%02d %s%s%s",
 		status.Size(),
+		stamp.Year(),
+		stamp.Month(),
+		stamp.Day(),
+		stamp.Hour(),
+		stamp.Minute(),
 		prefix,
 		name,
 		postfix))
