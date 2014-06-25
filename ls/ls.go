@@ -21,6 +21,7 @@ const (
 	O_LONG      = 2
 	O_INDICATOR = 4
 	O_COLOR     = 8
+	O_ALL       = 16
 )
 
 type fileInfoT struct {
@@ -172,6 +173,15 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	if err != nil {
 		return err
 	}
+	if (flag & O_ALL) == 0 {
+		tmp := make([]os.FileInfo, 0)
+		for _, f := range nodesArray.nodes {
+			if !strings.HasPrefix(f.Name(), ".") {
+				tmp = append(tmp, f)
+			}
+		}
+		nodesArray.nodes = tmp
+	}
 	if (flag & O_LONG) > 0 {
 		lsLong(nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
@@ -233,6 +243,10 @@ var option = map[rune](func(*int) error){
 	},
 	'o': func(flag *int) error {
 		*flag |= O_COLOR
+		return nil
+	},
+	'a': func(flag *int) error {
+		*flag |= O_ALL
 		return nil
 	},
 }
