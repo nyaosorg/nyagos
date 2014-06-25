@@ -4,10 +4,11 @@ import "bufio"
 import "fmt"
 import "io"
 import "os"
-import "path"
+import "path/filepath"
 
 import "github.com/shiena/ansicolor"
 
+import "./exename"
 import "./completion"
 import "./conio"
 import "./history"
@@ -37,14 +38,14 @@ func main() {
 		}
 	})
 
-	appData := path.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
+	appData := filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
 	os.Mkdir(appData, 0777)
-	histPath := path.Join(appData, "nyagos.history")
+	histPath := filepath.Join(appData, "nyagos.history")
 	history.Load(histPath)
 	defer history.Save(histPath)
 
-	exeFolder := path.Dir(os.Args[0])
-	rcPath := path.Join(exeFolder, "nyagos.rc")
+	exeFolder := filepath.Dir(exename.Query())
+	rcPath := filepath.Join(exeFolder, "nyagos.rc")
 	if fd, err := os.Open(rcPath); err == nil {
 		defer fd.Close()
 		scr := bufio.NewScanner(fd)
