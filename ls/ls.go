@@ -128,7 +128,7 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 			}
 		} else if exeSuffixes[strings.ToLower(path.Ext(val.Name()))] {
 			if (flag & O_COLOR) != 0 {
-				prefix = ANSI_DIR
+				prefix = ANSI_EXEC
 				postfix = ANSI_END
 			}
 			if (flag & O_INDICATOR) != 0 {
