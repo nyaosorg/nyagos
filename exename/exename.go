@@ -1,27 +1,13 @@
 package exename
 
-//#include <windows.h>
-import "C"
+import "syscall"
+import "unsafe"
 
-import "bytes"
-import "unicode/utf16"
+var kernel32 = syscall.NewLazyDLL("kernel32")
+var procGetModuleFileName = kernel32.NewProc("GetModuleFileNameW")
 
 func Query() string {
-	var pathW [C.MAX_PATH]C.WCHAR
-	C.GetModuleFileNameW(nil, &pathW[0], C.MAX_PATH)
-
-	var path16 [C.MAX_PATH]uint16
-	for i := 0; pathW[i] != 0; i++ {
-		path16[i] = (uint16)(pathW[i])
-	}
-
-	pathRune := utf16.Decode(path16[:])
-	var buffer bytes.Buffer
-	for _, ch := range pathRune {
-		if ch == 0 {
-			break
-		}
-		buffer.WriteRune(ch)
-	}
-	return buffer.String()
+	var path16 [syscall.MAX_PATH]uint16
+	procGetModuleFileName.Call(0, uintptr(unsafe.Pointer(&path16[0])), uintptr(len(path16)))
+	return syscall.UTF16ToString(path16[:])
 }
