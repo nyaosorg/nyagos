@@ -43,7 +43,11 @@ func main() {
 	history.Load(histPath)
 	defer history.Save(histPath)
 
-	exeFolder := filepath.Dir(exename.Query())
+	exeName, exeNameErr := exename.Query()
+	if exeNameErr != nil {
+		fmt.Fprintln(os.Stderr, exeNameErr)
+	}
+	exeFolder := filepath.Dir(exeName)
 	rcPath := filepath.Join(exeFolder, "nyagos.rc")
 	if fd, err := os.Open(rcPath); err == nil {
 		defer fd.Close()
