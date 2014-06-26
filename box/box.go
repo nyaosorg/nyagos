@@ -1,6 +1,7 @@
 package box
 
 import "bytes"
+import "fmt"
 import "io"
 import "regexp"
 import "strings"
@@ -31,7 +32,6 @@ func Print(nodes []string, width int, out io.Writer) {
 				runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))))
 	}
 	for _, line := range lines {
-		io.WriteString(out, strings.TrimSpace(line.String()))
-		io.WriteString(out, "\n")
+		fmt.Fprintln(out, strings.TrimSpace(line.String()))
 	}
 }

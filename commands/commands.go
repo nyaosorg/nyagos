@@ -1,6 +1,5 @@
 package commands
 
-import "io"
 import "os"
 import "os/exec"
 import "strings"
@@ -36,8 +35,7 @@ func getHome() string {
 
 func cmd_pwd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	wd, _ := os.Getwd()
-	io.WriteString(cmd.Stdout, wd)
-	io.WriteString(cmd.Stdout, "\n")
+	fmt.Fprintln(cmd.Stdout, wd)
 	return interpreter.CONTINUE
 }
 
@@ -57,8 +55,7 @@ func cmd_cd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	err := ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
 	if err != nil {
-		io.WriteString(cmd.Stderr, err.Error())
-		io.WriteString(cmd.Stderr, "\n")
+		fmt.Fprintln(cmd.Stderr, err.Error())
 	}
 	return interpreter.CONTINUE
 }
@@ -66,7 +63,7 @@ func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 func cmd_set(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
-			fmt.Fprintf(cmd.Stdout, "%s\n", val)
+			fmt.Fprintln(cmd.Stdout, val)
 		}
 		return interpreter.CONTINUE
 	}
@@ -126,8 +123,7 @@ func cmd_source(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 }
 
 func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
-	io.WriteString(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
-	io.WriteString(cmd.Stdout, "\n")
+	fmt.Fprintln(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
 	return interpreter.CONTINUE
 }
 

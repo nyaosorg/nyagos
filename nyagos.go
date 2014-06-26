@@ -2,7 +2,6 @@ package main
 
 import "bufio"
 import "fmt"
-import "io"
 import "os"
 import "path/filepath"
 
@@ -57,8 +56,7 @@ func main() {
 	for {
 		line, cont := conio.ReadLine(
 			func() {
-				io.WriteString(ansiOut,
-					prompt.Format2Prompt(os.Getenv("PROMPT")))
+				fmt.Fprint(ansiOut, prompt.Format2Prompt(os.Getenv("PROMPT")))
 			})
 		if cont == conio.ABORT {
 			break
@@ -66,13 +64,12 @@ func main() {
 		var isReplaced bool
 		line, isReplaced = history.Replace(line)
 		if isReplaced {
-			os.Stdout.WriteString(line)
-			os.Stdout.WriteString("\n")
+			fmt.Fprintln(os.Stdout, line)
 		}
 		history.Push(line)
 		whatToDo, err := interpreter.Interpret(line, option.CommandHooks, nil)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Fprintln(os.Stderr, err)
 		}
 		if whatToDo == interpreter.SHUTDOWN {
 			break

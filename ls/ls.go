@@ -98,7 +98,7 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 		name = path.Base(name)
 	}
 	stamp := status.ModTime()
-	io.WriteString(out, fmt.Sprintf(" %8d %04d-%02d-%02d %02d:%02d %s%s%s",
+	fmt.Fprintf(out, " %8d %04d-%02d-%02d %02d:%02d %s%s%s",
 		status.Size(),
 		stamp.Year(),
 		stamp.Month(),
@@ -107,7 +107,7 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 		stamp.Minute(),
 		prefix,
 		name,
-		postfix))
+		postfix)
 	if (flag & O_INDICATOR) > 0 {
 		io.WriteString(out, indicator)
 	}

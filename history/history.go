@@ -217,7 +217,7 @@ func CmdHistory(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
 		if err != nil {
-			fmt.Fprintf(cmd.Stderr, "%s\n", err.Error())
+			fmt.Fprintln(cmd.Stderr, err.Error())
 			return interpreter.CONTINUE
 		}
 		num = int(num64)
@@ -251,8 +251,7 @@ func Save(path string) error {
 	}
 	defer fd.Close()
 	for _, s := range hist_ {
-		fd.WriteString(s)
-		fd.WriteString("\n")
+		fmt.Fprintln(fd, s)
 	}
 	return nil
 }
