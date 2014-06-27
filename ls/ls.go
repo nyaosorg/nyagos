@@ -9,12 +9,7 @@ import "time"
 
 import "../box"
 
-var exeSuffixes = map[string]bool{
-	".bat": true,
-	".cmd": true,
-	".com": true,
-	".exe": true,
-}
+var exeSuffixes = map[string]bool{}
 
 const (
 	O_STRIP_DIR = 1
@@ -268,6 +263,13 @@ func (this OptionError) Error() string {
 
 // ls 機能のエントリ:引数をオプションとパスに分離する
 func Main(args []string, out io.Writer) error {
+	if len(exeSuffixes) <= 0 {
+		pathExt := os.Getenv("PATHEXT")
+		for _, ext := range strings.Split(pathExt, ";") {
+			exeSuffixes[strings.ToLower(ext)] = true
+		}
+	}
+
 	flag := 0
 	paths := make([]string, 0)
 	for _, arg := range args {
