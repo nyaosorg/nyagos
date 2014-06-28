@@ -382,6 +382,12 @@ func KeyFuncClearBefore(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
+func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
+	Cls()
+	this.RepaintAll()
+	return CONTINUE
+}
+
 var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\r':         KeyFuncEnter,
 	'\x01':       KeyFuncHead,
@@ -394,6 +400,7 @@ var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	('K' & 0x1F): KeyFuncClearAfter,
 	'\x1B':       KeyFuncClear,
 	('U' & 0x1F): KeyFuncClearBefore,
+	('L' & 0x1F): KeyFuncCLS,
 }
 
 // KeyCode from
