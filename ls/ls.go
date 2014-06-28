@@ -18,6 +18,8 @@ const (
 	O_INDICATOR = 4
 	O_COLOR     = 8
 	O_ALL       = 16
+	O_TIME      = 32
+	O_REVERSE   = 64
 )
 
 type fileInfoT struct {
@@ -149,6 +151,7 @@ func lsLong(nodes []os.FileInfo, flag int, out io.Writer) {
 }
 
 type fileInfoCollection struct {
+	flag  int
 	nodes []os.FileInfo
 }
 
@@ -156,7 +159,19 @@ func (this fileInfoCollection) Len() int {
 	return len(this.nodes)
 }
 func (this fileInfoCollection) Less(i, j int) bool {
-	return this.nodes[i].Name() < this.nodes[j].Name()
+	var result bool
+	if (this.flag & O_TIME) != 0 {
+		result = this.nodes[i].ModTime().After(this.nodes[j].ModTime())
+		if !result && !this.nodes[i].ModTime().Before(this.nodes[j].ModTime()) {
+			result = (this.nodes[i].Name() < this.nodes[j].Name())
+		}
+	} else {
+		result = (this.nodes[i].Name() < this.nodes[j].Name())
+	}
+	if (this.flag & O_REVERSE) != 0 {
+		result = !result
+	}
+	return result
 }
 func (this fileInfoCollection) Swap(i, j int) {
 	tmp := this.nodes[i]
@@ -172,6 +187,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	defer fd.Close()
 	var nodesArray fileInfoCollection
 	nodesArray.nodes, err = fd.Readdir(-1)
+	nodesArray.flag = flag
 	if err != nil {
 		return err
 	}
@@ -183,8 +199,8 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 			}
 		}
 		nodesArray.nodes = tmp
-		sort.Sort(nodesArray)
 	}
+	sort.Sort(nodesArray)
 	if (flag & O_LONG) > 0 {
 		lsLong(nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
@@ -250,6 +266,14 @@ var option = map[rune](func(*int) error){
 	},
 	'a': func(flag *int) error {
 		*flag |= O_ALL
+		return nil
+	},
+	't': func(flag *int) error {
+		*flag |= O_TIME
+		return nil
+	},
+	'r': func(flag *int) error {
+		*flag |= O_REVERSE
 		return nil
 	},
 }
