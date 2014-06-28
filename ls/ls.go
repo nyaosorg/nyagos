@@ -3,7 +3,7 @@ package ls
 import "fmt"
 import "io"
 import "os"
-import "path"
+import "path/filepath"
 import "sort"
 import "strings"
 import "time"
@@ -20,6 +20,7 @@ const (
 	O_ALL       = 16
 	O_TIME      = 32
 	O_REVERSE   = 64
+	O_RECURSIVE = 128
 )
 
 type fileInfoT struct {
@@ -82,7 +83,7 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if exeSuffixes[strings.ToLower(path.Ext(name))] {
+	} else if exeSuffixes[strings.ToLower(filepath.Ext(name))] {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -93,7 +94,7 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 		io.WriteString(out, "-")
 	}
 	if (flag & O_STRIP_DIR) > 0 {
-		name = path.Base(name)
+		name = filepath.Base(name)
 	}
 	stamp := status.ModTime()
 	fmt.Fprintf(out, " %8d %04d-%02d-%02d %02d:%02d %s%s%s",
@@ -130,7 +131,7 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 				prefix = ANSI_READONLY
 				postfix = ANSI_END
 			}
-		} else if exeSuffixes[strings.ToLower(path.Ext(val.Name()))] {
+		} else if exeSuffixes[strings.ToLower(filepath.Ext(val.Name()))] {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
@@ -184,27 +185,41 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	if err != nil {
 		return err
 	}
-	defer fd.Close()
 	var nodesArray fileInfoCollection
 	nodesArray.nodes, err = fd.Readdir(-1)
+	fd.Close()
 	nodesArray.flag = flag
 	if err != nil {
 		return err
 	}
-	if (flag & O_ALL) == 0 {
-		tmp := make([]os.FileInfo, 0)
-		for _, f := range nodesArray.nodes {
-			if !strings.HasPrefix(f.Name(), ".") {
-				tmp = append(tmp, f)
-			}
-		}
-		nodesArray.nodes = tmp
+	tmp := make([]os.FileInfo, 0)
+	var folders []string = nil
+	if (flag & O_RECURSIVE) != 0 {
+		folders = make([]string, 0)
 	}
+	for _, f := range nodesArray.nodes {
+		if strings.HasPrefix(f.Name(), ".") && (flag&O_ALL) == 0 {
+			continue
+		}
+		if f.IsDir() && folders != nil {
+			folders = append(folders, f.Name())
+		} else {
+			tmp = append(tmp, f)
+		}
+	}
+	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	if (flag & O_LONG) > 0 {
 		lsLong(nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
 		lsBox(nodesArray.nodes, O_STRIP_DIR|flag, out)
+	}
+	if folders != nil && len(folders) > 0 {
+		for _, f1 := range folders {
+			f1fullpath := filepath.Join(folder, f1)
+			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
+			lsFolder(f1fullpath, flag, out)
+		}
 	}
 	return nil
 }
@@ -274,6 +289,10 @@ var option = map[rune](func(*int) error){
 	},
 	'r': func(flag *int) error {
 		*flag |= O_REVERSE
+		return nil
+	},
+	'R': func(flag *int) error {
+		*flag |= O_RECURSIVE
 		return nil
 	},
 }
