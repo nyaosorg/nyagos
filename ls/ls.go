@@ -4,6 +4,7 @@ import "fmt"
 import "io"
 import "os"
 import "path"
+import "sort"
 import "strings"
 import "time"
 
@@ -151,13 +152,13 @@ type fileInfoCollection struct {
 	nodes []os.FileInfo
 }
 
-func (this *fileInfoCollection) Len() int {
+func (this fileInfoCollection) Len() int {
 	return len(this.nodes)
 }
-func (this *fileInfoCollection) Less(i, j int) bool {
+func (this fileInfoCollection) Less(i, j int) bool {
 	return this.nodes[i].Name() < this.nodes[j].Name()
 }
-func (this *fileInfoCollection) Swap(i, j int) {
+func (this fileInfoCollection) Swap(i, j int) {
 	tmp := this.nodes[i]
 	this.nodes[i] = this.nodes[j]
 	this.nodes[j] = tmp
@@ -182,6 +183,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 			}
 		}
 		nodesArray.nodes = tmp
+		sort.Sort(nodesArray)
 	}
 	if (flag & O_LONG) > 0 {
 		lsLong(nodesArray.nodes, O_STRIP_DIR|flag, out)
