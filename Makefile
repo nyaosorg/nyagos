@@ -1,7 +1,10 @@
 # Maintenance file for nmake.exe
 
-build:
-	go build nyagos.go
+build :
+	go build
+
+icon : 
+	rsrc -ico nyagos.ico -o nyagos.syso
 
 fmt:
 	for /R $(MAKEDIR) %%I IN (*.go) do go fmt %%I
