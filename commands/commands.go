@@ -9,9 +9,11 @@ import "path/filepath"
 import "bufio"
 
 import alias "../alias/table"
+import "../conio"
 import "../history"
 import "../interpreter"
 import "../ls"
+
 import "github.com/shiena/ansicolor"
 
 func cmd_exit(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
@@ -127,6 +129,11 @@ func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
+func cmd_cls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+	conio.Cls()
+	return interpreter.CONTINUE
+}
+
 func cmd_alias(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
@@ -157,6 +164,7 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	".":       cmd_source,
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
+	"cls":     cmd_cls,
 	"echo":    cmd_echo,
 	"exit":    cmd_exit,
 	"history": history.CmdHistory,
