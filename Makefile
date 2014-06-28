@@ -8,6 +8,7 @@ fmt:
 
 clean :
 	del nyagos.exe
+	for /R $(MAKEDIR) %%I in (*.un~) do del %%I
 
 snapshot :
 	zip -9 nyagos-%DATE:/=%.zip nyagos.cmd nyagos.exe nyagos_ja.txt readme.mkd
