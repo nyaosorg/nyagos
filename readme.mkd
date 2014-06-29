@@ -6,7 +6,6 @@ Required software
 
 * [go1.3 windows/386](http://golang.org)
 * [Mingw-Gcc 4.8.1-4](http://mingw.org/)
-* [rsrc](https://github.com/akavel/rsrc) to embed icon to executable.
 
 How to Build
 ------------
@@ -15,5 +14,5 @@ On `%GOPATH%` folder,
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
-    rsrc -ico nyagos.ico -o nyagos.syso
-    go build
+    nmake icon
+    nmake

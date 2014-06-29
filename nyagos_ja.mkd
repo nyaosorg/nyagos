@@ -135,7 +135,6 @@ NYAGOS は
 
 - [go1.3 windows/386](http://golang.org)
 - [Mingw-Gcc 4.8.1-4](http://mingw.org/)
-- [rsrc](https://github.com/akavel/rsrc) to embed icon to executable.
 
 を用いてビルドしています。言語標準以外では、以下のモジュールを
 利用させていただいております。
