@@ -4,9 +4,10 @@ import "bytes"
 import "fmt"
 import "os"
 import "path"
+import "path/filepath"
+import "regexp"
 import "strings"
 import "unicode"
-import "path/filepath"
 
 import "../box"
 import "../exename"
@@ -17,7 +18,19 @@ func isExecutable(path string) bool {
 	return ok
 }
 
+var RxEnvironPattern = regexp.MustCompile("%[^%]+%")
+
 func listUpFiles(str string) ([]string, error) {
+	str = RxEnvironPattern.ReplaceAllStringFunc(str, func(p string) string {
+		if len(p) == 2 {
+			return "%"
+		} else if val := os.Getenv(p[1 : len(p)-1]); val != "" {
+			return val
+		} else {
+			return p
+		}
+	})
+
 	str = strings.Replace(strings.Replace(str, "\\", "/", -1), "\"", "", -1)
 	var directory string
 	str = strings.Replace(str, "\\", "/", -1)
