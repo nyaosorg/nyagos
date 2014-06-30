@@ -1,6 +1,7 @@
 package exename
 
 import "os"
+import "strings"
 import "syscall"
 import "unsafe"
 
@@ -14,4 +15,13 @@ func Query() (string, error) {
 		return os.Args[0], err
 	}
 	return syscall.UTF16ToString(path16[:]), nil
+}
+
+var Suffixes = map[string]bool{}
+
+func init() {
+	pathExt := os.Getenv("PATHEXT")
+	for _, ext := range strings.Split(pathExt, ";") {
+		Suffixes[strings.ToLower(ext)] = true
+	}
 }
