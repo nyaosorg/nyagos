@@ -182,6 +182,18 @@ func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error
 	}
 	function, ok := buildInCmd[name]
 	if ok {
+		newArgs := make([]string, 0)
+		for _, arg1 := range cmd.Args {
+			matches, _ := filepath.Glob(arg1)
+			if matches == nil {
+				newArgs = append(newArgs, arg1)
+			} else {
+				for _, s := range matches {
+					newArgs = append(newArgs, s)
+				}
+			}
+		}
+		cmd.Args = newArgs
 		return function(cmd), nil
 	} else {
 		return interpreter.THROUGH, nil

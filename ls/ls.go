@@ -9,8 +9,7 @@ import "strings"
 import "time"
 
 import "../box"
-
-var exeSuffixes = map[string]bool{}
+import "../exename"
 
 const (
 	O_STRIP_DIR = 1
@@ -83,7 +82,7 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if exeSuffixes[strings.ToLower(filepath.Ext(name))] {
+	} else if exename.Suffixes[strings.ToLower(filepath.Ext(name))] {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -131,7 +130,7 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 				prefix = ANSI_READONLY
 				postfix = ANSI_END
 			}
-		} else if exeSuffixes[strings.ToLower(filepath.Ext(val.Name()))] {
+		} else if exename.Suffixes[strings.ToLower(filepath.Ext(val.Name()))] {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
@@ -308,13 +307,6 @@ func (this OptionError) Error() string {
 
 // ls 機能のエントリ:引数をオプションとパスに分離する
 func Main(args []string, out io.Writer) error {
-	if len(exeSuffixes) <= 0 {
-		pathExt := os.Getenv("PATHEXT")
-		for _, ext := range strings.Split(pathExt, ";") {
-			exeSuffixes[strings.ToLower(ext)] = true
-		}
-	}
-
 	flag := 0
 	paths := make([]string, 0)
 	for _, arg := range args {

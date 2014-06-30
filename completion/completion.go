@@ -6,27 +6,15 @@ import "os"
 import "path"
 import "strings"
 import "unicode"
+import "path/filepath"
 
 import "../box"
+import "../exename"
 import "../conio"
 
-var pathHash []string
-
 func isExecutable(path string) bool {
-	path = strings.ToLower(path)
-	if strings.HasSuffix(path, ".exe") {
-		return true
-	}
-	if strings.HasSuffix(path, ".cmd") {
-		return true
-	}
-	if strings.HasSuffix(path, ".bat") {
-		return true
-	}
-	if strings.HasSuffix(path, ".com") {
-		return true
-	}
-	return false
+	_, ok := exename.Suffixes[strings.ToLower(filepath.Ext(path))]
+	return ok
 }
 
 func listUpFiles(str string) ([]string, error) {
