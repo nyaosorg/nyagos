@@ -11,7 +11,7 @@ var Table = map[string]string{
 	"mkdir":  "%COMSPEC% /c mkdir",
 	"mklink": "%COMSPEC% /c mklink",
 	"move":   "%COMSPEC% /c move",
-	"open":   "%COMSPEC% /c start",
+	"open":   "%COMSPEC% /c for %I in ($*) do @start \"%I\"",
 	"rd":     "%COMSPEC% /c rd",
 	"ren":    "%COMSPEC% /c ren",
 	"rename": "%COMSPEC% /c rename",
