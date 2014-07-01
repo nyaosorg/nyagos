@@ -194,7 +194,12 @@ func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 			}
 		}
 		cmd.Args = newArgs
-		return function(cmd), nil
+		if IsBackground {
+			go function(cmd)
+			return interpreter.CONTINUE, nil
+		} else {
+			return function(cmd), nil
+		}
 	} else {
 		return interpreter.THROUGH, nil
 	}
