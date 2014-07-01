@@ -7,7 +7,7 @@ icon :
 	windres --output-format=coff -o nyagosico.syso nyagosico.rc
 
 fmt:
-	for /R $(MAKEDIR) %%I IN (*.go) do go fmt %%I
+	for /R $(MAKEDIR) %%I IN (*.go) do @go fmt %%I
 
 clean :
 	if exist nyagos.exe del nyagos.exe
