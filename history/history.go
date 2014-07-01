@@ -212,13 +212,12 @@ func insertHisotry(buffer *bytes.Buffer, reader *strings.Reader, history1 string
 	}
 }
 
-func CmdHistory(cmd *exec.Cmd) interpreter.NextT {
+func CmdHistory(cmd *exec.Cmd) (interpreter.NextT, error) {
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
 		if err != nil {
-			fmt.Fprintln(cmd.Stderr, err.Error())
-			return interpreter.CONTINUE
+			return interpreter.CONTINUE, err
 		}
 		num = int(num64)
 	} else {
@@ -233,7 +232,7 @@ func CmdHistory(cmd *exec.Cmd) interpreter.NextT {
 	for i, s := range histories[start:] {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s)
 	}
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
 const max_histories = 2000

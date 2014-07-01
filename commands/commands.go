@@ -16,8 +16,8 @@ import "../ls"
 
 import "github.com/shiena/ansicolor"
 
-func cmd_exit(cmd *exec.Cmd) interpreter.NextT {
-	return interpreter.SHUTDOWN
+func cmd_exit(cmd *exec.Cmd) (interpreter.NextT, error) {
+	return interpreter.SHUTDOWN, nil
 }
 
 func getHome() string {
@@ -35,39 +35,36 @@ func getHome() string {
 	return ""
 }
 
-func cmd_pwd(cmd *exec.Cmd) interpreter.NextT {
+func cmd_pwd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	wd, _ := os.Getwd()
 	fmt.Fprintln(cmd.Stdout, wd)
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
-func cmd_cd(cmd *exec.Cmd) interpreter.NextT {
+func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
-		os.Chdir(cmd.Args[1])
-		return interpreter.CONTINUE
+		err := os.Chdir(cmd.Args[1])
+		return interpreter.CONTINUE, err
 	}
 	home := getHome()
 	if home != "" {
-		os.Chdir(home)
-		return interpreter.CONTINUE
+		err := os.Chdir(home)
+		return interpreter.CONTINUE, err
 	}
 	return cmd_pwd(cmd)
 }
 
-func cmd_ls(cmd *exec.Cmd) interpreter.NextT {
+func cmd_ls(cmd *exec.Cmd) (interpreter.NextT, error) {
 	err := ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
-	if err != nil {
-		fmt.Fprintln(cmd.Stderr, err.Error())
-	}
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, err
 }
 
-func cmd_set(cmd *exec.Cmd) interpreter.NextT {
+func cmd_set(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)
 		}
-		return interpreter.CONTINUE
+		return interpreter.CONTINUE, nil
 	}
 	for _, arg := range cmd.Args[1:] {
 		eqlPos := strings.Index(arg, "=")
@@ -77,10 +74,10 @@ func cmd_set(cmd *exec.Cmd) interpreter.NextT {
 			os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
 		}
 	}
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
-func cmd_source(cmd *exec.Cmd) interpreter.NextT {
+func cmd_source(cmd *exec.Cmd) (interpreter.NextT, error) {
 	envTxtPath := filepath.Join(
 		os.TempDir(),
 		fmt.Sprintf("nyagos-%d.tmp", os.Getpid()))
@@ -100,46 +97,43 @@ func cmd_source(cmd *exec.Cmd) interpreter.NextT {
 	cmd2.Args = args
 	cmd2.Env = nil
 	cmd2.Dir = ""
-	err := cmd2.Run()
+	if err := cmd2.Run(); err != nil {
+		return interpreter.CONTINUE, err
+	}
+	fp, err := os.Open(envTxtPath)
 	if err != nil {
-		fmt.Fprintf(cmd.Stderr, "%s\n", err.Error())
-	} else {
-		fp, err := os.Open(envTxtPath)
-		if err != nil {
-			fmt.Fprintf(cmd.Stderr, "%s\n", err.Error())
-			return interpreter.CONTINUE
-		}
-		defer os.Remove(envTxtPath)
-		defer fp.Close()
+		return interpreter.CONTINUE, nil
+	}
+	defer os.Remove(envTxtPath)
+	defer fp.Close()
 
-		scr := bufio.NewScanner(fp)
-		for scr.Scan() {
-			line := scr.Text()
-			eqlPos := strings.Index(line, "=")
-			if eqlPos > 0 {
-				os.Setenv(line[:eqlPos], line[eqlPos+1:])
-			}
+	scr := bufio.NewScanner(fp)
+	for scr.Scan() {
+		line := scr.Text()
+		eqlPos := strings.Index(line, "=")
+		if eqlPos > 0 {
+			os.Setenv(line[:eqlPos], line[eqlPos+1:])
 		}
 	}
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
-func cmd_echo(cmd *exec.Cmd) interpreter.NextT {
+func cmd_echo(cmd *exec.Cmd) (interpreter.NextT, error) {
 	fmt.Fprintln(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
-func cmd_cls(cmd *exec.Cmd) interpreter.NextT {
+func cmd_cls(cmd *exec.Cmd) (interpreter.NextT, error) {
 	conio.Cls()
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
-func cmd_alias(cmd *exec.Cmd) interpreter.NextT {
+func cmd_alias(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val)
 		}
-		return interpreter.CONTINUE
+		return interpreter.CONTINUE, nil
 	}
 	for _, args := range cmd.Args[1:] {
 		if eqlPos := strings.IndexRune(args, '='); eqlPos >= 0 {
@@ -157,10 +151,10 @@ func cmd_alias(cmd *exec.Cmd) interpreter.NextT {
 			fmt.Printf("%s=%s\n", key, val)
 		}
 	}
-	return interpreter.CONTINUE
+	return interpreter.CONTINUE, nil
 }
 
-var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.NextT{
+var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 	".":       cmd_source,
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
@@ -198,7 +192,8 @@ func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 			go function(cmd)
 			return interpreter.CONTINUE, nil
 		} else {
-			return function(cmd), nil
+			next, err := function(cmd)
+			return next, err
 		}
 	} else {
 		return interpreter.THROUGH, nil
