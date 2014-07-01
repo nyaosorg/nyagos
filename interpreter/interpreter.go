@@ -26,7 +26,7 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, 
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
 			//fmt.Println(state)
-			cmd := new(exec.Cmd)
+			var cmd exec.Cmd
 			cmd.Args = state.Argv
 			cmd.Env = nil
 			cmd.Dir = ""
@@ -93,7 +93,7 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, 
 
 			isBackGround := (state.Term == "|" || state.Term == "&")
 
-			whatToDo, err = hook(cmd, isBackGround)
+			whatToDo, err = hook(&cmd, isBackGround)
 			if whatToDo == THROUGH {
 				cmd.Path, err = exec.LookPath(state.Argv[0])
 				if err == nil {
