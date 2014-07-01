@@ -212,7 +212,7 @@ func insertHisotry(buffer *bytes.Buffer, reader *strings.Reader, history1 string
 	}
 }
 
-func CmdHistory(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func CmdHistory(cmd *exec.Cmd) interpreter.NextT {
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)

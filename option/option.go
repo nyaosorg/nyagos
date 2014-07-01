@@ -8,7 +8,7 @@ import . "../alias/table"
 import "../commands"
 import "../interpreter"
 
-func CommandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
+func CommandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	status, _ := alias.Hook(cmd, IsBackground)
 	if status != interpreter.THROUGH {
 		return status, nil

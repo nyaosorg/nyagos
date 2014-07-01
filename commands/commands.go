@@ -16,7 +16,7 @@ import "../ls"
 
 import "github.com/shiena/ansicolor"
 
-func cmd_exit(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_exit(cmd *exec.Cmd) interpreter.NextT {
 	return interpreter.SHUTDOWN
 }
 
@@ -35,13 +35,13 @@ func getHome() string {
 	return ""
 }
 
-func cmd_pwd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_pwd(cmd *exec.Cmd) interpreter.NextT {
 	wd, _ := os.Getwd()
 	fmt.Fprintln(cmd.Stdout, wd)
 	return interpreter.CONTINUE
 }
 
-func cmd_cd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_cd(cmd *exec.Cmd) interpreter.NextT {
 	if len(cmd.Args) >= 2 {
 		os.Chdir(cmd.Args[1])
 		return interpreter.CONTINUE
@@ -54,7 +54,7 @@ func cmd_cd(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return cmd_pwd(cmd)
 }
 
-func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_ls(cmd *exec.Cmd) interpreter.NextT {
 	err := ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
 	if err != nil {
 		fmt.Fprintln(cmd.Stderr, err.Error())
@@ -62,7 +62,7 @@ func cmd_ls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
-func cmd_set(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_set(cmd *exec.Cmd) interpreter.NextT {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)
@@ -80,7 +80,7 @@ func cmd_set(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
-func cmd_source(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_source(cmd *exec.Cmd) interpreter.NextT {
 	envTxtPath := filepath.Join(
 		os.TempDir(),
 		fmt.Sprintf("nyagos-%d.tmp", os.Getpid()))
@@ -124,17 +124,17 @@ func cmd_source(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
-func cmd_echo(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_echo(cmd *exec.Cmd) interpreter.NextT {
 	fmt.Fprintln(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
 	return interpreter.CONTINUE
 }
 
-func cmd_cls(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_cls(cmd *exec.Cmd) interpreter.NextT {
 	conio.Cls()
 	return interpreter.CONTINUE
 }
 
-func cmd_alias(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
+func cmd_alias(cmd *exec.Cmd) interpreter.NextT {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val)
@@ -160,7 +160,7 @@ func cmd_alias(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd {
 	return interpreter.CONTINUE
 }
 
-var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
+var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.NextT{
 	".":       cmd_source,
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
@@ -174,7 +174,7 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) interpreter.WhatToDoAfterCmd{
 	"source":  cmd_source,
 }
 
-func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
+func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		os.Chdir(name + ".")

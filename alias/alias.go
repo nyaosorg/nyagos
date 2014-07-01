@@ -12,7 +12,7 @@ import "../interpreter"
 
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
-func Hook(cmd *exec.Cmd, IsBackground bool) (interpreter.WhatToDoAfterCmd, error) {
+func Hook(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	baseStr, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
 		return interpreter.THROUGH, nil

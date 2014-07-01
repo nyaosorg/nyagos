@@ -6,12 +6,12 @@ import "os/exec"
 
 import "../parser"
 
-type WhatToDoAfterCmd int
+type NextT int
 
 const (
-	THROUGH  WhatToDoAfterCmd = 0
-	CONTINUE WhatToDoAfterCmd = 1
-	SHUTDOWN WhatToDoAfterCmd = 2
+	THROUGH  NextT = 0
+	CONTINUE NextT = 1
+	SHUTDOWN NextT = 2
 )
 
 type Stdio struct {
@@ -20,7 +20,7 @@ type Stdio struct {
 	Stderr io.Writer
 }
 
-func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToDoAfterCmd, error), stdio *Stdio) (WhatToDoAfterCmd, error) {
+func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, error), stdio *Stdio) (NextT, error) {
 	statements := parser.Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
@@ -89,7 +89,7 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (WhatToD
 				defer pipeIn.Close()
 				cmd.Stdout = pipeOut
 			}
-			var whatToDo WhatToDoAfterCmd
+			var whatToDo NextT
 
 			isBackGround := (state.Term == "|" || state.Term == "&")
 
