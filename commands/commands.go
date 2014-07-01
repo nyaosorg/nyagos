@@ -171,8 +171,8 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
-		os.Chdir(name + ".")
-		return interpreter.CONTINUE, nil
+		err := os.Chdir(name + ".")
+		return interpreter.CONTINUE, err
 	}
 	function, ok := buildInCmd[name]
 	if ok {
