@@ -41,13 +41,23 @@ func cmd_pwd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	return interpreter.CONTINUE, nil
 }
 
+var prevDir string
+
 func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
-		err := os.Chdir(cmd.Args[1])
+		prevDir_, _ := os.Getwd()
+		var err error
+		if cmd.Args[1] == "-" {
+			err = os.Chdir(prevDir)
+		} else {
+			err = os.Chdir(cmd.Args[1])
+		}
+		prevDir = prevDir_
 		return interpreter.CONTINUE, err
 	}
 	home := getHome()
 	if home != "" {
+		prevDir, _ = os.Getwd()
 		err := os.Chdir(home)
 		return interpreter.CONTINUE, err
 	}
