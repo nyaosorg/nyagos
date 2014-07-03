@@ -93,14 +93,16 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, 
 
 			isBackGround := (state.Term == "|" || state.Term == "&")
 
-			whatToDo, err = hook(&cmd, isBackGround)
-			if whatToDo == THROUGH {
-				cmd.Path, err = exec.LookPath(state.Argv[0])
-				if err == nil {
-					if isBackGround {
-						err = cmd.Start()
-					} else {
-						err = cmd.Run()
+			if len(cmd.Args) > 0 {
+				whatToDo, err = hook(&cmd, isBackGround)
+				if whatToDo == THROUGH {
+					cmd.Path, err = exec.LookPath(state.Argv[0])
+					if err == nil {
+						if isBackGround {
+							err = cmd.Start()
+						} else {
+							err = cmd.Run()
+						}
 					}
 				}
 			}
