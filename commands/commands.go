@@ -13,6 +13,7 @@ import "../conio"
 import "../history"
 import "../interpreter"
 import "../ls"
+import "../currentwork"
 
 import "github.com/shiena/ansicolor"
 
@@ -36,7 +37,7 @@ func getHome() string {
 }
 
 func cmd_pwd(cmd *exec.Cmd) (interpreter.NextT, error) {
-	wd, _ := os.Getwd()
+	wd, _ := currentwork.Getwd()
 	fmt.Fprintln(cmd.Stdout, wd)
 	return interpreter.CONTINUE, nil
 }
@@ -45,20 +46,20 @@ var prevDir string
 
 func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
-		prevDir_, _ := os.Getwd()
+		prevDir_, _ := currentwork.Getwd()
 		var err error
 		if cmd.Args[1] == "-" {
-			err = os.Chdir(prevDir)
+			err = currentwork.Chdir(prevDir)
 		} else {
-			err = os.Chdir(cmd.Args[1])
+			err = currentwork.Chdir(cmd.Args[1])
 		}
 		prevDir = prevDir_
 		return interpreter.CONTINUE, err
 	}
 	home := getHome()
 	if home != "" {
-		prevDir, _ = os.Getwd()
-		err := os.Chdir(home)
+		prevDir, _ = currentwork.Getwd()
+		err := currentwork.Chdir(home)
 		return interpreter.CONTINUE, err
 	}
 	return cmd_pwd(cmd)
@@ -175,13 +176,14 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 	"ls":      cmd_ls,
 	"pwd":     cmd_pwd,
 	"set":     cmd_set,
+	"rem":     cmd_rem,
 	"source":  cmd_source,
 }
 
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
-		err := os.Chdir(name + ".")
+		err := currentwork.Chdrive(name)
 		return interpreter.CONTINUE, err
 	}
 	function, ok := buildInCmd[name]

@@ -9,6 +9,9 @@ icon :
 fmt:
 	for /R $(MAKEDIR) %%I IN (*.go) do @go fmt %%I
 
+ver:
+	yShowVer nyagos.exe $(HOME)\bin\nyagos.exe
+
 clean :
 	if exist nyagos.exe del nyagos.exe
 

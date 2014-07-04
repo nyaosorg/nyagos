@@ -6,6 +6,8 @@ import "time"
 import "bytes"
 import "fmt"
 
+import "../currentwork"
+
 func Format2Prompt(format string) string {
 	if format == "" {
 		format = "[$P]$_$$$S"
@@ -42,7 +44,7 @@ func Format2Prompt(format string) string {
 					buffer.WriteString(wd[:2])
 				}
 			} else if c == 'p' {
-				wd, err := os.Getwd()
+				wd, err := currentwork.Getwd()
 				if err == nil {
 					buffer.WriteString(wd)
 				}
