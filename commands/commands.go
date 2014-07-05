@@ -183,6 +183,7 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
+		prevDir, _ = currentwork.Getwd()
 		err := currentwork.Chdrive(name)
 		return interpreter.CONTINUE, err
 	}
