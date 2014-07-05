@@ -4,9 +4,7 @@ import "os"
 import "os/exec"
 import "strings"
 import "fmt"
-import "bytes"
 import "path/filepath"
-import "bufio"
 
 import alias "../alias/table"
 import "../conio"
@@ -83,47 +81,6 @@ func cmd_set(cmd *exec.Cmd) (interpreter.NextT, error) {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", arg, os.Getenv(arg))
 		} else {
 			os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
-		}
-	}
-	return interpreter.CONTINUE, nil
-}
-
-func cmd_source(cmd *exec.Cmd) (interpreter.NextT, error) {
-	envTxtPath := filepath.Join(
-		os.TempDir(),
-		fmt.Sprintf("nyagos-%d.tmp", os.Getpid()))
-
-	var buffer bytes.Buffer
-
-	buffer.WriteString(cmd.Args[1])
-	buffer.WriteString(" & set > ")
-	buffer.WriteString(envTxtPath)
-
-	args := make([]string, 3)
-	args[0] = os.Getenv("COMSPEC")
-	args[1] = "/c"
-	args[2] = buffer.String()
-	var cmd2 exec.Cmd
-	cmd2.Path = args[0]
-	cmd2.Args = args
-	cmd2.Env = nil
-	cmd2.Dir = ""
-	if err := cmd2.Run(); err != nil {
-		return interpreter.CONTINUE, err
-	}
-	fp, err := os.Open(envTxtPath)
-	if err != nil {
-		return interpreter.CONTINUE, nil
-	}
-	defer os.Remove(envTxtPath)
-	defer fp.Close()
-
-	scr := bufio.NewScanner(fp)
-	for scr.Scan() {
-		line := scr.Text()
-		eqlPos := strings.Index(line, "=")
-		if eqlPos > 0 {
-			os.Setenv(line[:eqlPos], line[eqlPos+1:])
 		}
 	}
 	return interpreter.CONTINUE, nil
