@@ -11,7 +11,7 @@ import "../conio"
 import "../history"
 import "../interpreter"
 import "../ls"
-import "../currentwork"
+import "../dos"
 
 import "github.com/shiena/ansicolor"
 
@@ -35,7 +35,7 @@ func getHome() string {
 }
 
 func cmd_pwd(cmd *exec.Cmd) (interpreter.NextT, error) {
-	wd, _ := currentwork.Getwd()
+	wd, _ := os.Getwd()
 	fmt.Fprintln(cmd.Stdout, wd)
 	return interpreter.CONTINUE, nil
 }
@@ -44,20 +44,20 @@ var prevDir string
 
 func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
-		prevDir_, _ := currentwork.Getwd()
+		prevDir_, _ := os.Getwd()
 		var err error
 		if cmd.Args[1] == "-" {
-			err = currentwork.Chdir(prevDir)
+			err = dos.Chdir(prevDir)
 		} else {
-			err = currentwork.Chdir(cmd.Args[1])
+			err = dos.Chdir(cmd.Args[1])
 		}
 		prevDir = prevDir_
 		return interpreter.CONTINUE, err
 	}
 	home := getHome()
 	if home != "" {
-		prevDir, _ = currentwork.Getwd()
-		err := currentwork.Chdir(home)
+		prevDir, _ = os.Getwd()
+		err := dos.Chdir(home)
 		return interpreter.CONTINUE, err
 	}
 	return cmd_pwd(cmd)
@@ -140,8 +140,7 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
-		prevDir, _ = currentwork.Getwd()
-		err := currentwork.Chdrive(name)
+		err := dos.Chdrive(name)
 		return interpreter.CONTINUE, err
 	}
 	function, ok := buildInCmd[name]

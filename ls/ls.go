@@ -4,6 +4,7 @@ import "fmt"
 import "io"
 import "os"
 import "path/filepath"
+import "regexp"
 import "sort"
 import "strings"
 import "time"
@@ -180,7 +181,13 @@ func (this fileInfoCollection) Swap(i, j int) {
 }
 
 func lsFolder(folder string, flag int, out io.Writer) error {
-	fd, err := os.Open(folder)
+	var folder_ string
+	if rxDriveOnly.MatchString(folder) {
+		folder_ = folder + "."
+	} else {
+		folder_ = folder
+	}
+	fd, err := os.Open(folder_)
 	if err != nil {
 		return err
 	}
@@ -223,6 +230,8 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	return nil
 }
 
+var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
+
 func lsCore(paths []string, flag int, out io.Writer) error {
 	if len(paths) <= 0 {
 		return lsFolder(".", flag, out)
@@ -231,7 +240,13 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 	printCount := 0
 	files := make([]os.FileInfo, 0)
 	for _, name := range paths {
-		status, err := os.Stat(name)
+		var nameStat string
+		if rxDriveOnly.MatchString(name) {
+			nameStat = name + "."
+		} else {
+			nameStat = name
+		}
+		status, err := os.Stat(nameStat)
 		if err != nil {
 			return err
 		}
