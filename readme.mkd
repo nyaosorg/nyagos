@@ -5,7 +5,7 @@ Required software
 -----------------
 
 * [go1.3 windows/386](http://golang.org)
-* [Mingw-Gcc 4.8.1-4](http://mingw.org/)
+* [Mingw-Gcc 4.8.1-4](http://mingw.org)
 
 How to Build
 ------------
@@ -13,6 +13,8 @@ How to Build
 On `%GOPATH%` folder,
 
     git clone https://github.com/zetamatta/nyagos nyagos
+    go get github.com/mattn/go-runewidth
+    go get github.com/shiena/ansicolor 
     cd nyagos
-    nmake icon
-    nmake
+    windres --output-format=coff -o nyagosico.syso nyagosico.rc
+    go build
