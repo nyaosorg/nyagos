@@ -4,6 +4,7 @@ import "regexp"
 import "strings"
 import "unicode"
 import "syscall"
+import "path/filepath"
 
 //#include <direct.h>
 import "C"
@@ -38,4 +39,22 @@ func Chdir(folder string) error {
 		C._wchdir((*C.wchar_t)(&utf16[0]))
 	}
 	return err
+}
+
+var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
+var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[\\/]")
+
+func Join(paths ...string) string {
+	start := 0
+	for i, path := range paths {
+		if rxDriveOnly.MatchString(path) {
+			paths[i] = path + "."
+		} else if rxRoot.MatchString(path) {
+			start = i
+		}
+	}
+	if start > 0 {
+		paths = paths[start:]
+	}
+	return filepath.Join(paths...)
 }

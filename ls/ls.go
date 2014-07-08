@@ -10,6 +10,7 @@ import "strings"
 import "time"
 
 import "../box"
+import "../dos"
 import "../exename"
 
 const (
@@ -222,7 +223,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
-			f1fullpath := filepath.Join(folder, f1)
+			f1fullpath := dos.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
 			lsFolder(f1fullpath, flag, out)
 		}
