@@ -20,7 +20,7 @@ type Stdio struct {
 	Stderr io.Writer
 }
 
-func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, error), stdio *Stdio) (NextT, error) {
+func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (NextT, error), stdio *Stdio) (NextT, error) {
 	statements := parser.Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
@@ -94,7 +94,7 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, 
 			isBackGround := (state.Term == "|" || state.Term == "&")
 
 			if len(cmd.Args) > 0 {
-				whatToDo, err = hook(&cmd, isBackGround)
+				whatToDo, err = hook(&cmd, isBackGround, pipeOut)
 				if whatToDo == THROUGH {
 					cmd.Path, err = exec.LookPath(state.Argv[0])
 					if err == nil {
@@ -104,6 +104,8 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool) (NextT, 
 							err = cmd.Run()
 						}
 					}
+				} else {
+					pipeOut = nil
 				}
 			}
 			if pipeOut != nil {

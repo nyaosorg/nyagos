@@ -1,5 +1,6 @@
 package option
 
+import "io"
 import "os/exec"
 import "strings"
 
@@ -8,12 +9,12 @@ import . "../alias/table"
 import "../commands"
 import "../interpreter"
 
-func CommandHooks(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
-	status, _ := alias.Hook(cmd, IsBackground)
+func CommandHooks(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
+	status, _ := alias.Hook(cmd, IsBackground, closer)
 	if status != interpreter.THROUGH {
 		return status, nil
 	}
-	return commands.Exec(cmd, IsBackground)
+	return commands.Exec(cmd, IsBackground, closer)
 }
 
 func Parse(getArg func() (string, bool)) {

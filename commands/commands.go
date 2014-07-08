@@ -1,5 +1,6 @@
 package commands
 
+import "io"
 import "os"
 import "os/exec"
 import "strings"
@@ -137,7 +138,7 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 	"source":  cmd_source,
 }
 
-func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
+func Exec(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
@@ -158,10 +159,14 @@ func Exec(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 		}
 		cmd.Args = newArgs
 		if IsBackground {
-			go function(cmd)
+			go func(cmd *exec.Cmd, closer io.Closer) {
+				function(cmd)
+				closer.Close()
+			}(cmd, closer)
 			return interpreter.CONTINUE, nil
 		} else {
 			next, err := function(cmd)
+			closer.Close()
 			return next, err
 		}
 	} else {

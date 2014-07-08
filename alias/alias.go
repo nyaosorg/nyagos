@@ -5,6 +5,7 @@ import "os/exec"
 import "regexp"
 import "strconv"
 import "strings"
+import "io"
 
 import . "./table"
 import "../commands"
@@ -12,7 +13,7 @@ import "../interpreter"
 
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
-func Hook(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
+func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
 	baseStr, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
 		return interpreter.THROUGH, nil
@@ -48,8 +49,12 @@ func Hook(cmd *exec.Cmd, IsBackground bool) (interpreter.NextT, error) {
 	stdio.Stdin = cmd.Stdin
 	stdio.Stdout = cmd.Stdout
 	stdio.Stderr = cmd.Stderr
-	return interpreter.Interpret(
+	nextT, err := interpreter.Interpret(
 		cmdline,
 		commands.Exec,
 		&stdio)
+	if nextT != interpreter.THROUGH && closer != nil {
+		closer.Close()
+	}
+	return nextT, err
 }
