@@ -149,12 +149,16 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncInsertReport(this *ReadLineBuffer) KeyFuncResult {
-	L := this.InsertString(this.Cursor, fmt.Sprintf("[%X]", this.Unicode))
+	insertAndRepaint(this, fmt.Sprintf("[%X]", this.Unicode))
+	return CONTINUE
+}
+
+func insertAndRepaint(this *ReadLineBuffer, text string) {
+	L := this.InsertString(this.Cursor, text)
 	if L >= 0 {
 		this.Repaint(this.Cursor, -L)
 		this.Cursor += L
 	}
-	return CONTINUE
 }
 
 func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
@@ -199,6 +203,11 @@ func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
+func KeyFuncPaste(this *ReadLineBuffer) KeyFuncResult {
+	insertAndRepaint(this, GetClipboardString())
+	return CONTINUE
+}
+
 var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\r':         KeyFuncEnter,
 	'\x01':       KeyFuncHead,
@@ -212,6 +221,7 @@ var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
 	'\x1B':       KeyFuncClear,
 	('U' & 0x1F): KeyFuncClearBefore,
 	('L' & 0x1F): KeyFuncCLS,
+	('Y' & 0x1F): KeyFuncPaste,
 }
 
 // KeyCode from
