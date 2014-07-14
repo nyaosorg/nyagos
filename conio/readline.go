@@ -1,5 +1,6 @@
 package conio
 
+import "strings"
 import "fmt"
 
 type KeyFuncResult int
@@ -204,7 +205,12 @@ func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncPaste(this *ReadLineBuffer) KeyFuncResult {
-	insertAndRepaint(this, GetClipboardString())
+	insertAndRepaint(this,
+		strings.Replace(
+			strings.Replace(
+				strings.Replace(GetClipboardString(), "\n", " ",-1),
+				"\r", "",-1),
+			"\t", " ",-1))
 	return CONTINUE
 }
 
