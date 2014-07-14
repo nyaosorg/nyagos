@@ -5,7 +5,6 @@ import "os"
 import "os/exec"
 import "strings"
 import "fmt"
-import "path/filepath"
 
 import alias "../alias/table"
 import "../conio"
@@ -148,7 +147,7 @@ func Exec(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 	if ok {
 		newArgs := make([]string, 0)
 		for _, arg1 := range cmd.Args {
-			matches, _ := filepath.Glob(arg1)
+			matches, _ := dos.Glob(arg1)
 			if matches == nil {
 				newArgs = append(newArgs, arg1)
 			} else {

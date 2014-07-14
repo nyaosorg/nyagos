@@ -1,5 +1,6 @@
 package dos
 
+import "fmt"
 import "regexp"
 import "strings"
 import "unicode"
@@ -57,4 +58,18 @@ func Join(paths ...string) string {
 		paths = paths[start:]
 	}
 	return filepath.Join(paths...)
+}
+
+var rxCouldGlobPattern = regexp.MustCompile("^[A-Za-z]:[^\\/]")
+
+func Glob(pattern string) (matches []string, err error) {
+	result, err := filepath.Glob(pattern)
+	if len(result) > 0 {
+		return result, err
+	}
+	if rxCouldGlobPattern.MatchString(pattern) {
+		pattern = fmt.Sprintf("%s.\\%s", pattern[:2], pattern[2:])
+		result, err = filepath.Glob(pattern)
+	}
+	return result, err
 }
