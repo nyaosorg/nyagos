@@ -150,16 +150,8 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncInsertReport(this *ReadLineBuffer) KeyFuncResult {
-	insertAndRepaint(this, fmt.Sprintf("[%X]", this.Unicode))
+	this.InsertAndRepaint(fmt.Sprintf("[%X]", this.Unicode))
 	return CONTINUE
-}
-
-func insertAndRepaint(this *ReadLineBuffer, text string) {
-	L := this.InsertString(this.Cursor, text)
-	if L >= 0 {
-		this.Repaint(this.Cursor, -L)
-		this.Cursor += L
-	}
 }
 
 func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
@@ -205,12 +197,12 @@ func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncPaste(this *ReadLineBuffer) KeyFuncResult {
-	insertAndRepaint(this,
+	this.InsertAndRepaint(
 		strings.Replace(
 			strings.Replace(
-				strings.Replace(GetClipboardString(), "\n", " ",-1),
-				"\r", "",-1),
-			"\t", " ",-1))
+				strings.Replace(GetClipboardString(), "\n", " ", -1),
+				"\r", "", -1),
+			"\t", " ", -1))
 	return CONTINUE
 }
 

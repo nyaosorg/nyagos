@@ -97,9 +97,15 @@ func (this *ReadLineBuffer) Delete(pos int, n int) int {
 	return delw
 }
 
+func (this *ReadLineBuffer) InsertAndRepaint(str string) {
+	this.ReplaceAndRepaint(this.Cursor, str)
+}
+
 func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 	n := this.Cursor - pos
-	this.Delete(pos, n)
+	if n > 0 {
+		this.Delete(pos, n)
+	}
 	this.InsertString(pos, str)
 	if pos < this.ViewStart {
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
