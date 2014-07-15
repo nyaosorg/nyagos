@@ -3,6 +3,8 @@ package conio
 import "strings"
 import "fmt"
 
+import "github.com/atotto/clipboard"
+
 type KeyFuncResult int
 
 const (
@@ -197,12 +199,15 @@ func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncPaste(this *ReadLineBuffer) KeyFuncResult {
-	this.InsertAndRepaint(
-		strings.Replace(
+	text, err := clipboard.ReadAll()
+	if err == nil {
+		this.InsertAndRepaint(
 			strings.Replace(
-				strings.Replace(GetClipboardString(), "\n", " ", -1),
-				"\r", "", -1),
-			"\t", " ", -1))
+				strings.Replace(
+					strings.Replace(text, "\n", " ", -1),
+					"\r", "", -1),
+				"\t", " ", -1))
+	}
 	return CONTINUE
 }
 
