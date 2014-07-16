@@ -2,8 +2,9 @@ package conio
 
 import "strings"
 import "fmt"
+import "bytes"
 
-import "github.com/atotto/clipboard"
+import "github.com/zetamatta/clipboard"
 
 type KeyFuncResult int
 
@@ -160,6 +161,13 @@ func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	i := this.Cursor
 	bs := 0
+
+	var killbuf bytes.Buffer
+	for j := this.Cursor; j < this.Length; j++ {
+		killbuf.WriteRune(this.Buffer[j])
+	}
+	clipboard.WriteAll(killbuf.String())
+
 	for i < this.Length && w < this.ViewWidth {
 		w1 := getCharWidth(this.Buffer[i])
 		PutRep(' ', w1)
