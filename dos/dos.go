@@ -30,14 +30,24 @@ func Chdrive(drive string) error {
 
 var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
 
-func Chdir(folder string) error {
-	if m := rxPath.FindStringSubmatch(folder); m != nil {
-		C._chdrive(C.int(m[1][0] & 0x1F))
+func Chdir(folder_ string) error {
+	folder := folder_
+	if m := rxPath.FindStringSubmatch(folder_); m != nil {
+		status := C._chdrive(C.int(m[1][0] & 0x1F))
+		if status != 0 {
+			return fmt.Errorf("%s: no such directory", folder_)
+		}
 		folder = m[2]
+		if len(folder) <= 0 {
+			return nil
+		}
 	}
 	utf16, err := syscall.UTF16FromString(folder)
 	if err == nil {
-		C._wchdir((*C.wchar_t)(&utf16[0]))
+		status := C._wchdir((*C.wchar_t)(&utf16[0]))
+		if status != 0 {
+			err = fmt.Errorf("%s: no such directory", folder_)
+		}
 	}
 	return err
 }
