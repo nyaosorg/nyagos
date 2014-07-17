@@ -15,7 +15,9 @@ On `%GOPATH%` folder,
     git clone https://github.com/zetamatta/nyagos nyagos
     go get github.com/mattn/go-runewidth
     go get github.com/shiena/ansicolor 
-    go get github.com/zetamatta/clipboard
+    go get github.com/zetamatta/clipboard 
     cd nyagos
     windres --output-format=coff -o nyagosico.syso nyagosico.rc
     go build
+
+* [github.com/zetamatta/clipboard](http://github.com/zetamatta/clipboard)'s original is [github.com/atotto/clipboard](https://github.com/atotto/clipboard).
