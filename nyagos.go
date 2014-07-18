@@ -3,6 +3,7 @@ package main
 import "bufio"
 import "fmt"
 import "os"
+import "os/signal"
 import "path/filepath"
 
 import "github.com/shiena/ansicolor"
@@ -15,7 +16,19 @@ import "./interpreter"
 import "./option"
 import "./prompt"
 
+func signalOff() {
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+	go func() {
+		for _ = range ch {
+
+		}
+	}()
+}
+
 func main() {
+	signalOff()
+
 	// KeyBind += completion Module
 	conio.KeyMap['\t'] = completion.KeyFuncCompletion
 	conio.ZeroMap[conio.K_UP] = history.KeyFuncHistoryUp
