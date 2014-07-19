@@ -1,8 +1,8 @@
 package conio
 
-import "strings"
-import "fmt"
 import "bytes"
+import "fmt"
+import "strings"
 
 import "github.com/zetamatta/clipboard"
 
@@ -259,16 +259,18 @@ var ZeroMap = map[uint16]func(*ReadLineBuffer) KeyFuncResult{
 	K_SHIFT: KeyFuncPass,
 }
 
-func ReadLine(prompt_ func()) (string, KeyFuncResult) {
+const widthWithoutPrompt = 79
+
+func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
 	var this ReadLineBuffer
 	this.Buffer = make([]rune, 20)
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
-	this.ViewWidth = 60
+	this.ViewWidth = widthWithoutPrompt
 	this.Prompt = prompt_
 	if this.Prompt != nil {
-		this.Prompt()
+		this.ViewWidth = widthWithoutPrompt - this.Prompt()
 	}
 	for {
 		stdOut.Flush()
