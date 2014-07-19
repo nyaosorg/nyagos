@@ -5,12 +5,15 @@ import "fmt"
 import "os"
 import "os/signal"
 import "path/filepath"
+import "regexp"
+import "strings"
 
+import "github.com/mattn/go-runewidth"
 import "github.com/shiena/ansicolor"
 
-import "./exename"
 import "./completion"
 import "./conio"
+import "./exename"
 import "./history"
 import "./interpreter"
 import "./lua"
@@ -26,6 +29,8 @@ func signalOff() {
 		}
 	}()
 }
+
+var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 
 func main() {
 	signalOff()
@@ -83,8 +88,15 @@ func main() {
 
 	for {
 		line, cont := conio.ReadLine(
-			func() {
-				fmt.Fprint(ansiOut, prompt.Format2Prompt(os.Getenv("PROMPT")))
+			func() int {
+				text := prompt.Format2Prompt(os.Getenv("PROMPT"))
+				fmt.Fprint(ansiOut, text)
+				text = rxAnsiEscCode.ReplaceAllString(text, "")
+				lfPos := strings.LastIndex(text, "\n")
+				if lfPos >= 0 {
+					text = text[lfPos+1:]
+				}
+				return runewidth.StringWidth(text)
 			})
 		if cont == conio.ABORT {
 			break

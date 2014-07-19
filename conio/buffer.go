@@ -50,7 +50,7 @@ type ReadLineBuffer struct {
 	Keycode   uint16
 	ViewStart int
 	ViewWidth int
-	Prompt    func()
+	Prompt    func() int
 }
 
 func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
