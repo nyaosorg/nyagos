@@ -1,6 +1,5 @@
 package main
 
-import "bufio"
 import "fmt"
 import "os"
 import "os/signal"
@@ -76,14 +75,6 @@ func main() {
 	nyagos_lua := filepath.Join(exeFolder, "nyagos.lua")
 	if _, err := os.Stat(nyagos_lua); err == nil {
 		L.Call(nyagos_lua)
-	}
-	rcPath := filepath.Join(exeFolder, "nyagos.rc")
-	if fd, err := os.Open(rcPath); err == nil {
-		defer fd.Close()
-		scr := bufio.NewScanner(fd)
-		for scr.Scan() {
-			interpreter.Interpret(scr.Text(), option.CommandHooks, nil)
-		}
 	}
 
 	for {
