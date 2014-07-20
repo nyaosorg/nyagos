@@ -6,6 +6,7 @@ Required software
 
 * [go1.3 windows/386](http://golang.org)
 * [Mingw-Gcc 4.8.1-4](http://mingw.org)
+* [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 
 How to Build
 ------------
@@ -17,7 +18,12 @@ On `%GOPATH%` folder,
     go get github.com/shiena/ansicolor 
     go get github.com/zetamatta/clipboard 
     cd nyagos
+    git checkout Lua
     windres --output-format=coff -o nyagosico.syso nyagosico.rc
+    cd lua
+    unzip PATH\TO\lua-5.2.3_Win32_dllw4_lib.zip 
+    copy lua52.dll ..\..
+    cd ..
     go build
 
 * [github.com/zetamatta/clipboard](http://github.com/zetamatta/clipboard)'s original is [github.com/atotto/clipboard](https://github.com/atotto/clipboard).
