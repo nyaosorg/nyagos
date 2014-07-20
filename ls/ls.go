@@ -249,9 +249,8 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 		}
 		status, err := os.Stat(nameStat)
 		if err != nil {
-			return err
-		}
-		if status.IsDir() {
+			continue
+		} else if status.IsDir() {
 			dirs = append(dirs, name)
 		} else if (flag & O_LONG) != 0 {
 			lsOneLong(newMyFileInfoT(name, status), flag, out)
