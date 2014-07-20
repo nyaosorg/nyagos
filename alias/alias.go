@@ -13,6 +13,19 @@ import "../interpreter"
 
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
+func quoteAndJoin(list []string) string {
+	var buffer bytes.Buffer
+	for _, value := range list {
+		if buffer.Len() > 0 {
+			buffer.WriteRune(' ')
+		}
+		buffer.WriteRune('"')
+		buffer.WriteString(value)
+		buffer.WriteRune('"')
+	}
+	return buffer.String()
+}
+
 func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
 	baseStr, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
@@ -22,7 +35,7 @@ func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 	cmdline := paramMatch.ReplaceAllStringFunc(baseStr, func(s string) string {
 		if s == "$*" {
 			isReplaced = true
-			return strings.Join(cmd.Args[1:], " ")
+			return quoteAndJoin(cmd.Args[1:])
 		}
 		i, err := strconv.ParseInt(s[1:], 10, 0)
 		if err == nil {
@@ -37,12 +50,8 @@ func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 	if !isReplaced {
 		var buffer bytes.Buffer
 		buffer.WriteString(baseStr)
-
-		for _, arg := range cmd.Args[1:] {
-			buffer.WriteRune(' ')
-			buffer.WriteString(arg)
-		}
-
+		buffer.WriteRune(' ')
+		buffer.WriteString(quoteAndJoin(cmd.Args[1:]))
 		cmdline = buffer.String()
 	}
 	var stdio interpreter.Stdio
