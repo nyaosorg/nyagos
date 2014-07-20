@@ -10,11 +10,11 @@ from http://sourceforge.net/projects/luabinaries/files/5.2.3/Windows%20Libraries
 /*
 #cgo CFLAGS: -I ./include
 #cgo LDFLAGS: -llua52 -L.
+#include "stdlib.h"
 #include "lua.h"
 #include "lualib.h"
 #include "lauxlib.h"
 
-<<<<<<< HEAD
 static int gLua_pcall(lua_State* L,int x,int y,int z)
 { return lua_pcall(L,x,y,z); }
 
@@ -24,32 +24,21 @@ static const char *gLua_tostring(lua_State* L,int i)
 static int gLuaL_loadfile(lua_State* L,const char *filename)
 { return luaL_loadfile(L,filename); }
 
-static void gLua_pushcfunction(lua_State* L,lua_CFunction f)
-{
-	lua_pushcfunction(L,f);
-}
-
-extern int LuaAlias(lua_State*);
-extern int LuaSetEnv(lua_State*);
-
-static int setfunctions(lua_State* L)
-{
-	lua_pushcfunction(L,LuaAlias);
-	lua_setglobal(L,"alias");
-	lua_pushcfunction(L,LuaSetEnv);
-	lua_setglobal(L,"setenv");
-}
-
+extern int luaToGoBridge(lua_State *);
+static void gLua_pushbridge(lua_State*L)
+{ return lua_pushcfunction(L,luaToGoBridge);}
 */
 import "C"
-import "errors"
-import "strings"
-import "os"
 
-import "../alias/table"
+import "fmt"
+import "unsafe"
 
 type Lua struct {
 	lua *C.lua_State
+}
+
+type goFunctionT struct {
+	function func(*Lua) int
 }
 
 func NewLua() *Lua {
@@ -66,13 +55,13 @@ func (this *Lua) Close() {
 	C.lua_close(this.lua)
 }
 
-func (this *Lua) ToString(i int) string {
-	return C.GoString(C.gLua_tostring(this.lua, C.int(i)))
+func (this *Lua) ToString(index int) string {
+	return C.GoString(C.gLua_tostring(this.lua, C.int(index)))
 }
 
 func (this *Lua) Load(fname string) error {
 	if C.gLuaL_loadfile(this.lua, C.CString(fname)) != 0 {
-		return errors.New(fname + ": " + this.ToString(-1))
+		return fmt.Errorf("%s: %s", fname, this.ToString(-1))
 	}
 	return nil
 }
@@ -82,7 +71,51 @@ func (this *Lua) Call(fname string) error {
 		return err
 	}
 	if C.gLua_pcall(this.lua, 0, 0, 0) != 0 {
-		return errors.New(fname + ": " + this.ToString(-1))
+		return fmt.Errorf("%s: %s", fname, this.ToString(-1))
 	}
 	return nil
+}
+
+func (this *Lua) NewTable() {
+	C.lua_createtable(this.lua, 0, 0)
+}
+
+func (this *Lua) PushString(str string) {
+	tmp := C.CString(str)
+	C.lua_pushstring(this.lua, tmp)
+	C.free(unsafe.Pointer(tmp))
+}
+
+//export luaToGoBridge
+func luaToGoBridge(lua *C.lua_State) int {
+	f := *(*goFunctionT)(C.lua_touserdata(lua, 1))
+	C.lua_remove(lua, 1)
+	L := Lua{lua}
+	return int(f.function(&L))
+}
+
+func (this *Lua) SetField(index int, str string) {
+	tmp := C.CString(str)
+	C.lua_setfield(this.lua, C.int(index), tmp)
+	C.free(unsafe.Pointer(tmp))
+}
+
+func (this *Lua) SetGlobal(str string) {
+	tmp := C.CString(str)
+	C.lua_setglobal(this.lua, tmp)
+	C.free(unsafe.Pointer(tmp))
+}
+
+func (this *Lua) SetMetaTable(index int) {
+	C.lua_setmetatable(this.lua, C.int(index))
+}
+
+func (this *Lua) PushGoFunction(f func(L *Lua) int) {
+	f_ := goFunctionT{f}
+	voidptr := C.lua_newuserdata(this.lua, C.size_t(unsafe.Sizeof(f_)))
+	*(*goFunctionT)(voidptr) = f_
+	this.NewTable()
+	C.gLua_pushbridge(this.lua)
+	this.SetField(-2, "__call")
+	this.SetMetaTable(-2)
 }

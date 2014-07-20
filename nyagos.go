@@ -48,6 +48,7 @@ func main() {
 	// Lua extension
 	L := lua.NewLua()
 	L.OpenLibs()
+	lua.SetFunctions(L)
 	defer L.Close()
 
 	// Parameter Parsing
