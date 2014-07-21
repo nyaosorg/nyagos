@@ -1,6 +1,10 @@
 print "Nihongo Yet Another GOing Shell"
 print "Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG"
 
+-- This is system-lua files which will be updated.
+-- When you want to customize, please edit ~\.nyagos
+-- Please do not edit this.
+
 local function split(equation)
     local pos=string.find(equation,"=",1,true)
     if pos then
@@ -50,8 +54,6 @@ end
 
 exec = nyagos.exec
 
-set "PROMPT=$e[36;40;1m$L$P$G$_$$ $e[37;1m"
-alias "ls=ls -oF"
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
     local rcfname = home .. [[\.nyagos]]
@@ -59,4 +61,3 @@ if home then
         loadfile(rcfname)()
     end
 end
-exec "cd"

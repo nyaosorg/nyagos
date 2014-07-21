@@ -1,0 +1,8 @@
+-- This is a sample .nyagos written with Lua.
+-- Edit and put it on %USERPROFILE% or %HOME%
+
+set "PROMPT=$e[36;40;1m$L$P$G$_$$ $e[37;1m"
+alias "ls=ls -oF"
+exec "cd"
+
+-- vim:set ft=lua: --
