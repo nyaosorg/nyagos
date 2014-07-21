@@ -16,4 +16,4 @@ clean :
 	if exist nyagos.exe del nyagos.exe
 
 snapshot :
-	zip -9 nyagos-%DATE:/=%.zip nyagos.exe nyagos_ja.txt readme.mkd nyagos.lua lua52.dll
+	zip -9 nyagos-%DATE:/=%.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.mkd readme.mkd .nyagos
