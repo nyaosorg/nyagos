@@ -11,10 +11,10 @@ Windows であまりストレスを感じないような環境を構築するために
 
 ## インストール
 
-`nyagos.exe` 、`nyagos.lua`、`lua52.dll` を %PATH% の差す
+`nyagos.exe` 、`nyagos.lua`、`lua52.dll` を `%PATH%` の差す
 ディレクトリに置いてください(同一のディレクトリに置いてください)。
 
-カスタマイズ用ファイル .nyagos は、%USERPROFILE% か %HOME% 
+カスタマイズ用ファイル `.nyagos` は、`%USERPROFILE%` か `%HOME%`
 の差すディレクトリに置いて、必要に応じて修正してください。
 
 ## 起動オプション
