@@ -33,10 +33,12 @@ func exec(L *Lua) int {
 }
 
 func SetFunctions(this *Lua) {
+	this.NewTable()
 	this.PushGoFunction(alias)
-	this.SetGlobal("alias")
+	this.SetField(-2, "alias")
 	this.PushGoFunction(setEnv)
-	this.SetGlobal("setenv")
+	this.SetField(-2, "setenv")
 	this.PushGoFunction(exec)
-	this.SetGlobal("exec")
+	this.SetField(-2, "exec")
+	this.SetGlobal("nyagos")
 }
