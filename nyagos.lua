@@ -54,23 +54,24 @@ end
 
 exec = nyagos.exec
 
-alias "assoc=%COMSPEC% /c assoc"
-alias "attrib=%COMSPEC% /c attrib"
-alias "copy=%COMSPEC% /c copy"
-alias "del=%COMSPEC% /c del"
-alias "dir=%COMSPEC% /c dir"
-alias "for=%COMSPEC% /c for"
-alias "md=%COMSPEC% /c md"
-alias "mkdir=%COMSPEC% /c mkdir"
-alias "mklink=%COMSPEC% /c mklink"
-alias "move=%COMSPEC% /c move"
-alias "open=%COMSPEC% /c for %I in ($*) do @start \"%I\""
-alias "rd=%COMSPEC% /c rd"
-alias "ren=%COMSPEC% /c ren"
-alias "rename=%COMSPEC% /c rename"
-alias "rmdir=%COMSPEC% /c rmdir"
-alias "start=%COMSPEC% /c start"
-alias "type=%COMSPEC% /c type"
+alias 'assoc=%COMSPEC% /c assoc $*'
+alias 'attrib=%COMSPEC% /c attrib $*'
+alias 'copy=%COMSPEC% /c copy $*'
+alias 'del=%COMSPEC% /c del $*'
+alias 'dir=%COMSPEC% /c dir $*'
+alias 'for=%COMSPEC% /c for $*'
+alias 'md=%COMSPEC% /c md $*'
+alias 'mkdir=%COMSPEC% /c mkdir $*'
+alias 'mklink=%COMSPEC% /c mklink $*'
+alias 'move=%COMSPEC% /c move $*'
+alias 'open=%COMSPEC% /c for %I in ($*) do @start "%I"'
+alias 'rd=%COMSPEC% /c rd $*'
+alias 'ren=%COMSPEC% /c ren $*'
+alias 'rename=%COMSPEC% /c rename $*'
+alias 'rmdir=%COMSPEC% /c rmdir $*'
+alias 'start=%COMSPEC% /c start $*'
+alias 'type=%COMSPEC% /c type $*'
+alias 'ls=ls -oF $*'
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
