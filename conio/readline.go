@@ -4,7 +4,7 @@ import "bytes"
 import "fmt"
 import "strings"
 
-import "github.com/zetamatta/clipboard"
+import "github.com/atotto/clipboard"
 
 type KeyFuncResult int
 
