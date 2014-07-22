@@ -75,7 +75,8 @@ alias 'ls=ls -oF $*'
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
-    local rcfname = home .. [[\.nyagos]]
+    exec "cd"
+    local rcfname = '.nyagos'
     if exists(rcfname) then
         local chank,err=loadfile(rcfname)
         if chank then
