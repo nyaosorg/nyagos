@@ -77,6 +77,11 @@ local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
     local rcfname = home .. [[\.nyagos]]
     if exists(rcfname) then
-        loadfile(rcfname)()
+        local chank,err=loadfile(rcfname)
+        if chank then
+            chank()
+        elseif err then
+            print(err)
+        end
     end
 end
