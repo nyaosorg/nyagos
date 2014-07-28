@@ -21,7 +21,11 @@ func cmd_source(cmd *exec.Cmd) (interpreter.NextT, error) {
 	args[0] = os.Getenv("COMSPEC")
 	args[1] = "/C"
 	for _, v := range cmd.Args[1:] {
-		args = append(args, strings.Replace(v, " ", "^ ", -1))
+		args = append(args,
+			strings.Replace(
+				strings.Replace(
+					strings.Replace(v, " ", "^ ", -1), "(", "^(", -1),
+				")", "^)", -1))
 	}
 	args = append(args, "&")
 	args = append(args, "set")
