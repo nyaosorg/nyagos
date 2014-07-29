@@ -106,6 +106,12 @@ func (this *Lua) SetGlobal(str string) {
 	C.free(unsafe.Pointer(tmp))
 }
 
+func (this *Lua) GetGlobal(str string) {
+	tmp := C.CString(str)
+	C.lua_getglobal(this.lua, tmp)
+	C.free(unsafe.Pointer(tmp))
+}
+
 func (this *Lua) SetMetaTable(index int) {
 	C.lua_setmetatable(this.lua, C.int(index))
 }
@@ -118,4 +124,12 @@ func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 	C.gLua_pushbridge(this.lua)
 	this.SetField(-2, "__call")
 	this.SetMetaTable(-2)
+}
+
+func (this *Lua) GetTop() int {
+	return int(C.lua_gettop(this.lua))
+}
+
+func (this *Lua) SetTop(index int) {
+	C.lua_settop(this.lua, C.int(index))
 }
