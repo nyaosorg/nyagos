@@ -57,7 +57,7 @@ func SetFunctions(this *Lua) {
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
-	this.GetGlobal("io")
+	this.GetGlobal("os")
 	this.PushGoFunction(getEnv)
 	this.SetField(-2, "getenv")
 
