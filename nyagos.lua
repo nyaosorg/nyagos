@@ -22,9 +22,9 @@ function set(equation)
         left = string.sub(left,1,-2)
         local original=os.getenv(left)
         if string.find(right,original) then
-            right = right .. ";" .. original
-        else
             right = original
+        else
+            right = right .. ";" .. original
         end
     end
     if right then
