@@ -16,29 +16,44 @@ local function split(equation)
     end
 end
 
+local function expand(text)
+    return string.gsub(text,"%%(%w+)%%",function(w)
+        return os.getenv(w)
+    end)
+end
+
 function set(equation)
-    local left,right,pos = split(equation)
-    if pos and string.sub(left,-1) == "+" then
-        left = string.sub(left,1,-2)
-        local original=os.getenv(left)
-        if string.find(right,original) then
-            right = original
-        else
-            right = right .. ";" .. original
+    if type(equation) == 'table' then
+        for left,right in pairs(equation) do
+            nyagos.setenv(left,expand(right))
         end
-    end
-    if right then
-        right = string.gsub(right,"%%(%w+)%%",function(w)
-            return os.getenv(w)
-        end)
-        nyagos.setenv(left,right)
+    else
+        local left,right,pos = split(equation)
+        if pos and string.sub(left,-1) == "+" then
+            left = string.sub(left,1,-2)
+            local original=os.getenv(left)
+            if string.find(right,original) then
+                right = original
+            else
+                right = right .. ";" .. original
+            end
+        end
+        if right then
+            nyagos.setenv(left,expand(right))
+        end
     end
 end
 
 function alias(equation)
-    local left,right,pos = split(equation)
-    if right then
-        nyagos.alias(left,right)
+    if type(equation) == 'table' then
+        for left,right in pairs(equation) do
+            nyagos.alias(left,right)
+        end
+    else
+        local left,right,pos = split(equation)
+        if right then
+            nyagos.alias(left,right)
+        end
     end
 end
 
@@ -52,30 +67,32 @@ function exists(path)
     end
 end
 
-exec = nyagos.exec
+x = nyagos.exec
 
-alias 'assoc=%COMSPEC% /c assoc $*'
-alias 'attrib=%COMSPEC% /c attrib $*'
-alias 'copy=%COMSPEC% /c copy $*'
-alias 'del=%COMSPEC% /c del $*'
-alias 'dir=%COMSPEC% /c dir $*'
-alias 'for=%COMSPEC% /c for $*'
-alias 'md=%COMSPEC% /c md $*'
-alias 'mkdir=%COMSPEC% /c mkdir $*'
-alias 'mklink=%COMSPEC% /c mklink $*'
-alias 'move=%COMSPEC% /c move $*'
-alias 'open=%COMSPEC% /c for %I in ($*) do @start "%I"'
-alias 'rd=%COMSPEC% /c rd $*'
-alias 'ren=%COMSPEC% /c ren $*'
-alias 'rename=%COMSPEC% /c rename $*'
-alias 'rmdir=%COMSPEC% /c rmdir $*'
-alias 'start=%COMSPEC% /c start $*'
-alias 'type=%COMSPEC% /c type $*'
-alias 'ls=ls -oF $*'
+alias{
+    assoc='%COMSPEC% /c assoc $*',
+    attrib='%COMSPEC% /c attrib $*',
+    copy='%COMSPEC% /c copy $*',
+    del='%COMSPEC% /c del $*',
+    dir='%COMSPEC% /c dir $*',
+    ['for']='%COMSPEC% /c for $*',
+    md='%COMSPEC% /c md $*',
+    mkdir='%COMSPEC% /c mkdir $*',
+    mklink='%COMSPEC% /c mklink $*',
+    move='%COMSPEC% /c move $*',
+    open='%COMSPEC% /c for %I in ($*) do @start "%I"',
+    rd='%COMSPEC% /c rd $*',
+    ren='%COMSPEC% /c ren $*',
+    rename='%COMSPEC% /c rename $*',
+    rmdir='%COMSPEC% /c rmdir $*',
+    start='%COMSPEC% /c start $*',
+    ['type']='%COMSPEC% /c type $*',
+    ls='ls -oF $*',
+}
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
-    exec "cd"
+    x'cd'
     local rcfname = '.nyagos'
     if exists(rcfname) then
         local chank,err=loadfile(rcfname)
