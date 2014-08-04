@@ -102,24 +102,47 @@ func (this *ReadLineBuffer) InsertAndRepaint(str string) {
 }
 
 func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
+	// Cursor rewind
+	for i := this.Cursor - 1; i >= this.ViewStart; i-- {
+		Backspace(getCharWidth(this.Buffer[i]))
+	}
+
+	// Replace Buffer
 	n := this.Cursor - pos
 	if n > 0 {
 		this.Delete(pos, n)
 	}
-	this.InsertString(pos, str)
-	if pos < this.ViewStart {
-		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-	} else {
-		Backspace(this.GetWidthBetween(pos, this.Cursor))
-	}
-	this.Cursor = pos
-	for _, ch := range str {
-		if this.Cursor >= this.ViewStart {
-			PutRep(ch, 1)
+
+	// Define ViewStart , Cursor
+	this.Cursor = pos + this.InsertString(pos, str)
+	this.ViewStart = 0
+	w := 0
+	for i := 0; i < this.Cursor; i++ {
+		w1 := getCharWidth(this.Buffer[i])
+		for w1+w >= this.ViewWidth {
+			w -= getCharWidth(this.Buffer[this.ViewStart])
+			this.ViewStart++
 		}
-		this.Cursor++
+		w += w1
 	}
-	this.Repaint(this.Cursor, 0)
+
+	// Repaint
+	w = 0
+	for i := this.ViewStart; i < this.Cursor; i++ {
+		PutRep(this.Buffer[i], 1)
+		w += getCharWidth(this.Buffer[i])
+	}
+	bs := 0
+	for i := this.Cursor; i < this.Length; i++ {
+		w1 := getCharWidth(this.Buffer[i])
+		if w+w1 >= this.ViewWidth {
+			break
+		}
+		PutRep(this.Buffer[i], 1)
+		w += w1
+		bs += w1
+	}
+	Backspace(bs)
 }
 
 func (this *ReadLineBuffer) GetWidthBetween(from int, to int) int {
