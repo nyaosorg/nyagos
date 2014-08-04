@@ -73,3 +73,35 @@ Display the history. No arguments, the last ten are displayed.
 
 ### `ls -OPTION FILES`
 
+List the directory. Supported options are below:
+
+* `-l` Long format
+* `-F` Mark `/` after directories' name. `*' after executables' name.
+* `-o` Enable color
+* `-a` Print all files.
+* `-R` Print Subdirectories recursively.
+
+### `pwd`
+
+Print the current woking drive and directory.
+
+### `set ENV=VAR`
+
+Set the environment variable the value. When the value has any spaces,
+you should `set "ENV=VAR"`.
+
+#### Special Variable
+
+* `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
+
+### `source BATCHFILENAME`
+
+## On the Startup
+
+## Substitution
+
+### History
+
+### Environment variable
+
+## Lua Extension
