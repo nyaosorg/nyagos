@@ -1,9 +1,10 @@
-package lua
+package nua
 
 import "fmt"
 import "os"
 import "strings"
 
+import . "../lua"
 import "../alias/table"
 import "../interpreter"
 import "../option"

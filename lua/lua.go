@@ -41,7 +41,7 @@ type goFunctionT struct {
 	function func(*Lua) int
 }
 
-func NewLua() *Lua {
+func New() *Lua {
 	this := new(Lua)
 	this.lua = C.luaL_newstate()
 	return this

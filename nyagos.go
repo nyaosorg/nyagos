@@ -16,6 +16,7 @@ import "./exename"
 import "./history"
 import "./interpreter"
 import "./lua"
+import "./nua"
 import "./option"
 import "./prompt"
 
@@ -45,9 +46,9 @@ func main() {
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
 
 	// Lua extension
-	L := lua.NewLua()
+	L := lua.New()
 	L.OpenLibs()
-	lua.SetFunctions(L)
+	nua.SetFunctions(L)
 	defer L.Close()
 
 	// Parameter Parsing
