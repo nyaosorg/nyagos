@@ -7,10 +7,9 @@ import "strconv"
 import "strings"
 import "io"
 
-import . "./table"
-import "../commands"
 import "../interpreter"
 
+var Table = map[string]string{}
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
 func quoteAndJoin(list []string) string {
@@ -26,10 +25,12 @@ func quoteAndJoin(list []string) string {
 	return buffer.String()
 }
 
+var NextHook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error)
+
 func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
 	baseStr, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
-		return interpreter.THROUGH, nil
+		return NextHook(cmd, IsBackground, closer)
 	}
 	isReplaced := false
 	cmdline := paramMatch.ReplaceAllStringFunc(baseStr, func(s string) string {
@@ -60,7 +61,7 @@ func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 	stdio.Stderr = cmd.Stderr
 	nextT, err := interpreter.Interpret(
 		cmdline,
-		commands.Exec,
+		NextHook, /* commands.Exec */
 		&stdio)
 	if nextT != interpreter.THROUGH && closer != nil {
 		closer.Close()

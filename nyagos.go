@@ -10,8 +10,10 @@ import "strings"
 import "github.com/mattn/go-runewidth"
 import "github.com/shiena/ansicolor"
 
+import "./alias"
 import "./completion"
 import "./conio"
+import "./commands"
 import "./exename"
 import "./history"
 import "./interpreter"
@@ -44,6 +46,8 @@ func main() {
 
 	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
+
+	alias.NextHook = commands.Exec
 
 	// Lua extension
 	L := lua.New()
@@ -102,7 +106,7 @@ func main() {
 			fmt.Fprintln(os.Stdout, line)
 		}
 		history.Push(line)
-		whatToDo, err := interpreter.Interpret(line, option.CommandHooks, nil)
+		whatToDo, err := interpreter.Interpret(line, alias.Hook, nil)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

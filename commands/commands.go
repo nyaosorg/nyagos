@@ -6,7 +6,7 @@ import "os/exec"
 import "strings"
 import "fmt"
 
-import alias "../alias/table"
+import "../alias"
 import "../conio"
 import "../history"
 import "../interpreter"

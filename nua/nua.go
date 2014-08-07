@@ -5,25 +5,24 @@ import "os"
 import "strings"
 
 import . "../lua"
-import "../alias/table"
+import "../alias"
 import "../interpreter"
-import "../option"
 
-func alias(L *Lua) int {
+func cmdAlias(L *Lua) int {
 	name := L.ToString(1)
 	value := L.ToString(2)
-	aliasTable.Table[strings.ToLower(name)] = value
+	alias.Table[strings.ToLower(name)] = value
 	return 0
 }
 
-func setEnv(L *Lua) int {
+func cmdSetEnv(L *Lua) int {
 	name := L.ToString(1)
 	value := L.ToString(2)
 	os.Setenv(name, value)
 	return 0
 }
 
-func getEnv(L *Lua) int {
+func cmdGetEnv(L *Lua) int {
 	name := L.ToString(1)
 	value := os.Getenv(name)
 	if len(value) > 0 {
@@ -34,9 +33,9 @@ func getEnv(L *Lua) int {
 	}
 }
 
-func exec(L *Lua) int {
+func cmdExec(L *Lua) int {
 	statement := L.ToString(1)
-	_, err := interpreter.Interpret(statement, option.CommandHooks, nil)
+	_, err := interpreter.Interpret(statement, alias.Hook, nil)
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -47,19 +46,19 @@ func exec(L *Lua) int {
 func SetFunctions(this *Lua) {
 	stackPos := this.GetTop()
 	this.NewTable()
-	this.PushGoFunction(alias)
+	this.PushGoFunction(cmdAlias)
 	this.SetField(-2, "alias")
-	this.PushGoFunction(setEnv)
+	this.PushGoFunction(cmdSetEnv)
 	this.SetField(-2, "setenv")
-	this.PushGoFunction(getEnv)
+	this.PushGoFunction(cmdGetEnv)
 	this.SetField(-2, "getenv")
-	this.PushGoFunction(exec)
+	this.PushGoFunction(cmdExec)
 	this.SetField(-2, "exec")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
 	this.GetGlobal("os")
-	this.PushGoFunction(getEnv)
+	this.PushGoFunction(cmdGetEnv)
 	this.SetField(-2, "getenv")
 
 	this.SetTop(stackPos)
