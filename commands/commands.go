@@ -99,7 +99,7 @@ func cmd_cls(cmd *exec.Cmd) (interpreter.NextT, error) {
 func cmd_alias(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
-			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val)
+			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
 		}
 		return interpreter.CONTINUE, nil
 	}
@@ -108,7 +108,7 @@ func cmd_alias(cmd *exec.Cmd) (interpreter.NextT, error) {
 			key := args[0:eqlPos]
 			val := args[eqlPos+1:]
 			if len(val) > 0 {
-				alias.Table[strings.ToLower(key)] = val
+				alias.Table[strings.ToLower(key)] = alias.New(val)
 			} else {
 				delete(alias.Table, strings.ToLower(key))
 			}
@@ -116,7 +116,7 @@ func cmd_alias(cmd *exec.Cmd) (interpreter.NextT, error) {
 			key := strings.ToLower(args)
 			val := alias.Table[key]
 
-			fmt.Printf("%s=%s\n", key, val)
+			fmt.Printf("%s=%s\n", key, val.String())
 		}
 	}
 	return interpreter.CONTINUE, nil

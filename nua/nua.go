@@ -11,7 +11,7 @@ import "../interpreter"
 func cmdAlias(L *Lua) int {
 	name := L.ToString(1)
 	value := L.ToString(2)
-	alias.Table[strings.ToLower(name)] = value
+	alias.Table[strings.ToLower(name)] = alias.New(value)
 	return 0
 }
 
