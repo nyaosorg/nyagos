@@ -1,7 +1,9 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-Required software
+The binary files can be downloaded on [nyaos.org](http://www.nyaos.org/index.cgi?p=NYAGOS).
+
+Required software 
 -----------------
 
 * [go1.3 windows/386](http://golang.org)
