@@ -27,6 +27,9 @@ static int gLuaL_loadfile(lua_State* L,const char *filename)
 static int gLua_isfunction(lua_State* L,int i)
 { return lua_isfunction(L,i); }
 
+static void gLua_pop(lua_State* L,int n)
+{ lua_pop(L,n); }
+
 extern int luaToGoBridge(lua_State *);
 static void gLua_pushbridge(lua_State*L)
 { return lua_pushcfunction(L,luaToGoBridge);}
@@ -88,7 +91,6 @@ func (this *Lua) Call(nargs, nresult int) error {
 		return fmt.Errorf("%s", this.ToString(-1))
 	}
 	return nil
-
 }
 
 func (this *Lua) Source(fname string) error {
@@ -160,4 +162,8 @@ func (this *Lua) GetTop() int {
 
 func (this *Lua) SetTop(index int) {
 	C.lua_settop(this.lua, C.int(index))
+}
+
+func (this *Lua) Pop(n int) {
+	C.gLua_pop(this.lua, C.int(n))
 }
