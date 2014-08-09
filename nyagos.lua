@@ -68,6 +68,7 @@ function exists(path)
 end
 
 x = nyagos.exec
+print = nyagos.echo
 
 alias{
     assoc='%COMSPEC% /c assoc $*',

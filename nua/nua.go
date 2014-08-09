@@ -69,6 +69,18 @@ func cmdExec(L *Lua) int {
 	return 0
 }
 
+func cmdEcho(L *Lua) int {
+	n := L.GetTop()
+	for i := 1; i <= n; i++ {
+		if i > 1 {
+			fmt.Print("\t")
+		}
+		fmt.Print(L.ToString(i))
+	}
+	fmt.Print("\n")
+	return 0
+}
+
 func SetFunctions(this *Lua) {
 	stackPos := this.GetTop()
 	this.NewTable()
@@ -80,6 +92,8 @@ func SetFunctions(this *Lua) {
 	this.SetField(-2, "getenv")
 	this.PushGoFunction(cmdExec)
 	this.SetField(-2, "exec")
+	this.PushGoFunction(cmdEcho)
+	this.SetField(-2, "echo")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
