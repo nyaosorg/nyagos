@@ -79,7 +79,7 @@ func main() {
 	exeFolder := filepath.Dir(exeName)
 	nyagos_lua := filepath.Join(exeFolder, "nyagos.lua")
 	if _, err := os.Stat(nyagos_lua); err == nil {
-		err := L.Call(nyagos_lua)
+		err := L.Source(nyagos_lua)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

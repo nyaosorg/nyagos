@@ -24,6 +24,9 @@ static const char *gLua_tostring(lua_State* L,int i)
 static int gLuaL_loadfile(lua_State* L,const char *filename)
 { return luaL_loadfile(L,filename); }
 
+static int gLua_isfunction(lua_State* L,int i)
+{ return lua_isfunction(L,i); }
+
 extern int luaToGoBridge(lua_State *);
 static void gLua_pushbridge(lua_State*L)
 { return lua_pushcfunction(L,luaToGoBridge);}
@@ -61,6 +64,18 @@ func (this *Lua) ToString(index int) string {
 	return C.GoString(C.gLua_tostring(this.lua, C.int(index)))
 }
 
+func (this *Lua) IsString(index int) bool {
+	return C.lua_isstring(this.lua, C.int(index)) != 0
+}
+
+func (this *Lua) IsFunction(index int) bool {
+	return C.gLua_isfunction(this.lua, C.int(index)) != 0
+}
+
+func (this *Lua) PushValue(index int) {
+	C.lua_pushvalue(this.lua, C.int(index))
+}
+
 func (this *Lua) Load(fname string) error {
 	if C.gLuaL_loadfile(this.lua, C.CString(fname)) != 0 {
 		return fmt.Errorf("%s: %s", fname, this.ToString(-1))
@@ -68,14 +83,19 @@ func (this *Lua) Load(fname string) error {
 	return nil
 }
 
-func (this *Lua) Call(fname string) error {
+func (this *Lua) Call(nargs, nresult int) error {
+	if C.gLua_pcall(this.lua, C.int(nargs), C.int(nresult), 0) != 0 {
+		return fmt.Errorf("%s", this.ToString(-1))
+	}
+	return nil
+
+}
+
+func (this *Lua) Source(fname string) error {
 	if err := this.Load(fname); err != nil {
 		return err
 	}
-	if C.gLua_pcall(this.lua, 0, 0, 0) != 0 {
-		return fmt.Errorf("%s: %s", fname, this.ToString(-1))
-	}
-	return nil
+	return this.Call(0, 0)
 }
 
 func (this *Lua) NewTable() {
@@ -99,6 +119,12 @@ func luaToGoBridge(lua *C.lua_State) int {
 func (this *Lua) SetField(index int, str string) {
 	tmp := C.CString(str)
 	C.lua_setfield(this.lua, C.int(index), tmp)
+	C.free(unsafe.Pointer(tmp))
+}
+
+func (this *Lua) GetField(index int, str string) {
+	tmp := C.CString(str)
+	C.lua_getfield(this.lua, C.int(index), tmp)
 	C.free(unsafe.Pointer(tmp))
 }
 

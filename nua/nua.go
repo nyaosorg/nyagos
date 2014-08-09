@@ -3,15 +3,41 @@ package nua
 import "fmt"
 import "os"
 import "strings"
+import "os/exec"
 
 import . "../lua"
 import "../alias"
 import "../interpreter"
 
+type LuaFunction struct {
+	L            *Lua
+	registoryKey string
+}
+
+func (this LuaFunction) String() string {
+	return "<<Lua-function>>"
+}
+
+func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
+	this.L.GetField(Registory, this.registoryKey)
+	for _, arg1 := range cmd.Args {
+		this.L.PushString(arg1)
+	}
+	this.L.Call(len(cmd.Args), 0)
+	return interpreter.CONTINUE, nil
+}
+
 func cmdAlias(L *Lua) int {
 	name := L.ToString(1)
-	value := L.ToString(2)
-	alias.Table[strings.ToLower(name)] = alias.New(value)
+	key := strings.ToLower(name)
+	if L.IsString(2) {
+		value := L.ToString(2)
+		alias.Table[key] = alias.New(value)
+	} else if L.IsFunction(2) {
+		regkey := "nyagos.alias." + key
+		L.SetField(Registory, regkey)
+		alias.Table[key] = LuaFunction{L, regkey}
+	}
 	return 0
 }
 
