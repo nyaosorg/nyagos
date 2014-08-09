@@ -37,6 +37,8 @@ type Lua struct {
 	lua *C.lua_State
 }
 
+const Registory = C.LUA_REGISTRYINDEX
+
 type goFunctionT struct {
 	function func(*Lua) int
 }
