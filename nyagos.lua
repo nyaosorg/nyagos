@@ -1,5 +1,5 @@
-print "Nihongo Yet Another GOing Shell"
-print "Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG"
+print("Nihongo Yet Another GOing Shell "..nyagos.version)
+print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
 
 -- This is system-lua files which will be updated.
 -- When you want to customize, please edit ~\.nyagos

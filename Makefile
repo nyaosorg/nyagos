@@ -1,7 +1,7 @@
 # Maintenance file for nmake.exe
 
 build :
-	go build
+	go build -ldflags "-X main.version [SNAPSHOT-%DATE:/=%]" nyagos.go
 
 icon : 
 	windres --output-format=coff -o nyagosico.syso nyagosico.rc

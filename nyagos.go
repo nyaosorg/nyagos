@@ -33,6 +33,7 @@ func signalOff() {
 }
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
+var version string
 
 func main() {
 	signalOff()
@@ -53,6 +54,10 @@ func main() {
 	L := lua.New()
 	L.OpenLibs()
 	nua.SetFunctions(L)
+	L.GetGlobal("nyagos")
+	L.PushString(version)
+	L.SetField(-2, "version")
+	L.Pop(1)
 	defer L.Close()
 
 	// Parameter Parsing
