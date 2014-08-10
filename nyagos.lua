@@ -68,6 +68,7 @@ function exists(path)
 end
 
 x = nyagos.exec
+original_print = print
 print = nyagos.echo
 
 alias{
