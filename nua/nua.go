@@ -23,8 +23,8 @@ func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 	for _, arg1 := range cmd.Args {
 		this.L.PushString(arg1)
 	}
-	this.L.Call(len(cmd.Args), 0)
-	return interpreter.CONTINUE, nil
+	err := this.L.Call(len(cmd.Args), 0)
+	return interpreter.CONTINUE, err
 }
 
 func cmdAlias(L *Lua) int {
