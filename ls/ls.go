@@ -12,6 +12,7 @@ import "time"
 import "../box"
 import "../dos"
 import "../exename"
+import "./fileattr"
 
 const (
 	O_STRIP_DIR = 1
@@ -205,7 +206,8 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 		folders = make([]string, 0)
 	}
 	for _, f := range nodesArray.nodes {
-		if strings.HasPrefix(f.Name(), ".") && (flag&O_ALL) == 0 {
+		attr := fileattr.New(dos.Join(folder_, f.Name()))
+		if (strings.HasPrefix(f.Name(), ".") || attr.IsHidden()) && (flag&O_ALL) == 0 {
 			continue
 		}
 		if f.IsDir() && folders != nil {
