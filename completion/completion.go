@@ -19,6 +19,7 @@ func isExecutable(path string) bool {
 }
 
 var RxEnvironPattern = regexp.MustCompile("%[^%]+%")
+var RxTilda = regexp.MustCompile("^~[/\\\\]")
 
 func listUpFiles(str string) ([]string, error) {
 	str = RxEnvironPattern.ReplaceAllStringFunc(str, func(p string) string {
@@ -30,7 +31,17 @@ func listUpFiles(str string) ([]string, error) {
 			return p
 		}
 	})
-
+	str = RxTilda.ReplaceAllStringFunc(str, func(p string) string {
+		home := os.Getenv("HOME")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		if home != "" {
+			return home + "\\"
+		} else {
+			return p
+		}
+	})
 	str = strings.Replace(strings.Replace(str, "\\", "/", -1), "\"", "", -1)
 	var directory string
 	str = strings.Replace(str, "\\", "/", -1)
