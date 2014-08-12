@@ -1,10 +1,10 @@
 # Maintenance file for nmake.exe
 
-build :
-	go build -ldflags "-X main.version [SNAPSHOT-%DATE:/=%]" nyagos.go
+build : nyagos.syso
+	go build -ldflags "-X main.version [SNAPSHOT-%DATE:/=%]"
 
-icon : 
-	windres --output-format=coff -o nyagosico.syso nyagosico.rc
+nyagos.syso : 
+	windres --output-format=coff -o nyagos.syso nyagos.rc
 
 fmt:
 	for /R $(MAKEDIR) %%I IN (*.go) do @go fmt %%I
