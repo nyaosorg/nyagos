@@ -90,6 +90,10 @@ alias{
     start='%COMSPEC% /c start $*',
     ['type']='%COMSPEC% /c type $*',
     ls='ls -oF $*',
+    lua_e=function(...)
+        local args={...}
+        assert(load(args[2]))()
+    end,
 }
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
