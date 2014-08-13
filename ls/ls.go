@@ -7,7 +7,6 @@ import "path/filepath"
 import "regexp"
 import "sort"
 import "strings"
-import "time"
 
 import "../box"
 import "../dos"
@@ -25,8 +24,8 @@ const (
 )
 
 type fileInfoT struct {
-	name string
-	info os.FileInfo
+	name        string
+	os.FileInfo // anonymous
 }
 
 const (
@@ -37,18 +36,10 @@ const (
 	ANSI_END      = "\x1B[39m"
 )
 
-func (this fileInfoT) Name() string       { return this.name }
-func (this fileInfoT) Size() int64        { return this.info.Size() }
-func (this fileInfoT) Mode() os.FileMode  { return this.info.Mode() }
-func (this fileInfoT) ModTime() time.Time { return this.info.ModTime() }
-func (this fileInfoT) IsDir() bool        { return this.info.IsDir() }
-func (this fileInfoT) Sys() interface{}   { return this.info.Sys() }
+func (this fileInfoT) Name() string { return this.name }
 
 func newMyFileInfoT(name string, info os.FileInfo) *fileInfoT {
-	return &fileInfoT{
-		name: name,
-		info: info,
-	}
+	return &fileInfoT{name, info}
 }
 
 func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
