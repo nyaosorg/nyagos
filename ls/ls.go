@@ -33,6 +33,7 @@ const (
 	ANSI_DIR      = "\x1B[1;32m"
 	ANSI_NORM     = "\x1B[1;37m"
 	ANSI_READONLY = "\x1B[1;33m"
+	ANSI_HIDDEN   = "\x1B[1;34m"
 	ANSI_END      = "\x1B[39m"
 )
 
@@ -89,6 +90,10 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	} else {
 		io.WriteString(out, "-")
 	}
+	if attr.IsHidden() && (flag&O_COLOR) != 0 {
+		prefix = ANSI_HIDDEN
+		postfix = ANSI_END
+	}
 	if (flag & O_STRIP_DIR) > 0 {
 		name = filepath.Base(name)
 	}
@@ -144,6 +149,10 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 			if (flag & O_INDICATOR) != 0 {
 				postfix += "*"
 			}
+		}
+		if attr.IsHidden() && (flag&O_COLOR) != 0 {
+			prefix = ANSI_HIDDEN
+			postfix = ANSI_END
 		}
 		nodes_[key] = prefix + val.Name() + postfix
 	}
