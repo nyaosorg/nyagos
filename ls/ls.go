@@ -45,10 +45,10 @@ func (this fileInfoT) IsDir() bool        { return this.info.IsDir() }
 func (this fileInfoT) Sys() interface{}   { return this.info.Sys() }
 
 func newMyFileInfoT(name string, info os.FileInfo) *fileInfoT {
-	this := new(fileInfoT)
-	this.name = name
-	this.info = info
-	return this
+	return &fileInfoT{
+		name: name,
+		info: info,
+	}
 }
 
 func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
