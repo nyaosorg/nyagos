@@ -42,7 +42,7 @@ func newMyFileInfoT(name string, info os.FileInfo) *fileInfoT {
 	return &fileInfoT{name, info}
 }
 
-func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
+func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	indicator := " "
 	prefix := ""
 	postfix := ""
@@ -59,6 +59,10 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	mode := status.Mode()
 	perm := mode.Perm()
 	name := status.Name()
+	attr := dos.NewFileAttr(dos.Join(folder, status.Name()))
+	if attr.IsReparse() {
+		indicator = "@"
+	}
 	if (perm & 4) > 0 {
 		io.WriteString(out, "r")
 	} else {
@@ -105,12 +109,21 @@ func lsOneLong(status os.FileInfo, flag int, out io.Writer) {
 	io.WriteString(out, "\n")
 }
 
-func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
+func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 	nodes_ := make([]string, len(nodes))
 	for key, val := range nodes {
 		prefix := ""
 		postfix := ""
-		if val.IsDir() {
+		attr := dos.NewFileAttr(dos.Join(folder, val.Name()))
+		if attr.IsReparse() {
+			if (flag & O_COLOR) != 0 {
+				prefix = ANSI_DIR
+				postfix = ANSI_END
+			}
+			if (flag & O_INDICATOR) != 0 {
+				postfix += "@"
+			}
+		} else if val.IsDir() {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_DIR
 				postfix = ANSI_END
@@ -137,9 +150,9 @@ func lsBox(nodes []os.FileInfo, flag int, out io.Writer) {
 	box.Print(nodes_, 80, out)
 }
 
-func lsLong(nodes []os.FileInfo, flag int, out io.Writer) {
+func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 	for _, finfo := range nodes {
-		lsOneLong(finfo, flag, out)
+		lsOneLong(folder, finfo, flag, out)
 	}
 }
 
@@ -209,9 +222,9 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	if (flag & O_LONG) > 0 {
-		lsLong(nodesArray.nodes, O_STRIP_DIR|flag, out)
+		lsLong(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
-		lsBox(nodesArray.nodes, O_STRIP_DIR|flag, out)
+		lsBox(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
@@ -245,14 +258,14 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 		} else if status.IsDir() {
 			dirs = append(dirs, name)
 		} else if (flag & O_LONG) != 0 {
-			lsOneLong(newMyFileInfoT(name, status), flag, out)
+			lsOneLong(".", newMyFileInfoT(name, status), flag, out)
 			printCount += 1
 		} else {
 			files = append(files, newMyFileInfoT(name, status))
 		}
 	}
 	if len(files) > 0 {
-		lsBox(files, flag, out)
+		lsBox(".", files, flag, out)
 		printCount = len(files)
 	}
 	for _, name := range dirs {
