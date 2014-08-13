@@ -1,4 +1,4 @@
-package fileattr
+package dos
 
 //#include <windows.h>
 import "C"
@@ -8,7 +8,7 @@ type FileAttr struct {
 	attr uint
 }
 
-func New(path string) *FileAttr {
+func NewFileAttr(path string) *FileAttr {
 	cpath := C.CString(path)
 	defer C.free(unsafe.Pointer(cpath))
 	return &FileAttr{uint(C.GetFileAttributes((*C.CHAR)(cpath)))}
