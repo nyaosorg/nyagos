@@ -1,7 +1,7 @@
 # Maintenance file for nmake.exe
 
 build : nyagos.syso
-	go build -ldflags "-X main.version [SNAPSHOT-%DATE:/=%]"
+	for /F %%V IN ('git log -1 --pretty^=format:%%H') DO go build -ldflags "-X main.version [SNAPSHOT-%DATE:/=%-%%V]"
 
 nyagos.syso : 
 	windres --output-format=coff -o nyagos.syso nyagos.rc

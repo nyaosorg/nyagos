@@ -1,4 +1,5 @@
-print("Nihongo Yet Another GOing Shell "..nyagos.version)
+print("Nihongo Yet Another GOing Shell")
+print(nyagos.version)
 print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
 
 -- This is system-lua files which will be updated.
