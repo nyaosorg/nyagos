@@ -19,10 +19,8 @@ On `%GOPATH%` folder,
     go get github.com/mattn/go-runewidth
     go get github.com/shiena/ansicolor 
     go get github.com/atotto/clipboard
-    cd nyagos
-    windres --output-format=coff -o nyagosico.syso nyagosico.rc
-    cd lua
+    cd nyagos\lua
     unzip PATH\TO\lua-5.2.3_Win32_dllw4_lib.zip 
     copy lua52.dll ..\..
     cd ..
-    go build
+    make.cmd
