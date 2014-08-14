@@ -33,7 +33,9 @@ func signalOff() {
 }
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
-var version string
+
+var stamp string
+var commit string
 
 func main() {
 	signalOff()
@@ -55,8 +57,10 @@ func main() {
 	L.OpenLibs()
 	nua.SetFunctions(L)
 	L.GetGlobal("nyagos")
-	L.PushString(version)
-	L.SetField(-2, "version")
+	L.PushString(stamp)
+	L.SetField(-2, "stamp")
+	L.PushString(commit)
+	L.SetField(-2, "commit")
 	L.Pop(1)
 	defer L.Close()
 

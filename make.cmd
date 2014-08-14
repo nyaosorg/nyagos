@@ -4,7 +4,7 @@
 
 :build
         if not exist nyagos.syso windres --output-format=coff -o nyagos.syso nyagos.rc
-	for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -ldflags "-X main.version [SNAPSHOT-%DATE:/=%-%%V]"
+	for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -ldflags "-X main.stamp %DATE% -X main.commit %%V"
         goto end
 
 :fmt

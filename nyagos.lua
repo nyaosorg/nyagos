@@ -1,5 +1,5 @@
 print("Nihongo Yet Another GOing Shell")
-print(nyagos.version)
+print(string.format("Build at %s with commit %s",nyagos.stamp,nyagos.commit))
 print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
 
 -- This is system-lua files which will be updated.
