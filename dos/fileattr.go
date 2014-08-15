@@ -2,16 +2,15 @@ package dos
 
 //#include <windows.h>
 import "C"
-import "unsafe"
+import "syscall"
 
 type FileAttr struct {
 	attr uint
 }
 
 func NewFileAttr(path string) *FileAttr {
-	cpath := C.CString(path)
-	defer C.free(unsafe.Pointer(cpath))
-	return &FileAttr{uint(C.GetFileAttributes((*C.CHAR)(cpath)))}
+	cpath, _ := syscall.UTF16FromString(path)
+	return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}
 }
 
 func (this *FileAttr) IsReparse() bool {
