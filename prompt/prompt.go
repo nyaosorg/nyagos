@@ -3,6 +3,7 @@ package prompt
 import "bytes"
 import "fmt"
 import "os"
+import "strings"
 import "time"
 import "unicode"
 
@@ -14,7 +15,11 @@ func Format2Prompt(format string) string {
 	}
 	var buffer bytes.Buffer
 	lastchar := '\000'
-	for _, ch := range format {
+	for reader := strings.NewReader(format); reader.Len() > 0; {
+		ch, _, err := reader.ReadRune()
+		if err != nil {
+			break
+		}
 		if lastchar == '$' {
 			c := unicode.ToLower(ch)
 			if c == 'a' {
@@ -59,6 +64,24 @@ func Format2Prompt(format string) string {
 				buffer.WriteString(
 					fmt.Sprintf("%02d:%02d:%02d.%02d",
 						hour, min, sec, nnn))
+			} else if c == 'u' {
+				r := 0
+				for i := 0; i < 4 && reader.Len() > 0; i++ {
+					r1, _, err := reader.ReadRune()
+					if err != nil {
+						break
+					}
+					n := strings.IndexRune("0123456789ABCDEF",
+						unicode.ToUpper(r1))
+					if n < 0 {
+						reader.UnreadRune()
+						break
+					}
+					r = r*16 + n
+				}
+				if r > 0 {
+					buffer.WriteRune(rune(r))
+				}
 			} else if c == 'v' {
 				// Windows Version
 			} else if c == '_' {
