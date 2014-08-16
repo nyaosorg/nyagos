@@ -3,9 +3,10 @@ package prompt
 import "bytes"
 import "fmt"
 import "os"
-import "strings"
 import "time"
 import "unicode"
+
+import "../dos"
 
 func Format2Prompt(format string) string {
 	if format == "" {
@@ -45,9 +46,7 @@ func Format2Prompt(format string) string {
 			} else if c == 'p' {
 				wd, err := os.Getwd()
 				if err == nil {
-					buffer.WriteString(strings.Replace(
-						dos.ReplaceHomeToTilde(wd),
-						"\\", "/", -1))
+					buffer.WriteString(dos.ReplaceHomeToTildeSlash(wd))
 				}
 			} else if c == 'q' {
 				buffer.WriteRune('=')

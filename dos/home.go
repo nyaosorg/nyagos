@@ -19,3 +19,7 @@ func ReplaceHomeToTilde(wd string) string {
 	}
 	return wd
 }
+
+func ReplaceHomeToTildeSlash(wd string) string {
+	return strings.Replace(ReplaceHomeToTilde(wd), "\\", "/", -1)
+}

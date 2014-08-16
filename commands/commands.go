@@ -19,24 +19,9 @@ func cmd_exit(cmd *exec.Cmd) (interpreter.NextT, error) {
 	return interpreter.SHUTDOWN, nil
 }
 
-func getHome() string {
-	home := os.Getenv("HOME")
-	if home != "" {
-		return home
-	}
-	homeDrive := os.Getenv("HOMEDRIVE")
-	if homeDrive != "" {
-		homePath := os.Getenv("HOMEPATH")
-		if homePath != "" {
-			return homeDrive + homePath
-		}
-	}
-	return ""
-}
-
 func cmd_pwd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	wd, _ := os.Getwd()
-	fmt.Fprintln(cmd.Stdout, wd)
+	fmt.Fprintln(cmd.Stdout, dos.ReplaceHomeToTildeSlash(wd))
 	return interpreter.CONTINUE, nil
 }
 
@@ -54,7 +39,7 @@ func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 		prevDir = prevDir_
 		return interpreter.CONTINUE, err
 	}
-	home := getHome()
+	home := dos.GetHome()
 	if home != "" {
 		prevDir, _ = os.Getwd()
 		err := dos.Chdir(home)
