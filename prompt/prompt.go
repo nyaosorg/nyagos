@@ -7,14 +7,6 @@ import "strings"
 import "time"
 import "unicode"
 
-func getHome() string {
-	home := os.Getenv("HOME")
-	if home == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-	return home
-}
-
 func Format2Prompt(format string) string {
 	if format == "" {
 		format = "[$P]$_$$$S"
@@ -53,12 +45,9 @@ func Format2Prompt(format string) string {
 			} else if c == 'p' {
 				wd, err := os.Getwd()
 				if err == nil {
-					home := getHome()
-					homeLen := len(home)
-					if len(wd) >= homeLen && strings.EqualFold(home, wd[0:homeLen]) {
-						wd = "~" + wd[homeLen:]
-					}
-					buffer.WriteString(strings.Replace(wd, "\\", "/", -1))
+					buffer.WriteString(strings.Replace(
+						dos.ReplaceHomeToTilde(wd),
+						"\\", "/", -1))
 				}
 			} else if c == 'q' {
 				buffer.WriteRune('=')
