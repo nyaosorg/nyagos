@@ -9,7 +9,7 @@ import "io"
 
 import "../interpreter"
 
-type Callee interface {
+type Callable interface {
 	String() string
 	Call(cmd *exec.Cmd) (interpreter.NextT, error)
 }
@@ -63,7 +63,7 @@ func (this *AliasFunc) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 	return nextT, err
 }
 
-var Table = map[string]Callee{}
+var Table = map[string]Callable{}
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
 func quoteAndJoin(list []string) string {
