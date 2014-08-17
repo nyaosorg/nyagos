@@ -167,3 +167,11 @@ func (this *Lua) SetTop(index int) {
 func (this *Lua) Pop(n int) {
 	C.gLua_pop(this.lua, C.int(n))
 }
+
+func (this *Lua) PushLightUserData(p unsafe.Pointer) {
+	C.lua_pushlightuserdata(this.lua, p)
+}
+
+func (this *Lua) ToUserData(index int) unsafe.Pointer {
+	return C.lua_touserdata(this.lua, C.int(index))
+}

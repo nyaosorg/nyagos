@@ -1,13 +1,17 @@
 package nua
 
 import "fmt"
+import "io"
 import "os"
-import "strings"
 import "os/exec"
+import "strings"
+import "unsafe"
 
 import . "../lua"
 import "../alias"
 import "../interpreter"
+
+const nyagos_exec_cmd = "nyagos.exec.cmd"
 
 type LuaFunction struct {
 	L            *Lua
@@ -23,6 +27,8 @@ func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 	for _, arg1 := range cmd.Args {
 		this.L.PushString(arg1)
 	}
+	this.L.PushLightUserData(unsafe.Pointer(cmd))
+	this.L.SetField(Registory, nyagos_exec_cmd)
 	err := this.L.Call(len(cmd.Args), 0)
 	return interpreter.CONTINUE, err
 }
@@ -70,14 +76,24 @@ func cmdExec(L *Lua) int {
 }
 
 func cmdEcho(L *Lua) int {
+	L.GetField(Registory, nyagos_exec_cmd)
+	cmd := (*exec.Cmd)(L.ToUserData(-1))
+	L.Pop(1)
+	var out io.Writer
+	if cmd != nil {
+		out = cmd.Stdout
+	} else {
+		out = os.Stdout
+	}
+
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {
 		if i > 1 {
-			fmt.Print("\t")
+			fmt.Fprint(out, "\t")
 		}
-		fmt.Print(L.ToString(i))
+		fmt.Fprint(out, L.ToString(i))
 	}
-	fmt.Print("\n")
+	fmt.Fprint(out, "\n")
 	return 0
 }
 
