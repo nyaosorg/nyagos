@@ -7,7 +7,6 @@ import "path/filepath"
 import "regexp"
 import "strings"
 
-import "github.com/mattn/go-runewidth"
 import "github.com/shiena/ansicolor"
 
 import "./alias"
@@ -104,7 +103,7 @@ func main() {
 				if lfPos >= 0 {
 					text = text[lfPos+1:]
 				}
-				return runewidth.StringWidth(text)
+				return conio.GetStringWidth(text)
 			})
 		if cont == conio.ABORT {
 			break

@@ -5,24 +5,6 @@ import "bytes"
 import "os"
 import "unicode"
 
-import "github.com/mattn/go-runewidth"
-
-var widthCache = make(map[rune]int)
-
-func getCharWidth(n rune) int {
-	width, ok := widthCache[n]
-	if !ok {
-		width = runewidth.RuneWidth(n)
-		widthCache[n] = width
-	}
-	return width
-	// if n > 0xFF {
-	//	return 2;
-	//}else{
-	//	return 1;
-	//}
-}
-
 var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)
 
 func PutRep(ch rune, n int) {
@@ -88,7 +70,7 @@ func (this *ReadLineBuffer) Delete(pos int, n int) int {
 	}
 	delw := 0
 	for i := pos; i < pos+n; i++ {
-		delw += getCharWidth(this.Buffer[i])
+		delw += GetCharWidth(this.Buffer[i])
 	}
 	for i := pos; i < this.Length-n; i++ {
 		this.Buffer[i] = this.Buffer[i+n]
@@ -104,7 +86,7 @@ func (this *ReadLineBuffer) InsertAndRepaint(str string) {
 func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
 	for i := this.Cursor - 1; i >= this.ViewStart; i-- {
-		Backspace(getCharWidth(this.Buffer[i]))
+		Backspace(GetCharWidth(this.Buffer[i]))
 	}
 
 	// Replace Buffer
@@ -118,9 +100,9 @@ func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 	this.ViewStart = 0
 	w := 0
 	for i := 0; i < this.Cursor; i++ {
-		w1 := getCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		for w1+w >= this.ViewWidth {
-			w -= getCharWidth(this.Buffer[this.ViewStart])
+			w -= GetCharWidth(this.Buffer[this.ViewStart])
 			this.ViewStart++
 		}
 		w += w1
@@ -130,11 +112,11 @@ func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 	w = 0
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRep(this.Buffer[i], 1)
-		w += getCharWidth(this.Buffer[i])
+		w += GetCharWidth(this.Buffer[i])
 	}
 	bs := 0
 	for i := this.Cursor; i < this.Length; i++ {
-		w1 := getCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		if w+w1 >= this.ViewWidth {
 			break
 		}
@@ -148,7 +130,7 @@ func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 func (this *ReadLineBuffer) GetWidthBetween(from int, to int) int {
 	width := 0
 	for i := from; i < to; i++ {
-		width += getCharWidth(this.Buffer[i])
+		width += GetCharWidth(this.Buffer[i])
 	}
 	return width
 }
@@ -158,7 +140,7 @@ func (this *ReadLineBuffer) Repaint(pos int, del int) {
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
 	for i := pos; i < this.Length; i++ {
-		w1 := getCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		vp += w1
 		if vp >= this.ViewWidth {
 			break

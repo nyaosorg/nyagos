@@ -31,7 +31,7 @@ func KeyFuncBackword(this *ReadLineBuffer) KeyFuncResult { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		Backspace(getCharWidth(this.Buffer[this.Cursor]))
+		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -46,12 +46,12 @@ func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
 		PutRep('\a', 1)
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
-		w := getCharWidth(this.Buffer[this.ViewStart])
+		w := GetCharWidth(this.Buffer[this.ViewStart])
 		for {
 			if this.ViewStart <= 0 {
 				break
 			}
-			w_ := w + getCharWidth(this.Buffer[this.ViewStart-1])
+			w_ := w + GetCharWidth(this.Buffer[this.ViewStart-1])
 			if w_ >= this.ViewWidth {
 				break
 			}
@@ -76,7 +76,7 @@ func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
 	} else {
 		// Right Scroll
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-		if getCharWidth(this.Buffer[this.Cursor]) > getCharWidth(this.Buffer[this.ViewStart]) {
+		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -124,11 +124,11 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := getCharWidth(ch)
+	w1 := GetCharWidth(ch)
 	if w+w1 >= this.ViewWidth {
 		// scroll left
 		Backspace(w)
-		if getCharWidth(this.Buffer[this.ViewStart]) < w1 {
+		if GetCharWidth(this.Buffer[this.ViewStart]) < w1 {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -161,7 +161,7 @@ func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
 	clipboard.WriteAll(killbuf.String())
 
 	for i < this.Length && w < this.ViewWidth {
-		w1 := getCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		PutRep(' ', w1)
 		i++
 		w += w1
