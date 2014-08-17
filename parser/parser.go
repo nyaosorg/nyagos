@@ -2,7 +2,11 @@ package parser
 
 import "bytes"
 import "os"
+import "regexp"
+import "strconv"
 import "unicode"
+
+import "../dos"
 
 type RedirectT struct {
 	Path     string
@@ -17,6 +21,8 @@ type StatementT struct {
 }
 
 var prefix []string = []string{" 0<", " 1>", " 2>"}
+
+var rxUnicode = regexp.MustCompile("^u\\+?([0-9a-fA-F]+)$")
 
 func (this StatementT) String() string {
 	var buffer bytes.Buffer
@@ -61,11 +67,7 @@ func dequote(source *bytes.Buffer) string {
 			break
 		}
 		if ch == '~' && unicode.IsSpace(lastchar) {
-			home := os.Getenv("HOME")
-			if home == "" {
-				home = os.Getenv("USERPROFILE")
-			}
-			if home != "" {
+			if home := dos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
 				buffer.WriteRune('~')
@@ -91,6 +93,9 @@ func dequote(source *bytes.Buffer) string {
 			value := os.Getenv(nameStr)
 			if value != "" {
 				buffer.WriteString(value)
+			} else if m := rxUnicode.FindStringSubmatch(nameStr); m != nil {
+				ucode, _ := strconv.ParseInt(m[1], 16, 32)
+				buffer.WriteRune(rune(ucode))
 			} else {
 				buffer.WriteRune('%')
 				buffer.WriteString(nameStr)
