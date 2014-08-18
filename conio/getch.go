@@ -14,11 +14,23 @@ WCHAR getUnicodeChar(struct _INPUT_RECORD *input) {
 WCHAR getVirtualKeyCode(struct _INPUT_RECORD *input) {
 	return input->Event.KeyEvent.wVirtualKeyCode;
 }
+
+HANDLE GetConinHandle(){
+	return CreateFileW(
+		L"CONIN$" ,
+		GENERIC_READ ,
+		FILE_SHARE_READ ,
+		NULL ,
+		OPEN_EXISTING ,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL
+	);
+}
 */
 import "C"
 import "unicode/utf16"
 
-var hConin C.HANDLE = C.GetStdHandle(C.STD_INPUT_HANDLE)
+var hConin C.HANDLE = C.GetConinHandle() //C.GetStdHandle(C.STD_INPUT_HANDLE)
 
 var buffer [10][2]uint16
 var readptr int = 0
