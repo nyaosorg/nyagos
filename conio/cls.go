@@ -7,8 +7,21 @@ DWORD getSize(CONSOLE_SCREEN_BUFFER_INFO *csbi){
 	return csbi->dwSize.X * csbi->dwSize.Y;
 }
 
+DWORD getWidth(CONSOLE_SCREEN_BUFFER_INFO *csbi){
+	return csbi->srWindow.Right - csbi->srWindow.Left;
+}
+
+DWORD getHeight(CONSOLE_SCREEN_BUFFER_INFO *csbi){
+	return csbi->srWindow.Bottom - csbi->srWindow.Top;
+}
 */
 import "C"
+
+func GetScreenSize() (int, int) {
+	var csbi C.CONSOLE_SCREEN_BUFFER_INFO
+	C.GetConsoleScreenBufferInfo(hConout, &csbi)
+	return int(C.getWidth(&csbi)), int(C.getHeight(&csbi))
+}
 
 func Cls() {
 	var csbi C.CONSOLE_SCREEN_BUFFER_INFO
