@@ -10,8 +10,9 @@ import "strings"
 import "unicode"
 
 import "../box"
-import "../exename"
 import "../conio"
+import "../dos"
+import "../exename"
 
 func isExecutable(path string) bool {
 	_, ok := exename.Suffixes[strings.ToLower(filepath.Ext(path))]
@@ -70,6 +71,9 @@ func listUpFiles(str string) ([]string, error) {
 	STR := strings.ToUpper(str)
 	for _, node1 := range files {
 		name := path.Join(directory, node1.Name())
+		if attr := dos.NewFileAttr(name); attr.IsHidden() {
+			continue
+		}
 		if node1.IsDir() {
 			name += "/"
 		}
