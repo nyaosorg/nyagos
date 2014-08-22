@@ -10,6 +10,7 @@ import "unsafe"
 import . "../lua"
 import "../alias"
 import "../interpreter"
+import "../parser"
 
 const nyagos_exec_cmd = "nyagos.exec.cmd"
 
@@ -47,10 +48,30 @@ func cmdAlias(L *Lua) int {
 	return 0
 }
 
+type DynamicLuaEnv struct {
+	L            *Lua
+	registoryKey string
+}
+
+func (this DynamicLuaEnv) Get() string {
+	this.L.GetField(Registory, this.registoryKey)
+	if err := this.L.Call(0, 1); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+	defer this.L.Pop(1)
+	return this.L.ToString(1)
+}
+
 func cmdSetEnv(L *Lua) int {
 	name := L.ToString(1)
-	value := L.ToString(2)
-	os.Setenv(name, value)
+	if L.IsString(2) {
+		value := L.ToString(2)
+		os.Setenv(name, value)
+	} else if L.IsFunction(2) {
+		regkey := "nyagos.dynenv." + name
+		L.SetField(Registory, regkey)
+		parser.DynamicEnvTable[name] = DynamicLuaEnv{L, regkey}
+	}
 	return 0
 }
 

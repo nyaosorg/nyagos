@@ -26,7 +26,11 @@ end
 function set(equation)
     if type(equation) == 'table' then
         for left,right in pairs(equation) do
-            nyagos.setenv(left,expand(right))
+            if type(right) == 'string' then
+                nyagos.setenv(left,expand(right))
+            else
+                nyagos.setenv(left,right)
+            end
         end
     else
         local left,right,pos = split(equation)
@@ -95,6 +99,11 @@ alias{
         local args={...}
         assert(load(args[2]))()
     end,
+}
+
+set{
+    DATE=function() return os.date("%Y/%m/%d") end,
+    TIME=function() return os.date("%H:%M:%S") end
 }
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
