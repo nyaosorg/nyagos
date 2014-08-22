@@ -22,11 +22,16 @@ type StatementT struct {
 
 var prefix []string = []string{" 0<", " 1>", " 2>"}
 
-type DynamicEnv interface {
-	Get() string
+var percentFunc = map[string]func() string{
+	"CD": func() string {
+		wd, err := os.Getwd()
+		if err == nil {
+			return wd
+		} else {
+			return ""
+		}
+	},
 }
-
-var DynamicEnvTable = map[string]DynamicEnv{}
 
 var rxUnicode = regexp.MustCompile("^u\\+?([0-9a-fA-F]+)$")
 
@@ -102,8 +107,8 @@ func dequote(source *bytes.Buffer) string {
 			} else if m := rxUnicode.FindStringSubmatch(nameStr); m != nil {
 				ucode, _ := strconv.ParseInt(m[1], 16, 32)
 				buffer.WriteRune(rune(ucode))
-			} else if f, ok := DynamicEnvTable[nameStr]; ok {
-				buffer.WriteString(f.Get())
+			} else if f, ok := percentFunc[nameStr]; ok {
+				buffer.WriteString(f())
 			} else {
 				buffer.WriteRune('%')
 				buffer.WriteString(nameStr)
