@@ -122,22 +122,14 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 	for key, val := range nodes {
 		prefix := ""
 		postfix := ""
-		attr := dos.NewFileAttr(dos.Join(folder, val.Name()))
-		if attr.IsReparse() {
+		indicator := ""
+		if val.IsDir() {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_DIR
 				postfix = ANSI_END
 			}
 			if (flag & O_INDICATOR) != 0 {
-				postfix += "@"
-			}
-		} else if val.IsDir() {
-			if (flag & O_COLOR) != 0 {
-				prefix = ANSI_DIR
-				postfix = ANSI_END
-			}
-			if (flag & O_INDICATOR) != 0 {
-				postfix += "/"
+				indicator = "/"
 			}
 		} else if (val.Mode().Perm() & 2) == 0 {
 			if (flag & O_COLOR) != 0 {
@@ -150,14 +142,18 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				postfix = ANSI_END
 			}
 			if (flag & O_INDICATOR) != 0 {
-				postfix += "*"
+				indicator = "*"
 			}
 		}
+		attr := dos.NewFileAttr(dos.Join(folder, val.Name()))
 		if attr.IsHidden() && (flag&O_COLOR) != 0 {
 			prefix = ANSI_HIDDEN
 			postfix = ANSI_END
 		}
-		nodes_[key] = prefix + val.Name() + postfix
+		if attr.IsReparse() && (flag&O_INDICATOR) != 0 {
+			indicator = "@"
+		}
+		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
 	box.Print(nodes_, screenWidth, out)
 }
