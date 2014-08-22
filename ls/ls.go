@@ -131,12 +131,14 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 			if (flag & O_INDICATOR) != 0 {
 				indicator = "/"
 			}
-		} else if (val.Mode().Perm() & 2) == 0 {
+		}
+		if (val.Mode().Perm() & 2) == 0 {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_READONLY
 				postfix = ANSI_END
 			}
-		} else if exename.Suffixes[strings.ToLower(filepath.Ext(val.Name()))] {
+		}
+		if exename.Suffixes[strings.ToLower(filepath.Ext(val.Name()))] {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
