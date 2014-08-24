@@ -8,9 +8,12 @@ import "strings"
 
 import "github.com/mattn/go-runewidth"
 
+import "../conio"
+
 var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 
-func Print(nodes []string, width int, out io.Writer) {
+func Print(nodes []string, out io.Writer) {
+	width, _ := conio.GetScreenSize()
 	maxLen := 1
 	for _, finfo := range nodes {
 		length := runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))

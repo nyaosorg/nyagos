@@ -9,7 +9,6 @@ import "sort"
 import "strings"
 
 import "../../box"
-import "../../conio"
 import "../../dos"
 
 const (
@@ -36,8 +35,6 @@ const (
 	ANSI_HIDDEN   = "\x1B[1;34m"
 	ANSI_END      = "\x1B[39m"
 )
-
-var screenWidth int
 
 func (this fileInfoT) Name() string { return this.name }
 
@@ -156,7 +153,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
-	box.Print(nodes_, screenWidth, out)
+	box.Print(nodes_, out)
 }
 
 func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
@@ -337,7 +334,6 @@ func (this OptionError) Error() string {
 // ls 機能のエントリ:引数をオプションとパスに分離する
 func Main(args []string, out io.Writer) error {
 	flag := 0
-	screenWidth, _ = conio.GetScreenSize()
 	paths := make([]string, 0)
 	for _, arg := range args {
 		if strings.HasPrefix(arg, "-") {

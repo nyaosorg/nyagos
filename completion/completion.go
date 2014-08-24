@@ -148,7 +148,7 @@ func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		return conio.CONTINUE
 	}
 	fmt.Print("\n")
-	box.Print(list, 80, os.Stdout)
+	box.Print(list, os.Stdout)
 	this.RepaintAll()
 	return conio.CONTINUE
 }
