@@ -10,7 +10,7 @@ import "../alias"
 import "../conio"
 import "../history"
 import "../interpreter"
-import "../ls"
+import "./ls"
 import "../dos"
 
 import "github.com/shiena/ansicolor"

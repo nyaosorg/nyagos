@@ -1,9 +1,9 @@
-package option
+package main
 
-import "../alias"
-import "../interpreter"
+import "./alias"
+import "./interpreter"
 
-func Parse(getArg func() (string, bool)) {
+func OptionParse(getArg func() (string, bool)) {
 	for {
 		arg, ok := getArg()
 		if !ok {

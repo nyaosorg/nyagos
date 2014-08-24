@@ -10,16 +10,13 @@ import "strings"
 import "github.com/shiena/ansicolor"
 
 import "./alias"
+import "./commands"
 import "./completion"
 import "./conio"
-import "./commands"
-import "./exename"
+import "./dos"
 import "./history"
 import "./interpreter"
 import "./lua"
-import "./nua"
-import "./option"
-import "./prompt"
 
 func signalOff() {
 	ch := make(chan os.Signal, 1)
@@ -54,7 +51,7 @@ func main() {
 	// Lua extension
 	L := lua.New()
 	L.OpenLibs()
-	nua.SetFunctions(L)
+	SetLuaFunctions(L)
 	L.GetGlobal("nyagos")
 	L.PushString(stamp)
 	L.SetField(-2, "stamp")
@@ -65,7 +62,7 @@ func main() {
 
 	// Parameter Parsing
 	argc := 0
-	option.Parse(func() (string, bool) {
+	OptionParse(func() (string, bool) {
 		argc++
 		if argc < len(os.Args) {
 			return os.Args[argc], true
@@ -80,7 +77,7 @@ func main() {
 	history.Load(histPath)
 	defer history.Save(histPath)
 
-	exeName, exeNameErr := exename.Query()
+	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
 	}
@@ -96,7 +93,7 @@ func main() {
 	for {
 		line, cont := conio.ReadLine(
 			func() int {
-				text := prompt.Format2Prompt(os.Getenv("PROMPT"))
+				text := Format2Prompt(os.Getenv("PROMPT"))
 				fmt.Fprint(ansiOut, text)
 				text = rxAnsiEscCode.ReplaceAllString(text, "")
 				lfPos := strings.LastIndex(text, "\n")

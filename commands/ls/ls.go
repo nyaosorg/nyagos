@@ -8,10 +8,9 @@ import "regexp"
 import "sort"
 import "strings"
 
-import "../box"
-import "../conio"
-import "../dos"
-import "../exename"
+import "../../box"
+import "../../conio"
+import "../../dos"
 
 const (
 	O_STRIP_DIR = 1
@@ -83,7 +82,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if exename.Suffixes[strings.ToLower(filepath.Ext(name))] {
+	} else if dos.ExecutableSuffixes[strings.ToLower(filepath.Ext(name))] {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -138,7 +137,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				postfix = ANSI_END
 			}
 		}
-		if exename.Suffixes[strings.ToLower(filepath.Ext(val.Name()))] {
+		if dos.ExecutableSuffixes[strings.ToLower(filepath.Ext(val.Name()))] {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END

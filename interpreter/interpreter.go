@@ -4,8 +4,6 @@ import "io"
 import "os"
 import "os/exec"
 
-import "../parser"
-
 type NextT int
 
 const (
@@ -21,7 +19,7 @@ type Stdio struct {
 }
 
 func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (NextT, error), stdio *Stdio) (NextT, error) {
-	statements := parser.Parse(text)
+	statements := Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {

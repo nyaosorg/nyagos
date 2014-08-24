@@ -1,4 +1,4 @@
-package parser
+package interpreter
 
 import "bytes"
 import "os"

@@ -1,4 +1,4 @@
-package nua
+package main
 
 import "fmt"
 import "io"
@@ -7,9 +7,9 @@ import "os/exec"
 import "strings"
 import "unsafe"
 
-import . "../lua"
-import "../alias"
-import "../interpreter"
+import . "./lua"
+import "./alias"
+import "./interpreter"
 
 const nyagos_exec_cmd = "nyagos.exec.cmd"
 
@@ -97,7 +97,7 @@ func cmdEcho(L *Lua) int {
 	return 0
 }
 
-func SetFunctions(this *Lua) {
+func SetLuaFunctions(this *Lua) {
 	stackPos := this.GetTop()
 	this.NewTable()
 	this.PushGoFunction(cmdAlias)

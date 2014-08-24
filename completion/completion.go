@@ -12,10 +12,9 @@ import "unicode"
 import "../box"
 import "../conio"
 import "../dos"
-import "../exename"
 
 func isExecutable(path string) bool {
-	_, ok := exename.Suffixes[strings.ToLower(filepath.Ext(path))]
+	_, ok := dos.ExecutableSuffixes[strings.ToLower(filepath.Ext(path))]
 	return ok
 }
 

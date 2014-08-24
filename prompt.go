@@ -1,4 +1,4 @@
-package prompt
+package main
 
 import "bytes"
 import "fmt"
@@ -7,7 +7,7 @@ import "strings"
 import "time"
 import "unicode"
 
-import "../dos"
+import "./dos"
 
 func Format2Prompt(format string) string {
 	if format == "" {
