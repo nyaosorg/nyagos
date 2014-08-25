@@ -33,7 +33,7 @@ var percentFunc = map[string]func() string{
 	},
 }
 
-var rxUnicode = regexp.MustCompile("^u\\+?([0-9a-fA-F]+)$")
+var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
 
 func (this StatementT) String() string {
 	var buffer bytes.Buffer
