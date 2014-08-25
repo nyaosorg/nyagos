@@ -10,6 +10,7 @@ import "unsafe"
 import . "./lua"
 import "./alias"
 import "./interpreter"
+import "./mbcs"
 
 const nyagos_exec_cmd = "nyagos.exec.cmd"
 
@@ -97,6 +98,16 @@ func cmdEcho(L *Lua) int {
 	return 0
 }
 
+func cmdAtoU(L *Lua) int {
+	L.PushString(mbcs.AtoU(L.ToAnsiString(1)))
+	return 1
+}
+
+func cmdUtoA(L *Lua) int {
+	L.PushAnsiString(mbcs.UtoA(L.ToString(1)))
+	return 1
+}
+
 func SetLuaFunctions(this *Lua) {
 	stackPos := this.GetTop()
 	this.NewTable()
@@ -110,6 +121,10 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "exec")
 	this.PushGoFunction(cmdEcho)
 	this.SetField(-2, "echo")
+	this.PushGoFunction(cmdAtoU)
+	this.SetField(-2, "atou")
+	this.PushGoFunction(cmdUtoA)
+	this.SetField(-2, "utoa")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv

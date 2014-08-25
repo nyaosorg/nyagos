@@ -18,9 +18,6 @@ from http://sourceforge.net/projects/luabinaries/files/5.2.3/Windows%20Libraries
 static int gLua_pcall(lua_State* L,int x,int y,int z)
 { return lua_pcall(L,x,y,z); }
 
-static const char *gLua_tostring(lua_State* L,int i)
-{ return lua_tostring(L,i); }
-
 static int gLuaL_loadfile(lua_State* L,const char *filename)
 { return luaL_loadfile(L,filename); }
 
@@ -64,7 +61,15 @@ func (this *Lua) Close() {
 }
 
 func (this *Lua) ToString(index int) string {
-	return C.GoString(C.gLua_tostring(this.lua, C.int(index)))
+	var length C.size_t
+	p := C.lua_tolstring(this.lua, C.int(index), &length)
+	return C.GoStringN(p, C.int(length))
+}
+
+func (this *Lua) ToAnsiString(index int) []byte {
+	var length C.size_t
+	p := C.lua_tolstring(this.lua, C.int(index), &length)
+	return C.GoBytes(unsafe.Pointer(p), C.int(length))
 }
 
 func (this *Lua) IsString(index int) bool {
@@ -108,6 +113,12 @@ func (this *Lua) PushString(str string) {
 	tmp := C.CString(str)
 	C.lua_pushstring(this.lua, tmp)
 	C.free(unsafe.Pointer(tmp))
+}
+
+func (this *Lua) PushAnsiString(data []byte) {
+	C.lua_pushlstring(this.lua,
+		(*C.char)(unsafe.Pointer(&data[0])),
+		C.size_t(len(data)))
 }
 
 //export luaToGoBridge
