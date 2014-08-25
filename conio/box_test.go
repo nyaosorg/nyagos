@@ -1,11 +1,11 @@
-package box
+package conio
 
 import "os"
 import "testing"
 
-func TestPrint(t *testing.T) {
-	Print([]string{
+func TestBoxPrint(t *testing.T) {
+	BoxPrint([]string{
 		"aaaa", "bbbb", "cccc", "fjdaksljflkdajfkljsalkfjdlkf",
 		"jfkldsjflkjdsalkfjlkdsajflkajds",
-		"fsdfsdf"}, 80, os.Stdout)
+		"fsdfsdf"}, os.Stdout)
 }

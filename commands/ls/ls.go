@@ -8,7 +8,7 @@ import "regexp"
 import "sort"
 import "strings"
 
-import "../../box"
+import "../../conio"
 import "../../dos"
 
 const (
@@ -153,7 +153,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
-	box.Print(nodes_, out)
+	conio.BoxPrint(nodes_, out)
 }
 
 func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {

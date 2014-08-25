@@ -9,7 +9,6 @@ import "regexp"
 import "strings"
 import "unicode"
 
-import "../box"
 import "../conio"
 import "../dos"
 
@@ -148,7 +147,7 @@ func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		return conio.CONTINUE
 	}
 	fmt.Print("\n")
-	box.Print(list, os.Stdout)
+	conio.BoxPrint(list, os.Stdout)
 	this.RepaintAll()
 	return conio.CONTINUE
 }
