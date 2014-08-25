@@ -227,6 +227,14 @@ nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 UTF8 になります。内蔵 Lua の print は nyagos.lua にて、この 
 nyagos.echo に差し替えられています。
 
+### `nyagos.utoa(UTF8文字列)`
+
+UTF8文字列 s を、現在のコードページの文字列に変換します。
+
+### `nyagos.atou(ANSI文字列)`
+
+現在のコードページの文字列を、UTF8 へ変換します。
+
 ### `nyagos.filter`
 
 nyagos.filter は通常未定義ですが、これにユーザの Lua 関数を設定すると
