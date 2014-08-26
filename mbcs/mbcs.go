@@ -24,6 +24,6 @@ func AtoU(mbcs []byte) string {
 	utf16 := make([]uint16, size)
 	C.MultiByteToWideChar(C.CP_THREAD_ACP, 0,
 		(*C.CHAR)(unsafe.Pointer(&mbcs[0])), C.int(len(mbcs)),
-		(*C.WCHAR)(unsafe.Pointer(&utf16[0])), size)
+		(*C.WCHAR)(&utf16[0]), size)
 	return syscall.UTF16ToString(utf16)
 }
