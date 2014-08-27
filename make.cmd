@@ -26,10 +26,10 @@
         goto end
 
 :install
-        if exist installdir (
-            start make.cmd install_
+        @if exist installdir (
+            @start make.cmd install_
         ) else (
-            @echo Please do 'mklink /J installdir PATH\TO\BIN' for example.
+            @echo Please do 'mklink /J installdir PATH\TO\BIN'.
         )
         @goto end
 
