@@ -25,4 +25,19 @@
         zip -9 nyagos-%DATE:/=%.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.mkd readme.mkd .nyagos
         goto end
 
+:install
+        if exist installdir (
+            start make.cmd install_
+        ) else (
+            @echo Please do 'mklink /J installdir PATH\TO\BIN' for example.
+        )
+        @goto end
+
+:install_
+        @echo Please close NYAGOS.exe and hit ENTER.
+        @pause
+        copy nyagos.exe .\installdir\.
+        copy nyagos.lua .\installdir\.
+        copy lua52.dll  .\installdir\.
+        goto end
 :end
