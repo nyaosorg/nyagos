@@ -1,3 +1,10 @@
-.*.un~
-*.zip
+*.a
+*.dll
+*.exe
 *.swp
+*.syso
+*.zip
+.*.un~
+installdir/
+lua/include/
+lua/lua-5*/
