@@ -60,7 +60,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	perm := mode.Perm()
 	name := status.Name()
 	attr := dos.NewFileAttr(dos.Join(folder, status.Name()))
-	if attr.IsReparse() {
+	if attr != nil && attr.IsReparse() {
 		indicator = "@"
 	}
 	if (perm & 4) > 0 {
@@ -79,7 +79,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if dos.ExecutableSuffixes[strings.ToLower(filepath.Ext(name))] {
+	} else if dos.IsExecutableSuffix(filepath.Ext(name)) {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -89,7 +89,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	} else {
 		io.WriteString(out, "-")
 	}
-	if attr.IsHidden() && (flag&O_COLOR) != 0 {
+	if attr != nil && attr.IsHidden() && (flag&O_COLOR) != 0 {
 		prefix = ANSI_HIDDEN
 		postfix = ANSI_END
 	}
@@ -134,7 +134,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				postfix = ANSI_END
 			}
 		}
-		if dos.ExecutableSuffixes[strings.ToLower(filepath.Ext(val.Name()))] {
+		if dos.IsExecutableSuffix(filepath.Ext(val.Name())) {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
@@ -144,11 +144,11 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 			}
 		}
 		attr := dos.NewFileAttr(dos.Join(folder, val.Name()))
-		if attr.IsHidden() && (flag&O_COLOR) != 0 {
+		if attr != nil && attr.IsHidden() && (flag&O_COLOR) != 0 {
 			prefix = ANSI_HIDDEN
 			postfix = ANSI_END
 		}
-		if attr.IsReparse() && (flag&O_INDICATOR) != 0 {
+		if attr != nil && attr.IsReparse() && (flag&O_INDICATOR) != 0 {
 			indicator = "@"
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
@@ -216,7 +216,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	}
 	for _, f := range nodesArray.nodes {
 		attr := dos.NewFileAttr(dos.Join(folder_, f.Name()))
-		if (strings.HasPrefix(f.Name(), ".") || attr.IsHidden()) && (flag&O_ALL) == 0 {
+		if (strings.HasPrefix(f.Name(), ".") || (attr != nil && attr.IsHidden())) && (flag&O_ALL) == 0 {
 			continue
 		}
 		if f.IsDir() && folders != nil {

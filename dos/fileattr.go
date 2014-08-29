@@ -9,8 +9,12 @@ type FileAttr struct {
 }
 
 func NewFileAttr(path string) *FileAttr {
-	cpath, _ := syscall.UTF16FromString(path)
-	return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}
+	cpath, err := syscall.UTF16FromString(path)
+	if err == nil && cpath != nil {
+		return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}
+	} else {
+		return nil
+	}
 }
 
 func (this *FileAttr) IsReparse() bool {

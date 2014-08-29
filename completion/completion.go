@@ -69,7 +69,7 @@ func listUpFiles(str string) ([]string, error) {
 	STR := strings.ToUpper(str)
 	for _, node1 := range files {
 		name := path.Join(directory, node1.Name())
-		if attr := dos.NewFileAttr(name); attr.IsHidden() {
+		if attr := dos.NewFileAttr(name); attr != nil && attr.IsHidden() {
 			continue
 		}
 		if node1.IsDir() {
@@ -194,7 +194,7 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 	} else {
 		list, err = listUpCommands(str)
 	}
-	if err != nil || len(list) <= 0 {
+	if err != nil || list == nil || len(list) <= 0 {
 		return conio.CONTINUE
 	}
 	commonStr := getCommmon(list)

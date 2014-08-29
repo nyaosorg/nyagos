@@ -11,7 +11,10 @@ import "github.com/mattn/go-runewidth"
 var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 
 func BoxPrint(nodes []string, out io.Writer) {
-	width, _ := GetScreenSize()
+	width, _ := GetScreenSize() // ignore height
+	if width <= 0 || width > 999 {
+		width = 80
+	}
 	maxLen := 1
 	for _, finfo := range nodes {
 		length := runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))
