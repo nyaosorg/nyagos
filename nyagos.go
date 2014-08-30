@@ -91,6 +91,12 @@ func main() {
 	}
 
 	for {
+		wd, wdErr := os.Getwd()
+		if wdErr == nil {
+			conio.SetTitle("NYAOS - " + wd)
+		} else {
+			conio.SetTitle("NYAOS - " + wdErr.Error())
+		}
 		line, cont := conio.ReadLine(
 			func() int {
 				text := Format2Prompt(os.Getenv("PROMPT"))
