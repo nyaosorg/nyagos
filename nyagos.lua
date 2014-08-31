@@ -95,6 +95,17 @@ alias{
         local args={...}
         assert(load(args[2]))()
     end,
+    which=function(...)
+        local args={...}
+        for dir1 in string.gmatch(os.getenv('PATH'),"[^;]+") do
+            for ext1 in string.gmatch(os.getenv('PATHEXT'),"[^;]+") do
+                local path1 = dir1 .. "\\" .. args[2] .. ext1
+                if exists(path1) then
+                    nyagos.echo(path1)
+                end
+            end
+        end
+    end
 }
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
