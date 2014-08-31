@@ -23,6 +23,16 @@ local function expand(text)
     end)
 end
 
+function addpath(...)
+    for _,dir in pairs{...} do
+        dir = expand(dir)
+        local list=os.getenv("PATH")
+        if not string.find(";"..list..";",";"..dir..";",1,true) then
+            nyagos.setenv("PATH",dir..";"..list)
+        end
+    end
+end
+
 function set(equation)
     if type(equation) == 'table' then
         for left,right in pairs(equation) do
@@ -33,7 +43,7 @@ function set(equation)
         if pos and string.sub(left,-1) == "+" then
             left = string.sub(left,1,-2)
             local original=os.getenv(left)
-            if string.find(right,original) then
+            if string.find(right,original,1,true) then
                 right = original
             else
                 right = right .. ";" .. original
