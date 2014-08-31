@@ -2,18 +2,21 @@ package dos
 
 //#include <windows.h>
 import "C"
+import "fmt"
 import "syscall"
 
 type FileAttr struct {
 	attr uint
 }
 
-func NewFileAttr(path string) *FileAttr {
+func NewFileAttr(path string) (*FileAttr, error) {
 	cpath, err := syscall.UTF16FromString(path)
-	if err == nil && cpath != nil {
-		return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}
+	if err != nil {
+		return &FileAttr{0}, err
+	} else if cpath == nil {
+		return &FileAttr{0}, fmt.Errorf("sysCall.UTF16FromString() failed")
 	} else {
-		return nil
+		return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}, nil
 	}
 }
 

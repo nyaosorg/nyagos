@@ -69,7 +69,7 @@ func listUpFiles(str string) ([]string, error) {
 	STR := strings.ToUpper(str)
 	for _, node1 := range files {
 		name := path.Join(directory, node1.Name())
-		if attr := dos.NewFileAttr(name); attr != nil && attr.IsHidden() {
+		if attr, attrErr := dos.NewFileAttr(name); attrErr == nil && attr.IsHidden() {
 			continue
 		}
 		if node1.IsDir() {

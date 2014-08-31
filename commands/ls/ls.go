@@ -59,8 +59,8 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	mode := status.Mode()
 	perm := mode.Perm()
 	name := status.Name()
-	attr := dos.NewFileAttr(dos.Join(folder, status.Name()))
-	if attr != nil && attr.IsReparse() {
+	attr, attrErr := dos.NewFileAttr(dos.Join(folder, status.Name()))
+	if attrErr == nil && attr.IsReparse() {
 		indicator = "@"
 	}
 	if (perm & 4) > 0 {
@@ -143,12 +143,12 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				indicator = "*"
 			}
 		}
-		attr := dos.NewFileAttr(dos.Join(folder, val.Name()))
-		if attr != nil && attr.IsHidden() && (flag&O_COLOR) != 0 {
+		attr, attrErr := dos.NewFileAttr(dos.Join(folder, val.Name()))
+		if attrErr == nil && attr.IsHidden() && (flag&O_COLOR) != 0 {
 			prefix = ANSI_HIDDEN
 			postfix = ANSI_END
 		}
-		if attr != nil && attr.IsReparse() && (flag&O_INDICATOR) != 0 {
+		if attr == nil && attr.IsReparse() && (flag&O_INDICATOR) != 0 {
 			indicator = "@"
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
@@ -215,8 +215,8 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 		folders = make([]string, 0)
 	}
 	for _, f := range nodesArray.nodes {
-		attr := dos.NewFileAttr(dos.Join(folder_, f.Name()))
-		if (strings.HasPrefix(f.Name(), ".") || (attr != nil && attr.IsHidden())) && (flag&O_ALL) == 0 {
+		attr, attrErr := dos.NewFileAttr(dos.Join(folder_, f.Name()))
+		if (strings.HasPrefix(f.Name(), ".") || (attrErr == nil && attr.IsHidden())) && (flag&O_ALL) == 0 {
 			continue
 		}
 		if f.IsDir() && folders != nil {
