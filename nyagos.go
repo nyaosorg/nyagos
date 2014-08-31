@@ -37,11 +37,15 @@ func main() {
 	signalOff()
 
 	// KeyBind += completion Module
-	conio.KeyMap['\t'] = completion.KeyFuncCompletion
-	conio.ZeroMap[conio.K_UP] = history.KeyFuncHistoryUp
-	conio.ZeroMap[conio.K_DOWN] = history.KeyFuncHistoryDown
-	conio.KeyMap['P'&0x1F] = history.KeyFuncHistoryUp
-	conio.KeyMap['N'&0x1F] = history.KeyFuncHistoryDown
+	historyUp := conio.KeyGoFuncT{history.KeyFuncHistoryUp}
+	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
+	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
+
+	conio.KeyMap['\t'] = &completion
+	conio.ZeroMap[conio.K_UP] = &historyUp
+	conio.ZeroMap[conio.K_DOWN] = &historyDown
+	conio.KeyMap['P'&0x1F] = &historyUp
+	conio.KeyMap['N'&0x1F] = &historyDown
 
 	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)

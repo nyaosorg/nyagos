@@ -8,20 +8,32 @@ const (
 	ABORT    KeyFuncResult = iota
 )
 
-var KeyMap = map[rune]func(*ReadLineBuffer) KeyFuncResult{
-	'\b':         KeyFuncBackSpace,
-	'\r':         KeyFuncEnter,
-	'\x7F':       KeyFuncDelete,
-	('A' & 0x1f): KeyFuncHead,
-	('B' & 0x1f): KeyFuncBackword,
-	('D' & 0x1f): KeyFuncDeleteOrAbort,
-	('E' & 0x1f): KeyFuncTail,
-	('F' & 0x1f): KeyFuncForward,
-	('K' & 0x1f): KeyFuncClearAfter,
-	('L' & 0x1F): KeyFuncCLS,
-	('U' & 0x1F): KeyFuncClearBefore,
-	('Y' & 0x1F): KeyFuncPaste,
-	('[' & 0x1F): KeyFuncClear,
+type KeyFuncT interface {
+	Call(buffer *ReadLineBuffer) KeyFuncResult
+}
+
+type KeyGoFuncT struct {
+	F func(buffer *ReadLineBuffer) KeyFuncResult
+}
+
+func (this *KeyGoFuncT) Call(buffer *ReadLineBuffer) KeyFuncResult {
+	return this.F(buffer)
+}
+
+var KeyMap = map[rune]KeyFuncT{
+	'\b':         &KeyGoFuncT{KeyFuncBackSpace},
+	'\r':         &KeyGoFuncT{KeyFuncEnter},
+	'\x7F':       &KeyGoFuncT{KeyFuncDelete},
+	('A' & 0x1f): &KeyGoFuncT{KeyFuncHead},
+	('B' & 0x1f): &KeyGoFuncT{KeyFuncBackword},
+	('D' & 0x1f): &KeyGoFuncT{KeyFuncDeleteOrAbort},
+	('E' & 0x1f): &KeyGoFuncT{KeyFuncTail},
+	('F' & 0x1f): &KeyGoFuncT{KeyFuncForward},
+	('K' & 0x1f): &KeyGoFuncT{KeyFuncClearAfter},
+	('L' & 0x1F): &KeyGoFuncT{KeyFuncCLS},
+	('U' & 0x1F): &KeyGoFuncT{KeyFuncClearBefore},
+	('Y' & 0x1F): &KeyGoFuncT{KeyFuncPaste},
+	('[' & 0x1F): &KeyGoFuncT{KeyFuncClear},
 }
 
 // KeyCode from
@@ -38,14 +50,14 @@ const (
 	K_DOWN  = 0x28
 )
 
-var ZeroMap = map[uint16]func(*ReadLineBuffer) KeyFuncResult{
-	K_LEFT:  KeyFuncBackword,
-	K_RIGHT: KeyFuncForward,
-	K_DEL:   KeyFuncDelete,
-	K_HOME:  KeyFuncHead,
-	K_END:   KeyFuncTail,
-	K_CTRL:  KeyFuncPass,
-	K_SHIFT: KeyFuncPass,
+var ZeroMap = map[uint16]KeyFuncT{
+	K_LEFT:  &KeyGoFuncT{KeyFuncBackword},
+	K_RIGHT: &KeyGoFuncT{KeyFuncForward},
+	K_DEL:   &KeyGoFuncT{KeyFuncDelete},
+	K_HOME:  &KeyGoFuncT{KeyFuncHead},
+	K_END:   &KeyGoFuncT{KeyFuncTail},
+	K_CTRL:  &KeyGoFuncT{KeyFuncPass},
+	K_SHIFT: &KeyGoFuncT{KeyFuncPass},
 }
 
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
@@ -65,21 +77,21 @@ func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
 		stdOut.Flush()
 		shineCursor()
 		this.Unicode, this.Keycode = GetKey()
-		var f func(*ReadLineBuffer) KeyFuncResult
+		var f KeyFuncT
 		var ok bool
 		if this.Unicode != 0 {
 			f, ok = KeyMap[this.Unicode]
 			if !ok {
 				//f = KeyFuncInsertReport
-				f = KeyFuncInsertSelf
+				f = &KeyGoFuncT{KeyFuncInsertSelf}
 			}
 		} else {
 			f, ok = ZeroMap[this.Keycode]
 			if !ok {
-				f = KeyFuncPass
+				f = &KeyGoFuncT{KeyFuncPass}
 			}
 		}
-		rc := f(&this)
+		rc := f.Call(&this)
 		if rc != CONTINUE {
 			stdOut.WriteRune('\n')
 			stdOut.Flush()
