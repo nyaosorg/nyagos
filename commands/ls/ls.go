@@ -148,7 +148,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 			prefix = ANSI_HIDDEN
 			postfix = ANSI_END
 		}
-		if attr == nil && attr.IsReparse() && (flag&O_INDICATOR) != 0 {
+		if attrErr == nil && attr.IsReparse() && (flag&O_INDICATOR) != 0 {
 			indicator = "@"
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
