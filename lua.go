@@ -109,13 +109,23 @@ func cmdGetwd(L *Lua) int {
 }
 
 func cmdAtoU(L *Lua) int {
-	L.PushString(mbcs.AtoU(L.ToAnsiString(1)))
-	return 1
+	str, err := mbcs.AtoU(L.ToAnsiString(1))
+	if err == nil {
+		L.PushString(str)
+		return 1
+	} else {
+		return 0
+	}
 }
 
 func cmdUtoA(L *Lua) int {
-	L.PushAnsiString(mbcs.UtoA(L.ToString(1)))
-	return 1
+	str, err := mbcs.UtoA(L.ToString(1))
+	if err == nil {
+		L.PushAnsiString(str)
+		return 1
+	} else {
+		return 0
+	}
 }
 
 func SetLuaFunctions(this *Lua) {
