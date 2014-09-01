@@ -98,6 +98,16 @@ func cmdEcho(L *Lua) int {
 	return 0
 }
 
+func cmdGetwd(L *Lua) int {
+	wd, err := os.Getwd()
+	if err == nil {
+		L.PushString(wd)
+		return 1
+	} else {
+		return 0
+	}
+}
+
 func cmdAtoU(L *Lua) int {
 	L.PushString(mbcs.AtoU(L.ToAnsiString(1)))
 	return 1
@@ -125,6 +135,8 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "atou")
 	this.PushGoFunction(cmdUtoA)
 	this.SetField(-2, "utoa")
+	this.PushGoFunction(cmdGetwd)
+	this.SetField(-2, "getwd")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
