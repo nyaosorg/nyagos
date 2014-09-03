@@ -25,12 +25,15 @@ func (this LuaFunction) String() string {
 
 func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 	this.L.GetField(Registory, this.registoryKey)
-	for _, arg1 := range cmd.Args {
+	this.L.NewTable()
+	for i, arg1 := range cmd.Args {
+		this.L.PushInteger(i)
 		this.L.PushString(arg1)
+		this.L.SetTable(-3)
 	}
 	this.L.PushLightUserData(unsafe.Pointer(cmd))
 	this.L.SetField(Registory, nyagos_exec_cmd)
-	err := this.L.Call(len(cmd.Args), 0)
+	err := this.L.Call(1, 0)
 	return interpreter.CONTINUE, err
 }
 

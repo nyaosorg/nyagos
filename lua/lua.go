@@ -121,12 +121,20 @@ func (this *Lua) PushAnsiString(data []byte) {
 		C.size_t(len(data)))
 }
 
+func (this *Lua) PushInteger(n int) {
+	C.lua_pushinteger(this.lua, C.lua_Integer(n))
+}
+
 //export luaToGoBridge
 func luaToGoBridge(lua *C.lua_State) int {
 	f := *(*goFunctionT)(C.lua_touserdata(lua, 1))
 	C.lua_remove(lua, 1)
 	L := Lua{lua}
 	return int(f.function(&L))
+}
+
+func (this *Lua) SetTable(index int) {
+	C.lua_settable(this.lua, C.int(index))
 }
 
 func (this *Lua) SetField(index int, str string) {

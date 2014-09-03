@@ -101,15 +101,13 @@ alias{
     start='%COMSPEC% /c start $*',
     ['type']='%COMSPEC% /c type $*',
     ls='ls -oF $*',
-    lua_e=function(...)
-        local args={...}
-        assert(load(args[2]))()
+    lua_e=function(args)
+        assert(load(args[1]))()
     end,
-    which=function(...)
-        local args={...}
+    which=function(args)
         for dir1 in string.gmatch(os.getenv('PATH'),"[^;]+") do
             for ext1 in string.gmatch(os.getenv('PATHEXT'),"[^;]+") do
-                local path1 = dir1 .. "\\" .. args[2] .. ext1
+                local path1 = dir1 .. "\\" .. args[1] .. ext1
                 if exists(path1) then
                     nyagos.echo(path1)
                 end
