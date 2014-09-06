@@ -24,10 +24,7 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer i
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
 			//fmt.Println(state)
-			var cmd exec.Cmd
-			cmd.Args = state.Argv
-			cmd.Env = nil
-			cmd.Dir = ""
+			cmd := exec.Cmd{Args: state.Argv}
 			if stdio == nil {
 				cmd.Stdin = os.Stdin
 				cmd.Stdout = os.Stdout

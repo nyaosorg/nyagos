@@ -22,8 +22,5 @@ func GetLocate() (int, int) {
 }
 
 func Locate(x, y int) {
-	var coord C.COORD
-	coord.X = C.SHORT(x)
-	coord.Y = C.SHORT(y)
-	C.SetConsoleCursorPosition(hConout, coord)
+	C.SetConsoleCursorPosition(hConout, C.COORD{X: C.SHORT(x), Y: C.SHORT(y)})
 }

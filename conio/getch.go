@@ -33,8 +33,8 @@ import "unicode/utf16"
 var hConin C.HANDLE = C.GetConinHandle() //C.GetStdHandle(C.STD_INPUT_HANDLE)
 
 var buffer [10][2]uint16
-var readptr int = 0
-var stacked int = 0
+var readptr = 0
+var stacked = 0
 
 func GetKey() (rune, uint16) {
 	if readptr >= stacked {

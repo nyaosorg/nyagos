@@ -38,10 +38,6 @@ const (
 
 func (this fileInfoT) Name() string { return this.name }
 
-func newMyFileInfoT(name string, info os.FileInfo) *fileInfoT {
-	return &fileInfoT{name, info}
-}
-
 func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	indicator := " "
 	prefix := ""
@@ -186,9 +182,7 @@ func (this fileInfoCollection) Less(i, j int) bool {
 	return result
 }
 func (this fileInfoCollection) Swap(i, j int) {
-	tmp := this.nodes[i]
-	this.nodes[i] = this.nodes[j]
-	this.nodes[j] = tmp
+	this.nodes[i], this.nodes[j] = this.nodes[j], this.nodes[i]
 }
 
 func lsFolder(folder string, flag int, out io.Writer) error {
@@ -202,10 +196,9 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	if err != nil {
 		return err
 	}
-	var nodesArray fileInfoCollection
+	nodesArray := fileInfoCollection{flag: flag}
 	nodesArray.nodes, err = fd.Readdir(-1)
 	fd.Close()
-	nodesArray.flag = flag
 	if err != nil {
 		return err
 	}
@@ -264,10 +257,10 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 		} else if status.IsDir() {
 			dirs = append(dirs, name)
 		} else if (flag & O_LONG) != 0 {
-			lsOneLong(".", newMyFileInfoT(name, status), flag, out)
+			lsOneLong(".", &fileInfoT{name, status}, flag, out)
 			printCount += 1
 		} else {
-			files = append(files, newMyFileInfoT(name, status))
+			files = append(files, &fileInfoT{name, status})
 		}
 	}
 	if len(files) > 0 {
@@ -279,8 +272,7 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 			if printCount > 0 {
 				io.WriteString(out, "\n")
 			}
-			io.WriteString(out, name)
-			io.WriteString(out, ":\n")
+			fmt.Fprintf(out, "%s:\n", name)
 		}
 		err := lsFolder(name, flag, out)
 		if err != nil {
@@ -340,12 +332,9 @@ func Main(args []string, out io.Writer) error {
 			for _, o := range arg[1:] {
 				setter, ok := option[o]
 				if !ok {
-					var err OptionError
-					err.Option = o
-					return err
+					return OptionError{Option: o}
 				}
-				err := setter(&flag)
-				if err != nil {
+				if err := setter(&flag); err != nil {
 					return err
 				}
 			}

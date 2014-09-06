@@ -53,7 +53,7 @@ func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
 }
 
 func (this *ReadLineBuffer) InsertString(pos int, s string) int {
-	list := make([]rune, 0)
+	list := []rune{}
 	for _, r := range s {
 		list = append(list, r)
 	}

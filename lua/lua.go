@@ -47,9 +47,7 @@ type goFunctionT struct {
 }
 
 func New() *Lua {
-	this := new(Lua)
-	this.lua = C.luaL_newstate()
-	return this
+	return &Lua{C.luaL_newstate()}
 }
 
 func (this *Lua) OpenLibs() {
@@ -110,9 +108,9 @@ func (this *Lua) NewTable() {
 }
 
 func (this *Lua) PushString(str string) {
-	tmp := C.CString(str)
-	C.lua_pushstring(this.lua, tmp)
-	C.free(unsafe.Pointer(tmp))
+	cstr := C.CString(str)
+	C.lua_pushstring(this.lua, cstr)
+	C.free(unsafe.Pointer(cstr))
 }
 
 func (this *Lua) PushAnsiString(data []byte) {
@@ -138,27 +136,27 @@ func (this *Lua) SetTable(index int) {
 }
 
 func (this *Lua) SetField(index int, str string) {
-	tmp := C.CString(str)
-	C.lua_setfield(this.lua, C.int(index), tmp)
-	C.free(unsafe.Pointer(tmp))
+	cstr := C.CString(str)
+	C.lua_setfield(this.lua, C.int(index), cstr)
+	C.free(unsafe.Pointer(cstr))
 }
 
 func (this *Lua) GetField(index int, str string) {
-	tmp := C.CString(str)
-	C.lua_getfield(this.lua, C.int(index), tmp)
-	C.free(unsafe.Pointer(tmp))
+	cstr := C.CString(str)
+	C.lua_getfield(this.lua, C.int(index), cstr)
+	C.free(unsafe.Pointer(cstr))
 }
 
 func (this *Lua) SetGlobal(str string) {
-	tmp := C.CString(str)
-	C.lua_setglobal(this.lua, tmp)
-	C.free(unsafe.Pointer(tmp))
+	cstr := C.CString(str)
+	C.lua_setglobal(this.lua, cstr)
+	C.free(unsafe.Pointer(cstr))
 }
 
 func (this *Lua) GetGlobal(str string) {
-	tmp := C.CString(str)
-	C.lua_getglobal(this.lua, tmp)
-	C.free(unsafe.Pointer(tmp))
+	cstr := C.CString(str)
+	C.lua_getglobal(this.lua, cstr)
+	C.free(unsafe.Pointer(cstr))
 }
 
 func (this *Lua) SetMetaTable(index int) {

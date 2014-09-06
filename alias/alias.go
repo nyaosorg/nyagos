@@ -19,9 +19,7 @@ type AliasFunc struct {
 }
 
 func New(baseStr string) *AliasFunc {
-	this := new(AliasFunc)
-	this.BaseStr = baseStr
-	return this
+	return &AliasFunc{baseStr}
 }
 
 func (this *AliasFunc) String() string {
@@ -52,15 +50,12 @@ func (this *AliasFunc) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 		buffer.WriteString(quoteAndJoin(cmd.Args[1:]))
 		cmdline = buffer.String()
 	}
-	var stdio interpreter.Stdio
-	stdio.Stdin = cmd.Stdin
-	stdio.Stdout = cmd.Stdout
-	stdio.Stderr = cmd.Stderr
-	nextT, err := interpreter.Interpret(
-		cmdline,
-		NextHook, /* commands.Exec */
-		&stdio)
-	return nextT, err
+	stdio := interpreter.Stdio{
+		Stdin:  cmd.Stdin,
+		Stdout: cmd.Stdout,
+		Stderr: cmd.Stderr,
+	}
+	return interpreter.Interpret(cmdline, NextHook, &stdio)
 }
 
 var Table = map[string]Callable{}

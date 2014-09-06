@@ -9,5 +9,4 @@ func SetTitle(title string) {
 	if ctitle != nil && err == nil {
 		C.SetConsoleTitleW((*C.WCHAR)(&ctitle[0]))
 	}
-
 }

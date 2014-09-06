@@ -29,8 +29,10 @@ var prevDir string
 
 func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
-		prevDir_, _ := os.Getwd()
-		var err error
+		prevDir_, err := os.Getwd()
+		if err != nil {
+			return interpreter.CONTINUE, err
+		}
 		if cmd.Args[1] == "-" {
 			err = dos.Chdir(prevDir)
 		} else {
@@ -42,15 +44,14 @@ func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	home := dos.GetHome()
 	if home != "" {
 		prevDir, _ = os.Getwd()
-		err := dos.Chdir(home)
-		return interpreter.CONTINUE, err
+		return interpreter.CONTINUE, dos.Chdir(home)
 	}
 	return cmd_pwd(cmd)
 }
 
 func cmd_ls(cmd *exec.Cmd) (interpreter.NextT, error) {
-	err := ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
-	return interpreter.CONTINUE, err
+	return interpreter.CONTINUE,
+		ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
 }
 
 func cmd_set(cmd *exec.Cmd) (interpreter.NextT, error) {
@@ -101,7 +102,7 @@ func cmd_alias(cmd *exec.Cmd) (interpreter.NextT, error) {
 			key := strings.ToLower(args)
 			val := alias.Table[key]
 
-			fmt.Printf("%s=%s\n", key, val.String())
+			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
 		}
 	}
 	return interpreter.CONTINUE, nil

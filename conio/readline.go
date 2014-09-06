@@ -61,11 +61,7 @@ var ZeroMap = map[uint16]KeyFuncT{
 }
 
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
-	var this ReadLineBuffer
-	this.Buffer = make([]rune, 20)
-	this.Length = 0
-	this.Cursor = 0
-	this.ViewStart = 0
+	this := ReadLineBuffer{Buffer: make([]rune, 20)}
 	this.ViewWidth, _ = GetScreenSize()
 	this.ViewWidth--
 
