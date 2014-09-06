@@ -18,13 +18,15 @@ type Stdio struct {
 	Stderr io.Writer
 }
 
+var ArgsHook func([]string) []string
+
 func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (NextT, error), stdio *Stdio) (NextT, error) {
 	statements := Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
 			//fmt.Println(state)
-			cmd := exec.Cmd{Args: state.Argv}
+			var cmd exec.Cmd
 			if stdio == nil {
 				cmd.Stdin = os.Stdin
 				cmd.Stdout = os.Stdout
@@ -88,7 +90,11 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer i
 
 			isBackGround := (state.Term == "|" || state.Term == "&")
 
-			if len(cmd.Args) > 0 {
+			if len(state.Argv) > 0 {
+				if ArgsHook != nil {
+					state.Argv = ArgsHook(state.Argv)
+				}
+				cmd.Args = state.Argv
 				whatToDo, err = hook(&cmd, isBackGround, pipeOut)
 				if whatToDo == THROUGH {
 					cmd.Path, err = exec.LookPath(state.Argv[0])

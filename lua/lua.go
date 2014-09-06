@@ -78,6 +78,22 @@ func (this *Lua) IsFunction(index int) bool {
 	return C.gLua_isfunction(this.lua, C.int(index)) != 0
 }
 
+const (
+	TNIL           = int(C.LUA_TNIL)
+	TNUMBER        = int(C.LUA_TNUMBER)
+	TBOOLEAN       = int(C.LUA_TBOOLEAN)
+	TSTRING        = int(C.LUA_TSTRING)
+	TTABLE         = int(C.LUA_TTABLE)
+	TFUNCTION      = int(C.LUA_TFUNCTION)
+	TUSERDATA      = int(C.LUA_TUSERDATA)
+	TTHREAD        = int(C.LUA_TTHREAD)
+	TLIGHTUSERDATE = int(C.LUA_TLIGHTUSERDATA)
+)
+
+func (this *Lua) GetType(index int) int {
+	return int(C.lua_type(this.lua, C.int(index)))
+}
+
 func (this *Lua) PushValue(index int) {
 	C.lua_pushvalue(this.lua, C.int(index))
 }
@@ -133,6 +149,10 @@ func luaToGoBridge(lua *C.lua_State) int {
 
 func (this *Lua) SetTable(index int) {
 	C.lua_settable(this.lua, C.int(index))
+}
+
+func (this *Lua) GetTable(index int) {
+	C.lua_gettable(this.lua, C.int(index))
 }
 
 func (this *Lua) SetField(index int, str string) {

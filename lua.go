@@ -40,10 +40,11 @@ func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 func cmdAlias(L *Lua) int {
 	name := L.ToString(1)
 	key := strings.ToLower(name)
-	if L.IsString(2) {
+	switch L.GetType(2) {
+	case TSTRING:
 		value := L.ToString(2)
 		alias.Table[key] = alias.New(value)
-	} else if L.IsFunction(2) {
+	case TFUNCTION:
 		regkey := "nyagos.alias." + key
 		L.SetField(Registory, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
@@ -133,6 +134,7 @@ func cmdUtoA(L *Lua) int {
 
 func SetLuaFunctions(this *Lua) {
 	stackPos := this.GetTop()
+	defer this.SetTop(stackPos)
 	this.NewTable()
 	this.PushGoFunction(cmdAlias)
 	this.SetField(-2, "alias")
@@ -157,5 +159,37 @@ func SetLuaFunctions(this *Lua) {
 	this.PushGoFunction(cmdGetEnv)
 	this.SetField(-2, "getenv")
 
-	this.SetTop(stackPos)
+	interpreter.ArgsHook = func(args []string) []string {
+		pos := this.GetTop()
+		defer this.SetTop(pos)
+		this.GetGlobal("nyagos")
+		this.GetField(-1, "argsfilter")
+		if !this.IsFunction(-1) {
+			return args
+		}
+		this.NewTable()
+		for i := 0; i < len(args); i++ {
+			this.PushInteger(i)
+			this.PushString(args[i])
+			this.SetTable(-3)
+		}
+		if err := this.Call(1, 1); err != nil {
+			fmt.Fprintf(os.Stderr, "%s\n", err)
+			return args
+		}
+		if this.GetType(-1) != TTABLE {
+			return args
+		}
+		newargs := []string{}
+		for i := 0; true; i++ {
+			this.PushInteger(i)
+			this.GetTable(-2)
+			if this.GetType(-1) == TNIL {
+				break
+			}
+			newargs = append(newargs, this.ToString(-1))
+			this.Pop(1)
+		}
+		return newargs
+	}
 }
