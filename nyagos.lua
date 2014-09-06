@@ -116,6 +116,15 @@ alias{
     end
 }
 
+nyagos.argsfilter = function(args)
+    if string.match(args[0],"%.py$") then
+        table.insert(args,1,args[0])
+        args[0] = "ipy"
+        return args
+    end
+end
+
+
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
     x'cd'
