@@ -82,6 +82,33 @@ x = nyagos.exec
 original_print = print
 print = nyagos.echo
 
+nyagos.suffixes = {
+    py={"ipy.exe"},
+    rb={"ruby.exe"},
+    lua={"lua.exe"},
+    pl={"perl.exe"},
+    awk={"gawk.exe","-f"},
+}
+
+nyagos.argsfilter = function(args)
+    local m = string.match(args[0],"%.(%w+)$")
+    if not m then 
+        return
+    end
+    local cmdline = nyagos.suffixes[ string.lower(m) ]
+    if not cmdline then
+        return
+    end
+    local newargs={}
+    for i=1,#cmdline do
+        newargs[i-1]=cmdline[i]
+    end
+    for i=0,#args do
+        newargs[#newargs+1] = args[i]
+    end
+    return newargs
+end
+
 alias{
     assoc='%COMSPEC% /c assoc $*',
     attrib='%COMSPEC% /c attrib $*',
@@ -100,6 +127,15 @@ alias{
     rmdir='%COMSPEC% /c rmdir $*',
     start='%COMSPEC% /c start $*',
     ['type']='%COMSPEC% /c type $*',
+    suffix=function(args)
+        if #args < 2 then
+            print "Usage: suffix SUFFIX COMMAND"
+        else
+            local suffix=string.lower(args[1])
+            local cmdline=args[2]
+            nyagos.suffixes[suffix]=cmdline
+        end
+    end,
     ls='ls -oF $*',
     lua_e=function(args)
         assert(load(args[1]))()
@@ -115,15 +151,6 @@ alias{
         end
     end
 }
-
-nyagos.argsfilter = function(args)
-    if string.match(args[0],"%.py$") then
-        table.insert(args,1,args[0])
-        args[0] = "ipy"
-        return args
-    end
-end
-
 
 local home = os.getenv("HOME") or os.getenv("USERPROFILE")
 if home then
