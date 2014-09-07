@@ -22,7 +22,7 @@
         goto end
 
 :snapshot
-        zip -9 nyagos-%DATE:/=%.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.mkd readme.mkd .nyagos
+        zip -9 nyagos-%DATE:/=%.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos
         goto end
 
 :install
