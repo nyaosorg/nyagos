@@ -68,6 +68,7 @@ function alias(equation)
     end
 end
 
+
 function exists(path)
     local fd=io.open(path)
     if fd then
@@ -82,13 +83,22 @@ x = nyagos.exec
 original_print = print
 print = nyagos.echo
 
-nyagos.suffixes = {
-    py={"ipy.exe"},
-    rb={"ruby.exe"},
-    lua={"lua.exe"},
-    pl={"perl.exe"},
-    awk={"gawk.exe","-f"},
-}
+nyagos.suffixes={}
+function suffix(suffix,cmdline)
+    local suffix=string.lower(suffix)
+    if string.sub(suffix,1,1)=='.' then
+        suffix = string.sub(suffix,2)
+    end
+    if not nyagos.suffixes[suffix] then
+        nyagos.setenv("PATHEXT",nyagos.getenv("PATHEXT")..";."..string.upper(suffix))
+    end
+    nyagos.suffixes[suffix]=cmdline
+end
+suffix(".pl",{"perl"})
+suffix(".py",{"ipy"})
+suffix(".rb",{"ruby"})
+suffix(".lua",{"lua"})
+suffix(".awk",{"awk","-f"})
 
 nyagos.argsfilter = function(args)
     local m = string.match(args[0],"%.(%w+)$")
@@ -131,9 +141,7 @@ alias{
         if #args < 2 then
             print "Usage: suffix SUFFIX COMMAND"
         else
-            local suffix=string.lower(args[1])
-            local cmdline=args[2]
-            nyagos.suffixes[suffix]=cmdline
+            suffix(args[1],args[2])
         end
     end,
     ls='ls -oF $*',
