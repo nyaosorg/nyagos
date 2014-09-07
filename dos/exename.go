@@ -27,14 +27,13 @@ func init() {
 }
 
 func IsExecutableSuffix(path string) bool {
-	if len(ExecutableSuffixes) <= 0 {
-		pathExt := os.Getenv("PATHEXT")
-		if pathExt != "" {
-			for _, ext := range strings.Split(pathExt, ";") {
-				ExecutableSuffixes[strings.ToLower(ext)] = true
+	pathExt := os.Getenv("PATHEXT")
+	if pathExt != "" {
+		for _, ext := range strings.Split(pathExt, ";") {
+			if strings.EqualFold(ext,path){
+				return true
 			}
 		}
 	}
-	_, ok := ExecutableSuffixes[strings.ToLower(path)]
-	return ok
+	return false
 }
