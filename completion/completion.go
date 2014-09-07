@@ -13,8 +13,7 @@ import "../conio"
 import "../dos"
 
 func isExecutable(path string) bool {
-	_, ok := dos.ExecutableSuffixes[strings.ToLower(filepath.Ext(path))]
-	return ok
+	return dos.IsExecutableSuffix(filepath.Ext(path))
 }
 
 var RxEnvironPattern = regexp.MustCompile("%[^%]+%")

@@ -17,20 +17,11 @@ func GetModuleFileName() (string, error) {
 	return syscall.UTF16ToString(path16[:]), nil
 }
 
-var ExecutableSuffixes = map[string]bool{}
-
-func init() {
-	pathExt := os.Getenv("PATHEXT")
-	for _, ext := range strings.Split(pathExt, ";") {
-		ExecutableSuffixes[strings.ToLower(ext)] = true
-	}
-}
-
 func IsExecutableSuffix(path string) bool {
 	pathExt := os.Getenv("PATHEXT")
 	if pathExt != "" {
 		for _, ext := range strings.Split(pathExt, ";") {
-			if strings.EqualFold(ext,path){
+			if strings.EqualFold(ext, path) {
 				return true
 			}
 		}
