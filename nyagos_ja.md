@@ -247,6 +247,23 @@ echo されるだけで、何も実行されなくなります。
         return 'echo '..text
     end
 
+### `nyagos.argsfilter`
+
+nyagos.argsfilter は nyagos.filter と似ていますが、コマンドライン
+を字句解析した後の、引数配列(args)を加工できる点が違います。
+
+標準の nyagos.lua では nyagos.argsfilter を使って、
+suffix というコマンドを作成しています。
+
+    コマンド
+        suffix 拡張子 インタプリタ名 引数1 引数2 …
+    Lua:関数
+        suffix("拡張子",{"インタプリタ名","引数1"…})
+
+これはコマンドに特定の拡張子がついた時に、インタプリタ名を
+先頭に挿入するものです。
+
+
 ## その他
 
 NYAGOS のソースは https://github.com/zetamatta/nyagos にて、
