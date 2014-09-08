@@ -21,7 +21,7 @@ func cmd_exit(cmd *exec.Cmd) (interpreter.NextT, error) {
 
 func cmd_pwd(cmd *exec.Cmd) (interpreter.NextT, error) {
 	wd, _ := os.Getwd()
-	fmt.Fprintln(cmd.Stdout, dos.ReplaceHomeToTildeSlash(wd))
+	fmt.Fprintln(cmd.Stdout, wd)
 	return interpreter.CONTINUE, nil
 }
 
