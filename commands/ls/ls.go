@@ -130,7 +130,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				postfix = ANSI_END
 			}
 		}
-		if dos.IsExecutableSuffix(filepath.Ext(val.Name())) {
+		if !val.IsDir() && dos.IsExecutableSuffix(filepath.Ext(val.Name())) {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
