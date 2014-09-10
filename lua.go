@@ -81,16 +81,16 @@ func cmdExec(L *Lua) int {
 }
 
 func cmdEcho(L *Lua) int {
-	L.GetField(Registory, nyagos_exec_cmd)
-	if L.GetType(-1) != TUSERDATE {
-		fmt.Fprintln(os.Stderr, "nyagos.echo: invalid argument: not userdata")
-		return 0
-	}
-	cmd := (*exec.Cmd)(L.ToUserData(-1))
-	L.Pop(1)
 	var out io.Writer
-	if cmd != nil {
-		out = cmd.Stdout
+	L.GetField(Registory, nyagos_exec_cmd)
+	if L.GetType(-1) == TLIGHTUSERDATA {
+		cmd := (*exec.Cmd)(L.ToUserData(-1))
+		L.Pop(1)
+		if cmd != nil {
+			out = cmd.Stdout
+		} else {
+			out = os.Stdout
+		}
 	} else {
 		out = os.Stdout
 	}
