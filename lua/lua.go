@@ -87,7 +87,7 @@ const (
 	TFUNCTION      = int(C.LUA_TFUNCTION)
 	TUSERDATA      = int(C.LUA_TUSERDATA)
 	TTHREAD        = int(C.LUA_TTHREAD)
-	TLIGHTUSERDATE = int(C.LUA_TLIGHTUSERDATA)
+	TLIGHTUSERDATA = int(C.LUA_TLIGHTUSERDATA)
 )
 
 func (this *Lua) GetType(index int) int {
