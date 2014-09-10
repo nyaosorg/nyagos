@@ -19,15 +19,21 @@ end
 
 local function expand(text)
     return string.gsub(text,"%%(%w+)%%",function(w)
-        return os.getenv(w)
+        return nyagos.getenv(w)
     end)
+end
+
+function hasList(list,target)
+    local LIST=";"..string.upper(list)..";"
+    local TARGET=";"..string.upper(target)..";"
+    return string.find(LIST,TARGET,1,true)
 end
 
 function addpath(...)
     for _,dir in pairs{...} do
         dir = expand(dir)
-        local list=os.getenv("PATH")
-        if not string.find(";"..list..";",";"..dir..";",1,true) then
+        local list=nyagos.getenv("PATH")
+        if not hasList(list,dir) then
             nyagos.setenv("PATH",dir..";"..list)
         end
     end
@@ -42,7 +48,7 @@ function set(equation)
         local left,right,pos = split(equation)
         if pos and string.sub(left,-1) == "+" then
             left = string.sub(left,1,-2)
-            local original=os.getenv(left)
+            local original=nyagos.getenv(left)
             if string.find(right,original,1,true) then
                 right = original
             else
@@ -68,7 +74,6 @@ function alias(equation)
     end
 end
 
-
 function exists(path)
     local fd=io.open(path)
     if fd then
@@ -90,7 +95,11 @@ function suffix(suffix,cmdline)
         suffix = string.sub(suffix,2)
     end
     if not nyagos.suffixes[suffix] then
-        nyagos.setenv("PATHEXT",nyagos.getenv("PATHEXT")..";."..string.upper(suffix))
+        local orgpathext = nyagos.getenv("PATHEXT")
+        local newext="."..suffix
+        if not hasList(orgpathext,newext) then
+            nyagos.setenv("PATHEXT",orgpathext..";."..newext)
+        end
     end
     nyagos.suffixes[suffix]=cmdline
 end
@@ -99,6 +108,8 @@ suffix(".py",{"ipy"})
 suffix(".rb",{"ruby"})
 suffix(".lua",{"lua"})
 suffix(".awk",{"awk","-f"})
+suffix(".js",{"cscript"})
+suffix(".vbs",{"cscript"})
 
 nyagos.argsfilter = function(args)
     local m = string.match(args[0],"%.(%w+)$")
@@ -113,10 +124,41 @@ nyagos.argsfilter = function(args)
     for i=1,#cmdline do
         newargs[i-1]=cmdline[i]
     end
-    for i=0,#args do
-        newargs[#newargs+1] = args[i]
+    local pathlist = which({args[0]},1)
+    if #pathlist < 0 then
+        newargs[#cmdline] = args[0]
+    else
+        newargs[#cmdline] = pathlist[1]
+    end
+    for i=1,#args do
+        newargs[#cmdline+i] = args[i]
     end
     return newargs
+end
+
+function which(args,n)
+    local list={}
+    for dir1 in string.gmatch(nyagos.getenv('PATH'),"[^;]+") do
+        local path0 = dir1 .. "\\" .. args[1]
+        if exists(path0) then
+            list[ #list+1 ] = path0
+            n = n - 1
+            if n == 0 then
+                return list
+            end
+        end
+        for ext1 in string.gmatch(nyagos.getenv('PATHEXT'),"[^;]+") do
+            local path1 = dir1 .. "\\" .. args[1] .. ext1
+            if exists(path1) then
+                list[ #list+1 ] = path1
+                n = n - 1
+                if n == 0 then
+                    return list
+                end
+            end
+        end
+    end
+    return list
 end
 
 alias{
@@ -149,18 +191,13 @@ alias{
         assert(load(args[1]))()
     end,
     which=function(args)
-        for dir1 in string.gmatch(os.getenv('PATH'),"[^;]+") do
-            for ext1 in string.gmatch(os.getenv('PATHEXT'),"[^;]+") do
-                local path1 = dir1 .. "\\" .. args[1] .. ext1
-                if exists(path1) then
-                    nyagos.echo(path1)
-                end
-            end
+        for _,path1 in pairs(which(args,0)) do
+            nyagos.echo(path1)
         end
     end
 }
 
-local home = os.getenv("HOME") or os.getenv("USERPROFILE")
+local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then
     x'cd'
     local rcfname = '.nyagos'
