@@ -112,7 +112,11 @@ suffix(".js",{"cscript","//nologo"})
 suffix(".vbs",{"cscript","//nologo"})
 
 nyagos.argsfilter = function(args)
-    local m = string.match(args[0],"%.(%w+)$")
+    local path=nyagos.which(args[0])
+    if not path then
+        return
+    end
+    local m = string.match(path,"%.(%w+)$")
     if not m then 
         return
     end
@@ -124,12 +128,7 @@ nyagos.argsfilter = function(args)
     for i=1,#cmdline do
         newargs[i-1]=cmdline[i]
     end
-    local pathlist = which({args[0]},1)
-    if #pathlist < 0 then
-        newargs[#cmdline] = args[0]
-    else
-        newargs[#cmdline] = pathlist[1]
-    end
+    newargs[#cmdline] = path
     for i=1,#args do
         newargs[#cmdline+i] = args[i]
     end
@@ -191,9 +190,7 @@ alias{
         assert(load(args[1]))()
     end,
     which=function(args)
-        for _,path1 in pairs(which(args,0)) do
-            nyagos.echo(path1)
-        end
+        nyagos.echo( nyagos.which(args[1]) )
     end
 }
 
