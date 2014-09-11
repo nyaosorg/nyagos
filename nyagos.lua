@@ -135,31 +135,6 @@ nyagos.argsfilter = function(args)
     return newargs
 end
 
-function which(args,n)
-    local list={}
-    for dir1 in string.gmatch(nyagos.getenv('PATH'),"[^;]+") do
-        local path0 = dir1 .. "\\" .. args[1]
-        if exists(path0) then
-            list[ #list+1 ] = path0
-            n = n - 1
-            if n == 0 then
-                return list
-            end
-        end
-        for ext1 in string.gmatch(nyagos.getenv('PATHEXT'),"[^;]+") do
-            local path1 = dir1 .. "\\" .. args[1] .. ext1
-            if exists(path1) then
-                list[ #list+1 ] = path1
-                n = n - 1
-                if n == 0 then
-                    return list
-                end
-            end
-        end
-    end
-    return list
-end
-
 alias{
     assoc='%COMSPEC% /c assoc $*',
     attrib='%COMSPEC% /c attrib $*',
