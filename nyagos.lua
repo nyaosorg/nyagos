@@ -98,7 +98,7 @@ function suffix(suffix,cmdline)
         local orgpathext = nyagos.getenv("PATHEXT")
         local newext="."..suffix
         if not hasList(orgpathext,newext) then
-            nyagos.setenv("PATHEXT",orgpathext..";."..newext)
+            nyagos.setenv("PATHEXT",orgpathext..";"..newext)
         end
     end
     nyagos.suffixes[suffix]=cmdline
