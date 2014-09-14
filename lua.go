@@ -179,13 +179,14 @@ func SetLuaFunctions(this *Lua) {
 	this.PushGoFunction(cmdGetEnv)
 	this.SetField(-2, "getenv")
 
-	interpreter.ArgsHook = func(args []string) []string {
+	var orgArgHook func([]string) []string
+	orgArgHook = interpreter.SetArgsHook(func(args []string) []string {
 		pos := this.GetTop()
 		defer this.SetTop(pos)
 		this.GetGlobal("nyagos")
 		this.GetField(-1, "argsfilter")
 		if !this.IsFunction(-1) {
-			return args
+			return orgArgHook(args)
 		}
 		this.NewTable()
 		for i := 0; i < len(args); i++ {
@@ -195,10 +196,10 @@ func SetLuaFunctions(this *Lua) {
 		}
 		if err := this.Call(1, 1); err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
-			return args
+			return orgArgHook(args)
 		}
 		if this.GetType(-1) != TTABLE {
-			return args
+			return orgArgHook(args)
 		}
 		newargs := []string{}
 		for i := 0; true; i++ {
@@ -210,6 +211,6 @@ func SetLuaFunctions(this *Lua) {
 			newargs = append(newargs, this.ToString(-1))
 			this.Pop(1)
 		}
-		return newargs
-	}
+		return orgArgHook(newargs)
+	})
 }

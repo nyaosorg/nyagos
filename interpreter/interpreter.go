@@ -18,7 +18,14 @@ type Stdio struct {
 	Stderr io.Writer
 }
 
-var ArgsHook func([]string) []string
+var argsHook func([]string) []string = func(args []string) []string {
+	return args
+}
+
+func SetArgsHook(argsHook_ func([]string) []string) (rv func([]string) []string) {
+	rv, argsHook = argsHook, argsHook_
+	return
+}
 
 func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (NextT, error), stdio *Stdio) (NextT, error) {
 	statements := Parse(text)
@@ -32,9 +39,21 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer i
 				cmd.Stdout = os.Stdout
 				cmd.Stderr = os.Stderr
 			} else {
-				cmd.Stdin = stdio.Stdin
-				cmd.Stdout = stdio.Stdout
-				cmd.Stderr = stdio.Stderr
+				if stdio.Stderr != nil {
+					cmd.Stdin = stdio.Stdin
+				} else {
+					cmd.Stdin = os.Stdin
+				}
+				if stdio.Stdout != nil {
+					cmd.Stdout = stdio.Stdout
+				} else {
+					cmd.Stdout = os.Stdout
+				}
+				if stdio.Stderr != nil {
+					cmd.Stderr = stdio.Stderr
+				} else {
+					cmd.Stderr = os.Stderr
+				}
 			}
 			if pipeIn != nil {
 				cmd.Stdin = pipeIn
@@ -91,8 +110,8 @@ func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer i
 			isBackGround := (state.Term == "|" || state.Term == "&")
 
 			if len(state.Argv) > 0 {
-				if ArgsHook != nil {
-					state.Argv = ArgsHook(state.Argv)
+				if argsHook != nil {
+					state.Argv = argsHook(state.Argv)
 				}
 				cmd.Args = state.Argv
 				whatToDo, err = hook(&cmd, isBackGround, pipeOut)
