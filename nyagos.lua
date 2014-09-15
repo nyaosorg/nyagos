@@ -6,6 +6,9 @@ print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
 -- When you want to customize, please edit ~\.nyagos
 -- Please do not edit this.
 
+io.getenv = nyagos.getenv
+io.setenv = nyagos.setenv
+
 local function split(equation)
     local pos=string.find(equation,"=",1,true)
     if pos then
