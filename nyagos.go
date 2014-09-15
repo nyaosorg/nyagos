@@ -50,7 +50,8 @@ func main() {
 	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
 
-	alias.NextHook = commands.Exec
+	commands.Init()
+	alias.Init()
 
 	// Lua extension
 	L := lua.New()
@@ -137,7 +138,7 @@ func main() {
 			fmt.Fprintln(os.Stdout, line)
 		}
 		history.Push(line)
-		whatToDo, err := interpreter.Interpret(line, alias.Hook, nil)
+		whatToDo, err := interpreter.Interpret(line, nil)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

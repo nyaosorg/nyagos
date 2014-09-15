@@ -18,16 +18,29 @@ type Stdio struct {
 	Stderr io.Writer
 }
 
-var argsHook func([]string) []string = func(args []string) []string {
+type ArgsHookT func(args []string) []string
+
+var argsHook = func(args []string) []string {
 	return args
 }
 
-func SetArgsHook(argsHook_ func([]string) []string) (rv func([]string) []string) {
+func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
 	rv, argsHook = argsHook, argsHook_
 	return
 }
 
-func Interpret(text string, hook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (NextT, error), stdio *Stdio) (NextT, error) {
+type HookT func(*exec.Cmd, bool, io.Closer) (NextT, error)
+
+var hook = func(*exec.Cmd, bool, io.Closer) (NextT, error) {
+	return THROUGH, nil
+}
+
+func SetHook(hook_ HookT) (rv HookT) {
+	rv, hook = hook, hook_
+	return
+}
+
+func Interpret(text string, stdio *Stdio) (NextT, error) {
 	statements := Parse(text)
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil

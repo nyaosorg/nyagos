@@ -158,3 +158,7 @@ func Exec(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 		return interpreter.THROUGH, nil
 	}
 }
+
+func Init() {
+	interpreter.SetHook(Exec)
+}

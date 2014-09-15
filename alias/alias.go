@@ -26,7 +26,9 @@ func (this *AliasFunc) String() string {
 	return this.BaseStr
 }
 
-func (this *AliasFunc) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
+var expanded = false
+
+func (this *AliasFunc) Call(cmd *exec.Cmd) (next interpreter.NextT, err error) {
 	isReplaced := false
 	cmdline := paramMatch.ReplaceAllStringFunc(this.BaseStr, func(s string) string {
 		if s == "$*" {
@@ -55,7 +57,10 @@ func (this *AliasFunc) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 		Stdout: cmd.Stdout,
 		Stderr: cmd.Stderr,
 	}
-	return interpreter.Interpret(cmdline, NextHook, &stdio)
+	expanded = true
+	next, err = interpreter.Interpret(cmdline, &stdio)
+	expanded = false
+	return
 }
 
 var Table = map[string]Callable{}
@@ -74,16 +79,23 @@ func quoteAndJoin(list []string) string {
 	return buffer.String()
 }
 
-var NextHook func(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error)
+var nextHook interpreter.HookT
 
-func Hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
+func hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
+	if expanded {
+		return nextHook(cmd, IsBackground, closer)
+	}
 	callee, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
-		return NextHook(cmd, IsBackground, closer)
+		return nextHook(cmd, IsBackground, closer)
 	}
-	nextT, err := callee.Call(cmd)
-	if nextT != interpreter.THROUGH && closer != nil {
+	next, err := callee.Call(cmd)
+	if next != interpreter.THROUGH && closer != nil {
 		closer.Close()
 	}
-	return nextT, err
+	return next, err
+}
+
+func Init() {
+	nextHook = interpreter.SetHook(hook)
 }

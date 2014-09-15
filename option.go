@@ -1,6 +1,5 @@
 package main
 
-import "./alias"
 import "./interpreter"
 
 func OptionParse(getArg func() (string, bool)) {
@@ -16,7 +15,7 @@ func OptionParse(getArg func() (string, bool)) {
 			switch o {
 			case 'c', 'k':
 				if fname, fnameOk := getArg(); fnameOk {
-					interpreter.Interpret(fname, alias.Hook, nil)
+					interpreter.Interpret(fname, nil)
 				}
 				if o == 'c' {
 					return

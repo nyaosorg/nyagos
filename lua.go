@@ -72,7 +72,7 @@ func cmdGetEnv(L *Lua) int {
 
 func cmdExec(L *Lua) int {
 	statement := L.ToString(1)
-	_, err := interpreter.Interpret(statement, alias.Hook, nil)
+	_, err := interpreter.Interpret(statement, nil)
 
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
