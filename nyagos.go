@@ -116,6 +116,14 @@ func main() {
 		if cont == conio.ABORT {
 			break
 		}
+
+		var isReplaced bool
+		line, isReplaced = history.Replace(line)
+		if isReplaced {
+			fmt.Fprintln(os.Stdout, line)
+		}
+		history.Push(line)
+
 		stackPos := L.GetTop()
 		L.GetGlobal("nyagos")
 		L.GetField(-1, "filter")
@@ -132,12 +140,6 @@ func main() {
 		}
 		L.SetTop(stackPos)
 
-		var isReplaced bool
-		line, isReplaced = history.Replace(line)
-		if isReplaced {
-			fmt.Fprintln(os.Stdout, line)
-		}
-		history.Push(line)
 		whatToDo, err := interpreter.Interpret(line, nil)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
