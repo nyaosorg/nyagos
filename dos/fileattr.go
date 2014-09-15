@@ -14,7 +14,7 @@ func NewFileAttr(path string) (*FileAttr, error) {
 	if err != nil {
 		return &FileAttr{0}, err
 	} else if cpath == nil {
-		return &FileAttr{0}, fmt.Errorf("sysCall.UTF16FromString() failed")
+		return &FileAttr{0}, fmt.Errorf("sysCall.UTF16FromString(\"%s\") failed",path)
 	} else {
 		return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}, nil
 	}
