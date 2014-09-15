@@ -3,6 +3,9 @@ The Nihongo Yet Another GOing Shell
 
 The binary files can be downloaded on [nyaos.org](http://www.nyaos.org/index.cgi?p=NYAGOS).
 
+* [English Document](./nyagos_en.md)
+* [Japanese Document](./nyagos_ja.md)
+
 Required software 
 -----------------
 
