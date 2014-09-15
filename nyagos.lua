@@ -135,6 +135,18 @@ nyagos.argsfilter = function(args)
     return newargs
 end
 
+nyagos.filter = function(cmdline)
+    cmdline = string.gsub(cmdline,'`([^`]*)`',function(m)
+        local r = nyagos.eval(m)
+        if r then
+            return nyagos.atou(r)
+        else
+            return ""
+        end
+    end)
+    return cmdline
+end
+
 alias{
     assoc='%COMSPEC% /c assoc $*',
     attrib='%COMSPEC% /c attrib $*',

@@ -80,6 +80,31 @@ func cmdExec(L *Lua) int {
 	return 0
 }
 
+func cmdEval(L *Lua) int {
+	statement := L.ToString(1)
+	r, w, err := os.Pipe()
+	if err != nil {
+		return 0
+	}
+	go func(statement string, w *os.File) {
+		interpreter.Interpret(statement, &interpreter.Stdio{Stdout: w})
+		w.Close()
+	}(statement, w)
+
+	var result = []byte{}
+	for {
+		buffer := make([]byte, 256)
+		size, err := r.Read(buffer)
+		if err != nil || size <= 0 {
+			break
+		}
+		result = append(result, buffer[0:size]...)
+	}
+	r.Close()
+	L.PushAnsiString(result)
+	return 1
+}
+
 func cmdEcho(L *Lua) int {
 	var out io.Writer
 	L.GetField(Registory, nyagos_exec_cmd)
@@ -172,6 +197,8 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "getwd")
 	this.PushGoFunction(cmdWhich)
 	this.SetField(-2, "which")
+	this.PushGoFunction(cmdEval)
+	this.SetField(-2, "eval")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
