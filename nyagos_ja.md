@@ -23,7 +23,9 @@ Windows であまりストレスを感じないような環境を構築するために
    * エイリアス
    * ファイル名・コマンド名補完
 * Lua言語を使ったカスタマイズ機能
-   * 内蔵コマンドや入力文字列に置換フックを Lua で記述可能
+   * Lua で内蔵コマンドを作成可能
+   * 入力文字列を Lua で加工できる
+   * コードページ文字列⇔UTF8変換関数や、eval関数などの支援関数も用意
 
 ## インストール
 
@@ -89,6 +91,7 @@ UNIX系シェルに近いキーバインドで、コマンドラインを編集可能です。
 * `mkdir=%COMSPEC% /c mkdir`
 * `mklink=%COMSPEC% /c mklink`
 * `move=%COMSPEC% /c move`
+* `open='%COMSPEC% /c for %I in ($*) do @start "%I"'`
 * `rd=%COMSPEC% /c rd`
 * `ren=%COMSPEC% /c ren`
 * `rename=%COMSPEC% /c rename`
