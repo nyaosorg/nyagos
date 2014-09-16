@@ -59,16 +59,27 @@ func (this *Lua) Close() {
 	C.lua_close(this.lua)
 }
 
-func (this *Lua) ToString(index int) string {
+func (this *Lua) ToString(index int) (string, error) {
+	if !this.IsString(index) {
+		return "", fmt.Errorf("Lua.ToString(%d): Not String", index)
+	}
 	var length C.size_t
 	p := C.lua_tolstring(this.lua, C.int(index), &length)
-	return C.GoStringN(p, C.int(length))
+	if p == nil {
+		return "", fmt.Errorf("Lua.ToString(%d): Empty", index)
+	} else {
+		return C.GoStringN(p, C.int(length)), nil
+	}
 }
 
 func (this *Lua) ToAnsiString(index int) []byte {
 	var length C.size_t
 	p := C.lua_tolstring(this.lua, C.int(index), &length)
-	return C.GoBytes(unsafe.Pointer(p), C.int(length))
+	if p == nil || length <= 0 {
+		return []byte{}
+	} else {
+		return C.GoBytes(unsafe.Pointer(p), C.int(length))
+	}
 }
 
 func (this *Lua) IsString(index int) bool {
@@ -101,7 +112,12 @@ func (this *Lua) PushValue(index int) {
 
 func (this *Lua) Load(fname string) error {
 	if C.gLuaL_loadfile(this.lua, C.CString(fname)) != 0 {
-		return fmt.Errorf("%s: %s", fname, this.ToString(-1))
+		msg, err := this.ToString(-1)
+		if err == nil {
+			return fmt.Errorf("%s: %s", fname, msg)
+		} else {
+			return err
+		}
 	}
 	return nil
 }
@@ -109,7 +125,12 @@ func (this *Lua) Load(fname string) error {
 func (this *Lua) Call(nargs, nresult int) error {
 	if C.gLua_pcall(this.lua, C.int(nargs), C.int(nresult), 0) != 0 {
 		if this.IsString(-1) {
-			return errors.New(this.ToString(-1))
+			msg, err := this.ToString(-1)
+			if err == nil {
+				return errors.New(msg)
+			} else {
+				return err
+			}
 		} else {
 			return errors.New("<Lua Error>")
 		}
@@ -220,4 +241,12 @@ func (this *Lua) ToUserData(index int) unsafe.Pointer {
 
 func (this *Lua) PushNil() {
 	C.lua_pushnil(this.lua)
+}
+
+func (this *Lua) PushBool(value bool) {
+	if value {
+		C.lua_pushboolean(this.lua, 1)
+	} else {
+		C.lua_pushboolean(this.lua, 0)
+	}
 }

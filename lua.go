@@ -39,53 +39,95 @@ func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 }
 
 func cmdAlias(L *Lua) int {
-	name := L.ToString(1)
+	name, nameErr := L.ToString(1)
+	if nameErr != nil {
+		L.PushNil()
+		L.PushString(nameErr.Error())
+		return 2
+	}
 	key := strings.ToLower(name)
 	switch L.GetType(2) {
 	case TSTRING:
-		value := L.ToString(2)
-		alias.Table[key] = alias.New(value)
+		value, err := L.ToString(2)
+		if err == nil {
+			alias.Table[key] = alias.New(value)
+		} else {
+			L.PushNil()
+			L.PushString(err.Error())
+			return 2
+		}
 	case TFUNCTION:
 		regkey := "nyagos.alias." + key
 		L.SetField(Registory, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
 	}
-	return 0
+	L.PushBool(true)
+	return 1
 }
 
 func cmdSetEnv(L *Lua) int {
-	name := L.ToString(1)
-	value := L.ToString(2)
+	name, nameErr := L.ToString(1)
+	if nameErr != nil {
+		L.PushNil()
+		L.PushString(nameErr.Error())
+		return 2
+	}
+	value, valueErr := L.ToString(2)
+	if valueErr != nil {
+		L.PushNil()
+		L.PushString(valueErr.Error())
+		return 2
+	}
 	os.Setenv(name, value)
-	return 0
+	L.PushBool(true)
+	return 1
 }
 
 func cmdGetEnv(L *Lua) int {
-	name := L.ToString(1)
+	name, nameErr := L.ToString(1)
+	if nameErr != nil {
+		L.PushNil()
+		return 1
+	}
 	value := os.Getenv(name)
 	if len(value) > 0 {
 		L.PushString(value)
-		return 1
 	} else {
-		return 0
+		L.PushNil()
 	}
+	return 1
 }
 
 func cmdExec(L *Lua) int {
-	statement := L.ToString(1)
+	statement, statementErr := L.ToString(1)
+	if statementErr != nil {
+		L.PushNil()
+		L.PushString(statementErr.Error())
+		return 2
+	}
 	_, err := interpreter.Interpret(statement, nil)
 
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		L.PushNil()
+		L.PushString(err.Error())
+		return 2
 	}
-	return 0
+	L.PushBool(true)
+	return 1
 }
 
 func cmdEval(L *Lua) int {
-	statement := L.ToString(1)
+	statement, statementErr := L.ToString(1)
+	if statementErr != nil {
+		L.PushNil()
+		L.PushString(statementErr.Error())
+		return 2
+	}
 	r, w, err := os.Pipe()
 	if err != nil {
-		return 0
+		L.PushNil()
+		L.PushString(err.Error())
+		return 2
 	}
 	go func(statement string, w *os.File) {
 		interpreter.Interpret(statement, &interpreter.Stdio{Stdout: w})
@@ -106,7 +148,8 @@ func cmdEval(L *Lua) int {
 		L.PushAnsiString(result)
 		return 1
 	} else {
-		return 0
+		L.PushNil()
+		return 1
 	}
 }
 
@@ -130,10 +173,18 @@ func cmdEcho(L *Lua) int {
 		if i > 1 {
 			fmt.Fprint(out, "\t")
 		}
-		fmt.Fprint(out, L.ToString(i))
+		str, err := L.ToString(i)
+		if err != nil {
+			L.PushNil()
+			L.PushString(err.Error())
+			return 2
+		} else {
+			fmt.Fprint(out, str)
+		}
 	}
 	fmt.Fprint(out, "\n")
-	return 0
+	L.PushBool(true)
+	return 1
 }
 
 func cmdGetwd(L *Lua) int {
@@ -150,13 +201,20 @@ func cmdWhich(L *Lua) int {
 	if L.GetType(-1) != TSTRING {
 		return 0
 	}
-	name := L.ToString(-1)
+	name, nameErr := L.ToString(-1)
+	if nameErr != nil {
+		L.PushNil()
+		L.PushString(nameErr.Error())
+		return 2
+	}
 	path, err := exec.LookPath(name)
 	if err == nil {
 		L.PushString(path)
 		return 1
 	} else {
-		return 0
+		L.PushNil()
+		L.PushString(err.Error())
+		return 2
 	}
 }
 
@@ -171,12 +229,21 @@ func cmdAtoU(L *Lua) int {
 }
 
 func cmdUtoA(L *Lua) int {
-	str, err := mbcs.UtoA(L.ToString(1))
+	utf8, utf8err := L.ToString(1)
+	if utf8err != nil {
+		L.PushNil()
+		L.PushString(utf8err.Error())
+		return 2
+	}
+	str, err := mbcs.UtoA(utf8)
 	if err == nil {
 		L.PushAnsiString(str)
-		return 1
+		L.PushNil()
+		return 2
 	} else {
-		return 0
+		L.PushNil()
+		L.PushString(err.Error())
+		return 2
 	}
 }
 
@@ -184,7 +251,13 @@ func cmdGlob(L *Lua) int {
 	if !L.IsString(-1) {
 		return 0
 	}
-	list, err := dos.Glob(L.ToString(-1))
+	wildcard, wildcardErr := L.ToString(-1)
+	if wildcardErr != nil {
+		L.PushNil()
+		L.PushString(wildcardErr.Error())
+		return 2
+	}
+	list, err := dos.Glob(wildcard)
 	if err != nil {
 		L.PushNil()
 		L.PushString(err.Error())
@@ -262,7 +335,12 @@ func SetLuaFunctions(this *Lua) {
 			if this.GetType(-1) == TNIL {
 				break
 			}
-			newargs = append(newargs, this.ToString(-1))
+			arg1, arg1err := this.ToString(-1)
+			if arg1err == nil {
+				newargs = append(newargs, arg1)
+			} else {
+				fmt.Fprintln(os.Stderr, arg1err.Error())
+			}
 			this.Pop(1)
 		}
 		return orgArgHook(newargs)

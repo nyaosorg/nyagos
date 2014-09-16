@@ -134,7 +134,10 @@ func main() {
 				fmt.Fprintln(os.Stderr, err)
 			} else {
 				if L.IsString(-1) {
-					line = L.ToString(-1)
+					line, err = L.ToString(-1)
+					if err != nil {
+						fmt.Fprintln(os.Stderr, err)
+					}
 				}
 			}
 		}
