@@ -9,6 +9,7 @@ import "unsafe"
 
 import . "./lua"
 import "./alias"
+import "./dos"
 import "./interpreter"
 import "./mbcs"
 
@@ -179,6 +180,26 @@ func cmdUtoA(L *Lua) int {
 	}
 }
 
+func cmdGlob(L *Lua) int {
+	if !L.IsString(-1) {
+		return 0
+	}
+	list, err := dos.Glob(L.ToString(-1))
+	if err != nil {
+		L.PushNil()
+		L.PushString(err.Error())
+		return 2
+	} else {
+		L.NewTable()
+		for i := 0; i < len(list); i++ {
+			L.PushInteger(i + 1)
+			L.PushString(list[i])
+			L.SetTable(-3)
+		}
+		return 1
+	}
+}
+
 func SetLuaFunctions(this *Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
@@ -203,6 +224,8 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "which")
 	this.PushGoFunction(cmdEval)
 	this.SetField(-2, "eval")
+	this.PushGoFunction(cmdGlob)
+	this.SetField(-2, "glob")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
