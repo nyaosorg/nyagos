@@ -33,6 +33,7 @@ static void gLua_pushbridge(lua_State*L)
 */
 import "C"
 
+import "errors"
 import "fmt"
 import "unsafe"
 
@@ -107,7 +108,11 @@ func (this *Lua) Load(fname string) error {
 
 func (this *Lua) Call(nargs, nresult int) error {
 	if C.gLua_pcall(this.lua, C.int(nargs), C.int(nresult), 0) != 0 {
-		return fmt.Errorf("%s", this.ToString(-1))
+		if this.IsString(-1) {
+			return errors.New(this.ToString(-1))
+		} else {
+			return errors.New("<Lua Error>")
+		}
 	}
 	return nil
 }

@@ -101,8 +101,12 @@ func cmdEval(L *Lua) int {
 		result = append(result, buffer[0:size]...)
 	}
 	r.Close()
-	L.PushAnsiString(result)
-	return 1
+	if result != nil {
+		L.PushAnsiString(result)
+		return 1
+	} else {
+		return 0
+	}
 }
 
 func cmdEcho(L *Lua) int {
