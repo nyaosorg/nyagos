@@ -158,7 +158,6 @@ func cmdEcho(L *Lua) int {
 	L.GetField(Registory, nyagos_exec_cmd)
 	if L.GetType(-1) == TLIGHTUSERDATA {
 		cmd := (*exec.Cmd)(L.ToUserData(-1))
-		L.Pop(1)
 		if cmd != nil {
 			out = cmd.Stdout
 		} else {
@@ -167,20 +166,20 @@ func cmdEcho(L *Lua) int {
 	} else {
 		out = os.Stdout
 	}
+	L.Pop(1)
 
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {
-		if i > 1 {
-			fmt.Fprint(out, "\t")
-		}
 		str, err := L.ToString(i)
 		if err != nil {
 			L.PushNil()
 			L.PushString(err.Error())
 			return 2
-		} else {
-			fmt.Fprint(out, str)
 		}
+		if i > 1 {
+			fmt.Fprint(out, "\t")
+		}
+		fmt.Fprint(out, str)
 	}
 	fmt.Fprint(out, "\n")
 	L.PushBool(true)
