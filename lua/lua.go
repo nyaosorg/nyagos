@@ -217,3 +217,7 @@ func (this *Lua) PushLightUserData(p unsafe.Pointer) {
 func (this *Lua) ToUserData(index int) unsafe.Pointer {
 	return C.lua_touserdata(this.lua, C.int(index))
 }
+
+func (this *Lua) PushNil() {
+	C.lua_pushnil(this.lua)
+}
