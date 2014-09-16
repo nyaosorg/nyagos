@@ -163,7 +163,16 @@ alias{
     mkdir='%COMSPEC% /c mkdir $*',
     mklink='%COMSPEC% /c mklink $*',
     move='%COMSPEC% /c move $*',
-    open='%COMSPEC% /c for %I in ($*) do @start "%I"',
+    open=function(args)
+        local count=0
+        for i=1,#args do
+            nyagos.exec(string.format('%s /c start "%s"',nyagos.getenv('COMSPEC'),args[i]))
+            count = count +1
+        end
+        if count <= 0 then
+            nyagos.exec(string.format('%s /c start .',nyagos.getenv('COMSPEC')))
+        end
+    end,
     rd='%COMSPEC% /c rd $*',
     ren='%COMSPEC% /c ren $*',
     rename='%COMSPEC% /c rename $*',
