@@ -166,7 +166,14 @@ alias{
     open=function(args)
         local count=0
         for i=1,#args do
-            nyagos.exec(string.format('%s /c start "%s"',nyagos.getenv('COMSPEC'),args[i]))
+            local list=nyagos.glob(args[i])
+            if list and #list >= 1 then
+                for i=1,#list do
+                    nyagos.exec(string.format('%s /c start "%s"',nyagos.getenv('COMSPEC'),list[i]))
+                end
+            else
+                nyagos.exec(string.format('%s /c start "%s"',nyagos.getenv('COMSPEC'),args[i]))
+            end
             count = count +1
         end
         if count <= 0 then
