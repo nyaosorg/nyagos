@@ -148,7 +148,7 @@ nyagos.filter = function(cmdline)
         r = string.gsub(r,'[|&<>!]',function(m)
             return string.format('%%u+%04X%%',string.byte(m,1,1))
         end)
-        return string.gsub(r,'%s$','')
+        return string.gsub(r,'%s+$','')
     end)
 end
 
