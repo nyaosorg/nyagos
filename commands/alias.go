@@ -25,9 +25,10 @@ func cmd_alias(cmd *exec.Cmd) (interpreter.NextT, error) {
 			}
 		} else {
 			key := strings.ToLower(args)
-			val := alias.Table[key]
-
-			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
+			val, ok := alias.Table[key]
+			if ok {
+				fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
+			}
 		}
 	}
 	return interpreter.CONTINUE, nil
