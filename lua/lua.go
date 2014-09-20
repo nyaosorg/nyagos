@@ -156,9 +156,13 @@ func (this *Lua) PushString(str string) {
 }
 
 func (this *Lua) PushAnsiString(data []byte) {
-	C.lua_pushlstring(this.lua,
-		(*C.char)(unsafe.Pointer(&data[0])),
-		C.size_t(len(data)))
+	if data != nil && len(data) > 0 {
+		C.lua_pushlstring(this.lua,
+			(*C.char)(unsafe.Pointer(&data[0])),
+			C.size_t(len(data)))
+	} else {
+		this.PushString("")
+	}
 }
 
 func (this *Lua) PushInteger(n int) {
