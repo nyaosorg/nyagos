@@ -30,7 +30,7 @@ func UtoA(utf8 string) ([]byte, error) {
 	}
 	size := C.WideCharToMultiByte(C.CP_THREAD_ACP, 0,
 		(*C.WCHAR)(&utf16[0]), C.int(len(utf16)), nil, 0, nil, nil)
-	if size == 0 {
+	if size <= 0 {
 		return nil, lastError("WideCharToMultiByte")
 	}
 	mbcs := make([]byte, size)
@@ -44,9 +44,12 @@ func UtoA(utf8 string) ([]byte, error) {
 }
 
 func AtoU(mbcs []byte) (string, error) {
+	if mbcs == nil || len(mbcs) <= 0 {
+		return "", nil
+	}
 	size := C.MultiByteToWideChar(C.CP_THREAD_ACP, 0,
 		(*C.CHAR)(unsafe.Pointer(&mbcs[0])), C.int(len(mbcs)), nil, 0)
-	if size == 0 {
+	if size <= 0 {
 		return "", lastError("MultiByteToWideChar")
 	}
 	utf16 := make([]uint16, size)
