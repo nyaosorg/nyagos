@@ -231,7 +231,11 @@ func cmdUtoA(L *Lua) int {
 	}
 	str, err := mbcs.UtoA(utf8)
 	if err == nil {
-		L.PushAnsiString(str)
+		if len(str) >= 1 {
+			L.PushAnsiString(str[:len(str)-1])
+		} else {
+			L.PushString("")
+		}
 		L.PushNil()
 		return 2
 	} else {
