@@ -21,43 +21,30 @@ func (this *KeyGoFuncT) Call(buffer *ReadLineBuffer) KeyFuncResult {
 }
 
 var KeyMap = map[rune]KeyFuncT{
-	'\b':         &KeyGoFuncT{KeyFuncBackSpace},
-	'\r':         &KeyGoFuncT{KeyFuncEnter},
-	'\x7F':       &KeyGoFuncT{KeyFuncDelete},
-	('A' & 0x1f): &KeyGoFuncT{KeyFuncHead},
-	('B' & 0x1f): &KeyGoFuncT{KeyFuncBackword},
-	('D' & 0x1f): &KeyGoFuncT{KeyFuncDeleteOrAbort},
-	('E' & 0x1f): &KeyGoFuncT{KeyFuncTail},
-	('F' & 0x1f): &KeyGoFuncT{KeyFuncForward},
-	('K' & 0x1f): &KeyGoFuncT{KeyFuncClearAfter},
-	('L' & 0x1F): &KeyGoFuncT{KeyFuncCLS},
-	('U' & 0x1F): &KeyGoFuncT{KeyFuncClearBefore},
-	('Y' & 0x1F): &KeyGoFuncT{KeyFuncPaste},
-	('[' & 0x1F): &KeyGoFuncT{KeyFuncClear},
+	NAME2CHAR[K_CTRL_A]: NAME2FUNC[F_HEAD],
+	NAME2CHAR[K_CTRL_B]: NAME2FUNC[F_BACKWORD],
+	NAME2CHAR[K_CTRL_D]: NAME2FUNC[F_DELETE_OR_ABORT],
+	NAME2CHAR[K_CTRL_E]: NAME2FUNC[F_TAIL],
+	NAME2CHAR[K_CTRL_F]: NAME2FUNC[F_FORWARD],
+	NAME2CHAR[K_CTRL_H]: NAME2FUNC[F_BACKSPACE],
+	NAME2CHAR[K_CTRL_K]: NAME2FUNC[F_ERASEAFTER],
+	NAME2CHAR[K_CTRL_L]: NAME2FUNC[F_REPAINT],
+	NAME2CHAR[K_CTRL_M]: NAME2FUNC[F_ENTER],
+	NAME2CHAR[K_CTRL_U]: NAME2FUNC[F_ERASEBEFORE],
+	NAME2CHAR[K_CTRL_Y]: NAME2FUNC[F_PASTE],
+	NAME2CHAR[K_DELETE]: NAME2FUNC[F_DELETE],
+	NAME2CHAR[K_ENTER]:  NAME2FUNC[F_ENTER],
+	NAME2CHAR[K_ESCAPE]: NAME2FUNC[F_CLEAR],
 }
 
-// KeyCode from
-// http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
-const (
-	K_LEFT  = 0x25
-	K_RIGHT = 0x27
-	K_DEL   = 0x2E
-	K_HOME  = 0x24
-	K_END   = 0x23
-	K_CTRL  = 0x11
-	K_SHIFT = 0x10
-	K_UP    = 0x26
-	K_DOWN  = 0x28
-)
-
 var ZeroMap = map[uint16]KeyFuncT{
-	K_LEFT:  &KeyGoFuncT{KeyFuncBackword},
-	K_RIGHT: &KeyGoFuncT{KeyFuncForward},
-	K_DEL:   &KeyGoFuncT{KeyFuncDelete},
-	K_HOME:  &KeyGoFuncT{KeyFuncHead},
-	K_END:   &KeyGoFuncT{KeyFuncTail},
-	K_CTRL:  &KeyGoFuncT{KeyFuncPass},
-	K_SHIFT: &KeyGoFuncT{KeyFuncPass},
+	NAME2SCAN[K_CTRL]:   NAME2FUNC[F_PASS],
+	NAME2SCAN[K_DELETE]: NAME2FUNC[F_DELETE],
+	NAME2SCAN[K_END]:    NAME2FUNC[F_TAIL],
+	NAME2SCAN[K_HOME]:   NAME2FUNC[F_HEAD],
+	NAME2SCAN[K_LEFT]:   NAME2FUNC[F_BACKWORD],
+	NAME2SCAN[K_RIGHT]:  NAME2FUNC[F_FORWARD],
+	NAME2SCAN[K_SHIFT]:  NAME2FUNC[F_PASS],
 }
 
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {

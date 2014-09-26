@@ -41,11 +41,11 @@ func main() {
 	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
 	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
 
-	conio.KeyMap['\t'] = &completion
-	conio.ZeroMap[conio.K_UP] = &historyUp
-	conio.ZeroMap[conio.K_DOWN] = &historyDown
-	conio.KeyMap['P'&0x1F] = &historyUp
-	conio.KeyMap['N'&0x1F] = &historyDown
+	conio.KeyMap[conio.NAME2CHAR[conio.K_CTRL_I]] = &completion
+	conio.ZeroMap[conio.NAME2SCAN[conio.K_UP]] = &historyUp
+	conio.ZeroMap[conio.NAME2SCAN[conio.K_DOWN]] = &historyDown
+	conio.KeyMap[conio.NAME2CHAR[conio.K_CTRL_P]] = &historyUp
+	conio.KeyMap[conio.NAME2CHAR[conio.K_CTRL_N]] = &historyDown
 
 	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
