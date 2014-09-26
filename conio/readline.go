@@ -1,5 +1,7 @@
 package conio
 
+import "fmt"
+
 type KeyFuncResult int
 
 const (
@@ -45,6 +47,26 @@ var ZeroMap = map[uint16]KeyFuncT{
 	NAME2SCAN[K_LEFT]:   NAME2FUNC[F_BACKWORD],
 	NAME2SCAN[K_RIGHT]:  NAME2FUNC[F_FORWARD],
 	NAME2SCAN[K_SHIFT]:  NAME2FUNC[F_PASS],
+}
+
+func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
+	if charValue, charOk := NAME2CHAR[keyName]; charOk {
+		KeyMap[charValue] = funcValue
+		return nil
+	} else if scanValue, scanOk := NAME2SCAN[keyName]; scanOk {
+		ZeroMap[scanValue] = funcValue
+		return nil
+	} else {
+		return fmt.Errorf("%s: no such keyname", keyName)
+	}
+}
+
+func BindKeySymbol(keyName, funcName string) error {
+	funcValue, funcOk := NAME2FUNC[funcName]
+	if !funcOk {
+		return fmt.Errorf("%s: no such function.", funcName)
+	}
+	return BindKeyFunc(keyName, funcValue)
 }
 
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {

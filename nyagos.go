@@ -41,11 +41,21 @@ func main() {
 	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
 	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
 
-	conio.KeyMap[conio.NAME2CHAR[conio.K_CTRL_I]] = &completion
-	conio.ZeroMap[conio.NAME2SCAN[conio.K_UP]] = &historyUp
-	conio.ZeroMap[conio.NAME2SCAN[conio.K_DOWN]] = &historyDown
-	conio.KeyMap[conio.NAME2CHAR[conio.K_CTRL_P]] = &historyUp
-	conio.KeyMap[conio.NAME2CHAR[conio.K_CTRL_N]] = &historyDown
+	if err := conio.BindKeyFunc(conio.K_CTRL_I, &completion); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+	if err := conio.BindKeyFunc(conio.K_UP, &historyUp); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+	if err := conio.BindKeyFunc(conio.K_DOWN, &historyDown); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+	if err := conio.BindKeyFunc(conio.K_CTRL_P, &historyUp); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+	if err := conio.BindKeyFunc(conio.K_CTRL_N, &historyDown); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
 
 	// ANSI Escape Sequence Support
 	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
