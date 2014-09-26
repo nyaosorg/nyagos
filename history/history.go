@@ -14,6 +14,14 @@ import "../interpreter"
 var histories = make([]string, 0)
 var pointor = 0
 
+func LastHistory() string {
+	if len(histories) <= 0 {
+		return ""
+	} else {
+		return histories[len(histories)-1]
+	}
+}
+
 func KeyFuncHistoryUp(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 	if pointor <= 0 {
 		pointor = len(histories)

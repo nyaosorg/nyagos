@@ -132,7 +132,12 @@ func main() {
 		if isReplaced {
 			fmt.Fprintln(os.Stdout, line)
 		}
-		history.Push(line)
+		if line == "" {
+			continue
+		}
+		if line != history.LastHistory() {
+			history.Push(line)
+		}
 
 		stackPos := L.GetTop()
 		L.GetGlobal("nyagos")
