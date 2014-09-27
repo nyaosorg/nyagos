@@ -36,24 +36,23 @@ var commit string
 func main() {
 	signalOff()
 
-	// KeyBind += completion Module
 	historyUp := conio.KeyGoFuncT{history.KeyFuncHistoryUp}
 	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
 	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
 
-	if err := conio.BindKeyFunc(conio.K_CTRL_I, &completion); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeyFunc(conio.K_UP, &historyUp); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_UP, "HISTORY_UP", &historyUp); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeyFunc(conio.K_DOWN, &historyDown); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_DOWN, "HISTORY_DOWN", &historyDown); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeyFunc(conio.K_CTRL_P, &historyUp); err != nil {
+	if err := conio.BindKeySymbol(conio.K_CTRL_P, "HISTORY_UP"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeyFunc(conio.K_CTRL_N, &historyDown); err != nil {
+	if err := conio.BindKeySymbol(conio.K_CTRL_N, "HISTORY_DOWN"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 

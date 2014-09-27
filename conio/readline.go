@@ -69,6 +69,11 @@ func BindKeySymbol(keyName, funcName string) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
+func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
+	NAME2FUNC[funcName] = funcValue
+	return BindKeyFunc(keyName, funcValue)
+}
+
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
 	this := ReadLineBuffer{Buffer: make([]rune, 20)}
 	this.ViewWidth, _ = GetScreenSize()
