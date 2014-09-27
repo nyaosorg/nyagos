@@ -31,6 +31,9 @@ var percentFunc = map[string]func() string{
 			return ""
 		}
 	},
+	"ERRORLEVEL": func() string {
+		return ErrorLevel
+	},
 }
 
 var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
