@@ -247,6 +247,26 @@ UTF8文字列 s を、現在のコードページの文字列に変換します。
 
 ワイルドカードを展開して、格納したテーブルを返します。
 
+### `nyagos.bindkey("キー名","機能名")`
+
+一行入力のキーに機能を割り当てます。
+
+キー名として以下が使えます。
+
+	"BACKSPACE" "CTRL" "C_A" "C_B" "C_C" "C_D" "C_E" "C_F" "C_G" "C_H"
+	"C_I" "C_J" "C_K" "C_L" "C_M" "C_N" "C_O" "C_P" "C_Q" "C_R" "C_S"
+	"C_T" "C_U" "C_V" "C_W" "C_X" "C_Y" "C_Z" "DEL" "DOWN" "END"
+	"ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
+
+機能名として以下が使えます。
+
+	"BACKSPACE" "BACKWORD" "CLEAR" "DELETE" "DELETE_OR_ABORT"
+	"ENTER" "ERASEAFTER" "ERASEBEFORE" "FORWARD" "HEAD"
+	"PASS" "PASTE" "REPAINT" "TAIL" "HISTORY_UP" "HISTORY_DOWN"
+        "COMPLETE"
+
+成功すると true を、失敗すると nil とエラーメッセージを返します。
+
 ### `nyagos.filter`
 
 通常ユーザが呼び出すことはありません。
@@ -273,6 +293,8 @@ suffix というコマンドを作成しています。
 
 これはコマンドに特定の拡張子がついた時に、インタプリタ名を
 先頭に挿入するものです。
+
+
 
 ## その他
 
