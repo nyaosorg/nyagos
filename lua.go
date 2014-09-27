@@ -9,6 +9,7 @@ import "unsafe"
 
 import . "./lua"
 import "./alias"
+import "./conio"
 import "./dos"
 import "./interpreter"
 import "./mbcs"
@@ -271,6 +272,28 @@ func cmdGlob(L *Lua) int {
 	}
 }
 
+func cmdBindKey(L *Lua) int {
+	key, keyErr := L.ToString(-2)
+	if keyErr != nil {
+		L.PushString(keyErr.Error())
+		return 1
+	}
+	val, valErr := L.ToString(-1)
+	if valErr != nil {
+		L.PushString(valErr.Error())
+		return 1
+	}
+	err := conio.BindKeySymbol(key, val)
+	if err != nil {
+		L.PushNil()
+		L.PushString(err.Error())
+		return 2
+	} else {
+		L.PushBool(true)
+		return 1
+	}
+}
+
 func SetLuaFunctions(this *Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
@@ -297,6 +320,8 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "eval")
 	this.PushGoFunction(cmdGlob)
 	this.SetField(-2, "glob")
+	this.PushGoFunction(cmdBindKey)
+	this.SetField(-2, "bindkey")
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
