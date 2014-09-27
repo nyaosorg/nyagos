@@ -39,22 +39,22 @@ Execute `COMMAND` and continue the command-line.
 
 ## Editor
 
-* BackSpace , Ctrl-H : Delete a left charactor.
-* Enter , Ctrl-M     : 
-* Del                : カーソル上の一文字を削除
-* Home , Ctrl-A      : カーソルを先頭へ移動
-* ← , Ctrl-B        : カーソルを一文字左へ移動
-* Ctrl-D             : 0文字の時は NYAGOS を終了、さもなければ Del と同じ
-* End , Ctrl-E       : カーソルを末尾へ移動
-* → , Ctrl-F        : カーソルを一文字右へ移動
-* Ctrl-K             : カーソル以降の文字を全て削除し、クリップボードへコピー
-* Ctrl-L             : 画面をクリアして、入力した内容を再表示
-* Ctrl-U             : カーソルまでの文字を全て削除し、クリップボードへコピー
-* Ctrl-Y             : クリップボードの内容を貼り付ける
-* Esc , Ctrl-[       : 入力内容を全て削除する
-* ↑ , Ctrl-P        : ヒストリ：一つ前の入力内容を展開する
-* ↓ , Ctrl-N        : ヒストリ：一つ後の入力内容を展開する
-* TAB , Ctrl-I       : ファイル名・コマンド名補完
+* BackSpace , Ctrl-H : Delete a charactor left of cursor
+* Enter , Ctrl-M     : Execute commandline
+* Del                : Delete a charactor on cursor
+* Home , Ctrl-A      : Move cursor to top
+* Left , Ctrl-B      : Move cursor to left
+* Ctrl-D             : Delete a charactor on cursor or quit
+* End , Ctrl-E       : Move cursor to the tail of commandline
+* Right , Ctrl-F     : Move cursor right
+* Ctrl-K             : Remove text from cursor to tail
+* Ctrl-L             : Repaint screen
+* Ctrl-U             : Remove text from top to cursor
+* Ctrl-Y             : Paste text from clipboard
+* Esc , Ctrl-[       : Remove all-commandline
+* UP , Ctrl-P        : Replace commandline to previous input one
+* DOWN , Ctrl-N      : Replace commnadline to next input one
+* TAB , Ctrl-I       : Complete file or command-name
 
 
 ## Built-in commnads
