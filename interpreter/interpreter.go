@@ -3,6 +3,8 @@ package interpreter
 import "io"
 import "os"
 import "os/exec"
+import "regexp"
+import "strconv"
 
 type NextT int
 
@@ -39,6 +41,9 @@ func SetHook(hook_ HookT) (rv HookT) {
 	rv, hook = hook, hook_
 	return
 }
+
+var errorStatusPattern = regexp.MustCompile("^exit status\\s*(\\d+)")
+var ErrorLevel int
 
 func Interpret(text string, stdio *Stdio) (NextT, error) {
 	statements := Parse(text)
@@ -143,6 +148,14 @@ func Interpret(text string, stdio *Stdio) (NextT, error) {
 			}
 			if pipeOut != nil {
 				pipeOut.Close()
+			}
+			if err != nil {
+				m := errorStatusPattern.FindStringSubmatch(err.Error())
+				if m != nil {
+					ErrorLevel, err = strconv.Atoi(m[1])
+				} else {
+					ErrorLevel = 0
+				}
 			}
 			if whatToDo == SHUTDOWN {
 				return SHUTDOWN, err
