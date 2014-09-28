@@ -45,8 +45,11 @@ var errorStatusPattern = regexp.MustCompile("^exit status ([0-9]+)")
 var ErrorLevel string
 
 func Interpret(text string, stdio *Stdio) (NextT, error) {
-	statements := Parse(text)
-	for _, pipeline := range statements {
+	statement := Parse(text)
+	return InterpretStatement(&statement, stdio)
+}
+func InterpretStatement(statements *[][]StatementT, stdio *Stdio) (NextT, error) {
+	for _, pipeline := range *statements {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
 			//fmt.Println(state)
