@@ -76,7 +76,7 @@ func main() {
 
 	// Parameter Parsing
 	argc := 0
-	OptionParse(func() (string, bool) {
+	cont := OptionParse(func() (string, bool) {
 		argc++
 		if argc < len(os.Args) {
 			return os.Args[argc], true
@@ -84,6 +84,9 @@ func main() {
 			return "", false
 		}
 	})
+	if !cont {
+		return
+	}
 
 	appData := filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
 	os.Mkdir(appData, 0777)

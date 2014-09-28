@@ -2,11 +2,11 @@ package main
 
 import "./interpreter"
 
-func OptionParse(getArg func() (string, bool)) {
+func OptionParse(getArg func() (string, bool)) bool {
 	for {
 		arg, ok := getArg()
 		if !ok {
-			return
+			return true
 		}
 		if arg[0] != '-' {
 			continue
@@ -18,9 +18,10 @@ func OptionParse(getArg func() (string, bool)) {
 					interpreter.Interpret(fname, nil)
 				}
 				if o == 'c' {
-					return
+					return false
 				}
 			}
 		}
 	}
+	return true
 }
