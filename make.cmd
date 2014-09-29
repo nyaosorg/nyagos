@@ -9,6 +9,7 @@
 
 :fmt
         for /R . %%I IN (*.go) do go fmt %%I
+        for /R . %%I in (.*~) do del %%I
         goto end
 
 :clean
@@ -22,7 +23,7 @@
         goto end
 
 :snapshot
-        zip -9 nyagos-%DATE:/=%.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos
+        zip -9 nyagos-%DATE:/=%.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
         goto end
 
 :install
@@ -39,5 +40,6 @@
         copy nyagos.exe .\installdir\.
         copy nyagos.lua .\installdir\.
         copy lua52.dll  .\installdir\.
+        robocopy nyagos.d .\installdir\nyagos.d /E
         goto end
 :end
