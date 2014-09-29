@@ -155,10 +155,10 @@ func InterpretStatement(statements *[][]StatementT, stdio *Stdio) (NextT, error)
 				m := errorStatusPattern.FindStringSubmatch(err.Error())
 				if m != nil {
 					ErrorLevel = m[1]
+					err = nil
 				} else {
-					ErrorLevel = "0"
+					ErrorLevel = "-1"
 				}
-				err = nil
 			} else {
 				ErrorLevel = "0"
 			}
