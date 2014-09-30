@@ -28,13 +28,13 @@
 
 :install
         @if exist installdir (
-            @start make.cmd install_
+            @start make.cmd install.
         ) else (
             @echo Please do 'mklink /J installdir PATH\TO\BIN'.
         )
         @goto end
 
-:install_
+:install.
         @echo Please close NYAGOS.exe and hit ENTER.
         @pause
         robocopy nyagos.d .\installdir\nyagos.d /E
