@@ -6,7 +6,9 @@ print("Nihongo Yet Another GOing Shell")
 print("Build at ".. nyagos.stamp .. " with commit "..nyagos.commit)
 print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
 
-for _,fname in ipairs(nyagos.glob("nyagos.d\\*.lua")) do
+local dotfolder = string.gsub(nyagos.exe,"%.exe",".d")
+for _,fname in ipairs(nyagos.glob(dotfolder.."\\*.lua")) do
+    -- print(fname)
     local chank,err=assert(loadfile(fname))
     if err then
         print(err)
