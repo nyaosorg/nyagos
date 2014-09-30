@@ -322,6 +322,13 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "glob")
 	this.PushGoFunction(cmdBindKey)
 	this.SetField(-2, "bindkey")
+	exeName, exeNameErr := dos.GetModuleFileName()
+	if exeNameErr != nil {
+		fmt.Fprintln(os.Stderr, exeNameErr)
+	} else {
+		this.PushString(exeName)
+		this.SetField(-2, "exe")
+	}
 	this.SetGlobal("nyagos")
 
 	// replace io.getenv
