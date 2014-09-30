@@ -218,6 +218,10 @@ If it returns string, NYAGOS.exe replace the command-line-string it.
 not a string but a table as string array which has each command 
 arguments.
 
+### `nyagos.exe`
+
+This string variable has the value of the fullpath of nyagos.exe.
+
 ## Misc.
 
 You can get the source files from
