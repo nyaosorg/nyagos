@@ -169,6 +169,11 @@ It executes "COMMAND" as shell command.
 It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
 When error occures, OUTPUT is set `nil`.
 
+### `WD = getwd()`
+
+Get current working directory.
+
+
 ### `nyagos.write("TEXT")`
 
 It output "TEXT" to the standard output with UTF8.
