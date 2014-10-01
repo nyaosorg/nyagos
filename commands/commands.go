@@ -13,7 +13,6 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
 	"cls":     cmd_cls,
-	"echo":    cmd_echo,
 	"exit":    cmd_exit,
 	"history": history.CmdHistory,
 	"ls":      cmd_ls,

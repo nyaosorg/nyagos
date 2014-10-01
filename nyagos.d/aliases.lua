@@ -1,6 +1,7 @@
 alias{
     assoc='%COMSPEC% /c assoc $*',
     attrib='%COMSPEC% /c attrib $*',
+    echo=function(args) nyagos.write(table.concat(args,' ')..'\n') end,
     copy='%COMSPEC% /c copy $*',
     del='%COMSPEC% /c del $*',
     dir='%COMSPEC% /c dir $*',
@@ -16,12 +17,8 @@ alias{
     ls='ls -oF $*',
     ['type']='%COMSPEC% /c type $*',
     ['for']='%COMSPEC% /c for $*',
-    lua_e=function(args)
-        assert(load(args[1]))()
-    end,
-    which=function(args)
-        nyagos.echo( nyagos.which(args[1]) )
-    end,
+    lua_e=function(args) assert(load(args[1]))() end,
+    which=function(args) nyagos.write( nyagos.which(args[1])..'\n') end,
     open=function(args)
         local count=0
         for i=1,#args do
