@@ -157,8 +157,8 @@ These suffix are available.
 
 It defines an alias. These macros are available on "REPLACE-STRING".
 
-* $1,$2,$3 ... the number's argument.
-* $* ... all arguments
+* `$1`,`$2`,`$3` ... the number's argument.
+* `$*` ... all arguments
 
 ### `nyagos.setenv("NAME","VALUE")`
 
@@ -173,7 +173,7 @@ It executes "COMMAND" as shell command.
 It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
 When error occures, OUTPUT is set `nil`.
 
-### `nyagos.echo("TEXT")`
+### `nyagos.write("TEXT")`
 
 It output "TEXT" to the standard output with UTF8.
 

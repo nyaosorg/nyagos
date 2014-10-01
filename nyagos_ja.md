@@ -209,15 +209,15 @@ nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 nyagos.exec と同じですが、標準出力を取り込んで、戻り値として返します。
 実行に失敗した場合などは nil が戻ります。
 
-### `nyagos.echo(テキスト)`
+### `nyagos.write(テキスト)`
 
 テキストを出力しますが、リダイレクトされている場合は文字コードは
-UTF8 になります。内蔵 Lua の print は nyagos.lua にて、この 
-nyagos.echo に差し替えられています。
+UTF8 になります。内蔵 Lua の print は nyagos.write(テキスト..'\n')
+に差し替えられています。
 
 ### `nyagos.utoa(UTF8文字列)`
 
-UTF8文字列 s を、現在のコードページの文字列に変換します。
+UTF8文字列を、現在のコードページの文字列に変換します。
 
 ### `nyagos.atou(ANSI文字列)`
 
