@@ -12,6 +12,7 @@ alias{
     rd='%COMSPEC% /c rd $*',
     ren='%COMSPEC% /c ren $*',
     rename='%COMSPEC% /c rename $*',
+    rem=function() end,
     rmdir='%COMSPEC% /c rmdir $*',
     start='%COMSPEC% /c start $*',
     ls='ls -oF $*',
