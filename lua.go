@@ -14,6 +14,8 @@ import "./dos"
 import "./interpreter"
 import "./mbcs"
 
+import "github.com/shiena/ansicolor"
+
 const nyagos_exec_cmd = "nyagos.exec.cmd"
 
 type LuaFunction struct {
@@ -150,19 +152,15 @@ func cmdEval(L *Lua) int {
 }
 
 func cmdEcho(L *Lua) int {
-	var out io.Writer
+	var out io.Writer = os.Stdout
 	L.GetField(Registory, nyagos_exec_cmd)
 	if L.GetType(-1) == TLIGHTUSERDATA {
-		cmd := (*exec.Cmd)(L.ToUserData(-1))
-		if cmd != nil {
+		if cmd := (*exec.Cmd)(L.ToUserData(-1)); cmd != nil {
 			out = cmd.Stdout
-		} else {
-			out = os.Stdout
 		}
-	} else {
-		out = os.Stdout
 	}
 	L.Pop(1)
+	out = ansicolor.NewAnsiColorWriter(out)
 
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {
