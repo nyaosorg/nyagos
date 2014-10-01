@@ -151,7 +151,7 @@ func cmdEval(L *Lua) int {
 	return 1
 }
 
-func cmdEcho(L *Lua) int {
+func cmdWrite(L *Lua) int {
 	var out io.Writer = os.Stdout
 	L.GetField(Registory, nyagos_exec_cmd)
 	if L.GetType(-1) == TLIGHTUSERDATA {
@@ -175,7 +175,6 @@ func cmdEcho(L *Lua) int {
 		}
 		fmt.Fprint(out, str)
 	}
-	fmt.Fprint(out, "\n")
 	L.PushBool(true)
 	return 1
 }
@@ -304,8 +303,8 @@ func SetLuaFunctions(this *Lua) {
 	this.SetField(-2, "getenv")
 	this.PushGoFunction(cmdExec)
 	this.SetField(-2, "exec")
-	this.PushGoFunction(cmdEcho)
-	this.SetField(-2, "echo")
+	this.PushGoFunction(cmdWrite)
+	this.SetField(-2, "write")
 	this.PushGoFunction(cmdAtoU)
 	this.SetField(-2, "atou")
 	this.PushGoFunction(cmdUtoA)

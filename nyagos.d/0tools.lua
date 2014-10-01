@@ -44,6 +44,9 @@ function exists(f)
     end
     return false
 end
+function nyagos.echo(s)
+    nyagos.write(s..'\n')
+end
 io.getenv = nyagos.getenv
 io.setenv = nyagos.setenv
 x = nyagos.exec
