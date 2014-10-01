@@ -76,10 +76,6 @@ No arguments, list up the all aliases.
 Change the current working drive and directory.
 No arguments, move to %HOME% or %USERPROFILE%.
 
-### `echo STRING`
-
-Print STRING to Standard-output with UTF-8
-
 ### `exit`
 
 Quit NYAGOS.exe.
