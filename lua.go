@@ -5,7 +5,6 @@ import "io"
 import "os"
 import "os/exec"
 import "strings"
-import "unsafe"
 
 import . "./lua"
 import "./alias"
@@ -16,12 +15,12 @@ import "./mbcs"
 
 import "github.com/shiena/ansicolor"
 
-const nyagos_exec_cmd = "nyagos.exec.cmd"
-
 type LuaFunction struct {
 	L            *Lua
 	registoryKey string
 }
+
+var LuaInstanceToCmd = map[*Lua]*exec.Cmd{}
 
 func (this LuaFunction) String() string {
 	return "<<Lua-function>>"
@@ -35,8 +34,7 @@ func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 		this.L.PushString(arg1)
 		this.L.SetTable(-3)
 	}
-	this.L.PushLightUserData(unsafe.Pointer(cmd))
-	this.L.SetField(Registory, nyagos_exec_cmd)
+	LuaInstanceToCmd[this.L] = cmd
 	err := this.L.Call(1, 0)
 	return interpreter.CONTINUE, err
 }
@@ -153,14 +151,13 @@ func cmdEval(L *Lua) int {
 
 func cmdWrite(L *Lua) int {
 	var out io.Writer = os.Stdout
-	L.GetField(Registory, nyagos_exec_cmd)
-	if L.GetType(-1) == TLIGHTUSERDATA {
-		if cmd := (*exec.Cmd)(L.ToUserData(-1)); cmd != nil {
-			out = cmd.Stdout
-		}
+	if cmd, cmdOk := LuaInstanceToCmd[L]; cmdOk && cmd.Stdout != nil {
+		out = cmd.Stdout
 	}
-	L.Pop(1)
-	out = ansicolor.NewAnsiColorWriter(out)
+	switch out.(type) {
+	case *os.File:
+		out = ansicolor.NewAnsiColorWriter(out)
+	}
 
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {
