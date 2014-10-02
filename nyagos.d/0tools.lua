@@ -47,8 +47,12 @@ end
 function nyagos.echo(s)
     nyagos.write(s..'\n')
 end
+function x(s)
+    for line in string.gmatch(s,'[^\r\n]+') do
+        nyagos.exec(line)
+    end
+end
 io.getenv = nyagos.getenv
 io.setenv = nyagos.setenv
-x = nyagos.exec
 original_print = print
 print = nyagos.echo
