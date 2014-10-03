@@ -20,7 +20,7 @@ type LuaFunction struct {
 	registoryKey string
 }
 
-var LuaInstanceToCmd *exec.Cmd
+var LuaInstanceToCmd = map[uintptr]*exec.Cmd{}
 
 func (this LuaFunction) String() string {
 	return "<<Lua-function>>"
@@ -34,7 +34,7 @@ func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
 		this.L.PushString(arg1)
 		this.L.SetTable(-3)
 	}
-	LuaInstanceToCmd = cmd
+	LuaInstanceToCmd[this.L.Id()] = cmd
 	err := this.L.Call(1, 0)
 	return interpreter.CONTINUE, err
 }
@@ -151,8 +151,9 @@ func cmdEval(L *Lua) int {
 
 func cmdWrite(L *Lua) int {
 	var out io.Writer = os.Stdout
-	if LuaInstanceToCmd != nil && LuaInstanceToCmd.Stdout != nil {
-		out = LuaInstanceToCmd.Stdout
+	cmd, cmdOk := LuaInstanceToCmd[L.Id()]
+	if cmdOk && cmd != nil && cmd.Stdout != nil {
+		out = cmd.Stdout
 	}
 	switch out.(type) {
 	case *os.File:

@@ -41,6 +41,10 @@ type Lua struct {
 	lua *C.lua_State
 }
 
+func (this *Lua) Id() uintptr {
+	return uintptr(unsafe.Pointer(this.lua))
+}
+
 const Registory = C.LUA_REGISTRYINDEX
 
 type goFunctionT struct {
