@@ -42,7 +42,7 @@ func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
 		copy(tmp, this.Buffer)
 		this.Buffer = tmp
 	}
-	for i := this.Length; i >= pos; i-- {
+	for i := this.Length - 1; i >= pos; i-- {
 		this.Buffer[i+n] = this.Buffer[i]
 	}
 	for i := 0; i < n; i++ {
