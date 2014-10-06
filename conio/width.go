@@ -4,7 +4,8 @@ import "github.com/mattn/go-runewidth"
 
 var widthCache = map[rune]int{
 	rune(0x262D): 2, // Hammer and sickle: http://unicode-table.com/en/262D/
-	rune(0x270F): 2,
+	rune(0x262A): 2, // Star And Crescent
+	rune(0x270F): 2, // Pencil
 }
 
 func GetCharWidth(n rune) int {
