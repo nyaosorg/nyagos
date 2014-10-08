@@ -2,7 +2,7 @@
 -- Edit and put it on %USERPROFILE% or %HOME%
 
 set{
-    PROMPT='$e[36;40;1m$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$u270F $e[37;1m'
+    PROMPT='$e[36;40;1m$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s$e[37;1m'
 }
 
 -- vim:set ft=lua: --
