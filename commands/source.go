@@ -9,7 +9,7 @@ import "strings"
 
 import "../interpreter"
 
-func cmd_source(cmd *exec.Cmd) (interpreter.NextT, error) {
+func cmd_source(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) < 2 {
 		return interpreter.CONTINUE, nil
 	}

@@ -160,7 +160,7 @@ func main() {
 		}
 		L.SetTop(stackPos)
 
-		whatToDo, err := interpreter.Interpret(line, nil)
+		whatToDo, err := interpreter.New().Interpret(line)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

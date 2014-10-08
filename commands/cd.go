@@ -1,14 +1,13 @@
 package commands
 
 import "os"
-import "os/exec"
 
 import "../dos"
 import "../interpreter"
 
 var prevDir string
 
-func cmd_cd(cmd *exec.Cmd) (interpreter.NextT, error) {
+func cmd_cd(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
 		prevDir_, err := os.Getwd()
 		if err != nil {

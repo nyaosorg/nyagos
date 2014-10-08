@@ -14,8 +14,8 @@ func OptionParse(getArg func() (string, bool)) bool {
 		for _, o := range arg[1:] {
 			switch o {
 			case 'c', 'k':
-				if fname, fnameOk := getArg(); fnameOk {
-					interpreter.Interpret(fname, nil)
+				if arg1, ok := getArg(); ok {
+					interpreter.New().Interpret(arg1)
 				}
 				if o == 'c' {
 					return false

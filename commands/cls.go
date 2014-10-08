@@ -1,11 +1,9 @@
 package commands
 
-import "os/exec"
-
 import "../conio"
 import "../interpreter"
 
-func cmd_cls(cmd *exec.Cmd) (interpreter.NextT, error) {
+func cmd_cls(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	conio.Cls()
 	return interpreter.CONTINUE, nil
 }

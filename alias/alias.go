@@ -1,17 +1,15 @@
 package alias
 
 import "bytes"
-import "os/exec"
 import "regexp"
 import "strconv"
 import "strings"
-import "io"
 
 import "../interpreter"
 
 type Callable interface {
 	String() string
-	Call(cmd *exec.Cmd) (interpreter.NextT, error)
+	Call(cmd *interpreter.Interpreter) (interpreter.NextT, error)
 }
 
 type AliasFunc struct {
@@ -26,9 +24,7 @@ func (this *AliasFunc) String() string {
 	return this.BaseStr
 }
 
-var expanded = false
-
-func (this *AliasFunc) Call(cmd *exec.Cmd) (next interpreter.NextT, err error) {
+func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.NextT, err error) {
 	isReplaced := false
 	cmdline := paramMatch.ReplaceAllStringFunc(this.BaseStr, func(s string) string {
 		if s == "$*" {
@@ -52,14 +48,9 @@ func (this *AliasFunc) Call(cmd *exec.Cmd) (next interpreter.NextT, err error) {
 		buffer.WriteString(quoteAndJoin(cmd.Args[1:]))
 		cmdline = buffer.String()
 	}
-	stdio := interpreter.Stdio{
-		Stdin:  cmd.Stdin,
-		Stdout: cmd.Stdout,
-		Stderr: cmd.Stderr,
-	}
-	expanded = true
-	next, err = interpreter.Interpret(cmdline, &stdio)
-	expanded = false
+	it := cmd.Clone()
+	it.HookCount = cmd.HookCount + 1
+	next, err = it.Interpret(cmdline)
 	return
 }
 
@@ -81,26 +72,26 @@ func quoteAndJoin(list []string) string {
 
 var nextHook interpreter.HookT
 
-func hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
-	if expanded {
-		return nextHook(cmd, IsBackground, closer)
+func hook(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+	if cmd.HookCount > 0 {
+		return nextHook(cmd)
 	}
 	callee, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
-		return nextHook(cmd, IsBackground, closer)
+		return nextHook(cmd)
 	}
-	if IsBackground {
+	if cmd.IsBackGround {
 		go func() {
 			callee.Call(cmd)
-			if closer != nil {
-				closer.Close()
+			if cmd.Closer != nil {
+				cmd.Closer.Close()
 			}
 		}()
 		return interpreter.CONTINUE, nil
 	} else {
 		next, err := callee.Call(cmd)
-		if next != interpreter.THROUGH && closer != nil {
-			closer.Close()
+		if next != interpreter.THROUGH && cmd.Closer != nil {
+			cmd.Closer.Close()
 		}
 		return next, err
 	}

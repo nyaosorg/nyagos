@@ -1,8 +1,7 @@
 package commands
 
-import "os/exec"
 import "../interpreter"
 
-func cmd_exit(cmd *exec.Cmd) (interpreter.NextT, error) {
+func cmd_exit(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	return interpreter.SHUTDOWN, nil
 }

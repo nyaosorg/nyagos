@@ -4,7 +4,6 @@ import "bufio"
 import "bytes"
 import "fmt"
 import "os"
-import "os/exec"
 import "strconv"
 import "strings"
 
@@ -220,7 +219,7 @@ func insertHisotry(buffer *bytes.Buffer, reader *strings.Reader, history1 string
 	}
 }
 
-func CmdHistory(cmd *exec.Cmd) (interpreter.NextT, error) {
+func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)

@@ -1,14 +1,12 @@
 package commands
 
-import "io"
-import "os/exec"
 import "strings"
 
 import "../history"
 import "../interpreter"
 import "../dos"
 
-var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
+var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.NextT, error){
 	".":       cmd_source,
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
@@ -21,7 +19,7 @@ var buildInCmd = map[string]func(cmd *exec.Cmd) (interpreter.NextT, error){
 	"source":  cmd_source,
 }
 
-func Exec(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT, error) {
+func Exec(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
@@ -41,15 +39,21 @@ func Exec(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 			}
 		}
 		cmd.Args = newArgs
-		if IsBackground {
-			go func(cmd *exec.Cmd, closer io.Closer) {
+		if cmd.IsBackGround {
+			go func(cmd *interpreter.Interpreter) {
 				function(cmd)
-				closer.Close()
-			}(cmd, closer)
+				if cmd.Closer != nil {
+					cmd.Closer.Close()
+					cmd.Closer = nil
+				}
+			}(cmd)
 			return interpreter.CONTINUE, nil
 		} else {
 			next, err := function(cmd)
-			closer.Close()
+			if cmd.Closer != nil {
+				cmd.Closer.Close()
+				cmd.Closer = nil
+			}
 			return next, err
 		}
 	} else {

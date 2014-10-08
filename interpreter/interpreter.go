@@ -13,10 +13,24 @@ const (
 	SHUTDOWN NextT = 2
 )
 
-type Stdio struct {
-	Stdin  io.Reader
-	Stdout io.Writer
-	Stderr io.Writer
+type Interpreter struct {
+	exec.Cmd
+	HookCount    int
+	IsBackGround bool
+	Closer       io.Closer
+}
+
+func New() *Interpreter {
+	return new(Interpreter)
+}
+
+func (this *Interpreter) Clone() *Interpreter {
+	rv := new(Interpreter)
+	rv.Stdout = this.Stdout
+	rv.Stderr = this.Stderr
+	rv.Stdin = this.Stdin
+	rv.HookCount = this.HookCount
+	return this
 }
 
 type ArgsHookT func(args []string) []string
@@ -30,9 +44,9 @@ func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
 	return
 }
 
-type HookT func(*exec.Cmd, bool, io.Closer) (NextT, error)
+type HookT func(*Interpreter) (NextT, error)
 
-var hook = func(*exec.Cmd, bool, io.Closer) (NextT, error) {
+var hook = func(*Interpreter) (NextT, error) {
 	return THROUGH, nil
 }
 
@@ -44,36 +58,27 @@ func SetHook(hook_ HookT) (rv HookT) {
 var errorStatusPattern = regexp.MustCompile("^exit status ([0-9]+)")
 var ErrorLevel string
 
-func Interpret(text string, stdio *Stdio) (NextT, error) {
-	statement := Parse(text)
-	return InterpretStatement(&statement, stdio)
-}
-func InterpretStatement(statements *[][]StatementT, stdio *Stdio) (NextT, error) {
-	for _, pipeline := range *statements {
+func (this *Interpreter) Interpret(text string) (NextT, error) {
+	statements := Parse(text)
+	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
 			//fmt.Println(state)
-			var cmd exec.Cmd
-			if stdio == nil {
-				cmd.Stdin = os.Stdin
-				cmd.Stdout = os.Stdout
-				cmd.Stderr = os.Stderr
+			cmd := this.Clone()
+			if this.Stderr != nil {
+				cmd.Stdin = this.Stdin
 			} else {
-				if stdio.Stderr != nil {
-					cmd.Stdin = stdio.Stdin
-				} else {
-					cmd.Stdin = os.Stdin
-				}
-				if stdio.Stdout != nil {
-					cmd.Stdout = stdio.Stdout
-				} else {
-					cmd.Stdout = os.Stdout
-				}
-				if stdio.Stderr != nil {
-					cmd.Stderr = stdio.Stderr
-				} else {
-					cmd.Stderr = os.Stderr
-				}
+				cmd.Stdin = os.Stdin
+			}
+			if this.Stdout != nil {
+				cmd.Stdout = this.Stdout
+			} else {
+				cmd.Stdout = os.Stdout
+			}
+			if this.Stderr != nil {
+				cmd.Stderr = this.Stderr
+			} else {
+				cmd.Stderr = os.Stderr
 			}
 			if pipeIn != nil {
 				cmd.Stdin = pipeIn
@@ -134,7 +139,9 @@ func InterpretStatement(statements *[][]StatementT, stdio *Stdio) (NextT, error)
 					state.Argv = argsHook(state.Argv)
 				}
 				cmd.Args = state.Argv
-				whatToDo, err = hook(&cmd, isBackGround, pipeOut)
+				cmd.IsBackGround = isBackGround
+				cmd.Closer = pipeOut
+				whatToDo, err = hook(cmd)
 				if whatToDo == THROUGH {
 					cmd.Path, err = exec.LookPath(state.Argv[0])
 					if err == nil {
@@ -171,4 +178,8 @@ func InterpretStatement(statements *[][]StatementT, stdio *Stdio) (NextT, error)
 		}
 	}
 	return CONTINUE, nil
+}
+
+func Run(text string) (NextT, error) {
+	return New().Interpret(text)
 }

@@ -20,13 +20,13 @@ type LuaFunction struct {
 	registoryKey string
 }
 
-var LuaInstanceToCmd = map[uintptr]*exec.Cmd{}
+var LuaInstanceToCmd = map[uintptr]*interpreter.Interpreter{}
 
 func (this LuaFunction) String() string {
 	return "<<Lua-function>>"
 }
 
-func (this LuaFunction) Call(cmd *exec.Cmd) (interpreter.NextT, error) {
+func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	this.L.GetField(Registory, this.registoryKey)
 	this.L.NewTable()
 	for i, arg1 := range cmd.Args {
@@ -106,7 +106,7 @@ func cmdExec(L *Lua) int {
 		L.PushString(statementErr.Error())
 		return 2
 	}
-	_, err := interpreter.Interpret(statement, nil)
+	_, err := interpreter.New().Interpret(statement)
 
 	if err != nil {
 		L.PushNil()
@@ -131,7 +131,9 @@ func cmdEval(L *Lua) int {
 		return 2
 	}
 	go func(statement string, w *os.File) {
-		interpreter.Interpret(statement, &interpreter.Stdio{Stdout: w})
+		it := interpreter.New()
+		it.Stdout = w
+		it.Interpret(statement)
 		w.Close()
 	}(statement, w)
 
