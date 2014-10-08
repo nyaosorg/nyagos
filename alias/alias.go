@@ -89,11 +89,21 @@ func hook(cmd *exec.Cmd, IsBackground bool, closer io.Closer) (interpreter.NextT
 	if !ok {
 		return nextHook(cmd, IsBackground, closer)
 	}
-	next, err := callee.Call(cmd)
-	if next != interpreter.THROUGH && closer != nil {
-		closer.Close()
+	if IsBackground {
+		go func() {
+			callee.Call(cmd)
+			if closer != nil {
+				closer.Close()
+			}
+		}()
+		return interpreter.CONTINUE, nil
+	} else {
+		next, err := callee.Call(cmd)
+		if next != interpreter.THROUGH && closer != nil {
+			closer.Close()
+		}
+		return next, err
 	}
-	return next, err
 }
 
 func Init() {
