@@ -285,7 +285,7 @@ NYAGOS のソースは https://github.com/zetamatta/nyagos にて、
 
 NYAGOS のビルドには
 
-- [go1.3 windows/386](http://golang.org)
+- [go1.3.3 for windows/386](http://golang.org)
 - [Mingw-Gcc 4.8.1-4](http://mingw.org/)
 - [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 

@@ -154,7 +154,7 @@ These suffix are available.
 It defines an alias. These macros are available on "REPLACE-STRING".
 
 * `$1`,`$2`,`$3` ... the number's argument.
-* `$*` ... all arguments
+* `$\*` ... all arguments
 
 ### `nyagos.setenv("NAME","VALUE")`
 
@@ -234,7 +234,7 @@ On the New BSD-licenses, you can use NYAGOS.
 
 To build nyagos.exe , these softwares are required:
 
-- [go1.3 windows/386](http://golang.org)
+- [go1.3.3 windows/386](http://golang.org)
 - [Mingw-Gcc 4.8.1-4](http://mingw.org/)
 - [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 - http://github.com/mattn/go-runewidth
