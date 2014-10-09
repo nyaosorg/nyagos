@@ -179,7 +179,3 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 	}
 	return CONTINUE, nil
 }
-
-func Run(text string) (NextT, error) {
-	return New().Interpret(text)
-}
