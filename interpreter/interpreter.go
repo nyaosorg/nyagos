@@ -30,6 +30,7 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.Stderr = this.Stderr
 	rv.Stdin = this.Stdin
 	rv.HookCount = this.HookCount
+	// Dont Copy 'Closer' and 'IsBackGround'
 	return this
 }
 
@@ -63,8 +64,8 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
-			//fmt.Println(state)
-			cmd := this.Clone()
+			var cmd Interpreter
+			cmd.HookCount = this.HookCount
 			if this.Stderr != nil {
 				cmd.Stdin = this.Stdin
 			} else {
@@ -141,7 +142,7 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				cmd.Args = state.Argv
 				cmd.IsBackGround = isBackGround
 				cmd.Closer = pipeOut
-				whatToDo, err = hook(cmd)
+				whatToDo, err = hook(&cmd)
 				if whatToDo == THROUGH {
 					cmd.Path, err = exec.LookPath(state.Argv[0])
 					if err == nil {
