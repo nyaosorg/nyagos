@@ -57,6 +57,13 @@ func GetKey() (rune, uint16) {
 					buffer[stacked][0] = uint16(C.getUnicodeChar(&events[i]))
 					buffer[stacked][1] = uint16(C.getVirtualKeyCode(&events[i]))
 					stacked++
+				} else {
+					if CtrlC {
+						buffer[stacked][0] = 3
+						buffer[stacked][1] = 0
+						stacked++
+						CtrlC = false
+					}
 				}
 			}
 		}

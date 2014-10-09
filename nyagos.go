@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 import "os"
-import "os/signal"
 import "path/filepath"
 import "regexp"
 import "strings"
@@ -18,23 +17,13 @@ import "./history"
 import "./interpreter"
 import "./lua"
 
-func signalOff() {
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt)
-	go func() {
-		for _ = range ch {
-
-		}
-	}()
-}
-
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 
 var stamp string
 var commit string
 
 func main() {
-	signalOff()
+	conio.DisableCtrlC()
 
 	historyUp := conio.KeyGoFuncT{history.KeyFuncHistoryUp}
 	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
