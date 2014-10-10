@@ -201,12 +201,13 @@ KEYNAME are:
 
 FUNCNAME are:
 
-	"BACKSPACE" "BACKWORD" "CLEAR" "DELETE" "DELETE_OR_ABORT"
-	"ENTER" "ERASEAFTER" "ERASEBEFORE" "FORWARD" "HEAD"
-	"PASS" "PASTE" "REPAINT" "TAIL" "HISTORY_UP" "HISTORY_DOWN"
-        "COMPLETE"
+        "BACKWARD_DELETE_CHAR" "BACKWARD_CHAR" "CLEAR_SCREEN" "DELETE_CHAR"
+        "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
+        "FORWARD_CHAR" "BEGINNING_OF_LINE" "PASS" "YANK" "KILL_WHOLE_LINE"
+        "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY"
 
 If it succeeded, it returns true only. Failed, it returns nil and error-message.
+Cases are ignores and, the character '-' is same as '\_'.
 
 ### `nyagos.filter = function(cmdline) ... end`
 
