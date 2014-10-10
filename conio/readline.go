@@ -1,6 +1,7 @@
 package conio
 
 import "fmt"
+import "strings"
 
 type KeyFuncResult int
 
@@ -49,11 +50,16 @@ var ZeroMap = map[uint16]KeyFuncT{
 	NAME2SCAN[K_SHIFT]:  NAME2FUNC[F_PASS],
 }
 
+func normWord(src string) string {
+	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
+}
+
 func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
-	if charValue, charOk := NAME2CHAR[keyName]; charOk {
+	keyName_ := normWord(keyName)
+	if charValue, charOk := NAME2CHAR[keyName_]; charOk {
 		KeyMap[charValue] = funcValue
 		return nil
-	} else if scanValue, scanOk := NAME2SCAN[keyName]; scanOk {
+	} else if scanValue, scanOk := NAME2SCAN[keyName_]; scanOk {
 		ZeroMap[scanValue] = funcValue
 		return nil
 	} else {
@@ -62,7 +68,7 @@ func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 }
 
 func BindKeySymbol(keyName, funcName string) error {
-	funcValue, funcOk := NAME2FUNC[funcName]
+	funcValue, funcOk := NAME2FUNC[normWord(funcName)]
 	if !funcOk {
 		return fmt.Errorf("%s: no such function.", funcName)
 	}
@@ -70,7 +76,7 @@ func BindKeySymbol(keyName, funcName string) error {
 }
 
 func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
-	NAME2FUNC[funcName] = funcValue
+	NAME2FUNC[normWord(funcName)] = funcValue
 	return BindKeyFunc(keyName, funcValue)
 }
 
