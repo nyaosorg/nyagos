@@ -42,20 +42,21 @@ const (
 )
 
 const (
-	F_BACKSPACE       = "BACKSPACE"
-	F_BACKWORD        = "BACKWORD"
-	F_CLEAR           = "CLEAR"
-	F_DELETE          = "DELETE"
-	F_DELETE_OR_ABORT = "DELETE_OR_ABORT"
-	F_ENTER           = "ENTER"
-	F_ERASEAFTER      = "ERASEAFTER"
-	F_ERASEBEFORE     = "ERASEBEFORE"
-	F_FORWARD         = "FORWARD"
-	F_HEAD            = "HEAD"
-	F_PASS            = "PASS"
-	F_PASTE           = "PASTE"
-	F_REPAINT         = "REPAINT"
-	F_TAIL            = "TAIL"
+	F_BACKWARD_DELETE_CHAR = "BACKWARD_DELETE_CHAR"
+	F_BACKWARD_CHAR        = "BACKWARD_CHAR"
+	F_CLEAR_SCREEN         = "CLEAR_SCREEN"
+	F_DELETE_CHAR          = "DELETE_CHAR"
+	F_DELETE_OR_ABORT      = "DELETE_OR_ABORT"
+	F_ACCEPT_LINE          = "ACCEPT_LINE"
+	F_KILL_LINE            = "KILL_LINE"
+	F_UNIX_LINE_DISCARD    = "UNIX_LINE_DISCARD"
+	F_FORARD_CHAR          = "FORWARD_CHAR"
+	F_BEGINNING_OF_LINE    = "BEGINNING_OF_LINE"
+	F_PASS                 = "PASS"
+	F_YANK                 = "YANK"
+	F_REPAINT              = "REPAINT"
+	F_END_OF_LINE          = "END_OF_LINE"
+	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
 )
 
 var NAME2CHAR = map[string]rune{
@@ -107,18 +108,18 @@ var NAME2SCAN = map[string]uint16{
 }
 
 var NAME2FUNC = map[string]KeyFuncT{
-	F_BACKSPACE:       &KeyGoFuncT{KeyFuncBackSpace},
-	F_BACKWORD:        &KeyGoFuncT{KeyFuncBackword},
-	F_CLEAR:           &KeyGoFuncT{KeyFuncClear},
-	F_DELETE:          &KeyGoFuncT{KeyFuncDelete},
-	F_DELETE_OR_ABORT: &KeyGoFuncT{KeyFuncDeleteOrAbort},
-	F_ENTER:           &KeyGoFuncT{KeyFuncEnter},
-	F_ERASEAFTER:      &KeyGoFuncT{KeyFuncClearAfter},
-	F_ERASEBEFORE:     &KeyGoFuncT{KeyFuncClearBefore},
-	F_FORWARD:         &KeyGoFuncT{KeyFuncForward},
-	F_HEAD:            &KeyGoFuncT{KeyFuncHead},
-	F_PASS:            &KeyGoFuncT{KeyFuncPass},
-	F_PASTE:           &KeyGoFuncT{KeyFuncPaste},
-	F_REPAINT:         &KeyGoFuncT{KeyFuncCLS},
-	F_TAIL:            &KeyGoFuncT{KeyFuncTail},
+	F_BACKWARD_DELETE_CHAR: &KeyGoFuncT{KeyFuncBackSpace},
+	F_BACKWARD_CHAR:        &KeyGoFuncT{KeyFuncBackword},
+	F_KILL_WHOLE_LINE:      &KeyGoFuncT{KeyFuncClear},
+	F_DELETE_CHAR:          &KeyGoFuncT{KeyFuncDelete},
+	F_DELETE_OR_ABORT:      &KeyGoFuncT{KeyFuncDeleteOrAbort},
+	F_ACCEPT_LINE:          &KeyGoFuncT{KeyFuncEnter},
+	F_KILL_LINE:            &KeyGoFuncT{KeyFuncClearAfter},
+	F_UNIX_LINE_DISCARD:    &KeyGoFuncT{KeyFuncClearBefore},
+	F_FORARD_CHAR:          &KeyGoFuncT{KeyFuncForward},
+	F_BEGINNING_OF_LINE:    &KeyGoFuncT{KeyFuncHead},
+	F_PASS:                 &KeyGoFuncT{KeyFuncPass},
+	F_YANK:                 &KeyGoFuncT{KeyFuncPaste},
+	F_CLEAR_SCREEN:         &KeyGoFuncT{KeyFuncCLS},
+	F_END_OF_LINE:          &KeyGoFuncT{KeyFuncTail},
 }

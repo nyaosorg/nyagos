@@ -32,16 +32,16 @@ func main() {
 	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbolFunc(conio.K_UP, "HISTORY_UP", &historyUp); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_UP, "PREVIOUS_HISTORY", &historyUp); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbolFunc(conio.K_DOWN, "HISTORY_DOWN", &historyDown); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_DOWN, "NEXT_HISTORY", &historyDown); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbol(conio.K_CTRL_P, "HISTORY_UP"); err != nil {
+	if err := conio.BindKeySymbol(conio.K_CTRL_P, "PREVIOUS_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbol(conio.K_CTRL_N, "HISTORY_DOWN"); err != nil {
+	if err := conio.BindKeySymbol(conio.K_CTRL_N, "NEXT_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
