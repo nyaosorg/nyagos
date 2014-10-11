@@ -210,6 +210,15 @@ FUNCNAME are:
 If it succeeded, it returns true only. Failed, it returns nil and error-message.
 Cases are ignores and, the character '-' is same as '\_'.
 
+### `nyagos.bindkey("KEYNAME",function()...end)`
+
+When the key is pressed, call the function.
+
+The return value of function is used as below
+
+* When it is a string, it is inserted into cursor position.
+* When it is nil, it is ignored.
+
 ### `nyagos.filter = function(cmdline) ... end`
 
 `nyagos.filter` can modify user input command-line.
