@@ -60,7 +60,7 @@ const (
 	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
 )
 
-var NAME2CHAR = map[string]rune{
+var name2char = map[string]rune{
 	K_BACKSPACE: '\b',
 	K_CTRL_A:    rune('a' & 0x1F),
 	K_CTRL_B:    rune('b' & 0x1F),
@@ -96,7 +96,7 @@ var NAME2CHAR = map[string]rune{
 // KeyCode from
 // http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 
-var NAME2SCAN = map[string]uint16{
+var name2scan = map[string]uint16{
 	K_CTRL:   0x11,
 	K_DELETE: 0x2E,
 	K_DOWN:   0x28,
@@ -108,7 +108,7 @@ var NAME2SCAN = map[string]uint16{
 	K_UP:     0x26,
 }
 
-var NAME2FUNC = map[string]KeyFuncT{
+var name2func = map[string]KeyFuncT{
 	F_BACKWARD_DELETE_CHAR: &KeyGoFuncT{KeyFuncBackSpace},
 	F_BACKWARD_CHAR:        &KeyGoFuncT{KeyFuncBackword},
 	F_KILL_WHOLE_LINE:      &KeyGoFuncT{KeyFuncClear},
