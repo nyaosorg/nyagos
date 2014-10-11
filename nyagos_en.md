@@ -217,7 +217,9 @@ When the key is pressed, call the function.
 The return value of function is used as below
 
 * When it is a string, it is inserted into cursor position.
-* When it is nil, it is ignored.
+* When it is `true`, accept line as same as Enter is pressed.
+* When it is `false`, drop line as same as Ctrl-C is pressed.
+* When it is `nil`, it is ignored.
 
 ### `nyagos.filter = function(cmdline) ... end`
 
