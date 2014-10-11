@@ -14,6 +14,13 @@ func KeyFuncEnter(this *ReadLineBuffer) KeyFuncResult { // Ctrl-M
 	return ENTER
 }
 
+func KeyFuncIntr(this *ReadLineBuffer) KeyFuncResult { // Ctrl-C
+	this.Length = 0
+	this.Cursor = 0
+	this.Buffer = []rune{}
+	return ENTER
+}
+
 func KeyFuncHead(this *ReadLineBuffer) KeyFuncResult { // Ctrl-A
 	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0

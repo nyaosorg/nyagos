@@ -42,6 +42,7 @@ const (
 )
 
 const (
+	F_INTR                 = "INTR"
 	F_BACKWARD_DELETE_CHAR = "BACKWARD_DELETE_CHAR"
 	F_BACKWARD_CHAR        = "BACKWARD_CHAR"
 	F_CLEAR_SCREEN         = "CLEAR_SCREEN"
@@ -122,4 +123,5 @@ var NAME2FUNC = map[string]KeyFuncT{
 	F_YANK:                 &KeyGoFuncT{KeyFuncPaste},
 	F_CLEAR_SCREEN:         &KeyGoFuncT{KeyFuncCLS},
 	F_END_OF_LINE:          &KeyGoFuncT{KeyFuncTail},
+	F_INTR:                 &KeyGoFuncT{KeyFuncIntr},
 }
