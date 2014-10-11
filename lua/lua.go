@@ -45,7 +45,7 @@ func (this *Lua) Id() uintptr {
 	return uintptr(unsafe.Pointer(this.lua))
 }
 
-const Registory = C.LUA_REGISTRYINDEX
+const REGISTORYINDEX = C.LUA_REGISTRYINDEX
 
 type goFunctionT struct {
 	function func(*Lua) int

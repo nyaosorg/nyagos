@@ -27,7 +27,7 @@ func (this LuaFunction) String() string {
 }
 
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	this.L.GetField(lua.Registory, this.registoryKey)
+	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
 	this.L.NewTable()
 	for i, arg1 := range cmd.Args {
 		this.L.PushInteger(i)
@@ -59,7 +59,7 @@ func cmdAlias(L *lua.Lua) int {
 		}
 	case lua.TFUNCTION:
 		regkey := "nyagos.alias." + key
-		L.SetField(lua.Registory, regkey)
+		L.SetField(lua.REGISTORYINDEX, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
 	}
 	L.PushBool(true)
@@ -275,7 +275,7 @@ type KeyLuaFuncT struct {
 }
 
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
-	this.L.GetField(lua.Registory, this.registoryKey)
+	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
 	if err := this.L.Call(0, 0); err != nil {
 		fmt.Println(os.Stderr, err)
 	}
@@ -292,7 +292,7 @@ func cmdBindKey(L *lua.Lua) int {
 	switch L.GetType(-1) {
 	case lua.TFUNCTION:
 		regkey := "nyagos.bind." + key
-		L.SetField(lua.Registory, regkey)
+		L.SetField(lua.REGISTORYINDEX, regkey)
 		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
 			L.PushNil()
 			L.PushString(err.Error())
