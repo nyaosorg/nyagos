@@ -285,6 +285,12 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 		if strErr == nil {
 			buffer.InsertAndRepaint(str)
 		}
+	case lua.TBOOLEAN:
+		if !this.L.ToBool(-1) {
+			buffer.Buffer = []rune{}
+			buffer.Length = 0
+		}
+		return readline.ENTER
 	}
 	return readline.CONTINUE
 }
