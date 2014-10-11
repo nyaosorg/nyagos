@@ -1,10 +1,11 @@
-package conio
+package readline
 
 import "bytes"
 import "fmt"
 import "strings"
 
 import "github.com/atotto/clipboard"
+import ".."
 
 func KeyFuncPass(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
@@ -38,7 +39,7 @@ func KeyFuncBackword(this *ReadLineBuffer) KeyFuncResult { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
+		Backspace(conio.GetCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -53,12 +54,12 @@ func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
 		PutRep('\a', 1)
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
-		w := GetCharWidth(this.Buffer[this.ViewStart])
+		w := conio.GetCharWidth(this.Buffer[this.ViewStart])
 		for {
 			if this.ViewStart <= 0 {
 				break
 			}
-			w_ := w + GetCharWidth(this.Buffer[this.ViewStart-1])
+			w_ := w + conio.GetCharWidth(this.Buffer[this.ViewStart-1])
 			if w_ >= this.ViewWidth {
 				break
 			}
@@ -83,7 +84,7 @@ func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
 	} else {
 		// Right Scroll
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
+		if conio.GetCharWidth(this.Buffer[this.Cursor]) > conio.GetCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -131,11 +132,11 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := GetCharWidth(ch)
+	w1 := conio.GetCharWidth(ch)
 	if w+w1 >= this.ViewWidth {
 		// scroll left
 		Backspace(w)
-		if GetCharWidth(this.Buffer[this.ViewStart]) < w1 {
+		if conio.GetCharWidth(this.Buffer[this.ViewStart]) < w1 {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -168,7 +169,7 @@ func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
 	clipboard.WriteAll(killbuf.String())
 
 	for i < this.Length && w < this.ViewWidth {
-		w1 := GetCharWidth(this.Buffer[i])
+		w1 := conio.GetCharWidth(this.Buffer[i])
 		PutRep(' ', w1)
 		i++
 		w += w1
@@ -200,7 +201,7 @@ func KeyFuncClearBefore(this *ReadLineBuffer) KeyFuncResult {
 }
 
 func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
-	Cls()
+	conio.Cls()
 	this.RepaintAll()
 	return CONTINUE
 }

@@ -1,7 +1,9 @@
-package conio
+package readline
 
 import "fmt"
 import "strings"
+
+import ".."
 
 type KeyFuncResult int
 
@@ -83,7 +85,7 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
 	this := ReadLineBuffer{Buffer: make([]rune, 20)}
-	this.ViewWidth, _ = GetScreenSize()
+	this.ViewWidth, _ = conio.GetScreenSize()
 	this.ViewWidth--
 
 	this.Prompt = prompt_
@@ -93,7 +95,7 @@ func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
 	for {
 		stdOut.Flush()
 		shineCursor()
-		this.Unicode, this.Keycode = GetKey()
+		this.Unicode, this.Keycode = conio.GetKey()
 		var f KeyFuncT
 		var ok bool
 		if this.Unicode != 0 {

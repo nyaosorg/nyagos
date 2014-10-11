@@ -8,7 +8,7 @@ import "strings"
 
 import . "./lua"
 import "./alias"
-import "./conio"
+import "./conio/readline"
 import "./dos"
 import "./interpreter"
 import "./mbcs"
@@ -274,12 +274,12 @@ type KeyLuaFuncT struct {
 	registoryKey string
 }
 
-func (this *KeyLuaFuncT) Call(buffer *conio.ReadLineBuffer) conio.KeyFuncResult {
+func (this *KeyLuaFuncT) Call(buffer *readline.ReadLineBuffer) readline.KeyFuncResult {
 	this.L.GetField(Registory, this.registoryKey)
 	if err := this.L.Call(0, 0); err != nil {
 		fmt.Println(os.Stderr, err)
 	}
-	return conio.CONTINUE
+	return readline.CONTINUE
 }
 
 func cmdBindKey(L *Lua) int {
@@ -293,7 +293,7 @@ func cmdBindKey(L *Lua) int {
 	case TFUNCTION:
 		regkey := "nyagos.bind." + key
 		L.SetField(Registory, regkey)
-		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
+		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
 			L.PushNil()
 			L.PushString(err.Error())
 			return 2
@@ -308,7 +308,7 @@ func cmdBindKey(L *Lua) int {
 			L.PushString(valErr.Error())
 			return 2
 		}
-		err := conio.BindKeySymbol(key, val)
+		err := readline.BindKeySymbol(key, val)
 		if err != nil {
 			L.PushNil()
 			L.PushString(err.Error())

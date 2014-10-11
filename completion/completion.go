@@ -10,6 +10,7 @@ import "strings"
 import "unicode"
 
 import "../conio"
+import "../conio/readline"
 import "../dos"
 
 func isExecutable(path string) bool {
@@ -134,7 +135,7 @@ func listUpCommands(str string) ([]string, error) {
 	}
 	return uniq, nil
 }
-func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
+func KeyFuncCompletionList(this *readline.ReadLineBuffer) readline.KeyFuncResult {
 	str, pos := this.CurrentWord()
 	var list []string
 	if pos > 0 {
@@ -143,12 +144,12 @@ func KeyFuncCompletionList(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		list, _ = listUpCommands(str)
 	}
 	if list == nil {
-		return conio.CONTINUE
+		return readline.CONTINUE
 	}
 	fmt.Print("\n")
 	conio.BoxPrint(list, os.Stdout)
 	this.RepaintAll()
-	return conio.CONTINUE
+	return readline.CONTINUE
 }
 
 func getCommmon(list []string) string {
@@ -176,7 +177,7 @@ func compareWithoutQuote(this string, that string) bool {
 	return strings.Replace(this, "\"", "", -1) == strings.Replace(that, "\"", "", -1)
 }
 
-func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
+func KeyFuncCompletion(this *readline.ReadLineBuffer) readline.KeyFuncResult {
 	str, wordStart := this.CurrentWord()
 
 	slashToBackSlash := true
@@ -194,7 +195,7 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		list, err = listUpCommands(str)
 	}
 	if err != nil || list == nil || len(list) <= 0 {
-		return conio.CONTINUE
+		return readline.CONTINUE
 	}
 	commonStr := getCommmon(list)
 	needQuote := strings.ContainsRune(str, '"')
@@ -225,5 +226,5 @@ func KeyFuncCompletion(this *conio.ReadLineBuffer) conio.KeyFuncResult {
 		return KeyFuncCompletionList(this)
 	}
 	this.ReplaceAndRepaint(wordStart, commonStr)
-	return conio.CONTINUE
+	return readline.CONTINUE
 }

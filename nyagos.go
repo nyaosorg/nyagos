@@ -12,6 +12,7 @@ import "./alias"
 import "./commands"
 import "./completion"
 import "./conio"
+import "./conio/readline"
 import "./dos"
 import "./history"
 import "./interpreter"
@@ -25,23 +26,23 @@ var commit string
 func main() {
 	conio.DisableCtrlC()
 
-	historyUp := conio.KeyGoFuncT{history.KeyFuncHistoryUp}
-	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
-	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
+	historyUp := readline.KeyGoFuncT{history.KeyFuncHistoryUp}
+	historyDown := readline.KeyGoFuncT{history.KeyFuncHistoryDown}
+	completion := readline.KeyGoFuncT{completion.KeyFuncCompletion}
 
-	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
+	if err := readline.BindKeySymbolFunc(readline.K_CTRL_I, "COMPLETE", &completion); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbolFunc(conio.K_UP, "PREVIOUS_HISTORY", &historyUp); err != nil {
+	if err := readline.BindKeySymbolFunc(readline.K_UP, "PREVIOUS_HISTORY", &historyUp); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbolFunc(conio.K_DOWN, "NEXT_HISTORY", &historyDown); err != nil {
+	if err := readline.BindKeySymbolFunc(readline.K_DOWN, "NEXT_HISTORY", &historyDown); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbol(conio.K_CTRL_P, "PREVIOUS_HISTORY"); err != nil {
+	if err := readline.BindKeySymbol(readline.K_CTRL_P, "PREVIOUS_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := conio.BindKeySymbol(conio.K_CTRL_N, "NEXT_HISTORY"); err != nil {
+	if err := readline.BindKeySymbol(readline.K_CTRL_N, "NEXT_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
@@ -103,7 +104,7 @@ func main() {
 		} else {
 			conio.SetTitle("NYAOS - " + wdErr.Error())
 		}
-		line, cont := conio.ReadLine(
+		line, cont := readline.ReadLine(
 			func() int {
 				text := Format2Prompt(os.Getenv("PROMPT"))
 				fmt.Fprint(ansiOut, text)
@@ -114,7 +115,7 @@ func main() {
 				}
 				return conio.GetStringWidth(text)
 			})
-		if cont == conio.ABORT {
+		if cont == readline.ABORT {
 			break
 		}
 
