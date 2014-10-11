@@ -42,4 +42,12 @@
         copy nyagos.lua .\installdir\.
         copy lua52.dll  .\installdir\.
         goto end
+
+:upgrade
+        for %%I in (mattn\go-runewidth shiena\ansicolor atotto\clipboard ) do (
+            cd %GOPATH%\Src\github.com\%%I
+            git pull origin master:master
+            go build
+        )
+
 :end
