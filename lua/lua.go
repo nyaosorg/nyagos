@@ -258,3 +258,11 @@ func (this *Lua) PushBool(value bool) {
 		C.lua_pushboolean(this.lua, 0)
 	}
 }
+
+func (this *Lua) ToBool(index int) bool {
+	if C.lua_toboolean(this.lua, C.int(index)) != 0 {
+		return true
+	} else {
+		return false
+	}
+}
