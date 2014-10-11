@@ -7,22 +7,22 @@ import "strings"
 import "github.com/atotto/clipboard"
 import ".."
 
-func KeyFuncPass(this *Buffer) KeyFuncResult {
+func KeyFuncPass(this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncEnter(this *Buffer) KeyFuncResult { // Ctrl-M
+func KeyFuncEnter(this *Buffer) Result { // Ctrl-M
 	return ENTER
 }
 
-func KeyFuncIntr(this *Buffer) KeyFuncResult { // Ctrl-C
+func KeyFuncIntr(this *Buffer) Result { // Ctrl-C
 	this.Length = 0
 	this.Cursor = 0
 	this.Buffer = []rune{}
 	return ENTER
 }
 
-func KeyFuncHead(this *Buffer) KeyFuncResult { // Ctrl-A
+func KeyFuncHead(this *Buffer) Result { // Ctrl-A
 	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -30,7 +30,7 @@ func KeyFuncHead(this *Buffer) KeyFuncResult { // Ctrl-A
 	return CONTINUE
 }
 
-func KeyFuncBackword(this *Buffer) KeyFuncResult { // Ctrl-B
+func KeyFuncBackword(this *Buffer) Result { // Ctrl-B
 	if this.Cursor <= 0 {
 		return CONTINUE
 	}
@@ -44,7 +44,7 @@ func KeyFuncBackword(this *Buffer) KeyFuncResult { // Ctrl-B
 	return CONTINUE
 }
 
-func KeyFuncTail(this *Buffer) KeyFuncResult { // Ctrl-E
+func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, this.Length)
 	if allength < this.ViewWidth {
 		for ; this.Cursor < this.Length; this.Cursor++ {
@@ -73,7 +73,7 @@ func KeyFuncTail(this *Buffer) KeyFuncResult { // Ctrl-E
 	return CONTINUE
 }
 
-func KeyFuncForward(this *Buffer) KeyFuncResult { // Ctrl-F
+func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 	if this.Cursor >= this.Length {
 		return CONTINUE
 	}
@@ -98,7 +98,7 @@ func KeyFuncForward(this *Buffer) KeyFuncResult { // Ctrl-F
 	return CONTINUE
 }
 
-func KeyFuncBackSpace(this *Buffer) KeyFuncResult { // Backspace
+func KeyFuncBackSpace(this *Buffer) Result { // Backspace
 	if this.Cursor > 0 {
 		this.Cursor--
 		delw := this.Delete(this.Cursor, 1)
@@ -112,13 +112,13 @@ func KeyFuncBackSpace(this *Buffer) KeyFuncResult { // Backspace
 	return CONTINUE
 }
 
-func KeyFuncDelete(this *Buffer) KeyFuncResult { // Del
+func KeyFuncDelete(this *Buffer) Result { // Del
 	delw := this.Delete(this.Cursor, 1)
 	this.Repaint(this.Cursor, delw)
 	return CONTINUE
 }
 
-func KeyFuncDeleteOrAbort(this *Buffer) KeyFuncResult { // Ctrl-D
+func KeyFuncDeleteOrAbort(this *Buffer) Result { // Ctrl-D
 	if this.Length > 0 {
 		return KeyFuncDelete(this)
 	} else {
@@ -126,7 +126,7 @@ func KeyFuncDeleteOrAbort(this *Buffer) KeyFuncResult { // Ctrl-D
 	}
 }
 
-func KeyFuncInsertSelf(this *Buffer) KeyFuncResult {
+func KeyFuncInsertSelf(this *Buffer) Result {
 	ch := this.Unicode
 	if ch < 0x20 || !this.Insert(this.Cursor, []rune{ch}) {
 		return CONTINUE
@@ -152,12 +152,12 @@ func KeyFuncInsertSelf(this *Buffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncInsertReport(this *Buffer) KeyFuncResult {
+func KeyFuncInsertReport(this *Buffer) Result {
 	this.InsertAndRepaint(fmt.Sprintf("[%X]", this.Unicode))
 	return CONTINUE
 }
 
-func KeyFuncClearAfter(this *Buffer) KeyFuncResult {
+func KeyFuncClearAfter(this *Buffer) Result {
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	i := this.Cursor
 	bs := 0
@@ -180,7 +180,7 @@ func KeyFuncClearAfter(this *Buffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncClear(this *Buffer) KeyFuncResult {
+func KeyFuncClear(this *Buffer) Result {
 	KeyFuncClearAfter(this)
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	Backspace(width)
@@ -192,7 +192,7 @@ func KeyFuncClear(this *Buffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncClearBefore(this *Buffer) KeyFuncResult {
+func KeyFuncClearBefore(this *Buffer) Result {
 	keta := this.Delete(0, this.Cursor)
 	Backspace(keta)
 	this.Cursor = 0
@@ -200,13 +200,13 @@ func KeyFuncClearBefore(this *Buffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncCLS(this *Buffer) KeyFuncResult {
+func KeyFuncCLS(this *Buffer) Result {
 	conio.Cls()
 	this.RepaintAll()
 	return CONTINUE
 }
 
-func KeyFuncPaste(this *Buffer) KeyFuncResult {
+func KeyFuncPaste(this *Buffer) Result {
 	text, err := clipboard.ReadAll()
 	if err == nil {
 		this.InsertAndRepaint(

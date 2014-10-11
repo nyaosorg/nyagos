@@ -21,7 +21,7 @@ func LastHistory() string {
 	}
 }
 
-func KeyFuncHistoryUp(this *readline.Buffer) readline.KeyFuncResult {
+func KeyFuncHistoryUp(this *readline.Buffer) readline.Result {
 	if pointor <= 0 {
 		pointor = len(histories)
 	}
@@ -36,7 +36,7 @@ func KeyFuncHistoryUp(this *readline.Buffer) readline.KeyFuncResult {
 	return readline.CONTINUE
 }
 
-func KeyFuncHistoryDown(this *readline.Buffer) readline.KeyFuncResult {
+func KeyFuncHistoryDown(this *readline.Buffer) readline.Result {
 	pointor += 1
 	if pointor >= len(histories) {
 		pointor = 0

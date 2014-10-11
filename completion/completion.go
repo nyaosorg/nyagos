@@ -135,7 +135,7 @@ func listUpCommands(str string) ([]string, error) {
 	}
 	return uniq, nil
 }
-func KeyFuncCompletionList(this *readline.Buffer) readline.KeyFuncResult {
+func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 	str, pos := this.CurrentWord()
 	var list []string
 	if pos > 0 {
@@ -177,7 +177,7 @@ func compareWithoutQuote(this string, that string) bool {
 	return strings.Replace(this, "\"", "", -1) == strings.Replace(that, "\"", "", -1)
 }
 
-func KeyFuncCompletion(this *readline.Buffer) readline.KeyFuncResult {
+func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 	str, wordStart := this.CurrentWord()
 
 	slashToBackSlash := true

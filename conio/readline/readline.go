@@ -5,23 +5,23 @@ import "strings"
 
 import ".."
 
-type KeyFuncResult int
+type Result int
 
 const (
-	CONTINUE KeyFuncResult = iota
-	ENTER    KeyFuncResult = iota
-	ABORT    KeyFuncResult = iota
+	CONTINUE Result = iota
+	ENTER    Result = iota
+	ABORT    Result = iota
 )
 
 type KeyFuncT interface {
-	Call(buffer *Buffer) KeyFuncResult
+	Call(buffer *Buffer) Result
 }
 
 type KeyGoFuncT struct {
-	F func(buffer *Buffer) KeyFuncResult
+	F func(buffer *Buffer) Result
 }
 
-func (this *KeyGoFuncT) Call(buffer *Buffer) KeyFuncResult {
+func (this *KeyGoFuncT) Call(buffer *Buffer) Result {
 	return this.F(buffer)
 }
 
@@ -83,7 +83,7 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
-func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
+func ReadLine(prompt_ func() int) (string, Result) {
 	this := Buffer{Buffer: make([]rune, 20)}
 	this.ViewWidth, _ = conio.GetScreenSize()
 	this.ViewWidth--
