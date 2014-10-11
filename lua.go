@@ -276,8 +276,15 @@ type KeyLuaFuncT struct {
 
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
-	if err := this.L.Call(0, 0); err != nil {
+	if err := this.L.Call(0, 1); err != nil {
 		fmt.Println(os.Stderr, err)
+	}
+	switch this.L.GetType(-1) {
+	case lua.TSTRING:
+		str, strErr := this.L.ToString(-1)
+		if strErr == nil {
+			buffer.InsertAndRepaint(str)
+		}
 	}
 	return readline.CONTINUE
 }
