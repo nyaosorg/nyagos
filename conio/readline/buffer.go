@@ -26,7 +26,7 @@ func shineCursor() {
 	conio.Locate(x, y)
 }
 
-type ReadLineBuffer struct {
+type Buffer struct {
 	Buffer    []rune
 	Length    int
 	Cursor    int
@@ -37,7 +37,7 @@ type ReadLineBuffer struct {
 	Prompt    func() int
 }
 
-func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
+func (this *Buffer) Insert(pos int, c []rune) bool {
 	n := len(c)
 	for this.Length+n >= len(this.Buffer) {
 		tmp := make([]rune, len(this.Buffer)*2)
@@ -54,7 +54,7 @@ func (this *ReadLineBuffer) Insert(pos int, c []rune) bool {
 	return true
 }
 
-func (this *ReadLineBuffer) InsertString(pos int, s string) int {
+func (this *Buffer) InsertString(pos int, s string) int {
 	list := []rune{}
 	for _, r := range s {
 		list = append(list, r)
@@ -66,7 +66,7 @@ func (this *ReadLineBuffer) InsertString(pos int, s string) int {
 	}
 }
 
-func (this *ReadLineBuffer) Delete(pos int, n int) int {
+func (this *Buffer) Delete(pos int, n int) int {
 	if this.Length < pos+n {
 		return 0
 	}
@@ -81,11 +81,11 @@ func (this *ReadLineBuffer) Delete(pos int, n int) int {
 	return delw
 }
 
-func (this *ReadLineBuffer) InsertAndRepaint(str string) {
+func (this *Buffer) InsertAndRepaint(str string) {
 	this.ReplaceAndRepaint(this.Cursor, str)
 }
 
-func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
+func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
 	for i := this.Cursor - 1; i >= this.ViewStart; i-- {
 		Backspace(conio.GetCharWidth(this.Buffer[i]))
@@ -129,7 +129,7 @@ func (this *ReadLineBuffer) ReplaceAndRepaint(pos int, str string) {
 	Backspace(bs)
 }
 
-func (this *ReadLineBuffer) GetWidthBetween(from int, to int) int {
+func (this *Buffer) GetWidthBetween(from int, to int) int {
 	width := 0
 	for i := from; i < to; i++ {
 		width += conio.GetCharWidth(this.Buffer[i])
@@ -137,7 +137,7 @@ func (this *ReadLineBuffer) GetWidthBetween(from int, to int) int {
 	return width
 }
 
-func (this *ReadLineBuffer) Repaint(pos int, del int) {
+func (this *Buffer) Repaint(pos int, del int) {
 	bs := 0
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
@@ -154,7 +154,7 @@ func (this *ReadLineBuffer) Repaint(pos int, del int) {
 	Backspace(bs + del)
 }
 
-func (this *ReadLineBuffer) RepaintAll() {
+func (this *Buffer) RepaintAll() {
 	if this.Prompt != nil {
 		this.Prompt()
 	}
@@ -164,7 +164,7 @@ func (this *ReadLineBuffer) RepaintAll() {
 	this.Repaint(this.Cursor, 0)
 }
 
-func (this ReadLineBuffer) String() string {
+func (this Buffer) String() string {
 	var result bytes.Buffer
 	for i := 0; i < this.Length; i++ {
 		result.WriteRune(this.Buffer[i])
@@ -172,7 +172,7 @@ func (this ReadLineBuffer) String() string {
 	return result.String()
 }
 
-func (this *ReadLineBuffer) CurrentWordTop() (wordTop int) {
+func (this *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	isQuoted := false
 	for i := 0; i < this.Cursor; i++ {
@@ -192,7 +192,7 @@ func (this *ReadLineBuffer) CurrentWordTop() (wordTop int) {
 	}
 }
 
-func (this *ReadLineBuffer) CurrentWord() (string, int) {
+func (this *Buffer) CurrentWord() (string, int) {
 	var buffer bytes.Buffer
 	start := this.CurrentWordTop()
 	for i := start; i < this.Cursor; i++ {

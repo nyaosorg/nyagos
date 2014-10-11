@@ -14,14 +14,14 @@ const (
 )
 
 type KeyFuncT interface {
-	Call(buffer *ReadLineBuffer) KeyFuncResult
+	Call(buffer *Buffer) KeyFuncResult
 }
 
 type KeyGoFuncT struct {
-	F func(buffer *ReadLineBuffer) KeyFuncResult
+	F func(buffer *Buffer) KeyFuncResult
 }
 
-func (this *KeyGoFuncT) Call(buffer *ReadLineBuffer) KeyFuncResult {
+func (this *KeyGoFuncT) Call(buffer *Buffer) KeyFuncResult {
 	return this.F(buffer)
 }
 
@@ -84,7 +84,7 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 }
 
 func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
-	this := ReadLineBuffer{Buffer: make([]rune, 20)}
+	this := Buffer{Buffer: make([]rune, 20)}
 	this.ViewWidth, _ = conio.GetScreenSize()
 	this.ViewWidth--
 

@@ -274,7 +274,7 @@ type KeyLuaFuncT struct {
 	registoryKey string
 }
 
-func (this *KeyLuaFuncT) Call(buffer *readline.ReadLineBuffer) readline.KeyFuncResult {
+func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.KeyFuncResult {
 	this.L.GetField(Registory, this.registoryKey)
 	if err := this.L.Call(0, 0); err != nil {
 		fmt.Println(os.Stderr, err)

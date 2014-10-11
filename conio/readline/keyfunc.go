@@ -7,22 +7,22 @@ import "strings"
 import "github.com/atotto/clipboard"
 import ".."
 
-func KeyFuncPass(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncPass(this *Buffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncEnter(this *ReadLineBuffer) KeyFuncResult { // Ctrl-M
+func KeyFuncEnter(this *Buffer) KeyFuncResult { // Ctrl-M
 	return ENTER
 }
 
-func KeyFuncIntr(this *ReadLineBuffer) KeyFuncResult { // Ctrl-C
+func KeyFuncIntr(this *Buffer) KeyFuncResult { // Ctrl-C
 	this.Length = 0
 	this.Cursor = 0
 	this.Buffer = []rune{}
 	return ENTER
 }
 
-func KeyFuncHead(this *ReadLineBuffer) KeyFuncResult { // Ctrl-A
+func KeyFuncHead(this *Buffer) KeyFuncResult { // Ctrl-A
 	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -30,7 +30,7 @@ func KeyFuncHead(this *ReadLineBuffer) KeyFuncResult { // Ctrl-A
 	return CONTINUE
 }
 
-func KeyFuncBackword(this *ReadLineBuffer) KeyFuncResult { // Ctrl-B
+func KeyFuncBackword(this *Buffer) KeyFuncResult { // Ctrl-B
 	if this.Cursor <= 0 {
 		return CONTINUE
 	}
@@ -44,7 +44,7 @@ func KeyFuncBackword(this *ReadLineBuffer) KeyFuncResult { // Ctrl-B
 	return CONTINUE
 }
 
-func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
+func KeyFuncTail(this *Buffer) KeyFuncResult { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, this.Length)
 	if allength < this.ViewWidth {
 		for ; this.Cursor < this.Length; this.Cursor++ {
@@ -73,7 +73,7 @@ func KeyFuncTail(this *ReadLineBuffer) KeyFuncResult { // Ctrl-E
 	return CONTINUE
 }
 
-func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
+func KeyFuncForward(this *Buffer) KeyFuncResult { // Ctrl-F
 	if this.Cursor >= this.Length {
 		return CONTINUE
 	}
@@ -98,7 +98,7 @@ func KeyFuncForward(this *ReadLineBuffer) KeyFuncResult { // Ctrl-F
 	return CONTINUE
 }
 
-func KeyFuncBackSpace(this *ReadLineBuffer) KeyFuncResult { // Backspace
+func KeyFuncBackSpace(this *Buffer) KeyFuncResult { // Backspace
 	if this.Cursor > 0 {
 		this.Cursor--
 		delw := this.Delete(this.Cursor, 1)
@@ -112,13 +112,13 @@ func KeyFuncBackSpace(this *ReadLineBuffer) KeyFuncResult { // Backspace
 	return CONTINUE
 }
 
-func KeyFuncDelete(this *ReadLineBuffer) KeyFuncResult { // Del
+func KeyFuncDelete(this *Buffer) KeyFuncResult { // Del
 	delw := this.Delete(this.Cursor, 1)
 	this.Repaint(this.Cursor, delw)
 	return CONTINUE
 }
 
-func KeyFuncDeleteOrAbort(this *ReadLineBuffer) KeyFuncResult { // Ctrl-D
+func KeyFuncDeleteOrAbort(this *Buffer) KeyFuncResult { // Ctrl-D
 	if this.Length > 0 {
 		return KeyFuncDelete(this)
 	} else {
@@ -126,7 +126,7 @@ func KeyFuncDeleteOrAbort(this *ReadLineBuffer) KeyFuncResult { // Ctrl-D
 	}
 }
 
-func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncInsertSelf(this *Buffer) KeyFuncResult {
 	ch := this.Unicode
 	if ch < 0x20 || !this.Insert(this.Cursor, []rune{ch}) {
 		return CONTINUE
@@ -152,12 +152,12 @@ func KeyFuncInsertSelf(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncInsertReport(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncInsertReport(this *Buffer) KeyFuncResult {
 	this.InsertAndRepaint(fmt.Sprintf("[%X]", this.Unicode))
 	return CONTINUE
 }
 
-func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncClearAfter(this *Buffer) KeyFuncResult {
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	i := this.Cursor
 	bs := 0
@@ -180,7 +180,7 @@ func KeyFuncClearAfter(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncClear(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncClear(this *Buffer) KeyFuncResult {
 	KeyFuncClearAfter(this)
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	Backspace(width)
@@ -192,7 +192,7 @@ func KeyFuncClear(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncClearBefore(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncClearBefore(this *Buffer) KeyFuncResult {
 	keta := this.Delete(0, this.Cursor)
 	Backspace(keta)
 	this.Cursor = 0
@@ -200,13 +200,13 @@ func KeyFuncClearBefore(this *ReadLineBuffer) KeyFuncResult {
 	return CONTINUE
 }
 
-func KeyFuncCLS(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncCLS(this *Buffer) KeyFuncResult {
 	conio.Cls()
 	this.RepaintAll()
 	return CONTINUE
 }
 
-func KeyFuncPaste(this *ReadLineBuffer) KeyFuncResult {
+func KeyFuncPaste(this *Buffer) KeyFuncResult {
 	text, err := clipboard.ReadAll()
 	if err == nil {
 		this.InsertAndRepaint(
