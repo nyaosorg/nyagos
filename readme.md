@@ -25,3 +25,11 @@ On `%GOPATH%` folder,
     cd ..
     make.cmd get
     make.cmd
+
+Special Thanks
+--------------
+
+* [nocd5](https://github.com/nocd5/)
+* [mattn](https://github.com/mattn/)
+* [shiena](https://github.com/shiena/)
+* [atotto](https://github.com/atotto/)
