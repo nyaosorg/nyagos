@@ -55,6 +55,7 @@ Execute `COMMAND` and continue the command-line.
 * UP , Ctrl-P        : Replace commandline to previous input one
 * DOWN , Ctrl-N      : Replace commnadline to next input one
 * TAB , Ctrl-I       : Complete file or command-name
+* Ctrl-C             : Drop text all
 
 
 ## Built-in commnads
@@ -204,7 +205,7 @@ FUNCNAME are:
         "BACKWARD_DELETE_CHAR" "BACKWARD_CHAR" "CLEAR_SCREEN" "DELETE_CHAR"
         "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
         "FORWARD_CHAR" "BEGINNING_OF_LINE" "PASS" "YANK" "KILL_WHOLE_LINE"
-        "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY"
+        "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
 
 If it succeeded, it returns true only. Failed, it returns nil and error-message.
 Cases are ignores and, the character '-' is same as '\_'.
