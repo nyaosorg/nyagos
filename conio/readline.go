@@ -23,7 +23,7 @@ func (this *KeyGoFuncT) Call(buffer *ReadLineBuffer) KeyFuncResult {
 	return this.F(buffer)
 }
 
-var KeyMap = map[rune]KeyFuncT{
+var keyMap = map[rune]KeyFuncT{
 	NAME2CHAR[K_CTRL_A]: NAME2FUNC[F_BEGINNING_OF_LINE],
 	NAME2CHAR[K_CTRL_B]: NAME2FUNC[F_BACKWARD_CHAR],
 	NAME2CHAR[K_CTRL_C]: NAME2FUNC[F_INTR],
@@ -41,7 +41,7 @@ var KeyMap = map[rune]KeyFuncT{
 	NAME2CHAR[K_ESCAPE]: NAME2FUNC[F_KILL_WHOLE_LINE],
 }
 
-var ZeroMap = map[uint16]KeyFuncT{
+var scanMap = map[uint16]KeyFuncT{
 	NAME2SCAN[K_CTRL]:   NAME2FUNC[F_PASS],
 	NAME2SCAN[K_DELETE]: NAME2FUNC[F_DELETE_CHAR],
 	NAME2SCAN[K_END]:    NAME2FUNC[F_END_OF_LINE],
@@ -58,10 +58,10 @@ func normWord(src string) string {
 func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	keyName_ := normWord(keyName)
 	if charValue, charOk := NAME2CHAR[keyName_]; charOk {
-		KeyMap[charValue] = funcValue
+		keyMap[charValue] = funcValue
 		return nil
 	} else if scanValue, scanOk := NAME2SCAN[keyName_]; scanOk {
-		ZeroMap[scanValue] = funcValue
+		scanMap[scanValue] = funcValue
 		return nil
 	} else {
 		return fmt.Errorf("%s: no such keyname", keyName)
@@ -97,13 +97,13 @@ func ReadLine(prompt_ func() int) (string, KeyFuncResult) {
 		var f KeyFuncT
 		var ok bool
 		if this.Unicode != 0 {
-			f, ok = KeyMap[this.Unicode]
+			f, ok = keyMap[this.Unicode]
 			if !ok {
 				//f = KeyFuncInsertReport
 				f = &KeyGoFuncT{KeyFuncInsertSelf}
 			}
 		} else {
-			f, ok = ZeroMap[this.Keycode]
+			f, ok = scanMap[this.Keycode]
 			if !ok {
 				f = &KeyGoFuncT{KeyFuncPass}
 			}

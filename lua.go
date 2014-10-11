@@ -269,25 +269,54 @@ func cmdGlob(L *Lua) int {
 	}
 }
 
+type KeyLuaFuncT struct {
+	L            *Lua
+	registoryKey string
+}
+
+func (this *KeyLuaFuncT) Call(buffer *conio.ReadLineBuffer) conio.KeyFuncResult {
+	this.L.GetField(Registory, this.registoryKey)
+	if err := this.L.Call(0, 0); err != nil {
+		fmt.Println(os.Stderr, err)
+	}
+	return conio.CONTINUE
+}
+
 func cmdBindKey(L *Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		L.PushString(keyErr.Error())
 		return 1
 	}
-	val, valErr := L.ToString(-1)
-	if valErr != nil {
-		L.PushString(valErr.Error())
-		return 1
-	}
-	err := conio.BindKeySymbol(key, val)
-	if err != nil {
-		L.PushNil()
-		L.PushString(err.Error())
-		return 2
-	} else {
-		L.PushBool(true)
-		return 1
+	key = strings.Replace(strings.ToUpper(key), "-", "_", -1)
+	switch L.GetType(-1) {
+	case TFUNCTION:
+		regkey := "nyagos.bind." + key
+		L.SetField(Registory, regkey)
+		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
+			L.PushNil()
+			L.PushString(err.Error())
+			return 2
+		} else {
+			L.PushBool(true)
+			return 1
+		}
+	default:
+		val, valErr := L.ToString(-1)
+		if valErr != nil {
+			L.PushNil()
+			L.PushString(valErr.Error())
+			return 2
+		}
+		err := conio.BindKeySymbol(key, val)
+		if err != nil {
+			L.PushNil()
+			L.PushString(err.Error())
+			return 2
+		} else {
+			L.PushBool(true)
+			return 1
+		}
 	}
 }
 
