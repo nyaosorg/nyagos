@@ -6,7 +6,7 @@ import "os"
 import "os/exec"
 import "strings"
 
-import . "./lua"
+import "./lua"
 import "./alias"
 import "./conio/readline"
 import "./dos"
@@ -16,7 +16,7 @@ import "./mbcs"
 import "github.com/shiena/ansicolor"
 
 type LuaFunction struct {
-	L            *Lua
+	L            *lua.Lua
 	registoryKey string
 }
 
@@ -27,7 +27,7 @@ func (this LuaFunction) String() string {
 }
 
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	this.L.GetField(Registory, this.registoryKey)
+	this.L.GetField(lua.Registory, this.registoryKey)
 	this.L.NewTable()
 	for i, arg1 := range cmd.Args {
 		this.L.PushInteger(i)
@@ -39,7 +39,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 	return interpreter.CONTINUE, err
 }
 
-func cmdAlias(L *Lua) int {
+func cmdAlias(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		L.PushNil()
@@ -48,7 +48,7 @@ func cmdAlias(L *Lua) int {
 	}
 	key := strings.ToLower(name)
 	switch L.GetType(2) {
-	case TSTRING:
+	case lua.TSTRING:
 		value, err := L.ToString(2)
 		if err == nil {
 			alias.Table[key] = alias.New(value)
@@ -57,16 +57,16 @@ func cmdAlias(L *Lua) int {
 			L.PushString(err.Error())
 			return 2
 		}
-	case TFUNCTION:
+	case lua.TFUNCTION:
 		regkey := "nyagos.alias." + key
-		L.SetField(Registory, regkey)
+		L.SetField(lua.Registory, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
 	}
 	L.PushBool(true)
 	return 1
 }
 
-func cmdSetEnv(L *Lua) int {
+func cmdSetEnv(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		L.PushNil()
@@ -84,7 +84,7 @@ func cmdSetEnv(L *Lua) int {
 	return 1
 }
 
-func cmdGetEnv(L *Lua) int {
+func cmdGetEnv(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		L.PushNil()
@@ -99,7 +99,7 @@ func cmdGetEnv(L *Lua) int {
 	return 1
 }
 
-func cmdExec(L *Lua) int {
+func cmdExec(L *lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
 		L.PushNil()
@@ -117,7 +117,7 @@ func cmdExec(L *Lua) int {
 	return 1
 }
 
-func cmdEval(L *Lua) int {
+func cmdEval(L *lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
 		L.PushNil()
@@ -151,7 +151,7 @@ func cmdEval(L *Lua) int {
 	return 1
 }
 
-func cmdWrite(L *Lua) int {
+func cmdWrite(L *lua.Lua) int {
 	var out io.Writer = os.Stdout
 	cmd, cmdOk := LuaInstanceToCmd[L.Id()]
 	if cmdOk && cmd != nil && cmd.Stdout != nil {
@@ -179,7 +179,7 @@ func cmdWrite(L *Lua) int {
 	return 1
 }
 
-func cmdGetwd(L *Lua) int {
+func cmdGetwd(L *lua.Lua) int {
 	wd, err := os.Getwd()
 	if err == nil {
 		L.PushString(wd)
@@ -189,8 +189,8 @@ func cmdGetwd(L *Lua) int {
 	}
 }
 
-func cmdWhich(L *Lua) int {
-	if L.GetType(-1) != TSTRING {
+func cmdWhich(L *lua.Lua) int {
+	if L.GetType(-1) != lua.TSTRING {
 		return 0
 	}
 	name, nameErr := L.ToString(-1)
@@ -210,7 +210,7 @@ func cmdWhich(L *Lua) int {
 	}
 }
 
-func cmdAtoU(L *Lua) int {
+func cmdAtoU(L *lua.Lua) int {
 	str, err := mbcs.AtoU(L.ToAnsiString(1))
 	if err == nil {
 		L.PushString(str)
@@ -220,7 +220,7 @@ func cmdAtoU(L *Lua) int {
 	}
 }
 
-func cmdUtoA(L *Lua) int {
+func cmdUtoA(L *lua.Lua) int {
 	utf8, utf8err := L.ToString(1)
 	if utf8err != nil {
 		L.PushNil()
@@ -243,7 +243,7 @@ func cmdUtoA(L *Lua) int {
 	}
 }
 
-func cmdGlob(L *Lua) int {
+func cmdGlob(L *lua.Lua) int {
 	if !L.IsString(-1) {
 		return 0
 	}
@@ -270,19 +270,19 @@ func cmdGlob(L *Lua) int {
 }
 
 type KeyLuaFuncT struct {
-	L            *Lua
+	L            *lua.Lua
 	registoryKey string
 }
 
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
-	this.L.GetField(Registory, this.registoryKey)
+	this.L.GetField(lua.Registory, this.registoryKey)
 	if err := this.L.Call(0, 0); err != nil {
 		fmt.Println(os.Stderr, err)
 	}
 	return readline.CONTINUE
 }
 
-func cmdBindKey(L *Lua) int {
+func cmdBindKey(L *lua.Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		L.PushString(keyErr.Error())
@@ -290,9 +290,9 @@ func cmdBindKey(L *Lua) int {
 	}
 	key = strings.Replace(strings.ToUpper(key), "-", "_", -1)
 	switch L.GetType(-1) {
-	case TFUNCTION:
+	case lua.TFUNCTION:
 		regkey := "nyagos.bind." + key
-		L.SetField(Registory, regkey)
+		L.SetField(lua.Registory, regkey)
 		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
 			L.PushNil()
 			L.PushString(err.Error())
@@ -320,7 +320,7 @@ func cmdBindKey(L *Lua) int {
 	}
 }
 
-func SetLuaFunctions(this *Lua) {
+func SetLuaFunctions(this *lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
 	this.NewTable()
@@ -381,14 +381,14 @@ func SetLuaFunctions(this *Lua) {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
 			return orgArgHook(args)
 		}
-		if this.GetType(-1) != TTABLE {
+		if this.GetType(-1) != lua.TTABLE {
 			return orgArgHook(args)
 		}
 		newargs := []string{}
 		for i := 0; true; i++ {
 			this.PushInteger(i)
 			this.GetTable(-2)
-			if this.GetType(-1) == TNIL {
+			if this.GetType(-1) == lua.TNIL {
 				break
 			}
 			arg1, arg1err := this.ToString(-1)
