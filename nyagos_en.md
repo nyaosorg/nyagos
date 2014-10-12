@@ -216,8 +216,9 @@ When the key is pressed, call the function.
 
 `this` is the table which have these members.
 
-* this.pos ... cursor position counted with bytes (==1 when beginning of line)
-* this.text ... all text represented with utf8
+* `this.pos` ... cursor position counted with bytes (==1 when beginning of line)
+* `this.text` ... all text represented with utf8
+* `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
 
 The return value of function is used as below
 
