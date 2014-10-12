@@ -256,6 +256,7 @@ UTF8文字列を、現在のコードページの文字列に変換します。
 * `this.pos` … バイト数で数えたカーソル位置(先頭は 1 になります)
 * `this.text` … utf8 で表現された現在の入力テキスト
 * `this:call("FUNCNAME")` ... `this.call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
+* `this:insert("TEXT")` ... TEXT をカーソル位置に挿入します
 
 また、戻り値は次のように使われます。
 

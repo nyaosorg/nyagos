@@ -219,6 +219,7 @@ When the key is pressed, call the function.
 * `this.pos` ... cursor position counted with bytes (==1 when beginning of line)
 * `this.text` ... all text represented with utf8
 * `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
+* `this:insert("TEXT")` ... insert TEXT at the cursor position.
 
 The return value of function is used as below
 
