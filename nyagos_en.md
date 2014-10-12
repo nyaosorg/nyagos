@@ -210,9 +210,14 @@ FUNCNAME are:
 If it succeeded, it returns true only. Failed, it returns nil and error-message.
 Cases are ignores and, the character '-' is same as '\_'.
 
-### `nyagos.bindkey("KEYNAME",function()...end)`
+### `nyagos.bindkey("KEYNAME",function(this)...end)`
 
 When the key is pressed, call the function.
+
+`this` is the table which have these members.
+
+* this.pos ... cursor position counted with bytes (==1 when beginning of line)
+* this.text ... all text represented with utf8
 
 The return value of function is used as below
 
