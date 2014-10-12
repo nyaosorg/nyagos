@@ -276,23 +276,47 @@ type KeyLuaFuncT struct {
 	registoryKey string
 }
 
-func callKeyFunc(L *lua.Lua) int {
+func getBufferForCallBack(L *lua.Lua) (*readline.Buffer, int) {
 	if L.GetType(1) != lua.TTABLE {
 		L.PushNil()
 		L.PushString("bindKeyExec: call with : not .")
-		return 2
+		return nil, 2
 	}
 	L.GetField(1, "buffer")
 	if L.GetType(-1) != lua.TLIGHTUSERDATA {
 		L.PushNil()
 		L.PushString("bindKey.Call: invalid object")
-		return 2
+		return nil, 2
 	}
 	buffer := (*readline.Buffer)(L.ToUserData(-1))
 	if buffer == nil {
 		L.PushNil()
 		L.PushString("bindKey.Call: invalid member")
+		return nil, 2
+	}
+	return buffer, 0
+}
+
+func callInsert(L *lua.Lua) int {
+	buffer, stackRc := getBufferForCallBack(L)
+	if buffer == nil {
+		return stackRc
+	}
+	text, textErr := L.ToString(2)
+	if textErr != nil {
+		L.PushNil()
+		L.PushString(textErr.Error())
 		return 2
+	}
+	buffer.InsertAndRepaint(text)
+	L.PushBool(true)
+	return 1
+}
+
+func callKeyFunc(L *lua.Lua) int {
+	buffer, stackRc := getBufferForCallBack(L)
+	if buffer == nil {
+		return stackRc
 	}
 	key, keyErr := L.ToString(2)
 	if keyErr != nil {
@@ -341,6 +365,8 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.SetField(-2, "buffer")
 	this.L.PushGoFunction(callKeyFunc)
 	this.L.SetField(-2, "call")
+	this.L.PushGoFunction(callInsert)
+	this.L.SetField(-2, "insert")
 	if err := this.L.Call(1, 1); err != nil {
 		fmt.Println(os.Stderr, err)
 	}
