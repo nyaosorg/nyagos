@@ -5,6 +5,7 @@ import "io"
 import "os"
 import "os/exec"
 import "strings"
+import "bytes"
 
 import "./lua"
 import "./alias"
@@ -276,7 +277,23 @@ type KeyLuaFuncT struct {
 
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
-	if err := this.L.Call(0, 1); err != nil {
+	this.L.NewTable()
+	pos := -1
+	var text bytes.Buffer
+	for i, c := range buffer.Buffer {
+		if i == buffer.Cursor {
+			pos = text.Len() + 1
+		}
+		text.WriteRune(c)
+	}
+	if pos < 0 {
+		pos = text.Len()
+	}
+	this.L.PushInteger(pos)
+	this.L.SetField(-2, "pos")
+	this.L.PushString(text.String())
+	this.L.SetField(-2, "text")
+	if err := this.L.Call(1, 1); err != nil {
 		fmt.Println(os.Stderr, err)
 	}
 	switch this.L.GetType(-1) {
