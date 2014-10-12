@@ -70,6 +70,15 @@ func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	}
 }
 
+func GetFunc(funcName string) (KeyFuncT, error) {
+	rc, ok := name2func[normWord(funcName)]
+	if ok {
+		return rc, nil
+	} else {
+		return nil, fmt.Errorf("%s: not found in the function-list", funcName)
+	}
+}
+
 func BindKeySymbol(keyName, funcName string) error {
 	funcValue, funcOk := name2func[normWord(funcName)]
 	if !funcOk {

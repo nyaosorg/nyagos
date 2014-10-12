@@ -1,17 +1,18 @@
 package main
 
+import "bytes"
 import "fmt"
 import "io"
 import "os"
 import "os/exec"
 import "strings"
-import "bytes"
+import "unsafe"
 
-import "./lua"
 import "./alias"
 import "./conio/readline"
 import "./dos"
 import "./interpreter"
+import "./lua"
 import "./mbcs"
 
 import "github.com/shiena/ansicolor"
@@ -275,6 +276,49 @@ type KeyLuaFuncT struct {
 	registoryKey string
 }
 
+func callKeyFunc(L *lua.Lua) int {
+	if L.GetType(1) != lua.TTABLE {
+		L.PushNil()
+		L.PushString("bindKeyExec: call with : not .")
+		return 2
+	}
+	L.GetField(1, "buffer")
+	if L.GetType(-1) != lua.TLIGHTUSERDATA {
+		L.PushNil()
+		L.PushString("bindKey.Call: invalid object")
+		return 2
+	}
+	buffer := (*readline.Buffer)(L.ToUserData(-1))
+	if buffer == nil {
+		L.PushNil()
+		L.PushString("bindKey.Call: invalid member")
+		return 2
+	}
+	key, keyErr := L.ToString(2)
+	if keyErr != nil {
+		L.PushNil()
+		L.PushString(keyErr.Error())
+		return 2
+	}
+	function, funcErr := readline.GetFunc(key)
+	if funcErr != nil {
+		L.PushNil()
+		L.PushString(funcErr.Error())
+		return 2
+	}
+	rc := function.Call(buffer)
+	L.PushBool(true)
+	switch rc {
+	case readline.ENTER:
+		L.PushBool(true)
+		return 2
+	case readline.ABORT:
+		L.PushBool(false)
+		return 2
+	}
+	return 1
+}
+
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
 	this.L.NewTable()
@@ -293,6 +337,10 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.SetField(-2, "pos")
 	this.L.PushString(text.String())
 	this.L.SetField(-2, "text")
+	this.L.PushLightUserData(unsafe.Pointer(buffer))
+	this.L.SetField(-2, "buffer")
+	this.L.PushGoFunction(callKeyFunc)
+	this.L.SetField(-2, "call")
 	if err := this.L.Call(1, 1); err != nil {
 		fmt.Println(os.Stderr, err)
 	}
