@@ -13,6 +13,21 @@ import "../interpreter"
 var histories = make([]string, 0)
 var pointor = 0
 
+func Get(n int) string {
+	if n < 0 {
+		n = len(histories) + n
+	}
+	if n >= len(histories) {
+		return ""
+	} else {
+		return histories[n]
+	}
+}
+
+func Len() int {
+	return len(histories)
+}
+
 func LastHistory() string {
 	if len(histories) <= 0 {
 		return ""
