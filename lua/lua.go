@@ -173,6 +173,16 @@ func (this *Lua) PushInteger(n int) {
 	C.lua_pushinteger(this.lua, C.lua_Integer(n))
 }
 
+func (this *Lua) ToInteger(index int) (int, error) {
+	var issucceeded C.int
+	value := C.lua_tointegerx(this.lua, C.int(index), &issucceeded)
+	if issucceeded != 0 {
+		return int(value), nil
+	} else {
+		return 0, errors.New("ToInteger: the value in not integer on the stack")
+	}
+}
+
 //export luaToGoBridge
 func luaToGoBridge(lua *C.lua_State) int {
 	f := *(*goFunctionT)(C.lua_touserdata(lua, 1))
