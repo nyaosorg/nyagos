@@ -148,6 +148,37 @@ func Replace(line string) (string, bool) {
 				reader.UnreadRune() // next char of '-'
 			}
 		}
+		if ch == '?' { // !?str?
+			var seekStrBuf bytes.Buffer
+			lastCharIsQuestionMark := false
+			for reader.Len() > 0 {
+				ch, _, _ := reader.ReadRune()
+				if ch == '?' {
+					lastCharIsQuestionMark = true
+					break
+				}
+				seekStrBuf.WriteRune(ch)
+			}
+			seekStr := seekStrBuf.String()
+			found := false
+			for i := len(histories) - 1; i >= 0; i-- {
+				if strings.Contains(histories[i], seekStr) {
+					buffer.WriteString(histories[i])
+					isReplaced = true
+					found = true
+					break
+				}
+			}
+			if !found {
+				buffer.WriteRune('?')
+				buffer.WriteString(seekStr)
+				if lastCharIsQuestionMark {
+					buffer.WriteRune('?')
+				}
+			}
+			continue
+		}
+		// !str
 		var seekStrBuf bytes.Buffer
 		seekStrBuf.WriteRune(ch)
 		for reader.Len() > 0 {
