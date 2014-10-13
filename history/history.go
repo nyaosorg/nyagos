@@ -71,25 +71,6 @@ func Push(input string) {
 	pointor = len(histories)
 }
 
-func eventDesignerStrBegin(reader *strings.Reader) (string, bool) {
-	var buf bytes.Buffer
-	for reader.Len() > 0 {
-		ch, _, _ := reader.ReadRune()
-		if ch == ' ' {
-			reader.UnreadRune()
-			break
-		}
-		buf.WriteRune(ch)
-	}
-	str := buf.String()
-	for i := len(histories) - 1; i >= 0; i-- {
-		if strings.HasPrefix(histories[i], str) {
-			return histories[i], true
-		}
-	}
-	return "", false
-}
-
 func Replace(line string) (string, bool) {
 	var buffer bytes.Buffer
 	var isReplaced = false
@@ -162,20 +143,34 @@ func Replace(line string) (string, bool) {
 				} else {
 					buffer.WriteString("!-0")
 				}
+				continue
 			} else {
-				buffer.WriteString("!-")
-				buffer.WriteRune(ch)
+				reader.UnreadRune() // next char of '-'
 			}
-		} else { // !str
-			reader.UnreadRune() // "-"
-			str, ok := eventDesignerStrBegin(reader)
-			if ok {
-				buffer.WriteString(str)
+		}
+		var seekStrBuf bytes.Buffer
+		seekStrBuf.WriteRune(ch)
+		for reader.Len() > 0 {
+			ch, _, _ := reader.ReadRune()
+			if ch == ' ' {
+				reader.UnreadRune()
+				break
+			}
+			seekStrBuf.WriteRune(ch)
+		}
+		seekStr := seekStrBuf.String()
+		found := false
+		for i := len(histories) - 1; i >= 0; i-- {
+			if strings.HasPrefix(histories[i], seekStr) {
+				buffer.WriteString(histories[i])
 				isReplaced = true
-			} else {
-				buffer.WriteRune('!')
-				buffer.WriteRune(ch)
+				found = true
+				break
 			}
+		}
+		if !found {
+			buffer.WriteRune('!')
+			buffer.WriteRune(ch)
 		}
 	}
 	return buffer.String(), isReplaced
