@@ -239,6 +239,11 @@ If it returns string, NYAGOS.exe replace the command-line-string it.
 not a string but a table as string array which has each command 
 arguments.
 
+### `nyagos.gethistory(N)`
+
+Get the n-th command-line history. When N < 0, last (-N)-th history.
+With no arguments, get the count of the command-line history.
+
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.
