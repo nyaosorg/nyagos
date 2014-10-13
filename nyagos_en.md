@@ -131,6 +131,8 @@ We use . (one-period) as an alias of source.
 * `!!` previous input string
 * `!n` n'th input string
 * `!-n` n'th previous input string
+* `!STR` input string starting with STR
+* `!?STR?` input string containing STR
 
 These suffix are available.
 
