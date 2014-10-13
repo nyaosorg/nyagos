@@ -33,3 +33,13 @@ Special Thanks
 * [mattn](https://github.com/mattn/)
 * [shiena](https://github.com/shiena/)
 * [atotto](https://github.com/atotto/)
+
+License
+-------
+
+You can use, copy and modify under the New BSD License.
+
+Author
+------
+
+[zetamatta](https://github.com/zetamatta/)
