@@ -71,6 +71,25 @@ func Push(input string) {
 	pointor = len(histories)
 }
 
+func eventDesignerStrBegin(reader *strings.Reader) (string, bool) {
+	var buf bytes.Buffer
+	for reader.Len() > 0 {
+		ch, _, _ := reader.ReadRune()
+		if ch == ' ' {
+			reader.UnreadRune()
+			break
+		}
+		buf.WriteRune(ch)
+	}
+	str := buf.String()
+	for i := len(histories) - 1; i >= 0; i-- {
+		if strings.HasPrefix(histories[i], str) {
+			return histories[i], true
+		}
+	}
+	return "", false
+}
+
 func Replace(line string) (string, bool) {
 	var buffer bytes.Buffer
 	var isReplaced = false
@@ -91,7 +110,7 @@ func Replace(line string) (string, bool) {
 			}
 			continue
 		}
-		if ch == '!' {
+		if ch == '!' { // !!
 			if len(histories) > 0 {
 				insertHisotry(&buffer, reader, histories[len(histories)-1])
 				isReplaced = true
@@ -101,7 +120,7 @@ func Replace(line string) (string, bool) {
 				continue
 			}
 		}
-		if n := strings.IndexRune("0123456789", ch); n >= 0 {
+		if n := strings.IndexRune("0123456789", ch); n >= 0 { // !n
 			backno := n
 			for reader.Len() > 0 {
 				ch, _, _ = reader.ReadRune()
@@ -119,7 +138,7 @@ func Replace(line string) (string, bool) {
 			}
 			continue
 		}
-		if ch == '-' && reader.Len() > 0 {
+		if ch == '-' && reader.Len() > 0 { // !-n
 			ch, _, _ := reader.ReadRune()
 			n := strings.IndexRune("0123456789", ch)
 			if n >= 0 {
@@ -147,9 +166,16 @@ func Replace(line string) (string, bool) {
 				buffer.WriteString("!-")
 				buffer.WriteRune(ch)
 			}
-		} else {
-			buffer.WriteRune('!')
-			buffer.WriteRune(ch)
+		} else { // !str
+			reader.UnreadRune() // "-"
+			str, ok := eventDesignerStrBegin(reader)
+			if ok {
+				buffer.WriteString(str)
+				isReplaced = true
+			} else {
+				buffer.WriteRune('!')
+				buffer.WriteRune(ch)
+			}
 		}
 	}
 	return buffer.String(), isReplaced
