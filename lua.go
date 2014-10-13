@@ -8,6 +8,7 @@ import "strings"
 
 import "./alias"
 import "./dos"
+import "./history"
 import "./interpreter"
 import "./lua"
 import "./mbcs"
@@ -268,6 +269,20 @@ func cmdGlob(L *lua.Lua) int {
 	}
 }
 
+func cmdGetHistory(this *lua.Lua) int {
+	if this.GetType(-1) == lua.TNUMBER {
+		val, err := this.ToInteger(-1)
+		if err != nil {
+			this.PushNil()
+			this.PushString(err.Error())
+		}
+		this.PushString(history.Get(val))
+	} else {
+		this.PushInteger(history.Len())
+	}
+	return 1
+}
+
 func SetLuaFunctions(this *lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
@@ -296,6 +311,8 @@ func SetLuaFunctions(this *lua.Lua) {
 	this.SetField(-2, "glob")
 	this.PushGoFunction(cmdBindKey)
 	this.SetField(-2, "bindkey")
+	this.PushGoFunction(cmdGetHistory)
+	this.SetField(-2, "gethistory")
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
