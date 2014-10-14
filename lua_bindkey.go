@@ -87,6 +87,9 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	pos := -1
 	var text bytes.Buffer
 	for i, c := range buffer.Buffer {
+		if i >= buffer.Length {
+			break
+		}
 		if i == buffer.Cursor {
 			pos = text.Len() + 1
 		}
