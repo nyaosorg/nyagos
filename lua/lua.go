@@ -276,3 +276,7 @@ func (this *Lua) ToBool(index int) bool {
 		return false
 	}
 }
+
+func (this *Lua) RawSetI(index int, n int) {
+	C.lua_rawseti(this.lua, C.int(index), C.int(n))
+}
