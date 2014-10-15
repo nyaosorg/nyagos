@@ -22,9 +22,8 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
 	this.L.NewTable()
 	for i, arg1 := range cmd.Args {
-		this.L.PushInteger(i)
 		this.L.PushString(arg1)
-		this.L.SetTable(-3)
+		this.L.RawSetI(-2, i)
 	}
 	LuaInstanceToCmd[this.L.Id()] = cmd
 	err := this.L.Call(1, 0)
@@ -88,9 +87,8 @@ func SetLuaFunctions(this *lua.Lua) {
 		}
 		this.NewTable()
 		for i := 0; i < len(args); i++ {
-			this.PushInteger(i)
 			this.PushString(args[i])
-			this.SetTable(-3)
+			this.RawSetI(-2, i)
 		}
 		if err := this.Call(1, 1); err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err)

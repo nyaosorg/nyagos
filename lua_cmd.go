@@ -238,9 +238,8 @@ func cmdGlob(L *lua.Lua) int {
 	} else {
 		L.NewTable()
 		for i := 0; i < len(list); i++ {
-			L.PushInteger(i + 1)
 			L.PushString(list[i])
-			L.SetTable(-3)
+			L.RawSetI(-2, i+1)
 		}
 		return 1
 	}
