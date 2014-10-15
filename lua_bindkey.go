@@ -96,7 +96,7 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 		text.WriteRune(c)
 	}
 	if pos < 0 {
-		pos = text.Len()
+		pos = text.Len() + 1
 	}
 	this.L.PushInteger(pos)
 	this.L.SetField(-2, "pos")
