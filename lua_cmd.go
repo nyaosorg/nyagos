@@ -7,6 +7,7 @@ import "os/exec"
 import "strings"
 
 import "./alias"
+import "./conio"
 import "./dos"
 import "./history"
 import "./interpreter"
@@ -256,5 +257,23 @@ func cmdGetHistory(this *lua.Lua) int {
 	} else {
 		this.PushInteger(history.Len())
 	}
+	return 1
+}
+
+func cmdSetRuneWidth(this *lua.Lua) int {
+	char, charErr := this.ToInteger(1)
+	if charErr != nil {
+		this.PushNil()
+		this.PushString(charErr.Error())
+		return 2
+	}
+	width, widthErr := this.ToInteger(2)
+	if widthErr != nil {
+		this.PushNil()
+		this.PushString(widthErr.Error())
+		return 2
+	}
+	conio.SetCharWidth(rune(char), width)
+	this.PushBool(true)
 	return 1
 }

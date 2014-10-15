@@ -61,6 +61,8 @@ func SetLuaFunctions(this *lua.Lua) {
 	this.SetField(-2, "bindkey")
 	this.PushGoFunction(cmdGetHistory)
 	this.SetField(-2, "gethistory")
+	this.PushGoFunction(cmdSetRuneWidth)
+	this.SetField(-2, "setrunewidth")
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
