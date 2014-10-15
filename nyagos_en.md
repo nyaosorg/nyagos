@@ -37,6 +37,10 @@ Execute `COMMAND` and quit.
 
 Execute `COMMAND` and continue the command-line.
 
+### `-f SCRIPTFILE ARG1 ARG2 ...`
+
+Execute SCRIPTFILE with Lua interpretor and quit.
+
 ## Editor
 
 * BackSpace , Ctrl-H : Delete a charactor left of cursor
