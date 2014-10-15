@@ -19,7 +19,12 @@ alias{
     ['type']='%COMSPEC% /c type $*',
     ['for']='%COMSPEC% /c for $*',
     lua_e=function(args) assert(load(args[1]))() end,
-    which=function(args) nyagos.write( nyagos.which(args[1])..'\n') end,
+    which=function(args) 
+        local result=nyagos.which(args[1])
+        if result then
+            nyagos.write( result..'\n')
+        end
+    end,
     open=function(args)
         local count=0
         for i=1,#args do
