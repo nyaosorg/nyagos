@@ -1,8 +1,12 @@
 package main
 
-import "./interpreter"
+import "fmt"
+import "os"
 
-func OptionParse(getArg func() (string, bool)) bool {
+import "./interpreter"
+import "./lua"
+
+func OptionParse(L *lua.Lua, getArg func() (string, bool)) bool {
 	for {
 		arg, ok := getArg()
 		if !ok {
@@ -20,6 +24,26 @@ func OptionParse(getArg func() (string, bool)) bool {
 				if o == 'c' {
 					return false
 				}
+			case 'f':
+				if script, scriptOk := getArg(); scriptOk {
+					L.NewTable()
+					L.PushString(script)
+					L.RawSetI(-2, 0)
+					for i := 1; true; i++ {
+						arg1, ok := getArg()
+						if !ok {
+							break
+						}
+						L.PushString(arg1)
+						L.RawSetI(-2, i)
+					}
+					L.SetGlobal("arg")
+					err := L.Source(script)
+					if err != nil {
+						fmt.Fprintln(os.Stderr, err)
+					}
+				}
+				return false
 			}
 		}
 	}

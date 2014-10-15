@@ -66,7 +66,7 @@ func main() {
 
 	// Parameter Parsing
 	argc := 0
-	cont := OptionParse(func() (string, bool) {
+	cont := OptionParse(L, func() (string, bool) {
 		argc++
 		if argc < len(os.Args) {
 			return os.Args[argc], true
