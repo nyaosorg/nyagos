@@ -2,8 +2,10 @@
 -- DO NOT EDIT THIS. PLEASE EDIT ~\.nyagos OR ADD SCRIPT INTO nyagos.d\ --
 --------------------------------------------------------------------------
 
-print("Nihongo Yet Another GOing Shell")
-print("Build at ".. nyagos.stamp .. " with commit "..nyagos.commit)
+print("Nihongo Yet Another GOing Shell " .. nyagos.version)
+if string.len(nyagos.version) <= 0 then
+    print("Build at ".. nyagos.stamp .. " with commit "..nyagos.commit)
+end
 print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
 
 local function expand(text)

@@ -22,6 +22,7 @@ var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 
 var stamp string
 var commit string
+var version string
 
 func main() {
 	conio.DisableCtrlC()
@@ -61,6 +62,8 @@ func main() {
 	L.SetField(-2, "stamp")
 	L.PushString(commit)
 	L.SetField(-2, "commit")
+	L.PushString(version)
+	L.SetField(-2, "version")
 	L.Pop(1)
 	defer L.Close()
 
