@@ -26,6 +26,10 @@
         go get github.com/atotto/clipboard       
         goto end
 
+:package
+        for /F %%I in (version.txt) do zip -9 "nyagos-%%I.zip" nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
+        goto end
+
 :snapshot
         zip -9 nyagos-%DATE:/=%%2.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
         goto end
