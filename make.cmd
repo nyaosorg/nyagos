@@ -3,13 +3,17 @@
 @if not "%1" == "" goto %1
 
 :build
-        if not exist nyagos.syso windres --output-format=coff -o nyagos.syso nyagos.rc
-        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -ldflags "-X main.stamp %DATE% -X main.commit %%V %VERSION%"
-        goto end
+        echo %DATE:/=% > version.now
+        goto _build
 
 :release
         for /F %%I in (version.txt) do set "VERSION=-X main.version %%I"
-        goto build
+        copy version.txt version.now
+
+:_build
+        if not exist nyagos.syso windres --output-format=coff -o nyagos.syso nyagos.rc
+        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -ldflags "-X main.stamp %DATE% -X main.commit %%V %VERSION%"
+        goto end
 
 :fmt
         for /R . %%I IN (*.go) do go fmt %%I
@@ -17,7 +21,7 @@
         goto end
 
 :clean
-        for %%I in (nyagos.exe nyagos.syso) do if exist %%I del %%I
+        for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
         goto end
 
 :get
@@ -27,11 +31,7 @@
         goto end
 
 :package
-        for /F %%I in (version.txt) do zip -9 "nyagos-%%I.zip" nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
-        goto end
-
-:snapshot
-        zip -9 nyagos-%DATE:/=%%2.zip nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
+        for /F %%I in (version.now) do zip -9 "nyagos-%%I%2.zip" nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
         goto end
 
 :install
@@ -57,5 +57,19 @@
             git pull origin master:master
             go build
         )
+        goto end
 
+:help
+        @echo off
+        echo Usage for make.cmd
+        echo   %0 (no arguments) == %0 build
+        echo   %0 build .... Build nyagos.exe as snapshot (ignore version.txt)
+        echo   %0 release .. Build nyagos.exe as release  (see version.txt)
+        echo   %0 fmt ...... Format all source files with 'go fmt'
+        echo   %0 clean .... Delete nyagos.exe and nyagos.syso
+        echo   %0 install .. Copy binaries to %~dp0installdir
+        echo   %0 package .. Make the package zip-file (see version.now)
+        echo   %0 get ...... Do 'go get' for each github library
+        echo   %0 upgrade .. Do 'git pull' for each github library
+        echo   %0 help ..... Print help
 :end
