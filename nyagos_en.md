@@ -21,8 +21,8 @@ Programming Language GO and Lua.
 
 ## Install
 
-Put `nyagos.exe`, `nyagos.lua`, `lua52.dll` into the one 
-directory pointed with `%PATH%`.
+Put files:`nyagos.exe`, `nyagos.lua` and `lua52.dll`, and
+directory `nyagos.d` into the one directory pointed with `%PATH%`.
 
 Put .nyagos into the directory pointed with %USERPROFILE%
 or %HOME% and modify as you like.
@@ -256,10 +256,7 @@ This string variable has the value of the fullpath of nyagos.exe.
 
 ## Misc.
 
-You can get the source files from
-    https://github.com/zetamatta/nyagos
-the binary files from
-    http://www.nyaos.org/index.cgi?p=NYAGOS .
+You can get NYAGOS's package from https://github.com/zetamatta/nyagos
 
 On the New BSD-licenses, you can use NYAGOS.
 

@@ -29,8 +29,9 @@ Windows であまりストレスを感じないような環境を構築するために
 
 ## インストール
 
-`nyagos.exe` 、`nyagos.lua`、`lua52.dll` を `%PATH%` の差す
-ディレクトリに置いてください(同一のディレクトリに置いてください)。
+ファイル:`nyagos.exe`,`nyagos.lua`,`lua52.dll`、ディレクトリ`nyagos.d`を
+`%PATH%` の差すディレクトリに置いてください。
+(同一のディレクトリに置いてください)
 
 カスタマイズ用ファイル `.nyagos` は、`%USERPROFILE%` か `%HOME%`
 の差すディレクトリに置いて、必要に応じて修正してください。
@@ -309,9 +310,8 @@ nyagos.exe のフルパスが格納されています。
 
 ## その他
 
-NYAGOS のソースは https://github.com/zetamatta/nyagos にて、
-バイナリパッケージは http://www.nyaos.org/index.cgi?p=NYAGOS にて、
-公開しています。ソースは、修正BSDライセンスにて配布・改変が可能です。
+NYAGOS は https://github.com/zetamatta/nyagos にて公開しています。
+ソースは修正BSDライセンスにて配布・改変が可能です。
 
 NYAGOS のビルドには
 

@@ -26,6 +26,13 @@ On `%GOPATH%` folder,
     make.cmd get
     make.cmd
 
+How to use make.cmd is shown with `make.cmd help`
+
+License
+-------
+
+You can use, copy and modify under the New BSD License.
+
 Special Thanks
 --------------
 
@@ -34,12 +41,7 @@ Special Thanks
 * [shiena](https://github.com/shiena/)
 * [atotto](https://github.com/atotto/)
 
-License
--------
-
-You can use, copy and modify under the New BSD License.
-
 Author
 ------
 
-[zetamatta](https://github.com/zetamatta/)
+* [zetamatta](https://github.com/zetamatta/)
