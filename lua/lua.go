@@ -280,3 +280,11 @@ func (this *Lua) ToBool(index int) bool {
 func (this *Lua) RawSetI(index int, n int) {
 	C.lua_rawseti(this.lua, C.int(index), C.int(n))
 }
+
+func (this *Lua) Remove(index int) {
+	C.lua_remove(this.lua, C.int(index))
+}
+
+func (this *Lua) Replace(index int) {
+	C.lua_replace(this.lua, C.int(index))
+}
