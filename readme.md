@@ -33,15 +33,19 @@ License
 
 You can use, copy and modify under the New BSD License.
 
-Special Thanks
---------------
+Acknowledgement
+---------------
 
-* [nocd5](https://github.com/nocd5/)
-* [mattn](https://github.com/mattn/)
-* [shiena](https://github.com/shiena/)
-* [atotto](https://github.com/atotto/)
+* [nocd5](https://github.com/nocd5)
+* [mattn](https://github.com/mattn)
+* [shiena](https://github.com/shiena)
+* [atotto](https://github.com/atotto)
+* [ironsand](https://github.com/ironsand)
+* [kardianos](https://github.com/kardianos)
 
 Author
 ------
 
-* [zetamatta](https://github.com/zetamatta/)
+* [zetamatta](https://github.com/zetamatta)
+
+I dedicate this code to my late father.
