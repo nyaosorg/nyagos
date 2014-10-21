@@ -21,6 +21,12 @@ local function set_(f,equation,expand)
         end
         return true
     end
+    local pluspos=string.find(equation,"+=",1,true)
+    if pluspos > 0 then
+        local left=string.sub(equation,1,pluspos-1)
+        equation = string.format("%s=%s;%%%s%%",
+                        left,string.sub(equation,pluspos+2),left)
+    end
     local pos=string.find(equation,"=",1,true)
     if pos then
         local left=string.sub(equation,1,pos-1)
