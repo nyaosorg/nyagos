@@ -30,6 +30,44 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 	return interpreter.CONTINUE, err
 }
 
+const original_io_lines = "original_io_lines"
+
+func ioLines(this *lua.Lua) int {
+	if this.IsString(1) {
+		// io.lines("FILENAME") --> use original io.lines
+		this.GetField(lua.REGISTORYINDEX, original_io_lines)
+		this.PushValue(1)
+		this.Call(1, 1)
+	} else {
+		// io.lines() --> use nyagos version
+		this.PushGoFunction(ioLinesNext)
+	}
+	return 1
+}
+
+func ioLinesNext(this *lua.Lua) int {
+	cmd := LuaInstanceToCmd[this.Id()]
+
+	line := make([]byte, 0, 256)
+	var ch [1]byte
+	for {
+		n, err := cmd.Stdin.Read(ch[0:1])
+		if n <= 0 || err != nil {
+			if len(line) <= 0 {
+				this.PushNil()
+			} else {
+				this.PushAnsiString(line)
+			}
+			return 1
+		}
+		if ch[0] == '\n' {
+			this.PushAnsiString(line)
+			return 1
+		}
+		line = append(line, ch[0])
+	}
+}
+
 func SetLuaFunctions(this *lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
@@ -71,10 +109,23 @@ func SetLuaFunctions(this *lua.Lua) {
 	}
 	this.SetGlobal("nyagos")
 
-	// replace io.getenv
-	this.GetGlobal("os")
-	this.PushGoFunction(cmdGetEnv)
-	this.SetField(-2, "getenv")
+	// replace os.getenv
+	this.GetGlobal("os")           // +1
+	this.PushGoFunction(cmdGetEnv) // +2
+	this.SetField(-2, "getenv")    // +1
+	this.Pop(1)                    // 0
+
+	// save io.lines as original_io_lines
+	this.GetGlobal("io")                                 // +1
+	this.GetField(-1, "lines")                           // +2
+	this.SetField(lua.REGISTORYINDEX, original_io_lines) // +1
+	this.Pop(1)                                          // 0
+
+	// replace io.lines
+	this.GetGlobal("io")         // +1
+	this.PushGoFunction(ioLines) // +2
+	this.SetField(-2, "lines")   // +1
+	this.Pop(1)                  // 0
 
 	var orgArgHook func([]string) []string
 	orgArgHook = interpreter.SetArgsHook(func(args []string) []string {
