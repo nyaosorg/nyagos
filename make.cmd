@@ -45,7 +45,7 @@
 :install.
         @echo Please close NYAGOS.exe and hit ENTER.
         @pause
-        robocopy nyagos.d .\installdir\nyagos.d /E
+        robocopy nyagos.d .\installdir\nyagos.d /mir
         copy nyagos.exe .\installdir\.
         copy nyagos.lua .\installdir\.
         copy lua52.dll  .\installdir\.
