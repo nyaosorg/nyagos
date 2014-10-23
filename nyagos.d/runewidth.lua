@@ -5,3 +5,5 @@ nyagos.setrunewidth(0x262D,2)
 nyagos.setrunewidth(0x262A,2)
 -- Pencil
 nyagos.setrunewidth(0x270F,2)
+-- Open Box
+nyagos.setrunewidth(0x2423,2)
