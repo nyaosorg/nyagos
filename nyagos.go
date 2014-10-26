@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "io"
 import "os"
 import "path/filepath"
 import "regexp"
@@ -23,6 +24,22 @@ var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 var stamp string
 var commit string
 var version string
+var ansiOut io.Writer
+
+func nyagosPrompt(L *lua.Lua) int {
+	template, err := L.ToString(-1)
+	if err != nil {
+		template = "[" + err.Error() + "]"
+	}
+	text := Format2Prompt(template)
+	fmt.Fprint(ansiOut, text)
+	text = rxAnsiEscCode.ReplaceAllString(text, "")
+	lfPos := strings.LastIndex(text, "\n")
+	if lfPos >= 0 {
+		text = text[lfPos+1:]
+	}
+	return conio.GetStringWidth(text)
+}
 
 func main() {
 	conio.DisableCtrlC()
@@ -48,7 +65,7 @@ func main() {
 	}
 
 	// ANSI Escape Sequence Support
-	ansiOut := ansicolor.NewAnsiColorWriter(os.Stdout)
+	ansiOut = ansicolor.NewAnsiColorWriter(os.Stdout)
 
 	commands.Init()
 	alias.Init()
@@ -64,6 +81,8 @@ func main() {
 	L.SetField(-2, "commit")
 	L.PushString(version)
 	L.SetField(-2, "version")
+	L.PushGoFunction(nyagosPrompt)
+	L.SetField(-2, "prompt")
 	L.Pop(1)
 	defer L.Close()
 
@@ -109,14 +128,17 @@ func main() {
 		}
 		line, cont := readline.ReadLine(
 			func() int {
-				text := Format2Prompt(os.Getenv("PROMPT"))
-				fmt.Fprint(ansiOut, text)
-				text = rxAnsiEscCode.ReplaceAllString(text, "")
-				lfPos := strings.LastIndex(text, "\n")
-				if lfPos >= 0 {
-					text = text[lfPos+1:]
+				L.GetGlobal("nyagos")
+				L.GetField(-1, "prompt")
+				L.Remove(-2)
+				L.PushString(os.Getenv("PROMPT"))
+				L.Call(1, 1)
+				length, lengthErr := L.ToInteger(-1)
+				if lengthErr == nil {
+					return length
+				} else {
+					return 0
 				}
-				return conio.GetStringWidth(text)
 			})
 		if cont == readline.ABORT {
 			break
