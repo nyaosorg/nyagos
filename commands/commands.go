@@ -1,6 +1,7 @@
 package commands
 
 import "strings"
+import "regexp"
 
 import "../history"
 import "../interpreter"
@@ -19,6 +20,8 @@ var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.Next
 	"source":  cmd_source,
 }
 
+var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
+
 func Exec(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
@@ -26,38 +29,45 @@ func Exec(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		return interpreter.CONTINUE, err
 	}
 	function, ok := buildInCmd[name]
-	if ok {
-		newArgs := make([]string, 0)
-		for _, arg1 := range cmd.Args {
-			matches, _ := dos.Glob(arg1)
-			if matches == nil {
-				newArgs = append(newArgs, arg1)
-			} else {
-				for _, s := range matches {
-					newArgs = append(newArgs, s)
-				}
+	if !ok {
+		m := unscoNamePattern.FindStringSubmatch(name)
+		if m == nil {
+			return interpreter.THROUGH, nil
+		}
+		name = m[1]
+		function, ok = buildInCmd[name]
+		if !ok {
+			return interpreter.THROUGH, nil
+		}
+	}
+	newArgs := make([]string, 0)
+	for _, arg1 := range cmd.Args {
+		matches, _ := dos.Glob(arg1)
+		if matches == nil {
+			newArgs = append(newArgs, arg1)
+		} else {
+			for _, s := range matches {
+				newArgs = append(newArgs, s)
 			}
 		}
-		cmd.Args = newArgs
-		if cmd.IsBackGround {
-			go func(cmd *interpreter.Interpreter) {
-				function(cmd)
-				if cmd.Closer != nil {
-					cmd.Closer.Close()
-					cmd.Closer = nil
-				}
-			}(cmd)
-			return interpreter.CONTINUE, nil
-		} else {
-			next, err := function(cmd)
+	}
+	cmd.Args = newArgs
+	if cmd.IsBackGround {
+		go func(cmd *interpreter.Interpreter) {
+			function(cmd)
 			if cmd.Closer != nil {
 				cmd.Closer.Close()
 				cmd.Closer = nil
 			}
-			return next, err
-		}
+		}(cmd)
+		return interpreter.CONTINUE, nil
 	} else {
-		return interpreter.THROUGH, nil
+		next, err := function(cmd)
+		if cmd.Closer != nil {
+			cmd.Closer.Close()
+			cmd.Closer = nil
+		}
+		return next, err
 	}
 }
 
