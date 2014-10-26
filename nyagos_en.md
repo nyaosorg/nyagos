@@ -64,6 +64,8 @@ Execute SCRIPTFILE with Lua interpretor and quit.
 
 ## Built-in commnads
 
+These commands have their alias. For example, `ls` => `__ls__`.
+
 ### `alias ALIAS=DEFINE`
 
 Define the alias. Macros in DEFINE:
