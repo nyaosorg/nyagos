@@ -299,6 +299,19 @@ suffix というコマンドを作成しています。
 これはコマンドに特定の拡張子がついた時に、インタプリタ名を
 先頭に挿入するものです。
 
+### `length := nyagos.prompt(template)`
+
+通常ユーザが直接呼び出すことはありません。
+引数のプロンプトのテンプレート(=%PROMPT%)を展開して、プロンプト文字列を
+生成して表示、文字の桁数を戻り値を返す関数が格納されています。
+ユーザはこれを横取りして独自のプロンプト表示を改造することができます。
+
+    local prompt_ = nyagos.prompt
+    nyagos.prompt = function(template)
+        nyagos.echo("xxxxx")
+        return prompt_(template)
+    end
+
 ### `nyagos.gethistory(N)`
 
 N 番目のヒストリ内容を返します。N が負の時は現在から(-N)個過去の

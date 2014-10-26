@@ -245,6 +245,18 @@ If it returns string, NYAGOS.exe replace the command-line-string it.
 not a string but a table as string array which has each command 
 arguments.
 
+### `length := nyagos.prompt(template)`
+
+`nyagos.prompt` is assigned function which draw prompt.
+You can swap the prompt-function as below.
+
+    local prompt_ = nyagos.prompt
+    nyagos.prompt = function(template)
+        nyagos.echo("xxxxx")
+        return prompt_(template)
+    end
+
+
 ### `nyagos.gethistory(N)`
 
 Get the n-th command-line history. When N < 0, last (-N)-th history.
