@@ -25,6 +25,7 @@ On `%GOPATH%` folder,
     cd ..
     make.cmd get
     make.cmd
+    make.cmd install INSTALLDIR
 
 How to use make.cmd is shown with `make.cmd help`
 
