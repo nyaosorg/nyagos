@@ -86,6 +86,7 @@ func main() {
 	L.SetField(-2, "prompt")
 	L.Pop(1)
 	defer L.Close()
+	conio.OnClose(func() { L.Close() })
 
 	// Parameter Parsing
 	argc := 0
@@ -106,6 +107,7 @@ func main() {
 	histPath := filepath.Join(appData, "nyagos.history")
 	history.Load(histPath)
 	defer history.Save(histPath)
+	conio.OnClose(func() { history.Save(histPath) })
 
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
