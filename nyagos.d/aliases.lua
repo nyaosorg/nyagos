@@ -31,15 +31,15 @@ alias{
             local list=nyagos.glob(args[i])
             if list and #list >= 1 then
                 for i=1,#list do
-                    nyagos.exec(string.format('%s /c start "%s"',nyagos.getenv('COMSPEC'),list[i]))
+                    nyagos.shellexecute("open",list[i])
                 end
             else
-                nyagos.exec(string.format('%s /c start "%s"',nyagos.getenv('COMSPEC'),args[i]))
+                nyagos.shellexecute("open",args[i])
             end
             count = count +1
         end
         if count <= 0 then
-            nyagos.exec(string.format('%s /c start .',nyagos.getenv('COMSPEC')))
+            nyagos.shellexecute("open",".")
         end
     end,
 }
