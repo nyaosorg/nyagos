@@ -13,6 +13,7 @@ import "./history"
 import "./interpreter"
 import "./lua"
 import "./mbcs"
+import "./shellexecute"
 
 import "github.com/shiena/ansicolor"
 
@@ -274,5 +275,36 @@ func cmdSetRuneWidth(this *lua.Lua) int {
 	}
 	conio.SetCharWidth(rune(char), width)
 	this.PushBool(true)
+	return 1
+}
+
+func cmdShellExecute(this *lua.Lua) int {
+	action, actionErr := this.ToString(1)
+	if actionErr != nil {
+		this.PushNil()
+		this.PushString(actionErr.Error())
+		return 2
+	}
+	path, pathErr := this.ToString(2)
+	if pathErr != nil {
+		this.PushNil()
+		this.PushString(pathErr.Error())
+		return 2
+	}
+	param, paramErr := this.ToString(3)
+	if paramErr != nil {
+		param = ""
+	}
+	dir, dirErr := this.ToString(4)
+	if dirErr != nil {
+		dir = ""
+	}
+	err := shellexecute.Do(action, path, param, dir)
+	if err != nil {
+		this.PushNil()
+		this.PushString(err.Error())
+	} else {
+		this.PushBool(true)
+	}
 	return 1
 }
