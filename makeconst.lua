@@ -1,5 +1,5 @@
 function findValue(name,dir)
-    local cmdline = string.format("findstr %s %s\\*.h",name,dir)
+    local cmdline = string.format('findstr "\\<%s\\>" %s\\*.h',name,dir)
     local fd = io.popen(cmdline,"r")
     local value=nil
     for line in fd:lines() do
