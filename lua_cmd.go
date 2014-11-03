@@ -13,7 +13,6 @@ import "./history"
 import "./interpreter"
 import "./lua"
 import "./mbcs"
-import "./shellexecute"
 
 import "github.com/shiena/ansicolor"
 
@@ -299,7 +298,7 @@ func cmdShellExecute(this *lua.Lua) int {
 	if dirErr != nil {
 		dir = ""
 	}
-	err := shellexecute.Do(action, path, param, dir)
+	err := dos.ShellExecute(action, path, param, dir)
 	if err != nil {
 		this.PushNil()
 		this.PushString(err.Error())

@@ -1,4 +1,4 @@
-package shellexecute
+package dos
 
 import "syscall"
 import "unsafe"
@@ -30,7 +30,7 @@ const (
 	RUNAS      = "runas"
 )
 
-func Do(action string, path string, param string, directory string) error {
+func ShellExecute(action string, path string, param string, directory string) error {
 	actionW, actionErr := syscall.UTF16FromString(action)
 	if actionErr != nil {
 		return actionErr
