@@ -1,26 +1,47 @@
 package conio
 
-/*
-#include <windows.h>
+import "syscall"
+import "unsafe"
 
-void getLocate(HANDLE hConin,short* X,short* Y){
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	GetConsoleScreenBufferInfo(hConin,&csbi);
-	*X = (int)csbi.dwCursorPosition.X;
-	*Y = (int)csbi.dwCursorPosition.Y;
+type coord_t struct {
+	X int16
+	Y int16
 }
-*/
-import "C"
 
-var hConout = C.GetStdHandle(C.STD_OUTPUT_HANDLE)
+func (this *coord_t) Pack() uintptr {
+	return *(*uintptr)(unsafe.Pointer(this))
+}
+
+type small_rect_t struct {
+	Left   int16
+	Top    int16
+	Right  int16
+	Bottom int16
+}
+
+type consoleScreenBufferInfo struct {
+	Size              coord_t
+	CursorPosition    coord_t
+	Attributes        uint16
+	Window            small_rect_t
+	MaximumWindowSize coord_t
+}
+
+func (this *consoleScreenBufferInfo) Address() uintptr {
+	return uintptr(unsafe.Pointer(this))
+}
+
+var hConout, _ = syscall.GetStdHandle(syscall.STD_OUTPUT_HANDLE)
+var getConsoleScreenBufferInfo = kernel32.NewProc("GetConsoleScreenBufferInfo")
+var setConsoleCursorPosition = kernel32.NewProc("SetConsoleCursorPosition")
 
 func GetLocate() (int, int) {
-	var x C.short
-	var y C.short
-	C.getLocate(hConout, &x, &y)
-	return int(x), int(y)
+	var csbi consoleScreenBufferInfo
+	getConsoleScreenBufferInfo.Call(uintptr(hConout), csbi.Address())
+	return int(csbi.CursorPosition.X), int(csbi.CursorPosition.Y)
 }
 
 func Locate(x, y int) {
-	C.SetConsoleCursorPosition(hConout, C.COORD{X: C.SHORT(x), Y: C.SHORT(y)})
+	csbi := coord_t{X: int16(x), Y: int16(y)}
+	setConsoleCursorPosition.Call(uintptr(hConout), csbi.Pack())
 }

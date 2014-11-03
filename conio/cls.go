@@ -1,49 +1,37 @@
 package conio
 
-/*
-#include <windows.h>
-
-DWORD getSize(CONSOLE_SCREEN_BUFFER_INFO *csbi){
-	return csbi->dwSize.X * csbi->dwSize.Y;
-}
-
-DWORD getWidth(CONSOLE_SCREEN_BUFFER_INFO *csbi){
-	return csbi->srWindow.Right - csbi->srWindow.Left;
-}
-
-DWORD getHeight(CONSOLE_SCREEN_BUFFER_INFO *csbi){
-	return csbi->srWindow.Bottom - csbi->srWindow.Top;
-}
-*/
-import "C"
+import "unsafe"
 
 func GetScreenSize() (int, int) {
-	var csbi C.CONSOLE_SCREEN_BUFFER_INFO
-	C.GetConsoleScreenBufferInfo(hConout, &csbi)
-	return int(C.getWidth(&csbi)), int(C.getHeight(&csbi))
+	var csbi consoleScreenBufferInfo
+	getConsoleScreenBufferInfo.Call(uintptr(hConout), csbi.Address())
+	return int(csbi.Size.X), int(csbi.Size.Y)
 }
 
+var fillConsoleOutputCharacter = kernel32.NewProc("FillConsoleOutputCharacterW")
+var fillConsoleOutputAttribute = kernel32.NewProc("FillConsoleOutputAttribute")
+
 func Cls() {
-	var csbi C.CONSOLE_SCREEN_BUFFER_INFO
-	var coordScreen C.COORD
-	var cCharsWritten C.DWORD
+	var csbi consoleScreenBufferInfo
+	getConsoleScreenBufferInfo.Call(uintptr(hConout), csbi.Address())
+	var cCharsWritten uint32
+	c := coord_t{0, 0}
+	coordScreen := c.Pack()
+	dwConSize := csbi.Size.Pack()
 
-	C.GetConsoleScreenBufferInfo(hConout, &csbi)
-	dwConSize := C.getSize(&csbi)
-
-	coordScreen.X = 0
-	coordScreen.Y = 0
-	C.FillConsoleOutputCharacter(hConout,
-		C.CHAR(' '),
+	fillConsoleOutputCharacter.Call(
+		uintptr(hConout),
+		uintptr(' '),
 		dwConSize,
 		coordScreen,
-		&cCharsWritten)
+		uintptr(unsafe.Pointer(&cCharsWritten)))
 
-	C.FillConsoleOutputAttribute(hConout,
-		csbi.wAttributes,
+	fillConsoleOutputAttribute.Call(
+		uintptr(hConout),
+		uintptr(csbi.Attributes),
 		dwConSize,
 		coordScreen,
-		&cCharsWritten)
+		uintptr(unsafe.Pointer(&cCharsWritten)))
 
-	C.SetConsoleCursorPosition(hConout, coordScreen)
+	setConsoleCursorPosition.Call(uintptr(hConout), coordScreen)
 }
