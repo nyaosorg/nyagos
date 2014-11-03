@@ -1,12 +1,13 @@
 package conio
 
-//#include <windows.h>
-import "C"
 import "syscall"
+import "unsafe"
+
+var setConsoleTitle = kernel32.NewProc("SetConsoleTitleW")
 
 func SetTitle(title string) {
 	ctitle, err := syscall.UTF16FromString(title)
 	if ctitle != nil && err == nil {
-		C.SetConsoleTitleW((*C.WCHAR)(&ctitle[0]))
+		setConsoleTitle.Call(uintptr(unsafe.Pointer(&ctitle[0])))
 	}
 }
