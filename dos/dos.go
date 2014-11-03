@@ -5,10 +5,17 @@ import "regexp"
 import "strings"
 import "unicode"
 import "syscall"
+import "unsafe"
 import "path/filepath"
 
-//#include <direct.h>
-import "C"
+var msvcrt = syscall.NewLazyDLL("msvcrt")
+var _chdrive = msvcrt.NewProc("_chdrive")
+var _wchdir = msvcrt.NewProc("_wchdir")
+
+func chdrive_(n rune) uintptr {
+	rc, _, _ := _chdrive.Call(uintptr(n & 0x1F))
+	return rc
+}
 
 func GetFirst(s string) (rune, error) {
 	reader := strings.NewReader(s)
@@ -24,7 +31,7 @@ func Chdrive(drive string) error {
 	if driveErr != nil {
 		return driveErr
 	}
-	C._chdrive(C.int(driveLetter) & 0x1F)
+	chdrive_(driveLetter)
 	return nil
 }
 
@@ -33,7 +40,7 @@ var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
 func Chdir(folder_ string) error {
 	folder := folder_
 	if m := rxPath.FindStringSubmatch(folder_); m != nil {
-		status := C._chdrive(C.int(m[1][0] & 0x1F))
+		status := chdrive_(rune(m[1][0]))
 		if status != 0 {
 			return fmt.Errorf("%s: no such directory", folder_)
 		}
@@ -44,7 +51,7 @@ func Chdir(folder_ string) error {
 	}
 	utf16, err := syscall.UTF16FromString(folder)
 	if err == nil {
-		status := C._wchdir((*C.wchar_t)(&utf16[0]))
+		status, _, _ := _wchdir.Call(uintptr(unsafe.Pointer(&utf16[0])))
 		if status != 0 {
 			err = fmt.Errorf("%s: no such directory", folder_)
 		}
