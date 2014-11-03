@@ -1,43 +1,27 @@
 package conio
 
-/*
-#include <windows.h>
+import "syscall"
 
-extern void callBack();
-static WINAPI myHandleRoutine( DWORD dwCtrlType )
-{
-    switch( dwCtrlType ){
-    case CTRL_CLOSE_EVENT:
-    case CTRL_LOGOFF_EVENT:
-    case CTRL_SHUTDOWN_EVENT:
-		callBack();
-        break;
-    default:
-        break;
-    }
-    return FALSE;
-}
-
-static void MySetConsoleCtrlHandler()
-{
-	SetConsoleCtrlHandler( myHandleRoutine , TRUE );
-}
-
-*/
-import "C"
+var setConsoleCtrlHandler = kernel32.NewProc("SetConsoleCtrlHandler")
 
 var list = []func(){}
 
-//export callBack
-func callBack() {
-	for _, f := range list {
-		f()
+func callBack(dwCtrlType uintptr) uintptr {
+	switch dwCtrlType {
+	case CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT:
+		for i := len(list) - 1; i >= 0; i-- {
+			list[i]()
+		}
 	}
+	return 0
 }
 
 func OnClose(f func()) {
 	if len(list) <= 0 {
-		C.MySetConsoleCtrlHandler()
+		setConsoleCtrlHandler.Call(
+			/* syscall.NewCallback(callBack),*/
+			syscall.NewCallbackCDecl(callBack),
+			uintptr(1))
 	}
 	list = append(list, f)
 }
