@@ -13,6 +13,7 @@ function output(keyword,includedir,out)
     for _,keyword in ipairs(keyword) do
         local value = findValue(keyword,includedir)
         if value then
+            value = string.gsub(value,"(DWORD)","uint32")
             print(string.format("const %s=%s",keyword,value))
         end
     end
