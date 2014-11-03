@@ -6,6 +6,8 @@ import "unsafe"
 var multiByteToWideChar = kernel32.NewProc("MultiByteToWideChar")
 var wideCharToMultiByte = kernel32.NewProc("WideCharToMultiByte")
 
+// Get ansi string (current codepage multibyte string)
+// from utf8(go-native) string
 func UtoA(utf8 string) ([]byte, error) {
 	utf16, err := syscall.UTF16FromString(utf8)
 	if err != nil {
@@ -29,6 +31,8 @@ func UtoA(utf8 string) ([]byte, error) {
 	return mbcs, nil
 }
 
+// Get utf8(go-native) string
+// from ansi string (current codepage multibyte string)
 func AtoU(mbcs []byte) (string, error) {
 	if mbcs == nil || len(mbcs) <= 0 {
 		return "", nil

@@ -17,7 +17,7 @@ func chdrive_(n rune) uintptr {
 	return rc
 }
 
-func GetFirst(s string) (rune, error) {
+func getFirst(s string) (rune, error) {
 	reader := strings.NewReader(s)
 	drive, _, err := reader.ReadRune()
 	if err != nil {
@@ -26,8 +26,9 @@ func GetFirst(s string) (rune, error) {
 	return unicode.ToUpper(drive), nil
 }
 
+// Change drive without changing the working directory there.
 func Chdrive(drive string) error {
-	driveLetter, driveErr := GetFirst(drive)
+	driveLetter, driveErr := getFirst(drive)
 	if driveErr != nil {
 		return driveErr
 	}
@@ -37,6 +38,9 @@ func Chdrive(drive string) error {
 
 var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
 
+// Change the current working directory
+// without changeing the working directory
+// in the last drive.
 func Chdir(folder_ string) error {
 	folder := folder_
 	if m := rxPath.FindStringSubmatch(folder_); m != nil {
@@ -62,6 +66,7 @@ func Chdir(folder_ string) error {
 var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
 var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[\\/]")
 
+// Equals filepath.Join but this works right when path has drive-letter.
 func Join(paths ...string) string {
 	start := 0
 	for i, path := range paths {
@@ -79,6 +84,7 @@ func Join(paths ...string) string {
 
 var rxCouldGlobPattern = regexp.MustCompile("^[A-Za-z]:[^\\/]")
 
+// Expand filenames matching with wildcard-pattern.
 func Glob(pattern string) (matches []string, err error) {
 	result, err := filepath.Glob(pattern)
 	if len(result) > 0 {

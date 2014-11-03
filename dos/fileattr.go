@@ -6,10 +6,12 @@ import "syscall"
 
 var getFileAttributes = kernel32.NewProc("GetFileAttributesW")
 
+// Windows original attribute.
 type FileAttr struct {
 	attr uintptr
 }
 
+// Get Windows original attributes such as Hidden,Reparse and so on.
 func NewFileAttr(path string) (*FileAttr, error) {
 	cpath, err := syscall.UTF16FromString(path)
 	if err != nil {

@@ -3,6 +3,7 @@ package dos
 import "os"
 import "strings"
 
+// Get %HOME% || %USERPROFILE% || ""
 func GetHome() string {
 	home := os.Getenv("HOME")
 	if home == "" {

@@ -30,6 +30,7 @@ const (
 	RUNAS      = "runas"
 )
 
+// Call ShellExecute-API: edit,explore,open and so on.
 func ShellExecute(action string, path string, param string, directory string) error {
 	actionW, actionErr := syscall.UTF16FromString(action)
 	if actionErr != nil {
