@@ -6,9 +6,6 @@ import "syscall"
 
 var getFileAttributes = kernel32.NewProc("GetFileAttributesW")
 
-const FILE_ATTRIBUTE_REPARSE_POINT = 0x00000400
-const FILE_ATTRIBUTE_HIDDEN = 0x00000002
-
 type FileAttr struct {
 	attr uintptr
 }
