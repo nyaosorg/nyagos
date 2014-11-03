@@ -45,7 +45,7 @@
             @echo Please %0.cmd install PATH\TO\BIN, once
             goto end
         )
-        if exist installdir (
+        if exist "%INSTALLDIR%" (
             @start make.cmd install.
         ) else (
             @echo Please %0.cmd install EXIST\PATH\TO\BIN,  once
