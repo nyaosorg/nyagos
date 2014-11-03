@@ -42,4 +42,13 @@ alias{
             nyagos.shellexecute("open",".")
         end
     end,
+    sudo=function(args)
+        if #args <= 0 then
+            nyagos.shellexecute("runas",nyagos.exe)
+            return
+        end
+        local prog = args[1]
+        table.remove(args,1)
+        assert(nyagos.shellexecute("runas",prog,table.concat(args," "),nyagos.getwd()))
+    end,
 }
