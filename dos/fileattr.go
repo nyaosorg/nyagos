@@ -1,12 +1,16 @@
 package dos
 
-//#include <windows.h>
-import "C"
 import "fmt"
+import "unsafe"
 import "syscall"
 
+var getFileAttributes = kernel32.NewProc("GetFileAttributesW")
+
+const FILE_ATTRIBUTE_REPARSE_POINT = 0x00000400
+const FILE_ATTRIBUTE_HIDDEN = 0x00000002
+
 type FileAttr struct {
-	attr uint
+	attr uintptr
 }
 
 func NewFileAttr(path string) (*FileAttr, error) {
@@ -16,14 +20,15 @@ func NewFileAttr(path string) (*FileAttr, error) {
 	} else if cpath == nil {
 		return &FileAttr{0}, fmt.Errorf("sysCall.UTF16FromString(\"%s\") failed", path)
 	} else {
-		return &FileAttr{uint(C.GetFileAttributesW((*C.WCHAR)(&cpath[0])))}, nil
+		rc, _, _ := getFileAttributes.Call(uintptr(unsafe.Pointer(&cpath[0])))
+		return &FileAttr{rc}, nil
 	}
 }
 
 func (this *FileAttr) IsReparse() bool {
-	return (this.attr & C.FILE_ATTRIBUTE_REPARSE_POINT) != 0
+	return (this.attr & FILE_ATTRIBUTE_REPARSE_POINT) != 0
 }
 
 func (this *FileAttr) IsHidden() bool {
-	return (this.attr & C.FILE_ATTRIBUTE_HIDDEN) != 0
+	return (this.attr & FILE_ATTRIBUTE_HIDDEN) != 0
 }
