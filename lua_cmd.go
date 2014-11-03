@@ -12,7 +12,6 @@ import "./dos"
 import "./history"
 import "./interpreter"
 import "./lua"
-import "./mbcs"
 
 import "github.com/shiena/ansicolor"
 
@@ -188,7 +187,7 @@ func cmdWhich(L *lua.Lua) int {
 }
 
 func cmdAtoU(L *lua.Lua) int {
-	str, err := mbcs.AtoU(L.ToAnsiString(1))
+	str, err := dos.AtoU(L.ToAnsiString(1))
 	if err == nil {
 		L.PushString(str)
 		return 1
@@ -204,7 +203,7 @@ func cmdUtoA(L *lua.Lua) int {
 		L.PushString(utf8err.Error())
 		return 2
 	}
-	str, err := mbcs.UtoA(utf8)
+	str, err := dos.UtoA(utf8)
 	if err == nil {
 		if len(str) >= 1 {
 			L.PushAnsiString(str[:len(str)-1])

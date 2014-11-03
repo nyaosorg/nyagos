@@ -1,9 +1,8 @@
-package mbcs
+package dos
 
 import "syscall"
 import "unsafe"
 
-var kernel32 = syscall.NewLazyDLL("kernel32")
 var multiByteToWideChar = kernel32.NewProc("MultiByteToWideChar")
 var wideCharToMultiByte = kernel32.NewProc("WideCharToMultiByte")
 
