@@ -1,61 +1,62 @@
 package conio
 
-/*
-#include <windows.h>
-KEY_EVENT_RECORD* getKeyEvent(struct _INPUT_RECORD *input) {
-	return &(input->Event.KeyEvent);
-}
-char getAsciiChar(struct _INPUT_RECORD *input) {
-	return input->Event.KeyEvent.uChar.AsciiChar;
-}
-WCHAR getUnicodeChar(struct _INPUT_RECORD *input) {
-	return input->Event.KeyEvent.uChar.UnicodeChar;
-}
-WCHAR getVirtualKeyCode(struct _INPUT_RECORD *input) {
-	return input->Event.KeyEvent.wVirtualKeyCode;
-}
-
-HANDLE GetConinHandle(){
-	return CreateFileW(
-		L"CONIN$" ,
-		GENERIC_READ ,
-		FILE_SHARE_READ ,
-		NULL ,
-		OPEN_EXISTING ,
-		FILE_ATTRIBUTE_NORMAL,
-		NULL
-	);
-}
-*/
-import "C"
+import "syscall"
+import "unsafe"
 import "unicode/utf16"
 
-var hConin C.HANDLE = C.GetConinHandle() //C.GetStdHandle(C.STD_INPUT_HANDLE)
+type inputRecordT struct {
+	eventType uint16
+	_         uint16
+	// _KEY_EVENT_RECORD {
+	bKeyDown         uintptr
+	wRepeartCount    uint16
+	wVirtualKeyCode  uint16
+	wVirtualScanCode uint16
+	unicodeChar      uint16
+	// }
+	dwControlKeyState uint32
+}
 
 var buffer [10][2]uint16
 var readptr = 0
 var stacked = 0
+
+var createFile = kernel32.NewProc("CreateFileW")
+var getConsoleMode = kernel32.NewProc("GetConsoleMode")
+var setConsoleMode = kernel32.NewProc("SetConsoleMode")
+var readConsoleInput = kernel32.NewProc("ReadConsoleInputW")
+
+var conioS, _ = syscall.UTF16FromString("CONIN$")
+var hConin, _, _ = createFile.Call(
+	uintptr(unsafe.Pointer(&conioS[0])),
+	GENERIC_READ,
+	FILE_SHARE_READ,
+	0,
+	OPEN_EXISTING,
+	FILE_ATTRIBUTE_NORMAL,
+	0)
 
 func GetKey() (rune, uint16) {
 	if readptr >= stacked {
 		readptr = 0
 		stacked = 0
 		for stacked <= 0 {
-			var numberOfEventsRead C.DWORD
-			var events [len(buffer)]C.struct__INPUT_RECORD
-			var orgConMode C.DWORD
+			var numberOfEventsRead uint32
+			var events [len(buffer)]inputRecordT
+			var orgConMode uint32
 
-			C.GetConsoleMode(hConin, &orgConMode)
-			C.SetConsoleMode(hConin, 0)
-			C.ReadConsoleInputW(hConin,
-				&events[0],
-				C.DWORD(len(events)),
-				&numberOfEventsRead)
-			C.SetConsoleMode(hConin, orgConMode)
-			for i := C.DWORD(0); i < numberOfEventsRead; i++ {
-				if events[i].EventType == C.KEY_EVENT && C.getKeyEvent(&events[i]).bKeyDown != C.FALSE {
-					buffer[stacked][0] = uint16(C.getUnicodeChar(&events[i]))
-					buffer[stacked][1] = uint16(C.getVirtualKeyCode(&events[i]))
+			getConsoleMode.Call(uintptr(hConin), uintptr(unsafe.Pointer(&orgConMode)))
+			setConsoleMode.Call(uintptr(hConin), 0)
+			readConsoleInput.Call(
+				uintptr(hConin),
+				uintptr(unsafe.Pointer(&events[0])),
+				uintptr(len(events)),
+				uintptr(unsafe.Pointer(&numberOfEventsRead)))
+			setConsoleMode.Call(uintptr(hConin), uintptr(orgConMode))
+			for i := uint32(0); i < numberOfEventsRead; i++ {
+				if events[i].eventType == KEY_EVENT && events[i].bKeyDown != 0 {
+					buffer[stacked][0] = events[i].unicodeChar
+					buffer[stacked][1] = events[i].wVirtualKeyCode
 					stacked++
 				} else {
 					if CtrlC {

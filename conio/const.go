@@ -3,4 +3,10 @@ package conio
 const CTRL_CLOSE_EVENT = 2
 const CTRL_LOGOFF_EVENT = 5
 const CTRL_SHUTDOWN_EVENT = 6
+const STD_INPUT_HANDLE = (uint32)(0xfffffff6)
 const STD_OUTPUT_HANDLE = (uint32)(0xfffffff5)
+const GENERIC_READ = 0x80000000
+const FILE_SHARE_READ = 0x00000001
+const OPEN_EXISTING = 3
+const FILE_ATTRIBUTE_NORMAL = 0x00000080
+const KEY_EVENT = 1
