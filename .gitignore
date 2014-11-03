@@ -5,7 +5,6 @@
 *.syso
 *.zip
 .*.un~
-installdir/
 lua/include/
 lua/lua-5*/
 version.cmd
