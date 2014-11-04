@@ -4,10 +4,13 @@ function findValue(name,dir)
     local value=nil
     for line in fd:lines() do
         for token in string.gmatch(line,"%S+") do
-            value = token
+            value=token
+        end
+        if value then
+            return value
         end
     end
-    return value
+    return ""
 end
 function output(keyword,includedir,out)
     for _,keyword in ipairs(keyword) do
