@@ -89,5 +89,8 @@ end
 
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
-    include(home .. '\\.nyagos')
+    local dotfile = home .. '\\.nyagos'
+    if exists(dotfile) then
+        include(dotfile)
+    end
 end
