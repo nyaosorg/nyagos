@@ -147,14 +147,14 @@ func SetLuaFunctions(this *lua.Lua) {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
 			return orgArgHook(args)
 		}
-		if this.GetType(-1) != lua.TTABLE {
+		if this.GetType(-1) != lua.LUA_TTABLE {
 			return orgArgHook(args)
 		}
 		newargs := []string{}
 		for i := 0; true; i++ {
 			this.PushInteger(i)
 			this.GetTable(-2)
-			if this.GetType(-1) == lua.TNIL {
+			if this.GetType(-1) == lua.LUA_TNIL {
 				break
 			}
 			arg1, arg1err := this.ToString(-1)

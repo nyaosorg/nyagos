@@ -30,20 +30,8 @@ func (this *Lua) IsString(index int) bool {
 }
 
 func (this *Lua) IsFunction(index int) bool {
-	return this.GetType(index) == TFUNCTION
+	return this.GetType(index) == LUA_TFUNCTION
 }
-
-const (
-	TNIL           = LUA_TNIL
-	TNUMBER        = LUA_TNUMBER
-	TBOOLEAN       = LUA_TBOOLEAN
-	TSTRING        = LUA_TSTRING
-	TTABLE         = LUA_TTABLE
-	TFUNCTION      = LUA_TFUNCTION
-	TUSERDATA      = LUA_TUSERDATA
-	TTHREAD        = LUA_TTHREAD
-	TLIGHTUSERDATA = LUA_TLIGHTUSERDATA
-)
 
 var lua_type = luaDLL.NewProc("lua_type")
 

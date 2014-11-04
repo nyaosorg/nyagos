@@ -24,7 +24,7 @@ func cmdAlias(L *lua.Lua) int {
 	}
 	key := strings.ToLower(name)
 	switch L.GetType(2) {
-	case lua.TSTRING:
+	case lua.LUA_TSTRING:
 		value, err := L.ToString(2)
 		if err == nil {
 			alias.Table[key] = alias.New(value)
@@ -33,7 +33,7 @@ func cmdAlias(L *lua.Lua) int {
 			L.PushString(err.Error())
 			return 2
 		}
-	case lua.TFUNCTION:
+	case lua.LUA_TFUNCTION:
 		regkey := "nyagos.alias." + key
 		L.SetField(lua.REGISTORYINDEX, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
@@ -166,7 +166,7 @@ func cmdGetwd(L *lua.Lua) int {
 }
 
 func cmdWhich(L *lua.Lua) int {
-	if L.GetType(-1) != lua.TSTRING {
+	if L.GetType(-1) != lua.LUA_TSTRING {
 		return 0
 	}
 	name, nameErr := L.ToString(-1)
@@ -245,7 +245,7 @@ func cmdGlob(L *lua.Lua) int {
 }
 
 func cmdGetHistory(this *lua.Lua) int {
-	if this.GetType(-1) == lua.TNUMBER {
+	if this.GetType(-1) == lua.LUA_TNUMBER {
 		val, err := this.ToInteger(-1)
 		if err != nil {
 			this.PushNil()

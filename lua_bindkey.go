@@ -15,13 +15,13 @@ type KeyLuaFuncT struct {
 }
 
 func getBufferForCallBack(L *lua.Lua) (*readline.Buffer, int) {
-	if L.GetType(1) != lua.TTABLE {
+	if L.GetType(1) != lua.LUA_TTABLE {
 		L.PushNil()
 		L.PushString("bindKeyExec: call with : not .")
 		return nil, 2
 	}
 	L.GetField(1, "buffer")
-	if L.GetType(-1) != lua.TLIGHTUSERDATA {
+	if L.GetType(-1) != lua.LUA_TLIGHTUSERDATA {
 		L.PushNil()
 		L.PushString("bindKey.Call: invalid object")
 		return nil, 2
@@ -112,12 +112,12 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 		fmt.Println(os.Stderr, err)
 	}
 	switch this.L.GetType(-1) {
-	case lua.TSTRING:
+	case lua.LUA_TSTRING:
 		str, strErr := this.L.ToString(-1)
 		if strErr == nil {
 			buffer.InsertAndRepaint(str)
 		}
-	case lua.TBOOLEAN:
+	case lua.LUA_TBOOLEAN:
 		if !this.L.ToBool(-1) {
 			buffer.Buffer = []rune{}
 			buffer.Length = 0
@@ -135,7 +135,7 @@ func cmdBindKey(L *lua.Lua) int {
 	}
 	key = strings.Replace(strings.ToUpper(key), "-", "_", -1)
 	switch L.GetType(-1) {
-	case lua.TFUNCTION:
+	case lua.LUA_TFUNCTION:
 		regkey := "nyagos.bind." + key
 		L.SetField(lua.REGISTORYINDEX, regkey)
 		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
