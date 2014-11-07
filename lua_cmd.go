@@ -306,3 +306,36 @@ func cmdShellExecute(this *lua.Lua) int {
 	}
 	return 1
 }
+
+func cmdAccess(L *lua.Lua) int {
+	path, pathErr := L.ToString(1)
+	if pathErr != nil {
+		L.PushNil()
+		L.PushString(pathErr.Error())
+		return 2
+	}
+	mode, modeErr := L.ToInteger(2)
+	if modeErr != nil {
+		L.PushNil()
+		L.PushString(modeErr.Error())
+		return 2
+	}
+	fi, err := os.Stat(path)
+
+	var result bool
+	if err != nil {
+		result = false
+	} else {
+		switch {
+		case mode == 0:
+			result = true
+		case mode & 1 != 0: // X_OK
+		case mode & 2 != 0: // W_OK
+			result = fi.Mode().Perm() & 0200 != 0
+		case mode & 4 != 0: // R_OK
+			result = fi.Mode().Perm() & 0400 != 0
+		}
+	}
+	L.PushBool(result)
+	return 1
+}

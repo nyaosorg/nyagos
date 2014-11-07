@@ -82,6 +82,8 @@ func SetLuaFunctions(this *lua.Lua) {
 	this.SetField(-2, "exec")
 	this.PushGoFunction(cmdWrite)
 	this.SetField(-2, "write")
+	this.PushGoFunction(cmdAccess)
+	this.SetField(-2, "access")
 	this.PushGoFunction(cmdAtoU)
 	this.SetField(-2, "atou")
 	this.PushGoFunction(cmdUtoA)
