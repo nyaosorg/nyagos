@@ -94,6 +94,12 @@ func cmdExec(L *lua.Lua) int {
 	return 1
 }
 
+type emptyWriter struct { }
+
+func (e *emptyWriter) Write(b []byte) (int, error) {
+	return len(b), nil
+}
+
 func cmdEval(L *lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
@@ -110,6 +116,7 @@ func cmdEval(L *lua.Lua) int {
 	go func(statement string, w *os.File) {
 		it := interpreter.New()
 		it.Stdout = w
+		it.Stderr = &emptyWriter{}
 		it.Interpret(statement)
 		w.Close()
 	}(statement, w)
