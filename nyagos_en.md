@@ -268,6 +268,11 @@ With no arguments, get the count of the command-line history.
 
 This string variable has the value of the fullpath of nyagos.exe.
 
+### `nyagos.access(PATH,MODE)`
+
+Returns the boolean value whether the PATH can be access with MODE.
+It equals the access function of the programming language C.
+
 ## Misc.
 
 You can get NYAGOS's package from https://github.com/zetamatta/nyagos
