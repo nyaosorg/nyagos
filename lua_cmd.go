@@ -94,7 +94,7 @@ func cmdExec(L *lua.Lua) int {
 	return 1
 }
 
-type emptyWriter struct { }
+type emptyWriter struct{}
 
 func (e *emptyWriter) Write(b []byte) (int, error) {
 	return len(b), nil
@@ -337,11 +337,11 @@ func cmdAccess(L *lua.Lua) int {
 		switch {
 		case mode == 0:
 			result = true
-		case mode & 1 != 0: // X_OK
-		case mode & 2 != 0: // W_OK
-			result = fi.Mode().Perm() & 0200 != 0
-		case mode & 4 != 0: // R_OK
-			result = fi.Mode().Perm() & 0400 != 0
+		case mode&1 != 0: // X_OK
+		case mode&2 != 0: // W_OK
+			result = fi.Mode().Perm()&0200 != 0
+		case mode&4 != 0: // R_OK
+			result = fi.Mode().Perm()&0400 != 0
 		}
 	}
 	L.PushBool(result)
