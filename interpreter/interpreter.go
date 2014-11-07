@@ -31,7 +31,7 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.Stdin = this.Stdin
 	rv.HookCount = this.HookCount
 	// Dont Copy 'Closer' and 'IsBackGround'
-	return this
+	return rv
 }
 
 type ArgsHookT func(args []string) []string
@@ -128,7 +128,7 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				if err != nil {
 					return CONTINUE, err
 				}
-				defer pipeIn.Close()
+				// defer pipeIn.Close()
 				cmd.Stdout = pipeOut
 			}
 			var whatToDo NextT
@@ -157,7 +157,7 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				}
 			}
 			if pipeOut != nil {
-				pipeOut.Close()
+				// pipeOut.Close()
 			}
 			if err != nil {
 				m := errorStatusPattern.FindStringSubmatch(err.Error())
