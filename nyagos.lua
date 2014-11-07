@@ -52,14 +52,6 @@ function addpath(...)
         end
     end
 end
-function exists(f)
-    local fd=io.open(f,"r")
-    if fd then
-        fd:close()
-        return true
-    end
-    return false
-end
 function nyagos.echo(s)
     nyagos.write(s..'\n')
 end
@@ -90,7 +82,7 @@ end
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
     local dotfile = home .. '\\.nyagos'
-    if exists(dotfile) then
+    if nyagos.access(dotfile,0) then
         include(dotfile)
     end
 end
