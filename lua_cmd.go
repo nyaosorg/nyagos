@@ -12,6 +12,7 @@ import "./dos"
 import "./history"
 import "./interpreter"
 import "./lua"
+import "bytes"
 
 import "github.com/shiena/ansicolor"
 
@@ -123,7 +124,7 @@ func cmdEval(L *lua.Lua) int {
 		result = append(result, buffer[0:size]...)
 	}
 	r.Close()
-	L.PushAnsiString(result)
+	L.PushAnsiString(bytes.Trim(result, "\r\n\t "))
 	return 1
 }
 
