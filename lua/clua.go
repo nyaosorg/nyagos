@@ -15,9 +15,6 @@ from http://sourceforge.net/projects/luabinaries/files/5.2.3/Windows%20Libraries
 #include "lualib.h"
 #include "lauxlib.h"
 
-static int gLua_pcall(lua_State* L,int x,int y,int z)
-{ return lua_pcall(L,x,y,z); }
-
 extern int luaToGoBridge(lua_State *);
 static void gLua_pushbridge(lua_State*L)
 { return lua_pushcfunction(L,luaToGoBridge);}
@@ -66,20 +63,4 @@ func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 	C.gLua_pushbridge(this.lua)
 	this.SetField(-2, "__call")
 	this.SetMetaTable(-2)
-}
-
-func (this *Lua) Call(nargs, nresult int) error {
-	if C.gLua_pcall(this.lua, C.int(nargs), C.int(nresult), 0) != 0 {
-		if this.IsString(-1) {
-			msg, err := this.ToString(-1)
-			if err == nil {
-				return errors.New(msg)
-			} else {
-				return err
-			}
-		} else {
-			return errors.New("<Lua Error>")
-		}
-	}
-	return nil
 }

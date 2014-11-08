@@ -279,3 +279,24 @@ func (this *Lua) Load(fname string) error {
 	}
 	return nil
 }
+
+var lua_pcallk = luaDLL.NewProc("lua_pcallk")
+
+func (this *Lua) Call(nargs, nresult int) error {
+	rc, _, _ := lua_pcallk.Call(this.State(),
+		uintptr(nargs),
+		uintptr(nresult), 0, 0, 0)
+	if rc != 0 {
+		if this.IsString(-1) {
+			msg, err := this.ToString(-1)
+			if err == nil {
+				return errors.New(msg)
+			} else {
+				return err
+			}
+		} else {
+			return errors.New("<Lua Error>")
+		}
+	}
+	return nil
+}
