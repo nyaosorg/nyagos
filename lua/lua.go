@@ -1,6 +1,7 @@
 package lua
 
 import "errors"
+import "fmt"
 import "syscall"
 import "unsafe"
 
@@ -175,4 +176,85 @@ var lua_replace = luaDLL.NewProc("lua_replace")
 
 func (this *Lua) Replace(index int) {
 	lua_replace.Call(this.Id(), uintptr(index))
+}
+
+var lua_setglobal = luaDLL.NewProc("lua_setglobal")
+
+func (this *Lua) SetGlobal(str string) {
+	cstr, err := syscall.BytePtrFromString(str)
+	if err != nil {
+		panic(err.Error())
+	}
+	lua_setglobal.Call(this.Id(), uintptr(unsafe.Pointer(cstr)))
+}
+
+var lua_setfield = luaDLL.NewProc("lua_setfield")
+
+func (this *Lua) SetField(index int, str string) {
+	cstr, err := syscall.BytePtrFromString(str)
+	if err != nil {
+		panic(err.Error())
+	}
+	lua_setfield.Call(this.Id(), uintptr(index), uintptr(unsafe.Pointer(cstr)))
+}
+
+var lua_getfield = luaDLL.NewProc("lua_getfield")
+
+func (this *Lua) GetField(index int, str string) {
+	cstr, err := syscall.BytePtrFromString(str)
+	if err != nil {
+		panic(err.Error())
+	}
+	lua_getfield.Call(this.Id(), uintptr(index), uintptr(unsafe.Pointer(cstr)))
+}
+
+var lua_getglobal = luaDLL.NewProc("lua_getglobal")
+
+func (this *Lua) GetGlobal(str string) {
+	cstr, err := syscall.BytePtrFromString(str)
+	if err != nil {
+		panic(err.Error())
+	}
+	lua_getglobal.Call(this.Id(), uintptr(unsafe.Pointer(cstr)))
+}
+
+var lua_createtable = luaDLL.NewProc("lua_createtable")
+
+func (this *Lua) NewTable() {
+	lua_createtable.Call(this.Id(), 0, 0)
+}
+
+var lua_pushstring = luaDLL.NewProc("lua_pushstring")
+
+func (this *Lua) PushString(str string) {
+	cstr, err := syscall.BytePtrFromString(str)
+	if err != nil {
+		panic(err.Error())
+	}
+	lua_pushstring.Call(this.Id(), uintptr(unsafe.Pointer(cstr)))
+}
+
+var lua_tolstring = luaDLL.NewProc("lua_tolstring")
+
+func (this *Lua) ToAnsiString(index int) []byte {
+	var length uintptr
+	p, _, err := lua_tolstring.Call(this.Id(),
+		uintptr(index),
+		uintptr(unsafe.Pointer(&length)))
+	if err != nil || length <= 0 {
+		return []byte{}
+	} else {
+		return CGoBytes(p, length)
+	}
+}
+
+func (this *Lua) ToString(index int) (string, error) {
+	if !this.IsString(index) {
+		return "", fmt.Errorf("Lua.ToString(%d): Not String", index)
+	}
+	var length uintptr
+	p, _, _ := lua_tolstring.Call(this.Id(),
+		uintptr(index),
+		uintptr(unsafe.Pointer(&length)))
+	return CGoStringN(p, length), nil
 }

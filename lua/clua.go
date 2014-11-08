@@ -39,6 +39,14 @@ func New() *Lua {
 	return &Lua{C.luaL_newstate()}
 }
 
+func CGoBytes(p, length uintptr) []byte {
+	return C.GoBytes(unsafe.Pointer(p), C.int(length))
+}
+
+func CGoStringN(p, length uintptr) string {
+	return C.GoStringN((*C.char)(unsafe.Pointer(p)), C.int(length))
+}
+
 const REGISTORYINDEX = C.LUA_REGISTRYINDEX
 
 //export luaToGoBridge
@@ -48,30 +56,6 @@ func luaToGoBridge(lua *C.lua_State) int {
 	lua_remove.Call(uintptr(unsafe.Pointer(lua)), 1)
 	L := Lua{lua}
 	return int(f_.function(&L))
-}
-
-func (this *Lua) SetField(index int, str string) {
-	cstr := C.CString(str)
-	C.lua_setfield(this.lua, C.int(index), cstr)
-	C.free(unsafe.Pointer(cstr))
-}
-
-func (this *Lua) GetField(index int, str string) {
-	cstr := C.CString(str)
-	C.lua_getfield(this.lua, C.int(index), cstr)
-	C.free(unsafe.Pointer(cstr))
-}
-
-func (this *Lua) SetGlobal(str string) {
-	cstr := C.CString(str)
-	C.lua_setglobal(this.lua, cstr)
-	C.free(unsafe.Pointer(cstr))
-}
-
-func (this *Lua) GetGlobal(str string) {
-	cstr := C.CString(str)
-	C.lua_getglobal(this.lua, cstr)
-	C.free(unsafe.Pointer(cstr))
 }
 
 type goFunctionT struct {
@@ -86,29 +70,6 @@ func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 	C.gLua_pushbridge(this.lua)
 	this.SetField(-2, "__call")
 	this.SetMetaTable(-2)
-}
-
-func (this *Lua) ToString(index int) (string, error) {
-	if !this.IsString(index) {
-		return "", fmt.Errorf("Lua.ToString(%d): Not String", index)
-	}
-	var length C.size_t
-	p := C.lua_tolstring(this.lua, C.int(index), &length)
-	if p == nil {
-		return "", fmt.Errorf("Lua.ToString(%d): Empty", index)
-	} else {
-		return C.GoStringN(p, C.int(length)), nil
-	}
-}
-
-func (this *Lua) ToAnsiString(index int) []byte {
-	var length C.size_t
-	p := C.lua_tolstring(this.lua, C.int(index), &length)
-	if p == nil || length <= 0 {
-		return []byte{}
-	} else {
-		return C.GoBytes(unsafe.Pointer(p), C.int(length))
-	}
 }
 
 func (this *Lua) Load(fname string) error {
@@ -137,14 +98,4 @@ func (this *Lua) Call(nargs, nresult int) error {
 		}
 	}
 	return nil
-}
-
-func (this *Lua) NewTable() {
-	C.lua_createtable(this.lua, 0, 0)
-}
-
-func (this *Lua) PushString(str string) {
-	cstr := C.CString(str)
-	C.lua_pushstring(this.lua, cstr)
-	C.free(unsafe.Pointer(cstr))
 }
