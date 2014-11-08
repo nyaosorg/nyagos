@@ -25,7 +25,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 		this.L.PushString(arg1)
 		this.L.RawSetI(-2, i)
 	}
-	LuaInstanceToCmd[this.L.Id()] = cmd
+	LuaInstanceToCmd[this.L.State()] = cmd
 	err := this.L.Call(1, 0)
 	return interpreter.CONTINUE, err
 }
@@ -46,7 +46,7 @@ func ioLines(this *lua.Lua) int {
 }
 
 func ioLinesNext(this *lua.Lua) int {
-	cmd := LuaInstanceToCmd[this.Id()]
+	cmd := LuaInstanceToCmd[this.State()]
 
 	line := make([]byte, 0, 256)
 	var ch [1]byte

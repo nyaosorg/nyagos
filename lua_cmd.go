@@ -137,7 +137,7 @@ func cmdEval(L *lua.Lua) int {
 
 func cmdWrite(L *lua.Lua) int {
 	var out io.Writer = os.Stdout
-	cmd, cmdOk := LuaInstanceToCmd[L.Id()]
+	cmd, cmdOk := LuaInstanceToCmd[L.State()]
 	if cmdOk && cmd != nil && cmd.Stdout != nil {
 		out = cmd.Stdout
 	}
