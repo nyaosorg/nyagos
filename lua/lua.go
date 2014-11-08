@@ -126,6 +126,13 @@ func (this *Lua) PushLightUserData(p unsafe.Pointer) {
 	lua_pushlightuserdata.Call(this.State(), uintptr(p))
 }
 
+var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
+
+func (this *Lua) NewUserData(size uintptr) unsafe.Pointer {
+	area, _, _ := lua_newuserdata.Call(this.State(), size)
+	return unsafe.Pointer(area)
+}
+
 var lua_touserdata = luaDLL.NewProc("lua_touserdata")
 
 func (this *Lua) ToUserData(index int) unsafe.Pointer {

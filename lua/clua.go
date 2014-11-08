@@ -21,7 +21,6 @@ static void gLua_pushbridge(lua_State*L)
 */
 import "C"
 
-import "errors"
 import "unsafe"
 
 type Lua struct {
@@ -57,7 +56,7 @@ type goFunctionT struct {
 
 func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 	f_ := goFunctionT{f}
-	voidptr := C.lua_newuserdata(this.lua, C.size_t(unsafe.Sizeof(f_)))
+	voidptr := this.NewUserData(unsafe.Sizeof(f_))
 	*(*goFunctionT)(voidptr) = f_
 	this.NewTable()
 	C.gLua_pushbridge(this.lua)
