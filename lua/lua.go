@@ -7,8 +7,19 @@ import "unsafe"
 
 var luaDLL = syscall.NewLazyDLL("lua52")
 
+type Lua struct {
+	lua uintptr
+}
+
+var luaL_newstate = luaDLL.NewProc("luaL_newstate")
+
+func New() *Lua {
+	lua, _, _ := luaL_newstate.Call()
+	return &Lua{lua}
+}
+
 func (this *Lua) State() uintptr {
-	return uintptr(unsafe.Pointer(this.lua))
+	return this.lua
 }
 
 var luaL_openlibs = luaDLL.NewProc("luaL_openlibs")
@@ -306,4 +317,30 @@ func (this *Lua) Call(nargs, nresult int) error {
 		}
 	}
 	return nil
+}
+
+func luaToGoBridge(lua uintptr) int {
+	f, _, _ := lua_touserdata.Call(lua, 1)
+	f_ := *(*goFunctionT)(unsafe.Pointer(f))
+	lua_remove.Call(lua, 1)
+	L := Lua{lua}
+	return int(f_.function(&L))
+}
+
+type goFunctionT struct {
+	function func(*Lua) int
+}
+
+var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
+
+func (this *Lua) PushGoFunction(f func(L *Lua) int) {
+	f_ := goFunctionT{f}
+	voidptr := this.NewUserData(unsafe.Sizeof(f_))
+	*(*goFunctionT)(voidptr) = f_
+	this.NewTable()
+	lua_pushcclosure.Call(this.State(),
+		syscall.NewCallbackCDecl(luaToGoBridge),
+		0)
+	this.SetField(-2, "__call")
+	this.SetMetaTable(-2)
 }
