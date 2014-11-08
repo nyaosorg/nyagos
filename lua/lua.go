@@ -258,3 +258,24 @@ func (this *Lua) ToString(index int) (string, error) {
 		uintptr(unsafe.Pointer(&length)))
 	return CGoStringN(p, length), nil
 }
+
+var luaL_loadfilex = luaDLL.NewProc("luaL_loadfilex")
+
+func (this *Lua) Load(fname string) error {
+	cfname, err := syscall.BytePtrFromString(fname)
+	if err != nil {
+		return err
+	}
+	rc, _, _ := luaL_loadfilex.Call(this.State(),
+		uintptr(unsafe.Pointer(cfname)),
+		uintptr(0))
+	if rc != 0 {
+		msg, err := this.ToString(-1)
+		if err == nil {
+			return fmt.Errorf("%s: %s..", fname, msg)
+		} else {
+			return err
+		}
+	}
+	return nil
+}

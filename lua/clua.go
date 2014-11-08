@@ -18,9 +18,6 @@ from http://sourceforge.net/projects/luabinaries/files/5.2.3/Windows%20Libraries
 static int gLua_pcall(lua_State* L,int x,int y,int z)
 { return lua_pcall(L,x,y,z); }
 
-static int gLuaL_loadfile(lua_State* L,const char *filename)
-{ return luaL_loadfile(L,filename); }
-
 extern int luaToGoBridge(lua_State *);
 static void gLua_pushbridge(lua_State*L)
 { return lua_pushcfunction(L,luaToGoBridge);}
@@ -28,7 +25,6 @@ static void gLua_pushbridge(lua_State*L)
 import "C"
 
 import "errors"
-import "fmt"
 import "unsafe"
 
 type Lua struct {
@@ -70,18 +66,6 @@ func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 	C.gLua_pushbridge(this.lua)
 	this.SetField(-2, "__call")
 	this.SetMetaTable(-2)
-}
-
-func (this *Lua) Load(fname string) error {
-	if C.gLuaL_loadfile(this.lua, C.CString(fname)) != 0 {
-		msg, err := this.ToString(-1)
-		if err == nil {
-			return fmt.Errorf("%s: %s", fname, msg)
-		} else {
-			return err
-		}
-	}
-	return nil
 }
 
 func (this *Lua) Call(nargs, nresult int) error {
