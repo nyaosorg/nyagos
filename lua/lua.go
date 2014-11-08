@@ -238,10 +238,10 @@ var lua_tolstring = luaDLL.NewProc("lua_tolstring")
 
 func (this *Lua) ToAnsiString(index int) []byte {
 	var length uintptr
-	p, _, err := lua_tolstring.Call(this.State(),
+	p, _, _ := lua_tolstring.Call(this.State(),
 		uintptr(index),
 		uintptr(unsafe.Pointer(&length)))
-	if err != nil || length <= 0 {
+	if length <= 0 {
 		return []byte{}
 	} else {
 		return CGoBytes(p, length)
