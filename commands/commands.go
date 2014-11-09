@@ -12,16 +12,18 @@ var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.Next
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
 	"cls":     cmd_cls,
+	"del":     cmd_del,
+	"erase":   cmd_del,
 	"exit":    cmd_exit,
 	"history": history.CmdHistory,
 	"ls":      cmd_ls,
+	"md":      cmd_mkdir,
+	"mkdir":   cmd_mkdir,
 	"pwd":     cmd_pwd,
+	"rd":      cmd_rmdir,
+	"rmdir":   cmd_rmdir,
 	"set":     cmd_set,
 	"source":  cmd_source,
-	"rmdir":   cmd_rmdir,
-	"rd":      cmd_rmdir,
-	"mkdir":   cmd_mkdir,
-	"md":      cmd_mkdir,
 }
 
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
