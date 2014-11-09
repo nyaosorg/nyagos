@@ -24,9 +24,7 @@ On `%GOPATH%` folder,
     cd ..
     make.cmd get
 
-When windres.exe(MinGW) is ready,
-
-    make.cmd resource
+When windres.exe of MinGW is available, do `make.cmd resource` to create nyagos.syso from nyagos.ico.
 
     make.cmd
     make.cmd install INSTALLDIR
