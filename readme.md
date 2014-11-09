@@ -10,7 +10,6 @@ Required software
 -----------------
 
 * [go1.3.3 windows/386](http://golang.org)
-* [Mingw-Gcc 4.8.1-4](http://mingw.org)
 * [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 
 How to Build
@@ -24,6 +23,11 @@ On `%GOPATH%` folder,
     copy lua52.dll ..\..
     cd ..
     make.cmd get
+
+When windres.exe(MinGW) is ready,
+
+    make.cmd resource
+
     make.cmd
     make.cmd install INSTALLDIR
 
