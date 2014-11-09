@@ -5,9 +5,19 @@ import "fmt"
 import "syscall"
 import "unsafe"
 
-import "../dos"
-
 var luaDLL = syscall.NewLazyDLL("lua52")
+var msvcrt = syscall.NewLazyDLL("msvcrt")
+var memcpy = msvcrt.NewProc("memcpy")
+
+func CGoBytes(p, length uintptr) []byte {
+	buffer := make([]byte, length)
+	memcpy.Call(uintptr(unsafe.Pointer(&buffer[0])), p, length)
+	return buffer
+}
+
+func CGoStringN(p, length uintptr) string {
+	return string(CGoBytes(p, length))
+}
 
 type Lua struct {
 	lua uintptr
@@ -264,7 +274,7 @@ func (this *Lua) ToAnsiString(index int) []byte {
 	if length <= 0 {
 		return []byte{}
 	} else {
-		return dos.GoBytes(p, length)
+		return CGoBytes(p, length)
 	}
 }
 
@@ -276,7 +286,7 @@ func (this *Lua) ToString(index int) (string, error) {
 	p, _, _ := lua_tolstring.Call(this.State(),
 		uintptr(index),
 		uintptr(unsafe.Pointer(&length)))
-	return dos.GoStringN(p, length), nil
+	return CGoStringN(p, length), nil
 }
 
 var luaL_loadfilex = luaDLL.NewProc("luaL_loadfilex")
