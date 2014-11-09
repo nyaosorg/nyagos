@@ -11,7 +11,17 @@ import "path/filepath"
 var msvcrt = syscall.NewLazyDLL("msvcrt")
 var _chdrive = msvcrt.NewProc("_chdrive")
 var _wchdir = msvcrt.NewProc("_wchdir")
+var memcpy = msvcrt.NewProc("memcpy")
 
+func GoBytes(p, length uintptr) []byte {
+	buffer := make([]byte, length)
+	memcpy.Call(uintptr(unsafe.Pointer(&buffer[0])), p, length)
+	return buffer
+}
+
+func GoStringN(p, length uintptr) string {
+	return string(GoBytes(p, length))
+}
 func chdrive_(n rune) uintptr {
 	rc, _, _ := _chdrive.Call(uintptr(n & 0x1F))
 	return rc
