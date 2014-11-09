@@ -6,6 +6,18 @@ import "syscall"
 import "unsafe"
 
 var luaDLL = syscall.NewLazyDLL("lua52")
+var msvcrt = syscall.NewLazyDLL("msvcrt")
+var memcpy = msvcrt.NewProc("memcpy")
+
+func CGoBytes(p, length uintptr) []byte {
+	buffer := make([]byte, length)
+	memcpy.Call(uintptr(unsafe.Pointer(&buffer[0])), p, length)
+	return buffer
+}
+
+func CGoStringN(p, length uintptr) string {
+	return string(CGoBytes(p, length))
+}
 
 type Lua struct {
 	lua uintptr
