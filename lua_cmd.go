@@ -36,7 +36,7 @@ func cmdAlias(L *lua.Lua) int {
 		}
 	case lua.LUA_TFUNCTION:
 		regkey := "nyagos.alias." + key
-		L.SetField(lua.REGISTORYINDEX, regkey)
+		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
 	}
 	L.PushBool(true)

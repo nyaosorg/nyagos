@@ -82,7 +82,7 @@ func callKeyFunc(L *lua.Lua) int {
 }
 
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
-	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
+	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
 	this.L.NewTable()
 	pos := -1
 	var text bytes.Buffer
@@ -137,7 +137,7 @@ func cmdBindKey(L *lua.Lua) int {
 	switch L.GetType(-1) {
 	case lua.LUA_TFUNCTION:
 		regkey := "nyagos.bind." + key
-		L.SetField(lua.REGISTORYINDEX, regkey)
+		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
 			L.PushNil()
 			L.PushString(err.Error())

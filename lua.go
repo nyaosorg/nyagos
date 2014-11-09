@@ -19,7 +19,7 @@ func (this LuaFunction) String() string {
 }
 
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	this.L.GetField(lua.REGISTORYINDEX, this.registoryKey)
+	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
 	this.L.NewTable()
 	for i, arg1 := range cmd.Args {
 		this.L.PushString(arg1)
@@ -35,7 +35,7 @@ const original_io_lines = "original_io_lines"
 func ioLines(this *lua.Lua) int {
 	if this.IsString(1) {
 		// io.lines("FILENAME") --> use original io.lines
-		this.GetField(lua.REGISTORYINDEX, original_io_lines)
+		this.GetField(lua.LUA_REGISTRYINDEX, original_io_lines)
 		this.PushValue(1)
 		this.Call(1, 1)
 	} else {
@@ -120,10 +120,10 @@ func SetLuaFunctions(this *lua.Lua) {
 	this.Pop(1)                    // 0
 
 	// save io.lines as original_io_lines
-	this.GetGlobal("io")                                 // +1
-	this.GetField(-1, "lines")                           // +2
-	this.SetField(lua.REGISTORYINDEX, original_io_lines) // +1
-	this.Pop(1)                                          // 0
+	this.GetGlobal("io")                                    // +1
+	this.GetField(-1, "lines")                              // +2
+	this.SetField(lua.LUA_REGISTRYINDEX, original_io_lines) // +1
+	this.Pop(1)                                             // 0
 
 	// replace io.lines
 	this.GetGlobal("io")         // +1
