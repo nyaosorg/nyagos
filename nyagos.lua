@@ -69,8 +69,10 @@ local function include(fname)
     local chank,err=assert(loadfile(fname))
     if err then
         print(err)
-    else
+    elseif chank then
         chank()
+    else
+        print(fname .. ":fail to load")
     end
 end
 

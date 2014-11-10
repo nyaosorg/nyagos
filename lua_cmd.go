@@ -331,7 +331,7 @@ func cmdAccess(L *lua.Lua) int {
 	fi, err := os.Stat(path)
 
 	var result bool
-	if err != nil {
+	if err != nil || fi == nil {
 		result = false
 	} else {
 		switch {

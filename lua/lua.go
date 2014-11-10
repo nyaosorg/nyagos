@@ -10,12 +10,19 @@ var msvcrt = syscall.NewLazyDLL("msvcrt")
 var memcpy = msvcrt.NewProc("memcpy")
 
 func CGoBytes(p, length uintptr) []byte {
+	if length <= 0 {
+		return []byte{}
+	}
 	buffer := make([]byte, length)
 	memcpy.Call(uintptr(unsafe.Pointer(&buffer[0])), p, length)
 	return buffer
+	// return C.GoBytes(unsafe.Pointer(p),C.int(length))
 }
 
 func CGoStringN(p, length uintptr) string {
+	if length <= 0 {
+		return ""
+	}
 	return string(CGoBytes(p, length))
 }
 
