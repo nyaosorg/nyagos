@@ -1,8 +1,10 @@
 package conio
 
+import "os"
+import "os/signal"
 import "syscall"
-import "unsafe"
 import "unicode/utf16"
+import "unsafe"
 
 type inputRecordT struct {
 	eventType uint16
@@ -16,10 +18,6 @@ type inputRecordT struct {
 	// }
 	dwControlKeyState uint32
 }
-
-var buffer [10][2]uint16
-var readptr = 0
-var stacked = 0
 
 var createFile = kernel32.NewProc("CreateFileW")
 var getConsoleMode = kernel32.NewProc("GetConsoleMode")
@@ -36,45 +34,73 @@ var hConin, _, _ = createFile.Call(
 	FILE_ATTRIBUTE_NORMAL,
 	0)
 
-func GetKey() (rune, uint16) {
-	if readptr >= stacked {
-		readptr = 0
-		stacked = 0
-		for stacked <= 0 {
-			var numberOfEventsRead uint32
-			var events [len(buffer)]inputRecordT
-			var orgConMode uint32
+type keyInfo struct {
+	KeyCode  rune
+	ScanCode uint16
+}
 
-			getConsoleMode.Call(uintptr(hConin), uintptr(unsafe.Pointer(&orgConMode)))
-			setConsoleMode.Call(uintptr(hConin), 0)
-			readConsoleInput.Call(
-				uintptr(hConin),
-				uintptr(unsafe.Pointer(&events[0])),
-				uintptr(len(events)),
-				uintptr(unsafe.Pointer(&numberOfEventsRead)))
-			setConsoleMode.Call(uintptr(hConin), uintptr(orgConMode))
-			for i := uint32(0); i < numberOfEventsRead; i++ {
-				if events[i].eventType == KEY_EVENT && events[i].bKeyDown != 0 {
-					buffer[stacked][0] = events[i].unicodeChar
-					buffer[stacked][1] = events[i].wVirtualKeyCode
-					stacked++
-				} else {
-					if CtrlC {
-						buffer[stacked][0] = 3
-						buffer[stacked][1] = 0
-						stacked++
-						CtrlC = false
-					}
-				}
+func DisableCtrlC() {
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+	go func() {
+		for _ = range ch {
+			if keyPipe != nil {
+				go func() {
+					keyPipe <- keyInfo{3, 0}
+				}()
+			}
+		}
+	}()
+}
+
+var keyPipe chan keyInfo = nil
+
+func keyGoRuntine(pipe chan keyInfo) {
+	var numberOfEventsRead uint32
+	var events [10]inputRecordT
+	var orgConMode uint32
+
+	getConsoleMode.Call(uintptr(hConin),
+		uintptr(unsafe.Pointer(&orgConMode)))
+	setConsoleMode.Call(uintptr(hConin), uintptr(ENABLE_PROCESSED_INPUT))
+	readConsoleInput.Call(
+		uintptr(hConin),
+		uintptr(unsafe.Pointer(&events[0])),
+		uintptr(len(events)),
+		uintptr(unsafe.Pointer(&numberOfEventsRead)))
+	setConsoleMode.Call(uintptr(hConin), uintptr(orgConMode))
+	for i := uint32(0); i < numberOfEventsRead; i++ {
+		if events[i].eventType == KEY_EVENT && events[i].bKeyDown != 0 {
+			var keycode rune
+			if events[i].unicodeChar == 0 {
+				keycode = rune(0)
+			} else {
+				keycode = utf16.Decode([]uint16{events[i].unicodeChar})[0]
+			}
+			pipe <- keyInfo{
+				keycode,
+				events[i].wVirtualKeyCode,
 			}
 		}
 	}
-	rc := buffer[readptr]
-	readptr++
-	if rc[0] == 0 {
-		return rune(0), rc[1]
-	} else {
-		return (utf16.Decode([]uint16{rc[0]}))[0], rc[1]
+	// Not to read keyboard data on not requested time
+	// (ex. other application is running)
+	// shutdown goroutine.
+	pipe <- keyInfo{0, 0}
+}
+
+func GetKey() (rune, uint16) {
+	if keyPipe == nil {
+		keyPipe = make(chan keyInfo, 10)
+		go keyGoRuntine(keyPipe)
+	}
+	for {
+		keyInfo := <-keyPipe
+		if keyInfo.KeyCode != 0 || keyInfo.ScanCode != 0 {
+			return keyInfo.KeyCode, keyInfo.ScanCode
+		}
+		// When keyGoRuntine has shutdowned, restart.
+		go keyGoRuntine(keyPipe)
 	}
 }
 
