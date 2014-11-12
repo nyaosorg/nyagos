@@ -113,9 +113,11 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				var fd *os.File
 				var err error
 				if state.Redirect[2].IsAppend {
-					fd, err = os.OpenFile(state.Redirect[2].Path, os.O_APPEND, 0666)
+					fd, err = os.OpenFile(state.Redirect[2].Path,
+						os.O_APPEND, 0666)
 				} else {
-					fd, err = os.OpenFile(state.Redirect[2].Path, os.O_CREATE, 0666)
+					fd, err = os.OpenFile(state.Redirect[2].Path,
+						os.O_CREATE|os.O_TRUNC, 0666)
 				}
 				if err != nil {
 					return CONTINUE, err
