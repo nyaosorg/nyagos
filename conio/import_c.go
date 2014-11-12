@@ -1,0 +1,3 @@
+package conio
+
+import "C"
