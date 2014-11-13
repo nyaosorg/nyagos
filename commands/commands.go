@@ -11,6 +11,7 @@ var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.Next
 	".":       cmd_source,
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
+	"copy":    cmd_copy,
 	"cls":     cmd_cls,
 	"del":     cmd_del,
 	"erase":   cmd_del,

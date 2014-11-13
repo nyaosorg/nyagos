@@ -2,7 +2,6 @@ alias{
     assoc='%COMSPEC% /c assoc $*',
     attrib='%COMSPEC% /c attrib $*',
     echo=function(args) nyagos.write(table.concat(args,' ')..'\n') end,
-    copy='%COMSPEC% /c copy $*',
     dir='%COMSPEC% /c dir $*',
     mklink='%COMSPEC% /c mklink $*',
     move='%COMSPEC% /c move $*',
