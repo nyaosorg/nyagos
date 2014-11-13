@@ -4,7 +4,6 @@ alias{
     echo=function(args) nyagos.write(table.concat(args,' ')..'\n') end,
     dir='%COMSPEC% /c dir $*',
     mklink='%COMSPEC% /c mklink $*',
-    move='%COMSPEC% /c move $*',
     ren='%COMSPEC% /c ren $*',
     rename='%COMSPEC% /c rename $*',
     rem=function() end,

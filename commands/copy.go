@@ -8,6 +8,18 @@ import "../dos"
 import "../interpreter"
 
 func cmd_copy(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+	return interpreter.CONTINUE, cmd_xxxx(cmd, func(src, dst string) error {
+		return dos.Copy(src, dst, false)
+	})
+}
+
+func cmd_move(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+	return interpreter.CONTINUE, cmd_xxxx(cmd, func(src, dst string) error {
+		return dos.Move(src, dst)
+	})
+}
+
+func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) error {
 	switch len(cmd.Args) {
 	case 0, 1, 2:
 		fmt.Fprintf(cmd.Stderr,
@@ -22,20 +34,17 @@ func cmd_copy(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			dst = dos.Join(dst, filepath.Base(src))
 		}
 		fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
-		err = dos.Copy(src, dst, false)
-		if err != nil {
-			return interpreter.CONTINUE, err
-		}
+		return cmds(src, dst)
 	default:
 		for i, n := 1, len(cmd.Args)-1; i < n; i++ {
 			src := cmd.Args[i]
 			dst := dos.Join(cmd.Args[n], filepath.Base(src))
 			fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
-			err := dos.Copy(src, dst, false)
+			err := cmds(src, dst)
 			if err != nil {
-				return interpreter.CONTINUE, err
+				return err
 			}
 		}
 	}
-	return interpreter.CONTINUE, nil
+	return nil
 }
