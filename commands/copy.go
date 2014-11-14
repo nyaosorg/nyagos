@@ -10,7 +10,7 @@ import "../interpreter"
 
 func cmd_copy(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	return interpreter.CONTINUE, cmd_xxxx(cmd, func(src, dst string) error {
-		return dos.Copy(src, dst, true)
+		return dos.Copy(src, dst, false)
 	})
 }
 
@@ -25,7 +25,7 @@ func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) er
 	case 0, 1, 2:
 		fmt.Fprintf(cmd.Stderr,
 			"Usage: %s SOURCE-FILENAME DESITINATE-FILENAME\n"+
-			"       %s FILENAMES... DESINATE-DIRECTORY\n",
+				"       %s FILENAMES... DESINATE-DIRECTORY\n",
 			cmd.Args[0], cmd.Args[0])
 	case 3:
 		src := cmd.Args[1]
@@ -38,11 +38,9 @@ func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) er
 		fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
 		if fi != nil && err == nil {
 			fmt.Fprintf(cmd.Stderr, "%s: override? [Yes/No] ", dst)
-			switch conio.GetCh() {
-			case 'y', 'Y':
-				fmt.Fprintln(cmd.Stderr)
-			default:
-				fmt.Fprintln(cmd.Stderr, " -> canceled")
+			ch := conio.GetCh()
+			fmt.Fprintf(cmd.Stderr, "%c\n", ch)
+			if ch != 'y' || ch != 'Y' {
 				return nil
 			}
 		}
@@ -60,10 +58,10 @@ func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) er
 						"%s: override? [Yes/No/All/Quit] ",
 						dst)
 					ch := conio.GetCh()
-					fmt.Fprintln(cmd.Stderr)
+					fmt.Fprintf(cmd.Stderr, "%c\n", ch)
 					switch ch {
 					case 'y', 'Y':
-						;
+
 					case 'a', 'A':
 						all = true
 					case 'q', 'Q':

@@ -6,7 +6,7 @@ import "unsafe"
 var copyFile = kernel32.NewProc("CopyFileW")
 var moveFile = kernel32.NewProc("MoveFileW")
 
-func Copy(src string, dst string, override bool) error {
+func Copy(src string, dst string, isFailIfExists bool) error {
 	cSrc, cSrcErr := syscall.UTF16FromString(src)
 	if cSrcErr != nil {
 		return cSrcErr
@@ -15,16 +15,16 @@ func Copy(src string, dst string, override bool) error {
 	if cDstErr != nil {
 		return cDstErr
 	}
-	var override_ uintptr
-	if override {
-		override_ = 1
+	var isFailIfExists_ uintptr
+	if isFailIfExists {
+		isFailIfExists_ = 1
 	} else {
-		override_ = 0
+		isFailIfExists_ = 0
 	}
 	rc, _, err := copyFile.Call(
 		uintptr(unsafe.Pointer(&cSrc[0])),
 		uintptr(unsafe.Pointer(&cDst[0])),
-		override_)
+		isFailIfExists_)
 	if rc != 0 {
 		return nil
 	} else {
