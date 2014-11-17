@@ -150,7 +150,7 @@ func main() {
 			fmt.Fprintln(os.Stdout, line)
 		}
 		if line == "" {
-			history.ResetPointer();
+			history.ResetPointer()
 			continue
 		}
 		if line != history.LastHistory() {
