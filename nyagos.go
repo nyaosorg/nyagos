@@ -105,6 +105,7 @@ func main() {
 	os.Mkdir(appData, 0777)
 	histPath := filepath.Join(appData, "nyagos.history")
 	history.Load(histPath)
+	history.Save(histPath) // cut over max-line
 
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
