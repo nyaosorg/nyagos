@@ -68,7 +68,7 @@ func KeyFuncHistoryDown(this *readline.Buffer) readline.Result {
 
 func Push(input string) {
 	histories = append(histories, input)
-	pointor = len(histories)
+	ResetPointer();
 }
 
 func Replace(line string) (string, bool) {
@@ -204,6 +204,11 @@ func Replace(line string) (string, bool) {
 			buffer.WriteRune(ch)
 		}
 	}
+
+	if isReplaced {
+		ResetPointer();
+	}
+
 	return buffer.String(), isReplaced
 }
 
@@ -340,4 +345,8 @@ func Load(path string) error {
 		histories = append(histories, sc.Text())
 	}
 	return nil
+}
+
+func ResetPointer() {
+	pointor = len(histories)
 }
