@@ -12,10 +12,15 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	all := false
 	for i := 1; i < n; i++ {
 		path := cmd.Args[i]
-		if _, err := os.Stat(path); err != nil {
-			fmt.Fprintf(cmd.Stdout,
-				"(%d/%d) %s: %s\n",
-				i, n-1, path, err.Error())
+		stat, statErr := os.Stat(path)
+		if statErr != nil {
+			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: %s\n",
+				i, n-1, path, statErr.Error())
+			continue
+		}
+		if mode := stat.Mode(); mode.IsDir() {
+			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s is directory and passed.\n",
+				i, n-1, path)
 			continue
 		}
 		if all {
@@ -28,6 +33,7 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			fmt.Fprintf(cmd.Stdout, "%c ", ch)
 			switch ch {
 			case 'q', 'Q':
+				fmt.Fprintln(cmd.Stdout)
 				return interpreter.CONTINUE, nil
 			case 'y', 'Y':
 				break
