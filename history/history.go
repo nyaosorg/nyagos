@@ -11,7 +11,7 @@ import "../conio/readline"
 import "../interpreter"
 
 var histories = make([]string, 0)
-var pointor = 0
+var pointer = 0
 
 func Get(n int) string {
 	if n < 0 {
@@ -37,13 +37,13 @@ func LastHistory() string {
 }
 
 func KeyFuncHistoryUp(this *readline.Buffer) readline.Result {
-	if pointor <= 0 {
-		pointor = len(histories)
+	if pointer <= 0 {
+		pointer = len(histories)
 	}
-	pointor -= 1
+	pointer -= 1
 	readline.KeyFuncClear(this)
-	if pointor >= 0 {
-		this.InsertString(0, histories[pointor])
+	if pointer >= 0 {
+		this.InsertString(0, histories[pointer])
 		this.ViewStart = 0
 		this.Cursor = 0
 		readline.KeyFuncTail(this)
@@ -52,13 +52,13 @@ func KeyFuncHistoryUp(this *readline.Buffer) readline.Result {
 }
 
 func KeyFuncHistoryDown(this *readline.Buffer) readline.Result {
-	pointor += 1
-	if pointor >= len(histories) {
-		pointor = 0
+	pointer += 1
+	if pointer >= len(histories) {
+		pointer = 0
 	}
 	readline.KeyFuncClear(this)
-	if pointor < len(histories) {
-		this.InsertString(0, histories[pointor])
+	if pointer < len(histories) {
+		this.InsertString(0, histories[pointer])
 		this.ViewStart = 0
 		this.Cursor = 0
 		readline.KeyFuncTail(this)
@@ -348,5 +348,5 @@ func Load(path string) error {
 }
 
 func ResetPointer() {
-	pointor = len(histories)
+	pointer = len(histories)
 }
