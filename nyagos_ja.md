@@ -128,6 +128,15 @@ NYAGOS を終了します。
 
 * `PROMPT` … プロンプトの文字列を設定します。`$P` 等のマクロ文字はCMD.EXE と同じです。shiena 様開発のモジュールによりエスケープシーケンスが使えます。
 
+### `copy SOURCE-FILENAME DESTINATE-FILENAME`
+### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
+### `move OLD-FILENAME NEW-FILENAME`
+### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
+### `del FILE(S)...`
+### `erase FILE(S)...`
+
+これらの内蔵版は、上書きや削除の際に常にプロンプトで実行可否を問い合わせます。
+
 ### `source バッチファイル名`
 
 バッチファイルを実行します。CMD.EXE を使って実行しているので、

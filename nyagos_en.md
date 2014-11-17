@@ -112,6 +112,16 @@ you should `set "ENV=VAR"`.
 
 * `PROMPT` ... Escape sequences are avaliable.
 
+### `copy SOURCE-FILENAME DESTINATE-FILENAME`
+### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
+### `move OLD-FILENAME NEW-FILENAME`
+### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
+### `del FILE(S)...`
+### `erase FILE(S)...`
+
+These built-in commands are always asking with prompt when files are override or removed.
+
+
 #### Special Variable
 
 * `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
