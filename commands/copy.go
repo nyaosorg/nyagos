@@ -8,19 +8,28 @@ import "../conio"
 import "../dos"
 import "../interpreter"
 
+type actionT struct {
+	Do      func(src, dst string) error
+	IsDirOk bool
+}
+
 func cmd_copy(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	return interpreter.CONTINUE, cmd_xxxx(cmd, func(src, dst string) error {
-		return dos.Copy(src, dst, false)
-	})
+	return interpreter.CONTINUE,
+		cmd_xxxx(cmd, actionT{
+			func(src, dst string) error {
+				return dos.Copy(src, dst, false)
+			}, false})
 }
 
 func cmd_move(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	return interpreter.CONTINUE, cmd_xxxx(cmd, func(src, dst string) error {
-		return dos.Move(src, dst)
-	})
+	return interpreter.CONTINUE,
+		cmd_xxxx(cmd, actionT{
+			func(src, dst string) error {
+				return dos.Move(src, dst)
+			}, true})
 }
 
-func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) error {
+func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
 	switch len(cmd.Args) {
 	case 0, 1, 2:
 		fmt.Fprintf(cmd.Stderr,
@@ -30,6 +39,13 @@ func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) er
 	case 3:
 		src := cmd.Args[1]
 		dst := cmd.Args[2]
+		if !action.IsDirOk {
+			fi, err := os.Stat(src)
+			if err == nil && fi.Mode().IsDir() {
+				fmt.Fprintf(cmd.Stderr, "%s is directory and passed.\n", src)
+				return nil
+			}
+		}
 		fi, err := os.Stat(dst)
 		if err == nil && fi != nil && fi.Mode().IsDir() {
 			dst = dos.Join(dst, filepath.Base(src))
@@ -44,12 +60,20 @@ func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) er
 				return nil
 			}
 		}
-		return cmds(src, dst)
+		return action.Do(src, dst)
 	default:
 		all := false
 		for i, n := 1, len(cmd.Args)-1; i < n; i++ {
 			src := cmd.Args[i]
 			dst := dos.Join(cmd.Args[n], filepath.Base(src))
+			if !action.IsDirOk {
+				fi, err := os.Stat(src)
+				if err == nil && fi.Mode().IsDir() {
+					fmt.Fprintf(cmd.Stderr, "%s is directory and passed.\n", src)
+					continue
+				}
+			}
+
 			fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
 			if !all {
 				fi, err := os.Stat(dst)
@@ -71,7 +95,7 @@ func cmd_xxxx(cmd *interpreter.Interpreter, cmds func(src, dst string) error) er
 					}
 				}
 			}
-			err := cmds(src, dst)
+			err := action.Do(src, dst)
 			if err != nil {
 				return err
 			}
