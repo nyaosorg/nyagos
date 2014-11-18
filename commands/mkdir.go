@@ -9,6 +9,10 @@ import "../dos"
 import "../interpreter"
 
 func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+	if len(cmd.Args) <= 1 {
+		fmt.Println("Usage: mkdir [/s] DIRECTORIES...")
+		return interpreter.CONTINUE, nil
+	}
 	for _, arg1 := range cmd.Args[1:] {
 		err := syscall.Mkdir(arg1, 0777)
 		if err != nil {
@@ -19,6 +23,10 @@ func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 }
 
 func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+	if len(cmd.Args) <= 1 {
+		fmt.Println("Usage: rmdir [/s] DIRECTORIES...")
+		return interpreter.CONTINUE, nil
+	}
 	s_option := false
 	message := "%s: Rmdir Are you sure? [Yes/No/Quit] "
 	for _, arg1 := range cmd.Args[1:] {

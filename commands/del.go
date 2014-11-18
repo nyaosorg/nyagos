@@ -9,6 +9,11 @@ import "../conio"
 
 func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	n := len(cmd.Args)
+	if n <= 1 {
+		fmt.Fprintln(cmd.Stderr, "Usage: del   FILE(S)...")
+		fmt.Fprintln(cmd.Stderr, "       erase FILE(S)...")
+		return interpreter.CONTINUE, nil
+	}
 	all := false
 	for i := 1; i < n; i++ {
 		path := cmd.Args[i]
