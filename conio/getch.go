@@ -1,5 +1,6 @@
 package conio
 
+import "fmt"
 import "os"
 import "os/signal"
 import "syscall"
@@ -19,20 +20,19 @@ type inputRecordT struct {
 	dwControlKeyState uint32
 }
 
-var createFile = kernel32.NewProc("CreateFileW")
 var getConsoleMode = kernel32.NewProc("GetConsoleMode")
 var setConsoleMode = kernel32.NewProc("SetConsoleMode")
 var readConsoleInput = kernel32.NewProc("ReadConsoleInputW")
 
-var conioS, _ = syscall.UTF16FromString("CONIN$")
-var hConin, _, _ = createFile.Call(
-	uintptr(unsafe.Pointer(&conioS[0])),
-	GENERIC_READ,
-	FILE_SHARE_READ,
-	0,
-	OPEN_EXISTING,
-	FILE_ATTRIBUTE_NORMAL,
-	0)
+var hConin syscall.Handle
+
+func init() {
+	var err error
+	hConin, err = syscall.Open("CONIN$", syscall.O_RDWR, 0)
+	if err != nil {
+		panic(fmt.Sprintf("conio: %v", err))
+	}
+}
 
 type keyInfo struct {
 	KeyCode  rune
