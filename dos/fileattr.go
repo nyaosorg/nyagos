@@ -1,27 +1,32 @@
 package dos
 
-import "fmt"
-import "unsafe"
 import "syscall"
 
-var getFileAttributes = kernel32.NewProc("GetFileAttributesW")
+func GetFileAttributes(path string) (uint32, error) {
+	cpath, cpathErr := syscall.UTF16PtrFromString(path)
+	if cpathErr != nil {
+		return 0, cpathErr
+	}
+	return syscall.GetFileAttributes(cpath)
+}
+
+func SetFileAttributes(path string, attr uint32) error {
+	cpath, cpathErr := syscall.UTF16PtrFromString(path)
+	if cpathErr != nil {
+		return cpathErr
+	}
+	return syscall.SetFileAttributes(cpath, attr)
+}
 
 // Windows original attribute.
 type FileAttr struct {
-	attr uintptr
+	attr uint32
 }
 
 // Get Windows original attributes such as Hidden,Reparse and so on.
 func NewFileAttr(path string) (*FileAttr, error) {
-	cpath, err := syscall.UTF16FromString(path)
-	if err != nil {
-		return &FileAttr{0}, err
-	} else if cpath == nil {
-		return &FileAttr{0}, fmt.Errorf("sysCall.UTF16FromString(\"%s\") failed", path)
-	} else {
-		rc, _, _ := getFileAttributes.Call(uintptr(unsafe.Pointer(&cpath[0])))
-		return &FileAttr{rc}, nil
-	}
+	attr, attrErr := GetFileAttributes(path)
+	return &FileAttr{attr}, attrErr
 }
 
 func (this *FileAttr) IsReparse() bool {

@@ -20,14 +20,17 @@ func Truncate(folder string, out io.Writer) error {
 			continue
 		}
 		fullpath := Join(folder, f.Name())
+		var err error
 		if f.IsDir() {
 			fmt.Fprintf(out, "%s\\\n", fullpath)
-			if err := Truncate(fullpath, out); err != nil {
-				return fmt.Errorf("%s: %s", fullpath, err.Error())
-			}
+			err = Truncate(fullpath, out)
 		} else {
 			fmt.Fprintln(out, fullpath)
-			syscall.Unlink(fullpath)
+			SetFileAttributes(fullpath, FILE_ATTRIBUTE_NORMAL)
+			err = syscall.Unlink(fullpath)
+		}
+		if err != nil {
+			return fmt.Errorf("%s: %s", fullpath, err.Error())
 		}
 	}
 	if err := syscall.Rmdir(folder); err != nil {
