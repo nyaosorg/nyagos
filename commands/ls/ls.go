@@ -55,8 +55,8 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	mode := status.Mode()
 	perm := mode.Perm()
 	name := status.Name()
-	attr, attrErr := dos.NewFileAttr(dos.Join(folder, status.Name()))
-	if attrErr == nil && attr.IsReparse() {
+	attr, attrErr := dos.GetFileAttributes(dos.Join(folder, status.Name()))
+	if attrErr == nil && (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		indicator = "@"
 	}
 	if (perm & 4) > 0 {
@@ -85,7 +85,9 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	} else {
 		io.WriteString(out, "-")
 	}
-	if attr != nil && attr.IsHidden() && (flag&O_COLOR) != 0 {
+	if attrErr == nil &&
+		(attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
+		(flag&O_COLOR) != 0 {
 		prefix = ANSI_HIDDEN
 		postfix = ANSI_END
 	}
@@ -139,13 +141,17 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				indicator = "*"
 			}
 		}
-		attr, attrErr := dos.NewFileAttr(dos.Join(folder, val.Name()))
-		if attrErr == nil && attr.IsHidden() && (flag&O_COLOR) != 0 {
-			prefix = ANSI_HIDDEN
-			postfix = ANSI_END
-		}
-		if attrErr == nil && attr.IsReparse() && (flag&O_INDICATOR) != 0 {
-			indicator = "@"
+		attr, attrErr := dos.GetFileAttributes(dos.Join(folder, val.Name()))
+		if attrErr == nil {
+			if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
+				(flag&O_COLOR) != 0 {
+				prefix = ANSI_HIDDEN
+				postfix = ANSI_END
+			}
+			if (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
+				(flag&O_INDICATOR) != 0 {
+				indicator = "@"
+			}
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
@@ -208,9 +214,14 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 		folders = make([]string, 0)
 	}
 	for _, f := range nodesArray.nodes {
-		attr, attrErr := dos.NewFileAttr(dos.Join(folder_, f.Name()))
-		if (strings.HasPrefix(f.Name(), ".") || (attrErr == nil && attr.IsHidden())) && (flag&O_ALL) == 0 {
-			continue
+		if (flag & O_ALL) == 0 {
+			if strings.HasPrefix(f.Name(), ".") {
+				continue
+			}
+			attr, err := dos.GetFileAttributes(dos.Join(folder_, f.Name()))
+			if err == nil && (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
+				continue
+			}
 		}
 		if f.IsDir() && folders != nil {
 			folders = append(folders, f.Name())
