@@ -10,7 +10,7 @@ type inputRecordT struct {
 	eventType uint16
 	_         uint16
 	// _KEY_EVENT_RECORD {
-	bKeyDown         uintptr
+	bKeyDown         int32
 	wRepeartCount    uint16
 	wVirtualKeyCode  uint16
 	wVirtualScanCode uint16
