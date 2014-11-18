@@ -5,6 +5,7 @@ import "os"
 import "syscall"
 
 import "../conio"
+import "../dos"
 import "../interpreter"
 
 func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
@@ -49,7 +50,8 @@ func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			continue
 		}
 		if s_option {
-			err = os.RemoveAll(arg1)
+			fmt.Fprintln(cmd.Stdout)
+			err = dos.Truncate(arg1, cmd.Stdout)
 		} else {
 			err = syscall.Rmdir(arg1)
 		}
