@@ -1,13 +1,11 @@
 package conio
 
-import (
-	"fmt"
-	"os"
-	"os/signal"
-	"syscall"
-	"unicode/utf16"
-	"unsafe"
-)
+import "fmt"
+import "os"
+import "os/signal"
+import "syscall"
+import "unicode/utf16"
+import "unsafe"
 
 type inputRecordT struct {
 	eventType uint16
