@@ -161,6 +161,8 @@ func main() {
 				fmt.Fprintln(fd, line)
 				fd.Close()
 			}
+		} else {
+			history.ResetPointer()
 		}
 
 		stackPos := L.GetTop()

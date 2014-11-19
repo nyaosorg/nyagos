@@ -204,11 +204,6 @@ func Replace(line string) (string, bool) {
 			buffer.WriteRune(ch)
 		}
 	}
-
-	if isReplaced {
-		ResetPointer()
-	}
-
 	return buffer.String(), isReplaced
 }
 
