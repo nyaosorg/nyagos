@@ -7,6 +7,7 @@ import "path/filepath"
 import "regexp"
 import "sort"
 import "strings"
+import "syscall"
 
 import "../../conio"
 import "../../dos"
@@ -55,8 +56,10 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	mode := status.Mode()
 	perm := mode.Perm()
 	name := status.Name()
-	attr, attrErr := dos.GetFileAttributes(dos.Join(folder, status.Name()))
-	if attrErr == nil && (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
+	sys := status.Sys().(*syscall.Win32FileAttributeData)
+	attr := sys.FileAttributes
+
+	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		indicator = "@"
 	}
 	if (perm & 4) > 0 {
@@ -85,8 +88,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	} else {
 		io.WriteString(out, "-")
 	}
-	if attrErr == nil &&
-		(attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
+	if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
 		(flag&O_COLOR) != 0 {
 		prefix = ANSI_HIDDEN
 		postfix = ANSI_END
@@ -141,17 +143,16 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				indicator = "*"
 			}
 		}
-		attr, attrErr := dos.GetFileAttributes(dos.Join(folder, val.Name()))
-		if attrErr == nil {
-			if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
-				(flag&O_COLOR) != 0 {
-				prefix = ANSI_HIDDEN
-				postfix = ANSI_END
-			}
-			if (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
-				(flag&O_INDICATOR) != 0 {
-				indicator = "@"
-			}
+		sys := val.Sys().(*syscall.Win32FileAttributeData)
+		attr := sys.FileAttributes
+		if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
+			(flag&O_COLOR) != 0 {
+			prefix = ANSI_HIDDEN
+			postfix = ANSI_END
+		}
+		if (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
+			(flag&O_INDICATOR) != 0 {
+			indicator = "@"
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
@@ -218,8 +219,9 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 			if strings.HasPrefix(f.Name(), ".") {
 				continue
 			}
-			attr, err := dos.GetFileAttributes(dos.Join(folder_, f.Name()))
-			if err == nil && (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
+			sys := f.Sys().(*syscall.Win32FileAttributeData)
+			attr := sys.FileAttributes
+			if (attr & dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
 				continue
 			}
 		}
