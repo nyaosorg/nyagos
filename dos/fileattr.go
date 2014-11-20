@@ -1,6 +1,11 @@
 package dos
 
+import "os"
 import "syscall"
+
+func GetFileAttributesFromFileInfo(status os.FileInfo) uint32 {
+	return status.Sys().(*syscall.Win32FileAttributeData).FileAttributes
+}
 
 func GetFileAttributes(path string) (uint32, error) {
 	cpath, cpathErr := syscall.UTF16PtrFromString(path)
