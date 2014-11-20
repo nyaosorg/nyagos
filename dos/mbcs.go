@@ -1,7 +1,9 @@
 package dos
 
-import "syscall"
-import "unsafe"
+import (
+	"syscall"
+	"unsafe"
+)
 
 var multiByteToWideChar = kernel32.NewProc("MultiByteToWideChar")
 var wideCharToMultiByte = kernel32.NewProc("WideCharToMultiByte")

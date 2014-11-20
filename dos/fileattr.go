@@ -1,7 +1,9 @@
 package dos
 
-import "os"
-import "syscall"
+import (
+	"os"
+	"syscall"
+)
 
 func GetFileAttributesFromFileInfo(status os.FileInfo) uint32 {
 	return status.Sys().(*syscall.Win32FileAttributeData).FileAttributes

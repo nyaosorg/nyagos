@@ -1,23 +1,25 @@
 package main
 
-import "fmt"
-import "io"
-import "os"
-import "path/filepath"
-import "regexp"
-import "strings"
+import (
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"regexp"
+	"strings"
 
-import "github.com/shiena/ansicolor"
+	"github.com/shiena/ansicolor"
 
-import "./alias"
-import "./commands"
-import "./completion"
-import "./conio"
-import "./conio/readline"
-import "./dos"
-import "./history"
-import "./interpreter"
-import "./lua"
+	"./alias"
+	"./commands"
+	"./completion"
+	"./conio"
+	"./conio/readline"
+	"./dos"
+	"./history"
+	"./interpreter"
+	"./lua"
+)
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 

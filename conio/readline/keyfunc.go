@@ -1,11 +1,13 @@
 package readline
 
-import "bytes"
-import "fmt"
-import "strings"
+import (
+	"bytes"
+	"fmt"
+	"strings"
 
-import "github.com/atotto/clipboard"
-import ".."
+	".."
+	"github.com/atotto/clipboard"
+)
 
 func KeyFuncPass(this *Buffer) Result {
 	return CONTINUE

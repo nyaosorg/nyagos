@@ -1,12 +1,14 @@
 package commands
 
-import "fmt"
-import "os"
-import "syscall"
+import (
+	"fmt"
+	"os"
+	"syscall"
 
-import "../conio"
-import "../dos"
-import "../interpreter"
+	"../conio"
+	"../dos"
+	"../interpreter"
+)
 
 func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) <= 1 {

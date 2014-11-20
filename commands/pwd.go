@@ -1,8 +1,11 @@
 package commands
 
-import "fmt"
-import "os"
-import "../interpreter"
+import (
+	"fmt"
+	"os"
+
+	"../interpreter"
+)
 
 func cmd_pwd(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	wd, _ := os.Getwd()

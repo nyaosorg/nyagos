@@ -1,9 +1,11 @@
 package dos
 
-import "os"
-import "strings"
-import "syscall"
-import "unsafe"
+import (
+	"os"
+	"strings"
+	"syscall"
+	"unsafe"
+)
 
 var getModuleFileName = kernel32.NewProc("GetModuleFileNameW")
 

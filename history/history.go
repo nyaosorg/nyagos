@@ -1,14 +1,16 @@
 package history
 
-import "bufio"
-import "bytes"
-import "fmt"
-import "os"
-import "strconv"
-import "strings"
+import (
+	"bufio"
+	"bytes"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
 
-import "../conio/readline"
-import "../interpreter"
+	"../conio/readline"
+	"../interpreter"
+)
 
 var histories = make([]string, 0)
 var pointer = 0

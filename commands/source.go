@@ -1,13 +1,15 @@
 package commands
 
-import "bufio"
-import "path/filepath"
-import "fmt"
-import "os"
-import "os/exec"
-import "strings"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 
-import "../interpreter"
+	"../interpreter"
+)
 
 func cmd_source(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) < 2 {

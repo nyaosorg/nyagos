@@ -1,11 +1,13 @@
 package commands
 
-import "strings"
-import "regexp"
+import (
+	"regexp"
+	"strings"
 
-import "../history"
-import "../interpreter"
-import "../dos"
+	"../dos"
+	"../history"
+	"../interpreter"
+)
 
 var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.NextT, error){
 	".":       cmd_source,

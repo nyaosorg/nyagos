@@ -1,12 +1,14 @@
 package interpreter
 
-import "bytes"
-import "os"
-import "regexp"
-import "strconv"
-import "unicode"
+import (
+	"bytes"
+	"os"
+	"regexp"
+	"strconv"
+	"unicode"
 
-import "../dos"
+	"../dos"
+)
 
 type RedirectT struct {
 	Path     string

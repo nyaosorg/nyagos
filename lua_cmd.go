@@ -1,20 +1,22 @@
 package main
 
-import "fmt"
-import "io"
-import "os"
-import "os/exec"
-import "strings"
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"os"
+	"os/exec"
+	"strings"
 
-import "./alias"
-import "./conio"
-import "./dos"
-import "./history"
-import "./interpreter"
-import "./lua"
-import "bytes"
+	"github.com/shiena/ansicolor"
 
-import "github.com/shiena/ansicolor"
+	"./alias"
+	"./conio"
+	"./dos"
+	"./history"
+	"./interpreter"
+	"./lua"
+)
 
 func cmdAlias(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)

@@ -1,17 +1,19 @@
 package completion
 
-import "bytes"
-import "fmt"
-import "os"
-import "path"
-import "path/filepath"
-import "regexp"
-import "strings"
-import "unicode"
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"path"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"unicode"
 
-import "../conio"
-import "../conio/readline"
-import "../dos"
+	"../conio"
+	"../conio/readline"
+	"../dos"
+)
 
 func isExecutable(path string) bool {
 	return dos.IsExecutableSuffix(filepath.Ext(path))

@@ -1,11 +1,13 @@
 package commands
 
-import "fmt"
-import "os"
-import "syscall"
+import (
+	"fmt"
+	"os"
+	"syscall"
 
-import "../interpreter"
-import "../conio"
+	"../conio"
+	"../interpreter"
+)
 
 func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	n := len(cmd.Args)

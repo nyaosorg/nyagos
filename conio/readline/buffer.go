@@ -1,11 +1,13 @@
 package readline
 
-import "bufio"
-import "bytes"
-import "os"
-import "unicode"
+import (
+	"bufio"
+	"bytes"
+	"os"
+	"unicode"
 
-import ".."
+	".."
+)
 
 var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)
 

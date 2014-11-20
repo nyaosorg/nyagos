@@ -1,9 +1,11 @@
 package lua
 
-import "errors"
-import "fmt"
-import "syscall"
-import "unsafe"
+import (
+	"errors"
+	"fmt"
+	"syscall"
+	"unsafe"
+)
 
 var luaDLL = syscall.NewLazyDLL("lua52")
 

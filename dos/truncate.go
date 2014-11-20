@@ -1,9 +1,11 @@
 package dos
 
-import "fmt"
-import "io"
-import "os"
-import "syscall"
+import (
+	"fmt"
+	"io"
+	"os"
+	"syscall"
+)
 
 func Truncate(folder string, out io.Writer) error {
 	attr, attrErr := GetFileAttributes(folder)

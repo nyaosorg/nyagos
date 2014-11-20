@@ -1,12 +1,14 @@
 package dos
 
-import "fmt"
-import "regexp"
-import "strings"
-import "unicode"
-import "syscall"
-import "unsafe"
-import "path/filepath"
+import (
+	"fmt"
+	"path/filepath"
+	"regexp"
+	"strings"
+	"syscall"
+	"unicode"
+	"unsafe"
+)
 
 var msvcrt = syscall.NewLazyDLL("msvcrt")
 var _chdrive = msvcrt.NewProc("_chdrive")

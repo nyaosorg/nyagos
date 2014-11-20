@@ -1,9 +1,11 @@
 package main
 
-import "fmt"
-import "os"
+import (
+	"fmt"
+	"os"
 
-import ".."
+	".."
+)
 
 func main() {
 	err := ls.Main(os.Args[1:], os.Stdout)

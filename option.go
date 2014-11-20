@@ -1,10 +1,12 @@
 package main
 
-import "fmt"
-import "os"
+import (
+	"fmt"
+	"os"
 
-import "./interpreter"
-import "./lua"
+	"./interpreter"
+	"./lua"
+)
 
 func OptionParse(L *lua.Lua, getArg func() (string, bool)) bool {
 	for {

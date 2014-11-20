@@ -1,13 +1,15 @@
 package main
 
-import "bytes"
-import "fmt"
-import "os"
-import "strings"
-import "unsafe"
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"strings"
+	"unsafe"
 
-import "./conio/readline"
-import "./lua"
+	"./conio/readline"
+	"./lua"
+)
 
 type KeyLuaFuncT struct {
 	L            *lua.Lua

@@ -1,11 +1,13 @@
 package main
 
-import "fmt"
-import "os"
+import (
+	"fmt"
+	"os"
 
-import "./dos"
-import "./interpreter"
-import "./lua"
+	"./dos"
+	"./interpreter"
+	"./lua"
+)
 
 type LuaFunction struct {
 	L            *lua.Lua

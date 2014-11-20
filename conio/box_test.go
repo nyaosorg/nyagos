@@ -1,7 +1,9 @@
 package conio
 
-import "os"
-import "testing"
+import (
+	"os"
+	"testing"
+)
 
 func TestBoxPrint(t *testing.T) {
 	BoxPrint([]string{

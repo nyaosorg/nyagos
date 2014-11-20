@@ -1,9 +1,11 @@
 package interpreter
 
-import "io"
-import "os"
-import "os/exec"
-import "regexp"
+import (
+	"io"
+	"os"
+	"os/exec"
+	"regexp"
+)
 
 type NextT int
 

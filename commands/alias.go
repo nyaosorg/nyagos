@@ -1,10 +1,12 @@
 package commands
 
-import "fmt"
-import "strings"
+import (
+	"fmt"
+	"strings"
 
-import "../alias"
-import "../interpreter"
+	"../alias"
+	"../interpreter"
+)
 
 func cmd_alias(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) <= 1 {

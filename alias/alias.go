@@ -1,11 +1,13 @@
 package alias
 
-import "bytes"
-import "regexp"
-import "strconv"
-import "strings"
+import (
+	"bytes"
+	"regexp"
+	"strconv"
+	"strings"
 
-import "../interpreter"
+	"../interpreter"
+)
 
 type Callable interface {
 	String() string

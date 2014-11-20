@@ -1,12 +1,14 @@
 package commands
 
-import "fmt"
-import "os"
-import "path/filepath"
+import (
+	"fmt"
+	"os"
+	"path/filepath"
 
-import "../conio"
-import "../dos"
-import "../interpreter"
+	"../conio"
+	"../dos"
+	"../interpreter"
+)
 
 type actionT struct {
 	Do      func(src, dst string) error

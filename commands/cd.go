@@ -1,9 +1,11 @@
 package commands
 
-import "os"
+import (
+	"os"
 
-import "../dos"
-import "../interpreter"
+	"../dos"
+	"../interpreter"
+)
 
 var prevDir string
 

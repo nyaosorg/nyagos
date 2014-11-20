@@ -1,7 +1,9 @@
 package interpreter
 
-import "testing"
-import "fmt"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestParser(t *testing.T) {
 	text := "aaaa bbbb \"\" cccc <\"ddd\"\"ddd\"|ahaha \"ihihi |ufufu\" ; ohoho gegee&&hogehogeo >ihihi"

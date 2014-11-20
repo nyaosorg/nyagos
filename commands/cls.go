@@ -1,7 +1,9 @@
 package commands
 
-import "../conio"
-import "../interpreter"
+import (
+	"../conio"
+	"../interpreter"
+)
 
 func cmd_cls(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	conio.Cls()

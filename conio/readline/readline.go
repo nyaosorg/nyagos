@@ -1,9 +1,11 @@
 package readline
 
-import "fmt"
-import "strings"
+import (
+	"fmt"
+	"strings"
 
-import ".."
+	".."
+)
 
 type Result int
 

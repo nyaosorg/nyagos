@@ -1,13 +1,15 @@
 package main
 
-import "bytes"
-import "fmt"
-import "os"
-import "strings"
-import "time"
-import "unicode"
+import (
+	"bytes"
+	"fmt"
+	"os"
+	"strings"
+	"time"
+	"unicode"
 
-import "./dos"
+	"./dos"
+)
 
 func Format2Prompt(format string) string {
 	if format == "" {

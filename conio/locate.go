@@ -1,7 +1,9 @@
 package conio
 
-import "syscall"
-import "unsafe"
+import (
+	"syscall"
+	"unsafe"
+)
 
 type coord_t struct {
 	X int16

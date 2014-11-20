@@ -1,10 +1,12 @@
 package commands
 
-import "fmt"
-import "os"
-import "strings"
+import (
+	"fmt"
+	"os"
+	"strings"
 
-import "../interpreter"
+	"../interpreter"
+)
 
 func cmd_set(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) <= 1 {

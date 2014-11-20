@@ -1,7 +1,9 @@
 package dos
 
-import "os"
-import "strings"
+import (
+	"os"
+	"strings"
+)
 
 // Get %HOME% || %USERPROFILE% || ""
 func GetHome() string {

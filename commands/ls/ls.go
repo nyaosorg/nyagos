@@ -1,15 +1,17 @@
 package ls
 
-import "fmt"
-import "io"
-import "os"
-import "path/filepath"
-import "regexp"
-import "sort"
-import "strings"
+import (
+	"fmt"
+	"io"
+	"os"
+	"path/filepath"
+	"regexp"
+	"sort"
+	"strings"
 
-import "../../conio"
-import "../../dos"
+	"../../conio"
+	"../../dos"
+)
 
 const (
 	O_STRIP_DIR = 1

@@ -1,7 +1,9 @@
 package dos
 
-import "syscall"
-import "unsafe"
+import (
+	"syscall"
+	"unsafe"
+)
 
 var copyFile = kernel32.NewProc("CopyFileW")
 var moveFile = kernel32.NewProc("MoveFileW")

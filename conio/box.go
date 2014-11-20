@@ -1,12 +1,14 @@
 package conio
 
-import "bytes"
-import "fmt"
-import "io"
-import "regexp"
-import "strings"
+import (
+	"bytes"
+	"fmt"
+	"io"
+	"regexp"
+	"strings"
 
-import "github.com/mattn/go-runewidth"
+	"github.com/mattn/go-runewidth"
+)
 
 var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 

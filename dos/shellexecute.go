@@ -1,7 +1,9 @@
 package dos
 
-import "syscall"
-import "unsafe"
+import (
+	"syscall"
+	"unsafe"
+)
 
 var shell32 = syscall.NewLazyDLL("shell32")
 var shellExecute = shell32.NewProc("ShellExecuteW")

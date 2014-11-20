@@ -1,7 +1,9 @@
 package conio
 
-import "syscall"
-import "unsafe"
+import (
+	"syscall"
+	"unsafe"
+)
 
 var setConsoleTitle = kernel32.NewProc("SetConsoleTitleW")
 
