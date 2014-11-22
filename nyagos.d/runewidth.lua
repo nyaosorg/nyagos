@@ -1,4 +1,3 @@
-
 -- Hammer and sickle: http://unicode-table.com/en/262D/
 nyagos.setrunewidth(0x262D,2)
 -- Star And Crescent
