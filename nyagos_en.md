@@ -118,6 +118,8 @@ you should `set "ENV=VAR"`.
 ### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
 ### `del FILE(S)...`
 ### `erase FILE(S)...`
+### `mkdir NEWDIR(S)...`
+### `rmdir [/s] DIR(S)...`
 
 These built-in commands are always asking with prompt when files are override or removed.
 
@@ -216,7 +218,8 @@ KEYNAME are:
 	"BACKSPACE" "CTRL" "C_A" "C_B" "C_C" "C_D" "C_E" "C_F" "C_G" "C_H"
 	"C_I" "C_J" "C_K" "C_L" "C_M" "C_N" "C_O" "C_P" "C_Q" "C_R" "C_S"
 	"C_T" "C_U" "C_V" "C_W" "C_X" "C_Y" "C_Z" "DEL" "DOWN" "END"
-	"ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
+	"ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP","F1".."F24"
+        "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
 
 FUNCNAME are:
 
@@ -292,7 +295,6 @@ On the New BSD-licenses, you can use NYAGOS.
 To build nyagos.exe , these softwares are required:
 
 - [go1.3.3 windows/386](http://golang.org)
-- [Mingw-Gcc 4.8.1-4](http://mingw.org/)
 - [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
