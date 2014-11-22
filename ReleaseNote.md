@@ -7,14 +7,17 @@ NYAGOS 4.0.1\_0
 * ヒストリのサーチポインタを「修正」「Ctrl-C押下」時に初期化するようにした
 * ヒストリをリアルタイムにセーブするようにした
 * `__コマンド名__` をコマンド名の別名に自動定義
-* (エイリアスコマンド) | 
+* F1～F24,PAGEUP,PAGEDOWN 等、サポートキーの追加
 
 Lua
 ---
-* nyagos.access 関数を追加
+* nyagos.access 関数を追加 (pull request #26 by `@mattn_jp`)
 * nyagos.shellexecute 関数を追加(open/su の自前実装可能になった)
 * nyagos.prompt でプロンプト表示を横取りできるようにした。
 
 Bugfix
 ------
-* リダイレクトでファイルを truncate していなかった
+* alias + パイプ + & の場合、標準入力から値を受け取れない不具合を修正(#25 reported by `@nocd5`)
+* リダイレクトでファイルを truncate していなかった(#27 reported by `@nocd5`)
+* ヒストリを書き換えた時、Ctrl-C 押下時にヒストリ位置をリセットするようにした (#30 & #34 fixed by `@nocd5`)
+* conio.GetKey の64bit時の不具合を修正 (#32 fixed by `@hattya`)
