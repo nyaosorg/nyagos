@@ -38,6 +38,7 @@ Acknowledgement
 
 * [nocd5](https://github.com/nocd5)
 * [mattn](https://github.com/mattn)
+* [hattya](https://github.com/hattya)
 * [shiena](https://github.com/shiena)
 * [atotto](https://github.com/atotto)
 * [ironsand](https://github.com/ironsand)
