@@ -29,6 +29,10 @@ or %HOME% and modify as you like.
 
 ## Option for NYAGOS.EXE
 
+### `-h`
+
+Print Usage.
+
 ### `-c "COMMAND"`
 
 Execute `COMMAND` and quit.
@@ -40,6 +44,7 @@ Execute `COMMAND` and continue the command-line.
 ### `-f SCRIPTFILE ARG1 ARG2 ...`
 
 Execute SCRIPTFILE with Lua interpretor and quit.
+The script can refer arguments as `arg[]`.
 
 ## Editor
 
