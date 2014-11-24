@@ -11,8 +11,26 @@ import (
 
 var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)
 
+var hasCache = map[rune]bool{}
+
 func PutRep(ch rune, n int) {
-	for i := 0; i < n; i++ {
+	if n <= 0 {
+		return
+	}
+	if hasCache[ch] {
+		stdOut.WriteRune(ch)
+	} else {
+		stdOut.Flush()
+		pre_x, pre_y := conio.GetLocate()
+		stdOut.WriteRune(ch)
+		stdOut.Flush()
+		post_x, post_y := conio.GetLocate()
+		if post_y == pre_y && post_x > pre_x {
+			hasCache[ch] = true
+			conio.SetCharWidth(ch, post_x-pre_x)
+		}
+	}
+	for i := 1; i < n; i++ {
 		stdOut.WriteRune(ch)
 	}
 }
