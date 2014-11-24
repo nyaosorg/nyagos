@@ -89,17 +89,7 @@ func main() {
 	L.Pop(1)
 	defer L.Close()
 
-	// Parameter Parsing
-	argc := 0
-	cont := OptionParse(L, func() (string, bool) {
-		argc++
-		if argc < len(os.Args) {
-			return os.Args[argc], true
-		} else {
-			return "", false
-		}
-	})
-	if !cont {
+	if !optionParse(L) {
 		return
 	}
 
