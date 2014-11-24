@@ -48,20 +48,20 @@
             @echo Please %0.cmd install PATH\TO\BIN, once
             goto end
         )
-        if exist "%INSTALLDIR%" (
-            @start make.cmd install.
-        ) else (
+        if not exist "%INSTALLDIR%" (
             @echo Please %0.cmd install EXIST\PATH\TO\BIN,  once
+            goto end
         )
-        goto end
-
-:install.
-        @echo Please close NYAGOS.exe and hit ENTER.
-        @pause
         robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
+        if exist "%INSTALLDIR%\nyagos.exe" (
+            pushd "%INSTALLDIR%"
+            for %%I in ("nyagos-20*.exe") do del "%%I" 2>nul
+            rename nyagos.exe "nyagos-%DATE:/=%-%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%.exe"
+            popd
+        )
         copy nyagos.exe "%INSTALLDIR%\."
         copy nyagos.lua "%INSTALLDIR%\."
-        copy lua52.dll  "%INSTALLDIR%\."
+        if not exist "%INSTALLDIR%\lua52.dll" copy lua52.dll "%INSTALLDIR%\."
         goto end
 
 :upgrade
