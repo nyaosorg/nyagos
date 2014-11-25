@@ -52,13 +52,12 @@
             @echo Please %0.cmd install EXIST\PATH\TO\BIN,  once
             goto end
         )
+        start %~0 install.
+        goto end
+
+:install.
         robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
-        if exist "%INSTALLDIR%\nyagos.exe" (
-            pushd "%INSTALLDIR%"
-            for %%I in ("nyagos-20*.exe") do del "%%I" 2>nul
-            rename nyagos.exe "nyagos-%DATE:/=%-%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%.exe"
-            popd
-        )
+        taskkill /im nyagos.exe
         copy nyagos.exe "%INSTALLDIR%\."
         copy nyagos.lua "%INSTALLDIR%\."
         if not exist "%INSTALLDIR%\lua52.dll" copy lua52.dll "%INSTALLDIR%\."
