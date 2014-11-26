@@ -1,13 +1,13 @@
 package commands
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 
+	"../dos"
 	"../interpreter"
 )
 
@@ -50,8 +50,11 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	}
 	defer fp.Close()
 
-	for scr := bufio.NewScanner(fp); scr.Scan(); {
-		line := scr.Text()
+	for {
+		line, lineErr := dos.ReadAnsiLine(fp)
+		if lineErr != nil {
+			break
+		}
 		eqlPos := strings.Index(line, "=")
 		if eqlPos > 0 {
 			os.Setenv(line[:eqlPos], line[eqlPos+1:])
@@ -63,9 +66,9 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		return interpreter.CONTINUE, err2
 	}
 	defer fp2.Close()
-	line, lineErr := bufio.NewReader(fp2).ReadString('\n')
+	line, lineErr := dos.ReadAnsiLine(fp2)
 	if lineErr == nil {
-		os.Chdir(strings.TrimSpace(line))
+		os.Chdir(line)
 	}
 	return interpreter.CONTINUE, nil
 }
