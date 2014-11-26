@@ -135,10 +135,9 @@ These built-in commands are always asking with prompt when files are override or
 
 ### `source BATCHFILENAME`
 
-Execute the batch-file(*.cmd,*.bat) for CMD.exe.
-The batch-file is executed with CMD.exe , so it can not use
-NYAGOS' built-in commands, but the environment variables
-CMD.exe changes are imported to NYAGOS.exe.
+Execute the batch-file(*.cmd,*.bat) by CMD.exe and
+import the environment variables and working directory
+which CMD.exe changed.
 
 We use . (one-period) as an alias of source.
 
