@@ -218,11 +218,10 @@ It expands the wildcard pattern to table contains filenames.
 ### `nyagos.bindkey("KEYNAME","FUNCNAME")`
 
 KEYNAME are:
-
-	"BACKSPACE" "CTRL" "C_A" "C_B" "C_C" "C_D" "C_E" "C_F" "C_G" "C_H"
-	"C_I" "C_J" "C_K" "C_L" "C_M" "C_N" "C_O" "C_P" "C_Q" "C_R" "C_S"
-	"C_T" "C_U" "C_V" "C_W" "C_X" "C_Y" "C_Z" "DEL" "DOWN" "END"
-	"ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP","F1".."F24"
+        "C_A" "C_B" ... "C_Z" "M_A" "M_B" ... "M_Z"
+        "F1" "F2" ..."F24"
+        "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
+	"ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
         "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
 
 FUNCNAME are:
