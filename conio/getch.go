@@ -9,6 +9,15 @@ import (
 	"unsafe"
 )
 
+const (
+	RIGHT_ALT_PRESSED  = 1
+	LEFT_ALT_PRESSED   = 2
+	RIGHT_CTRL_PRESSED = 4
+	LEFT_CTRL_PRESSED  = 8
+	CTRL_PRESSED       = RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED
+	ALT_PRESSED        = RIGHT_ALT_PRESSED | LEFT_ALT_PRESSED
+)
+
 type inputRecordT struct {
 	eventType uint16
 	_         uint16
@@ -37,8 +46,9 @@ func init() {
 }
 
 type keyInfo struct {
-	KeyCode  rune
-	ScanCode uint16
+	KeyCode    rune
+	ScanCode   uint16
+	ShiftState uint32
 }
 
 func DisableCtrlC() {
@@ -48,7 +58,7 @@ func DisableCtrlC() {
 		for _ = range ch {
 			if keyPipe != nil {
 				go func() {
-					keyPipe <- keyInfo{3, 0}
+					keyPipe <- keyInfo{3, 0, LEFT_CTRL_PRESSED}
 				}()
 			}
 		}
@@ -82,16 +92,17 @@ func keyGoRuntine(pipe chan keyInfo) {
 			pipe <- keyInfo{
 				keycode,
 				events[i].wVirtualKeyCode,
+				events[i].dwControlKeyState,
 			}
 		}
 	}
 	// Not to read keyboard data on not requested time
 	// (ex. other application is running)
 	// shutdown goroutine.
-	pipe <- keyInfo{0, 0}
+	pipe <- keyInfo{0, 0, 0}
 }
 
-func GetKey() (rune, uint16) {
+func GetKey() (rune, uint16, uint32) {
 	if keyPipe == nil {
 		keyPipe = make(chan keyInfo, 10)
 		go keyGoRuntine(keyPipe)
@@ -99,7 +110,7 @@ func GetKey() (rune, uint16) {
 	for {
 		keyInfo := <-keyPipe
 		if keyInfo.KeyCode != 0 || keyInfo.ScanCode != 0 {
-			return keyInfo.KeyCode, keyInfo.ScanCode
+			return keyInfo.KeyCode, keyInfo.ScanCode, keyInfo.ShiftState
 		}
 		// When keyGoRuntine has shutdowned, restart.
 		go keyGoRuntine(keyPipe)
@@ -108,7 +119,7 @@ func GetKey() (rune, uint16) {
 
 func GetCh() rune {
 	for {
-		ch, _ := GetKey()
+		ch, _, _ := GetKey()
 		if ch != 0 {
 			return ch
 		}

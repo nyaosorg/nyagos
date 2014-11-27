@@ -55,13 +55,18 @@ var scanMap = map[uint16]KeyFuncT{
 	name2scan[K_SHIFT]:  name2func[F_PASS],
 }
 
+var altMap = map[uint16]KeyFuncT{}
+
 func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
 }
 
 func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	keyName_ := normWord(keyName)
-	if charValue, charOk := name2char[keyName_]; charOk {
+	if altValue, altOk := name2alt[keyName_]; altOk {
+		altMap[altValue] = funcValue
+		return nil
+	} else if charValue, charOk := name2char[keyName_]; charOk {
 		keyMap[charValue] = funcValue
 		return nil
 	} else if scanValue, scanOk := name2scan[keyName_]; scanOk {
@@ -106,10 +111,15 @@ func ReadLine(prompt_ func() int) (string, Result) {
 	for {
 		stdOut.Flush()
 		shineCursor()
-		this.Unicode, this.Keycode = conio.GetKey()
+		this.Unicode, this.Keycode, this.ShiftState = conio.GetKey()
 		var f KeyFuncT
 		var ok bool
-		if this.Unicode != 0 {
+		if (this.ShiftState & conio.ALT_PRESSED) != 0 {
+			f, ok = altMap[this.Keycode]
+			if !ok {
+				continue
+			}
+		} else if this.Unicode != 0 {
 			f, ok = keyMap[this.Unicode]
 			if !ok {
 				//f = KeyFuncInsertReport

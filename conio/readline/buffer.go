@@ -47,14 +47,15 @@ func shineCursor() {
 }
 
 type Buffer struct {
-	Buffer    []rune
-	Length    int
-	Cursor    int
-	Unicode   rune
-	Keycode   uint16
-	ViewStart int
-	ViewWidth int
-	Prompt    func() int
+	Buffer     []rune
+	Length     int
+	Cursor     int
+	Unicode    rune
+	Keycode    uint16
+	ShiftState uint32
+	ViewStart  int
+	ViewWidth  int
+	Prompt     func() int
 }
 
 func (this *Buffer) Insert(pos int, c []rune) bool {

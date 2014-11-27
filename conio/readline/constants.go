@@ -69,6 +69,33 @@ const (
 	K_RIGHT      = "RIGHT"
 	K_SHIFT      = "SHIFT"
 	K_UP         = "UP"
+	K_ALT_A      = "M_A"
+	K_ALT_B      = "M_B"
+	K_ALT_BREAK  = "M_BREAK"
+	K_ALT_C      = "M_C"
+	K_ALT_D      = "M_D"
+	K_ALT_E      = "M_E"
+	K_ALT_F      = "M_F"
+	K_ALT_G      = "M_G"
+	K_ALT_H      = "M_H"
+	K_ALT_I      = "M_I"
+	K_ALT_J      = "M_J"
+	K_ALT_K      = "M_K"
+	K_ALT_L      = "M_L"
+	K_ALT_M      = "M_M"
+	K_ALT_N      = "M_N"
+	K_ALT_O      = "M_O"
+	K_ALT_P      = "M_P"
+	K_ALT_Q      = "M_Q"
+	K_ALT_R      = "M_R"
+	K_ALT_S      = "M_S"
+	K_ALT_T      = "M_T"
+	K_ALT_U      = "M_U"
+	K_ALT_V      = "M_V"
+	K_ALT_W      = "M_W"
+	K_ALT_X      = "M_X"
+	K_ALT_Y      = "M_Y"
+	K_ALT_Z      = "M_Z"
 )
 
 const (
@@ -166,6 +193,35 @@ var name2scan = map[string]uint16{
 	K_RIGHT:      0x27,
 	K_SHIFT:      0x10,
 	K_UP:         0x26,
+}
+
+var name2alt = map[string]uint16{
+	K_ALT_A: 0x41,
+	K_ALT_B: 0x42,
+	K_ALT_C: 0x43,
+	K_ALT_D: 0x44,
+	K_ALT_E: 0x45,
+	K_ALT_F: 0x46,
+	K_ALT_G: 0x47,
+	K_ALT_H: 0x48,
+	K_ALT_I: 0x49,
+	K_ALT_J: 0x4A,
+	K_ALT_K: 0x4B,
+	K_ALT_L: 0x4C,
+	K_ALT_M: 0x4D,
+	K_ALT_N: 0x4E,
+	K_ALT_O: 0x4F,
+	K_ALT_P: 0x50,
+	K_ALT_Q: 0x51,
+	K_ALT_R: 0x52,
+	K_ALT_S: 0x53,
+	K_ALT_T: 0x54,
+	K_ALT_U: 0x55,
+	K_ALT_V: 0x56,
+	K_ALT_W: 0x57,
+	K_ALT_X: 0x58,
+	K_ALT_Y: 0x59,
+	K_ALT_Z: 0x5A,
 }
 
 var name2func = map[string]KeyFuncT{
