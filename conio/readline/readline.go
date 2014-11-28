@@ -55,7 +55,9 @@ var scanMap = map[uint16]KeyFuncT{
 	name2scan[K_SHIFT]:  name2func[F_PASS],
 }
 
-var altMap = map[uint16]KeyFuncT{}
+var altMap = map[uint16]KeyFuncT{
+	name2alt[K_ALT_V]: name2func[F_YANK],
+}
 
 func normWord(src string) string {
 	return strings.Replace(strings.ToUpper(src), "-", "_", -1)
