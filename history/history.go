@@ -210,7 +210,7 @@ func Replace(line string) (string, bool) {
 }
 
 func splitQ(s string) []string {
-	args := make([]string, 0)
+	args := []string{}
 	reader := strings.NewReader(s)
 	for reader.Len() > 0 {
 		var buffer bytes.Buffer
@@ -235,9 +235,8 @@ func splitQ(s string) []string {
 			}
 			buffer.WriteRune(ch)
 		}
-		s := buffer.String()
-		if s != "" {
-			args = append(args, s)
+		if buffer.Len() > 0 {
+			args = append(args, buffer.String() )
 		}
 	}
 	return args
