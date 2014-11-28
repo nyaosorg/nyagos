@@ -34,28 +34,28 @@ const (
 
 // Call ShellExecute-API: edit,explore,open and so on.
 func ShellExecute(action string, path string, param string, directory string) error {
-	actionW, actionErr := syscall.UTF16FromString(action)
+	actionP, actionErr := syscall.UTF16PtrFromString(action)
 	if actionErr != nil {
 		return actionErr
 	}
-	pathW, pathErr := syscall.UTF16FromString(path)
+	pathP, pathErr := syscall.UTF16PtrFromString(path)
 	if pathErr != nil {
 		return pathErr
 	}
-	paramW, paramErr := syscall.UTF16FromString(param)
+	paramP, paramErr := syscall.UTF16PtrFromString(param)
 	if paramErr != nil {
 		return paramErr
 	}
-	directoryW, directoryErr := syscall.UTF16FromString(directory)
+	directoryP, directoryErr := syscall.UTF16PtrFromString(directory)
 	if directoryErr != nil {
 		return directoryErr
 	}
 	status, _, _ := shellExecute.Call(
 		uintptr(0),
-		uintptr(unsafe.Pointer(&actionW[0])),
-		uintptr(unsafe.Pointer(&pathW[0])),
-		uintptr(unsafe.Pointer(&paramW[0])),
-		uintptr(unsafe.Pointer(&directoryW[0])),
+		uintptr(unsafe.Pointer(actionP)),
+		uintptr(unsafe.Pointer(pathP)),
+		uintptr(unsafe.Pointer(paramP)),
+		uintptr(unsafe.Pointer(directoryP)),
 		SW_SHOWNORMAL)
 	if status < 32 {
 		return syscall.GetLastError()

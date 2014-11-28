@@ -55,9 +55,9 @@ func Chdir(folder_ string) error {
 			return nil
 		}
 	}
-	utf16, err := syscall.UTF16FromString(folder)
+	utf16, err := syscall.UTF16PtrFromString(folder)
 	if err == nil {
-		status, _, _ := _wchdir.Call(uintptr(unsafe.Pointer(&utf16[0])))
+		status, _, _ := _wchdir.Call(uintptr(unsafe.Pointer(utf16)))
 		if status != 0 {
 			err = fmt.Errorf("%s: no such directory", folder_)
 		}

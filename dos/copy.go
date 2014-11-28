@@ -9,11 +9,11 @@ var copyFile = kernel32.NewProc("CopyFileW")
 var moveFile = kernel32.NewProc("MoveFileW")
 
 func Copy(src string, dst string, isFailIfExists bool) error {
-	cSrc, cSrcErr := syscall.UTF16FromString(src)
+	cSrc, cSrcErr := syscall.UTF16PtrFromString(src)
 	if cSrcErr != nil {
 		return cSrcErr
 	}
-	cDst, cDstErr := syscall.UTF16FromString(dst)
+	cDst, cDstErr := syscall.UTF16PtrFromString(dst)
 	if cDstErr != nil {
 		return cDstErr
 	}
@@ -24,8 +24,8 @@ func Copy(src string, dst string, isFailIfExists bool) error {
 		isFailIfExists_ = 0
 	}
 	rc, _, err := copyFile.Call(
-		uintptr(unsafe.Pointer(&cSrc[0])),
-		uintptr(unsafe.Pointer(&cDst[0])),
+		uintptr(unsafe.Pointer(cSrc)),
+		uintptr(unsafe.Pointer(cDst)),
 		isFailIfExists_)
 	if rc != 0 {
 		return nil
@@ -35,17 +35,17 @@ func Copy(src string, dst string, isFailIfExists bool) error {
 }
 
 func Move(src, dst string) error {
-	cSrc, cSrcErr := syscall.UTF16FromString(src)
+	cSrc, cSrcErr := syscall.UTF16PtrFromString(src)
 	if cSrcErr != nil {
 		return cSrcErr
 	}
-	cDst, cDstErr := syscall.UTF16FromString(dst)
+	cDst, cDstErr := syscall.UTF16PtrFromString(dst)
 	if cDstErr != nil {
 		return cDstErr
 	}
 	rc, _, err := moveFile.Call(
-		uintptr(unsafe.Pointer(&cSrc[0])),
-		uintptr(unsafe.Pointer(&cDst[0])))
+		uintptr(unsafe.Pointer(cSrc)),
+		uintptr(unsafe.Pointer(cDst)))
 	if rc != 0 {
 		return nil
 	} else {
