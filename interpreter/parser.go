@@ -41,23 +41,23 @@ var percentFunc = map[string]func() string{
 var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
 
 func (this StatementT) String() string {
-	var buffer bytes.Buffer
+	buffer := make([]byte, 0, 200)
 	for _, arg := range this.Argv {
-		buffer.WriteRune('[')
-		buffer.WriteString(arg)
-		buffer.WriteRune(']')
+		buffer = append(buffer, '[')
+		buffer = append(buffer, arg...)
+		buffer = append(buffer, ']')
 	}
 	for i := 0; i < len(prefix); i++ {
 		if len(this.Redirect[i].Path) > 0 {
-			buffer.WriteString(prefix[i])
-			buffer.WriteString("[")
-			buffer.WriteString(this.Redirect[i].Path)
-			buffer.WriteString("]")
+			buffer = append(buffer, prefix[i]...)
+			buffer = append(buffer, '[')
+			buffer = append(buffer, this.Redirect[i].Path...)
+			buffer = append(buffer, ']')
 		}
 	}
-	buffer.WriteString(" ")
-	buffer.WriteString(this.Term)
-	return buffer.String()
+	buffer = append(buffer, ' ')
+	buffer = append(buffer, this.Term...)
+	return string(buffer)
 }
 
 func chomp(buffer *bytes.Buffer) {

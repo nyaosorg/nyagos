@@ -1,7 +1,6 @@
 package conio
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"regexp"
@@ -30,14 +29,20 @@ func BoxPrint(nodes []string, out io.Writer) {
 	}
 	nlines := (len(nodes) + nodePerLine - 1) / nodePerLine
 
-	lines := make([]bytes.Buffer, nlines)
-	for i, finfo := range nodes {
-		lines[i%nlines].WriteString(finfo)
-		lines[i%nlines].WriteString(
-			strings.Repeat(" ", maxLen+1-
-				runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))))
+	lines := make([][]byte, nlines)
+	row := 0
+	for _, finfo := range nodes {
+		lines[row] = append(lines[row], finfo...)
+		w := runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))
+		for i, iEnd := 0, maxLen+1-w; i < iEnd; i++ {
+			lines[row] = append(lines[row], ' ')
+		}
+		row++
+		if row >= nlines {
+			row = 0
+		}
 	}
 	for _, line := range lines {
-		fmt.Fprintln(out, strings.TrimSpace(line.String()))
+		fmt.Fprintln(out, strings.TrimSpace(string(line)))
 	}
 }

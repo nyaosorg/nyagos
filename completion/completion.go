@@ -210,13 +210,13 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		}
 	}
 	if needQuote {
-		var buffer bytes.Buffer
-		buffer.WriteRune('"')
-		buffer.WriteString(commonStr)
+		buffer := make([]byte, 0, 100)
+		buffer = append(buffer, '"')
+		buffer = append(buffer, commonStr...)
 		if len(list) <= 1 {
-			buffer.WriteRune('"')
+			buffer = append(buffer, '"')
 		}
-		commonStr = buffer.String()
+		commonStr = string(buffer)
 	}
 	if len(list) == 1 && !strings.HasSuffix(commonStr, "/") && !strings.HasSuffix(commonStr, "/\"") {
 		commonStr += " "

@@ -1,7 +1,6 @@
 package alias
 
 import (
-	"bytes"
 	"regexp"
 	"strconv"
 	"strings"
@@ -44,11 +43,11 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Next
 	})
 
 	if !isReplaced {
-		var buffer bytes.Buffer
-		buffer.WriteString(this.BaseStr)
-		buffer.WriteRune(' ')
-		buffer.WriteString(quoteAndJoin(cmd.Args[1:]))
-		cmdline = buffer.String()
+		buffer := make([]byte, 0, 200)
+		buffer = append(buffer, this.BaseStr...)
+		buffer = append(buffer, ' ')
+		buffer = append(buffer, quoteAndJoin(cmd.Args[1:])...)
+		cmdline = string(buffer)
 	}
 	it := cmd.Clone()
 	it.HookCount = cmd.HookCount + 1
@@ -60,16 +59,16 @@ var Table = map[string]Callable{}
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
 func quoteAndJoin(list []string) string {
-	var buffer bytes.Buffer
-	for _, value := range list {
-		if buffer.Len() > 0 {
-			buffer.WriteRune(' ')
+	buffer := make([]byte, 0, 100)
+	for i, value := range list {
+		if i > 0 {
+			buffer = append(buffer, ' ')
 		}
-		buffer.WriteRune('"')
-		buffer.WriteString(value)
-		buffer.WriteRune('"')
+		buffer = append(buffer, '"')
+		buffer = append(buffer, value...)
+		buffer = append(buffer, '"')
 	}
-	return buffer.String()
+	return string(buffer)
 }
 
 var nextHook interpreter.HookT
