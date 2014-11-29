@@ -236,7 +236,7 @@ func splitQ(s string) []string {
 			buffer.WriteRune(ch)
 		}
 		if buffer.Len() > 0 {
-			args = append(args, buffer.String() )
+			args = append(args, buffer.String())
 		}
 	}
 	return args
