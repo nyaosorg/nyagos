@@ -17,20 +17,40 @@ const (
 
 type Interpreter struct {
 	exec.Cmd
+	Stdio        [3]*os.File
 	HookCount    int
 	IsBackGround bool
 	Closer       io.Closer
 }
 
 func New() *Interpreter {
-	return new(Interpreter)
+	this := Interpreter{
+		Stdio: [3]*os.File{os.Stdin, os.Stdout, os.Stderr},
+	}
+	return &this
+}
+
+func (this *Interpreter) SetStdin(f *os.File) {
+	this.Stdio[0] = f
+	this.Stdin = f
+}
+func (this *Interpreter) SetStdout(f *os.File) {
+	this.Stdio[1] = f
+	this.Stdout = f
+}
+func (this *Interpreter) SetStderr(f *os.File) {
+	this.Stdio[2] = f
+	this.Stderr = f
 }
 
 func (this *Interpreter) Clone() *Interpreter {
 	rv := new(Interpreter)
+	rv.Stdio[0] = this.Stdio[0]
+	rv.Stdio[1] = this.Stdio[1]
+	rv.Stdio[2] = this.Stdio[2]
+	rv.Stdin = this.Stdin
 	rv.Stdout = this.Stdout
 	rv.Stderr = this.Stderr
-	rv.Stdin = this.Stdin
 	rv.HookCount = this.HookCount
 	// Dont Copy 'Closer' and 'IsBackGround'
 	return rv
@@ -61,71 +81,30 @@ func SetHook(hook_ HookT) (rv HookT) {
 var errorStatusPattern = regexp.MustCompile("^exit status ([0-9]+)")
 var ErrorLevel string
 
+func nvl(a *os.File, b *os.File) *os.File {
+	if a != nil {
+		return a
+	} else {
+		return b
+	}
+}
+
 func (this *Interpreter) Interpret(text string) (NextT, error) {
-	statements := Parse(text)
+	statements, statementsErr := Parse(text)
+	if statementsErr != nil {
+		return CONTINUE, statementsErr
+	}
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
-			var cmd Interpreter
+			cmd := new(Interpreter)
 			cmd.HookCount = this.HookCount
-			if this.Stderr != nil {
-				cmd.Stdin = this.Stdin
-			} else {
-				cmd.Stdin = os.Stdin
-			}
-			if this.Stdout != nil {
-				cmd.Stdout = this.Stdout
-			} else {
-				cmd.Stdout = os.Stdout
-			}
-			if this.Stderr != nil {
-				cmd.Stderr = this.Stderr
-			} else {
-				cmd.Stderr = os.Stderr
-			}
+			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
+			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
+			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
 			if pipeIn != nil {
-				cmd.Stdin = pipeIn
+				cmd.SetStdin(pipeIn)
 				pipeIn = nil
-			}
-			if state.Redirect[0].Path != "" {
-				fd, err := os.Open(state.Redirect[0].Path)
-				if err != nil {
-					return CONTINUE, err
-				}
-				defer fd.Close()
-				cmd.Stdin = fd
-			}
-			if state.Redirect[1].Path != "" {
-				var fd *os.File
-				var err error
-				if state.Redirect[1].IsAppend {
-					fd, err = os.OpenFile(state.Redirect[1].Path,
-						os.O_APPEND, 0666)
-				} else {
-					fd, err = os.OpenFile(state.Redirect[1].Path,
-						os.O_CREATE|os.O_TRUNC, 0666)
-				}
-				if err != nil {
-					return CONTINUE, err
-				}
-				defer fd.Close()
-				cmd.Stdout = fd
-			}
-			if state.Redirect[2].Path != "" {
-				var fd *os.File
-				var err error
-				if state.Redirect[2].IsAppend {
-					fd, err = os.OpenFile(state.Redirect[2].Path,
-						os.O_APPEND, 0666)
-				} else {
-					fd, err = os.OpenFile(state.Redirect[2].Path,
-						os.O_CREATE|os.O_TRUNC, 0666)
-				}
-				if err != nil {
-					return CONTINUE, err
-				}
-				defer fd.Close()
-				cmd.Stderr = fd
 			}
 			var err error = nil
 			var pipeOut *os.File = nil
@@ -139,12 +118,19 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 					return CONTINUE, err
 				}
 				// defer pipeIn.Close()
-				cmd.Stdout = pipeOut
+				cmd.SetStdout(pipeOut)
 				if state.Term == "|&" {
-					cmd.Stderr = pipeOut
+					cmd.SetStderr(pipeOut)
 				}
 			case "&":
 				isBackGround = true
+			}
+
+			for _, red := range state.Redirect {
+				err = red.OpenOn(cmd)
+				if err != nil {
+					return CONTINUE, err
+				}
 			}
 			var whatToDo NextT
 
@@ -155,22 +141,22 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				cmd.Args = state.Argv
 				cmd.IsBackGround = isBackGround
 				cmd.Closer = pipeOut
-				whatToDo, err = hook(&cmd)
+				whatToDo, err = hook(cmd)
 				if whatToDo == THROUGH {
 					cmd.Path, err = exec.LookPath(state.Argv[0])
 					if err == nil {
 						if isBackGround {
-							err = cmd.Start()
+							go func() {
+								cmd.Run()
+								if pipeOut != nil {
+									pipeOut.Close()
+								}
+							}()
 						} else {
 							err = cmd.Run()
 						}
 					}
-				} else {
-					pipeOut = nil
 				}
-			}
-			if pipeOut != nil {
-				// pipeOut.Close()
 			}
 			if err != nil {
 				m := errorStatusPattern.FindStringSubmatch(err.Error())

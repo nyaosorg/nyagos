@@ -2,23 +2,19 @@ package interpreter
 
 import (
 	"bytes"
+	"errors"
 	"os"
 	"regexp"
 	"strconv"
+	"strings"
 	"unicode"
 
 	"../dos"
 )
 
-type RedirectT struct {
-	Path     string
-	IsAppend bool
-}
-
 type StatementT struct {
 	Argv     []string
-	Redirect [3]RedirectT
-	IsAppend [3]bool
+	Redirect []*Redirecter
 	Term     string
 }
 
@@ -39,26 +35,6 @@ var percentFunc = map[string]func() string{
 }
 
 var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
-
-func (this StatementT) String() string {
-	buffer := make([]byte, 0, 200)
-	for _, arg := range this.Argv {
-		buffer = append(buffer, '[')
-		buffer = append(buffer, arg...)
-		buffer = append(buffer, ']')
-	}
-	for i := 0; i < len(prefix); i++ {
-		if len(this.Redirect[i].Path) > 0 {
-			buffer = append(buffer, prefix[i]...)
-			buffer = append(buffer, '[')
-			buffer = append(buffer, this.Redirect[i].Path...)
-			buffer = append(buffer, ']')
-		}
-	}
-	buffer = append(buffer, ' ')
-	buffer = append(buffer, this.Term...)
-	return string(buffer)
-}
 
 func chomp(buffer *bytes.Buffer) {
 	original := buffer.String()
@@ -136,19 +112,20 @@ func dequote(source *bytes.Buffer) string {
 }
 
 func terminate(statements *[]StatementT,
-	nextword *int,
-	redirect *[3]RedirectT,
+	isRedirected *bool,
+	redirect *[]*Redirecter,
 	buffer *bytes.Buffer,
 	argv *[]string,
 	term string) {
+
 	var statement1 StatementT
 	if buffer.Len() > 0 {
-		if *nextword == WORD_ARGV {
-			statement1.Argv = append(*argv, dequote(buffer))
-		} else {
+		if *isRedirected && len(*redirect) > 0 {
+			(*redirect)[len(*redirect)-1].SetPath(dequote(buffer))
+			*isRedirected = false
 			statement1.Argv = *argv
-			(*redirect)[*nextword].Path = dequote(buffer)
-			*nextword = WORD_ARGV
+		} else {
+			statement1.Argv = append(*argv, dequote(buffer))
 		}
 		buffer.Reset()
 	} else if len(*argv) <= 0 {
@@ -156,103 +133,116 @@ func terminate(statements *[]StatementT,
 	} else {
 		statement1.Argv = *argv
 	}
-	statement1.Redirect[0] = redirect[0]
-	statement1.Redirect[1] = redirect[1]
-	statement1.Redirect[2] = redirect[2]
-	redirect[0].Path = ""
-	redirect[0].IsAppend = false
-	redirect[1].Path = ""
-	redirect[1].IsAppend = false
-	redirect[2].Path = ""
-	redirect[2].IsAppend = false
+	statement1.Redirect = *redirect
+	*redirect = make([]*Redirecter, 0, 3)
 	*argv = make([]string, 0)
 	statement1.Term = term
 	*statements = append(*statements, statement1)
 }
 
-const (
-	WORD_ARGV   = -1
-	WORD_STDIN  = 0
-	WORD_STDOUT = 1
-	WORD_STDERR = 2
-)
-
-func Parse1(text string) []StatementT {
+func parse1(text string) ([]StatementT, error) {
 	isQuoted := false
 	statements := make([]StatementT, 0)
 	argv := make([]string, 0)
 	lastchar := ' '
-	lastredirected := -1
 	var buffer bytes.Buffer
-	nextword := WORD_ARGV
-	var redirect [3]RedirectT
-	for _, ch := range text {
+	isNextRedirect := false
+	redirect := make([]*Redirecter, 0, 3)
+
+	reader := strings.NewReader(text)
+	for reader.Len() > 0 {
+		ch, chSize, chErr := reader.ReadRune()
+		if chSize <= 0 {
+			break
+		}
+		if chErr != nil {
+			return nil, chErr
+		}
 		if ch == '"' {
 			isQuoted = !isQuoted
 		}
 		if isQuoted {
 			buffer.WriteRune(ch)
-		} else {
-			if ch == ' ' {
-				if buffer.Len() > 0 {
-					if nextword == WORD_ARGV {
-						argv = append(argv, dequote(&buffer))
-					} else {
-						redirect[nextword].Path = dequote(&buffer)
-					}
-					buffer.Reset()
-					nextword = WORD_ARGV
-				}
-			} else if lastchar == ' ' && ch == ';' {
-				terminate(&statements, &nextword, &redirect, &buffer, &argv, ";")
-			} else if ch == '|' {
-				if lastchar == '|' {
-					statements[len(statements)-1].Term = "||"
+		} else if ch == ' ' {
+			if buffer.Len() > 0 {
+				if isNextRedirect && len(redirect) > 0 {
+					redirect[len(redirect)-1].SetPath(dequote(&buffer))
 				} else {
-					terminate(&statements, &nextword, &redirect, &buffer, &argv, "|")
+					argv = append(argv, dequote(&buffer))
 				}
-			} else if ch == '&' {
-				switch lastchar {
-				case '&':
-					statements[len(statements)-1].Term = "&&"
-				case '|':
-					statements[len(statements)-1].Term = "|&"
-				default:
-					terminate(&statements, &nextword, &redirect, &buffer, &argv, "&")
-				}
-			} else if ch == '>' {
-				if lastchar == '1' {
-					chomp(&buffer)
-					nextword = WORD_STDOUT
-					redirect[1].IsAppend = false
-					lastredirected = 1
-				} else if lastchar == '2' {
-					chomp(&buffer)
-					nextword = WORD_STDERR
-					redirect[2].IsAppend = false
-					lastredirected = 2
-				} else if lastchar == '>' && lastredirected >= 0 {
-					redirect[lastredirected].IsAppend = true
-				} else {
-					nextword = WORD_STDOUT
-					lastredirected = 1
-				}
-			} else if ch == '<' {
-				nextword = WORD_STDIN
-				redirect[0].IsAppend = false
-				lastredirected = 0
-			} else {
-				buffer.WriteRune(ch)
+				buffer.Reset()
+				isNextRedirect = false
 			}
+		} else if lastchar == ' ' && ch == ';' {
+			terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, ";")
+		} else if ch == '|' {
+			if lastchar == '|' {
+				statements[len(statements)-1].Term = "||"
+			} else {
+				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "|")
+			}
+		} else if ch == '&' {
+			switch lastchar {
+			case '&':
+				statements[len(statements)-1].Term = "&&"
+			case '|':
+				statements[len(statements)-1].Term = "|&"
+			case '>':
+				// >&[n]
+				ch2, ch2siz, ch2err := reader.ReadRune()
+				if ch2err != nil {
+					return nil, ch2err
+				}
+				if ch2siz <= 0 {
+					return nil, errors.New("Too Near EOF for >&")
+				}
+				red := redirect[len(redirect)-1]
+				switch ch2 {
+				case '1':
+					red.DupFrom(1)
+				case '2':
+					red.DupFrom(2)
+				default:
+					return nil, errors.New("Syntax error after >&")
+				}
+				isNextRedirect = false
+			default:
+				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "&")
+			}
+		} else if ch == '>' {
+			switch lastchar {
+			case '1':
+				// 1>
+				chomp(&buffer)
+				redirect = append(redirect, NewRedirecter(1))
+			case '2':
+				// 2>
+				chomp(&buffer)
+				redirect = append(redirect, NewRedirecter(2))
+			case '>':
+				// >>
+				if len(redirect) >= 0 {
+					redirect[len(redirect)-1].SetAppend()
+				}
+			default:
+				// >
+				redirect = append(redirect, NewRedirecter(1))
+			}
+			isNextRedirect = true
+		} else if ch == '<' {
+			redirect = append(redirect, NewRedirecter(0))
+			isNextRedirect = true
+		} else {
+			buffer.WriteRune(ch)
 		}
 		lastchar = ch
 	}
-	terminate(&statements, &nextword, &redirect, &buffer, &argv, " ")
-	return statements
+	terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, " ")
+	return statements, nil
 }
 
 // Make arrays whose elements are pipelines
-func Parse2(statements []StatementT) [][]StatementT {
+func parse2(statements []StatementT) [][]StatementT {
 	result := make([][]StatementT, 1)
 	for _, statement1 := range statements {
 		result[len(result)-1] = append(result[len(result)-1], statement1)
@@ -269,8 +259,11 @@ func Parse2(statements []StatementT) [][]StatementT {
 	return result
 }
 
-func Parse(text string) [][]StatementT {
-	result1 := Parse1(text)
-	result2 := Parse2(result1)
-	return result2
+func Parse(text string) ([][]StatementT, error) {
+	result1, err := parse1(text)
+	if err != nil {
+		return nil, err
+	}
+	result2 := parse2(result1)
+	return result2, nil
 }
