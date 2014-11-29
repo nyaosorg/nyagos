@@ -212,9 +212,12 @@ func Parse1(text string) []StatementT {
 					terminate(&statements, &nextword, &redirect, &buffer, &argv, "|")
 				}
 			} else if ch == '&' {
-				if lastchar == '&' {
+				switch lastchar {
+				case '&':
 					statements[len(statements)-1].Term = "&&"
-				} else {
+				case '|':
+					statements[len(statements)-1].Term = "|&"
+				default:
 					terminate(&statements, &nextword, &redirect, &buffer, &argv, "&")
 				}
 			} else if ch == '>' {
@@ -248,11 +251,15 @@ func Parse1(text string) []StatementT {
 	return statements
 }
 
+// Make arrays whose elements are pipelines
 func Parse2(statements []StatementT) [][]StatementT {
 	result := make([][]StatementT, 1)
 	for _, statement1 := range statements {
 		result[len(result)-1] = append(result[len(result)-1], statement1)
-		if statement1.Term != "|" {
+		switch statement1.Term {
+		case "|", "|&":
+
+		default:
 			result = append(result, make([]StatementT, 0))
 		}
 	}

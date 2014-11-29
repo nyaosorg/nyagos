@@ -129,17 +129,24 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 			}
 			var err error = nil
 			var pipeOut *os.File = nil
-			if state.Term == "|" {
+			isBackGround := false
+
+			switch state.Term {
+			case "|", "|&":
+				isBackGround = true
 				pipeIn, pipeOut, err = os.Pipe()
 				if err != nil {
 					return CONTINUE, err
 				}
 				// defer pipeIn.Close()
 				cmd.Stdout = pipeOut
+				if state.Term == "|&" {
+					cmd.Stderr = pipeOut
+				}
+			case "&":
+				isBackGround = true
 			}
 			var whatToDo NextT
-
-			isBackGround := (state.Term == "|" || state.Term == "&")
 
 			if len(state.Argv) > 0 {
 				if argsHook != nil {
