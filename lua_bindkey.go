@@ -111,7 +111,7 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.PushGoFunction(callInsert)
 	this.L.SetField(-2, "insert")
 	if err := this.L.Call(1, 1); err != nil {
-		fmt.Println(os.Stderr, err)
+		fmt.Fprintln(os.Stderr, err)
 	}
 	switch this.L.GetType(-1) {
 	case lua.LUA_TSTRING:
