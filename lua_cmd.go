@@ -117,8 +117,7 @@ func cmdEval(L *lua.Lua) int {
 	}
 	go func(statement string, w *os.File) {
 		it := interpreter.New()
-		it.Stdout = w
-		it.Stderr = &emptyWriter{}
+		it.SetStdout(w)
 		it.Interpret(statement)
 		w.Close()
 	}(statement, w)

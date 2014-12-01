@@ -27,6 +27,9 @@ func New() *Interpreter {
 	this := Interpreter{
 		Stdio: [3]*os.File{os.Stdin, os.Stdout, os.Stderr},
 	}
+	this.Stdin = os.Stdin
+	this.Stdout = os.Stdout
+	this.Stderr = os.Stderr
 	return &this
 }
 
