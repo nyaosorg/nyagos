@@ -26,6 +26,7 @@ var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.Next
 	"move":    cmd_move,
 	"pwd":     cmd_pwd,
 	"rd":      cmd_rmdir,
+	"rem":     cmd_rem,
 	"rmdir":   cmd_rmdir,
 	"set":     cmd_set,
 	"source":  cmd_source,

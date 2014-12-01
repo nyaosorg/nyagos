@@ -4,7 +4,6 @@ for _,name in pairs{
     "dir",
     "for",
     "mklink",
-    "rem",
     "ren",
     "rename",
     "start",
