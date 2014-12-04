@@ -22,7 +22,7 @@ local function set_(f,equation,expand)
         return true
     end
     local pluspos=string.find(equation,"+=",1,true)
-    if pluspos > 0 then
+    if pluspos and pluspos > 0 then
         local left=string.sub(equation,1,pluspos-1)
         equation = string.format("%s=%s;%%%s%%",
                         left,string.sub(equation,pluspos+2),left)
