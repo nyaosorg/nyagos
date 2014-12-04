@@ -64,9 +64,13 @@ func quoteAndJoin(list []string) string {
 		if i > 0 {
 			buffer = append(buffer, ' ')
 		}
-		buffer = append(buffer, '"')
-		buffer = append(buffer, value...)
-		buffer = append(buffer, '"')
+		if strings.IndexByte(value, ' ') >= 0 {
+			buffer = append(buffer, '"')
+			buffer = append(buffer, value...)
+			buffer = append(buffer, '"')
+		} else {
+			buffer = append(buffer, value...)
+		}
 	}
 	return string(buffer)
 }
