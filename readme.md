@@ -1,19 +1,40 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
+NYAGOS is the commandline-shell for Windows written with the
+Programming Language GO and Lua.
+
+* UNIX-Like Shell
+  * History (Ctrl-P and !-mark)
+  * Alias
+  * Filename/Command-name completion
+* Support UNICODE
+  * Can paste unicode charactor on clipboard and edit them.
+  * Unicode-literal %U+XXXX%
+  * Prompt Macro $Uxxxx
+* Built-in ls
+  * color support (-o option)
+  * indicate junction-mark as @
+* Customizing with Lua
+  * built-in command written with Lua
+  * filtering command-line
+  * useful functions: ANSI-String & UTF8 convert , eval and so on.
+
+How to Get
+----------
+
 The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).
 
 * [English Document](./nyagos_en.md)
 * [Japanese Document](./nyagos_ja.md)
 
-Required software 
------------------
+How to Build
+------------
+
+These sortwares are required.
 
 * [go1.3.3 windows/386](http://golang.org)
 * [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
-
-How to Build
-------------
 
 On `%GOPATH%` folder,
 
