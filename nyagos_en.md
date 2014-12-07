@@ -105,6 +105,7 @@ List the directory. Supported options are below:
 * `-o` Enable color
 * `-a` Print all files.
 * `-R` Print Subdirectories recursively.
+* `-1` Print filename only.
 
 ### `pwd`
 
