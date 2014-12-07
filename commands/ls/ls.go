@@ -22,6 +22,7 @@ const (
 	O_TIME      = 32
 	O_REVERSE   = 64
 	O_RECURSIVE = 128
+	O_ONE       = 256
 )
 
 type fileInfoT struct {
@@ -164,6 +165,12 @@ func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 	}
 }
 
+func lsSimple(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
+	for _, f := range nodes {
+		fmt.Fprintln(out, f.Name())
+	}
+}
+
 type fileInfoCollection struct {
 	flag  int
 	nodes []os.FileInfo
@@ -231,7 +238,9 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	}
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
-	if (flag & O_LONG) > 0 {
+	if (flag & O_ONE) != 0 {
+		lsSimple(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+	} else if (flag & O_LONG) != 0 {
 		lsLong(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
 		lsBox(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
@@ -321,6 +330,10 @@ var option = map[rune](func(*int) error){
 	},
 	'R': func(flag *int) error {
 		*flag |= O_RECURSIVE
+		return nil
+	},
+	'1': func(flag *int) error {
+		*flag |= O_ONE
 		return nil
 	},
 }
