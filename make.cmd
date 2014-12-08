@@ -38,7 +38,7 @@
         goto end
 
 :package
-        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos nyagos.d\*.lua
+        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos specialfolders.vbs lnk.vbs makeicon.cmd nyagos.d\*.lua
         goto end
 
 :install

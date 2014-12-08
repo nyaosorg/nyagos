@@ -20,10 +20,17 @@ Programming Language GO and Lua.
   * filtering command-line
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
 
-How to Get
-----------
+How to Install
+--------------
 
 The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).
+
+    > mkdir PATH\TO\INSTALLDIR
+    > cd PATH\TO\INSTALLDIR
+    > unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
+    > makeicon.cmd
+
+The batchfile: `makeicon.cmd` makes icon on your desktop.
 
 * [English Document](./nyagos_en.md)
 * [Japanese Document](./nyagos_ja.md)
