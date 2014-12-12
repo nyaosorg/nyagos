@@ -298,7 +298,7 @@ On the New BSD-licenses, you can use NYAGOS.
 
 To build nyagos.exe , these softwares are required:
 
-- [go1.3.3 windows/386](http://golang.org)
+- [go1.4 windows/386](http://golang.org)
 - [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor

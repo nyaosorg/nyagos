@@ -353,7 +353,7 @@ NYAGOS は https://github.com/zetamatta/nyagos にて公開しています。
 
 NYAGOS のビルドには
 
-- [go1.3.3 for windows/386](http://golang.org)
+- [go1.4 for windows/386](http://golang.org)
 - [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
 
 が必要となります。言語標準以外では、以下のモジュールを
