@@ -1,7 +1,7 @@
 Option Explicit
 if WScript.Arguments.count < 2 then
     WScript.Echo( _
-        "Usage: cscript lnk.vbs FILENAME SHORTCUT ... make shortcut" _
+        "Usage: cscript lnk.vbs FILENAME SHORTCUT [WORKINGDIRECTORY]... make shortcut" _
         & vbcrlf & _
         "       cscript lnk.vbs SHORTCUT          ... print shortcut-target")
     WScript.Quit()
@@ -22,7 +22,21 @@ dim shortcut1 : set shortcut1=shell1.CreateShortcut(dst)
 if shortcut1 is nothing then
     WScript.Quit()
 end if
+dim workDir : workDir = ""
+if WScript.Arguments.Count >= 3 then
+    workDir = WScript.Arguments.Item(2)
+    workDir = fsObj.GetAbsolutePathName(workDir)
+    if fsObj.FolderExists(workDir) then
+        shortcut1.WorkingDirectory = workDir
+    else
+        workDir = ""
+    end if
+end if
+
 shortcut1.TargetPath=src
 shortcut1.Save()
 
 WScript.Echo "    " & src & vbcrlf & "--> " & dst
+if workDir <> "" then
+    WScript.Echo "    on " & workDir
+end if
