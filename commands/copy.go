@@ -58,7 +58,7 @@ func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
 			fmt.Fprintf(cmd.Stderr, "%s: override? [Yes/No] ", dst)
 			ch := conio.GetCh()
 			fmt.Fprintf(cmd.Stderr, "%c\n", ch)
-			if ch != 'y' || ch != 'Y' {
+			if ch != 'y' && ch != 'Y' {
 				return nil
 			}
 		}
