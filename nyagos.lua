@@ -84,7 +84,9 @@ end
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
     local dotfile = home .. '\\.nyagos'
-    if nyagos.access(dotfile,0) then
+    local fd=io.open(dotfile)
+    if fd then
+        fd:close()
         include(dotfile)
     end
 end
