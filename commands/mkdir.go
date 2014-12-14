@@ -2,7 +2,6 @@ package commands
 
 import (
 	"fmt"
-	"os"
 	"syscall"
 
 	"../conio"
@@ -37,15 +36,6 @@ func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			message = "%s : Delete Tree. Are you sure? [Yes/No/Quit] "
 			continue
 		}
-		fi, err := os.Stat(arg1)
-		if err != nil {
-			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, err.Error())
-			continue
-		}
-		if !fi.IsDir() {
-			fmt.Fprintf(cmd.Stderr, "%s: not directory\n", arg1)
-			continue
-		}
 		fmt.Fprintf(cmd.Stderr, message, arg1)
 		ch := conio.GetCh()
 		fmt.Fprintf(cmd.Stderr, "%c ", ch)
@@ -59,6 +49,7 @@ func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			fmt.Fprintln(cmd.Stderr, "-> canceled")
 			continue
 		}
+		var err error
 		if s_option {
 			fmt.Fprintln(cmd.Stdout)
 			err = dos.Truncate(arg1, cmd.Stdout)
