@@ -1,42 +1,42 @@
 Option Explicit
-if WScript.Arguments.count < 2 then
+If WScript.Arguments.Count < 2 Then
     WScript.Echo( _
         "Usage: cscript lnk.vbs FILENAME SHORTCUT [WORKINGDIRECTORY]... make shortcut" _
         & vbcrlf & _
         "       cscript lnk.vbs SHORTCUT          ... print shortcut-target")
     WScript.Quit()
-end if 
-dim src : src=WScript.Arguments.Item(0)
-dim dst : dst=WScript.Arguments.Item(1)
-dim fsObj : set fsObj=CreateObject("Scripting.FileSystemObject")
+End If
+Dim src : src=WScript.Arguments.Item(0)
+Dim dst : dst=WScript.Arguments.Item(1)
+Dim fsObj : Set fsObj=CreateObject("Scripting.FileSystemObject")
 src=fsObj.GetAbsolutePathName(src)
 dst=fsObj.GetAbsolutePathName(dst)
-if fsObj.FolderExists(dst) then
+If fsObj.FolderExists(dst) Then
     dst = dst & "\" & fsObj.getFileName(src)
-end if
-if right(dst,4) <> ".lnk" then
+End If
+If Right(dst,4) <> ".lnk" Then
     dst = dst & ".lnk"
-end if
-dim shell1 : set shell1=CreateObject("WScript.Shell")
-dim shortcut1 : set shortcut1=shell1.CreateShortcut(dst)
-if shortcut1 is nothing then
+End If
+Dim shell1 : Set shell1=CreateObject("WScript.Shell")
+Dim shortcut1 : Set shortcut1=shell1.CreateShortcut(dst)
+If shortcut1 Is Nothing Then
     WScript.Quit()
-end if
-dim workDir : workDir = ""
-if WScript.Arguments.Count >= 3 then
+End If
+Dim workDir : workDir = ""
+If WScript.Arguments.Count >= 3 Then
     workDir = WScript.Arguments.Item(2)
     workDir = fsObj.GetAbsolutePathName(workDir)
-    if fsObj.FolderExists(workDir) then
+    If fsObj.FolderExists(workDir) Then
         shortcut1.WorkingDirectory = workDir
-    else
+    Else
         workDir = ""
-    end if
-end if
+    End If
+End If
 
 shortcut1.TargetPath=src
 shortcut1.Save()
 
 WScript.Echo "    " & src & vbcrlf & "--> " & dst
-if workDir <> "" then
+If workDir <> "" Then
     WScript.Echo "    on " & workDir
-end if
+End If
