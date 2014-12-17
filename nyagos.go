@@ -130,6 +130,9 @@ func main() {
 				if lengthErr == nil {
 					return length
 				} else {
+					fmt.Fprintf(os.Stderr,
+						"nyagos.prompt: Length invalid: %s\n",
+						lengthErr.Error())
 					return 0
 				}
 			})
