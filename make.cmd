@@ -15,6 +15,7 @@
         set "X_VERSION=-X main.version %VERSION%"
 
 :_build
+        if not exist nyagos.syso for %%I in (windres.exe) do if not "%%~$PATH:I" == "" windres.exe --output-format=coff -o nyagos.syso nyagos.rc
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
         goto end
 
@@ -31,10 +32,6 @@
         go get github.com/mattn/go-runewidth
         go get github.com/shiena/ansicolor 
         go get github.com/atotto/clipboard       
-        goto end
-
-:resource
-        if not exist nyagos.syso windres --output-format=coff -o nyagos.syso nyagos.rc
         goto end
 
 :package
