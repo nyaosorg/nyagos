@@ -9,7 +9,7 @@ set{
 -- Coloring Prompt for NYAGOS.exe
 local prompter=nyagos.prompt
 nyagos.prompt = function(this)
-    prompter('$e[36;40;1m'..this..'$e[37;1m')
+    return prompter('$e[36;40;1m'..this..'$e[37;1m')
 end
 
 -- vim:set ft=lua: --
