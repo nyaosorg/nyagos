@@ -130,9 +130,11 @@ func KeyFuncDeleteOrAbort(this *Buffer) Result { // Ctrl-D
 
 func KeyFuncInsertSelf(this *Buffer) Result {
 	ch := this.Unicode
-	if ch < 0x20 || !this.Insert(this.Cursor, []rune{ch}) {
+	if ch < 0x20 {
 		return CONTINUE
 	}
+	this.Insert(this.Cursor, []rune{ch})
+
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	w1 := conio.GetCharWidth(ch)
 	if w+w1 >= this.ViewWidth {

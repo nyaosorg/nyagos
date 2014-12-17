@@ -36,9 +36,11 @@ func PutRep(ch rune, n int) {
 }
 
 func Backspace(n int) {
-	stdOut.Flush()
-	x, y := conio.GetLocate()
-	conio.Locate(x-n, y)
+	if n > 0 {
+		stdOut.Flush()
+		x, y := conio.GetLocate()
+		conio.Locate(x-n, y)
+	}
 }
 
 func shineCursor() {
@@ -58,7 +60,7 @@ type Buffer struct {
 	Prompt     func() int
 }
 
-func (this *Buffer) Insert(pos int, c []rune) bool {
+func (this *Buffer) Insert(pos int, c []rune) {
 	n := len(c)
 	for this.Length+n >= len(this.Buffer) {
 		tmp := make([]rune, len(this.Buffer)*2)
@@ -72,29 +74,22 @@ func (this *Buffer) Insert(pos int, c []rune) bool {
 		this.Buffer[pos+i] = c[i]
 	}
 	this.Length += n
-	return true
 }
 
+// Insert String :s at :pos
+// returns
+//    count of rune
 func (this *Buffer) InsertString(pos int, s string) int {
-	list := []rune{}
-	for _, r := range s {
-		list = append(list, r)
-	}
-	if this.Insert(pos, list) {
-		return len(list)
-	} else {
-		return -1
-	}
+	list := []rune(s)
+	this.Insert(pos, list)
+	return len(list)
 }
 
 func (this *Buffer) Delete(pos int, n int) int {
-	if this.Length < pos+n {
+	if n <= 0 || this.Length < pos+n {
 		return 0
 	}
-	delw := 0
-	for i := pos; i < pos+n; i++ {
-		delw += conio.GetCharWidth(this.Buffer[i])
-	}
+	delw := this.GetWidthBetween(pos, pos+n)
 	for i := pos; i < this.Length-n; i++ {
 		this.Buffer[i] = this.Buffer[i+n]
 	}
@@ -108,27 +103,21 @@ func (this *Buffer) InsertAndRepaint(str string) {
 
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
-	for i := this.Cursor - 1; i >= this.ViewStart; i-- {
-		Backspace(conio.GetCharWidth(this.Buffer[i]))
-	}
+	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 
 	// Replace Buffer
-	n := this.Cursor - pos
-	if n > 0 {
-		this.Delete(pos, n)
-	}
+	this.Delete(pos, this.Cursor-pos)
 
 	// Define ViewStart , Cursor
 	this.Cursor = pos + this.InsertString(pos, str)
 	this.ViewStart = 0
 	w := 0
 	for i := 0; i < this.Cursor; i++ {
-		w1 := conio.GetCharWidth(this.Buffer[i])
-		for w1+w >= this.ViewWidth {
+		w += conio.GetCharWidth(this.Buffer[i])
+		for w >= this.ViewWidth {
 			w -= conio.GetCharWidth(this.Buffer[this.ViewStart])
 			this.ViewStart++
 		}
-		w += w1
 	}
 
 	// Repaint
@@ -147,7 +136,9 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		w += w1
 		bs += w1
 	}
-	Backspace(bs)
+	if bs > 0 {
+		Backspace(bs)
+	}
 }
 
 func (this *Buffer) GetWidthBetween(from int, to int) int {
