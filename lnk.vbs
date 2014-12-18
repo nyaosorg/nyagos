@@ -27,9 +27,9 @@ If WScript.Arguments.Count >= 3 Then
     Dim i
     For i=2 to WScript.Arguments.Count-1
         Dim equation : equation = WScript.Arguments.Item(i)
-        Dim pos : pos = instr(equation,"=")
+        Dim pos : pos = InStr(equation,"=")
         If pos >= 0 Then
-            equation = Left(equation,pos-1) & "=""" & mid(equation,pos+1) & """"
+            equation = Left(equation,pos-1) & "=""" & Mid(equation,pos+1) & """"
             WScript.Echo equation
             Execute "shortcut1." & equation
         End If

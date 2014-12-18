@@ -1,6 +1,6 @@
 Option Explicit
 Dim objShell,arg1
 Set objShell = WScript.CreateObject("WScript.Shell")
-for each arg1 in WScript.Arguments
+For Each arg1 In WScript.Arguments
     WScript.Echo( objShell.SpecialFolders(arg1) )
 next
