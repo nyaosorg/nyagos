@@ -68,6 +68,10 @@
         )
         goto end
 
+:icon
+        makeicon.cmd
+        goto end
+
 :help
         @echo off
         echo Usage for make.cmd
