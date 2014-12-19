@@ -7,7 +7,11 @@ nyagos.alias("open",function(args)
                 nyagos.shellexecute("open",list[i])
             end
         else
-            nyagos.shellexecute("open",args[i])
+            if nyagos.access(args[i]) then
+                nyagos.shellexecute("open",args[i])
+            else
+                print(args[i] .. ": can not get status")
+            end
         end
         count = count +1
     end
