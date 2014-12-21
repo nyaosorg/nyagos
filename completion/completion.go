@@ -198,8 +198,17 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		// Assert that environ variable name is only alphabet.
 		replacedStart := this.Length - len(str)
 		if len(matches) >= 2 {
-			this.ReplaceAndRepaint(replacedStart, "%"+getCommmon(matches))
-			return readline.CONTINUE
+			commonStr := "%" + getCommmon(matches)
+			if commonStr != str {
+				this.ReplaceAndRepaint(replacedStart, commonStr)
+				return readline.CONTINUE
+			} else {
+				// no difference -> listing.
+				fmt.Println()
+				conio.BoxPrint(matches, os.Stdout)
+				this.RepaintAll()
+				return readline.CONTINUE
+			}
 		} else if len(matches) == 1 {
 			this.ReplaceAndRepaint(replacedStart, "%"+matches[0]+"%")
 			return readline.CONTINUE
