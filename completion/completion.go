@@ -20,7 +20,6 @@ func isExecutable(path string) bool {
 }
 
 var RxEnvironPattern = regexp.MustCompile("%[^%]+%")
-var RxEnvironPattern2 = regexp.MustCompile("%[^%]+$")
 var RxTilda = regexp.MustCompile("^~[/\\\\]")
 
 func listUpFiles(str string) ([]string, error) {
@@ -35,11 +34,7 @@ func listUpFiles(str string) ([]string, error) {
 	})
 
 	str = RxTilda.ReplaceAllStringFunc(str, func(p string) string {
-		home := os.Getenv("HOME")
-		if home == "" {
-			home = os.Getenv("USERPROFILE")
-		}
-		if home != "" {
+		if home := dos.GetHome(); home != "" {
 			return home + "\\"
 		} else {
 			return p

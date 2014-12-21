@@ -2,6 +2,7 @@ package completion
 
 import (
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -18,6 +19,8 @@ func findLastOpenPercent(this string) int {
 	}
 	return pos
 }
+
+var RxEnvironPattern2 = regexp.MustCompile("%[^%]+$")
 
 func listUpEnv(cmdline string) ([]string, int, error) {
 	lastPercentPos := findLastOpenPercent(cmdline)
