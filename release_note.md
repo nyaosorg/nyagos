@@ -1,3 +1,20 @@
+Latest
+======
+
+* 環境変数名を補完できるようにした。
+
+BugFix
+-------
+
+* `open *.sln` などでワイルドカードがマッチしなかった時、エラーにならなかった
+* makeicon.cmd でアイコンがショートカットに紐つかなかった時があった
+
+Trivial
+--------
+* VBScript の大文字・小文字を修正した(with [vbsfmt](https://github.com/zetamatta/camelfmt))
+* license.txt (New BSD License) を用意
+* make.cmd sweep で ~ 付きファイルの削除を
+
 NYAGOS 4.0.2\_2
 ===============
 
