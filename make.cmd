@@ -21,11 +21,15 @@
 
 :fmt
         for /R . %%I IN (*.go) do go fmt %%I
-        for /R . %%I in (.*~) do del %%I
+        for /R . %%I in (*~) do del %%I
         goto end
 
 :clean
         for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
+        goto end
+
+:sweep
+        for /R %%I in (*~) do del %%I
         goto end
 
 :get
