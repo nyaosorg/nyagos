@@ -181,40 +181,62 @@ func compareWithoutQuote(this string, that string) bool {
 	return strings.Replace(this, "\"", "", -1) == strings.Replace(that, "\"", "", -1)
 }
 
-func KeyFuncCompletion(this *readline.Buffer) readline.Result {
-	// complete %ENV$
-	if str := RxEnvironPattern2.FindString(this.String()); str != "" {
-		name := strings.ToUpper(str[1:])
-		matches := make([]string, 0, 5)
-		for _, envEquation := range os.Environ() {
-			equalPos := strings.IndexRune(envEquation, '=')
-			if equalPos >= 0 {
-				envName := envEquation[:equalPos]
-				if strings.HasPrefix(strings.ToUpper(envName), name) {
-					matches = append(matches, envName)
-				}
+func findLastOpenPercent(this string) int {
+	pos := -1
+	for i, ch := range this {
+		if ch == '%' {
+			if pos >= 0 { // closing percent mark
+				pos = -1
+			} else { // opening percent mark
+				pos = i
 			}
-		}
-		// Assert that environ variable name is only alphabet.
-		replacedStart := this.Length - len(str)
-		if len(matches) >= 2 {
-			commonStr := "%" + getCommmon(matches)
-			if commonStr != str {
-				this.ReplaceAndRepaint(replacedStart, commonStr)
-				return readline.CONTINUE
-			} else {
-				// no difference -> listing.
-				fmt.Println()
-				conio.BoxPrint(matches, os.Stdout)
-				this.RepaintAll()
-				return readline.CONTINUE
-			}
-		} else if len(matches) == 1 {
-			this.ReplaceAndRepaint(replacedStart, "%"+matches[0]+"%")
-			return readline.CONTINUE
 		}
 	}
+	return pos
+}
 
+func completeEnv(this *readline.Buffer) bool {
+	allstr := this.String()
+	lastPercentPos := findLastOpenPercent(allstr)
+	if lastPercentPos < 0 {
+		return false
+	}
+	str := allstr[lastPercentPos:]
+	name := strings.ToUpper(str[1:])
+	matches := make([]string, 0, 5)
+	for _, envEquation := range os.Environ() {
+		equalPos := strings.IndexRune(envEquation, '=')
+		if equalPos >= 0 {
+			envName := envEquation[:equalPos]
+			if strings.HasPrefix(strings.ToUpper(envName), name) {
+				matches = append(matches, envName)
+			}
+		}
+	}
+	if len(matches) <= 0 { // nothing matches.
+		return false
+	}
+	if len(matches) == 1 { // one matches.
+		this.ReplaceAndRepaint(lastPercentPos, "%"+matches[0]+"%")
+		return true
+	}
+	// more than one match.
+	commonStr := "%" + getCommmon(matches)
+	if commonStr != str {
+		this.ReplaceAndRepaint(lastPercentPos, commonStr)
+	} else {
+		// no difference -> listing.
+		fmt.Println()
+		conio.BoxPrint(matches, os.Stdout)
+		this.RepaintAll()
+	}
+	return true
+}
+
+func KeyFuncCompletion(this *readline.Buffer) readline.Result {
+	if completeEnv(this) {
+		return readline.CONTINUE
+	}
 	str, wordStart := this.CurrentWord()
 
 	slashToBackSlash := true
