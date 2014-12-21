@@ -20,6 +20,7 @@ func isExecutable(path string) bool {
 }
 
 var RxEnvironPattern = regexp.MustCompile("%[^%]+%")
+var RxEnvironPattern2 = regexp.MustCompile("%[^%]+$")
 var RxTilda = regexp.MustCompile("^~[/\\\\]")
 
 func listUpFiles(str string) ([]string, error) {
@@ -32,6 +33,7 @@ func listUpFiles(str string) ([]string, error) {
 			return p
 		}
 	})
+
 	str = RxTilda.ReplaceAllStringFunc(str, func(p string) string {
 		home := os.Getenv("HOME")
 		if home == "" {
@@ -180,6 +182,30 @@ func compareWithoutQuote(this string, that string) bool {
 }
 
 func KeyFuncCompletion(this *readline.Buffer) readline.Result {
+	// complete %ENV$
+	if str := RxEnvironPattern2.FindString(this.String()); str != "" {
+		name := strings.ToUpper(str[1:])
+		matches := make([]string, 0, 5)
+		for _, envEquation := range os.Environ() {
+			equalPos := strings.IndexRune(envEquation, '=')
+			if equalPos >= 0 {
+				envName := envEquation[:equalPos]
+				if strings.HasPrefix(strings.ToUpper(envName), name) {
+					matches = append(matches, envName)
+				}
+			}
+		}
+		// Assert that environ variable name is only alphabet.
+		replacedStart := this.Length - len(str)
+		if len(matches) >= 2 {
+			this.ReplaceAndRepaint(replacedStart, "%"+getCommmon(matches))
+			return readline.CONTINUE
+		} else if len(matches) == 1 {
+			this.ReplaceAndRepaint(replacedStart, "%"+matches[0]+"%")
+			return readline.CONTINUE
+		}
+	}
+
 	str, wordStart := this.CurrentWord()
 
 	slashToBackSlash := true
