@@ -156,7 +156,7 @@ func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 	return readline.CONTINUE
 }
 
-func getCommmon(list []string) string {
+func GetCommon(list []string) string {
 	common := list[0]
 	for _, f := range list[1:] {
 		cr := strings.NewReader(common)
@@ -181,48 +181,24 @@ func compareWithoutQuote(this string, that string) bool {
 	return strings.Replace(this, "\"", "", -1) == strings.Replace(that, "\"", "", -1)
 }
 
-func findLastOpenPercent(this string) int {
-	pos := -1
-	for i, ch := range this {
-		if ch == '%' {
-			if pos >= 0 { // closing percent mark
-				pos = -1
-			} else { // opening percent mark
-				pos = i
-			}
-		}
-	}
-	return pos
-}
-
-func completeEnv(this *readline.Buffer) bool {
-	allstr := this.String()
-	lastPercentPos := findLastOpenPercent(allstr)
-	if lastPercentPos < 0 {
+func completeXXX(this *readline.Buffer, listUpper func(string) ([]string, int, error)) bool {
+	allstring := this.String()
+	matches, lastPercentPos, listUpErr := listUpper(allstring)
+	if listUpErr != nil {
+		fmt.Fprintln(os.Stderr, listUpErr.Error())
 		return false
 	}
-	str := allstr[lastPercentPos:]
-	name := strings.ToUpper(str[1:])
-	matches := make([]string, 0, 5)
-	for _, envEquation := range os.Environ() {
-		equalPos := strings.IndexRune(envEquation, '=')
-		if equalPos >= 0 {
-			envName := envEquation[:equalPos]
-			if strings.HasPrefix(strings.ToUpper(envName), name) {
-				matches = append(matches, envName)
-			}
-		}
-	}
-	if len(matches) <= 0 { // nothing matches.
+	if matches == nil || len(matches) <= 0 {
 		return false
 	}
 	if len(matches) == 1 { // one matches.
-		this.ReplaceAndRepaint(lastPercentPos, "%"+matches[0]+"%")
+		this.ReplaceAndRepaint(lastPercentPos, matches[0])
 		return true
 	}
 	// more than one match.
-	commonStr := "%" + getCommmon(matches)
-	if commonStr != str {
+	commonStr := GetCommon(matches)
+	originStr := allstring[lastPercentPos:]
+	if commonStr != originStr {
 		this.ReplaceAndRepaint(lastPercentPos, commonStr)
 	} else {
 		// no difference -> listing.
@@ -234,7 +210,7 @@ func completeEnv(this *readline.Buffer) bool {
 }
 
 func KeyFuncCompletion(this *readline.Buffer) readline.Result {
-	if completeEnv(this) {
+	if completeXXX(this, listUpEnv) {
 		return readline.CONTINUE
 	}
 	str, wordStart := this.CurrentWord()
@@ -256,7 +232,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 	if err != nil || list == nil || len(list) <= 0 {
 		return readline.CONTINUE
 	}
-	commonStr := getCommmon(list)
+	commonStr := GetCommon(list)
 	needQuote := strings.ContainsRune(str, '"')
 	if !needQuote {
 		for _, node := range list {
