@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -23,6 +24,7 @@ const (
 	O_REVERSE   = 64
 	O_RECURSIVE = 128
 	O_ONE       = 256
+	O_HELP      = 512
 )
 
 type fileInfoT struct {
@@ -336,6 +338,10 @@ var option = map[rune](func(*int) error){
 		*flag |= O_ONE
 		return nil
 	},
+	'h': func(flag *int) error {
+		*flag |= O_HELP
+		return nil
+	},
 }
 
 // 存在しないオプションに関するエラー
@@ -365,6 +371,15 @@ func Main(args []string, out io.Writer) error {
 		} else {
 			paths = append(paths, arg)
 		}
+	}
+	if (flag & O_HELP) != 0 {
+		message := make([]byte, 0, 80)
+		message = append(message, "Usage: ls [-"...)
+		for optKey, _ := range option {
+			message = append(message, byte(optKey))
+		}
+		message = append(message, "] [PATH(s)]..."...)
+		return errors.New(string(message))
 	}
 	return lsCore(paths, flag, out)
 }
