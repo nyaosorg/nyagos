@@ -106,6 +106,9 @@ List the directory. Supported options are below:
 * `-a` Print all files.
 * `-R` Print Subdirectories recursively.
 * `-1` Print filename only.
+* `-t` Sort with last modified time.
+* `-r` Revert sort order.
+* `-h` Print Usage
 
 ### `pwd`
 
