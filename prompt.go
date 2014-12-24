@@ -51,9 +51,12 @@ func Format2Prompt(format string) string {
 					buffer.WriteString(wd[:2])
 				}
 			} else if c == 'p' {
-				wd, err := os.Getwd()
-				if err == nil {
-					buffer.WriteString(dos.ReplaceHomeToTildeSlash(wd))
+				if wd, err := os.Getwd(); err != nil {
+					fmt.Fprintf(os.Stderr, "$P: %s\n", err.Error())
+				} else if wd_, err_ := dos.CorrectPathCase(wd); err_ != nil {
+					fmt.Fprintf(os.Stderr, "$P: %s\n", err_.Error())
+				} else {
+					buffer.WriteString(dos.ReplaceHomeToTildeSlash(wd_))
 				}
 			} else if c == 'q' {
 				buffer.WriteRune('=')
