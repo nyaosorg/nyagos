@@ -27,6 +27,9 @@ func correct(path string) (string, string, error) {
 }
 
 func CorrectPathCase(path string) (string, error) {
+	if len(path) <= 3 {
+		return strings.ToUpper(path), nil
+	}
 	dirname, fname, err := correct(path)
 	if err != nil {
 		return "", err
