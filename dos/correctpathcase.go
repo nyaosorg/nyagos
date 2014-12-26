@@ -43,3 +43,11 @@ func CorrectPathCase(path string) (string, error) {
 	}
 	return filepath.Join(dirname, fname), nil
 }
+
+func Getwd() (string, error) {
+	wd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return CorrectPathCase(wd)
+}

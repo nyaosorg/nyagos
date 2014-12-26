@@ -2,13 +2,13 @@ package commands
 
 import (
 	"fmt"
-	"os"
 
+	"../dos"
 	"../interpreter"
 )
 
 func cmd_pwd(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	wd, _ := os.Getwd()
+	wd, _ := dos.Getwd()
 	fmt.Fprintln(cmd.Stdout, wd)
 	return interpreter.CONTINUE, nil
 }
