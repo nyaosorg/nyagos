@@ -165,7 +165,7 @@ func cmdWrite(L *lua.Lua) int {
 }
 
 func cmdGetwd(L *lua.Lua) int {
-	wd, err := os.Getwd()
+	wd, err := dos.Getwd()
 	if err == nil {
 		L.PushString(wd)
 		return 1
