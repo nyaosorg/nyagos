@@ -219,6 +219,10 @@ It converts the current codepage multibyte string to UTF8 string.
 
 It expands the wildcard pattern to table contains filenames.
 
+### `path = nyagos.pathjoin('path','to','where'...)`
+
+It makes parts of path-string join.
+
 ### `nyagos.bindkey("KEYNAME","FUNCNAME")`
 
 KEYNAME are:
