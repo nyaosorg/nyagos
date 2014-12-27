@@ -5,6 +5,6 @@
 *.syso
 *.zip
 .*.un~
-lua/include/
-lua/lua-5*/
+Src/lua/include/
+Src/lua/lua-5*/
 version.cmd
