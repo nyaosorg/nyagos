@@ -348,3 +348,24 @@ func cmdAccess(L *lua.Lua) int {
 	L.PushBool(result)
 	return 1
 }
+
+func cmdPathJoin(L *lua.Lua) int {
+	path, pathErr := L.ToString(1)
+	if pathErr != nil {
+		L.PushNil()
+		L.PushString(pathErr.Error())
+		return 2
+	}
+	for i, i_ := 2, L.GetTop(); i <= i_; i++ {
+		pathI, pathIErr := L.ToString(i)
+		if pathIErr != nil {
+			L.PushNil()
+			L.PushString(pathErr.Error())
+			return 2
+		}
+		path = dos.Join(path, pathI)
+	}
+	L.PushString(path)
+	L.PushNil()
+	return 2
+}
