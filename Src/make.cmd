@@ -16,7 +16,7 @@
 
 :_build
         if not exist nyagos.syso for %%I in (windres.exe) do if not "%%~$PATH:I" == "" windres.exe --output-format=coff -o nyagos.syso nyagos.rc
-        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
+        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o nyagos.exe -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
         goto end
 
 :fmt
@@ -39,7 +39,8 @@
         goto end
 
 :package
-        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua52.dll nyagos.lua nyagos_ja.md nyagos_en.md readme.md .nyagos specialfolders.vbs lnk.vbs makeicon.cmd nyagos.d\*.lua
+        zip -j9 "nyagos-%VERSION%%2.zip" %~dp0..\readme.md  %~dp0..\nyagos_ja.md %~dp0..\nyagos_en.md
+        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua52.dll nyagos.lua .nyagos specialfolders.vbs lnk.vbs makeicon.cmd nyagos.d\*.lua
         goto end
 
 :install
