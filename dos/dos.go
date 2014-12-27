@@ -66,7 +66,7 @@ func Chdir(folder_ string) error {
 }
 
 var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
-var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[\\/]")
+var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[/\\\\]")
 
 // Equals filepath.Join but this works right when path has drive-letter.
 func Join(paths ...string) string {
@@ -74,6 +74,7 @@ func Join(paths ...string) string {
 	for i, path := range paths {
 		if rxDriveOnly.MatchString(path) {
 			paths[i] = path + "."
+			start = i
 		} else if rxRoot.MatchString(path) {
 			start = i
 		}
