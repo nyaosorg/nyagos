@@ -103,7 +103,7 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 
 func ReadLine(prompt_ func() int) (string, Result) {
 	this := Buffer{Buffer: make([]rune, 20)}
-	this.ViewWidth, _ = conio.GetScreenSize()
+	this.ViewWidth, _ = conio.GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
 	this.Prompt = prompt_
