@@ -1,5 +1,4 @@
 @setlocal
-@set PROMPT=$G$S
 
 @if exist "%~dp0version.cmd" call "%~dp0version.cmd"
 
