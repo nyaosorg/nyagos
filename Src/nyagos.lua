@@ -6,7 +6,7 @@ print("Nihongo Yet Another GOing Shell " .. nyagos.version)
 if string.len(nyagos.version) <= 0 then
     print("Build at ".. nyagos.stamp .. " with commit "..nyagos.commit)
 end
-print("Copyright (c) 2014 HAYAMA_Kaoru and NYAOS.ORG")
+print("Copyright (c) 2014,2015 HAYAMA_Kaoru and NYAOS.ORG")
 
 local function expand(text)
     return string.gsub(text,"%%(%w+)%%",function(w)
