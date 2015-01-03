@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	".."
+	"../../conio"
 )
 
 type Result int

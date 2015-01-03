@@ -6,7 +6,7 @@ import (
 	"os"
 	"unicode"
 
-	".."
+	"../../conio"
 )
 
 var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)

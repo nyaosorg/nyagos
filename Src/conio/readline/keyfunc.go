@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	".."
+	"../../conio"
 	"github.com/atotto/clipboard"
 )
 
