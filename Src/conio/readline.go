@@ -1,10 +1,8 @@
-package readline
+package conio
 
 import (
 	"fmt"
 	"strings"
-
-	"../../conio"
 )
 
 type Result int
@@ -103,7 +101,7 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 
 func ReadLine(prompt_ func() int) (string, Result) {
 	this := Buffer{Buffer: make([]rune, 20)}
-	this.ViewWidth, _ = conio.GetScreenBufferInfo().ViewSize()
+	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
 	this.Prompt = prompt_
@@ -113,10 +111,10 @@ func ReadLine(prompt_ func() int) (string, Result) {
 	for {
 		stdOut.Flush()
 		shineCursor()
-		this.Unicode, this.Keycode, this.ShiftState = conio.GetKey()
+		this.Unicode, this.Keycode, this.ShiftState = GetKey()
 		var f KeyFuncT
 		var ok bool
-		if (this.ShiftState & conio.ALT_PRESSED) != 0 {
+		if (this.ShiftState & ALT_PRESSED) != 0 {
 			f, ok = altMap[this.Keycode]
 			if !ok {
 				continue

@@ -11,7 +11,6 @@ import (
 	"unicode"
 
 	"../conio"
-	"../conio/readline"
 	"../dos"
 )
 
@@ -134,7 +133,7 @@ func listUpCommands(str string) ([]string, error) {
 	}
 	return uniq, nil
 }
-func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
+func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	str, pos := this.CurrentWord()
 	var list []string
 	if pos > 0 {
@@ -143,12 +142,12 @@ func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 		list, _ = listUpCommands(str)
 	}
 	if list == nil {
-		return readline.CONTINUE
+		return conio.CONTINUE
 	}
 	fmt.Print("\n")
 	conio.BoxPrint(list, os.Stdout)
 	this.RepaintAll()
-	return readline.CONTINUE
+	return conio.CONTINUE
 }
 
 func GetCommon(list []string) string {
@@ -176,7 +175,7 @@ func compareWithoutQuote(this string, that string) bool {
 	return strings.Replace(this, "\"", "", -1) == strings.Replace(that, "\"", "", -1)
 }
 
-func completeXXX(this *readline.Buffer, listUpper func(string) ([]string, int, error)) bool {
+func completeXXX(this *conio.Buffer, listUpper func(string) ([]string, int, error)) bool {
 	allstring := this.String()
 	matches, lastPercentPos, listUpErr := listUpper(allstring)
 	if listUpErr != nil {
@@ -204,9 +203,9 @@ func completeXXX(this *readline.Buffer, listUpper func(string) ([]string, int, e
 	return true
 }
 
-func KeyFuncCompletion(this *readline.Buffer) readline.Result {
+func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	if completeXXX(this, listUpEnv) {
-		return readline.CONTINUE
+		return conio.CONTINUE
 	}
 	str, wordStart := this.CurrentWord()
 
@@ -225,7 +224,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		list, err = listUpCommands(str)
 	}
 	if err != nil || list == nil || len(list) <= 0 {
-		return readline.CONTINUE
+		return conio.CONTINUE
 	}
 	commonStr := GetCommon(list)
 	needQuote := strings.ContainsRune(str, '"')
@@ -256,5 +255,5 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		return KeyFuncCompletionList(this)
 	}
 	this.ReplaceAndRepaint(wordStart, commonStr)
-	return readline.CONTINUE
+	return conio.CONTINUE
 }

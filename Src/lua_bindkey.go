@@ -7,7 +7,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"./conio/readline"
+	"./conio"
 	"./lua"
 )
 
@@ -16,7 +16,7 @@ type KeyLuaFuncT struct {
 	registoryKey string
 }
 
-func getBufferForCallBack(L *lua.Lua) (*readline.Buffer, int) {
+func getBufferForCallBack(L *lua.Lua) (*conio.Buffer, int) {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		L.PushNil()
 		L.PushString("bindKeyExec: call with : not .")
@@ -28,7 +28,7 @@ func getBufferForCallBack(L *lua.Lua) (*readline.Buffer, int) {
 		L.PushString("bindKey.Call: invalid object")
 		return nil, 2
 	}
-	buffer := (*readline.Buffer)(L.ToUserData(-1))
+	buffer := (*conio.Buffer)(L.ToUserData(-1))
 	if buffer == nil {
 		L.PushNil()
 		L.PushString("bindKey.Call: invalid member")
@@ -64,7 +64,7 @@ func callKeyFunc(L *lua.Lua) int {
 		L.PushString(keyErr.Error())
 		return 2
 	}
-	function, funcErr := readline.GetFunc(key)
+	function, funcErr := conio.GetFunc(key)
 	if funcErr != nil {
 		L.PushNil()
 		L.PushString(funcErr.Error())
@@ -73,17 +73,17 @@ func callKeyFunc(L *lua.Lua) int {
 	rc := function.Call(buffer)
 	L.PushBool(true)
 	switch rc {
-	case readline.ENTER:
+	case conio.ENTER:
 		L.PushBool(true)
 		return 2
-	case readline.ABORT:
+	case conio.ABORT:
 		L.PushBool(false)
 		return 2
 	}
 	return 1
 }
 
-func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
+func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
 	this.L.NewTable()
 	pos := -1
@@ -124,9 +124,9 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 			buffer.Buffer = []rune{}
 			buffer.Length = 0
 		}
-		return readline.ENTER
+		return conio.ENTER
 	}
-	return readline.CONTINUE
+	return conio.CONTINUE
 }
 
 func cmdBindKey(L *lua.Lua) int {
@@ -140,7 +140,7 @@ func cmdBindKey(L *lua.Lua) int {
 	case lua.LUA_TFUNCTION:
 		regkey := "nyagos.bind." + key
 		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
-		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
+		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
 			L.PushNil()
 			L.PushString(err.Error())
 			return 2
@@ -155,7 +155,7 @@ func cmdBindKey(L *lua.Lua) int {
 			L.PushString(valErr.Error())
 			return 2
 		}
-		err := readline.BindKeySymbol(key, val)
+		err := conio.BindKeySymbol(key, val)
 		if err != nil {
 			L.PushNil()
 			L.PushString(err.Error())

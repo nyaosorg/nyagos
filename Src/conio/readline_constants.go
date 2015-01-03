@@ -1,4 +1,4 @@
-package readline
+package conio
 
 const (
 	K_BACKSPACE  = "BACKSPACE"

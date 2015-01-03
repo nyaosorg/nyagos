@@ -14,7 +14,6 @@ import (
 	"./commands"
 	"./completion"
 	"./conio"
-	"./conio/readline"
 	"./dos"
 	"./history"
 	"./interpreter"
@@ -47,23 +46,23 @@ func nyagosPrompt(L *lua.Lua) int {
 func main() {
 	conio.DisableCtrlC()
 
-	historyUp := readline.KeyGoFuncT{history.KeyFuncHistoryUp}
-	historyDown := readline.KeyGoFuncT{history.KeyFuncHistoryDown}
-	completion := readline.KeyGoFuncT{completion.KeyFuncCompletion}
+	historyUp := conio.KeyGoFuncT{history.KeyFuncHistoryUp}
+	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
+	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
 
-	if err := readline.BindKeySymbolFunc(readline.K_CTRL_I, "COMPLETE", &completion); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := readline.BindKeySymbolFunc(readline.K_UP, "PREVIOUS_HISTORY", &historyUp); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_UP, "PREVIOUS_HISTORY", &historyUp); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := readline.BindKeySymbolFunc(readline.K_DOWN, "NEXT_HISTORY", &historyDown); err != nil {
+	if err := conio.BindKeySymbolFunc(conio.K_DOWN, "NEXT_HISTORY", &historyDown); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := readline.BindKeySymbol(readline.K_CTRL_P, "PREVIOUS_HISTORY"); err != nil {
+	if err := conio.BindKeySymbol(conio.K_CTRL_P, "PREVIOUS_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	if err := readline.BindKeySymbol(readline.K_CTRL_N, "NEXT_HISTORY"); err != nil {
+	if err := conio.BindKeySymbol(conio.K_CTRL_N, "NEXT_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
@@ -119,7 +118,7 @@ func main() {
 		} else {
 			conio.SetTitle("NYAOS - " + wdErr.Error())
 		}
-		line, cont := readline.ReadLine(
+		line, cont := conio.ReadLine(
 			func() int {
 				L.GetGlobal("nyagos")
 				L.GetField(-1, "prompt")
@@ -136,7 +135,7 @@ func main() {
 					return 0
 				}
 			})
-		if cont == readline.ABORT {
+		if cont == conio.ABORT {
 			break
 		}
 

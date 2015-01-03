@@ -1,11 +1,10 @@
-package readline
+package conio
 
 import (
 	"bytes"
 	"fmt"
 	"strings"
 
-	"../../conio"
 	"github.com/atotto/clipboard"
 )
 
@@ -41,7 +40,7 @@ func KeyFuncBackword(this *Buffer) Result { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		Backspace(conio.GetCharWidth(this.Buffer[this.Cursor]))
+		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -56,12 +55,12 @@ func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 		PutRep('\a', 1)
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
-		w := conio.GetCharWidth(this.Buffer[this.ViewStart])
+		w := GetCharWidth(this.Buffer[this.ViewStart])
 		for {
 			if this.ViewStart <= 0 {
 				break
 			}
-			w_ := w + conio.GetCharWidth(this.Buffer[this.ViewStart-1])
+			w_ := w + GetCharWidth(this.Buffer[this.ViewStart-1])
 			if w_ >= this.ViewWidth {
 				break
 			}
@@ -86,7 +85,7 @@ func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 	} else {
 		// Right Scroll
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-		if conio.GetCharWidth(this.Buffer[this.Cursor]) > conio.GetCharWidth(this.Buffer[this.ViewStart]) {
+		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -136,11 +135,11 @@ func KeyFuncInsertSelf(this *Buffer) Result {
 	this.Insert(this.Cursor, []rune{ch})
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := conio.GetCharWidth(ch)
+	w1 := GetCharWidth(ch)
 	if w+w1 >= this.ViewWidth {
 		// scroll left
 		Backspace(w)
-		if conio.GetCharWidth(this.Buffer[this.ViewStart]) < w1 {
+		if GetCharWidth(this.Buffer[this.ViewStart]) < w1 {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -173,7 +172,7 @@ func KeyFuncClearAfter(this *Buffer) Result {
 	clipboard.WriteAll(killbuf.String())
 
 	for i < this.Length && w < this.ViewWidth {
-		w1 := conio.GetCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		PutRep(' ', w1)
 		i++
 		w += w1
@@ -205,7 +204,7 @@ func KeyFuncClearBefore(this *Buffer) Result {
 }
 
 func KeyFuncCLS(this *Buffer) Result {
-	conio.Cls()
+	Cls()
 	this.RepaintAll()
 	return CONTINUE
 }

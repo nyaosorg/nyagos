@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"../conio/readline"
+	"../conio"
 	"../interpreter"
 )
 
@@ -38,34 +38,34 @@ func LastHistory() string {
 	}
 }
 
-func KeyFuncHistoryUp(this *readline.Buffer) readline.Result {
+func KeyFuncHistoryUp(this *conio.Buffer) conio.Result {
 	if pointer <= 0 {
 		pointer = len(histories)
 	}
 	pointer -= 1
-	readline.KeyFuncClear(this)
+	conio.KeyFuncClear(this)
 	if pointer >= 0 {
 		this.InsertString(0, histories[pointer])
 		this.ViewStart = 0
 		this.Cursor = 0
-		readline.KeyFuncTail(this)
+		conio.KeyFuncTail(this)
 	}
-	return readline.CONTINUE
+	return conio.CONTINUE
 }
 
-func KeyFuncHistoryDown(this *readline.Buffer) readline.Result {
+func KeyFuncHistoryDown(this *conio.Buffer) conio.Result {
 	pointer += 1
 	if pointer >= len(histories) {
 		pointer = 0
 	}
-	readline.KeyFuncClear(this)
+	conio.KeyFuncClear(this)
 	if pointer < len(histories) {
 		this.InsertString(0, histories[pointer])
 		this.ViewStart = 0
 		this.Cursor = 0
-		readline.KeyFuncTail(this)
+		conio.KeyFuncTail(this)
 	}
-	return readline.CONTINUE
+	return conio.CONTINUE
 }
 
 func Push(input string) {
