@@ -105,7 +105,7 @@ func main() {
 			conio.SetTitle("NYAOS - " + wdErr.Error())
 		}
 		history_count := len(conio.Histories)
-		line, cont := conio.ReadLine(
+		line, cont := conio.ReadLinePromptFunc(
 			func() int {
 				L.GetGlobal("nyagos")
 				L.GetField(-1, "prompt")

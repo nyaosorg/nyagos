@@ -103,12 +103,12 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
-func ReadLine(prompt_ func() int) (string, Result) {
+func ReadLinePromptFunc(promptFunc func() int) (string, Result) {
 	this := Buffer{Buffer: make([]rune, 20)}
 	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
-	this.Prompt = prompt_
+	this.Prompt = promptFunc
 	if this.Prompt != nil {
 		this.ViewWidth = this.ViewWidth - this.Prompt()
 	}
@@ -149,4 +149,12 @@ func ReadLine(prompt_ func() int) (string, Result) {
 			return result, rc
 		}
 	}
+}
+
+// Not used on NYAGOS. Provide this as library for other applications.
+func ReadLinePromptStr(promptStr string) (string, Result) {
+	return ReadLinePromptFunc(func() int {
+		fmt.Print(promptStr)
+		return len(promptStr)
+	})
 }
