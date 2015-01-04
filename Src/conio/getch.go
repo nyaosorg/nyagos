@@ -51,30 +51,28 @@ type keyInfo struct {
 	ShiftState uint32
 }
 
+func ctrlCHandler(ch chan os.Signal) {
+	for _ = range ch {
+		keyBuffer = append(keyBuffer, keyInfo{3, 0, LEFT_CTRL_PRESSED})
+	}
+}
+
 func DisableCtrlC() {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt)
-	go func() {
-		for _ = range ch {
-			if keyPipe != nil {
-				go func() {
-					keyPipe <- keyInfo{3, 0, LEFT_CTRL_PRESSED}
-				}()
-			}
-		}
-	}()
+	go ctrlCHandler(ch)
 }
 
-var keyPipe chan keyInfo = nil
-
-func keyGoRuntine(pipe chan keyInfo) {
+func getKeys() []keyInfo {
 	var numberOfEventsRead uint32
 	var events [10]inputRecordT
 	var orgConMode uint32
 
+	result := make([]keyInfo, 0, 0)
+
 	getConsoleMode.Call(uintptr(hConin),
 		uintptr(unsafe.Pointer(&orgConMode)))
-	setConsoleMode.Call(uintptr(hConin), uintptr(ENABLE_PROCESSED_INPUT))
+	setConsoleMode.Call(uintptr(hConin), 0)
 	readConsoleInput.Call(
 		uintptr(hConin),
 		uintptr(unsafe.Pointer(&events[0])),
@@ -89,32 +87,27 @@ func keyGoRuntine(pipe chan keyInfo) {
 			} else {
 				keycode = utf16.Decode([]uint16{events[i].unicodeChar})[0]
 			}
-			pipe <- keyInfo{
+			result = append(result, keyInfo{
 				keycode,
 				events[i].wVirtualKeyCode,
 				events[i].dwControlKeyState,
-			}
+			})
 		}
 	}
-	// Not to read keyboard data on not requested time
-	// (ex. other application is running)
-	// shutdown goroutine.
-	pipe <- keyInfo{0, 0, 0}
+	return result
 }
 
+var keyBuffer []keyInfo
+var keyBufferRead = 0
+
 func GetKey() (rune, uint16, uint32) {
-	if keyPipe == nil {
-		keyPipe = make(chan keyInfo, 10)
-		go keyGoRuntine(keyPipe)
+	for keyBuffer == nil || keyBufferRead >= len(keyBuffer) {
+		keyBuffer = getKeys()
+		keyBufferRead = 0
 	}
-	for {
-		keyInfo := <-keyPipe
-		if keyInfo.KeyCode != 0 || keyInfo.ScanCode != 0 {
-			return keyInfo.KeyCode, keyInfo.ScanCode, keyInfo.ShiftState
-		}
-		// When keyGoRuntine has shutdowned, restart.
-		go keyGoRuntine(keyPipe)
-	}
+	r := keyBuffer[keyBufferRead]
+	keyBufferRead++
+	return r.KeyCode, r.ScanCode, r.ShiftState
 }
 
 func GetCh() rune {
