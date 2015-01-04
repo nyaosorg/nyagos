@@ -41,6 +41,8 @@ var keyMap = map[rune]KeyFuncT{
 	name2char[K_DELETE]: name2func[F_DELETE_CHAR],
 	name2char[K_ENTER]:  name2func[F_ACCEPT_LINE],
 	name2char[K_ESCAPE]: name2func[F_KILL_WHOLE_LINE],
+	name2char[K_CTRL_N]: name2func[F_HISTORY_DOWN],
+	name2char[K_CTRL_P]: name2func[F_HISTORY_UP],
 }
 
 var scanMap = map[uint16]KeyFuncT{
@@ -51,6 +53,8 @@ var scanMap = map[uint16]KeyFuncT{
 	name2scan[K_LEFT]:   name2func[F_BACKWARD_CHAR],
 	name2scan[K_RIGHT]:  name2func[F_FORARD_CHAR],
 	name2scan[K_SHIFT]:  name2func[F_PASS],
+	name2scan[K_DOWN]:   name2func[F_HISTORY_DOWN],
+	name2scan[K_UP]:     name2func[F_HISTORY_UP],
 }
 
 var altMap = map[uint16]KeyFuncT{
@@ -135,7 +139,14 @@ func ReadLine(prompt_ func() int) (string, Result) {
 		if rc != CONTINUE {
 			stdOut.WriteRune('\n')
 			stdOut.Flush()
-			return this.String(), rc
+			result := this.String()
+			if result == "" {
+				HistoryResetPointer()
+			}
+			if result != LastHistory() {
+				HistoryPush(result)
+			}
+			return result, rc
 		}
 	}
 }

@@ -13,7 +13,6 @@ import (
 	"./alias"
 	"./conio"
 	"./dos"
-	"./history"
 	"./interpreter"
 	"./lua"
 )
@@ -260,9 +259,9 @@ func cmdGetHistory(this *lua.Lua) int {
 			this.PushNil()
 			this.PushString(err.Error())
 		}
-		this.PushString(history.Get(val))
+		this.PushString(conio.GetHistory(val))
 	} else {
-		this.PushInteger(history.Len())
+		this.PushInteger(conio.HistoryLen())
 	}
 	return 1
 }

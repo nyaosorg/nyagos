@@ -115,6 +115,8 @@ const (
 	F_REPAINT              = "REPAINT"
 	F_END_OF_LINE          = "END_OF_LINE"
 	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
+	F_HISTORY_UP           = "HISTORY_UP"
+	F_HISTORY_DOWN         = "HISTORY_DOWN"
 )
 
 var name2char = map[string]rune{
@@ -240,4 +242,6 @@ var name2func = map[string]KeyFuncT{
 	F_CLEAR_SCREEN:         &KeyGoFuncT{KeyFuncCLS},
 	F_END_OF_LINE:          &KeyGoFuncT{KeyFuncTail},
 	F_INTR:                 &KeyGoFuncT{KeyFuncIntr},
+	F_HISTORY_UP:           &KeyGoFuncT{KeyFuncHistoryUp},
+	F_HISTORY_DOWN:         &KeyGoFuncT{KeyFuncHistoryDown},
 }

@@ -46,23 +46,9 @@ func nyagosPrompt(L *lua.Lua) int {
 func main() {
 	conio.DisableCtrlC()
 
-	historyUp := conio.KeyGoFuncT{history.KeyFuncHistoryUp}
-	historyDown := conio.KeyGoFuncT{history.KeyFuncHistoryDown}
 	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
 
 	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-	}
-	if err := conio.BindKeySymbolFunc(conio.K_UP, "PREVIOUS_HISTORY", &historyUp); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-	}
-	if err := conio.BindKeySymbolFunc(conio.K_DOWN, "NEXT_HISTORY", &historyDown); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-	}
-	if err := conio.BindKeySymbol(conio.K_CTRL_P, "PREVIOUS_HISTORY"); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-	}
-	if err := conio.BindKeySymbol(conio.K_CTRL_N, "NEXT_HISTORY"); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
@@ -118,6 +104,7 @@ func main() {
 		} else {
 			conio.SetTitle("NYAOS - " + wdErr.Error())
 		}
+		history_count := len(conio.Histories)
 		line, cont := conio.ReadLine(
 			func() int {
 				L.GetGlobal("nyagos")
@@ -145,18 +132,16 @@ func main() {
 			fmt.Fprintln(os.Stdout, line)
 		}
 		if line == "" {
-			history.ResetPointer()
 			continue
 		}
-		if line != history.LastHistory() {
-			history.Push(line)
+		if history_count > len(conio.Histories) {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 			if err == nil {
 				fmt.Fprintln(fd, line)
 				fd.Close()
+			} else {
+				fmt.Fprintln(os.Stderr, err.Error())
 			}
-		} else {
-			history.ResetPointer()
 		}
 
 		stackPos := L.GetTop()
