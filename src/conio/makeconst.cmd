@@ -1,3 +1,5 @@
+setlocal
+for %%I in (gcc.exe) do set "MINGW=%%~dp$PATH:I.."
 lua %~dp0..\makeconst.lua conio ^
 	CTRL_CLOSE_EVENT ^
 	CTRL_LOGOFF_EVENT ^
@@ -8,6 +10,6 @@ lua %~dp0..\makeconst.lua conio ^
 	STD_INPUT_HANDLE ^
 	STD_OUTPUT_HANDLE ^
 	KEY_EVENT ^
-	C:\MingW\include > const.go
+	"%MINGW%\include" > const.go
 go fmt const.go
-
+endlocal
