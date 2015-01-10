@@ -4,17 +4,11 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"unicode"
 
 	"../conio"
-	"../dos"
 )
-
-func isExecutable(path string) bool {
-	return dos.IsExecutableSuffix(filepath.Ext(path))
-}
 
 func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	str, pos := this.CurrentWord()

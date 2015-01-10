@@ -3,11 +3,17 @@ package completion
 import (
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"../alias"
 	"../commands"
+	"../dos"
 )
+
+func isExecutable(path string) bool {
+	return dos.IsExecutableSuffix(filepath.Ext(path))
+}
 
 func listUpAllExecutableOnPath() []string {
 	list := make([]string, 0, 100)
