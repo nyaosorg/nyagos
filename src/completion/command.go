@@ -4,22 +4,14 @@ import (
 	"os"
 	"path"
 	"strings"
+
+	"../alias"
 )
 
-func listUpCommands(str string) ([]string, error) {
-	listTmp, listErr := listUpFiles(str)
-	if listErr != nil {
-		return nil, listErr
-	}
-	list := make([]string, 0)
-	for _, fname := range listTmp {
-		if strings.HasSuffix(fname, "/") || strings.HasSuffix(fname, "\\") || isExecutable(fname) {
-			list = append(list, fname)
-		}
-	}
+func listUpAllExecutableOnPath() []string {
+	list := make([]string,0,100)
 	pathEnv := os.Getenv("PATH")
 	dirList := strings.Split(pathEnv, ";")
-	strUpr := strings.ToUpper(str)
 	for _, dir1 := range dirList {
 		dirHandle, dirErr := os.Open(dir1)
 		if dirErr != nil {
@@ -31,10 +23,6 @@ func listUpCommands(str string) ([]string, error) {
 			continue
 		}
 		for _, file1 := range files {
-			name1Upr := strings.ToUpper(file1.Name())
-			if !strings.HasPrefix(name1Upr, strUpr) {
-				continue
-			}
 			if file1.IsDir() {
 				continue
 			}
@@ -44,6 +32,42 @@ func listUpCommands(str string) ([]string, error) {
 			}
 		}
 	}
+	return list
+}
+
+func listUpCurrentAllExecutable(str string) ([]string, error) {
+	listTmp, listErr := listUpFiles(str)
+	if listErr != nil {
+		return nil, listErr
+	}
+	list := make([]string, 0)
+	for _, fname := range listTmp {
+		if strings.HasSuffix(fname, "/") || strings.HasSuffix(fname, "\\") || isExecutable(fname) {
+			list = append(list, fname)
+		}
+	}
+	return list, nil
+}
+
+func listUpCommands(str string) ([]string, error) {
+	list, listErr := listUpCurrentAllExecutable(str)
+	if listErr != nil {
+		return nil, listErr
+	}
+	strUpr := strings.ToUpper(str)
+	for _, name := range listUpAllExecutableOnPath() {
+		name1Upr := strings.ToUpper(name)
+		if strings.HasPrefix(name1Upr, strUpr) {
+			list = append(list, name)
+		}
+	}
+	for name, _ := range alias.Table {
+		name1Upr := strings.ToUpper(name)
+		if strings.HasPrefix(name1Upr, strUpr) {
+			list = append(list, name)
+		}
+	}
+
 	// remove dupcalites
 	uniq := make([]string, 0)
 	lastone := ""
