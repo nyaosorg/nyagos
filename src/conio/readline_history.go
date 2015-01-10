@@ -9,6 +9,13 @@ func NewHistoryLine(line string) *HistoryLine {
 	return &HistoryLine{Line: line, Word: SplitQ(line)}
 }
 
+func (this *HistoryLine) At(n int) string {
+	for n < 0 {
+		n += len(this.Word)
+	}
+	return this.Word[n%len(this.Word)]
+}
+
 var Histories = make([]*HistoryLine, 0)
 var HistoryPointer = 0
 

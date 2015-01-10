@@ -12,6 +12,23 @@ import (
 	"../interpreter"
 )
 
+func atoi_(reader *strings.Reader) (int, int) {
+	n := 0
+	count := 0
+	for reader.Len() > 0 {
+		ch, _, _ := reader.ReadRune()
+		index := strings.IndexRune("0123456789", ch)
+		if index >= 0 {
+			n = n*10 + index
+			count++
+		} else {
+			reader.UnreadRune()
+			break
+		}
+	}
+	return n, count
+}
+
 func Replace(line string) (string, bool) {
 	var buffer bytes.Buffer
 	isReplaced := false
@@ -28,14 +45,14 @@ func Replace(line string) (string, bool) {
 		if n := strings.IndexRune("^$:*", ch); n >= 0 {
 			reader.UnreadRune()
 			if history_count >= 2 {
-				insertHistory(&buffer, reader, conio.Histories[history_count-2])
+				insertHistory(&buffer, reader, history_count-2)
 				isReplaced = true
 			}
 			continue
 		}
 		if ch == '!' { // !!
 			if history_count >= 2 {
-				insertHistory(&buffer, reader, conio.Histories[history_count-2])
+				insertHistory(&buffer, reader, history_count-2)
 				isReplaced = true
 				continue
 			} else {
@@ -43,44 +60,24 @@ func Replace(line string) (string, bool) {
 				continue
 			}
 		}
-		if n := strings.IndexRune("0123456789", ch); n >= 0 { // !n
-			backno := n
-			for reader.Len() > 0 {
-				ch, _, _ = reader.ReadRune()
-				if n = strings.IndexRune("0123456789", ch); n >= 0 {
-					backno = backno*10 + n
-				} else {
-					reader.UnreadRune()
-					break
-				}
-			}
+		if strings.IndexRune("0123456789", ch) >= 0 { // !n
+			reader.UnreadRune()
+			backno, _ := atoi_(reader)
 			backno = backno % history_count
 			if 0 <= backno && backno < history_count {
-				insertHistory(&buffer, reader, conio.Histories[backno])
+				insertHistory(&buffer, reader, backno)
 				isReplaced = true
 			}
 			continue
 		}
 		if ch == '-' && reader.Len() > 0 { // !-n
-			ch, _, _ := reader.ReadRune()
-			n := strings.IndexRune("0123456789", ch)
-			if n >= 0 {
-				number := n
-				for reader.Len() > 0 {
-					ch, _, _ = reader.ReadRune()
-					n = strings.IndexRune("0123456789", ch)
-					if n < 0 {
-						reader.UnreadRune()
-						break
-					}
-					number = number*10 + n
-				}
+			if number, count := atoi_(reader); count > 0 {
 				backno := history_count - number - 1
 				for backno < 0 {
 					backno += history_count
 				}
 				if 0 <= backno && backno < history_count {
-					insertHistory(&buffer, reader, conio.Histories[backno])
+					insertHistory(&buffer, reader, backno)
 					isReplaced = true
 				} else {
 					buffer.WriteString("!-0")
@@ -157,34 +154,23 @@ func Replace(line string) (string, bool) {
 	return result.Line, isReplaced
 }
 
-func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, history1 *conio.HistoryLine) {
+func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) {
+	history1 := conio.Histories[historyNo]
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
 		if len(history1.Word) >= 2 {
-			buffer.WriteString(history1.Word[1])
+			buffer.WriteString(history1.At(1))
 		}
 	} else if siz > 0 && ch == '$' {
 		if len(history1.Word) >= 2 {
-			buffer.WriteString(history1.Word[len(history1.Word)-1])
+			buffer.WriteString(history1.At(-1))
 		}
 	} else if siz > 0 && ch == '*' {
 		if len(history1.Word) >= 2 {
 			buffer.WriteString(strings.Join(history1.Word[1:], " "))
 		}
 	} else if siz > 0 && ch == ':' {
-		n := 0
-		count := 0
-		for reader.Len() > 0 {
-			ch, _, _ = reader.ReadRune()
-			index := strings.IndexRune("0123456789", ch)
-			if index >= 0 {
-				n = n*10 + index
-				count++
-			} else {
-				reader.UnreadRune()
-				break
-			}
-		}
+		n, count := atoi_(reader)
 		if count <= 0 {
 			buffer.WriteRune(':')
 		} else if n < len(history1.Word) {
