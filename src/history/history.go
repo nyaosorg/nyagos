@@ -104,8 +104,8 @@ func Replace(line string) (string, bool) {
 			seekStr := seekStrBuf.String()
 			found := false
 			for i := history_count - 2; i >= 0; i-- {
-				if strings.Contains(conio.Histories[i], seekStr) {
-					buffer.WriteString(conio.Histories[i])
+				if strings.Contains(conio.Histories[i].Line, seekStr) {
+					buffer.WriteString(conio.Histories[i].Line)
 					isReplaced = true
 					found = true
 					break
@@ -134,8 +134,8 @@ func Replace(line string) (string, bool) {
 		seekStr := seekStrBuf.String()
 		found := false
 		for i := history_count - 2; i >= 0; i-- {
-			if strings.HasPrefix(conio.Histories[i], seekStr) {
-				buffer.WriteString(conio.Histories[i])
+			if strings.HasPrefix(conio.Histories[i].Line, seekStr) {
+				buffer.WriteString(conio.Histories[i].Line)
 				isReplaced = true
 				found = true
 				break
@@ -146,7 +146,7 @@ func Replace(line string) (string, bool) {
 			buffer.WriteRune(ch)
 		}
 	}
-	result := buffer.String()
+	result := conio.NewHistoryLine(buffer.String())
 	if isReplaced {
 		if history_count > 0 {
 			conio.Histories[history_count-1] = result
@@ -154,61 +154,24 @@ func Replace(line string) (string, bool) {
 			conio.Histories = append(conio.Histories, result)
 		}
 	}
-	return result, isReplaced
+	return result.Line, isReplaced
 }
 
-func splitQ(s string) []string {
-	args := []string{}
-	reader := strings.NewReader(s)
-	for reader.Len() > 0 {
-		var buffer bytes.Buffer
-		for {
-			if reader.Len() <= 0 {
-				return args
-			}
-			ch, _, _ := reader.ReadRune()
-			if ch != ' ' {
-				reader.UnreadRune()
-				break
-			}
-		}
-		quote := false
-		for reader.Len() > 0 {
-			ch, _, _ := reader.ReadRune()
-			if ch == '"' {
-				quote = !quote
-			}
-			if ch == ' ' && !quote {
-				break
-			}
-			buffer.WriteRune(ch)
-		}
-		if buffer.Len() > 0 {
-			args = append(args, buffer.String())
-		}
-	}
-	return args
-}
-
-func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, history1 string) {
+func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, history1 *conio.HistoryLine) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
-		args := splitQ(history1)
-		if len(args) >= 2 {
-			buffer.WriteString(args[1])
+		if len(history1.Word) >= 2 {
+			buffer.WriteString(history1.Word[1])
 		}
 	} else if siz > 0 && ch == '$' {
-		args := splitQ(history1)
-		if len(args) >= 2 {
-			buffer.WriteString(args[len(args)-1])
+		if len(history1.Word) >= 2 {
+			buffer.WriteString(history1.Word[len(history1.Word)-1])
 		}
 	} else if siz > 0 && ch == '*' {
-		args := splitQ(history1)
-		if len(args) >= 2 {
-			buffer.WriteString(strings.Join(args[1:], " "))
+		if len(history1.Word) >= 2 {
+			buffer.WriteString(strings.Join(history1.Word[1:], " "))
 		}
 	} else if siz > 0 && ch == ':' {
-		args := splitQ(history1)
 		n := 0
 		count := 0
 		for reader.Len() > 0 {
@@ -224,14 +187,14 @@ func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, history1 string
 		}
 		if count <= 0 {
 			buffer.WriteRune(':')
-		} else if n < len(args) {
-			buffer.WriteString(args[n])
+		} else if n < len(history1.Word) {
+			buffer.WriteString(history1.Word[n])
 		}
 	} else {
 		if siz > 0 {
 			reader.UnreadRune()
 		}
-		buffer.WriteString(history1)
+		buffer.WriteString(history1.Line)
 	}
 }
 
@@ -253,7 +216,7 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		start = 0
 	}
 	for i, s := range conio.Histories[start:] {
-		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s)
+		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
 	}
 	return interpreter.CONTINUE, nil
 }
@@ -261,7 +224,7 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 const max_histories = 2000
 
 func Save(path string) error {
-	var hist_ []string
+	var hist_ []*conio.HistoryLine
 	if len(conio.Histories) > max_histories {
 		hist_ = conio.Histories[(len(conio.Histories) - max_histories):]
 	} else {
@@ -273,7 +236,7 @@ func Save(path string) error {
 	}
 	defer fd.Close()
 	for _, s := range hist_ {
-		fmt.Fprintln(fd, s)
+		fmt.Fprintln(fd, s.Line)
 	}
 	return nil
 }
@@ -286,7 +249,7 @@ func Load(path string) error {
 	defer fd.Close()
 	sc := bufio.NewScanner(fd)
 	for sc.Scan() {
-		conio.Histories = append(conio.Histories, sc.Text())
+		conio.Histories = append(conio.Histories, conio.NewHistoryLine(sc.Text()))
 	}
 	return nil
 }
