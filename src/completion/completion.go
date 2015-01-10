@@ -4,9 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"path"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"unicode"
 
@@ -18,121 +16,6 @@ func isExecutable(path string) bool {
 	return dos.IsExecutableSuffix(filepath.Ext(path))
 }
 
-var RxEnvironPattern = regexp.MustCompile("%[^%]+%")
-var RxTilda = regexp.MustCompile("^~[/\\\\]")
-
-func listUpFiles(str string) ([]string, error) {
-	str = RxEnvironPattern.ReplaceAllStringFunc(str, func(p string) string {
-		if len(p) == 2 {
-			return "%"
-		} else if val := os.Getenv(p[1 : len(p)-1]); val != "" {
-			return val
-		} else {
-			return p
-		}
-	})
-
-	str = RxTilda.ReplaceAllStringFunc(str, func(p string) string {
-		if home := dos.GetHome(); home != "" {
-			return home + "\\"
-		} else {
-			return p
-		}
-	})
-	str = strings.Replace(strings.Replace(str, "\\", "/", -1), "\"", "", -1)
-	var directory string
-	str = strings.Replace(str, "\\", "/", -1)
-	if strings.HasSuffix(str, "/") {
-		directory = path.Join(str, ".")
-	} else {
-		directory = path.Dir(str)
-	}
-	cutprefix := 0
-	if strings.HasPrefix(directory, "/") {
-		wd, _ := os.Getwd()
-		directory = wd[0:2] + directory
-		cutprefix = 2
-	}
-
-	fd, fdErr := os.Open(directory)
-	if fdErr != nil {
-		return nil, fdErr
-	}
-	defer fd.Close()
-	files, filesErr := fd.Readdir(-1)
-	if filesErr != nil {
-		return nil, filesErr
-	}
-	commons := make([]string, 0)
-	STR := strings.ToUpper(str)
-	for _, node1 := range files {
-		name := path.Join(directory, node1.Name())
-		if attr, attrErr := dos.GetFileAttributes(name); attrErr == nil && (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
-			continue
-		}
-		if node1.IsDir() {
-			name += "/"
-		}
-		if cutprefix > 0 {
-			name = name[2:]
-		}
-		nameUpr := strings.ToUpper(name)
-		if strings.HasPrefix(nameUpr, STR) {
-			commons = append(commons, name)
-		}
-	}
-	return commons, nil
-}
-
-func listUpCommands(str string) ([]string, error) {
-	listTmp, listErr := listUpFiles(str)
-	if listErr != nil {
-		return nil, listErr
-	}
-	list := make([]string, 0)
-	for _, fname := range listTmp {
-		if strings.HasSuffix(fname, "/") || strings.HasSuffix(fname, "\\") || isExecutable(fname) {
-			list = append(list, fname)
-		}
-	}
-	pathEnv := os.Getenv("PATH")
-	dirList := strings.Split(pathEnv, ";")
-	strUpr := strings.ToUpper(str)
-	for _, dir1 := range dirList {
-		dirHandle, dirErr := os.Open(dir1)
-		if dirErr != nil {
-			continue
-		}
-		defer dirHandle.Close()
-		files, filesErr := dirHandle.Readdir(0)
-		if filesErr != nil {
-			continue
-		}
-		for _, file1 := range files {
-			name1Upr := strings.ToUpper(file1.Name())
-			if !strings.HasPrefix(name1Upr, strUpr) {
-				continue
-			}
-			if file1.IsDir() {
-				continue
-			}
-			name := file1.Name()
-			if isExecutable(name) {
-				list = append(list, path.Base(name))
-			}
-		}
-	}
-	// remove dupcalites
-	uniq := make([]string, 0)
-	lastone := ""
-	for _, cur := range list {
-		if cur != lastone {
-			uniq = append(uniq, cur)
-		}
-		lastone = cur
-	}
-	return uniq, nil
-}
 func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	str, pos := this.CurrentWord()
 	var list []string
