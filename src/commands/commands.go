@@ -9,7 +9,7 @@ import (
 	"../interpreter"
 )
 
-var buildInCmd = map[string]func(cmd *interpreter.Interpreter) (interpreter.NextT, error){
+var BuildInCommand = map[string]func(cmd *interpreter.Interpreter) (interpreter.NextT, error){
 	".":       cmd_source,
 	"alias":   cmd_alias,
 	"cd":      cmd_cd,
@@ -41,14 +41,14 @@ func Exec(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		err := dos.Chdrive(name)
 		return interpreter.CONTINUE, err
 	}
-	function, ok := buildInCmd[name]
+	function, ok := BuildInCommand[name]
 	if !ok {
 		m := unscoNamePattern.FindStringSubmatch(name)
 		if m == nil {
 			return interpreter.THROUGH, nil
 		}
 		name = m[1]
-		function, ok = buildInCmd[name]
+		function, ok = BuildInCommand[name]
 		if !ok {
 			return interpreter.THROUGH, nil
 		}

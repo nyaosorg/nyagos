@@ -6,10 +6,11 @@ import (
 	"strings"
 
 	"../alias"
+	"../commands"
 )
 
 func listUpAllExecutableOnPath() []string {
-	list := make([]string,0,100)
+	list := make([]string, 0, 100)
 	pathEnv := os.Getenv("PATH")
 	dirList := strings.Split(pathEnv, ";")
 	for _, dir1 := range dirList {
@@ -56,6 +57,12 @@ func listUpCommands(str string) ([]string, error) {
 	}
 	strUpr := strings.ToUpper(str)
 	for _, name := range listUpAllExecutableOnPath() {
+		name1Upr := strings.ToUpper(name)
+		if strings.HasPrefix(name1Upr, strUpr) {
+			list = append(list, name)
+		}
+	}
+	for name, _ := range commands.BuildInCommand {
 		name1Upr := strings.ToUpper(name)
 		if strings.HasPrefix(name1Upr, strUpr) {
 			list = append(list, name)
