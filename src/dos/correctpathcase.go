@@ -11,19 +11,19 @@ func correct(path string) (string, string, error) {
 	dirname, fname := filepath.Split(filepath.Clean(path))
 	fd, fdErr := os.Open(dirname)
 	if fdErr != nil {
-		return "", "", fdErr
+		return dirname, fname, fdErr
 	}
 	defer fd.Close()
 	fi, fiErr := fd.Readdir(-1)
 	if fiErr != nil {
-		return "", "", fiErr
+		return dirname, fname, fiErr
 	}
 	for _, fi1 := range fi {
 		if strings.EqualFold(fi1.Name(), fname) {
 			return dirname, fi1.Name(), nil
 		}
 	}
-	return "", "", fmt.Errorf("%s: not found.", path)
+	return dirname, fname, fmt.Errorf("%s: not found.", path)
 }
 
 func CorrectPathCase(path string) (string, error) {
@@ -32,7 +32,7 @@ func CorrectPathCase(path string) (string, error) {
 	}
 	dirname, fname, err := correct(path)
 	if err != nil {
-		return "", err
+		return path, err
 	}
 	if len(dirname) > 3 {
 		// NOT root directory.
@@ -49,5 +49,6 @@ func Getwd() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return CorrectPathCase(wd)
+	wd, _ = CorrectPathCase(wd)
+	return wd, nil
 }
