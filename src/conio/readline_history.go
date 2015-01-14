@@ -24,7 +24,7 @@ func GetHistory(n int) *HistoryLine {
 		n = len(Histories) + n
 	}
 	if n >= len(Histories) {
-		return nil
+		return &HistoryLine{Line: "", Word: []string{}}
 	} else {
 		return Histories[n]
 	}
