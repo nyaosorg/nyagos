@@ -1,7 +1,7 @@
 #include <stdio.h>
-#include "../include/lua.h"
-#include "../include/lualib.h"
-#include "../include/lauxlib.h"
+#include "../lua-5.3.0/src/lua.h"
+#include "../lua-5.3.0/src/lualib.h"
+#include "../lua-5.3.0/src/lauxlib.h"
 
 int main(){
     printf("package lua\n");

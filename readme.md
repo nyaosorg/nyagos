@@ -41,15 +41,28 @@ How to Build
 These sortwares are required.
 
 * [go1.4 windows/386](http://golang.org)
-* [LuaBinaries 5.2.3 for Win32 and MinGW](http://luabinaries.sourceforge.net/index.html)
+* [Lua 5.3](http://www.lua.org)
+* [MinGW](http://www.mingw.org) for building Lua 5.3
 
 On `%GOPATH%` folder,
 
     git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos\Src\lua
-    unzip PATH\TO\lua-5.2.3_Win32_dllw4_lib.zip 
-    copy lua52.dll ..\..
+    cd nyagos\src
+
+When you have lua53.dll
+
+    copy PATH\TO\lua53.dll lua\.
+
+Otherwise,
+
+    tar zxvf PATH\TO\lua-5.3.0.tar.gz
+    cd lua-5.3.0
+    mingw32-make.exe mingw
+    copy src\lua53.dll ..\..
     cd ..
+
+Finally
+
     make.cmd get
     make.cmd
     make.cmd install INSTALLDIR

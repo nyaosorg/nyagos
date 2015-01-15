@@ -29,7 +29,7 @@ Windows であまりストレスを感じないような環境を構築するために
 
 ## インストール
 
-ファイル:`nyagos.exe`,`nyagos.lua`,`lua52.dll`、ディレクトリ`nyagos.d`を
+ファイル:`nyagos.exe`,`nyagos.lua`,`lua53.dll`、ディレクトリ`nyagos.d`を
 `%PATH%` の差すディレクトリに置いてください。
 (同一のディレクトリに置いてください)
 

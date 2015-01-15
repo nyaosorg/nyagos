@@ -21,7 +21,7 @@ Programming Language GO and Lua.
 
 ## Install
 
-Put files:`nyagos.exe`, `nyagos.lua` and `lua52.dll`, and
+Put files:`nyagos.exe`, `nyagos.lua` and `lua53.dll`, and
 directory `nyagos.d` into the one directory pointed with `%PATH%`.
 
 Put .nyagos into the directory pointed with %USERPROFILE%
