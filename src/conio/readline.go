@@ -143,7 +143,7 @@ func ReadLinePromptFunc(promptFunc func() int) (string, Result) {
 			if result == "" {
 				HistoryResetPointer()
 			}
-			if result != LastHistory().Line {
+			if last := LastHistory(); last == nil || result != last.Line {
 				HistoryPush(result)
 			}
 			return result, rc
