@@ -77,9 +77,11 @@ local function include(fname)
 end
 
 local dotfolder = string.gsub(nyagos.exe,"%.exe",".d")
-for _,fname in ipairs(nyagos.glob(dotfolder.."\\*.lua")) do
+local fd = io.popen("dir /b /s "..dotfolder.."\\*.lua","r")
+for fname in fd:lines() do
     include(fname)
 end
+fd:close()
 
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
