@@ -134,7 +134,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		if history_count > len(conio.Histories) {
+		if len(conio.Histories) > history_count {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 			if err == nil {
 				fmt.Fprintln(fd, line)
