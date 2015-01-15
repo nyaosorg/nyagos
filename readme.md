@@ -42,7 +42,7 @@ These sortwares are required.
 
 * [go1.4 windows/386](http://golang.org)
 * [Lua 5.3](http://www.lua.org)
-* [MinGW](http://www.mingw.org) for building Lua 5.3
+* [TDM-GCC MinGW Compiler](http://sourceforge.net/projects/tdm-gcc/) to build Lua 5.3
 
 On `%GOPATH%` folder,
 
@@ -55,11 +55,11 @@ When you have lua53.dll
 
 Otherwise,
 
-    tar zxvf PATH\TO\lua-5.3.0.tar.gz
-    cd lua-5.3.0
+    tar zxvf PATH/TO/lua-5.3.0.tar.gz
+    cd lua-5.3.0\src
     mingw32-make.exe mingw
-    copy src\lua53.dll ..\..
-    cd ..
+    copy lua53.dll ..\..\..
+    cd ..\..\..
 
 Finally
 
