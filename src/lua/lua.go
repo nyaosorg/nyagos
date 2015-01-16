@@ -9,6 +9,14 @@ import (
 
 var luaDLL = syscall.NewLazyDLL("lua53")
 
+func sign(value int) uintptr {
+	if value < 0 {
+		return ^uintptr(0)
+	} else {
+		return 0
+	}
+}
+
 func CGoBytes(p, length uintptr) []byte {
 	if length <= 0 || p == 0 {
 		return []byte{}
@@ -101,7 +109,7 @@ func (this *Lua) PushAnsiString(data []byte) {
 var lua_pushinteger = luaDLL.NewProc("lua_pushinteger")
 
 func (this *Lua) PushInteger(n int) {
-	lua_pushinteger.Call(this.State(), uintptr(n))
+	lua_pushinteger.Call(this.State(), uintptr(n), sign(n))
 }
 
 var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
@@ -202,7 +210,7 @@ func (this *Lua) ToBool(index int) bool {
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
 
 func (this *Lua) RawSetI(index int, n int) {
-	lua_rawseti.Call(this.State(), uintptr(index), uintptr(n))
+	lua_rawseti.Call(this.State(), uintptr(index), uintptr(n), sign(n))
 }
 
 // 5.2
