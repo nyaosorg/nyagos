@@ -108,6 +108,8 @@ func SetLuaFunctions(this *lua.Lua) {
 	this.SetField(-2, "shellexecute")
 	this.PushGoFunction(cmdPathJoin)
 	this.SetField(-2, "pathjoin")
+	this.PushString(lua.DLL_NAME)
+	this.SetField(-2, "luaname")
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)

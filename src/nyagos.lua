@@ -2,7 +2,8 @@
 -- DO NOT EDIT THIS. PLEASE EDIT ~\.nyagos OR ADD SCRIPT INTO nyagos.d\ --
 --------------------------------------------------------------------------
 
-print("Nihongo Yet Another GOing Shell " .. nyagos.version)
+print("Nihongo Yet Another GOing Shell " .. nyagos.version ..
+        " Powered by " .. nyagos.luaname .. ".dll")
 if string.len(nyagos.version) <= 0 then
     print("Build at ".. nyagos.stamp .. " with commit "..nyagos.commit)
 end
