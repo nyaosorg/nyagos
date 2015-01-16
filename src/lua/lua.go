@@ -7,9 +7,7 @@ import (
 	"unsafe"
 )
 
-const DLL_NAME = "lua52"
-
-var luaDLL = syscall.NewLazyDLL(DLL_NAME)
+var luaDLL = syscall.NewLazyDLL("lua52")
 
 func CGoBytes(p, length uintptr) []byte {
 	if length <= 0 || p == 0 {
