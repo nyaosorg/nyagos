@@ -42,7 +42,7 @@ These sortwares are required.
 
 * [go1.4 windows/386](http://golang.org)
 * [Lua 5.3](http://www.lua.org)
-* [TDM-GCC MinGW Compiler](http://sourceforge.net/projects/tdm-gcc/) to build Lua 5.3
+* [tdm-gcc](http://tdm-gcc.tdragon.net/)
 
 On `%GOPATH%` folder,
 
