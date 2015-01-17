@@ -1,3 +1,17 @@
+NYAGOS 4.0.3\_2
+===============
+* alias や内蔵コマンドをコマンド名補完できるようにした
+
+BugFix
+------
+* pwd コマンドが UNC パスで正しく表示しない (#37)
+* nyagos.gethistory(大きな値)で落ちる (#38) ※
+* `%APPDATA%/NYAOS_ORG/nyagos.history` が更新されない (#39) ※
+* `%APPDATA%/NYAOS_ORG/nyagos.history` が存在しない、もしくは空ファイルだと初回コマンド実行時にクラッシュする (#40) ※
+* フランス語向けキーボードで AltGr キーを併用したキーが入力ができない (#41)
+
+※ おそらく、SNAPSHOT のみの不具合
+
 NYAGOS 4.0.3\_1
 ===============
 * 補完リストされる環境変数名を % で囲むようにした。
@@ -33,7 +47,7 @@ NYAGOS 4.0.2\_2
 * makeicon.cmd の作成するショートカットの属性を追加
 * make resource を実行しなくとも、windres.exe が %PATH% 上にあれば、アイコンリソース(\*.syso)を自動で作成するようにした。
 
-bugfix
+BugFix
 ------
 
 * デフォルトの .nyagos で定義している nyagos.prompt関数が原因で、画面幅を誤って認識していた問題を修正 (EXE側もエラー処理を追加)
