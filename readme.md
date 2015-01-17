@@ -71,6 +71,7 @@ Acknowledgement
 * [atotto](https://github.com/atotto)
 * [ironsand](https://github.com/ironsand)
 * [kardianos](https://github.com/kardianos)
+* [malys](https://github.com/malys)
 
 Author
 ------
