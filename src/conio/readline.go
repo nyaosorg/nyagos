@@ -118,7 +118,8 @@ func ReadLinePromptFunc(promptFunc func() int) (string, Result) {
 		this.Unicode, this.Keycode, this.ShiftState = GetKey()
 		var f KeyFuncT
 		var ok bool
-		if (this.ShiftState & ALT_PRESSED) != 0 {
+		if (this.ShiftState&ALT_PRESSED) != 0 &&
+			(this.ShiftState&CTRL_PRESSED) == 0 {
 			f, ok = altMap[this.Keycode]
 			if !ok {
 				continue
