@@ -1,6 +1,11 @@
 Latest(snapshot)
 ================
 * Lua 5.3 緊急対応
+   * <del>nyagos.luaname で使用中の Lua の DLL名を確認できるようにした</del><ins>組込の`_VERSION` 定数があるので削除</ins>
+
+BugFix
+------
+* `lua_Integer` 64bit化に対応できていなかった不具合を修正
 
 NYAGOS 4.0.3\_2
 ===============
