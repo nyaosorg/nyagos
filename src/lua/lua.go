@@ -13,13 +13,12 @@ type Integer int64
 
 const LUAINT_PER_UINTPTR = unsafe.Sizeof(Integer(0)) / unsafe.Sizeof(uintptr(0))
 
-func (value Integer) Expand() []uintptr {
-	values := make([]uintptr, LUAINT_PER_UINTPTR)
+func (value Integer) Expand(list []uintptr) []uintptr {
 	for i := uintptr(0); i < LUAINT_PER_UINTPTR; i++ {
-		values[i] = uintptr(value)
+		list = append(list, uintptr(value))
 		value >>= (8 * unsafe.Sizeof(uintptr(1)))
 	}
-	return values
+	return list
 }
 
 func CGoBytes(p, length uintptr) []byte {
@@ -114,8 +113,9 @@ func (this *Lua) PushAnsiString(data []byte) {
 var lua_pushinteger = luaDLL.NewProc("lua_pushinteger")
 
 func (this *Lua) PushInteger(value Integer) {
-	params := []uintptr{this.State()}
-	params = append(params, value.Expand()...)
+	params := make([]uintptr, 0, 4)
+	params = append(params, this.State())
+	params = value.Expand(params)
 	lua_pushinteger.Call(params...)
 }
 
@@ -217,8 +217,9 @@ func (this *Lua) ToBool(index int) bool {
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
 
 func (this *Lua) RawSetI(index int, value Integer) {
-	params := []uintptr{this.State(), uintptr(index)}
-	params = append(params, value.Expand()...)
+	params := make([]uintptr, 0, 4)
+	params = append(params, this.State(), uintptr(index))
+	params = value.Expand(params)
 	lua_rawseti.Call(params...)
 }
 
