@@ -100,7 +100,7 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	if pos < 0 {
 		pos = text.Len() + 1
 	}
-	this.L.PushInteger(pos)
+	this.L.PushInteger(lua.Integer(pos))
 	this.L.SetField(-2, "pos")
 	this.L.PushString(text.String())
 	this.L.SetField(-2, "text")

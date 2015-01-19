@@ -25,7 +25,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 	this.L.NewTable()
 	for i, arg1 := range cmd.Args {
 		this.L.PushString(arg1)
-		this.L.RawSetI(-2, i)
+		this.L.RawSetI(-2, lua.Integer(i))
 	}
 	LuaInstanceToCmd[this.L.State()] = cmd
 	err := this.L.Call(1, 0)
@@ -147,7 +147,7 @@ func SetLuaFunctions(this *lua.Lua) {
 		this.NewTable()
 		for i := 0; i < len(args); i++ {
 			this.PushString(args[i])
-			this.RawSetI(-2, i)
+			this.RawSetI(-2, lua.Integer(i))
 		}
 		if err := this.Call(1, 1); err != nil {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
@@ -157,7 +157,7 @@ func SetLuaFunctions(this *lua.Lua) {
 			return orgArgHook(args)
 		}
 		newargs := []string{}
-		for i := 0; true; i++ {
+		for i := lua.Integer(0); true; i++ {
 			this.PushInteger(i)
 			this.GetTable(-2)
 			if this.GetType(-1) == lua.LUA_TNIL {

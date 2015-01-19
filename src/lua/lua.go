@@ -7,7 +7,19 @@ import (
 	"unsafe"
 )
 
-var luaDLL = syscall.NewLazyDLL("lua52")
+var luaDLL = syscall.NewLazyDLL("lua53")
+
+type Integer int64
+
+const LUAINT_PER_UINTPTR = unsafe.Sizeof(Integer(0)) / unsafe.Sizeof(uintptr(0))
+
+func (value Integer) Expand(list []uintptr) []uintptr {
+	for i := uintptr(0); i < LUAINT_PER_UINTPTR; i++ {
+		list = append(list, uintptr(value))
+		value >>= (8 * unsafe.Sizeof(uintptr(1)))
+	}
+	return list
+}
 
 func CGoBytes(p, length uintptr) []byte {
 	if length <= 0 || p == 0 {
@@ -100,8 +112,11 @@ func (this *Lua) PushAnsiString(data []byte) {
 
 var lua_pushinteger = luaDLL.NewProc("lua_pushinteger")
 
-func (this *Lua) PushInteger(n int) {
-	lua_pushinteger.Call(this.State(), uintptr(n))
+func (this *Lua) PushInteger(value Integer) {
+	params := make([]uintptr, 0, 4)
+	params = append(params, this.State())
+	params = value.Expand(params)
+	lua_pushinteger.Call(params...)
 }
 
 var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
@@ -201,14 +216,28 @@ func (this *Lua) ToBool(index int) bool {
 
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
 
-func (this *Lua) RawSetI(index int, n int) {
-	lua_rawseti.Call(this.State(), uintptr(index), uintptr(n))
+func (this *Lua) RawSetI(index int, value Integer) {
+	params := make([]uintptr, 0, 4)
+	params = append(params, this.State(), uintptr(index))
+	params = value.Expand(params)
+	lua_rawseti.Call(params...)
 }
 
-var lua_remove = luaDLL.NewProc("lua_remove")
+// 5.2
+// var lua_remove = luaDLL.NewProc("lua_remove")
+// 5.3
+var lua_rotate = luaDLL.NewProc("lua_rotate")
+
+func lua_remove_Call(state uintptr, index int) {
+	lua_rotate.Call(state, uintptr(index), ^uintptr(0))
+	lua_settop.Call(state, ^uintptr(1)) // ^1 == -2
+}
 
 func (this *Lua) Remove(index int) {
-	lua_remove.Call(this.State(), uintptr(index))
+	// 5.2
+	// lua_remove.Call(this.State(), uintptr(index))
+	// 5.3
+	lua_remove_Call(this.State(), index)
 }
 
 var lua_replace = luaDLL.NewProc("lua_replace")
@@ -343,7 +372,7 @@ func (this *Lua) Call(nargs, nresult int) error {
 func luaToGoBridge(lua uintptr) int {
 	f, _, _ := lua_touserdata.Call(lua, 1)
 	f_ := *(*goFunctionT)(unsafe.Pointer(f))
-	lua_remove.Call(lua, 1)
+	lua_remove_Call(lua, 1)
 	L := Lua{lua}
 	return int(f_.function(&L))
 }

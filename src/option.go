@@ -31,7 +31,7 @@ func optionParse(L *lua.Lua) bool {
 		L.RawSetI(-2, 0)
 		for i, arg1 := range flag.Args() {
 			L.PushString(arg1)
-			L.RawSetI(-2, i)
+			L.RawSetI(-2, lua.Integer(i))
 		}
 		L.SetGlobal("arg")
 		err := L.Source(*optionF)

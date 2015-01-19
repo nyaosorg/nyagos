@@ -4,6 +4,7 @@
 *.swp
 *.syso
 *.zip
+*.gz
 .*.un~
 *.gz
 Src/lua/include/

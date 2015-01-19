@@ -246,7 +246,7 @@ func cmdGlob(L *lua.Lua) int {
 		L.NewTable()
 		for i := 0; i < len(list); i++ {
 			L.PushString(list[i])
-			L.RawSetI(-2, i+1)
+			L.RawSetI(-2, lua.Integer(i+1))
 		}
 		return 1
 	}
@@ -261,7 +261,7 @@ func cmdGetHistory(this *lua.Lua) int {
 		}
 		this.PushString(conio.GetHistory(val).Line)
 	} else {
-		this.PushInteger(conio.HistoryLen())
+		this.PushInteger(lua.Integer(conio.HistoryLen()))
 	}
 	return 1
 }

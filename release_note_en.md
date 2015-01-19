@@ -1,3 +1,11 @@
+Latest(snapshot)
+================
+* Support Lua 5.3
+
+BugFix since Snapshot 20150117
+------------------------------
+* Fix: not support that `lua_Integer` is 64bit
+
 NYAGOS 4.0.3\_2
 ===============
 * Command-name completion supports alias and built-in commands.

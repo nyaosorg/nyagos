@@ -39,7 +39,7 @@ func nyagosPrompt(L *lua.Lua) int {
 	if lfPos >= 0 {
 		text = text[lfPos+1:]
 	}
-	L.PushInteger(conio.GetStringWidth(text))
+	L.PushInteger(lua.Integer(conio.GetStringWidth(text)))
 	return 1
 }
 
