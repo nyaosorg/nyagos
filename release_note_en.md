@@ -1,10 +1,6 @@
-Latest(snapshot)
+NYAGOS 4.0.4\_0
 ================
 * Support Lua 5.3
-
-BugFix since Snapshot 20150117
-------------------------------
-* Fix: not support that `lua_Integer` is 64bit
 
 NYAGOS 4.0.3\_2
 ===============
