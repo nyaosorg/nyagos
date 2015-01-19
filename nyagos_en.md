@@ -88,6 +88,10 @@ No arguments, list up the all aliases.
 Change the current working drive and directory.
 No arguments, move to %HOME% or %USERPROFILE%.
 
+* `cd -` : move the previous directory.
+* `cd -N` : move the N-previous directory.
+* `cd -h` , `cd ?` : listing directories stayed.
+
 ### `exit`
 
 Quit NYAGOS.exe.
