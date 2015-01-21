@@ -1,3 +1,9 @@
+Latest
+======
+* cd -N (N:digit): move the N-th previous directory.
+* cd -h , cd ? : print current directory history.
+* pwd -N (N:digit): print the N-th previous directory.
+
 NYAGOS 4.0.4\_0
 ================
 * Support Lua 5.3

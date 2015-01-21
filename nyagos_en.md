@@ -89,7 +89,7 @@ Change the current working drive and directory.
 No arguments, move to %HOME% or %USERPROFILE%.
 
 * `cd -` : move the previous directory.
-* `cd -N` : move the N-previous directory.
+* `cd -N` (N:digit) : move the N-previous directory.
 * `cd -h` , `cd ?` : listing directories stayed.
 
 ### `exit`
@@ -117,6 +117,8 @@ List the directory. Supported options are below:
 ### `pwd`
 
 Print the current woking drive and directory.
+
+* `pwd -N` (N:digit) : print the N-previous directory.
 
 ### `set ENV=VAR`
 
