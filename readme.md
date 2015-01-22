@@ -85,6 +85,7 @@ Acknowledgement
 * [ironsand](https://github.com/ironsand)
 * [kardianos](https://github.com/kardianos)
 * [malys](https://github.com/malys)
+* [pine613](https://github.com/pine613)
 
 Author
 ------
