@@ -1,3 +1,4 @@
 pushd "%~dp0"Src 
-make.cmd %*
+call make.cmd %*
+if "%1" == "" copy nyagos.exe ..
 popd
