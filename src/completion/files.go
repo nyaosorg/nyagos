@@ -55,7 +55,7 @@ func listUpFiles(str string) ([]string, error) {
 		return nil, filesErr
 	}
 	commons := make([]string, 0)
-	STR := strings.ToUpper(str)
+	STR := strings.ToUpper(path.Clean(str))
 	for _, node1 := range files {
 		name := path.Join(directory, node1.Name())
 		if attr, attrErr := dos.GetFileAttributes(name); attrErr == nil && (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
@@ -67,7 +67,7 @@ func listUpFiles(str string) ([]string, error) {
 		if cutprefix > 0 {
 			name = name[2:]
 		}
-		nameUpr := strings.ToUpper(name)
+		nameUpr := strings.ToUpper(path.Clean(name))
 		if strings.HasPrefix(nameUpr, STR) {
 			commons = append(commons, name)
 		}
