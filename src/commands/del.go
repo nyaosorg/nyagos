@@ -19,7 +19,7 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	all := false
 	for i := 1; i < n; i++ {
 		path := cmd.Args[i]
-		stat, statErr := os.Stat(path)
+		stat, statErr := os.Lstat(path)
 		if statErr != nil {
 			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: %s\n",
 				i, n-1, path, statErr.Error())
