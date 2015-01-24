@@ -66,7 +66,7 @@ original_print = print
 print = nyagos.echo
 
 local function include(fname)
-    local chank,err=assert(loadfile(fname))
+    local chank,err=loadfile(fname)
     if err then
         print(err)
     elseif chank then
