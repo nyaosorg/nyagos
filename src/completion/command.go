@@ -56,6 +56,19 @@ func listUpCurrentAllExecutable(str string) ([]string, error) {
 	return list, nil
 }
 
+func removeDup(list []string) []string {
+	found := map[string]bool{}
+	result := make([]string, 0, len(list))
+
+	for _, value := range list {
+		if _, ok := found[value]; !ok {
+			result = append(result, value)
+			found[value] = true
+		}
+	}
+	return result
+}
+
 func listUpCommands(str string) ([]string, error) {
 	list, listErr := listUpCurrentAllExecutable(str)
 	if listErr != nil {
@@ -80,15 +93,5 @@ func listUpCommands(str string) ([]string, error) {
 			list = append(list, name)
 		}
 	}
-
-	// remove dupcalites
-	uniq := make([]string, 0)
-	lastone := ""
-	for _, cur := range list {
-		if cur != lastone {
-			uniq = append(uniq, cur)
-		}
-		lastone = cur
-	}
-	return uniq, nil
+	return removeDup(list), nil
 }
