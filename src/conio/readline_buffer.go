@@ -134,6 +134,11 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		w += w1
 		bs += w1
 	}
+	for w+1 < this.ViewWidth {
+		PutRep(' ', 1)
+		bs++
+		w++
+	}
 	if bs > 0 {
 		Backspace(bs)
 	}
