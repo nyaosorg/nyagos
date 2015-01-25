@@ -4,6 +4,19 @@ Latest
 * cd -h , cd ? : print current directory history.
 * pwd -N (N:digit): print the N-th previous directory.
 
+Bugfix
+------
+* Lua-function 'include' didn't report error
+* Command-name completion printed same-name in diffent directories.
+* ReadLine sometimes left trash at replacing string
+* Could not complete path including ./ #45
+* Could not broken symbolic link with DEL #44
+
+Trivial fix
+-----------
+* make.cmd: add echo off a lot
+* Let make.cmd on the top directory without arguments copy EXE top 
+
 NYAGOS 4.0.4\_0
 ================
 * Support Lua 5.3
