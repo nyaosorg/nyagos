@@ -10,71 +10,63 @@
         @goto _build
 
 :release
-        for /F %%I in (version.txt) do set VERSION=%%I
-        set "X_VERSION=-X main.version %VERSION%"
+        @for /F %%I in (version.txt) do set VERSION=%%I
+        @set "X_VERSION=-X main.version %VERSION%"
 
 :_build
-        if not exist nyagos.syso for %%I in (windres.exe) do if not "%%~$PATH:I" == "" windres.exe --output-format=coff -o nyagos.syso nyagos.rc
-        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o nyagos.exe -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
-        goto end
+        @if not exist nyagos.syso for %%I in (windres.exe) do if not "%%~$PATH:I" == "" windres.exe --output-format=coff -o nyagos.syso nyagos.rc
+        @for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o nyagos.exe -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
+        @goto end
 
 :fmt
-        for /R . %%I IN (*.go) do go fmt %%I
-        for /R . %%I in (*~) do del %%I
-        goto end
+        @for /R . %%I IN (*.go) do go fmt %%I
+        @for /R . %%I in (*~) do del %%I
+        @goto end
 
 :clean
-        for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
-        goto end
+        @for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
+        @goto end
 
 :sweep
-        for /R %%I in (*~) do del %%I
-        goto end
+        @for /R %%I in (*~) do del %%I
+        @goto end
 
 :get
-        go get github.com/mattn/go-runewidth
-        go get github.com/shiena/ansicolor 
-        go get github.com/atotto/clipboard       
-        goto end
+        go get -u github.com/mattn/go-runewidth
+        go get -u github.com/shiena/ansicolor 
+        go get -u github.com/atotto/clipboard       
+        @goto end
 
 :package
         zip -j9 "nyagos-%VERSION%%2.zip" %~dp0..\readme.md  %~dp0..\nyagos_ja.md %~dp0..\nyagos_en.md
         zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua53.dll lua.exe nyagos.lua .nyagos specialfolders.vbs lnk.vbs makeicon.cmd nyagos.d\*.lua
-        goto end
+        @goto end
 
 :install
         @echo off
-        if not "%2" == "" set "INSTALLDIR=%2"
-        if "%INSTALLDIR%" == "" (
+        @if not "%2" == "" set "INSTALLDIR=%2"
+        @if "%INSTALLDIR%" == "" (
             @echo Please %0.cmd install PATH\TO\BIN, once
             goto end
         )
-        if not exist "%INSTALLDIR%" (
+        @if not exist "%INSTALLDIR%" (
             @echo Please %0.cmd install EXIST\PATH\TO\BIN,  once
             goto end
         )
         start %~0 install.
-        goto end
+        @goto end
 
 :install.
         robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
         taskkill /im nyagos.exe
         copy nyagos.exe "%INSTALLDIR%\."
         copy nyagos.lua "%INSTALLDIR%\."
-        if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
-        goto end
-
-:upgrade
-        for %%I in (mattn\go-runewidth shiena\ansicolor atotto\clipboard ) do (
-            cd %GOPATH%\Src\github.com\%%I
-            git pull origin master:master
-            go build
-        )
-        goto end
+        @if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
+        @goto end
 
 :icon
-        makeicon.cmd
-        goto end
+        @makeicon.cmd
+        @goto end
 
 :help
         @echo off
@@ -93,7 +85,8 @@
         echo  %0 install  
         echo     : Copy binaries to last INSTALLDIR
 :end
-        ( echo set "VERSION=%VERSION%"
-          echo set "X_VERSION=%X_VERSION%"
-          echo set "INSTALLDIR=%INSTALLDIR%"
+        @echo off
+        ( echo @set "VERSION=%VERSION%"
+          echo @set "X_VERSION=%X_VERSION%"
+          echo @set "INSTALLDIR=%INSTALLDIR%"
         ) > "%~dp0version.cmd"
