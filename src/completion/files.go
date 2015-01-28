@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"../dos"
+	"../interpreter"
 )
 
 var rxEnvPattern = regexp.MustCompile("%[^%]+%")
@@ -18,6 +19,8 @@ func listUpFiles(str string) ([]string, error) {
 			return "%"
 		} else if val := os.Getenv(p[1 : len(p)-1]); val != "" {
 			return val
+		} else if f, ok := interpreter.PercentFunc[p[1:len(p)-1]]; ok {
+			return f()
 		} else {
 			return p
 		}

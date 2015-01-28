@@ -20,7 +20,7 @@ type StatementT struct {
 
 var prefix []string = []string{" 0<", " 1>", " 2>"}
 
-var percentFunc = map[string]func() string{
+var PercentFunc = map[string]func() string{
 	"CD": func() string {
 		wd, err := os.Getwd()
 		if err == nil {
@@ -88,7 +88,7 @@ func dequote(source *bytes.Buffer) string {
 			} else if m := rxUnicode.FindStringSubmatch(nameStr); m != nil {
 				ucode, _ := strconv.ParseInt(m[1], 16, 32)
 				buffer.WriteRune(rune(ucode))
-			} else if f, ok := percentFunc[nameStr]; ok {
+			} else if f, ok := PercentFunc[nameStr]; ok {
 				buffer.WriteString(f())
 			} else {
 				buffer.WriteRune('%')
