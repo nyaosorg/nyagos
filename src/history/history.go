@@ -192,6 +192,9 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			return interpreter.CONTINUE, err
 		}
 		num = int(num64)
+		if num < 0 {
+			num = -num
+		}
 	} else {
 		num = 10
 	}
