@@ -41,6 +41,8 @@ func listUpFiles(str string) ([]string, error) {
 	} else {
 		directory = path.Dir(str)
 	}
+
+	// Drive letter
 	cutprefix := 0
 	if strings.HasPrefix(directory, "/") {
 		wd, _ := os.Getwd()
@@ -58,7 +60,11 @@ func listUpFiles(str string) ([]string, error) {
 		return nil, filesErr
 	}
 	commons := make([]string, 0)
-	STR := strings.ToUpper(path.Clean(str))
+	if str != "" {
+		str = path.Clean(str)
+		// Since path.Clean("") -> ".", completed name to ".xxxx"
+	}
+	STR := strings.ToUpper(str)
 	for _, node1 := range files {
 		name := path.Join(directory, node1.Name())
 		if attr, attrErr := dos.GetFileAttributes(name); attrErr == nil && (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
