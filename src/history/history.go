@@ -189,7 +189,13 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
 		if err != nil {
-			return interpreter.CONTINUE, err
+			switch err.(type) {
+			case *strconv.NumError:
+				return interpreter.CONTINUE, fmt.Errorf(
+					"history: %s not a number", cmd.Args[1])
+			default:
+				return interpreter.CONTINUE, err
+			}
 		}
 		num = int(num64)
 		if num < 0 {
