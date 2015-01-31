@@ -10,14 +10,14 @@ import (
 
 	"github.com/shiena/ansicolor"
 
-	"./alias"
-	"./commands"
-	"./completion"
-	"./conio"
-	"./dos"
-	"./history"
-	"./interpreter"
-	"./lua"
+	"../alias"
+	"../commands"
+	"../completion"
+	"../conio"
+	"../dos"
+	"../history"
+	"../interpreter"
+	"../lua"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")

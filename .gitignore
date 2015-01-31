@@ -7,6 +7,6 @@
 *.gz
 .*.un~
 *.gz
-Src/lua/include/
-Src/lua/lua-5*/
+lua/include/
+lua/lua-5*/
 version.cmd

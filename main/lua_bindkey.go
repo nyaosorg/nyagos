@@ -7,8 +7,8 @@ import (
 	"strings"
 	"unsafe"
 
-	"./conio"
-	"./lua"
+	"../conio"
+	"../lua"
 )
 
 type KeyLuaFuncT struct {

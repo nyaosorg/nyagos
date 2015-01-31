@@ -10,11 +10,11 @@ import (
 
 	"github.com/shiena/ansicolor"
 
-	"./alias"
-	"./conio"
-	"./dos"
-	"./interpreter"
-	"./lua"
+	"../alias"
+	"../conio"
+	"../dos"
+	"../interpreter"
+	"../lua"
 )
 
 func cmdAlias(L *lua.Lua) int {

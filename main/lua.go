@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"./dos"
-	"./interpreter"
-	"./lua"
+	"../dos"
+	"../interpreter"
+	"../lua"
 )
 
 type LuaFunction struct {

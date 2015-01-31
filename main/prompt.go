@@ -8,7 +8,7 @@ import (
 	"time"
 	"unicode"
 
-	"./dos"
+	"../dos"
 )
 
 func Format2Prompt(format string) string {

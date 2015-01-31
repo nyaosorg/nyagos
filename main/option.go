@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"./interpreter"
-	"./lua"
+	"../interpreter"
+	"../lua"
 )
 
 func optionParse(L *lua.Lua) bool {
