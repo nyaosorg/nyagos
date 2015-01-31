@@ -259,9 +259,9 @@ func cmdGetHistory(this *lua.Lua) int {
 			this.PushNil()
 			this.PushString(err.Error())
 		}
-		this.PushString(conio.GetHistory(val).Line)
+		this.PushString(conio.DefaultEditor.GetHistoryAt(val).Line)
 	} else {
-		this.PushInteger(lua.Integer(conio.HistoryLen()))
+		this.PushInteger(lua.Integer(conio.DefaultEditor.HistoryLen()))
 	}
 	return 1
 }

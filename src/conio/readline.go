@@ -103,15 +103,15 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
-func ReadLinePromptFunc(promptFunc func() int) (string, Result) {
-	this := Buffer{Buffer: make([]rune, 20)}
+func (session *LineEditor) ReadLine() (string, Result) {
+	this := Buffer{
+		Buffer:  make([]rune, 20),
+		Session: session,
+	}
 	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
-	this.Prompt = promptFunc
-	if this.Prompt != nil {
-		this.ViewWidth = this.ViewWidth - this.Prompt()
-	}
+	this.ViewWidth = this.ViewWidth - session.Prompt()
 	for {
 		stdOut.Flush()
 		shineCursor()
@@ -142,10 +142,10 @@ func ReadLinePromptFunc(promptFunc func() int) (string, Result) {
 			stdOut.Flush()
 			result := this.String()
 			if result == "" {
-				HistoryResetPointer()
+				session.HistoryResetPointer()
 			}
-			if last := LastHistory(); last == nil || result != last.Line {
-				HistoryPush(result)
+			if last := session.LastHistory(); last == nil || result != last.Line {
+				session.HistoryPush(result)
 			}
 			return result, rc
 		}
@@ -154,8 +154,9 @@ func ReadLinePromptFunc(promptFunc func() int) (string, Result) {
 
 // Not used on NYAGOS. Provide this as library for other applications.
 func ReadLinePromptStr(promptStr string) (string, Result) {
-	return ReadLinePromptFunc(func() int {
+	DefaultEditor.Prompt = func() int {
 		fmt.Print(promptStr)
 		return len(promptStr)
-	})
+	}
+	return DefaultEditor.ReadLine()
 }

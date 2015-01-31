@@ -55,7 +55,7 @@ type Buffer struct {
 	ShiftState uint32
 	ViewStart  int
 	ViewWidth  int
-	Prompt     func() int
+	Session    *LineEditor
 }
 
 func (this *Buffer) Insert(pos int, c []rune) {
@@ -170,9 +170,7 @@ func (this *Buffer) Repaint(pos int, del int) {
 }
 
 func (this *Buffer) RepaintAll() {
-	if this.Prompt != nil {
-		this.Prompt()
-	}
+	this.Session.Prompt()
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRep(this.Buffer[i], 1)
 	}

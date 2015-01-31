@@ -33,7 +33,7 @@ func Replace(line string) (string, bool) {
 	var buffer bytes.Buffer
 	isReplaced := false
 	reader := strings.NewReader(line)
-	history_count := len(conio.Histories)
+	history_count := conio.DefaultEditor.HistoryLen()
 
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
@@ -101,8 +101,8 @@ func Replace(line string) (string, bool) {
 			seekStr := seekStrBuf.String()
 			found := false
 			for i := history_count - 2; i >= 0; i-- {
-				if strings.Contains(conio.Histories[i].Line, seekStr) {
-					buffer.WriteString(conio.Histories[i].Line)
+				if strings.Contains(conio.DefaultEditor.Histories[i].Line, seekStr) {
+					buffer.WriteString(conio.DefaultEditor.Histories[i].Line)
 					isReplaced = true
 					found = true
 					break
@@ -131,8 +131,8 @@ func Replace(line string) (string, bool) {
 		seekStr := seekStrBuf.String()
 		found := false
 		for i := history_count - 2; i >= 0; i-- {
-			if strings.HasPrefix(conio.Histories[i].Line, seekStr) {
-				buffer.WriteString(conio.Histories[i].Line)
+			if strings.HasPrefix(conio.DefaultEditor.Histories[i].Line, seekStr) {
+				buffer.WriteString(conio.DefaultEditor.Histories[i].Line)
 				isReplaced = true
 				found = true
 				break
@@ -146,16 +146,16 @@ func Replace(line string) (string, bool) {
 	result := conio.NewHistoryLine(buffer.String())
 	if isReplaced {
 		if history_count > 0 {
-			conio.Histories[history_count-1] = result
+			conio.DefaultEditor.Histories[history_count-1] = result
 		} else {
-			conio.Histories = append(conio.Histories, result)
+			conio.DefaultEditor.Histories = append(conio.DefaultEditor.Histories, result)
 		}
 	}
 	return result.Line, isReplaced
 }
 
 func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) {
-	history1 := conio.Histories[historyNo]
+	history1 := conio.DefaultEditor.Histories[historyNo]
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
 		if len(history1.Word) >= 2 {
@@ -205,12 +205,12 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		num = 10
 	}
 	var start int
-	if len(conio.Histories) > num {
-		start = len(conio.Histories) - num
+	if conio.DefaultEditor.HistoryLen() > num {
+		start = conio.DefaultEditor.HistoryLen() - num
 	} else {
 		start = 0
 	}
-	for i, s := range conio.Histories[start:] {
+	for i, s := range conio.DefaultEditor.Histories[start:] {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
 	}
 	return interpreter.CONTINUE, nil
@@ -220,10 +220,10 @@ const max_histories = 2000
 
 func Save(path string) error {
 	var hist_ []*conio.HistoryLine
-	if len(conio.Histories) > max_histories {
-		hist_ = conio.Histories[(len(conio.Histories) - max_histories):]
+	if conio.DefaultEditor.HistoryLen() > max_histories {
+		hist_ = conio.DefaultEditor.Histories[(conio.DefaultEditor.HistoryLen() - max_histories):]
 	} else {
-		hist_ = conio.Histories
+		hist_ = conio.DefaultEditor.Histories
 	}
 	fd, err := os.Create(path)
 	if err != nil {
@@ -244,7 +244,7 @@ func Load(path string) error {
 	defer fd.Close()
 	sc := bufio.NewScanner(fd)
 	for sc.Scan() {
-		conio.Histories = append(conio.Histories, conio.NewHistoryLine(sc.Text()))
+		conio.DefaultEditor.Histories = append(conio.DefaultEditor.Histories, conio.NewHistoryLine(sc.Text()))
 	}
 	return nil
 }

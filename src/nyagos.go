@@ -97,6 +97,23 @@ func main() {
 		}
 	}
 
+	conio.DefaultEditor.Prompt = func() int {
+		L.GetGlobal("nyagos")
+		L.GetField(-1, "prompt")
+		L.Remove(-2)
+		L.PushString(os.Getenv("PROMPT"))
+		L.Call(1, 1)
+		length, lengthErr := L.ToInteger(-1)
+		if lengthErr == nil {
+			return length
+		} else {
+			fmt.Fprintf(os.Stderr,
+				"nyagos.prompt: Length invalid: %s\n",
+				lengthErr.Error())
+			return 0
+		}
+	}
+
 	for {
 		wd, wdErr := os.Getwd()
 		if wdErr == nil {
@@ -104,24 +121,8 @@ func main() {
 		} else {
 			conio.SetTitle("NYAOS - " + wdErr.Error())
 		}
-		history_count := len(conio.Histories)
-		line, cont := conio.ReadLinePromptFunc(
-			func() int {
-				L.GetGlobal("nyagos")
-				L.GetField(-1, "prompt")
-				L.Remove(-2)
-				L.PushString(os.Getenv("PROMPT"))
-				L.Call(1, 1)
-				length, lengthErr := L.ToInteger(-1)
-				if lengthErr == nil {
-					return length
-				} else {
-					fmt.Fprintf(os.Stderr,
-						"nyagos.prompt: Length invalid: %s\n",
-						lengthErr.Error())
-					return 0
-				}
-			})
+		history_count := conio.DefaultEditor.HistoryLen()
+		line, cont := conio.DefaultEditor.ReadLine()
 		if cont == conio.ABORT {
 			break
 		}
@@ -134,7 +135,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		if len(conio.Histories) > history_count {
+		if conio.DefaultEditor.HistoryLen() > history_count {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 			if err == nil {
 				fmt.Fprintln(fd, line)
