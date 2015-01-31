@@ -103,7 +103,11 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
-func (session *LineEditor) ReadLine() (string, Result) {
+// Call LineEditor
+// - ENTER typed -> returns TEXT and true
+// - CTRL-C typed -> returns "" and true
+// - CTRL-D typed -> returns "" and false
+func (session *LineEditor) ReadLine() (string, bool) {
 	this := Buffer{
 		Buffer:  make([]rune, 20),
 		Session: session,
@@ -147,13 +151,13 @@ func (session *LineEditor) ReadLine() (string, Result) {
 			if last := session.LastHistory(); last == nil || result != last.Line {
 				session.HistoryPush(result)
 			}
-			return result, rc
+			return result, rc == ENTER
 		}
 	}
 }
 
 // Not used on NYAGOS. Provide this as library for other applications.
-func ReadLinePromptStr(promptStr string) (string, Result) {
+func ReadLinePromptStr(promptStr string) (string, bool) {
 	width := GetStringWidth(promptStr)
 	DefaultEditor.Prompt = func() int {
 		fmt.Print(promptStr)

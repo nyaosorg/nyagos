@@ -123,7 +123,7 @@ func main() {
 		}
 		history_count := conio.DefaultEditor.HistoryLen()
 		line, cont := conio.DefaultEditor.ReadLine()
-		if cont == conio.ABORT {
+		if !cont {
 			break
 		}
 
