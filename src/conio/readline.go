@@ -13,6 +13,19 @@ const (
 	ABORT    Result = iota
 )
 
+func (this Result) String() string {
+	switch this {
+	case CONTINUE:
+		return "CONTINUE"
+	case ENTER:
+		return "ENTER"
+	case ABORT:
+		return "ABORT"
+	default:
+		return "ERROR"
+	}
+}
+
 type KeyFuncT interface {
 	Call(buffer *Buffer) Result
 }

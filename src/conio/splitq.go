@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Split s with SPACES not enclosing with double-quotations.
 func SplitQ(s string) []string {
 	args := []string{}
 	reader := strings.NewReader(s)
