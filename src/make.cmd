@@ -19,8 +19,8 @@
         @goto end
 
 :fmt
-        @for /R . %%I IN (*.go) do go fmt %%I
         @for /R . %%I in (*~) do del %%I
+        @for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         @goto end
 
 :clean
