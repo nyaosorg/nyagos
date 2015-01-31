@@ -154,9 +154,10 @@ func (session *LineEditor) ReadLine() (string, Result) {
 
 // Not used on NYAGOS. Provide this as library for other applications.
 func ReadLinePromptStr(promptStr string) (string, Result) {
+	width := GetStringWidth(promptStr)
 	DefaultEditor.Prompt = func() int {
 		fmt.Print(promptStr)
-		return len(promptStr)
+		return width
 	}
 	return DefaultEditor.ReadLine()
 }

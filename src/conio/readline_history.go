@@ -64,6 +64,14 @@ func (this *LineEditor) HistoryResetPointer() {
 	this.Pointer = len(this.Histories)
 }
 
+func (this *LineEditor) SetPromptStr(prompt string) {
+	width := GetStringWidth(prompt)
+	this.Prompt = func() int {
+		fmt.Print(prompt)
+		return width
+	}
+}
+
 var DefaultEditor = NewLineEditor()
 
 func KeyFuncHistoryUp(this *Buffer) Result {
