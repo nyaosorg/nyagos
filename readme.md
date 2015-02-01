@@ -32,8 +32,8 @@ The binary files can be downloaded on [Release](https://github.com/zetamatta/nya
 
 The batchfile: `makeicon.cmd` makes icon on your desktop.
 
-* [English Document](nyagos_en.md)
-* [Japanese Document](nyagos_ja.md)
+* [English Document](Doc/nyagos_en.md)
+* [Japanese Document](Doc/nyagos_ja.md)
 
 How to Build
 ------------
@@ -47,7 +47,7 @@ These sortwares are required.
 On `%GOPATH%` folder,
 
     git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos\src
+    cd nyagos
 
 When you have lua53.dll
 
