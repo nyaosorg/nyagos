@@ -1,6 +1,6 @@
 setlocal
 
-if exist "%~dp0version.cmd" call "%~dp0version.cmd"
+if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
 if not "%1" == "" goto %1
 
@@ -10,7 +10,7 @@ if not "%1" == "" goto %1
         goto _build
 
 :release
-        for /F %%I in (%~dp0version.txt) do set VERSION=%%I
+        for /F %%I in (%~dp0Misc\version.txt) do set VERSION=%%I
         set "X_VERSION=-X main.version %VERSION%"
 
 :_build
@@ -88,4 +88,4 @@ if not "%1" == "" goto %1
         ( echo @set "VERSION=%VERSION%"
           echo @set "X_VERSION=%X_VERSION%"
           echo @set "INSTALLDIR=%INSTALLDIR%"
-        ) > "%~dp0version.cmd"
+        ) > "%~dp0Misc\version.cmd"
