@@ -143,6 +143,8 @@ func main() {
 			} else {
 				fmt.Fprintln(os.Stderr, err.Error())
 			}
+		} else {
+			conio.DefaultEditor.HistoryResetPointer()
 		}
 
 		stackPos := L.GetTop()
