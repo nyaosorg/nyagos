@@ -12,6 +12,7 @@ Bugfix
 * ReadLine sometimes left trash at replacing string
 * Could not complete path including ./ #45
 * Could not broken symbolic link with DEL #44
+* Files contains '&' was not enclosed with ".." at completion.
 
 Trivial fix
 -----------
