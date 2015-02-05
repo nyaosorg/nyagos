@@ -107,7 +107,7 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	needQuote := strings.ContainsRune(str, '"')
 	if !needQuote {
 		for _, node := range list {
-			if strings.ContainsRune(node, ' ') {
+			if strings.ContainsAny(node, " &") {
 				needQuote = true
 				break
 			}
