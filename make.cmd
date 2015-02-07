@@ -40,7 +40,8 @@ if not "%1" == "" goto %1
         goto end
 
 :package
-        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua53.dll lua.exe nyagos.lua .nyagos specialfolders.vbs lnk.vbs makeicon.cmd nyagos.d\*.lua readme.md nyagos_*.md
+        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua53.dll lua.exe nyagos.lua .nyagos specialfolders.vbs lnk.vbs makeicon.cmd nyagos.d\*.lua readme.md
+        zip -9j "nyagos-%VERSION%%2.zip" Doc\nyagos_*.md
         goto end
 
 :install
