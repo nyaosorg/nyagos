@@ -2,6 +2,12 @@
 -- DO NOT EDIT THIS. PLEASE EDIT ~\.nyagos OR ADD SCRIPT INTO nyagos.d\ --
 --------------------------------------------------------------------------
 
+if nyagos == nil then
+    print("This is the startup script for NYAGOS")
+    print("Do not run this with lua.exe")
+    os.exit(0)
+end
+
 print("Nihongo Yet Another GOing Shell " .. nyagos.version .. " Powered by " .. _VERSION )
 if string.len(nyagos.version) <= 0 then
     print("Build at ".. nyagos.stamp .. " with commit "..nyagos.commit)
