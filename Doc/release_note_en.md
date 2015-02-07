@@ -1,5 +1,5 @@
-Latest
-======
+NYAGOS 4.0.5\_0
+================
 * cd -N (N:digit): move the N-th previous directory.
 * cd -h , cd ? : print current directory history.
 * pwd -N (N:digit): print the N-th previous directory.
