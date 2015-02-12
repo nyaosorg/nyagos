@@ -46,7 +46,7 @@ func nyagosPrompt(L *lua.Lua) int {
 func main() {
 	conio.DisableCtrlC()
 
-	completion := conio.KeyGoFuncT{completion.KeyFuncCompletion}
+	completion := conio.KeyGoFuncT{F: completion.KeyFuncCompletion}
 
 	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
