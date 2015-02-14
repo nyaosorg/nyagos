@@ -1,6 +1,8 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
+English / [Japanese](./readme_ja.md)
+
 NYAGOS is the commandline-shell for Windows written with the
 Programming Language GO and Lua.
 
