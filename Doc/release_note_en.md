@@ -1,3 +1,7 @@
+Latest
+======
+* Add built-in command: pushd/popd/dirs
+
 NYAGOS 4.0.5\_0
 ================
 * cd -N (N:digit): move the N-th previous directory.

@@ -151,6 +151,9 @@ NYAGOS を終了します。
 ### `erase FILE(S)...`
 ### `mkdir NEWDIR(S)...`
 ### `rmdir [/s] DIR(S)...`
+### `pushd`
+### `popd`
+### `dirs`
 
 これらの内蔵版は、上書きや削除の際に常にプロンプトで実行可否を問い合わせます。
 

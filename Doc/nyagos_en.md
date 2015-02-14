@@ -135,6 +135,9 @@ you should `set "ENV=VAR"`.
 ### `erase FILE(S)...`
 ### `mkdir NEWDIR(S)...`
 ### `rmdir [/s] DIR(S)...`
+### `pushd [DIR]`
+### `popd`
+### `dirs`
 
 These built-in commands are always asking with prompt when files are override or removed.
 
