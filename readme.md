@@ -22,8 +22,8 @@ Programming Language GO and Lua.
   * filtering command-line
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
 
-How to Install
---------------
+Install
+-------
 
 The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).
 
@@ -37,8 +37,14 @@ The batchfile: `makeicon.cmd` makes icon on your desktop.
 * [English Document](Doc/nyagos_en.md)
 * [Japanese Document](Doc/nyagos_ja.md)
 
-How to Build
-------------
+Uninstall
+---------
+
+Remove unzipped files and `%APPDATA%\NYAOS.ORG` and icon on the desktop.
+NYAGOS.exe writes nothing on registry.
+
+Build
+-----
 
 These sortwares are required.
 

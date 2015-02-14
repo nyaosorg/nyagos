@@ -36,6 +36,12 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェルです。
 * [英語マニュアル](Doc/nyagos_en.md)
 * [日本語マニュアル](Doc/nyagos_ja.md)
 
+アンインストール
+----------------
+
+UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
+アイコンを削除してください。NYAGOS.exe はレジストリを読み書きしません。
+
 ビルド方法
 ----------
 
