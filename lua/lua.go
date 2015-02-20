@@ -85,38 +85,11 @@ func (this *Lua) GetType(index int) int {
 	return int(rv)
 }
 
-var lua_pushvalue = luaDLL.NewProc("lua_pushvalue")
-
-func (this *Lua) PushValue(index int) {
-	lua_pushvalue.Call(this.State(), uintptr(index))
-}
-
 func (this *Lua) Source(fname string) error {
 	if err := this.Load(fname); err != nil {
 		return err
 	}
 	return this.Call(0, 0)
-}
-
-var lua_pushlstring = luaDLL.NewProc("lua_pushlstring")
-
-func (this *Lua) PushAnsiString(data []byte) {
-	if data != nil && len(data) > 0 {
-		lua_pushlstring.Call(this.State(),
-			uintptr(unsafe.Pointer(&data[0])),
-			uintptr(len(data)))
-	} else {
-		this.PushString("")
-	}
-}
-
-var lua_pushinteger = luaDLL.NewProc("lua_pushinteger")
-
-func (this *Lua) PushInteger(value Integer) {
-	params := make([]uintptr, 0, 4)
-	params = append(params, this.State())
-	params = value.Expand(params)
-	lua_pushinteger.Call(params...)
 }
 
 var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
@@ -167,12 +140,6 @@ func (this *Lua) Pop(n int) {
 	this.SetTop(-n - 1)
 }
 
-var lua_pushlightuserdata = luaDLL.NewProc("lua_pushlightuserdata")
-
-func (this *Lua) PushLightUserData(p unsafe.Pointer) {
-	lua_pushlightuserdata.Call(this.State(), uintptr(p))
-}
-
 var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
 
 func (this *Lua) NewUserData(size uintptr) unsafe.Pointer {
@@ -185,22 +152,6 @@ var lua_touserdata = luaDLL.NewProc("lua_touserdata")
 func (this *Lua) ToUserData(index int) unsafe.Pointer {
 	rv, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
 	return unsafe.Pointer(rv)
-}
-
-var lua_pushnil = luaDLL.NewProc("lua_pushnil")
-
-func (this *Lua) PushNil() {
-	lua_pushnil.Call(this.State())
-}
-
-var lua_pushboolean = luaDLL.NewProc("lua_pushboolean")
-
-func (this *Lua) PushBool(value bool) {
-	if value {
-		lua_pushboolean.Call(this.State(), 1)
-	} else {
-		lua_pushboolean.Call(this.State(), 0)
-	}
 }
 
 var lua_toboolean = luaDLL.NewProc("lua_toboolean")
@@ -292,16 +243,6 @@ func (this *Lua) NewTable() {
 	lua_createtable.Call(this.State(), 0, 0)
 }
 
-var lua_pushstring = luaDLL.NewProc("lua_pushstring")
-
-func (this *Lua) PushString(str string) {
-	cstr, err := syscall.BytePtrFromString(str)
-	if err != nil {
-		panic(err.Error())
-	}
-	lua_pushstring.Call(this.State(), uintptr(unsafe.Pointer(cstr)))
-}
-
 var lua_tolstring = luaDLL.NewProc("lua_tolstring")
 
 func (this *Lua) ToAnsiString(index int) []byte {
@@ -367,30 +308,4 @@ func (this *Lua) Call(nargs, nresult int) error {
 		}
 	}
 	return nil
-}
-
-func luaToGoBridge(lua uintptr) int {
-	f, _, _ := lua_touserdata.Call(lua, 1)
-	f_ := *(*goFunctionT)(unsafe.Pointer(f))
-	lua_remove_Call(lua, 1)
-	L := Lua{lua}
-	return int(f_.function(&L))
-}
-
-type goFunctionT struct {
-	function func(*Lua) int
-}
-
-var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
-
-func (this *Lua) PushGoFunction(f func(L *Lua) int) {
-	f_ := goFunctionT{f}
-	voidptr := this.NewUserData(unsafe.Sizeof(f_))
-	*(*goFunctionT)(voidptr) = f_
-	this.NewTable()
-	lua_pushcclosure.Call(this.State(),
-		syscall.NewCallbackCDecl(luaToGoBridge),
-		0)
-	this.SetField(-2, "__call")
-	this.SetMetaTable(-2)
 }
