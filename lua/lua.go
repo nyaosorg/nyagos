@@ -92,19 +92,6 @@ func (this *Lua) Source(fname string) error {
 	return this.Call(0, 0)
 }
 
-var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
-
-func (this *Lua) ToInteger(index int) (int, error) {
-	var issucceeded uintptr
-	value, _, _ := lua_tointegerx.Call(this.State(), uintptr(index),
-		uintptr(unsafe.Pointer(&issucceeded)))
-	if issucceeded != 0 {
-		return int(value), nil
-	} else {
-		return 0, errors.New("ToInteger: the value in not integer on the stack")
-	}
-}
-
 var lua_settable = luaDLL.NewProc("lua_settable")
 
 func (this *Lua) SetTable(index int) {
@@ -145,24 +132,6 @@ var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
 func (this *Lua) NewUserData(size uintptr) unsafe.Pointer {
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
 	return unsafe.Pointer(area)
-}
-
-var lua_touserdata = luaDLL.NewProc("lua_touserdata")
-
-func (this *Lua) ToUserData(index int) unsafe.Pointer {
-	rv, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
-	return unsafe.Pointer(rv)
-}
-
-var lua_toboolean = luaDLL.NewProc("lua_toboolean")
-
-func (this *Lua) ToBool(index int) bool {
-	rv, _, _ := lua_toboolean.Call(this.State(), uintptr(index))
-	if rv != 0 {
-		return true
-	} else {
-		return false
-	}
 }
 
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
@@ -243,31 +212,6 @@ func (this *Lua) NewTable() {
 	lua_createtable.Call(this.State(), 0, 0)
 }
 
-var lua_tolstring = luaDLL.NewProc("lua_tolstring")
-
-func (this *Lua) ToAnsiString(index int) []byte {
-	var length uintptr
-	p, _, _ := lua_tolstring.Call(this.State(),
-		uintptr(index),
-		uintptr(unsafe.Pointer(&length)))
-	if length <= 0 {
-		return []byte{}
-	} else {
-		return CGoBytes(p, length)
-	}
-}
-
-func (this *Lua) ToString(index int) (string, error) {
-	if !this.IsString(index) {
-		return "", fmt.Errorf("Lua.ToString(%d): Not String", index)
-	}
-	var length uintptr
-	p, _, _ := lua_tolstring.Call(this.State(),
-		uintptr(index),
-		uintptr(unsafe.Pointer(&length)))
-	return CGoStringN(p, length), nil
-}
-
 var luaL_loadfilex = luaDLL.NewProc("luaL_loadfilex")
 
 func (this *Lua) Load(fname string) error {
@@ -278,15 +222,15 @@ func (this *Lua) Load(fname string) error {
 	rc, _, _ := luaL_loadfilex.Call(this.State(),
 		uintptr(unsafe.Pointer(cfname)),
 		uintptr(0))
-	if rc != 0 {
-		msg, err := this.ToString(-1)
-		if err == nil {
-			return fmt.Errorf("%s: %s..", fname, msg)
-		} else {
-			return err
-		}
+	if rc == 0 {
+		return nil
 	}
-	return nil
+	msg, err := this.ToString(-1)
+	if err == nil {
+		return fmt.Errorf("%s: %s..", fname, msg)
+	} else {
+		return err
+	}
 }
 
 var lua_pcallk = luaDLL.NewProc("lua_pcallk")
@@ -295,17 +239,17 @@ func (this *Lua) Call(nargs, nresult int) error {
 	rc, _, _ := lua_pcallk.Call(this.State(),
 		uintptr(nargs),
 		uintptr(nresult), 0, 0, 0)
-	if rc != 0 {
-		if this.IsString(-1) {
-			msg, err := this.ToString(-1)
-			if err == nil {
-				return errors.New(msg)
-			} else {
-				return err
-			}
-		} else {
-			return errors.New("<Lua Error>")
-		}
+	if rc == 0 {
+		return nil
 	}
-	return nil
+	if this.IsString(-1) {
+		msg, err := this.ToString(-1)
+		if err == nil {
+			return errors.New(msg)
+		} else {
+			return err
+		}
+	} else {
+		return errors.New("<Lua Error>")
+	}
 }

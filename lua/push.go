@@ -104,6 +104,13 @@ func (this *Lua) Push(value interface{}) {
 		this.PushGoFunction(t)
 	case []byte:
 		this.PushAnsiString(t)
+	case map[string]interface{}:
+		this.NewTable()
+		for key, val := range t {
+			this.PushString(key)
+			this.Push(val)
+			this.SetTable(-3)
+		}
 	default:
 		panic("lua.Lua.Push(value): value is not supported type")
 	}
