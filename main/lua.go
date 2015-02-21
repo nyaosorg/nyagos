@@ -73,48 +73,32 @@ func ioLinesNext(this *lua.Lua) int {
 func SetLuaFunctions(this *lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
-	this.NewTable()
-	this.PushGoFunction(cmdAlias)
-	this.SetField(-2, "alias")
-	this.PushGoFunction(cmdSetEnv)
-	this.SetField(-2, "setenv")
-	this.PushGoFunction(cmdGetEnv)
-	this.SetField(-2, "getenv")
-	this.PushGoFunction(cmdExec)
-	this.SetField(-2, "exec")
-	this.PushGoFunction(cmdWrite)
-	this.SetField(-2, "write")
-	this.PushGoFunction(cmdAccess)
-	this.SetField(-2, "access")
-	this.PushGoFunction(cmdAtoU)
-	this.SetField(-2, "atou")
-	this.PushGoFunction(cmdUtoA)
-	this.SetField(-2, "utoa")
-	this.PushGoFunction(cmdGetwd)
-	this.SetField(-2, "getwd")
-	this.PushGoFunction(cmdWhich)
-	this.SetField(-2, "which")
-	this.PushGoFunction(cmdEval)
-	this.SetField(-2, "eval")
-	this.PushGoFunction(cmdGlob)
-	this.SetField(-2, "glob")
-	this.PushGoFunction(cmdBindKey)
-	this.SetField(-2, "bindkey")
-	this.PushGoFunction(cmdGetHistory)
-	this.SetField(-2, "gethistory")
-	this.PushGoFunction(cmdSetRuneWidth)
-	this.SetField(-2, "setrunewidth")
-	this.PushGoFunction(cmdShellExecute)
-	this.SetField(-2, "shellexecute")
-	this.PushGoFunction(cmdPathJoin)
-	this.SetField(-2, "pathjoin")
-	exeName, exeNameErr := dos.GetModuleFileName()
-	if exeNameErr != nil {
+
+	nyagos_table := map[string]interface{}{
+		"access":       cmdAccess,
+		"alias":        cmdAlias,
+		"atou":         cmdAtoU,
+		"bindkey":      cmdBindKey,
+		"eval":         cmdEval,
+		"exec":         cmdExec,
+		"getenv":       cmdGetEnv,
+		"gethistory":   cmdGetHistory,
+		"getwd":        cmdGetwd,
+		"glob":         cmdGlob,
+		"pathjoin":     cmdPathJoin,
+		"setenv":       cmdSetEnv,
+		"setrunewidth": cmdSetRuneWidth,
+		"shellexecute": cmdShellExecute,
+		"utoa":         cmdUtoA,
+		"which":        cmdWhich,
+		"write":        cmdWrite,
+	}
+	if exeName, exeNameErr := dos.GetModuleFileName() ; exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
 	} else {
-		this.PushString(exeName)
-		this.SetField(-2, "exe")
+		nyagos_table["exe"] = exeName
 	}
+	this.Push(nyagos_table)
 	this.SetGlobal("nyagos")
 
 	// replace os.getenv
