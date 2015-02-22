@@ -93,7 +93,7 @@ func SetLuaFunctions(this *lua.Lua) {
 		"which":        cmdWhich,
 		"write":        cmdWrite,
 	}
-	if exeName, exeNameErr := dos.GetModuleFileName() ; exeNameErr != nil {
+	if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
 	} else {
 		nyagos_table["exe"] = exeName

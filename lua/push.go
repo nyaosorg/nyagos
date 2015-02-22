@@ -90,28 +90,39 @@ func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 	this.SetMetaTable(-2)
 }
 
-func (this *Lua) Push(value interface{}) {
-	switch t := value.(type) {
-	case nil:
-		this.PushNil()
-	case bool:
-		this.PushBool(t)
-	case int:
-		this.PushInteger(Integer(t))
-	case string:
-		this.PushString(t)
-	case func(L *Lua) int:
-		this.PushGoFunction(t)
-	case []byte:
-		this.PushAnsiString(t)
-	case map[string]interface{}:
-		this.NewTable()
-		for key, val := range t {
-			this.PushString(key)
-			this.Push(val)
-			this.SetTable(-3)
+func (this *Lua) Push(values ...interface{}) int {
+	for _, value := range values {
+		switch t := value.(type) {
+		case nil:
+			this.PushNil()
+		case bool:
+			this.PushBool(t)
+		case Integer:
+			this.PushInteger(Integer(t))
+		case int:
+			this.PushInteger(Integer(t))
+		case int64:
+			this.PushInteger(Integer(t))
+		case string:
+			this.PushString(t)
+		case func(L *Lua) int:
+			this.PushGoFunction(t)
+		case []byte:
+			this.PushAnsiString(t)
+		case error:
+			this.PushString(t.Error())
+		case map[string]interface{}:
+			this.NewTable()
+			for key, val := range t {
+				this.PushString(key)
+				this.Push(val)
+				this.SetTable(-3)
+			}
+		case unsafe.Pointer:
+			this.PushLightUserData(t)
+		default:
+			panic("lua.Lua.Push(value): value is not supported type")
 		}
-	default:
-		panic("lua.Lua.Push(value): value is not supported type")
 	}
+	return len(values)
 }

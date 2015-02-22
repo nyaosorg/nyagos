@@ -18,21 +18,15 @@ type KeyLuaFuncT struct {
 
 func getBufferForCallBack(L *lua.Lua) (*conio.Buffer, int) {
 	if L.GetType(1) != lua.LUA_TTABLE {
-		L.PushNil()
-		L.PushString("bindKeyExec: call with : not .")
-		return nil, 2
+		return nil, L.Push(nil, "bindKeyExec: call with : not .")
 	}
 	L.GetField(1, "buffer")
 	if L.GetType(-1) != lua.LUA_TLIGHTUSERDATA {
-		L.PushNil()
-		L.PushString("bindKey.Call: invalid object")
-		return nil, 2
+		return nil, L.Push(nil, "bindKey.Call: invalid object")
 	}
 	buffer := (*conio.Buffer)(L.ToUserData(-1))
 	if buffer == nil {
-		L.PushNil()
-		L.PushString("bindKey.Call: invalid member")
-		return nil, 2
+		return nil, L.Push(nil, "bindKey.Call: invalid member")
 	}
 	return buffer, 0
 }
@@ -44,13 +38,10 @@ func callInsert(L *lua.Lua) int {
 	}
 	text, textErr := L.ToString(2)
 	if textErr != nil {
-		L.PushNil()
-		L.PushString(textErr.Error())
-		return 2
+		return L.Push(nil, textErr)
 	}
 	buffer.InsertAndRepaint(text)
-	L.PushBool(true)
-	return 1
+	return L.Push(true)
 }
 
 func callKeyFunc(L *lua.Lua) int {
@@ -60,32 +51,24 @@ func callKeyFunc(L *lua.Lua) int {
 	}
 	key, keyErr := L.ToString(2)
 	if keyErr != nil {
-		L.PushNil()
-		L.PushString(keyErr.Error())
-		return 2
+		return L.Push(nil, keyErr)
 	}
 	function, funcErr := conio.GetFunc(key)
 	if funcErr != nil {
-		L.PushNil()
-		L.PushString(funcErr.Error())
-		return 2
+		return L.Push(nil, funcErr)
 	}
-	rc := function.Call(buffer)
-	L.PushBool(true)
-	switch rc {
+	switch function.Call(buffer) {
 	case conio.ENTER:
-		L.PushBool(true)
-		return 2
+		return L.Push(true, true)
 	case conio.ABORT:
-		L.PushBool(false)
-		return 2
+		return L.Push(true, false)
+	default:
+		return L.Push(nil)
 	}
-	return 1
 }
 
 func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
-	this.L.NewTable()
 	pos := -1
 	var text bytes.Buffer
 	for i, c := range buffer.Buffer {
@@ -100,16 +83,13 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	if pos < 0 {
 		pos = text.Len() + 1
 	}
-	this.L.PushInteger(lua.Integer(pos))
-	this.L.SetField(-2, "pos")
-	this.L.PushString(text.String())
-	this.L.SetField(-2, "text")
-	this.L.PushLightUserData(unsafe.Pointer(buffer))
-	this.L.SetField(-2, "buffer")
-	this.L.PushGoFunction(callKeyFunc)
-	this.L.SetField(-2, "call")
-	this.L.PushGoFunction(callInsert)
-	this.L.SetField(-2, "insert")
+	this.L.Push(map[string]interface{}{
+		"pos":    pos,
+		"text":   text,
+		"buffer": unsafe.Pointer(buffer),
+		"call":   callKeyFunc,
+		"insert": callInsert,
+	})
 	if err := this.L.Call(1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
@@ -132,8 +112,7 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 func cmdBindKey(L *lua.Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
-		L.PushString(keyErr.Error())
-		return 1
+		return L.Push(keyErr)
 	}
 	key = strings.Replace(strings.ToUpper(key), "-", "_", -1)
 	switch L.GetType(-1) {
@@ -141,28 +120,20 @@ func cmdBindKey(L *lua.Lua) int {
 		regkey := "nyagos.bind." + key
 		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
-			L.PushNil()
-			L.PushString(err.Error())
-			return 2
+			return L.Push(nil, err)
 		} else {
-			L.PushBool(true)
-			return 1
+			return L.Push(true)
 		}
 	default:
 		val, valErr := L.ToString(-1)
 		if valErr != nil {
-			L.PushNil()
-			L.PushString(valErr.Error())
-			return 2
+			return L.Push(nil, valErr)
 		}
 		err := conio.BindKeySymbol(key, val)
 		if err != nil {
-			L.PushNil()
-			L.PushString(err.Error())
-			return 2
+			return L.Push(nil, err)
 		} else {
-			L.PushBool(true)
-			return 1
+			return L.Push(true)
 		}
 	}
 }
