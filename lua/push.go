@@ -92,9 +92,11 @@ func (this *Lua) PushGoFunction(f func(L *Lua) int) {
 
 func (this *Lua) Push(values ...interface{}) int {
 	for _, value := range values {
-		switch t := value.(type) {
-		case nil:
+		if value == nil {
 			this.PushNil()
+			continue
+		}
+		switch t := value.(type) {
 		case bool:
 			this.PushBool(t)
 		case Integer:
