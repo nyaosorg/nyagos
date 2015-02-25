@@ -20,7 +20,7 @@ import (
 func cmdAlias(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
-		return L.Push(nil,nameErr)
+		return L.Push(nil, nameErr)
 	}
 	key := strings.ToLower(name)
 	switch L.GetType(2) {
@@ -29,7 +29,7 @@ func cmdAlias(L *lua.Lua) int {
 		if err == nil {
 			alias.Table[key] = alias.New(value)
 		} else {
-			return L.Push(nil,err)
+			return L.Push(nil, err)
 		}
 	case lua.LUA_TFUNCTION:
 		regkey := "nyagos.alias." + key
@@ -42,11 +42,11 @@ func cmdAlias(L *lua.Lua) int {
 func cmdSetEnv(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
-		return L.Push(nil,nameErr)
+		return L.Push(nil, nameErr)
 	}
 	value, valueErr := L.ToString(2)
 	if valueErr != nil {
-		return L.Push(nil,valueErr)
+		return L.Push(nil, valueErr)
 	}
 	os.Setenv(name, value)
 	return L.Push(true)
@@ -69,12 +69,12 @@ func cmdGetEnv(L *lua.Lua) int {
 func cmdExec(L *lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
-		return L.Push(nil,statementErr)
+		return L.Push(nil, statementErr)
 	}
 	_, err := interpreter.New().Interpret(statement)
 
 	if err != nil {
-		return L.Push(nil,err)
+		return L.Push(nil, err)
 	}
 	return L.Push(true)
 }
@@ -88,11 +88,11 @@ func (e *emptyWriter) Write(b []byte) (int, error) {
 func cmdEval(L *lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
-		return L.Push(nil,statementErr)
+		return L.Push(nil, statementErr)
 	}
 	r, w, err := os.Pipe()
 	if err != nil {
-		return L.Push(nil,err)
+		return L.Push(nil, err)
 	}
 	go func(statement string, w *os.File) {
 		it := interpreter.New()
@@ -130,7 +130,7 @@ func cmdWrite(L *lua.Lua) int {
 	for i := 1; i <= n; i++ {
 		str, err := L.ToString(i)
 		if err != nil {
-			return L.Push(nil,err)
+			return L.Push(nil, err)
 		}
 		if i > 1 {
 			fmt.Fprint(out, "\t")
@@ -145,7 +145,7 @@ func cmdGetwd(L *lua.Lua) int {
 	if err == nil {
 		return L.Push(wd)
 	} else {
-		return L.Push(nil,err)
+		return L.Push(nil, err)
 	}
 }
 
@@ -155,13 +155,13 @@ func cmdWhich(L *lua.Lua) int {
 	}
 	name, nameErr := L.ToString(-1)
 	if nameErr != nil {
-		return L.Push(nil,nameErr)
+		return L.Push(nil, nameErr)
 	}
 	path, err := exec.LookPath(name)
 	if err == nil {
 		return L.Push(path)
 	} else {
-		return L.Push(nil,err)
+		return L.Push(nil, err)
 	}
 }
 
@@ -178,11 +178,11 @@ func cmdAtoU(L *lua.Lua) int {
 func cmdUtoA(L *lua.Lua) int {
 	utf8, utf8err := L.ToString(1)
 	if utf8err != nil {
-		return L.Push(nil,utf8err)
+		return L.Push(nil, utf8err)
 	}
 	str, err := dos.UtoA(utf8)
 	if err != nil {
-		return L.Push(nil,err)
+		return L.Push(nil, err)
 	}
 	if len(str) >= 1 {
 		L.PushAnsiString(str[:len(str)-1])
@@ -205,7 +205,7 @@ func cmdGlob(L *lua.Lua) int {
 	}
 	list, err := dos.Glob(wildcard)
 	if err != nil {
-		return L.Push(nil,err)
+		return L.Push(nil, err)
 	} else {
 		L.NewTable()
 		for i := 0; i < len(list); i++ {
@@ -220,7 +220,7 @@ func cmdGetHistory(this *lua.Lua) int {
 	if this.GetType(-1) == lua.LUA_TNUMBER {
 		val, err := this.ToInteger(-1)
 		if err != nil {
-			return this.Push(nil,err.Error())
+			return this.Push(nil, err.Error())
 		}
 		this.PushString(conio.DefaultEditor.GetHistoryAt(val).Line)
 	} else {
@@ -232,11 +232,11 @@ func cmdGetHistory(this *lua.Lua) int {
 func cmdSetRuneWidth(this *lua.Lua) int {
 	char, charErr := this.ToInteger(1)
 	if charErr != nil {
-		return this.Push(nil,charErr)
+		return this.Push(nil, charErr)
 	}
 	width, widthErr := this.ToInteger(2)
 	if widthErr != nil {
-		return this.Push(nil,widthErr)
+		return this.Push(nil, widthErr)
 	}
 	conio.SetCharWidth(rune(char), width)
 	this.PushBool(true)
@@ -246,11 +246,11 @@ func cmdSetRuneWidth(this *lua.Lua) int {
 func cmdShellExecute(this *lua.Lua) int {
 	action, actionErr := this.ToString(1)
 	if actionErr != nil {
-		return this.Push(nil,actionErr)
+		return this.Push(nil, actionErr)
 	}
 	path, pathErr := this.ToString(2)
 	if pathErr != nil {
-		return this.Push(nil,pathErr)
+		return this.Push(nil, pathErr)
 	}
 	param, paramErr := this.ToString(3)
 	if paramErr != nil {
@@ -262,7 +262,7 @@ func cmdShellExecute(this *lua.Lua) int {
 	}
 	err := dos.ShellExecute(action, path, param, dir)
 	if err != nil {
-		return this.Push(nil,err)
+		return this.Push(nil, err)
 	} else {
 		return this.Push(true)
 	}
@@ -271,11 +271,11 @@ func cmdShellExecute(this *lua.Lua) int {
 func cmdAccess(L *lua.Lua) int {
 	path, pathErr := L.ToString(1)
 	if pathErr != nil {
-		return L.Push(nil,pathErr)
+		return L.Push(nil, pathErr)
 	}
 	mode, modeErr := L.ToInteger(2)
 	if modeErr != nil {
-		return L.Push(nil,modeErr)
+		return L.Push(nil, modeErr)
 	}
 	fi, err := os.Stat(path)
 
@@ -300,14 +300,14 @@ func cmdAccess(L *lua.Lua) int {
 func cmdPathJoin(L *lua.Lua) int {
 	path, pathErr := L.ToString(1)
 	if pathErr != nil {
-		return L.Push(nil,pathErr)
+		return L.Push(nil, pathErr)
 	}
 	for i, i_ := 2, L.GetTop(); i <= i_; i++ {
 		pathI, pathIErr := L.ToString(i)
 		if pathIErr != nil {
-			return L.Push(nil,pathErr)
+			return L.Push(nil, pathErr)
 		}
 		path = dos.Join(path, pathI)
 	}
-	return L.Push(path,nil)
+	return L.Push(path, nil)
 }
