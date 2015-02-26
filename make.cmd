@@ -59,7 +59,7 @@ if not "%1" == "" goto %1
 
 :install.
         robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
-        taskkill /im nyagos.exe
+        taskkill /F /im nyagos.exe
         copy nyagos.exe "%INSTALLDIR%\."
         copy nyagos.lua "%INSTALLDIR%\."
         if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
