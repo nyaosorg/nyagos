@@ -67,6 +67,55 @@ func callKeyFunc(L *lua.Lua) int {
 	}
 }
 
+func callLastWord(L *lua.Lua) int {
+	this, stack_count := getBufferForCallBack(L)
+	if this == nil {
+		return stack_count
+	}
+	word, pos := this.CurrentWord()
+	return L.Push(word, pos)
+}
+
+func callFirstWord(L *lua.Lua) int {
+	this, stack_count := getBufferForCallBack(L)
+	if this == nil {
+		return stack_count
+	}
+	word := conio.QuotedFirstWord(this.String())
+	return L.Push(word, 0)
+}
+
+func callBoxListing(L *lua.Lua) int {
+	// stack +1: readline.Buffer
+	// stack +2: table
+	// stack +3: index or value
+	this, stack_count := getBufferForCallBack(L)
+	if this == nil {
+		return stack_count
+	}
+	fmt.Print("\n")
+	list := make([]string, 0, 100)
+	for i := lua.Integer(1); true; i++ {
+		L.Push(i)     // to +3
+		L.GetTable(2) //
+		t := L.GetType(3)
+
+		if t == lua.LUA_TNIL {
+			break
+		}
+		str, err := L.ToString(3)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "boxprint: "+err.Error())
+			break
+		}
+		L.Remove(3)
+		list = append(list, str)
+	}
+	conio.BoxPrint(list, os.Stdout)
+	this.RepaintAll()
+	return 0
+}
+
 func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
 	pos := -1
@@ -84,11 +133,14 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 		pos = text.Len() + 1
 	}
 	this.L.Push(map[string]interface{}{
-		"pos":    pos,
-		"text":   text.String(),
-		"buffer": unsafe.Pointer(buffer),
-		"call":   callKeyFunc,
-		"insert": callInsert,
+		"pos":       pos,
+		"text":      text.String(),
+		"buffer":    unsafe.Pointer(buffer),
+		"call":      callKeyFunc,
+		"insert":    callInsert,
+		"lastword":  callLastWord,
+		"firstword": callFirstWord,
+		"boxprint":  callBoxListing,
 	})
 	if err := this.L.Call(1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
