@@ -1,6 +1,7 @@
 package lua
 
 import (
+	"fmt"
 	"syscall"
 	"unsafe"
 )
@@ -117,7 +118,7 @@ func (this *Lua) Push(values ...interface{}) int {
 		case unsafe.Pointer:
 			this.PushLightUserData(t)
 		default:
-			panic("lua.Lua.Push(value): value is not supported type")
+			panic(fmt.Sprintf("lua.Lua.Push(%T): value is not supported type", t))
 		}
 	}
 	return len(values)
