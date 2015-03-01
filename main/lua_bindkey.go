@@ -85,7 +85,7 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	}
 	this.L.Push(map[string]interface{}{
 		"pos":    pos,
-		"text":   text,
+		"text":   text.String(),
 		"buffer": unsafe.Pointer(buffer),
 		"call":   callKeyFunc,
 		"insert": callInsert,
