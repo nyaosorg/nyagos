@@ -2,7 +2,6 @@ package lua
 
 import (
 	"errors"
-	"fmt"
 	"unsafe"
 )
 
@@ -34,9 +33,6 @@ func (this *Lua) ToAnsiString(index int) []byte {
 }
 
 func (this *Lua) ToString(index int) (string, error) {
-	if !this.IsString(index) {
-		return "", fmt.Errorf("Lua.ToString(%d): Not String", index)
-	}
 	var length uintptr
 	p, _, _ := lua_tolstring.Call(this.State(),
 		uintptr(index),
