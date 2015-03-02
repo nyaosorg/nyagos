@@ -209,9 +209,7 @@ func (this *Buffer) CurrentWord() (string, int) {
 	var buffer bytes.Buffer
 	start := this.CurrentWordTop()
 	for i := start; i < this.Cursor; i++ {
-		if this.Buffer[i] != '"' {
-			buffer.WriteRune(this.Buffer[i])
-		}
+		buffer.WriteRune(this.Buffer[i])
 	}
 	return buffer.String(), start
 }

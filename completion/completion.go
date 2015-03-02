@@ -12,6 +12,7 @@ import (
 
 func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	str, pos := this.CurrentWord()
+	str = strings.Replace(str, "\"", "", -1)
 	var list []string
 	if pos > 0 {
 		list, _ = listUpFiles(str)
@@ -48,10 +49,6 @@ func GetCommon(list []string) string {
 	return common
 }
 
-func compareWithoutQuote(this string, that string) bool {
-	return strings.Replace(this, "\"", "", -1) == strings.Replace(that, "\"", "", -1)
-}
-
 func completeXXX(this *conio.Buffer, listUpper func(string) ([]string, int, error)) bool {
 	allstring := this.String()
 	matches, lastPercentPos, listUpErr := listUpper(allstring)
@@ -84,7 +81,8 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	if completeXXX(this, listUpEnv) {
 		return conio.CONTINUE
 	}
-	str, wordStart := this.CurrentWord()
+	word, wordStart := this.CurrentWord()
+	str := strings.Replace(word, "\"", "", -1)
 
 	slashToBackSlash := true
 	firstFoundSlashPos := strings.IndexRune(str, '/')
@@ -128,7 +126,7 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	if slashToBackSlash {
 		commonStr = strings.Replace(commonStr, "/", "\\", -1)
 	}
-	if compareWithoutQuote(str, commonStr) {
+	if word == commonStr {
 		return KeyFuncCompletionList(this)
 	}
 	this.ReplaceAndRepaint(wordStart, commonStr)
