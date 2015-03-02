@@ -4,6 +4,10 @@ Latest
 * Add the method boxprint(),firstword(),lastword() to nyagos.bindkey's first argument
 * Update Document about uninstalling
 
+Bugfix
+------
+* Completion failed when 0001 is typed where 0001.txt and "0001 copy.txt" were.
+
 NYAGOS 4.0.5\_0
 ================
 * cd -N (N:digit): move the N-th previous directory.
