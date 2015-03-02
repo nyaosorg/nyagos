@@ -1,6 +1,8 @@
 最新
 ====
 * 内蔵コマンド追加: pushd/popd/dirs
+* nyagos.bindkey の第一引数に、メソッド boxprint(),firstword(),lastword() を追加
+* アンインストールに関して、ドキュメントを更新
 
 NYAGOS 4.0.5\_0
 ===============

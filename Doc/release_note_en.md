@@ -1,6 +1,8 @@
 Latest
 ======
 * Add built-in command: pushd/popd/dirs
+* Add the method boxprint(),firstword(),lastword() to nyagos.bindkey's first argument
+* Update Document about uninstalling
 
 NYAGOS 4.0.5\_0
 ================
