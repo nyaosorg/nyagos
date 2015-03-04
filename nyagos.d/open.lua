@@ -16,6 +16,10 @@ nyagos.alias("open",function(args)
         count = count +1
     end
     if count <= 0 then
-        nyagos.shellexecute("open",".")
+        if nyagos.access(".\\open.cmd",0) then
+            nyagos.exec("open.cmd")
+        else
+            nyagos.shellexecute("open",".")
+        end
     end
 end)
