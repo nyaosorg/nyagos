@@ -261,8 +261,8 @@ When the key is pressed, call the function.
 * `this.text` ... all text represented with utf8
 * `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
 * `this:insert("TEXT")` ... insert TEXT at the cursor position.
-* `this:firstword()` ... get first word(=command-name) on the command-line.
-* `this:lastword()` ... get last word on the command-line.
+* `this:firstword()` ... get the first word(=command-name) on the command-line.
+* `this:lastword()` ... get the last word and its position on the command-line.
 * `this:boxprint({...})` ... listing table values like completion-list.
 
 The return value of function is used as below

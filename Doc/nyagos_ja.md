@@ -301,7 +301,7 @@ UTF8文字列を、現在のコードページの文字列に変換します。
 * `this:call("FUNCNAME")` ... `this.call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
 * `this:insert("TEXT")` ... TEXT をカーソル位置に挿入します
 * `this:firstword()` ... コマンドラインの先頭の単語(コマンド名)を返します
-* `this:lastword()` ... コマンドラインの最後の単語を返します
+* `this:lastword()` ... コマンドラインの最後の単語とその位置を返します
 * `this:boxprint({...})` ... テーブルの要素を補完候補リスト風に表示します
 
 また、戻り値は次のように使われます。
