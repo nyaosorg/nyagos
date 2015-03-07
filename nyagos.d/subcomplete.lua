@@ -32,32 +32,32 @@ end
 
 if next(maincmds) then
     nyagos.bindkey("C_I",function(this)
-        local firstword = this:firstword()
-        for maincmd1,subcmds in pairs(maincmds) do
-            if maincmd1 == firstword then
-                local lastword,lastword_at = this:lastword()
-                if lastword_at == string.len(maincmd1)+2 then
-                    local list={}
-                    local lastword_len = string.len(lastword)
-                    for i=1,#subcmds do
-                        if string.sub(subcmds[i],1,lastword_len) == lastword then
-                            list[#list+1] = subcmds[i]
-                        end
-                    end
-                    local commonprefix = nyagos.commonprefix(list)
-                    if string.len(commonprefix) > lastword_len then
-                        local result = string.sub(commonprefix,lastword_len+1)
-                        if #list == 1 then
-                            result = result .. " "
-                        end
-                        return result
-                    elseif #list >= 2 then
-                        this:boxprint(list)
-                    end
-                    return nil
-                end
+        local maincmd1 = this:firstword()
+        local subcmds = maincmds[maincmd1]
+        if not subcmds then
+            return this:call("COMPLETE")
+        end
+        local lastword,lastword_at = this:lastword()
+        if lastword_at ~= string.len(maincmd1)+2 then
+            return this:call("COMPLETE")
+        end
+        local list={}
+        local lastword_len = string.len(lastword)
+        for i=1,#subcmds do
+            if string.sub(subcmds[i],1,lastword_len) == lastword then
+                list[#list+1] = subcmds[i]
             end
         end
-        return this:call("COMPLETE")
+        local commonprefix = nyagos.commonprefix(list)
+        if string.len(commonprefix) > lastword_len then
+            local result = string.sub(commonprefix,lastword_len+1)
+            if #list == 1 then
+                result = result .. " "
+            end
+            return result
+        elseif #list >= 2 then
+            this:boxprint(list)
+        end
+        return nil
     end)
 end
