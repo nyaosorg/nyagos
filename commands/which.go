@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os/exec"
 
+	"../dos"
 	. "../interpreter"
 )
 
@@ -13,7 +14,7 @@ func cmd_which(cmd *Interpreter) (NextT, error) {
 		if err != nil {
 			return CONTINUE, err
 		}
-		fmt.Fprintln(cmd.Stdout, path)
+		fmt.Fprintln(cmd.Stdout, dos.YenYen2Yen(path))
 	}
 	return CONTINUE, nil
 }
