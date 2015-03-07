@@ -73,7 +73,7 @@ func callLastWord(L *lua.Lua) int {
 		return stack_count
 	}
 	word, pos := this.CurrentWord()
-	return L.Push(word, pos)
+	return L.Push(word, pos+1)
 }
 
 func callFirstWord(L *lua.Lua) int {
