@@ -29,6 +29,9 @@ func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 }
 
 func CommonPrefix(list []string) string {
+	if len(list) < 1 {
+		return ""
+	}
 	common := list[0]
 	for _, f := range list[1:] {
 		cr := strings.NewReader(common)
