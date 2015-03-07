@@ -117,9 +117,9 @@ func main() {
 	for {
 		wd, wdErr := os.Getwd()
 		if wdErr == nil {
-			conio.SetTitle("NYAOS - " + wd)
+			conio.SetTitle("NYAGOS - " + wd)
 		} else {
-			conio.SetTitle("NYAOS - " + wdErr.Error())
+			conio.SetTitle("NYAGOS - " + wdErr.Error())
 		}
 		history_count := conio.DefaultEditor.HistoryLen()
 		line, cont := conio.DefaultEditor.ReadLine()
