@@ -78,6 +78,7 @@ func SetLuaFunctions(this *lua.Lua) {
 		"access":       cmdAccess,
 		"alias":        cmdAlias,
 		"atou":         cmdAtoU,
+		"commonprefix": cmdCommonPrefix,
 		"bindkey":      cmdBindKey,
 		"eval":         cmdEval,
 		"exec":         cmdExec,

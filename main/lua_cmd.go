@@ -11,6 +11,7 @@ import (
 	"github.com/shiena/ansicolor"
 
 	"../alias"
+	"../completion"
 	"../conio"
 	"../dos"
 	"../interpreter"
@@ -310,4 +311,23 @@ func cmdPathJoin(L *lua.Lua) int {
 		path = dos.Join(path, pathI)
 	}
 	return L.Push(path, nil)
+}
+
+func cmdCommonPrefix(L *lua.Lua) int {
+	if L.GetType(1) != lua.LUA_TTABLE {
+		return 0
+	}
+	list := []string{}
+	for i := lua.Integer(1); true; i++ {
+		L.PushInteger(i)
+		L.GetTable(1)
+		if str, err := L.ToString(2); err == nil && str != "" {
+			list = append(list, str)
+		} else {
+			break
+		}
+		L.Remove(2)
+	}
+	L.PushString(completion.CommonPrefix(list))
+	return 1
 }
