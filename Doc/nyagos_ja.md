@@ -277,8 +277,8 @@ UTF8文字列を、現在のコードページの文字列に変換します。
 
         "C_A" "C_B" ... "C_Z" "M_A" "M_B" ... "M_Z"
         "F1" "F2" ... "F24"
-	"BACKSPACE" "CTRL" "DEL" "DOWN" "END"
-	"ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP",
+        "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
+        "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP",
         "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
 
 機能名として以下が使えます。
