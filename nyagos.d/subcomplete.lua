@@ -11,8 +11,22 @@ if githelp then
         end
     end
     githelp:close()
-    if next(gitcmds) then
+    if #gitcmds > 1 then
         maincmds["git"] = gitcmds
+    end
+end
+local svnhelp=io.popen("svn help","r")
+if svnhelp then
+    local svncmds={}
+    for line in svnhelp:lines() do
+        local m=string.match(line,"^   ([a-z]+)")
+        if m then
+            svncmds[ #svncmds+1 ] = m
+        end
+    end
+    svnhelp:close()
+    if #svncmds > 1 then
+        maincmds["svn"] = svncmds
     end
 end
 
