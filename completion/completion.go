@@ -28,7 +28,7 @@ func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	return conio.CONTINUE
 }
 
-func GetCommon(list []string) string {
+func CommonPrefix(list []string) string {
 	common := list[0]
 	for _, f := range list[1:] {
 		cr := strings.NewReader(common)
@@ -64,7 +64,7 @@ func completeXXX(this *conio.Buffer, listUpper func(string) ([]string, int, erro
 		return true
 	}
 	// more than one match.
-	commonStr := GetCommon(matches)
+	commonStr := CommonPrefix(matches)
 	originStr := allstring[lastPercentPos:]
 	if commonStr != originStr {
 		this.ReplaceAndRepaint(lastPercentPos, commonStr)
@@ -101,7 +101,7 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	if err != nil || list == nil || len(list) <= 0 {
 		return conio.CONTINUE
 	}
-	commonStr := GetCommon(list)
+	commonStr := CommonPrefix(list)
 	needQuote := strings.ContainsRune(str, '"')
 	if !needQuote {
 		for _, node := range list {
