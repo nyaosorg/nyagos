@@ -96,20 +96,18 @@ func callBoxListing(L *lua.Lua) int {
 	}
 	fmt.Print("\n")
 	list := make([]string, 0, 100)
-	for i := lua.Integer(1); true; i++ {
+	for i := 1; ; i++ {
 		L.Push(i)     // to +3
 		L.GetTable(2) //
-		t := L.GetType(3)
-
-		if t == lua.LUA_TNIL {
-			break
-		}
 		str, err := L.ToString(3)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "boxprint: "+err.Error())
 			break
 		}
-		L.Remove(3)
+		if str == "" {
+			break
+		}
+		L.Pop(1)
 		list = append(list, str)
 	}
 	conio.BoxPrint(list, os.Stdout)
