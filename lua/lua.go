@@ -123,8 +123,8 @@ func (this *Lua) SetTop(index int) {
 	lua_settop.Call(this.State(), uintptr(index))
 }
 
-func (this *Lua) Pop(n int) {
-	this.SetTop(-n - 1)
+func (this *Lua) Pop(n uint) {
+	this.SetTop(-int(n) - 1)
 }
 
 var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
