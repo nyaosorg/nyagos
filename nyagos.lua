@@ -76,7 +76,10 @@ local function include(fname)
     if err then
         print(err)
     elseif chank then
-        chank()
+        local ok,err=pcall(chank)
+        if not ok then
+            print(fname .. ": " ..err)
+        end
     else
         print(fname .. ":fail to load")
     end
