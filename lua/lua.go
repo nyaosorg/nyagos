@@ -253,3 +253,9 @@ func (this *Lua) Call(nargs, nresult int) error {
 		return errors.New("<Lua Error>")
 	}
 }
+
+var lua_len = luaDLL.NewProc("lua_len")
+
+func (this *Lua) Len(index int) {
+	lua_len.Call(this.State(), uintptr(index))
+}
