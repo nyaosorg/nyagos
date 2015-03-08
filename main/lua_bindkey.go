@@ -28,6 +28,7 @@ func getBufferForCallBack(L *lua.Lua) (*conio.Buffer, int) {
 	if buffer == nil {
 		return nil, L.Push(nil, "bindKey.Call: invalid member")
 	}
+	L.Pop(1)
 	return buffer, 0
 }
 
