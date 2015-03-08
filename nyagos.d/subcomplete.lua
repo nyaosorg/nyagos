@@ -30,6 +30,20 @@ if svnhelp then
     end
 end
 
+local hghelp=io.popen("hg debugcomplete","r")
+if hghelp then
+    local hgcmds={}
+    for line in hghelp:lines() do
+        for word in string.gmatch(line,"[a-z]+") do
+            hgcmds[#hgcmds+1] = word
+        end
+    end
+    hghelp:close()
+    if #hgcmds > 1 then
+        maincmds["hg"] = hgcmds
+    end
+end
+
 if next(maincmds) then
     nyagos.bindkey("C_I",function(this)
         local maincmd1 = this:firstword()
