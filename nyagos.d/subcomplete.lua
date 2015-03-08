@@ -1,6 +1,6 @@
 local maincmds = {}
 
-local githelp=io.popen("git help -a","r")
+local githelp=io.popen("git help -a 2>nul","r")
 if githelp then
     local gitcmds={}
     for line in githelp:lines() do
@@ -15,7 +15,7 @@ if githelp then
         maincmds["git"] = gitcmds
     end
 end
-local svnhelp=io.popen("svn help","r")
+local svnhelp=io.popen("svn help 2>nul","r")
 if svnhelp then
     local svncmds={}
     for line in svnhelp:lines() do
@@ -30,7 +30,7 @@ if svnhelp then
     end
 end
 
-local hghelp=io.popen("hg debugcomplete","r")
+local hghelp=io.popen("hg debugcomplete 2>nul","r")
 if hghelp then
     local hgcmds={}
     for line in hghelp:lines() do
