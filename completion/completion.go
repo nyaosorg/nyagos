@@ -10,20 +10,45 @@ import (
 	"../conio"
 )
 
-func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
-	str, pos := this.CurrentWord()
-	str = strings.Replace(str, "\"", "", -1)
-	var list []string
-	if pos > 0 {
-		list, _ = listUpFiles(str)
-	} else {
-		list, _ = listUpCommands(str)
+type CompletionList struct {
+	AllLine string
+	List    []string
+	RawWord string // have quotation
+	Word    string
+	Pos     int
+}
+
+func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
+	var err error
+	rv := CompletionList{}
+
+	// environment completion.
+	rv.AllLine = this.String()
+	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
+	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
+		rv.RawWord = rv.AllLine[rv.Pos:]
+		rv.Word = rv.RawWord
+		return &rv, nil
 	}
-	if list == nil {
+
+	// filename or commandname completion
+	rv.RawWord, rv.Pos = this.CurrentWord()
+	rv.Word = strings.Replace(rv.RawWord, "\"", "", -1)
+	if rv.Pos > 0 {
+		rv.List, err = listUpFiles(rv.Word)
+	} else {
+		rv.List, err = listUpCommands(rv.Word)
+	}
+	return &rv, err
+}
+
+func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
+	comp, err := listUpComplete(this)
+	if err != nil {
 		return conio.CONTINUE
 	}
 	fmt.Print("\n")
-	conio.BoxPrint(list, os.Stdout)
+	conio.BoxPrint(comp.List, os.Stdout)
 	this.RepaintAll()
 	return conio.CONTINUE
 }
@@ -52,62 +77,27 @@ func CommonPrefix(list []string) string {
 	return common
 }
 
-func completeXXX(this *conio.Buffer, listUpper func(string) ([]string, int, error)) bool {
-	allstring := this.String()
-	matches, lastPercentPos, listUpErr := listUpper(allstring)
-	if listUpErr != nil {
-		fmt.Fprintln(os.Stderr, listUpErr.Error())
-		return false
-	}
-	if matches == nil || len(matches) <= 0 {
-		return false
-	}
-	if len(matches) == 1 { // one matches.
-		this.ReplaceAndRepaint(lastPercentPos, matches[0])
-		return true
-	}
-	// more than one match.
-	commonStr := CommonPrefix(matches)
-	originStr := allstring[lastPercentPos:]
-	if commonStr != originStr {
-		this.ReplaceAndRepaint(lastPercentPos, commonStr)
-	} else {
-		// no difference -> listing.
-		fmt.Println()
-		conio.BoxPrint(matches, os.Stdout)
-		this.RepaintAll()
-	}
-	return true
+func endWithRoot(path string) bool {
+	return strings.HasSuffix(path, "\\") || strings.HasSuffix(path, "/")
 }
 
 func KeyFuncCompletion(this *conio.Buffer) conio.Result {
-	if completeXXX(this, listUpEnv) {
+	comp, err := listUpComplete(this)
+	if err != nil || comp.List == nil || len(comp.List) <= 0 {
 		return conio.CONTINUE
 	}
-	word, wordStart := this.CurrentWord()
-	str := strings.Replace(word, "\"", "", -1)
 
 	slashToBackSlash := true
-	firstFoundSlashPos := strings.IndexRune(str, '/')
-	firstFoundBackSlashPos := strings.IndexRune(str, '\\')
+	firstFoundSlashPos := strings.IndexRune(comp.Word, '/')
+	firstFoundBackSlashPos := strings.IndexRune(comp.Word, '\\')
 	if firstFoundSlashPos >= 0 && firstFoundBackSlashPos >= 0 && firstFoundSlashPos < firstFoundBackSlashPos {
 		slashToBackSlash = false
 	}
 
-	var list []string
-	var err error
-	if wordStart > 0 {
-		list, err = listUpFiles(str)
-	} else {
-		list, err = listUpCommands(str)
-	}
-	if err != nil || list == nil || len(list) <= 0 {
-		return conio.CONTINUE
-	}
-	commonStr := CommonPrefix(list)
-	needQuote := strings.ContainsRune(str, '"')
+	commonStr := CommonPrefix(comp.List)
+	needQuote := strings.ContainsRune(comp.Word, '"')
 	if !needQuote {
-		for _, node := range list {
+		for _, node := range comp.List {
 			if strings.ContainsAny(node, " &") {
 				needQuote = true
 				break
@@ -118,20 +108,20 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 		buffer := make([]byte, 0, 100)
 		buffer = append(buffer, '"')
 		buffer = append(buffer, commonStr...)
-		if len(list) <= 1 {
+		if len(comp.List) == 1 && !endWithRoot(comp.List[0]) {
 			buffer = append(buffer, '"')
 		}
 		commonStr = string(buffer)
 	}
-	if len(list) == 1 && !strings.HasSuffix(commonStr, "/") && !strings.HasSuffix(commonStr, "/\"") {
+	if len(comp.List) == 1 && !endWithRoot(commonStr) {
 		commonStr += " "
 	}
 	if slashToBackSlash {
 		commonStr = strings.Replace(commonStr, "/", "\\", -1)
 	}
-	if word == commonStr {
+	if comp.RawWord == commonStr {
 		return KeyFuncCompletionList(this)
 	}
-	this.ReplaceAndRepaint(wordStart, commonStr)
+	this.ReplaceAndRepaint(comp.Pos, commonStr)
 	return conio.CONTINUE
 }
