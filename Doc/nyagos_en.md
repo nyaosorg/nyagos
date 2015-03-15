@@ -300,14 +300,28 @@ You can swap the prompt-function as below.
 Get the n-th command-line history. When N < 0, last (-N)-th history.
 With no arguments, get the count of the command-line history.
 
-### `nyagos.exe`
-
-This string variable has the value of the fullpath of nyagos.exe.
-
 ### `nyagos.access(PATH,MODE)`
 
 Returns the boolean value whether the PATH can be access with MODE.
 It equals the access function of the programming language C.
+
+### `nyagos.completion_hook(c)`
+
+This is the Hook for completion. It should be assigned a function.
+The argument `c` is the table which has these members.
+
+    c.list[1] .. c.list[#c.list] - command/filename completion result
+    c.word - original word without double-quotations.
+    c.rawword - original word which may has double-quotations.
+    c.pos - position word exists.
+    c.text - all command-line text.
+
+`nyagos.completion_hook` should return updated list(table) or `nil`.
+Returning nil equals to returning c.list with no change.
+
+### `nyagos.exe`
+
+This string variable has the value of the fullpath of nyagos.exe.
 
 ## Misc.
 

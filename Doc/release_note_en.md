@@ -3,6 +3,7 @@ Latest
 * Add built-in command: pushd/popd/dirs
 * Add the method boxprint(),firstword(),lastword() to nyagos.bindkey's first argument
 * Update Document about uninstalling
+* Add `nyagos.completion_hook`
 * Sub-command completion for git and svn.
 
 Bugfix
