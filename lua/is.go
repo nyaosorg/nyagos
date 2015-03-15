@@ -12,6 +12,11 @@ func (this *Lua) IsFunction(index int) bool {
 	return this.GetType(index) == LUA_TFUNCTION
 }
 
+// 'lua_istable' is implemented as C-macro in the header file.
+func (this *Lua) IsTable(index int) bool {
+	return this.GetType(index) == LUA_TTABLE
+}
+
 var lua_isstring = luaDLL.NewProc("lua_isstring")
 
 func (this *Lua) IsString(index int) bool {
