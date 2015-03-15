@@ -45,33 +45,22 @@ if hghelp then
 end
 
 if next(maincmds) then
-    nyagos.bindkey("C_I",function(this)
-        local maincmd1 = this:firstword()
+    nyagos.completion_hook = function(c)
+        if c.pos <= 1 then
+            return nil
+        end
+        local firstwordlen = string.find(c.text," ",1,true)
+        if not firstwordlen or c.pos - 1 ~= firstwordlen then
+            return nil
+        end
+        local maincmd1 = string.sub(c.text,1,firstwordlen-1)
         local subcmds = maincmds[maincmd1]
         if not subcmds then
-            return this:call("COMPLETE")
+            return nil
         end
-        local lastword,lastword_at = this:lastword()
-        if lastword_at ~= string.len(maincmd1)+2 then
-            return this:call("COMPLETE")
-        end
-        local list={}
-        local lastword_len = string.len(lastword)
         for i=1,#subcmds do
-            if string.sub(subcmds[i],1,lastword_len) == lastword then
-                list[#list+1] = subcmds[i]
-            end
+            table.insert(c.list,subcmds[i])
         end
-        local commonprefix = nyagos.commonprefix(list)
-        if string.len(commonprefix) > lastword_len then
-            local result = string.sub(commonprefix,lastword_len+1)
-            if #list == 1 then
-                result = result .. " "
-            end
-            return result
-        elseif #list >= 2 then
-            this:boxprint(list)
-        end
-        return nil
-    end)
+        return c.list
+    end
 end
