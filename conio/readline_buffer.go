@@ -170,7 +170,7 @@ func (this *Buffer) Repaint(pos int, del int) {
 }
 
 func (this *Buffer) RepaintAll() {
-	this.Session.Prompt()
+	this.Session.Prompt(this.Session)
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRep(this.Buffer[i], 1)
 	}

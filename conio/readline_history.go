@@ -21,14 +21,15 @@ func (this *HistoryLine) At(n int) string {
 type LineEditor struct {
 	Histories []*HistoryLine
 	Pointer   int
-	Prompt    func() int
+	Prompt    func(*LineEditor) int
+	Tag       interface{}
 }
 
 func NewLineEditor() *LineEditor {
 	return &LineEditor{
 		Histories: make([]*HistoryLine, 0),
 		Pointer:   0,
-		Prompt:    func() int { fmt.Print("\n> "); return 2 },
+		Prompt:    func(this *LineEditor) int { fmt.Print("\n> "); return 2 },
 	}
 }
 
@@ -66,7 +67,7 @@ func (this *LineEditor) HistoryResetPointer() {
 
 func (this *LineEditor) SetPromptStr(prompt string) {
 	width := GetStringWidth(prompt)
-	this.Prompt = func() int {
+	this.Prompt = func(*LineEditor) int {
 		fmt.Print(prompt)
 		return width
 	}

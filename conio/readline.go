@@ -128,7 +128,7 @@ func (session *LineEditor) ReadLine() (string, bool) {
 	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
-	this.ViewWidth = this.ViewWidth - session.Prompt()
+	this.ViewWidth = this.ViewWidth - session.Prompt(session)
 	for {
 		stdOut.Flush()
 		shineCursor()
@@ -172,7 +172,7 @@ func (session *LineEditor) ReadLine() (string, bool) {
 // Not used on NYAGOS. Provide this as library for other applications.
 func ReadLinePromptStr(promptStr string) (string, bool) {
 	width := GetStringWidth(promptStr)
-	DefaultEditor.Prompt = func() int {
+	DefaultEditor.Prompt = func(*LineEditor) int {
 		fmt.Print(promptStr)
 		return width
 	}

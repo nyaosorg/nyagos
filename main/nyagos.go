@@ -43,6 +43,27 @@ func nyagosPrompt(L *lua.Lua) int {
 	return 1
 }
 
+func printPrompt(this *conio.LineEditor) int {
+	L, ok := this.Tag.(*lua.Lua)
+	if !ok {
+		panic("printPrompt conio.LineEditor.Tag is not lua.Lua")
+	}
+	L.GetGlobal("nyagos")
+	L.GetField(-1, "prompt")
+	L.Remove(-2)
+	L.PushString(os.Getenv("PROMPT"))
+	L.Call(1, 1)
+	length, lengthErr := L.ToInteger(-1)
+	if lengthErr == nil {
+		return length
+	} else {
+		fmt.Fprintf(os.Stderr,
+			"nyagos.prompt: Length invalid: %s\n",
+			lengthErr.Error())
+		return 0
+	}
+}
+
 func main() {
 	conio.DisableCtrlC()
 
@@ -97,22 +118,8 @@ func main() {
 		}
 	}
 
-	conio.DefaultEditor.Prompt = func() int {
-		L.GetGlobal("nyagos")
-		L.GetField(-1, "prompt")
-		L.Remove(-2)
-		L.PushString(os.Getenv("PROMPT"))
-		L.Call(1, 1)
-		length, lengthErr := L.ToInteger(-1)
-		if lengthErr == nil {
-			return length
-		} else {
-			fmt.Fprintf(os.Stderr,
-				"nyagos.prompt: Length invalid: %s\n",
-				lengthErr.Error())
-			return 0
-		}
-	}
+	conio.DefaultEditor.Tag = L
+	conio.DefaultEditor.Prompt = printPrompt
 
 	for {
 		wd, wdErr := os.Getwd()
