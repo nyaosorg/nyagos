@@ -59,7 +59,7 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 		L.SetField(-2, "word")
 		L.NewTable()
 		for key, val := range rv.List {
-			L.Push(key)
+			L.Push(1+key)
 			L.PushString(val)
 			L.SetTable(-3)
 		}
