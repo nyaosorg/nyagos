@@ -49,12 +49,11 @@ if next(maincmds) then
         if c.pos <= 1 then
             return nil
         end
-        local firstwordlen = string.find(c.text," ",1,true)
-        if not firstwordlen or c.pos - 1 ~= firstwordlen then
+        local cmdname = string.match(c.text,"^%S+")
+        if not cmdname then
             return nil
         end
-        local maincmd1 = string.sub(c.text,1,firstwordlen-1)
-        local subcmds = maincmds[maincmd1]
+        local subcmds = maincmds[cmdname]
         if not subcmds then
             return nil
         end
