@@ -1,10 +1,11 @@
-Latest
-======
+NYAGOS 4.0.6\_0
+===============
+
 * Add built-in command: pushd/popd/dirs
 * Add the method boxprint(),firstword(),lastword() to nyagos.bindkey's first argument
 * Update Document about uninstalling
 * Add `nyagos.completion_hook`
-* Sub-command completion for git and svn.
+* Sub-command completion for git, Subversion and Mercurial.
 
 Bugfix
 ------
@@ -12,6 +13,7 @@ Bugfix
 
 NYAGOS 4.0.5\_0
 ================
+
 * cd -N (N:digit): move the N-th previous directory.
 * cd -h , cd ? : print current directory history.
 * pwd -N (N:digit): print the N-th previous directory.
