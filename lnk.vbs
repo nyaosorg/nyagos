@@ -12,7 +12,7 @@ Dim fsObj : Set fsObj=CreateObject("Scripting.FileSystemObject")
 src=fsObj.GetAbsolutePathName(src)
 dst=fsObj.GetAbsolutePathName(dst)
 If fsObj.FolderExists(dst) Then
-    dst = dst & "\" & fsObj.getFileName(src)
+    dst = fsObj.BuildPath(dst,fsObj.GetFileName(src))
 End If
 If Right(dst,4) <> ".lnk" Then
     dst = dst & ".lnk"
