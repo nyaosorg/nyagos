@@ -64,7 +64,22 @@ func printPrompt(this *conio.LineEditor) int {
 	}
 }
 
+func when_panic() {
+	err := recover()
+	if err == nil {
+		return
+	}
+	fmt.Fprintln(os.Stderr, "************ Panic Occured. ***********")
+	fmt.Fprintln(os.Stderr, err)
+	fmt.Fprintln(os.Stderr, "*** Please copy these error message ***")
+	fmt.Fprintln(os.Stderr, "*** And hit ENTER key to quit.      ***")
+	var dummy [1]byte
+	os.Stdin.Read(dummy[:])
+}
+
 func main() {
+	defer when_panic()
+
 	conio.DisableCtrlC()
 
 	completion := conio.KeyGoFuncT{F: completion.KeyFuncCompletion}
