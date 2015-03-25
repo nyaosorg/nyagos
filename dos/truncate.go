@@ -7,7 +7,7 @@ import (
 	"syscall"
 )
 
-func Truncate(folder string, out io.Writer) error {
+func Truncate(folder string, whenError func(string, error) bool, out io.Writer) error {
 	attr, attrErr := GetFileAttributes(folder)
 	if attrErr != nil {
 		return fmt.Errorf("%s: %s", folder, attrErr)
@@ -31,14 +31,16 @@ func Truncate(folder string, out io.Writer) error {
 			var err error
 			if f.IsDir() {
 				fmt.Fprintf(out, "%s\\\n", fullpath)
-				err = Truncate(fullpath, out)
+				err = Truncate(fullpath, whenError, out)
 			} else {
 				fmt.Fprintln(out, fullpath)
 				SetFileAttributes(fullpath, FILE_ATTRIBUTE_NORMAL)
 				err = syscall.Unlink(fullpath)
 			}
 			if err != nil {
-				return fmt.Errorf("%s: %s", fullpath, err.Error())
+				if whenError != nil && !whenError(fullpath, err) {
+					return fmt.Errorf("%s: %s", fullpath, err.Error())
+				}
 			}
 		}
 	}

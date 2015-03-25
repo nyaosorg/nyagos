@@ -52,7 +52,10 @@ func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		var err error
 		if s_option {
 			fmt.Fprintln(cmd.Stdout)
-			err = dos.Truncate(arg1, cmd.Stdout)
+			err = dos.Truncate(arg1, func(path string, err error) bool {
+				fmt.Fprintf(cmd.Stderr, "%s -> %s\n", path, err.Error())
+				return true
+			}, cmd.Stdout)
 		} else {
 			err = syscall.Rmdir(arg1)
 		}
