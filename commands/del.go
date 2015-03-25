@@ -53,7 +53,8 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		}
 		err := syscall.Unlink(path)
 		if err != nil {
-			return interpreter.CONTINUE, err
+			fmt.Printf("-> %s\n", err.Error())
+			continue
 		}
 		fmt.Println("-> done.")
 	}
