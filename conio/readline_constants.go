@@ -111,7 +111,7 @@ const (
 	F_HISTORY_DOWN         = "HISTORY_DOWN"
 	F_HISTORY_UP           = "HISTORY_UP"
 	F_INTR                 = "INTR"
-	F_ISEARCH              = "ISEARCH"
+	F_ISEARCH_BACKWARD     = "ISEARCH_BACKWARD"
 	F_KILL_LINE            = "KILL_LINE"
 	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
 	F_PASS                 = "PASS"
@@ -240,7 +240,7 @@ var name2func = map[string]KeyFuncT{
 	F_HISTORY_DOWN:         &KeyGoFuncT{KeyFuncHistoryDown},
 	F_HISTORY_UP:           &KeyGoFuncT{KeyFuncHistoryUp},
 	F_INTR:                 &KeyGoFuncT{KeyFuncIntr},
-	F_ISEARCH:              &KeyGoFuncT{KeyFuncIncSearch},
+	F_ISEARCH_BACKWARD:     &KeyGoFuncT{KeyFuncIncSearch},
 	F_KILL_LINE:            &KeyGoFuncT{KeyFuncClearAfter},
 	F_KILL_WHOLE_LINE:      &KeyGoFuncT{KeyFuncClear},
 	F_PASS:                 &KeyGoFuncT{KeyFuncPass},
