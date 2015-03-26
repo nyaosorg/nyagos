@@ -1,3 +1,7 @@
+Latest
+======
+* Support incremental-search
+
 NYAGOS 4.0.6\_0
 ===============
 

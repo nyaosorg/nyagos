@@ -76,6 +76,7 @@ UNIX系シェルに近いキーバインドで、コマンドラインを編集可能です。
 * ↓ , Ctrl-N        : ヒストリ：一つ後の入力内容を展開する
 * TAB , Ctrl-I       : ファイル名・コマンド名補完
 * Ctrl-C             : 入力内容を破棄
+* Ctrl-R             : インクリメンタルサーチ
 
 ## 内蔵コマンド
 
@@ -287,6 +288,7 @@ UTF8文字列を、現在のコードページの文字列に変換します。
         "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
         "FORWARD_CHAR" "BEGINNING_OF_LINE" "PASS" "YANK" "KILL_WHOLE_LINE"
         "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
+        "ISEARCH_BACKWARD"
 
 成功すると true を、失敗すると nil とエラーメッセージを返します。
 大文字・小文字は区別せず、\_ のかわりに - を使うことができます。
