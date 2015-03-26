@@ -49,6 +49,7 @@ var keyMap = map[rune]KeyFuncT{
 	name2char[K_CTRL_K]: name2func[F_KILL_LINE],
 	name2char[K_CTRL_L]: name2func[F_CLEAR_SCREEN],
 	name2char[K_CTRL_M]: name2func[F_ACCEPT_LINE],
+	name2char[K_CTRL_R]: name2func[F_ISEARCH],
 	name2char[K_CTRL_U]: name2func[F_UNIX_LINE_DISCARD],
 	name2char[K_CTRL_Y]: name2func[F_YANK],
 	name2char[K_DELETE]: name2func[F_DELETE_CHAR],
