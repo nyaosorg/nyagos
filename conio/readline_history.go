@@ -104,3 +104,21 @@ func KeyFuncHistoryDown(this *Buffer) Result {
 	}
 	return CONTINUE
 }
+
+func (this *LineEditor) ShrinkHistory() {
+	map1 := map[string]int{}
+	for i := 0; i < len(this.Histories); i++ {
+		line := this.Histories[i].Line
+		if last, ok := map1[line]; ok {
+			this.Histories[last].Line = ""
+		}
+		map1[line] = i
+	}
+	newHistories := make([]*HistoryLine, 0, cap(this.Histories))
+	for i := 0; i < len(this.Histories); i++ {
+		if this.Histories[i].Line != "" {
+			newHistories = append(newHistories, this.Histories[i])
+		}
+	}
+	this.Histories = newHistories
+}
