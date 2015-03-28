@@ -13,7 +13,11 @@ import (
 func cmd_which(cmd *Interpreter) (NextT, error) {
 	for _, name := range cmd.Args[1:] {
 		if a, ok := alias.Table[strings.ToLower(name)]; ok {
-			fmt.Fprintf(cmd.Stdout, "aliased to %s\n", a.String())
+			fmt.Fprintf(cmd.Stdout, "%s: aliased to %s\n", name, a.String())
+			continue
+		}
+		if _, ok := BuildInCommand[name]; ok {
+			fmt.Fprintf(cmd.Stdout, "%s: built-in command\n", name)
 			continue
 		}
 		path, err := exec.LookPath(name)
