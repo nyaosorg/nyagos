@@ -220,20 +220,17 @@ const max_histories = 2000
 
 func Save(path string) error {
 	conio.DefaultEditor.ShrinkHistory()
-
-	var hist_ []*conio.HistoryLine
+	start := 0
 	if conio.DefaultEditor.HistoryLen() > max_histories {
-		hist_ = conio.DefaultEditor.Histories[(conio.DefaultEditor.HistoryLen() - max_histories):]
-	} else {
-		hist_ = conio.DefaultEditor.Histories
+		start = conio.DefaultEditor.HistoryLen() - max_histories
 	}
 	fd, err := os.Create(path)
 	if err != nil {
 		return err
 	}
 	defer fd.Close()
-	for _, s := range hist_ {
-		fmt.Fprintln(fd, s.Line)
+	for i := start; i < len(conio.DefaultEditor.Histories); i++ {
+		fmt.Fprintln(fd, conio.DefaultEditor.Histories[i].Line)
 	}
 	return nil
 }
