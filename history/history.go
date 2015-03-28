@@ -219,6 +219,8 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 const max_histories = 2000
 
 func Save(path string) error {
+	conio.DefaultEditor.ShrinkHistory()
+
 	var hist_ []*conio.HistoryLine
 	if conio.DefaultEditor.HistoryLen() > max_histories {
 		hist_ = conio.DefaultEditor.Histories[(conio.DefaultEditor.HistoryLen() - max_histories):]
@@ -246,5 +248,6 @@ func Load(path string) error {
 	for sc.Scan() {
 		conio.DefaultEditor.Histories = append(conio.DefaultEditor.Histories, conio.NewHistoryLine(sc.Text()))
 	}
+	conio.DefaultEditor.ShrinkHistory()
 	return nil
 }
