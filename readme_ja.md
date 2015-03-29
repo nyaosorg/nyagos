@@ -47,7 +47,7 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
 
 次のソフトウェアが必要となります。
 
-* [go1.4.1 windows/386](http://golang.org)
+* [go1.4.2 windows/386](http://golang.org)
 * [Lua 5.3](http://www.lua.org)
 * [tdm-gcc](http://tdm-gcc.tdragon.net)
 
