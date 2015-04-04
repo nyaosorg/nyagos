@@ -16,14 +16,23 @@ func KeyFuncIncSearch(this *Buffer) Result {
 	Backspace(this.Cursor - this.ViewStart)
 	for {
 		drawStr := fmt.Sprintf("(i-search)[%s]:%s", searchStr, foundStr)
-		drawWidth := GetStringWidth(drawStr)
-		fmt.Print(drawStr)
+		drawWidth := 0
+		for _, ch := range drawStr {
+			w1 := GetCharWidth(ch)
+			if drawWidth+w1 >= this.ViewWidth {
+				break
+			}
+			PutRep(ch, 1)
+			drawWidth += w1
+		}
 		if lastDrawWidth > drawWidth {
 			n := lastDrawWidth - drawWidth
 			PutRep(' ', n)
 			Backspace(n)
 		}
 		lastDrawWidth = drawWidth
+		stdOut.Flush()
+		shineCursor()
 		charcode, _, _ := GetKey()
 		Backspace(drawWidth)
 		switch charcode {
