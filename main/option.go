@@ -13,6 +13,7 @@ func optionParse(L *lua.Lua) bool {
 	optionK := flag.String("k", "", "like `cmd /k`")
 	optionC := flag.String("c", "", "like `cmd /c`")
 	optionF := flag.String("f", "", "run lua script")
+	optionE := flag.String("e", "", "run inline-lua-code")
 
 	flag.Parse()
 
@@ -37,6 +38,18 @@ func optionParse(L *lua.Lua) bool {
 		err := L.Source(*optionF)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
+		}
+		result = false
+	}
+	if *optionE != "" {
+		err := L.LoadString(*optionE)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+		} else {
+			L.Call(0, 0)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+			}
 		}
 		result = false
 	}
