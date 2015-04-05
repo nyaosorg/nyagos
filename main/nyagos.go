@@ -99,12 +99,18 @@ func main() {
 	L.OpenLibs()
 	SetLuaFunctions(L)
 	L.GetGlobal("nyagos")
-	L.PushString(stamp)
-	L.SetField(-2, "stamp")
-	L.PushString(commit)
-	L.SetField(-2, "commit")
-	L.PushString(version)
-	L.SetField(-2, "version")
+	if stamp != "" {
+		L.PushString(stamp)
+		L.SetField(-2, "stamp")
+	}
+	if commit != "" {
+		L.PushString(commit)
+		L.SetField(-2, "commit")
+	}
+	if version != "" {
+		L.PushString(version)
+		L.SetField(-2, "version")
+	}
 	L.PushGoFunction(nyagosPrompt)
 	L.SetField(-2, "prompt")
 	L.Pop(1)
