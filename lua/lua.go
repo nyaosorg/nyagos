@@ -215,6 +215,25 @@ func (this *Lua) Load(fname string) error {
 	}
 }
 
+var luaL_loadstring = luaDLL.NewProc("luaL_loadstring")
+
+func (this *Lua) LoadString(code string) error {
+	codePtr, err := syscall.BytePtrFromString(code)
+	if err != nil {
+		return err
+	}
+	rc, _, _ := luaL_loadstring.Call(this.State(), uintptr(unsafe.Pointer(codePtr)))
+	if rc == 0 {
+		return nil
+	}
+	msg, err := this.ToString(-1)
+	if err == nil {
+		return errors.New(msg)
+	} else {
+		return err
+	}
+}
+
 var lua_pcallk = luaDLL.NewProc("lua_pcallk")
 
 func (this *Lua) Call(nargs, nresult int) error {
