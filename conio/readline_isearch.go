@@ -22,12 +22,12 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			if drawWidth+w1 >= this.ViewWidth {
 				break
 			}
-			PutRep(ch, 1)
+			PutRune(ch)
 			drawWidth += w1
 		}
 		if lastDrawWidth > drawWidth {
 			n := lastDrawWidth - drawWidth
-			PutRep(' ', n)
+			PutRunes(' ', n)
 			Backspace(n)
 		}
 		lastDrawWidth = drawWidth
@@ -58,13 +58,13 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
 				w += GetCharWidth(this.Buffer[i])
-				PutRep(this.Buffer[i], 1)
+				PutRune(this.Buffer[i])
 			}
 			bs := 0
 			for {
 				if i >= this.Length {
 					if drawWidth > w {
-						PutRep(' ', drawWidth-w)
+						PutRunes(' ', drawWidth-w)
 						bs += (drawWidth - w)
 					}
 					break
@@ -73,7 +73,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 				if w+w1 >= this.ViewWidth {
 					break
 				}
-				PutRep(this.Buffer[i], 1)
+				PutRune(this.Buffer[i])
 				w += w1
 				bs += w1
 				i++

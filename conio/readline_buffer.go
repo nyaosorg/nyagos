@@ -11,10 +11,7 @@ var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)
 
 var hasCache = map[rune]bool{}
 
-func PutRep(ch rune, n int) {
-	if n <= 0 {
-		return
-	}
+func PutRune(ch rune) {
 	if hasCache[ch] {
 		stdOut.WriteRune(ch)
 	} else {
@@ -28,6 +25,13 @@ func PutRep(ch rune, n int) {
 			SetCharWidth(ch, post_x-pre_x)
 		}
 	}
+}
+
+func PutRunes(ch rune, n int) {
+	if n <= 0 {
+		return
+	}
+	PutRune(ch)
 	for i := 1; i < n; i++ {
 		stdOut.WriteRune(ch)
 	}
@@ -121,7 +125,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Repaint
 	w = 0
 	for i := this.ViewStart; i < this.Cursor; i++ {
-		PutRep(this.Buffer[i], 1)
+		PutRune(this.Buffer[i])
 		w += GetCharWidth(this.Buffer[i])
 	}
 	bs := 0
@@ -130,12 +134,12 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		if w+w1 >= this.ViewWidth {
 			break
 		}
-		PutRep(this.Buffer[i], 1)
+		PutRune(this.Buffer[i])
 		w += w1
 		bs += w1
 	}
 	for w+1 < this.ViewWidth {
-		PutRep(' ', 1)
+		PutRune(' ')
 		bs++
 		w++
 	}
@@ -162,17 +166,17 @@ func (this *Buffer) Repaint(pos int, del int) {
 		if vp >= this.ViewWidth {
 			break
 		}
-		PutRep(this.Buffer[i], 1)
+		PutRune(this.Buffer[i])
 		bs += w1
 	}
-	PutRep(' ', del)
+	PutRunes(' ', del)
 	Backspace(bs + del)
 }
 
 func (this *Buffer) RepaintAll() {
 	this.Session.Prompt(this.Session)
 	for i := this.ViewStart; i < this.Cursor; i++ {
-		PutRep(this.Buffer[i], 1)
+		PutRune(this.Buffer[i])
 	}
 	this.Repaint(this.Cursor, 0)
 }

@@ -49,10 +49,10 @@ func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, this.Length)
 	if allength < this.ViewWidth {
 		for ; this.Cursor < this.Length; this.Cursor++ {
-			PutRep(this.Buffer[this.Cursor], 1)
+			PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
-		PutRep('\a', 1)
+		PutRune('\a')
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
@@ -68,7 +68,7 @@ func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 			this.ViewStart--
 		}
 		for this.Cursor = this.ViewStart; this.Cursor < this.Length; this.Cursor++ {
-			PutRep(this.Buffer[this.Cursor], 1)
+			PutRune(this.Buffer[this.Cursor])
 		}
 	}
 	return CONTINUE
@@ -81,7 +81,7 @@ func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 	if w < this.ViewWidth {
 		// No Scroll
-		PutRep(this.Buffer[this.Cursor], 1)
+		PutRune(this.Buffer[this.Cursor])
 	} else {
 		// Right Scroll
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
@@ -90,9 +90,9 @@ func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 		}
 		this.ViewStart++
 		for i := this.ViewStart; i <= this.Cursor; i++ {
-			PutRep(this.Buffer[i], 1)
+			PutRune(this.Buffer[i])
 		}
-		PutRep(' ', 1)
+		PutRune(' ')
 		Backspace(1)
 	}
 	this.Cursor++
@@ -144,9 +144,9 @@ func KeyFuncInsertSelf(this *Buffer) Result {
 		}
 		this.ViewStart++
 		for i := this.ViewStart; i <= this.Cursor; i++ {
-			PutRep(this.Buffer[i], 1)
+			PutRune(this.Buffer[i])
 		}
-		PutRep(' ', 1)
+		PutRune(' ')
 		Backspace(1)
 	} else {
 		this.Repaint(this.Cursor, -w1)
@@ -173,7 +173,7 @@ func KeyFuncClearAfter(this *Buffer) Result {
 
 	for i < this.Length && w < this.ViewWidth {
 		w1 := GetCharWidth(this.Buffer[i])
-		PutRep(' ', w1)
+		PutRunes(' ', w1)
 		i++
 		w += w1
 		bs += w1
@@ -187,7 +187,7 @@ func KeyFuncClear(this *Buffer) Result {
 	KeyFuncClearAfter(this)
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	Backspace(width)
-	PutRep(' ', width)
+	PutRunes(' ', width)
 	Backspace(width)
 	this.Length = 0
 	this.Cursor = 0
