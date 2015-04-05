@@ -46,6 +46,10 @@ Execute `COMMAND` and continue the command-line.
 Execute SCRIPTFILE with Lua interpretor and quit.
 The script can refer arguments as `arg[]`.
 
+### `-e "SCRIPTCODE"`
+
+Execute SCRIPTCODE with Lua interpretor and quit.
+
 ## Editor
 
 * BackSpace , Ctrl-H : Delete a charactor left of cursor
