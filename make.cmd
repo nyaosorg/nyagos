@@ -5,16 +5,13 @@ if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
 if not "%1" == "" goto %1
 
-:build
-        set "VERSION=%DATE:/=%"
-        set X_VERSION=
-        goto _build
+goto build
 
 :release
         for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
         set "X_VERSION=-X main.version %VERSION%"
 
-:_build
+:build
         pushd "%~dp0main"
         for %%I in (windres.exe) do if not "%%~$PATH:I" == "" lua make_rc.lua | windres.exe --output-format=coff -o nyagos.syso
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
@@ -22,8 +19,8 @@ if not "%1" == "" goto %1
         goto end
 
 :status
-        if exist %~dp0nyagos.exe for /F %%I in ('cscript //nologo %~dp0showver.js %~dp0nyagos.exe') do echo NYAGOS.EXE version='%%I'
-        exit /b 0
+        nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
+        goto end
 
 :fmt
         for /R . %%I in (*~) do del %%I
@@ -45,8 +42,9 @@ if not "%1" == "" goto %1
         goto end
 
 :package
-        zip -9 "nyagos-%VERSION%%2.zip" nyagos.exe lua53.dll lua.exe nyagos.lua .nyagos specialfolders.js lnk.js makeicon.cmd nyagos.d\*.lua readme.md
-        zip -9j "nyagos-%VERSION%%2.zip" Doc\nyagos_*.md
+        for /F %%I in ('nyagos -e "print(nyagos.version or (string.gsub(nyagos.stamp,[[/]],[[]])))"') do set VERSION=%%I
+        zip -9 "nyagos-%VERSION%.zip" nyagos.exe lua53.dll lua.exe nyagos.lua .nyagos specialfolders.js lnk.js makeicon.cmd nyagos.d\*.lua readme.md
+        zip -9j "nyagos-%VERSION%.zip" Doc\nyagos_*.md
         goto end
 
 :install
@@ -90,8 +88,4 @@ if not "%1" == "" goto %1
         echo  %0 install  
         echo     : Copy binaries to last INSTALLDIR
 :end
-        echo off
-        ( echo @set "VERSION=%VERSION%"
-          echo @set "X_VERSION=%X_VERSION%"
-          echo @set "INSTALLDIR=%INSTALLDIR%"
-        ) > "%~dp0Misc\version.cmd"
+        echo @set "INSTALLDIR=%INSTALLDIR%" > "%~dp0Misc\version.cmd"
