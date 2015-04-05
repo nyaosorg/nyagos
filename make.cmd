@@ -10,12 +10,12 @@ if not "%1" == "" goto %1
         goto _build
 
 :release
-        for /F %%I in (%~dp0Misc\version.txt) do set VERSION=%%I
+        for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
         set "X_VERSION=-X main.version %VERSION%"
 
 :_build
         pushd "%~dp0main"
-        if not exist nyagos.syso for %%I in (windres.exe) do if not "%%~$PATH:I" == "" windres.exe --output-format=coff -o nyagos.syso nyagos.rc
+        for %%I in (windres.exe) do if not "%%~$PATH:I" == "" lua make_rc.lua | windres.exe --output-format=coff -o nyagos.syso
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
         popd
         goto end
