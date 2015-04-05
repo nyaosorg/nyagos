@@ -1,3 +1,4 @@
+@echo off
 setlocal
 
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
@@ -19,6 +20,10 @@ if not "%1" == "" goto %1
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
         popd
         goto end
+
+:status
+        if exist %~dp0nyagos.exe for /F %%I in ('cscript //nologo %~dp0showver.js %~dp0nyagos.exe') do echo NYAGOS.EXE version='%%I'
+        exit /b 0
 
 :fmt
         for /R . %%I in (*~) do del %%I
