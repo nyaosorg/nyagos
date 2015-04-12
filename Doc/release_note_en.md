@@ -2,6 +2,7 @@ Latest
 ======
 * Support incremental-search
 * Add option -e "LUA-CODE" to nyagos.exe
+* Set executable's property the version-number
 
 NYAGOS 4.0.6\_0
 ===============
