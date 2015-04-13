@@ -1,3 +1,11 @@
+NYAGOS 4.0.7\_1
+===============
+* Set arg[..] in nyagos -e "LUA-CODE".
+
+Bugfix
+------
+* In nyagos -f "LUA-FILE", arg[i]'s elements were shifted.
+
 NYAGOS 4.0.7\_0
 ===============
 * Support incremental-search(C-r)
