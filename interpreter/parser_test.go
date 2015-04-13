@@ -6,16 +6,19 @@ import (
 )
 
 func TestParser(t *testing.T) {
-	text := "aaaa bbbb \"\" cccc <\"ddd\"\"ddd\"|ahaha \"ihihi |ufufu\" ; ohoho gegee&&hogehogeo >ihihi"
+	text := "gawk \"{ print(\"\"ahaha ihihi ufufu\"\") }\" <\"ddd\"\"ddd\"|ahaha \"ihihi |ufufu\" ; ohoho gegee&&hogehogeo >ihihi"
 	fmt.Println(text)
-	result := Parse(text)
+	result,_ := Parse(text)
 	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
 		for _, stsub := range st {
-			fmt.Printf("  %s\n", stsub)
+			for _,word := range stsub.Argv {
+				fmt.Printf("  [%s]", word)
+			}
+			fmt.Println()
 		}
 	}
-	result = Parse("")
+	result,_ = Parse("")
 	fmt.Println("<empty-line>")
 	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
