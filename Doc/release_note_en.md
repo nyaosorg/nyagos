@@ -1,8 +1,9 @@
-Latest
-======
-* Support incremental-search
+NYAGOS 4.0.7\_0
+===============
+* Support incremental-search(C-r)
 * Add option -e "LUA-CODE" to nyagos.exe
 * Set executable's property the version-number
+* Change error-message when files do not exists like bash.
 
 NYAGOS 4.0.6\_0
 ===============
