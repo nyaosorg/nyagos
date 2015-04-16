@@ -1,6 +1,7 @@
 package dos
 
 import (
+	"fmt"
 	"syscall"
 	"unsafe"
 )
@@ -57,8 +58,13 @@ func ShellExecute(action string, path string, param string, directory string) er
 		uintptr(unsafe.Pointer(paramP)),
 		uintptr(unsafe.Pointer(directoryP)),
 		SW_SHOWNORMAL)
-	if status < 32 {
-		return syscall.GetLastError()
+
+	if status <= 32 {
+		if err := syscall.GetLastError(); err != nil {
+			return err
+		} else {
+			return fmt.Errorf("Error(%d) in ShellExecuteW()", status)
+		}
 	}
 	return nil
 }
