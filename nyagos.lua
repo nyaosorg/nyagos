@@ -8,7 +8,13 @@ if nyagos == nil then
     os.exit(0)
 end
 
-print("Nihongo Yet Another GOing Shell " .. (nyagos.version or "").. " Powered by " .. _VERSION )
+nyagos.ole = require('nyole')
+local fsObj = nyagos.ole.create_object_utf8('Scripting.FileSystemObject')
+nyagos.fsObj = fsObj
+local nyoleVer = fsObj:GetFileVersion(nyagos.ole.dll_utf8)
+
+print( "Nihongo Yet Another GOing Shell " .. (nyagos.version or "") ..
+    " Powered by " ..  _VERSION .. " & nyole.dll ".. nyoleVer)
 if not nyagos.version or string.len(nyagos.version) <= 0 then
     print("Build at "..(nyagos.stamp or "").." with commit "..(nyagos.commit or ""))
 end
@@ -59,7 +65,7 @@ function addpath(...)
     end
 end
 function nyagos.echo(s)
-    nyagos.write(s..'\n')
+    nyagos.write((s or '<nil>')..'\n')
 end
 function x(s)
     for line in string.gmatch(s,'[^\r\n]+') do
@@ -85,16 +91,17 @@ local function include(fname)
     end
 end
 
-local dotfolder = string.gsub(nyagos.exe,"%.exe",".d")
-local fd = io.popen("dir /b /s "..dotfolder.."\\*.lua","r")
-for fname in fd:lines() do
-    include(fname)
+local dotFolderPath = string.gsub(nyagos.exe,"%.exe$",".d")
+local dotFolder = fsObj:GetFolder(dotFolderPath)
+local files = dotFolder:files()
+for p in files:__iter__() do
+    local path = nyagos.fsObj:BuildPath(dotFolderPath,p.Name)
+    include(path)
 end
-fd:close()
 
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
-    local dotfile = home .. '\\.nyagos'
+    local dotfile = fsObj:BuildPath(home,'.nyagos')
     local fd=io.open(dotfile)
     if fd then
         fd:close()
