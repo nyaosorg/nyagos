@@ -140,7 +140,7 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	slashToBackSlash := true
 	firstFoundSlashPos := strings.IndexRune(comp.Word, '/')
 	firstFoundBackSlashPos := strings.IndexRune(comp.Word, '\\')
-	if firstFoundSlashPos >= 0 && firstFoundBackSlashPos >= 0 && firstFoundSlashPos < firstFoundBackSlashPos {
+	if firstFoundSlashPos >= 0 && (firstFoundBackSlashPos == -1 || firstFoundSlashPos < firstFoundBackSlashPos) {
 		slashToBackSlash = false
 	}
 
