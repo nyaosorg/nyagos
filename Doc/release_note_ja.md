@@ -1,3 +1,9 @@
+NYAGOS 4.0.7\_2
+===============
+* 補完で / が常に \ に置き変わる不具合を修正(してもらった) : Thx @nocd5
+* nyagos.shellexecute() が失敗した時に、メッセージのないエラーを報告しない不具合を修正
+* Luaスクリプトで COM を使うための DLL を同梱・使用([NYOLE.DLL](https://github.com/zetamatta/nyole))
+
 NYAGOS 4.0.7\_1
 ===============
 * 「nyagos -e "LUAコード"」で arg 配列を参照できるようにした

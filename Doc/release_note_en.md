@@ -1,3 +1,9 @@
+NYAGOS 4.0.7\_2
+===============
+* Fix:on completion, / was always replaced to \ .(Thx @nocd5)
+* Fix:nyagos.shellexecute() did not report some errors.
+* To use COM on Lua scripts, include and use [NYOLE.DLL](https://github.com/zetamatta/nyole).
+
 NYAGOS 4.0.7\_1
 ===============
 * Set arg[..] in nyagos -e "LUA-CODE".
