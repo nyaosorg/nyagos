@@ -49,7 +49,11 @@ func cmdSetEnv(L *lua.Lua) int {
 	if valueErr != nil {
 		return L.Push(nil, valueErr)
 	}
-	os.Setenv(name, value)
+	if len(value) > 0 {
+		os.Setenv(name, value)
+	} else {
+		os.Unsetenv(name)
+	}
 	return L.Push(true)
 }
 

@@ -20,7 +20,11 @@ func cmd_set(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 		if eqlPos < 0 {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", arg, os.Getenv(arg))
 		} else {
-			os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
+			if eqlPos + 1 < len(arg) {
+				os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
+			} else {
+				os.Unsetenv(arg[:eqlPos])
+			}
 		}
 	}
 	return interpreter.CONTINUE, nil
