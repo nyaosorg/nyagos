@@ -85,17 +85,27 @@ func Join(paths ...string) string {
 	return filepath.Join(paths...)
 }
 
-var rxCouldGlobPattern = regexp.MustCompile("^[A-Za-z]:[^\\/]")
-
 // Expand filenames matching with wildcard-pattern.
-func Glob(pattern string) (matches []string, err error) {
-	result, err := filepath.Glob(pattern)
-	if len(result) > 0 {
-		return result, err
+func Glob(pattern string) ([]string, error) {
+	pattern16, err := syscall.UTF16PtrFromString(pattern)
+	if err != nil {
+		return nil, err
 	}
-	if rxCouldGlobPattern.MatchString(pattern) {
-		pattern = fmt.Sprintf("%s.\\%s", pattern[:2], pattern[2:])
-		result, err = filepath.Glob(pattern)
+	var data1 syscall.Win32finddata
+	handle, err := syscall.FindFirstFile(pattern16, &data1)
+	if err != nil {
+		return nil, err
 	}
-	return result, err
+	dirname := filepath.Dir(pattern)
+	match := make([]string, 0, 100)
+	for {
+		fname := syscall.UTF16ToString(data1.FileName[:])
+		path := filepath.Join(dirname, fname)
+		match = append(match, path)
+
+		err := syscall.FindNextFile(handle, &data1)
+		if err != nil {
+			return match, nil
+		}
+	}
 }
