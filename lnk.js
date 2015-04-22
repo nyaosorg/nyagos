@@ -1,3 +1,9 @@
+if( WScript.Arguments.length == 1  ){
+    var wshShell=new ActiveXObject("WScript.Shell");
+    var lnkSrc = wshShell.CreateShortcut(WScript.Arguments.Unnamed(0));
+    WScript.Echo( "    " + lnkSrc + "\n<-- " + lnkSrc.TargetPath );
+    WScript.Quit(1);
+}
 if( WScript.Arguments.length < 2 ){
     WScript.Echo(
         "Usage: cscript lnk.js FILENAME SHORTCUT {Option=Value}... make shortcut\n" +
