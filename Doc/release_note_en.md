@@ -1,3 +1,5 @@
+* Fix: wildcard's case was not ignored (#58)
+
 NYAGOS 4.0.7\_2
 ===============
 * Fix:on completion, / was always replaced to \ .(Thx @nocd5)
