@@ -87,6 +87,10 @@ func Join(paths ...string) string {
 
 // Expand filenames matching with wildcard-pattern.
 func Glob(pattern string) ([]string, error) {
+	name := filepath.Base(pattern)
+	if strings.IndexAny(name, "*?") < 0 {
+		return nil, nil
+	}
 	pattern16, err := syscall.UTF16PtrFromString(pattern)
 	if err != nil {
 		return nil, err
