@@ -65,24 +65,28 @@ func Chdir(folder_ string) error {
 	return err
 }
 
-var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
 var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[/\\\\]")
+var rxDrive = regexp.MustCompile("^[a-zA-Z]:")
+
+func joinPath2(a, b string) string {
+	if len(a) <= 0 || rxRoot.MatchString(b) || rxDrive.MatchString(b) {
+		return b
+	}
+	switch a[len(a)-1] {
+	case '\\', '/', ':':
+		return a + b
+	default:
+		return a + "\\" + b
+	}
+}
 
 // Equals filepath.Join but this works right when path has drive-letter.
 func Join(paths ...string) string {
-	start := 0
-	for i, path := range paths {
-		if rxDriveOnly.MatchString(path) {
-			paths[i] = path + "."
-			start = i
-		} else if rxRoot.MatchString(path) {
-			start = i
-		}
+	result := paths[len(paths)-1]
+	for i := len(paths) - 2; i >= 0; i-- {
+		result = joinPath2(paths[i], result)
 	}
-	if start > 0 {
-		paths = paths[start:]
-	}
-	return filepath.Join(paths...)
+	return result
 }
 
 // Expand filenames matching with wildcard-pattern.
