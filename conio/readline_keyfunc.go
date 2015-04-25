@@ -221,3 +221,38 @@ func KeyFuncPaste(this *Buffer) Result {
 	}
 	return CONTINUE
 }
+
+func maxInt(a, b int) int {
+	if a < b {
+		return b
+	} else {
+		return a
+	}
+}
+
+func KeyFuncSwapChar(this *Buffer) Result {
+	if this.Length == this.Cursor {
+		if this.Cursor < 2 {
+			return CONTINUE
+		}
+		this.Buffer[this.Cursor-2], this.Buffer[this.Cursor-1] = this.Buffer[this.Cursor-1], this.Buffer[this.Cursor-2]
+
+		redrawStart := maxInt(this.Cursor-2, this.ViewStart)
+		Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
+		for i := redrawStart; i < this.Cursor; i++ {
+			PutRune(this.Buffer[i])
+		}
+	} else {
+		if this.Cursor < 1 {
+			return CONTINUE
+		}
+		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
+		redrawStart := maxInt(this.Cursor-1, this.ViewStart)
+		Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
+		for i := redrawStart; i <= this.Cursor; i++ {
+			PutRune(this.Buffer[i])
+		}
+		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
+	}
+	return CONTINUE
+}

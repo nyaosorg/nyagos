@@ -116,6 +116,7 @@ const (
 	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
 	F_PASS                 = "PASS"
 	F_REPAINT              = "REPAINT"
+	F_SWAPCHAR             = "SWAPCHAR"
 	F_UNIX_LINE_DISCARD    = "UNIX_LINE_DISCARD"
 	F_YANK                 = "YANK"
 )
@@ -246,4 +247,5 @@ var name2func = map[string]KeyFuncT{
 	F_PASS:                 &KeyGoFuncT{KeyFuncPass},
 	F_UNIX_LINE_DISCARD:    &KeyGoFuncT{KeyFuncClearBefore},
 	F_YANK:                 &KeyGoFuncT{KeyFuncPaste},
+	F_SWAPCHAR:             &KeyGoFuncT{KeyFuncSwapChar},
 }

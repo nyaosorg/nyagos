@@ -57,6 +57,7 @@ var keyMap = map[rune]KeyFuncT{
 	name2char[K_ESCAPE]: name2func[F_KILL_WHOLE_LINE],
 	name2char[K_CTRL_N]: name2func[F_HISTORY_DOWN],
 	name2char[K_CTRL_P]: name2func[F_HISTORY_UP],
+	name2char[K_CTRL_T]: name2func[F_SWAPCHAR],
 }
 
 var scanMap = map[uint16]KeyFuncT{
