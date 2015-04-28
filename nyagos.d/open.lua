@@ -7,7 +7,7 @@ nyagos.alias("open",function(args)
                 assert(nyagos.shellexecute("open",list[i]))
             end
         else
-            if nyagos.access(args[i]) then
+            if nyagos.access(args[i],0) then
                 assert(nyagos.shellexecute("open",args[i]))
             else
                 print(args[i] .. ": can not get status")
