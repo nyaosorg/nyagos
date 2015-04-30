@@ -95,23 +95,16 @@ func Glob(pattern string) ([]string, error) {
 	if strings.IndexAny(name, "*?") < 0 {
 		return nil, nil
 	}
-	pattern16, err := syscall.UTF16PtrFromString(pattern)
-	if err != nil {
-		return nil, err
-	}
-	var data1 syscall.Win32finddata
-	handle, err := syscall.FindFirstFile(pattern16, &data1)
+	findf, err := FindFirst(pattern)
 	if err != nil {
 		return nil, err
 	}
 	dirname := filepath.Dir(pattern)
 	match := make([]string, 0, 100)
 	for {
-		fname := syscall.UTF16ToString(data1.FileName[:])
-		path := filepath.Join(dirname, fname)
-		match = append(match, path)
+		match = append(match, filepath.Join(dirname, findf.Name()))
 
-		err := syscall.FindNextFile(handle, &data1)
+		err := findf.FindNext()
 		if err != nil {
 			return match, nil
 		}
