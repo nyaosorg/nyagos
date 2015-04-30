@@ -102,8 +102,9 @@ func Glob(pattern string) ([]string, error) {
 	dirname := filepath.Dir(pattern)
 	match := make([]string, 0, 100)
 	for {
-		match = append(match, filepath.Join(dirname, findf.Name()))
-
+		if name := findf.Name(); name[0] != '.' || pattern[0] == '.' {
+			match = append(match, filepath.Join(dirname, name))
+		}
 		err := findf.FindNext()
 		if err != nil {
 			return match, nil
