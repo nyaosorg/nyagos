@@ -2,12 +2,16 @@ package completion
 
 import (
 	"os"
-	"path"
 	"regexp"
 	"strings"
 
 	"../dos"
 	"../interpreter"
+)
+
+const (
+	STD_SLASH = "\\"
+	OPT_SLASH = "/"
 )
 
 var rxEnvPattern = regexp.MustCompile("%[^%]+%")
@@ -33,50 +37,37 @@ func listUpFiles(str string) ([]string, error) {
 			return p
 		}
 	})
-	str = strings.Replace(strings.Replace(str, "\\", "/", -1), "\"", "", -1)
-	var directory string
-	str = strings.Replace(str, "\\", "/", -1)
-	if strings.HasSuffix(str, "/") {
-		directory = path.Join(str, ".")
-	} else {
-		directory = path.Dir(str)
-	}
+	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), "\"", "", -1)
+	directory := dos.DirName(str)
+	wildcard := dos.Join(directory, "*")
 
 	// Drive letter
 	cutprefix := 0
-	if strings.HasPrefix(directory, "/") {
+	if strings.HasPrefix(directory, STD_SLASH) {
 		wd, _ := os.Getwd()
 		directory = wd[0:2] + directory
 		cutprefix = 2
 	}
 
-	fd, fdErr := os.Open(directory)
+	fd, fdErr := dos.FindFirst(wildcard)
 	if fdErr != nil {
 		return nil, fdErr
 	}
 	defer fd.Close()
-	files, filesErr := fd.Readdir(-1)
-	if filesErr != nil {
-		return nil, filesErr
-	}
 	commons := make([]string, 0)
-	if str != "" {
-		str = path.Clean(str)
-		// Since path.Clean("") -> ".", completed name to ".xxxx"
-	}
 	STR := strings.ToUpper(str)
-	for _, node1 := range files {
-		name := path.Join(directory, node1.Name())
-		if attr, attrErr := dos.GetFileAttributes(name); attrErr == nil && (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
+	for ; fdErr == nil; fdErr = fd.FindNext() {
+		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
 			continue
 		}
-		if node1.IsDir() {
-			name += "/"
+		name := dos.Join(directory, fd.Name())
+		if fd.IsDir() {
+			name += STD_SLASH
 		}
 		if cutprefix > 0 {
 			name = name[2:]
 		}
-		nameUpr := strings.ToUpper(path.Clean(name))
+		nameUpr := strings.ToUpper(name)
 		if strings.HasPrefix(nameUpr, STR) {
 			commons = append(commons, name)
 		}
