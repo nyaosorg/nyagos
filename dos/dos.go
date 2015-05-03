@@ -99,6 +99,7 @@ func Glob(pattern string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer findf.Close()
 	dirname := filepath.Dir(pattern)
 	match := make([]string, 0, 100)
 	for {
