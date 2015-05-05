@@ -93,6 +93,7 @@ make.cmd の使い方については `make.cmd help` を参照してください。
 * [kardianos](https://github.com/kardianos)
 * [malys](https://github.com/malys)
 * [pine613](https://github.com/pine613)
+* [NSP-0123456](https://github.com/NSP-0123456)
 
 開発者
 ------

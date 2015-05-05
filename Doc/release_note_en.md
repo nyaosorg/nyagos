@@ -1,4 +1,15 @@
-* Fix: wildcard's case was not ignored (#58)
+NYAGOS 4.0.7\_3
+===============
+* `SET VAR=` removes environment variable `VAR` (Thx @pine613)
+* lnk.js with one parameter shows its linked file. (#59 Thx @NSP-0123456)
+* Support Ctrl-T (swapchar) (#62)
+
+BugFix
+------
+* missed a double-quatation after a percent (#57)
+* wildcard's case was not ignored (#58)
+* completion removed .\ (dot and shash) (#61)
+* `open ARGUMENT(s)` did not work
 
 NYAGOS 4.0.7\_2
 ===============
