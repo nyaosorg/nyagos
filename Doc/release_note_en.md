@@ -1,3 +1,9 @@
+NYAGOS 4.0.7\_4
+===============
+* Fix bug that filename-completion replacing slash all to backslash.
+* Fix #63 ESCAPE-Key let clipboard empty-string.
+* Let Ctrl-U copy erased string to clipboard.
+
 NYAGOS 4.0.7\_3
 ===============
 * `SET VAR=` removes environment variable `VAR` (Thx @pine613)
