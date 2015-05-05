@@ -95,6 +95,7 @@ Acknowledgement
 * [malys](https://github.com/malys)
 * [pine613](https://github.com/pine613)
 * [NSP-0123456](https://github.com/NSP-0123456)
+* [hokorobi](http://d.hatena.ne.jp/hokorobi/)
 
 Author
 ------
