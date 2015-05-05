@@ -184,11 +184,10 @@ func KeyFuncClearAfter(this *Buffer) Result {
 }
 
 func KeyFuncClear(this *Buffer) Result {
-	KeyFuncClearAfter(this)
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	Backspace(width)
-	PutRunes(' ', width)
-	Backspace(width)
+	PutRunes(' ', this.ViewWidth)
+	Backspace(this.ViewWidth)
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
