@@ -195,6 +195,11 @@ func KeyFuncClear(this *Buffer) Result {
 }
 
 func KeyFuncClearBefore(this *Buffer) Result {
+	var killbuf bytes.Buffer
+	for i := 0; i < this.Cursor; i++ {
+		killbuf.WriteRune(this.Buffer[i])
+	}
+	clipboard.WriteAll(killbuf.String())
 	keta := this.Delete(0, this.Cursor)
 	Backspace(keta)
 	this.Cursor = 0
