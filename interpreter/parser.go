@@ -77,23 +77,29 @@ func dequote(source *bytes.Buffer) string {
 					return buffer.String()
 				}
 				if ch == '%' {
+					nameStr := nameBuf.String()
+					value := os.Getenv(nameStr)
+					if value != "" {
+						buffer.WriteString(value)
+					} else if m := rxUnicode.FindStringSubmatch(nameStr); m != nil {
+						ucode, _ := strconv.ParseInt(m[1], 16, 32)
+						buffer.WriteRune(rune(ucode))
+					} else if f, ok := PercentFunc[nameStr]; ok {
+						buffer.WriteString(f())
+					} else {
+						buffer.WriteRune('%')
+						buffer.WriteString(nameStr)
+						buffer.WriteRune('%')
+					}
+					break
+				}
+				if !unicode.IsLower(ch) && !unicode.IsUpper(ch) && !unicode.IsNumber(ch) && ch != '_' {
+					source.UnreadRune()
+					buffer.WriteRune('%')
+					buffer.WriteString(nameBuf.String())
 					break
 				}
 				nameBuf.WriteRune(ch)
-			}
-			nameStr := nameBuf.String()
-			value := os.Getenv(nameStr)
-			if value != "" {
-				buffer.WriteString(value)
-			} else if m := rxUnicode.FindStringSubmatch(nameStr); m != nil {
-				ucode, _ := strconv.ParseInt(m[1], 16, 32)
-				buffer.WriteRune(rune(ucode))
-			} else if f, ok := PercentFunc[nameStr]; ok {
-				buffer.WriteString(f())
-			} else {
-				buffer.WriteRune('%')
-				buffer.WriteString(nameStr)
-				buffer.WriteRune('%')
 			}
 			continue
 		}
