@@ -18,6 +18,10 @@ var rxEnvPattern = regexp.MustCompile("%[^%]+%")
 var rxTilde = regexp.MustCompile("^~[/\\\\]")
 
 func listUpFiles(str string) ([]string, error) {
+	orgSlash := STD_SLASH[0]
+	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
+		orgSlash = str[pos]
+	}
 	str = rxEnvPattern.ReplaceAllStringFunc(str, func(p string) string {
 		if len(p) == 2 {
 			return "%"
@@ -69,6 +73,9 @@ func listUpFiles(str string) ([]string, error) {
 		}
 		nameUpr := strings.ToUpper(name)
 		if strings.HasPrefix(nameUpr, STR) {
+			if orgSlash != STD_SLASH[0] {
+				name = strings.Replace(name, STD_SLASH, OPT_SLASH, -1)
+			}
 			commons = append(commons, name)
 		}
 	}
