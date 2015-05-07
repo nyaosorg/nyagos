@@ -250,11 +250,24 @@ func KeyFuncSwapChar(this *Buffer) Result {
 		if this.Cursor < 1 {
 			return CONTINUE
 		}
+
+		w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
-		redrawStart := maxInt(this.Cursor-1, this.ViewStart)
-		Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
-		for i := redrawStart; i <= this.Cursor; i++ {
-			PutRune(this.Buffer[i])
+		if w >= this.ViewWidth {
+			// cursor move right and scroll
+			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
+			Backspace(w_1)
+			this.ViewStart++
+			for i := this.ViewStart; i <= this.Cursor; i++ {
+				PutRune(this.Buffer[i])
+			}
+		} else {
+			// no neccesary to scroll
+			redrawStart := maxInt(this.Cursor-1, this.ViewStart)
+			Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
+			for i := redrawStart; i <= this.Cursor; i++ {
+				PutRune(this.Buffer[i])
+			}
 		}
 		this.Cursor++
 	}
