@@ -1,3 +1,5 @@
+* Fix #64 invalid cursor position after Ctrl-T typed.(Not compatible with other shells)
+
 NYAGOS 4.0.7\_4
 ===============
 * Fix bug that filename-completion replacing slash all to backslash.

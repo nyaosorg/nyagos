@@ -95,6 +95,7 @@ make.cmd の使い方については `make.cmd help` を参照してください。
 * [pine613](https://github.com/pine613)
 * [NSP-0123456](https://github.com/NSP-0123456)
 * [hokorobi](http://d.hatena.ne.jp/hokorobi/)
+* [amuramatsu](https://github.com/amuramatsu)
 
 開発者
 ------
