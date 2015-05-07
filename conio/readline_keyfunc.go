@@ -256,7 +256,7 @@ func KeyFuncSwapChar(this *Buffer) Result {
 		for i := redrawStart; i <= this.Cursor; i++ {
 			PutRune(this.Buffer[i])
 		}
-		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
+		this.Cursor++
 	}
 	return CONTINUE
 }
