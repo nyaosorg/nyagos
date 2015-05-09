@@ -67,7 +67,7 @@ func dequote(source *bytes.Buffer) string {
 			lastchar = '~'
 			continue
 		}
-		if ch == '%' {
+		if ch == '%' && lastquote != '\'' {
 			var nameBuf bytes.Buffer
 			for {
 				ch, _, err = source.ReadRune()
