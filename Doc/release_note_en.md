@@ -1,3 +1,5 @@
+* Single quatations like UNIX-Shell
+
 NYAGOS 4.0.7\_5
 ===============
 * Fix #64 invalid cursor position after Ctrl-T typed.(Not compatible with other shells)

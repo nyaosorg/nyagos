@@ -14,6 +14,7 @@ Programming Language GO and Lua.
   * History (Ctrl-P and !-mark)
   * Alias
   * Filename/Command-name completion
+  * Single quatations enclosing a command-line parameter.
 * Customizing with Lua
   * built-in command written with Lua
   * filtering command-line
