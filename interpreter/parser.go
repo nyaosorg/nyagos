@@ -52,7 +52,7 @@ func dequote(source *bytes.Buffer) string {
 	var buffer bytes.Buffer
 
 	lastchar := ' '
-	quote := false
+	lastquote := '\000'
 	for {
 		ch, _, err := source.ReadRune()
 		if err != nil {
@@ -103,11 +103,13 @@ func dequote(source *bytes.Buffer) string {
 			}
 			continue
 		}
-		if ch == '"' {
-			quote = !quote
-			if lastchar == '"' && quote {
-				buffer.WriteRune('"')
-				lastchar = '\000'
+
+		if lastquote != '\000' && ch == lastquote {
+			lastquote = '\000'
+		} else if (ch == '\'' || ch == '"') && lastquote == '\000' {
+			lastquote = ch
+			if ch == lastchar {
+				buffer.WriteRune(ch)
 			}
 		} else {
 			buffer.WriteRune(ch)
@@ -147,7 +149,7 @@ func terminate(statements *[]StatementT,
 }
 
 func parse1(text string) ([]StatementT, error) {
-	isQuoted := false
+	lastquote := '\000'
 	statements := make([]StatementT, 0)
 	argv := make([]string, 0)
 	lastchar := ' '
@@ -164,10 +166,14 @@ func parse1(text string) ([]StatementT, error) {
 		if chErr != nil {
 			return nil, chErr
 		}
-		if ch == '"' {
-			isQuoted = !isQuoted
+		if lastquote == '\000' {
+			if ch == '"' || ch == '\'' {
+				lastquote = ch
+			}
+		} else if ch == lastquote {
+			lastquote = '\000'
 		}
-		if isQuoted {
+		if lastquote != '\000' {
 			buffer.WriteRune(ch)
 		} else if ch == ' ' {
 			if buffer.Len() > 0 {
