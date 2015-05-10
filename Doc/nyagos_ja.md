@@ -382,6 +382,10 @@ C言語の access 関数と同じです。
 `nyagos.completion_hook` は更新した候補リストのテーブルか nil を
 戻り値としてください。nil は、更新しない c.list と等価です。
 
+### `nyagos.getkey()`
+
+入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
+
 ### `nyagos.exe`
 
 nyagos.exe のフルパスが格納されています。

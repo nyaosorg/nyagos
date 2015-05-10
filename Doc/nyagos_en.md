@@ -326,6 +326,10 @@ The argument `c` is the table which has these members.
 `nyagos.completion_hook` should return updated list(table) or `nil`.
 Returning nil equals to returning c.list with no change.
 
+### `nyagos.getkey()`
+
+It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
+
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.

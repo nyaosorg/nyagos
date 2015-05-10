@@ -1,4 +1,5 @@
 * Single quatations like UNIX-Shell
+* Add lua-function nyagos.getkey()
 
 NYAGOS 4.0.7\_5
 ===============
