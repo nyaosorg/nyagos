@@ -84,6 +84,7 @@ func SetLuaFunctions(this *lua.Lua) {
 		"exec":         cmdExec,
 		"getenv":       cmdGetEnv,
 		"gethistory":   cmdGetHistory,
+		"getkey":       cmdGetKey,
 		"getwd":        cmdGetwd,
 		"glob":         cmdGlob,
 		"pathjoin":     cmdPathJoin,

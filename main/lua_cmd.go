@@ -335,3 +335,11 @@ func cmdCommonPrefix(L *lua.Lua) int {
 	L.PushString(completion.CommonPrefix(list))
 	return 1
 }
+
+func cmdGetKey(L *lua.Lua) int {
+	keycode, scancode, shiftstatus := conio.GetKey()
+	L.PushInteger(lua.Integer(keycode))
+	L.PushInteger(lua.Integer(scancode))
+	L.PushInteger(lua.Integer(shiftstatus))
+	return 3
+}
