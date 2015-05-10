@@ -48,11 +48,13 @@ func chomp(buffer *bytes.Buffer) {
 	}
 }
 
+const NOTQUOTED = '\000'
+
 func dequote(source *bytes.Buffer) string {
 	var buffer bytes.Buffer
 
 	lastchar := ' '
-	lastquote := '\000'
+	quoteNow := NOTQUOTED
 	for {
 		ch, _, err := source.ReadRune()
 		if err != nil {
@@ -67,7 +69,7 @@ func dequote(source *bytes.Buffer) string {
 			lastchar = '~'
 			continue
 		}
-		if ch == '%' && lastquote != '\'' {
+		if ch == '%' && quoteNow != '\'' {
 			var nameBuf bytes.Buffer
 			for {
 				ch, _, err = source.ReadRune()
@@ -104,10 +106,10 @@ func dequote(source *bytes.Buffer) string {
 			continue
 		}
 
-		if lastquote != '\000' && ch == lastquote {
-			lastquote = '\000'
-		} else if (ch == '\'' || ch == '"') && lastquote == '\000' {
-			lastquote = ch
+		if quoteNow != NOTQUOTED && ch == quoteNow {
+			quoteNow = NOTQUOTED
+		} else if (ch == '\'' || ch == '"') && quoteNow == NOTQUOTED {
+			quoteNow = ch
 			if ch == lastchar {
 				buffer.WriteRune(ch)
 			}
@@ -149,7 +151,7 @@ func terminate(statements *[]StatementT,
 }
 
 func parse1(text string) ([]StatementT, error) {
-	lastquote := '\000'
+	quoteNow := NOTQUOTED
 	statements := make([]StatementT, 0)
 	argv := make([]string, 0)
 	lastchar := ' '
@@ -166,14 +168,14 @@ func parse1(text string) ([]StatementT, error) {
 		if chErr != nil {
 			return nil, chErr
 		}
-		if lastquote == '\000' {
+		if quoteNow == NOTQUOTED {
 			if ch == '"' || ch == '\'' {
-				lastquote = ch
+				quoteNow = ch
 			}
-		} else if ch == lastquote {
-			lastquote = '\000'
+		} else if ch == quoteNow {
+			quoteNow = NOTQUOTED
 		}
-		if lastquote != '\000' {
+		if quoteNow != NOTQUOTED {
 			buffer.WriteRune(ch)
 		} else if ch == ' ' {
 			if buffer.Len() > 0 {
