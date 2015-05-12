@@ -55,6 +55,7 @@ func dequote(source *bytes.Buffer) string {
 
 	lastchar := ' '
 	quoteNow := NOTQUOTED
+	yenCount := 0
 	for {
 		ch, _, err := source.ReadRune()
 		if err != nil {
@@ -69,7 +70,7 @@ func dequote(source *bytes.Buffer) string {
 			lastchar = '~'
 			continue
 		}
-		if ch == '%' && quoteNow != '\'' {
+		if ch == '%' && quoteNow != '\'' && yenCount%2 == 0 {
 			var nameBuf bytes.Buffer
 			for {
 				ch, _, err = source.ReadRune()
@@ -106,17 +107,41 @@ func dequote(source *bytes.Buffer) string {
 			continue
 		}
 
-		if quoteNow != NOTQUOTED && ch == quoteNow {
+		if quoteNow != NOTQUOTED && ch == quoteNow && yenCount%2 == 0 {
+			// Close Quotation.
+			for ; yenCount >= 2; yenCount -= 2 {
+				buffer.WriteRune('\\')
+			}
 			quoteNow = NOTQUOTED
-		} else if (ch == '\'' || ch == '"') && quoteNow == NOTQUOTED {
+		} else if (ch == '\'' || ch == '"') && quoteNow == NOTQUOTED && yenCount%2 == 0 {
+			// Open Qutation.
+			for ; yenCount >= 2; yenCount -= 2 {
+				buffer.WriteRune('\\')
+			}
 			quoteNow = ch
 			if ch == lastchar {
 				buffer.WriteRune(ch)
 			}
 		} else {
-			buffer.WriteRune(ch)
+			if ch == '\\' {
+				yenCount++
+			} else if ch == '\'' || ch == '"' {
+				for ; yenCount >= 2; yenCount -= 2 {
+					buffer.WriteRune('\\')
+				}
+				yenCount = 0
+				buffer.WriteRune(ch)
+			} else {
+				for ; yenCount > 0; yenCount-- {
+					buffer.WriteRune('\\')
+				}
+				buffer.WriteRune(ch)
+			}
 		}
 		lastchar = ch
+	}
+	for ; yenCount > 0; yenCount-- {
+		buffer.WriteRune('\\')
 	}
 	return buffer.String()
 }
@@ -152,6 +177,7 @@ func terminate(statements *[]StatementT,
 
 func parse1(text string) ([]StatementT, error) {
 	quoteNow := NOTQUOTED
+	yenCount := 0
 	statements := make([]StatementT, 0)
 	argv := make([]string, 0)
 	lastchar := ' '
@@ -169,10 +195,10 @@ func parse1(text string) ([]StatementT, error) {
 			return nil, chErr
 		}
 		if quoteNow == NOTQUOTED {
-			if ch == '"' || ch == '\'' {
+			if yenCount%2 == 0 && (ch == '"' || ch == '\'') {
 				quoteNow = ch
 			}
-		} else if ch == quoteNow {
+		} else if yenCount%2 == 0 && ch == quoteNow {
 			quoteNow = NOTQUOTED
 		}
 		if quoteNow != NOTQUOTED {
@@ -248,6 +274,11 @@ func parse1(text string) ([]StatementT, error) {
 			isNextRedirect = true
 		} else {
 			buffer.WriteRune(ch)
+		}
+		if ch == '\\' {
+			yenCount++
+		} else {
+			yenCount = 0
 		}
 		lastchar = ch
 	}
