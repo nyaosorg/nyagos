@@ -22,11 +22,11 @@ func TestQuotedFirstWord(t *testing.T) {
 
 func TestSplitQ(t *testing.T) {
 	fmt.Println("*** Test SplitQ() ***")
-	values := SplitQ("\"a b\" bbb ccc \"1 2 3\"")
+	values := SplitQ("\"a b\" bbb ccc \"1 2 3\" 'a  b' c")
 	for key, val := range values {
 		fmt.Printf("[%d]=\"%s\"\n", key, val)
 	}
-	if len(values) != 4 {
+	if len(values) != 6 {
 		t.Error("Case-1: failed")
 	}
 	if values[0] != "\"a b\"" {

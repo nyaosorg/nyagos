@@ -5,6 +5,8 @@ import (
 	"strings"
 )
 
+const NULQUOTE = '\000'
+
 func QuotedWordCutter(reader *strings.Reader) (string, bool) {
 	var buffer bytes.Buffer
 	for {
@@ -17,14 +19,24 @@ func QuotedWordCutter(reader *strings.Reader) (string, bool) {
 			break
 		}
 	}
-	quote := false
+	quote := NULQUOTE
+	yenCount := 0
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
-		if ch == '"' {
-			quote = !quote
+		if yenCount%2 == 0 {
+			if quote == NULQUOTE && (ch == '"' || ch == '\'') {
+				quote = ch
+			} else if quote != NULQUOTE && ch == quote {
+				quote = NULQUOTE
+			}
 		}
-		if ch == ' ' && !quote {
+		if ch == ' ' && quote == NULQUOTE {
 			break
+		}
+		if ch == '\\' {
+			yenCount++
+		} else {
+			yenCount = 0
 		}
 		buffer.WriteRune(ch)
 	}
