@@ -1,5 +1,6 @@
 * Single quatations like UNIX-Shell
 * Add lua-function nyagos.getkey()
+* Fix #66 `echo a>a` makes a empty file named `aa`
 
 NYAGOS 4.0.7\_5
 ===============
