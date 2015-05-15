@@ -185,6 +185,15 @@ func parse1(text string) ([]StatementT, error) {
 	isNextRedirect := false
 	redirect := make([]*Redirecter, 0, 3)
 
+	TermWord := func() {
+		if isNextRedirect && len(redirect) > 0 {
+			redirect[len(redirect)-1].SetPath(dequote(&buffer))
+		} else {
+			argv = append(argv, dequote(&buffer))
+		}
+		buffer.Reset()
+	}
+
 	reader := strings.NewReader(text)
 	for reader.Len() > 0 {
 		ch, chSize, chErr := reader.ReadRune()
@@ -205,12 +214,7 @@ func parse1(text string) ([]StatementT, error) {
 			buffer.WriteRune(ch)
 		} else if ch == ' ' {
 			if buffer.Len() > 0 {
-				if isNextRedirect && len(redirect) > 0 {
-					redirect[len(redirect)-1].SetPath(dequote(&buffer))
-				} else {
-					argv = append(argv, dequote(&buffer))
-				}
-				buffer.Reset()
+				TermWord()
 				isNextRedirect = false
 			}
 		} else if lastchar == ' ' && ch == ';' {
@@ -254,22 +258,27 @@ func parse1(text string) ([]StatementT, error) {
 			case '1':
 				// 1>
 				chomp(&buffer)
+				TermWord()
 				redirect = append(redirect, NewRedirecter(1))
 			case '2':
 				// 2>
 				chomp(&buffer)
+				TermWord()
 				redirect = append(redirect, NewRedirecter(2))
 			case '>':
 				// >>
+				TermWord()
 				if len(redirect) >= 0 {
 					redirect[len(redirect)-1].SetAppend()
 				}
 			default:
 				// >
+				TermWord()
 				redirect = append(redirect, NewRedirecter(1))
 			}
 			isNextRedirect = true
 		} else if ch == '<' {
+			TermWord()
 			redirect = append(redirect, NewRedirecter(0))
 			isNextRedirect = true
 		} else {
