@@ -1,4 +1,8 @@
+local orgfilter = nyagos.filter
 nyagos.filter = function(cmdline)
+    if orgfilter then
+        cmdline = orgfilter(cmdline)
+    end
     return string.gsub(cmdline,'`([^`]*)`',function(m)
         local r = nyagos.eval(m)
         if not r then
