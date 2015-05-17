@@ -82,6 +82,7 @@ func SetLuaFunctions(this *lua.Lua) {
 		"bindkey":      cmdBindKey,
 		"eval":         cmdEval,
 		"exec":         cmdExec,
+		"getalias":     cmdGetAlias,
 		"getenv":       cmdGetEnv,
 		"gethistory":   cmdGetHistory,
 		"getkey":       cmdGetKey,

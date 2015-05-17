@@ -18,6 +18,8 @@ import (
 	"../lua"
 )
 
+const alias_prefix = "nyagos.alias."
+
 func cmdAlias(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
@@ -27,17 +29,29 @@ func cmdAlias(L *lua.Lua) int {
 	switch L.GetType(2) {
 	case lua.LUA_TSTRING:
 		value, err := L.ToString(2)
+		regkey := alias_prefix + key
+		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		if err == nil {
 			alias.Table[key] = alias.New(value)
 		} else {
 			return L.Push(nil, err)
 		}
 	case lua.LUA_TFUNCTION:
-		regkey := "nyagos.alias." + key
+		regkey := alias_prefix + key
 		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		alias.Table[key] = LuaFunction{L, regkey}
 	}
 	return L.Push(true)
+}
+
+func cmdGetAlias(L *lua.Lua) int {
+	name, nameErr := L.ToString(1)
+	if nameErr != nil {
+		return L.Push(nil, nameErr)
+	}
+	regkey := alias_prefix + strings.ToLower(name)
+	L.GetField(lua.LUA_REGISTRYINDEX, regkey)
+	return 1
 }
 
 func cmdSetEnv(L *lua.Lua) int {
