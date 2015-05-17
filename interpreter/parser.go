@@ -96,7 +96,7 @@ func dequote(source *bytes.Buffer) string {
 					}
 					break
 				}
-				if !unicode.IsLower(ch) && !unicode.IsUpper(ch) && !unicode.IsNumber(ch) && ch != '_' {
+				if !unicode.IsLower(ch) && !unicode.IsUpper(ch) && !unicode.IsNumber(ch) && ch != '_' && ch != '+' {
 					source.UnreadRune()
 					buffer.WriteRune('%')
 					buffer.WriteString(nameBuf.String())
