@@ -15,7 +15,14 @@ function suffix(suffix,cmdline)
     nyagos.suffixes[suffix]=cmdline
 end
 
+local org_filter=nyagos.argsfilter
 nyagos.argsfilter = function(args)
+    if org_filter then
+        local args_ = org_filter(args)
+        if args_ then
+            args = args_
+        end
+    end
     local path=nyagos.which(args[0])
     if not path then
         return
