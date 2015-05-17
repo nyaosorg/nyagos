@@ -1,5 +1,9 @@
 * Single quatations like UNIX-Shell
-* Add lua-function nyagos.getkey()
+* Add lua-function `nyagos.getkey()`/`nyagos.getalias()`
+* Rename lua-function `nyagos.alias` to `nyagos.setalias()`
+* nyagos.lua: make alias-defining-table `nyagos.alias`.
+* nyagos.lua: `x("COMMAND")` prints error-message.
+* cdlnk.lua: `cd SHORTCUT.LNK` can work.
 * Fix #66 `echo a>a` makes a empty file named `aa`
 
 NYAGOS 4.0.7\_5

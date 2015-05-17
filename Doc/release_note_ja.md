@@ -1,5 +1,9 @@
 * UNIX的なシングルクォーテーションをサポート
-* Lua関数 nyagos.getkey() を追加
+* Lua関数 `nyagos.getkey()`/`nyagos.getalias()` を追加
+* nyagos.alias を `nyagos.setalias` に改名
+* nyagos.lua: エイリアス定義テーブル `nyagos.alias` を用意
+* nyagos.lua: `x("COMMAND")` がエラーを表示するようにした
+* cdlnk.lua: `cd ショートカットファイル` が機能するようにした
 * Fix #66 `echo a>a` で空の aa というファイルが出来てしまう
 
 NYAGOS 4.0.7\_5
