@@ -20,19 +20,24 @@ local function getfolder(arg1)
     return arg1
 end
 
+local org_cd = nyagos.getalias("cd")
 nyagos.alias("cd",function(args)
     for i=1,#args do
         local arg1 = args[i]
         if string.match(arg1,"%.[lL][nN][kK]$") then
             arg1 = getfolder(arg1)
         end
-        if string.find(arg1," ") then
+        if not org_cd and string.find(arg1," ") then
             arg1 = '"'..arg1..'"'
         end
         args[i] = arg1
     end
-    table.insert(args,1,"__cd__")
-    local cmdline=table.concat(args," ")
-    --print(cmdline)
-    nyagos.exec(cmdline)
+    if org_cd then
+        org_cd(args)
+    else
+        table.insert(args,1,"__cd__")
+        local cmdline=table.concat(args," ")
+        --print(cmdline)
+        nyagos.exec(cmdline)
+    end
 end)
