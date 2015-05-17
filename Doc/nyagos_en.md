@@ -193,20 +193,31 @@ These suffix are available.
 
 ## Lua extension
 
-### `nyagos.alias("NAME","REPLACED-STRING")`
+### `nyagos.setalias("NAME","REPLACED-STRING")`
 
 It defines an alias. These macros are available on "REPLACE-STRING".
 
 * `$1`,`$2`,`$3` ... the number's argument.
 * `$\*` ... all arguments
 
+### `nyagos.setalias("NAME",function(ARGS)...end)`
+
+It assigns the function to the command-name `"NAME"`.
+`ARGS` is the table: { 1stArgument,2nd,3rd,... }
+
+### `nyagos.getalias("NAME")`
+
+It returns the function definition assigned NAME.
+
 ### `nyagos.setenv("NAME","VALUE")`
 
 It changes the environment variable.
 
-### `nyagos.exec("COMMAND")`
+### `status,error = nyagos.exec("COMMAND")`
 
 It executes "COMMAND" as shell command.
+If "COMMAND" succeeds, status is true.
+Otherwise status is false and error is error-message.
 
 ### `OUTPUT = nyagos.eval("COMMAND")`
 
@@ -217,10 +228,13 @@ When error occures, OUTPUT is set `nil`.
 
 Get current working directory.
 
-
 ### `nyagos.write("TEXT")`
 
 It output "TEXT" to the standard output with UTF8.
+
+### `nyagos.writerr("TEXT")`
+
+It output "TEXT" to the standard error with UTF8.
 
 ### `ANSISTRING = nyagos.utoa(UTF8STRING)`
 
@@ -290,7 +304,7 @@ If it returns string, NYAGOS.exe replace the command-line-string it.
 not a string but a table as string array which has each command 
 arguments.
 
-### `length := nyagos.prompt(template)`
+### `length = nyagos.prompt(template)`
 
 `nyagos.prompt` is assigned function which draw prompt.
 You can swap the prompt-function as below.
@@ -300,7 +314,6 @@ You can swap the prompt-function as below.
         nyagos.echo("xxxxx")
         return prompt_(template)
     end
-
 
 ### `nyagos.gethistory(N)`
 
