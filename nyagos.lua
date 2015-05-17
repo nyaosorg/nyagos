@@ -19,6 +19,14 @@ nyagos.alias = setmetatable({},{
     __index=function(t,k) return nyagos.getalias(k,v) end
 })
 
+function x(s)
+    for line in string.gmatch(s,'[^\r\n]+') do
+        local status,errmsg = nyagos.exec(line)
+        if not status then
+            nyagos.writerr(errmsg.."\n")
+        end
+    end
+end
 print( "Nihongo Yet Another GOing Shell " .. (nyagos.version or "") ..
     " Powered by " ..  _VERSION .. " & nyole.dll ".. nyoleVer)
 if not nyagos.version or string.len(nyagos.version) <= 0 then
@@ -72,11 +80,6 @@ function addpath(...)
 end
 function nyagos.echo(s)
     nyagos.write((s or '<nil>')..'\n')
-end
-function x(s)
-    for line in string.gmatch(s,'[^\r\n]+') do
-        nyagos.exec(line)
-    end
 end
 io.getenv = nyagos.getenv
 io.setenv = nyagos.setenv

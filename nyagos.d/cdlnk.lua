@@ -38,6 +38,6 @@ nyagos.alias.cd=function(args)
         table.insert(args,1,"__cd__")
         local cmdline=table.concat(args," ")
         --print(cmdline)
-        nyagos.exec(cmdline)
+        x(cmdline)
     end
 end
