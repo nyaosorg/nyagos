@@ -126,11 +126,23 @@ func cmdWrite(L *lua.Lua) int {
 	if cmdOk && cmd != nil && cmd.Stdout != nil {
 		out = cmd.Stdout
 	}
+	return cmdWriteSub(L, out)
+}
+
+func cmdWriteErr(L *lua.Lua) int {
+	var out io.Writer = os.Stderr
+	cmd, cmdOk := LuaInstanceToCmd[L.State()]
+	if cmdOk && cmd != nil && cmd.Stderr != nil {
+		out = cmd.Stderr
+	}
+	return cmdWriteSub(L, out)
+}
+
+func cmdWriteSub(L *lua.Lua, out io.Writer) int {
 	switch out.(type) {
 	case *os.File:
 		out = ansicolor.NewAnsiColorWriter(out)
 	}
-
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {
 		str, err := L.ToString(i)

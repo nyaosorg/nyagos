@@ -94,6 +94,7 @@ func SetLuaFunctions(this *lua.Lua) {
 		"utoa":         cmdUtoA,
 		"which":        cmdWhich,
 		"write":        cmdWrite,
+		"writerr":      cmdWriteErr,
 	}
 	if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
