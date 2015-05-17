@@ -20,8 +20,8 @@ local function getfolder(arg1)
     return arg1
 end
 
-local org_cd = nyagos.getalias("cd")
-nyagos.alias("cd",function(args)
+local org_cd = nyagos.alias.cd
+nyagos.alias.cd=function(args)
     for i=1,#args do
         local arg1 = args[i]
         if string.match(arg1,"%.[lL][nN][kK]$") then
@@ -40,4 +40,4 @@ nyagos.alias("cd",function(args)
         --print(cmdline)
         nyagos.exec(cmdline)
     end
-end)
+end

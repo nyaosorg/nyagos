@@ -76,7 +76,7 @@ func SetLuaFunctions(this *lua.Lua) {
 
 	nyagos_table := map[string]interface{}{
 		"access":       cmdAccess,
-		"alias":        cmdAlias,
+		"setalias":     cmdSetAlias,
 		"atou":         cmdAtoU,
 		"commonprefix": cmdCommonPrefix,
 		"bindkey":      cmdBindKey,

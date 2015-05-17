@@ -20,7 +20,7 @@ import (
 
 const alias_prefix = "nyagos.alias."
 
-func cmdAlias(L *lua.Lua) int {
+func cmdSetAlias(L *lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
