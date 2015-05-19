@@ -48,25 +48,14 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
 次のソフトウェアが必要となります。
 
 * [go1.4.2 windows/386](http://golang.org)
-* [Lua 5.3](http://www.lua.org)
-* [tdm-gcc](http://tdm-gcc.tdragon.net)
+* [LuaBinaries(5.3 for Win32)](http://sourceforge.net/projects/luabinaries/files/5.3/Tools%20Executables/lua-5.3_Win32_bin.zip)
 
 `%GOPATH%` にて
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
 
-lua53.dll が既にある場合:
-
-    copy PATH\TO\lua53.dll lua\.
-
-さもなければ:
-
-    tar zxvf PATH/TO/lua-5.3.0.tar.gz
-    cd lua-5.3.0\src
-    mingw32-make.exe mingw
-    copy lua53.dll ..\..\..
-    cd ..\..\..
+    unzip PATH\TO\lua-5.3_Win32_bin.zip lua53.dll
 
 最後に:
 

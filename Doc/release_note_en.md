@@ -6,6 +6,7 @@
 * cdlnk.lua: `cd SHORTCUT.LNK` can work.
 * Fix #66 `echo a>a` makes a empty file named `aa`
 * When su and clone fails with permission error, retry with %COMSPEC% /c NYAGOS.EXE
+* Included lua.exe and lua53.dll are replaced from our building ones to luabinaries ones.
 
 NYAGOS 4.0.7\_5
 ===============
