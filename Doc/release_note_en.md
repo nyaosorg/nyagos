@@ -5,6 +5,7 @@
 * nyagos.lua: `x("COMMAND")` prints error-message.
 * cdlnk.lua: `cd SHORTCUT.LNK` can work.
 * Fix #66 `echo a>a` makes a empty file named `aa`
+* When su and clone fails with permission error, retry with %COMSPEC% /c NYAGOS.EXE
 
 NYAGOS 4.0.7\_5
 ===============

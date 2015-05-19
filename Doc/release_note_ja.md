@@ -5,6 +5,7 @@
 * nyagos.lua: `x("COMMAND")` がエラーを表示するようにした
 * cdlnk.lua: `cd ショートカットファイル` が機能するようにした
 * Fix #66 `echo a>a` で空の aa というファイルが出来てしまう
+* su や clone がアクセスエラーで失敗した時、%COMSPEC% /c NYAGOS.EXE でリトライするようにした
 
 NYAGOS 4.0.7\_5
 ===============
