@@ -8,9 +8,17 @@ nyagos.alias("sudo",function(args)
     assert(nyagos.shellexecute("runas",prog,table.concat(args," "),nyagos.getwd()))
 end)
 
+local function clone(action)
+    local status,err = nyagos.shellexecute(action,nyagos.exe)
+    if not status and string.match(err,"^Error%(5%)") then
+	status,err = nyagos.shellexecute(action,nyagos.getenv("COMSPEC"),'/c "'..nyagos.exe..'"')
+    end
+    return status,err
+end
+
 nyagos.alias("su",function()
-    assert(nyagos.shellexecute("runas",nyagos.exe))
+    assert(clone("runas"))
 end)
 nyagos.alias("clone",function()
-    assert(nyagos.shellexecute("open",nyagos.exe))
+    assert(clone("open"))
 end)
