@@ -80,6 +80,9 @@ func when_panic() {
 func main() {
 	defer when_panic()
 
+	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
+	defer dos.CoUninitialize()
+
 	conio.DisableCtrlC()
 
 	completion := conio.KeyGoFuncT{F: completion.KeyFuncCompletion}
