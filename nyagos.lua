@@ -104,8 +104,10 @@ local dotFolderPath = string.gsub(nyagos.exe,"%.exe$",".d")
 local dotFolder = fsObj:GetFolder(dotFolderPath)
 local files = dotFolder:files()
 for p in files:__iter__() do
-    local path = nyagos.fsObj:BuildPath(dotFolderPath,p.Name)
-    include(path)
+    if string.match(p.Name,"%.[lL][uU][aA]$") then
+        local path = nyagos.fsObj:BuildPath(dotFolderPath,p.Name)
+        include(path)
+    end
 end
 
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
