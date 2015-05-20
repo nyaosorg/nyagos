@@ -38,7 +38,7 @@ const (
 	ANSI_NORM     = "\x1B[1;37m"
 	ANSI_READONLY = "\x1B[1;33m"
 	ANSI_HIDDEN   = "\x1B[1;34m"
-	ANSI_END      = "\x1B[39m"
+	ANSI_END      = "\x1B[0m"
 )
 
 func (this fileInfoT) Name() string { return this.name }
