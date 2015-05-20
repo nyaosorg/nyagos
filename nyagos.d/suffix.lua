@@ -41,7 +41,7 @@ nyagos.argsfilter = function(args)
     end
     newargs[#cmdline] = path
     for i=1,#args do
-        newargs[#cmdline+i] = args[i]
+        newargs[#newargs+i] = args[i]
     end
     return newargs
 end
@@ -51,7 +51,11 @@ alias{
         if #args < 2 then
             print "Usage: suffix SUFFIX COMMAND"
         else
-            suffix(args[1],args[2])
+            local cmdline={}
+            for i=2,#args do
+                cmdline[#cmdline+1]=args[i]
+            end
+            suffix(args[1],cmdline)
         end
     end
 }
