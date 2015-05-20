@@ -137,10 +137,10 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 			}
 			var whatToDo NextT
 
+			if argsHook != nil {
+				state.Argv = argsHook(state.Argv)
+			}
 			if len(state.Argv) > 0 {
-				if argsHook != nil {
-					state.Argv = argsHook(state.Argv)
-				}
 				cmd.Args = state.Argv
 				cmd.IsBackGround = isBackGround
 				cmd.Closer = pipeOut
