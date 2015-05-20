@@ -4,9 +4,15 @@
 * nyagos.lua: make alias-defining-table `nyagos.alias`.
 * nyagos.lua: `x("COMMAND")` prints error-message.
 * cdlnk.lua: `cd SHORTCUT.LNK` can work.
-* Fix #66 `echo a>a` makes a empty file named `aa`
 * When su and clone fails with permission error, retry with %COMSPEC% /c NYAGOS.EXE
 * Included lua.exe and lua53.dll are replaced from our building ones to luabinaries ones.
+
+Bugfix
+-------
+* Fix #66 `echo a>a` makes a empty file named `aa`
+* Fix suffix.lua problem (#69 Thx hattya)
+* Fix panic when nyagos.argsfilter returns empty array(#68 Thx hattya)
+* Reset to default color after ls (#67 Thx hattya)
 
 NYAGOS 4.0.7\_5
 ===============

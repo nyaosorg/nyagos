@@ -4,9 +4,15 @@
 * nyagos.lua: エイリアス定義テーブル `nyagos.alias` を用意
 * nyagos.lua: `x("COMMAND")` がエラーを表示するようにした
 * cdlnk.lua: `cd ショートカットファイル` が機能するようにした
-* Fix #66 `echo a>a` で空の aa というファイルが出来てしまう
 * su や clone がアクセスエラーで失敗した時、%COMSPEC% /c NYAGOS.EXE でリトライするようにした
 * 同梱の lua.exe,lua53.dll を野良ビルド版から、LuaBinaries版へ差し替えた
+
+虫繕い
+------
+* Fix #66 `echo a>a` で空の aa というファイルが出来てしまう
+* suffix.lua で引数の数え方などを間違えていた (#69 Thx hattya)
+* nyagos.argsfilter が空の配列を返した時にパニックしていた (#68 Thx hattya)
+* ls 後のカラーリセットのエスケープシーケンスを修正 (#67 Thx hattya)
 
 NYAGOS 4.0.7\_5
 ===============
