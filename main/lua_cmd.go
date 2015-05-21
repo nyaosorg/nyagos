@@ -86,12 +86,31 @@ func cmdGetEnv(L *lua.Lua) int {
 }
 
 func cmdExec(L *lua.Lua) int {
-	statement, statementErr := L.ToString(1)
-	if statementErr != nil {
-		return L.Push(nil, statementErr)
+	var err error
+	if L.IsTable(1) {
+		L.Len(1)
+		n, _ := L.ToInteger(-1)
+		L.Pop(1)
+		args := make([]string, 0, n+1)
+		for i := 0; i <= n; i++ {
+			L.PushInteger(lua.Integer(i))
+			L.GetTable(-2)
+			arg1, err := L.ToString(-1)
+			if err == nil && arg1 != "" {
+				args = append(args, arg1)
+			}
+			L.Pop(1)
+		}
+		interpreter1 := interpreter.New()
+		interpreter1.Args = args
+		_, err = interpreter1.Spawnvp()
+	} else {
+		statement, statementErr := L.ToString(1)
+		if statementErr != nil {
+			return L.Push(nil, statementErr)
+		}
+		_, err = interpreter.New().Interpret(statement)
 	}
-	_, err := interpreter.New().Interpret(statement)
-
 	if err != nil {
 		return L.Push(nil, err)
 	}
