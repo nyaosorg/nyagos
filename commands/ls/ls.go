@@ -47,6 +47,10 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 	indicator := " "
 	prefix := ""
 	postfix := ""
+	if (flag & O_COLOR) != 0 {
+		prefix = ANSI_NORM
+		postfix = ANSI_END
+	}
 	if status.IsDir() {
 		io.WriteString(out, "d")
 		indicator = "/"
@@ -121,6 +125,10 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 	for key, val := range nodes {
 		prefix := ""
 		postfix := ""
+		if (flag & O_COLOR) != 0 {
+			prefix = ANSI_NORM
+			postfix = ANSI_END
+		}
 		indicator := ""
 		if val.IsDir() {
 			if (flag & O_COLOR) != 0 {
@@ -384,6 +392,9 @@ func Main(args []string, out io.Writer) error {
 		}
 		message = append(message, "] [PATH(s)]..."...)
 		return errors.New(string(message))
+	}
+	if (flag & O_COLOR) != 0 {
+		io.WriteString(out, ANSI_END)
 	}
 	return lsCore(paths, flag, out)
 }
