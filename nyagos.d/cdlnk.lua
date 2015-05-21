@@ -35,7 +35,7 @@ nyagos.alias.cd=function(args)
         args[0] = "__cd__"
         local status,errmsg = nyagos.exec(args)
         if not status then
-            nyagos.writerr(errmsg)
+            nyagos.writerr(errmsg.."\n")
         end
     end
 end
