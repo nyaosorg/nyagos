@@ -27,17 +27,15 @@ nyagos.alias.cd=function(args)
         if string.match(arg1,"%.[lL][nN][kK]$") then
             arg1 = getfolder(arg1)
         end
-        if not org_cd and string.find(arg1," ") then
-            arg1 = '"'..arg1..'"'
-        end
         args[i] = arg1
     end
     if org_cd then
         org_cd(args)
     else
-        table.insert(args,1,"__cd__")
-        local cmdline=table.concat(args," ")
-        --print(cmdline)
-        x(cmdline)
+        args[0] = "__cd__"
+        local status,errmsg = nyagos.exec(args)
+        if not status then
+            nyagos.writerr(errmsg)
+        end
     end
 end
