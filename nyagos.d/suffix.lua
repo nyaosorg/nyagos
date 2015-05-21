@@ -41,7 +41,7 @@ nyagos.argsfilter = function(args)
     end
     newargs[#cmdline] = path
     for i=1,#args do
-        newargs[#newargs+i] = args[i]
+        newargs[#newargs+1] = args[i]
     end
     return newargs
 end
