@@ -92,6 +92,46 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
+func (this *Interpreter) Spawnvp() (NextT, error) {
+	var whatToDo NextT = CONTINUE
+	var err error = nil
+
+	if argsHook != nil {
+		this.Args = argsHook(this.Args)
+	}
+	if len(this.Args) > 0 {
+		whatToDo, err = hook(this)
+		if whatToDo == THROUGH {
+			this.Path, err = exec.LookPath(this.Args[0])
+			if err == nil {
+				if this.IsBackGround {
+					go func() {
+						this.Run()
+						if this.Closer != nil {
+							this.Closer.Close()
+							this.Closer = nil
+						}
+					}()
+				} else {
+					err = this.Run()
+				}
+			}
+		}
+	}
+	if err != nil {
+		m := errorStatusPattern.FindStringSubmatch(err.Error())
+		if m != nil {
+			ErrorLevel = m[1]
+			err = nil
+		} else {
+			ErrorLevel = "-1"
+		}
+	} else {
+		ErrorLevel = "0"
+	}
+	return whatToDo, err
+}
+
 func (this *Interpreter) Interpret(text string) (NextT, error) {
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
@@ -135,48 +175,12 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 					return CONTINUE, err
 				}
 			}
-			var whatToDo NextT
-
-			if argsHook != nil {
-				state.Argv = argsHook(state.Argv)
-			}
-			if len(state.Argv) > 0 {
-				cmd.Args = state.Argv
-				cmd.IsBackGround = isBackGround
-				cmd.Closer = pipeOut
-				whatToDo, err = hook(cmd)
-				if whatToDo == THROUGH {
-					cmd.Path, err = exec.LookPath(state.Argv[0])
-					if err == nil {
-						if isBackGround {
-							go func() {
-								cmd.Run()
-								if pipeOut != nil {
-									pipeOut.Close()
-								}
-							}()
-						} else {
-							err = cmd.Run()
-						}
-					}
-				}
-			}
-			if err != nil {
-				m := errorStatusPattern.FindStringSubmatch(err.Error())
-				if m != nil {
-					ErrorLevel = m[1]
-					err = nil
-				} else {
-					ErrorLevel = "-1"
-				}
-			} else {
-				ErrorLevel = "0"
-			}
-			if whatToDo == SHUTDOWN {
-				return SHUTDOWN, err
-			}
-			if err != nil {
-				return CONTINUE, err
+			cmd.Args = state.Argv
+			cmd.IsBackGround = isBackGround
+			cmd.Closer = pipeOut
+			whatToDo, err := cmd.Spawnvp()
+			if whatToDo == SHUTDOWN || err != nil {
+				return whatToDo, err
 			}
 		}
 	}
