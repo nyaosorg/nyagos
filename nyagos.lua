@@ -21,10 +21,7 @@ nyagos.alias = setmetatable({},{
 
 function x(s)
     for line in string.gmatch(s,'[^\r\n]+') do
-        local status,errmsg = nyagos.exec(line)
-        if not status then
-            nyagos.writerr(errmsg.."\n")
-        end
+        nyagos.exec(line)
     end
 end
 print( "Nihongo Yet Another GOing Shell " .. (nyagos.version or "") ..

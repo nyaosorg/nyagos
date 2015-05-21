@@ -33,9 +33,6 @@ nyagos.alias.cd=function(args)
         org_cd(args)
     else
         args[0] = "__cd__"
-        local status,errmsg = nyagos.exec(args)
-        if not status then
-            nyagos.writerr(errmsg.."\n")
-        end
+        nyagos.exec(args)
     end
 end

@@ -112,6 +112,11 @@ func cmdExec(L *lua.Lua) int {
 		_, err = interpreter.New().Interpret(statement)
 	}
 	if err != nil {
+		var out io.Writer = os.Stderr
+		if cmd, cmdOk := LuaInstanceToCmd[L.State()]; cmdOk {
+			out = cmd.Stderr
+		}
+		fmt.Fprintln(out, err)
 		return L.Push(nil, err)
 	}
 	return L.Push(true)
