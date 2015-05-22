@@ -13,12 +13,6 @@ local fsObj = nyagos.ole.create_object_utf8('Scripting.FileSystemObject')
 nyagos.fsObj = fsObj
 local nyoleVer = fsObj:GetFileVersion(nyagos.ole.dll_utf8)
 
-nyagos.alias = setmetatable({},{
-    __call=function(t,k,v) nyagos.setalias(k,v) end,
-    __newindex=function(t,k,v) nyagos.setalias(k,v) end,
-    __index=function(t,k) return nyagos.getalias(k,v) end
-})
-
 function x(s)
     for line in string.gmatch(s,'[^\r\n]+') do
         nyagos.exec(line)

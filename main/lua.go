@@ -105,6 +105,16 @@ func SetLuaFunctions(this *lua.Lua) {
 	this.Push(nyagos_table)
 	this.SetGlobal("nyagos")
 
+	if err := this.LoadString(`nyagos.alias = setmetatable({},{
+		__call=function(t,k,v) nyagos.setalias(k,v) end,
+		__newindex=function(t,k,v) nyagos.setalias(k,v) end,
+		__index=function(t,k) return nyagos.getalias(k,v) end
+	})`); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	} else if err = this.Call(0, 0); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+	}
+
 	// replace os.getenv
 	this.GetGlobal("os")           // +1
 	this.PushGoFunction(cmdGetEnv) // +2
