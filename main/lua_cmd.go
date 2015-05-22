@@ -259,14 +259,11 @@ func cmdGlob(L *lua.Lua) int {
 		if list == nil || err != nil {
 			result = append(result, wildcard)
 		} else {
-			for _, val := range list {
-				result = append(result, val)
-			}
+			result = append(result, list...)
 		}
 	}
 	L.NewTable()
 	for i := 0; i < len(result); i++ {
-		print(result[i])
 		L.PushString(result[i])
 		L.RawSetI(-2, lua.Integer(i+1))
 	}
