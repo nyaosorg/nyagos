@@ -6,6 +6,7 @@
 * cdlnk.lua: `cd SHORTCUT.LNK` can work.
 * When su and clone fails with permission error, retry with %COMSPEC% /c NYAGOS.EXE
 * Included lua.exe and lua53.dll are replaced from our building ones to luabinaries ones.
+* lua-function nyagos.glob() excepts more than one wildcard patterns.
 
 Bugfix
 -------

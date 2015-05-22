@@ -224,7 +224,7 @@ Otherwise status is false and error is error-message.
 It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
 When error occures, OUTPUT is set `nil`.
 
-### `WD = getwd()`
+### `WD = nyaos.getwd()`
 
 Get current working directory.
 
@@ -244,9 +244,9 @@ It converts UTF8 string to the current code page multibyte string.
 
 It converts the current codepage multibyte string to UTF8 string.
 
-### `files = nyagos.glob("WILDCARD-PATTERN")`
+### `FILES = nyagos.glob("WILDCARD-PATTERN1","WILDCARD-PATTERN2"...)`
 
-It expands the wildcard pattern to table contains filenames.
+It returns the table which includes files matching the wildcard pattern(s).
 
 ### `path = nyagos.pathjoin('path','to','where'...)`
 

@@ -6,6 +6,7 @@
 * cdlnk.lua: `cd ショートカットファイル` が機能するようにした
 * su や clone がアクセスエラーで失敗した時、%COMSPEC% /c NYAGOS.EXE でリトライするようにした
 * 同梱の lua.exe,lua53.dll を野良ビルド版から、LuaBinaries版へ差し替えた
+* nyagos.glob 関数が複数のワイルドカード文字列を引数に取れるようにした
 
 虫繕い
 ------
