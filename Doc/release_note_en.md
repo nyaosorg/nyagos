@@ -7,6 +7,8 @@
 * When su and clone fails with permission error, retry with %COMSPEC% /c NYAGOS.EXE
 * Included lua.exe and lua53.dll are replaced from our building ones to luabinaries ones.
 * lua-function nyagos.glob() excepts more than one wildcard patterns.
+* Add lua-command `trash` which throw files Windows' trashbox.
+* NYOLE.DLL gets requred the version 0.0.0.5 or later (which is attached)
 
 Bugfix
 -------

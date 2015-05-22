@@ -7,6 +7,8 @@
 * su や clone がアクセスエラーで失敗した時、%COMSPEC% /c NYAGOS.EXE でリトライするようにした
 * 同梱の lua.exe,lua53.dll を野良ビルド版から、LuaBinaries版へ差し替えた
 * nyagos.glob 関数が複数のワイルドカード文字列を引数に取れるようにした
+* Luaコマンド trash 追加(ファイルをゴミ箱に移動する)
+* 使用する nyole.dll を 0.0.0.5 へ変更
 
 虫繕い
 ------
