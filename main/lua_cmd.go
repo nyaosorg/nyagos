@@ -249,26 +249,28 @@ func cmdUtoA(L *lua.Lua) int {
 }
 
 func cmdGlob(L *lua.Lua) int {
-	if !L.IsString(-1) {
-		return 0
-	}
-	wildcard, wildcardErr := L.ToString(-1)
-	if wildcardErr != nil {
-		L.PushNil()
-		L.PushString(wildcardErr.Error())
-		return 2
-	}
-	list, err := dos.Glob(wildcard)
-	if err != nil {
-		return L.Push(nil, err)
-	} else {
-		L.NewTable()
-		for i := 0; i < len(list); i++ {
-			L.PushString(list[i])
-			L.RawSetI(-2, lua.Integer(i+1))
+	result := make([]string, 0)
+	for i := 1; ; i++ {
+		wildcard, wildcardErr := L.ToString(i)
+		if wildcard == "" || wildcardErr != nil {
+			break
 		}
-		return 1
+		list, err := dos.Glob(wildcard)
+		if list == nil || err != nil {
+			result = append(result, wildcard)
+		} else {
+			for _, val := range list {
+				result = append(result, val)
+			}
+		}
 	}
+	L.NewTable()
+	for i := 0; i < len(result); i++ {
+		print(result[i])
+		L.PushString(result[i])
+		L.RawSetI(-2, lua.Integer(i+1))
+	}
+	return 1
 }
 
 func cmdGetHistory(this *lua.Lua) int {
