@@ -171,11 +171,6 @@ NYAGOS を終了します。
 コマンド名として「`source`」の代わりに「`.`」(ドット)一文字も使う
 ことができます。
 
-### `lua_e "luaコマンド"`
-
-lua のコマンドをインラインで実行します。
-本コマンドは nyagos.lua で定義された Lua 関数が実体です。
-
 ## 起動処理
 
 1. 起動時に nyagos.exe と同じフォルダの nyagos.lua を読み込みます。nyagos.lua はLua で記述されており、ここから更にホームディレクトリ(%HOME% or %USERPROFILE%)の .nyagos の Lua コードを読み込みます(nyagos拡張は後述)。ユーザカスタマイズは、この .nyagos を編集して行うことができます。
