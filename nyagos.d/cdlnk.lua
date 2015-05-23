@@ -1,3 +1,5 @@
+nyagos.ole = nyagos.ole or require("nyole")
+local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
 local wshObj = nyagos.ole.create_object_utf8("WScript.Shell")
 
 local function getfolder(arg1)
@@ -6,14 +8,14 @@ local function getfolder(arg1)
         return arg1
     end
     local path = shortcut1.TargetPath
-    if nyagos.fsObj:FolderExists(path) then
+    if fsObj:FolderExists(path) then
         return path
     end
     path = shortcut1.WorkingDirectory
-    if nyagos.fsObj:FolderExists(path) then
+    if fsObj:FolderExists(path) then
         return path
     end
-    path = nyagos.fsObj:GetParentFolderName(shortcut1.TargetPath)
+    path = fsObj:GetParentFolderName(shortcut1.TargetPath)
     if nyagos.fsObj:FolderExists(path) then
         return path
     end

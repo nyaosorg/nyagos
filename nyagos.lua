@@ -8,17 +8,9 @@ if nyagos == nil then
     os.exit(0)
 end
 
-nyagos.ole = require('nyole')
-local fsObj = nyagos.ole.create_object_utf8('Scripting.FileSystemObject')
-nyagos.fsObj = fsObj
-local nyoleVer = fsObj:GetFileVersion(nyagos.ole.dll_utf8)
-
-print( "Nihongo Yet Another GOing Shell " .. (nyagos.version or "") ..
-    " Powered by " ..  _VERSION .. " & nyole.dll ".. nyoleVer)
-if not nyagos.version or string.len(nyagos.version) <= 0 then
-    print("Build at "..(nyagos.stamp or "").." with commit "..(nyagos.commit or ""))
-end
+print("Nihongo Yet Another GOing Shell " .. (nyagos.version or nyagos.stamp))
 print("Copyright (c) 2014,2015 HAYAMA_Kaoru and NYAOS.ORG")
+print("Powered by ".._VERSION )
 
 local function include(fname)
     local chank,err=loadfile(fname)
@@ -34,19 +26,14 @@ local function include(fname)
     end
 end
 
-local dotFolderPath = string.gsub(nyagos.exe,"%.exe$",".d")
-local dotFolder = fsObj:GetFolder(dotFolderPath)
-local files = dotFolder:files()
-for p in files:__iter__() do
-    if string.match(p.Name,"%.[lL][uU][aA]$") then
-        local path = nyagos.fsObj:BuildPath(dotFolderPath,p.Name)
-        include(path)
-    end
+local addons=nyagos.glob((nyagos.exe:gsub("%.[eE][xX][eE]$",".d\\*.lua")))
+for i=1,#addons do
+    include(addons[i])
 end
 
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
-    local dotfile = fsObj:BuildPath(home,'.nyagos')
+    local dotfile = nyagos.pathjoin(home,'.nyagos')
     local fd=io.open(dotfile)
     if fd then
         fd:close()
