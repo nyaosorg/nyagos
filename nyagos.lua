@@ -8,9 +8,9 @@ if nyagos == nil then
     os.exit(0)
 end
 
-print("Nihongo Yet Another GOing Shell " .. (nyagos.version or nyagos.stamp))
+print(string.format("Nihongo Yet Another GOing Shell %s Powered by %s",
+      (nyagos.version or "v"..nyagos.stamp), _VERSION ))
 print("Copyright (c) 2014,2015 HAYAMA_Kaoru and NYAOS.ORG")
-print("Powered by ".._VERSION )
 
 local function include(fname)
     local chank,err=loadfile(fname)
