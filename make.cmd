@@ -13,7 +13,7 @@ goto build
 
 :build
         pushd "%~dp0main"
-        for %%I in (windres.exe) do if not "%%~$PATH:I" == "" lua make_rc.lua | windres.exe --output-format=coff -o nyagos.syso
+        for %%I in (windres.exe) do if not "%%~$PATH:I" == "" cscript //nologo make_rc.js | windres.exe --output-format=coff -o nyagos.syso
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
         popd
         goto end
