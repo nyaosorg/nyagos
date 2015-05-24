@@ -1,4 +1,3 @@
-@echo off
 setlocal
 
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
