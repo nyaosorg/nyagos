@@ -1,20 +1,21 @@
-* Single quatations like UNIX-Shell
-* Add lua-function `nyagos.getkey()`/`nyagos.getalias()`
-* Rename lua-function `nyagos.alias` to `nyagos.setalias()`
-* nyagos.lua: make alias-defining-table `nyagos.alias`.
-* nyagos.lua: `x("COMMAND")` prints error-message.
-* cdlnk.lua: `cd SHORTCUT.LNK` can work.
-* When su and clone fails with permission error, retry with %COMSPEC% /c NYAGOS.EXE
-* Included lua.exe and lua53.dll are replaced from our building ones to luabinaries ones.
-* lua-function nyagos.glob() excepts more than one wildcard patterns.
-* Add lua-command `trash` which throw files Windows' trashbox.
-* NYOLE.DLL gets requred the version 0.0.0.5 or later (which is attached)
+* Supported single-quatations like UNIX-Shell
+* Added lua-function `nyagos.getkey()`/`nyagos.getalias()`
+* Renamed lua-function `nyagos.alias` to `nyagos.setalias()`
+* Made alias-defining-table `nyagos.alias`. (nyagos.lua)
+* Changed the output of `x("COMMAND")` from stdout to stderr.
+* Added `cdlnk.lua` which enables `cd SHORTCUT.LNK`.
+* Improved `su` and `clone` to retry as `%COMSPEC% /c NYAGOS.EXE` when error occued.
+* Replaced lua.exe and lua53.dll to LuaBinaries' version.
+* Improved lua-function nyagos.glob to receives more than one wildcards.
+* Added `trash.lua` which provides `trash` command which throws files Windows' trashbox.
+* Replaced the bundled NYOLE.DLL 0.0.0.4 to 0.0.0.5 which trash.lua requires.
+* Enabled NYAGOS.EXE run without NYOLE.DLL (trash.lua & cdlnk.lua are disabled)
 
 Bugfix
 -------
-* Fix #66 `echo a>a` makes a empty file named `aa`
-* Fix suffix.lua problem (#69 Thx hattya)
-* Fix panic when nyagos.argsfilter returns empty array(#68 Thx hattya)
+* Fixed #66 `echo a>a` makes a empty file named `aa`
+* Fixed suffix.lua problem (#69 Thx hattya)
+* Fixed panic when nyagos.argsfilter returns empty array(#68 Thx hattya)
 * Reset to default color after ls (#67 Thx hattya)
 
 NYAGOS 4.0.7\_5
