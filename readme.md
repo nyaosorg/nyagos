@@ -86,6 +86,7 @@ Acknowledgement
 * [NSP-0123456](https://github.com/NSP-0123456)
 * [hokorobi](https://github.com/hokorobi)
 * [amuramatsu](https://github.com/amuramatsu)
+* [spiegel-im-spiegel](https://github.com/spiegel-im-spiegel)
 
 Author
 ------
