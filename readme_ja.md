@@ -49,6 +49,7 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
 
 * [go1.4.2 windows/386](http://golang.org)
 * [LuaBinaries(5.3 for Win32)](http://sourceforge.net/projects/luabinaries/files/5.3/Tools%20Executables/lua-5.3_Win32_bin.zip)
+* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (任意です。無い場合、幾つかの Lua 拡張が動きませんが、nyagos.exe 自体は動作します)
 
 `%GOPATH%` にて
 
@@ -56,6 +57,10 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
     cd nyagos
 
     unzip PATH\TO\lua-5.3_Win32_bin.zip lua53.dll
+
+NYOLE.DLL がある場合
+
+    unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
 
 最後に:
 
