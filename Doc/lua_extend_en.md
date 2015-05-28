@@ -80,6 +80,11 @@ Inserting Interpreter-name
 To append the new associtation between the suffix and interpreter,
 write
 
-    suffix(".xxx",{"INTERPRETERNAME","OPTION" ... })
+    suffix.xxx = "INTERPRETERNAME"
+    suffix.xxx = { "INTERPRETERNAME","OPTION" ... }
+    suffix[".xxx] = "INTERPRETERNAME"
+    suffix[".xxx] = { "INTERPRETERNAME","OPTION" ... }
+    suffix(".xxx","INTERPRETERNAME")
+    suffix(".xxx",{ "INTERPRETERNAME","OPTION" ... })
 
 in `%USERPROFILE%\\.nyagos`

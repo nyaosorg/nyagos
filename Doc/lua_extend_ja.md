@@ -80,6 +80,11 @@ UAC 昇格させて、コマンドを実行します。
 拡張子とインタプレタの関連付けを追加したい時は、
 `%USERPROFILE%\.nyagos` に
 
+    suffix.拡張子 = "INTERPRETERNAME"
+    suffix.拡張子 = {"INTERPRETERNAME","OPTION" ... }
+    suffix[".拡張子"] = "INTERPRETERNAME"
+    suffix[".拡張子"] = {"INTERPRETERNAME","OPTION" ... }
+    suffix(".拡張子","INTERPRETERNAME")
     suffix(".拡張子",{"INTERPRETERNAME","OPTION" ... })
 
 という記述を追加します。
