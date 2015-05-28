@@ -209,6 +209,8 @@ nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 現在は以下のような関数が使用できます。
 
 ### `nyagos.setalias("エイリアス名","置換コード")`
+### `nyagos.alias["エイリアス名"] = "置換コード"`
+### `nyagos.alias.エイリアス名 = "置換コード"`
 
 エイリアスを設定します。nyagos.lua 内で、これを簡略した
 
@@ -220,15 +222,21 @@ nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 使用可能です。
 
 ### `nyagos.setalias("エイリアス名",function(args)～end)`
+### `nyagos.alias["エイリアス名"] = function(args)～end`
+### `nyagos.alias.エイリアス名 = function(args)～end`
 
 Lua 関数をエイリアスコマンドとして呼び出せるようにします。
 args には全引数を格納したテーブルが入ります。
 
-### `nyagos.getalias("エイリアス名")`
+### `VALUE = nyagos.getalias("エイリアス名")`
+### `VALUE = nyagos.alias["エイリアス名"]`
+### `VALUE = nyagos.alias.エイリアス名`
 
 現在 "エイリアス名" に設定されている文字列もしくは Lua 関数が返します。
 
 ### `nyagos.setenv("環境変数名","変数内容")`
+### `nyagos.env["環境変数名"] = "変数内容"`
+### `nyagos.env.環境変数名 = "変数内容"`
 
 環境変数を設定します。nyagos.lua 内で、これを簡略した
 

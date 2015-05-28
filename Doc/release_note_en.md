@@ -1,3 +1,5 @@
+* Add the lua-table `nyagos.env`
+
 NYAGOS 4.0.8\_0
 ===============
 * Supported single-quatations like UNIX-Shell

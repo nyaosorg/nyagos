@@ -194,6 +194,7 @@ These suffix are available.
 ## Lua extension
 
 ### `nyagos.setalias("NAME","REPLACED-STRING")`
+### `nyagos.alias.NAME = "REPLACED-STRING"`
 
 It defines an alias. These macros are available on "REPLACE-STRING".
 
@@ -201,15 +202,26 @@ It defines an alias. These macros are available on "REPLACE-STRING".
 * `$\*` ... all arguments
 
 ### `nyagos.setalias("NAME",function(ARGS)...end)`
+### `nyagos.alias.NAME = function(ARGS)...end`
 
 It assigns the function to the command-name `"NAME"`.
 `ARGS` is the table: { 1stArgument,2nd,3rd,... }
 
-### `nyagos.getalias("NAME")`
+### `VALUE = nyagos.getalias("NAME")`
+### `VALUE = nyagos.alias["NAME"]`
+### `VALUE = nyagos.alias.NAME`
 
 It returns the function definition assigned NAME.
 
+### `VALUE = nyagos.getenv("NAME")`
+### `VALUE = nyagos.env["NAME"]`
+### `VALUE = nyagos.env.NAME`
+
+It returns the value of the environment variable named NAME.
+
 ### `nyagos.setenv("NAME","VALUE")`
+### `nyagos.env["NAME"] = VALUE`
+### `nyagos.env.NAME = VALUE`
 
 It changes the environment variable.
 
