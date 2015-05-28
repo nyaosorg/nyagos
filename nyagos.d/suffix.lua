@@ -1,6 +1,6 @@
 nyagos.suffixes={}
 
-function suffix(suffix,cmdline)
+local function _suffix(suffix,cmdline)
     local suffix=string.lower(suffix)
     if string.sub(suffix,1,1)=='.' then
         suffix = string.sub(suffix,2)
@@ -14,6 +14,12 @@ function suffix(suffix,cmdline)
     end
     nyagos.suffixes[suffix]=cmdline
 end
+
+suffix = setmetatable({},{
+    __call = function(t,k,v) _suffix(k,v) return end,
+    __newindex = function(t,k,v) _suffix(k,v) return end,
+    __index = function(t,k) return nyagos.suffixes[k] end 
+})
 
 local org_filter=nyagos.argsfilter
 nyagos.argsfilter = function(args)
@@ -36,35 +42,37 @@ nyagos.argsfilter = function(args)
         return
     end
     local newargs={}
-    for i=1,#cmdline do
-        newargs[i-1]=cmdline[i]
+    if type(cmdline) == 'table' then
+        for i=1,#cmdline do
+            newargs[i-1]=cmdline[i]
+        end
+    elseif type(cmdline) == 'string' then
+        newargs[0] = cmdline
     end
-    newargs[#cmdline] = path
+    newargs[#newargs+1] = path
     for i=1,#args do
         newargs[#newargs+1] = args[i]
     end
     return newargs
 end
 
-alias{
-    suffix=function(args)
-        if #args < 2 then
-            print "Usage: suffix SUFFIX COMMAND"
-        else
-            local cmdline={}
-            for i=2,#args do
-                cmdline[#cmdline+1]=args[i]
-            end
-            suffix(args[1],cmdline)
+nyagos.alias.suffix = function(args)
+    if #args < 2 then
+        print "Usage: suffix SUFFIX COMMAND"
+    else
+        local cmdline={}
+        for i=2,#args do
+            cmdline[#cmdline+1]=args[i]
         end
+        suffix(args[1],cmdline)
     end
-}
+end
 
-suffix(".pl",{"perl"})
-suffix(".py",{"ipy"})
-suffix(".rb",{"ruby"})
-suffix(".lua",{"lua"})
-suffix(".awk",{"awk","-f"})
-suffix(".js",{"cscript","//nologo"})
-suffix(".vbs",{"cscript","//nologo"})
-suffix(".ps1",{"powershell","-file"})
+suffix.pl="perl"
+suffix.py="ipy"
+suffix.rb="ruby"
+suffix.lua="lua"
+suffix.awk={"awk","-f"}
+suffix.js={"cscript","//nologo"}
+suffix.vbs={"cscript","//nologo"}
+suffix.ps1={"powershell","-file"}
