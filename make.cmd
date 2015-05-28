@@ -42,7 +42,7 @@ goto build
 
 :package
         for /F %%I in ('nyagos -e "print(nyagos.version or (string.gsub(nyagos.stamp,[[/]],[[]])))"') do set VERSION=%%I
-        zip -9 "nyagos-%VERSION%.zip" nyagos.exe lua53.dll nyole.dll lua.exe nyagos.lua .nyagos specialfolders.js lnk.js makeicon.cmd nyagos.d\*.lua license.txt readme_ja.md readme.md
+        zip -9 "nyagos-%VERSION%.zip" nyagos.exe lua53.dll nyole.dll nyagos.lua .nyagos specialfolders.js lnk.js makeicon.cmd nyagos.d\*.lua license.txt readme_ja.md readme.md
         zip -9j "nyagos-%VERSION%.zip" Doc\nyagos_*.md
         goto end
 
