@@ -1,3 +1,5 @@
+NYAGOS 4.0.8\_0
+===============
 * Supported single-quatations like UNIX-Shell
 * Added lua-function `nyagos.getkey()`/`nyagos.getalias()`
 * Renamed lua-function `nyagos.alias` to `nyagos.setalias()`
@@ -5,11 +7,12 @@
 * Changed the output of `x("COMMAND")` from stdout to stderr.
 * Added `cdlnk.lua` which enables `cd SHORTCUT.LNK`.
 * Improved `su` and `clone` to retry as `%COMSPEC% /c NYAGOS.EXE` when error occued.
-* Replaced lua.exe and lua53.dll to LuaBinaries' version.
 * Improved lua-function nyagos.glob to receives more than one wildcards.
 * Added `trash.lua` which provides `trash` command which throws files Windows' trashbox.
 * Replaced the bundled NYOLE.DLL 0.0.0.4 to 0.0.0.5 which trash.lua requires.
 * Enabled NYAGOS.EXE run without NYOLE.DLL (trash.lua & cdlnk.lua are disabled)
+* Replaced lua53.dll to LuaBinaries' version.
+* Unbundled lua.exe from zip-file.
 
 Bugfix
 -------

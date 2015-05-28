@@ -1,3 +1,5 @@
+NYAGOS 4.0.8\_0
+===============
 * UNIX的なシングルクォーテーションをサポート
 * Lua関数 `nyagos.getkey()`/`nyagos.getalias()` を追加
 * nyagos.alias を `nyagos.setalias` に改名
@@ -5,10 +7,11 @@
 * nyagos.lua: `x("COMMAND")` がエラーを表示するようにした
 * cdlnk.lua: `cd ショートカットファイル` が機能するようにした
 * su や clone がアクセスエラーで失敗した時、%COMSPEC% /c NYAGOS.EXE でリトライするようにした
-* 同梱の lua.exe,lua53.dll を野良ビルド版から、LuaBinaries版へ差し替えた
 * nyagos.glob 関数が複数のワイルドカード文字列を引数に取れるようにした
 * Luaコマンド trash 追加(ファイルをゴミ箱に移動する)
 * 使用する nyole.dll を 0.0.0.5 へ変更
+* 同梱の lua53.dll を野良ビルド版から、LuaBinaries版へ差し替えた
+* lua.exe の同梱をやめた
 
 虫繕い
 ------
