@@ -38,6 +38,6 @@ func GetScreenBufferInfo() *consoleScreenBufferInfo {
 }
 
 func (this *consoleScreenBufferInfo) ViewSize() (int, int) {
-	return int(this.Window.Right - this.Window.Left),
-		int(this.Window.Bottom - this.Window.Top)
+	return int(this.Window.Right-this.Window.Left) + 1,
+		int(this.Window.Bottom-this.Window.Top) + 1
 }
