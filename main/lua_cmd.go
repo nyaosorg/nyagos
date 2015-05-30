@@ -394,7 +394,8 @@ func cmdGetKey(L *lua.Lua) int {
 }
 
 func cmdGetViewWidth(L *lua.Lua) int {
-	width, _ := conio.GetScreenBufferInfo().ViewSize()
+	width, height := conio.GetScreenBufferInfo().ViewSize()
 	L.PushInteger(lua.Integer(width))
-	return 1
+	L.PushInteger(lua.Integer(height))
+	return 2
 }
