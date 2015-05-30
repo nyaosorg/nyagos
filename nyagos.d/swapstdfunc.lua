@@ -1,8 +1,8 @@
 io.getenv = nyagos.getenv
 io.setenv = nyagos.setenv
 
-function nyagos.echo(s)
-    nyagos.write(s)
+function nyagos.echo(...)
+    nyagos.write(...)
     nyagos.write("\n")
 end
 
