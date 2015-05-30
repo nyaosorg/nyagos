@@ -401,6 +401,14 @@ C言語の access 関数と同じです。
 `nyagos.completion_hook` は更新した候補リストのテーブルか nil を
 戻り値としてください。nil は、更新しない c.list と等価です。
 
+### `nyagos.on_command_not_found = function(args) ... end`
+
+定義されていると、コマンドが見付からなかった時に呼び出されます。
+コマンド名とパラメータが args[0] ～ args[#args] にセットされます。
+関数が nil か false を返した場合は nyagos.exe は通常のエラーを
+表示します。
+
+
 ### `nyagos.getkey()`
 
 入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
