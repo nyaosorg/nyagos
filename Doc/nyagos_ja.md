@@ -408,9 +408,9 @@ C言語の access 関数と同じです。
 関数が nil か false を返した場合は nyagos.exe は通常のエラーを
 表示します。
 
-### `nyagos.getviewwidth()`
+### `WIDTH,HEIGHT = nyagos.getviewwidth()`
 
-ターミナルの横幅を返します。
+ターミナルの横幅と高さを返します。
 
 ### `nyagos.getkey()`
 

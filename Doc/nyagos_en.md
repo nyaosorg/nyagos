@@ -362,9 +362,9 @@ usual.
 
 It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
 
-### `nyagos.getviewwidth()`
+### `WIDTH,HEIGHT=nyagos.getviewwidth()`
 
-It returns the width of the terminal.
+It returns the width and height of the terminal.
 
 ### `nyagos.exe`
 
