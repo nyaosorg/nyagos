@@ -1,11 +1,25 @@
 package interpreter
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"os/exec"
 	"regexp"
 )
+
+type CommandNotFound struct {
+	Name string
+	Err  error
+}
+
+func (this CommandNotFound) Stringer() string {
+	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", this.Name)
+}
+
+func (this CommandNotFound) Error() string {
+	return this.Stringer()
+}
 
 type NextT int
 
@@ -115,6 +129,8 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 				} else {
 					err = this.Run()
 				}
+			} else {
+				err = &CommandNotFound{this.Args[0], err}
 			}
 		}
 	}
