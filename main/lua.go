@@ -178,4 +178,28 @@ func SetLuaFunctions(this *lua.Lua) {
 		}
 		return orgArgHook(newargs)
 	})
+
+	orgOnCommandNotFound := interpreter.OnCommandNotFound
+	interpreter.OnCommandNotFound = func(inte *interpreter.Interpreter, err error) error {
+		this.GetGlobal("nyagos")
+		this.GetField(-1, "on_command_not_found")
+		this.Remove(-2) // remove nyagos.
+		if this.IsFunction(-1) {
+			this.NewTable()
+			for key, val := range inte.Args {
+				this.PushString(val)
+				this.RawSetI(-2, lua.Integer(key))
+			}
+			this.Call(1, 1)
+			defer this.Pop(1)
+			if this.ToBool(-1) {
+				return nil
+			} else {
+				return orgOnCommandNotFound(inte, err)
+			}
+		} else {
+			this.Pop(1)
+			return orgOnCommandNotFound(inte, err)
+		}
+	}
 }
