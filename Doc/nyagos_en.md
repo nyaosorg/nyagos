@@ -362,6 +362,10 @@ usual.
 
 It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
 
+### `nyagos.getviewwidth()`
+
+It returns the width of the terminal.
+
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.
