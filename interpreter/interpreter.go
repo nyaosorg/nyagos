@@ -95,6 +95,11 @@ func SetHook(hook_ HookT) (rv HookT) {
 	return
 }
 
+var OnCommandNotFound = func(this *Interpreter, err error) error {
+	err = &CommandNotFound{this.Args[0], err}
+	return err
+}
+
 var errorStatusPattern = regexp.MustCompile("^exit status ([0-9]+)")
 var ErrorLevel string
 
@@ -130,7 +135,7 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 					err = this.Run()
 				}
 			} else {
-				err = &CommandNotFound{this.Args[0], err}
+				err = OnCommandNotFound(this, err)
 			}
 		}
 	}
