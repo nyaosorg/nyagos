@@ -40,9 +40,9 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 	} else {
 		rv.List, err = listUpCommands(rv.Word)
 	}
-	L, Lok := this.Session.Tag.(*lua.Lua)
+	L, Lok := this.Session.Tag.(lua.Lua)
 	if !Lok {
-		panic("conio.LineEditor.Tag is not *lua.Lua")
+		panic("conio.LineEditor.Tag is not lua.Lua")
 	}
 	L.GetGlobal("nyagos")
 	L.GetField(-1, "completion_hook")

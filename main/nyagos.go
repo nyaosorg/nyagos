@@ -27,7 +27,7 @@ var commit string
 var version string
 var ansiOut io.Writer
 
-func nyagosPrompt(L *lua.Lua) int {
+func nyagosPrompt(L lua.Lua) int {
 	template, err := L.ToString(-1)
 	if err != nil {
 		template = "[" + err.Error() + "]"
@@ -44,7 +44,7 @@ func nyagosPrompt(L *lua.Lua) int {
 }
 
 func printPrompt(this *conio.LineEditor) int {
-	L, ok := this.Tag.(*lua.Lua)
+	L, ok := this.Tag.(lua.Lua)
 	if !ok {
 		panic("printPrompt conio.LineEditor.Tag is not lua.Lua")
 	}

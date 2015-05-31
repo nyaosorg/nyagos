@@ -40,34 +40,32 @@ func CGoStringN(p, length uintptr) string {
 	return string(CGoBytes(p, length))
 }
 
-type Lua struct {
-	lua uintptr
-}
+type Lua uintptr
 
 var luaL_newstate = luaDLL.NewProc("luaL_newstate")
 
-func New() *Lua {
+func New() Lua {
 	lua, _, _ := luaL_newstate.Call()
-	return &Lua{lua}
+	return Lua(lua)
 }
 
-func (this *Lua) State() uintptr {
-	return this.lua
+func (this Lua) State() uintptr {
+	return uintptr(this)
 }
 
 var luaL_openlibs = luaDLL.NewProc("luaL_openlibs")
 
-func (this *Lua) OpenLibs() {
+func (this Lua) OpenLibs() {
 	luaL_openlibs.Call(this.State())
 }
 
 var lua_close = luaDLL.NewProc("lua_close")
 
-func (this *Lua) Close() {
+func (this Lua) Close() {
 	lua_close.Call(this.State())
 }
 
-func (this *Lua) Source(fname string) error {
+func (this Lua) Source(fname string) error {
 	if err := this.Load(fname); err != nil {
 		return err
 	}
@@ -76,49 +74,49 @@ func (this *Lua) Source(fname string) error {
 
 var lua_settable = luaDLL.NewProc("lua_settable")
 
-func (this *Lua) SetTable(index int) {
+func (this Lua) SetTable(index int) {
 	lua_settable.Call(this.State(), uintptr(index))
 }
 
 var lua_gettable = luaDLL.NewProc("lua_gettable")
 
-func (this *Lua) GetTable(index int) {
+func (this Lua) GetTable(index int) {
 	lua_gettable.Call(this.State(), uintptr(index))
 }
 
 var lua_setmetatable = luaDLL.NewProc("lua_setmetatable")
 
-func (this *Lua) SetMetaTable(index int) {
+func (this Lua) SetMetaTable(index int) {
 	lua_setmetatable.Call(this.State(), uintptr(index))
 }
 
 var lua_gettop = luaDLL.NewProc("lua_gettop")
 
-func (this *Lua) GetTop() int {
+func (this Lua) GetTop() int {
 	rv, _, _ := lua_gettop.Call(this.State())
 	return int(rv)
 }
 
 var lua_settop = luaDLL.NewProc("lua_settop")
 
-func (this *Lua) SetTop(index int) {
+func (this Lua) SetTop(index int) {
 	lua_settop.Call(this.State(), uintptr(index))
 }
 
-func (this *Lua) Pop(n uint) {
+func (this Lua) Pop(n uint) {
 	this.SetTop(-int(n) - 1)
 }
 
 var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
 
-func (this *Lua) NewUserData(size uintptr) unsafe.Pointer {
+func (this Lua) NewUserData(size uintptr) unsafe.Pointer {
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
 	return unsafe.Pointer(area)
 }
 
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
 
-func (this *Lua) RawSetI(index int, value Integer) {
+func (this Lua) RawSetI(index int, value Integer) {
 	params := make([]uintptr, 0, 4)
 	params = append(params, this.State(), uintptr(index))
 	params = value.Expand(params)
@@ -135,7 +133,7 @@ func lua_remove_Call(state uintptr, index int) {
 	lua_settop.Call(state, ^uintptr(1)) // ^1 == -2
 }
 
-func (this *Lua) Remove(index int) {
+func (this Lua) Remove(index int) {
 	// 5.2
 	// lua_remove.Call(this.State(), uintptr(index))
 	// 5.3
@@ -144,13 +142,13 @@ func (this *Lua) Remove(index int) {
 
 var lua_replace = luaDLL.NewProc("lua_replace")
 
-func (this *Lua) Replace(index int) {
+func (this Lua) Replace(index int) {
 	lua_replace.Call(this.State(), uintptr(index))
 }
 
 var lua_setglobal = luaDLL.NewProc("lua_setglobal")
 
-func (this *Lua) SetGlobal(str string) {
+func (this Lua) SetGlobal(str string) {
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -160,7 +158,7 @@ func (this *Lua) SetGlobal(str string) {
 
 var lua_setfield = luaDLL.NewProc("lua_setfield")
 
-func (this *Lua) SetField(index int, str string) {
+func (this Lua) SetField(index int, str string) {
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -170,7 +168,7 @@ func (this *Lua) SetField(index int, str string) {
 
 var lua_getfield = luaDLL.NewProc("lua_getfield")
 
-func (this *Lua) GetField(index int, str string) {
+func (this Lua) GetField(index int, str string) {
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -180,7 +178,7 @@ func (this *Lua) GetField(index int, str string) {
 
 var lua_getglobal = luaDLL.NewProc("lua_getglobal")
 
-func (this *Lua) GetGlobal(str string) {
+func (this Lua) GetGlobal(str string) {
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -190,13 +188,13 @@ func (this *Lua) GetGlobal(str string) {
 
 var lua_createtable = luaDLL.NewProc("lua_createtable")
 
-func (this *Lua) NewTable() {
+func (this Lua) NewTable() {
 	lua_createtable.Call(this.State(), 0, 0)
 }
 
 var luaL_loadfilex = luaDLL.NewProc("luaL_loadfilex")
 
-func (this *Lua) Load(fname string) error {
+func (this Lua) Load(fname string) error {
 	cfname, err := syscall.BytePtrFromString(fname)
 	if err != nil {
 		return err
@@ -217,7 +215,7 @@ func (this *Lua) Load(fname string) error {
 
 var luaL_loadstring = luaDLL.NewProc("luaL_loadstring")
 
-func (this *Lua) LoadString(code string) error {
+func (this Lua) LoadString(code string) error {
 	codePtr, err := syscall.BytePtrFromString(code)
 	if err != nil {
 		return err
@@ -236,7 +234,7 @@ func (this *Lua) LoadString(code string) error {
 
 var lua_pcallk = luaDLL.NewProc("lua_pcallk")
 
-func (this *Lua) Call(nargs, nresult int) error {
+func (this Lua) Call(nargs, nresult int) error {
 	rc, _, _ := lua_pcallk.Call(this.State(),
 		uintptr(nargs),
 		uintptr(nresult), 0, 0, 0)
@@ -257,6 +255,6 @@ func (this *Lua) Call(nargs, nresult int) error {
 
 var lua_len = luaDLL.NewProc("lua_len")
 
-func (this *Lua) Len(index int) {
+func (this Lua) Len(index int) {
 	lua_len.Call(this.State(), uintptr(index))
 }

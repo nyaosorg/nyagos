@@ -20,7 +20,7 @@ import (
 
 const alias_prefix = "nyagos.alias."
 
-func cmdSetAlias(L *lua.Lua) int {
+func cmdSetAlias(L lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
@@ -44,7 +44,7 @@ func cmdSetAlias(L *lua.Lua) int {
 	return L.Push(true)
 }
 
-func cmdGetAlias(L *lua.Lua) int {
+func cmdGetAlias(L lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
@@ -54,7 +54,7 @@ func cmdGetAlias(L *lua.Lua) int {
 	return 1
 }
 
-func cmdSetEnv(L *lua.Lua) int {
+func cmdSetEnv(L lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
@@ -71,7 +71,7 @@ func cmdSetEnv(L *lua.Lua) int {
 	return L.Push(true)
 }
 
-func cmdGetEnv(L *lua.Lua) int {
+func cmdGetEnv(L lua.Lua) int {
 	name, nameErr := L.ToString(1)
 	if nameErr != nil {
 		return L.Push(nil)
@@ -85,7 +85,7 @@ func cmdGetEnv(L *lua.Lua) int {
 	return 1
 }
 
-func cmdExec(L *lua.Lua) int {
+func cmdExec(L lua.Lua) int {
 	var err error
 	if L.IsTable(1) {
 		L.Len(1)
@@ -128,7 +128,7 @@ func (e *emptyWriter) Write(b []byte) (int, error) {
 	return len(b), nil
 }
 
-func cmdEval(L *lua.Lua) int {
+func cmdEval(L lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
 		return L.Push(nil, statementErr)
@@ -158,7 +158,7 @@ func cmdEval(L *lua.Lua) int {
 	return 1
 }
 
-func cmdWrite(L *lua.Lua) int {
+func cmdWrite(L lua.Lua) int {
 	var out io.Writer = os.Stdout
 	cmd, cmdOk := LuaInstanceToCmd[L.State()]
 	if cmdOk && cmd != nil && cmd.Stdout != nil {
@@ -167,7 +167,7 @@ func cmdWrite(L *lua.Lua) int {
 	return cmdWriteSub(L, out)
 }
 
-func cmdWriteErr(L *lua.Lua) int {
+func cmdWriteErr(L lua.Lua) int {
 	var out io.Writer = os.Stderr
 	cmd, cmdOk := LuaInstanceToCmd[L.State()]
 	if cmdOk && cmd != nil && cmd.Stderr != nil {
@@ -176,7 +176,7 @@ func cmdWriteErr(L *lua.Lua) int {
 	return cmdWriteSub(L, out)
 }
 
-func cmdWriteSub(L *lua.Lua, out io.Writer) int {
+func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	switch out.(type) {
 	case *os.File:
 		out = ansicolor.NewAnsiColorWriter(out)
@@ -195,7 +195,7 @@ func cmdWriteSub(L *lua.Lua, out io.Writer) int {
 	return L.Push(true)
 }
 
-func cmdGetwd(L *lua.Lua) int {
+func cmdGetwd(L lua.Lua) int {
 	wd, err := dos.Getwd()
 	if err == nil {
 		return L.Push(wd)
@@ -204,7 +204,7 @@ func cmdGetwd(L *lua.Lua) int {
 	}
 }
 
-func cmdWhich(L *lua.Lua) int {
+func cmdWhich(L lua.Lua) int {
 	if L.GetType(-1) != lua.LUA_TSTRING {
 		return 0
 	}
@@ -220,7 +220,7 @@ func cmdWhich(L *lua.Lua) int {
 	}
 }
 
-func cmdAtoU(L *lua.Lua) int {
+func cmdAtoU(L lua.Lua) int {
 	str, err := dos.AtoU(L.ToAnsiString(1))
 	if err == nil {
 		L.PushString(str)
@@ -230,7 +230,7 @@ func cmdAtoU(L *lua.Lua) int {
 	}
 }
 
-func cmdUtoA(L *lua.Lua) int {
+func cmdUtoA(L lua.Lua) int {
 	utf8, utf8err := L.ToString(1)
 	if utf8err != nil {
 		return L.Push(nil, utf8err)
@@ -248,7 +248,7 @@ func cmdUtoA(L *lua.Lua) int {
 	return 2
 }
 
-func cmdGlob(L *lua.Lua) int {
+func cmdGlob(L lua.Lua) int {
 	result := make([]string, 0)
 	for i := 1; ; i++ {
 		wildcard, wildcardErr := L.ToString(i)
@@ -270,7 +270,7 @@ func cmdGlob(L *lua.Lua) int {
 	return 1
 }
 
-func cmdGetHistory(this *lua.Lua) int {
+func cmdGetHistory(this lua.Lua) int {
 	if this.GetType(-1) == lua.LUA_TNUMBER {
 		val, err := this.ToInteger(-1)
 		if err != nil {
@@ -283,7 +283,7 @@ func cmdGetHistory(this *lua.Lua) int {
 	return 1
 }
 
-func cmdSetRuneWidth(this *lua.Lua) int {
+func cmdSetRuneWidth(this lua.Lua) int {
 	char, charErr := this.ToInteger(1)
 	if charErr != nil {
 		return this.Push(nil, charErr)
@@ -297,7 +297,7 @@ func cmdSetRuneWidth(this *lua.Lua) int {
 	return 1
 }
 
-func cmdShellExecute(this *lua.Lua) int {
+func cmdShellExecute(this lua.Lua) int {
 	action, actionErr := this.ToString(1)
 	if actionErr != nil {
 		return this.Push(nil, actionErr)
@@ -322,7 +322,7 @@ func cmdShellExecute(this *lua.Lua) int {
 	}
 }
 
-func cmdAccess(L *lua.Lua) int {
+func cmdAccess(L lua.Lua) int {
 	path, pathErr := L.ToString(1)
 	if pathErr != nil {
 		return L.Push(nil, pathErr)
@@ -351,7 +351,7 @@ func cmdAccess(L *lua.Lua) int {
 	return 1
 }
 
-func cmdPathJoin(L *lua.Lua) int {
+func cmdPathJoin(L lua.Lua) int {
 	path, pathErr := L.ToString(1)
 	if pathErr != nil {
 		return L.Push(nil, pathErr)
@@ -366,7 +366,7 @@ func cmdPathJoin(L *lua.Lua) int {
 	return L.Push(path, nil)
 }
 
-func cmdCommonPrefix(L *lua.Lua) int {
+func cmdCommonPrefix(L lua.Lua) int {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		return 0
 	}
@@ -385,7 +385,7 @@ func cmdCommonPrefix(L *lua.Lua) int {
 	return 1
 }
 
-func cmdGetKey(L *lua.Lua) int {
+func cmdGetKey(L lua.Lua) int {
 	keycode, scancode, shiftstatus := conio.GetKey()
 	L.PushInteger(lua.Integer(keycode))
 	L.PushInteger(lua.Integer(scancode))
@@ -393,7 +393,7 @@ func cmdGetKey(L *lua.Lua) int {
 	return 3
 }
 
-func cmdGetViewWidth(L *lua.Lua) int {
+func cmdGetViewWidth(L lua.Lua) int {
 	width, height := conio.GetScreenBufferInfo().ViewSize()
 	L.PushInteger(lua.Integer(width))
 	L.PushInteger(lua.Integer(height))

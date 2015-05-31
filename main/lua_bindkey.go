@@ -12,11 +12,11 @@ import (
 )
 
 type KeyLuaFuncT struct {
-	L            *lua.Lua
+	L            lua.Lua
 	registoryKey string
 }
 
-func getBufferForCallBack(L *lua.Lua) (*conio.Buffer, int) {
+func getBufferForCallBack(L lua.Lua) (*conio.Buffer, int) {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		return nil, L.Push(nil, "bindKeyExec: call with : not .")
 	}
@@ -32,7 +32,7 @@ func getBufferForCallBack(L *lua.Lua) (*conio.Buffer, int) {
 	return buffer, 0
 }
 
-func callInsert(L *lua.Lua) int {
+func callInsert(L lua.Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -45,7 +45,7 @@ func callInsert(L *lua.Lua) int {
 	return L.Push(true)
 }
 
-func callKeyFunc(L *lua.Lua) int {
+func callKeyFunc(L lua.Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -68,7 +68,7 @@ func callKeyFunc(L *lua.Lua) int {
 	}
 }
 
-func callLastWord(L *lua.Lua) int {
+func callLastWord(L lua.Lua) int {
 	this, stack_count := getBufferForCallBack(L)
 	if this == nil {
 		return stack_count
@@ -77,7 +77,7 @@ func callLastWord(L *lua.Lua) int {
 	return L.Push(word, pos+1)
 }
 
-func callFirstWord(L *lua.Lua) int {
+func callFirstWord(L lua.Lua) int {
 	this, stack_count := getBufferForCallBack(L)
 	if this == nil {
 		return stack_count
@@ -86,7 +86,7 @@ func callFirstWord(L *lua.Lua) int {
 	return L.Push(word, 0)
 }
 
-func callBoxListing(L *lua.Lua) int {
+func callBoxListing(L lua.Lua) int {
 	// stack +1: readline.Buffer
 	// stack +2: table
 	// stack +3: index or value
@@ -160,7 +160,7 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	return conio.CONTINUE
 }
 
-func cmdBindKey(L *lua.Lua) int {
+func cmdBindKey(L lua.Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		return L.Push(keyErr)

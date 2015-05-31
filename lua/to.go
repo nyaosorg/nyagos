@@ -7,7 +7,7 @@ import (
 
 var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
 
-func (this *Lua) ToInteger(index int) (int, error) {
+func (this Lua) ToInteger(index int) (int, error) {
 	var issucceeded uintptr
 	value, _, _ := lua_tointegerx.Call(this.State(), uintptr(index),
 		uintptr(unsafe.Pointer(&issucceeded)))
@@ -20,7 +20,7 @@ func (this *Lua) ToInteger(index int) (int, error) {
 
 var lua_tolstring = luaDLL.NewProc("lua_tolstring")
 
-func (this *Lua) ToAnsiString(index int) []byte {
+func (this Lua) ToAnsiString(index int) []byte {
 	var length uintptr
 	p, _, _ := lua_tolstring.Call(this.State(),
 		uintptr(index),
@@ -32,7 +32,7 @@ func (this *Lua) ToAnsiString(index int) []byte {
 	}
 }
 
-func (this *Lua) ToString(index int) (string, error) {
+func (this Lua) ToString(index int) (string, error) {
 	var length uintptr
 	p, _, _ := lua_tolstring.Call(this.State(),
 		uintptr(index),
@@ -42,14 +42,14 @@ func (this *Lua) ToString(index int) (string, error) {
 
 var lua_touserdata = luaDLL.NewProc("lua_touserdata")
 
-func (this *Lua) ToUserData(index int) unsafe.Pointer {
+func (this Lua) ToUserData(index int) unsafe.Pointer {
 	rv, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
 	return unsafe.Pointer(rv)
 }
 
 var lua_toboolean = luaDLL.NewProc("lua_toboolean")
 
-func (this *Lua) ToBool(index int) bool {
+func (this Lua) ToBool(index int) bool {
 	rv, _, _ := lua_toboolean.Call(this.State(), uintptr(index))
 	return rv != 0
 }

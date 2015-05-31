@@ -10,7 +10,7 @@ import (
 )
 
 type LuaFunction struct {
-	L            *lua.Lua
+	L            lua.Lua
 	registoryKey string
 }
 
@@ -34,7 +34,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 
 const original_io_lines = "original_io_lines"
 
-func ioLines(this *lua.Lua) int {
+func ioLines(this lua.Lua) int {
 	if this.IsString(1) {
 		// io.lines("FILENAME") --> use original io.lines
 		this.GetField(lua.LUA_REGISTRYINDEX, original_io_lines)
@@ -47,7 +47,7 @@ func ioLines(this *lua.Lua) int {
 	return 1
 }
 
-func ioLinesNext(this *lua.Lua) int {
+func ioLinesNext(this lua.Lua) int {
 	cmd := LuaInstanceToCmd[this.State()]
 
 	line := make([]byte, 0, 256)
@@ -70,7 +70,7 @@ func ioLinesNext(this *lua.Lua) int {
 	}
 }
 
-func SetLuaFunctions(this *lua.Lua) {
+func SetLuaFunctions(this lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
 

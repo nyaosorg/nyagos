@@ -9,7 +9,7 @@ import (
 	"../lua"
 )
 
-func setLuaArg(L *lua.Lua, arg0 string) {
+func setLuaArg(L lua.Lua, arg0 string) {
 	L.NewTable()
 	L.PushString(arg0)
 	L.RawSetI(-2, 0)
@@ -20,7 +20,7 @@ func setLuaArg(L *lua.Lua, arg0 string) {
 	L.SetGlobal("arg")
 }
 
-func optionParse(L *lua.Lua) bool {
+func optionParse(L lua.Lua) bool {
 	optionK := flag.String("k", "", "like `cmd /k`")
 	optionC := flag.String("c", "", "like `cmd /c`")
 	optionF := flag.String("f", "", "run lua script")
