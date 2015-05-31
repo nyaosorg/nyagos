@@ -69,7 +69,13 @@ nyagos.alias.suffix = function(args)
 end
 
 suffix.pl="perl"
-suffix.py="ipy"
+if nyagos.which("ipy") then
+  suffix.py="ipy"
+elseif nyagos.which("py") then
+  suffix.py="py"
+else
+  suffix.py="python"
+end
 suffix.rb="ruby"
 suffix.lua="lua"
 suffix.awk={"awk","-f"}
