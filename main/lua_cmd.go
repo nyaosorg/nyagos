@@ -21,14 +21,14 @@ import (
 const alias_prefix = "nyagos.alias."
 
 func cmdSetAlias(L lua.Lua) int {
-	name, nameErr := L.ToString(1)
+	name, nameErr := L.ToString(-2)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
 	}
 	key := strings.ToLower(name)
-	switch L.GetType(2) {
+	switch L.GetType(-1) {
 	case lua.LUA_TSTRING:
-		value, err := L.ToString(2)
+		value, err := L.ToString(-1)
 		regkey := alias_prefix + key
 		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		if err == nil {
@@ -55,11 +55,11 @@ func cmdGetAlias(L lua.Lua) int {
 }
 
 func cmdSetEnv(L lua.Lua) int {
-	name, nameErr := L.ToString(1)
+	name, nameErr := L.ToString(-2)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
 	}
-	value, valueErr := L.ToString(2)
+	value, valueErr := L.ToString(-1)
 	if valueErr != nil {
 		return L.Push(nil, valueErr)
 	}
@@ -72,7 +72,7 @@ func cmdSetEnv(L lua.Lua) int {
 }
 
 func cmdGetEnv(L lua.Lua) int {
-	name, nameErr := L.ToString(1)
+	name, nameErr := L.ToString(-1)
 	if nameErr != nil {
 		return L.Push(nil)
 	}

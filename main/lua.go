@@ -104,23 +104,28 @@ func SetLuaFunctions(this lua.Lua) {
 		nyagos_table["exe"] = exeName
 	}
 	this.Push(nyagos_table)
-	this.SetGlobal("nyagos")
 
-	if err := this.LoadString(`
-		nyagos.alias = setmetatable({},{
-			__call=function(t,k,v) nyagos.setalias(k,v) end,
-			__newindex=function(t,k,v) nyagos.setalias(k,v) end,
-			__index=function(t,k) return nyagos.getalias(k,v) end
-		})
-		nyagos.env = setmetatable({},{
-			__newindex=function(t,k,v) nyagos.setenv(k,v) end,
-			__index=function(t,k) return nyagos.getenv(k) end
-		})
-	`); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	} else if err = this.Call(0, 0); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-	}
+	this.NewTable() // "nyagos.alias"
+	this.NewTable() // metatable.
+	this.PushGoFunction(cmdSetAlias)
+	this.SetField(-2, "__call")
+	this.PushGoFunction(cmdSetAlias)
+	this.SetField(-2, "__newindex")
+	this.PushGoFunction(cmdGetAlias)
+	this.SetField(-2, "__index")
+	this.SetMetaTable(-2)
+	this.SetField(-2, "alias")
+
+	this.NewTable() // "nyagos.env"
+	this.NewTable() // metatable
+	this.PushGoFunction(cmdSetEnv)
+	this.SetField(-2, "__newindex")
+	this.PushGoFunction(cmdGetEnv)
+	this.SetField(-2, "__index")
+	this.SetMetaTable(-2)
+	this.SetField(-2, "env")
+
+	this.SetGlobal("nyagos")
 
 	// replace os.getenv
 	this.GetGlobal("os")           // +1
