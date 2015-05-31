@@ -65,6 +65,12 @@ func (this *Lua) PushValue(index int) {
 	lua_pushvalue.Call(this.State(), uintptr(index))
 }
 
+var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
+
+func (this *Lua) PushCallbackCDecl(fn uintptr) {
+	lua_pushcclosure.Call(this.State(), fn, 0)
+}
+
 func luaToGoBridge(lua uintptr) int {
 	userdata, _, _ := lua_touserdata.Call(lua, 1)
 	fn := *(*func(*Lua) int)(unsafe.Pointer(userdata))
@@ -72,15 +78,11 @@ func luaToGoBridge(lua uintptr) int {
 	return int(fn(&Lua{lua}))
 }
 
-var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
-
 func (this *Lua) PushGoFunction(fn func(*Lua) int) {
 	userdata := this.NewUserData(unsafe.Sizeof(fn))
 	*(*func(*Lua) int)(userdata) = fn
 	this.NewTable()
-	lua_pushcclosure.Call(this.State(),
-		syscall.NewCallbackCDecl(luaToGoBridge),
-		0)
+	this.PushCallbackCDecl(syscall.NewCallbackCDecl(luaToGoBridge))
 	this.SetField(-2, "__call")
 	this.SetMetaTable(-2)
 }
