@@ -100,7 +100,7 @@ func getKeys() []keyInfo {
 var keyBuffer []keyInfo
 var keyBufferRead = 0
 
-func GetKey() (rune, uint16, uint32) {
+func getKey() (rune, uint16, uint32) {
 	for keyBuffer == nil || keyBufferRead >= len(keyBuffer) {
 		keyBuffer = getKeys()
 		keyBufferRead = 0
@@ -109,6 +109,16 @@ func GetKey() (rune, uint16, uint32) {
 	keyBufferRead++
 	return r.KeyCode, r.ScanCode, r.ShiftState
 }
+
+func GetKey() (rune, uint16, uint32) {
+	code,scan,shift := getKey()
+	if code < 0xDC00 || 0xDFFF < code {
+		return code,scan,shift
+	}
+	code2,_,_ := getKey()
+	return utf16.DecodeRune(code,code2),scan,shift
+}
+
 
 func GetCh() rune {
 	for {
