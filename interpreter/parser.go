@@ -189,7 +189,9 @@ func parse1(text string) ([]StatementT, error) {
 		if isNextRedirect && len(redirect) > 0 {
 			redirect[len(redirect)-1].SetPath(dequote(&buffer))
 		} else {
-			argv = append(argv, dequote(&buffer))
+			if buffer.Len() > 0 {
+				argv = append(argv, dequote(&buffer))
+			}
 		}
 		buffer.Reset()
 	}
