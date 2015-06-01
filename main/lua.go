@@ -76,27 +76,28 @@ func SetLuaFunctions(this lua.Lua) {
 
 	nyagos_table := map[string]interface{}{
 		"access":       cmdAccess,
-		"setalias":     cmdSetAlias,
 		"atou":         cmdAtoU,
-		"commonprefix": cmdCommonPrefix,
 		"bindkey":      cmdBindKey,
+		"commonprefix": cmdCommonPrefix,
 		"eval":         cmdEval,
 		"exec":         cmdExec,
 		"getalias":     cmdGetAlias,
 		"getenv":       cmdGetEnv,
 		"gethistory":   cmdGetHistory,
 		"getkey":       cmdGetKey,
+		"getviewwidth": cmdGetViewWidth,
 		"getwd":        cmdGetwd,
 		"glob":         cmdGlob,
 		"pathjoin":     cmdPathJoin,
+		"setalias":     cmdSetAlias,
 		"setenv":       cmdSetEnv,
 		"setrunewidth": cmdSetRuneWidth,
 		"shellexecute": cmdShellExecute,
+		"stat":         cmdStat,
 		"utoa":         cmdUtoA,
 		"which":        cmdWhich,
 		"write":        cmdWrite,
 		"writerr":      cmdWriteErr,
-		"getviewwidth": cmdGetViewWidth,
 	}
 	if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
