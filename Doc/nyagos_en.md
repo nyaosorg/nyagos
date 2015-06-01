@@ -366,6 +366,23 @@ It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
 
 It returns the width and height of the terminal.
 
+### `STAT = nyagos.stat(FILENAME)`
+
+It returns the file's information.
+If the file exists, the table STAT has these members.
+
+    STAT.name
+    STAT.isdir (is set true when the file is directory, otherwise false)
+    STAT.size  (bytes)
+    STAT.mtime.year
+    STAT.mtime.month
+    STAT.mtime.day
+    STAT.mtime.hour
+    STAT.mtime.minute
+    STAT.mtime.second
+
+If the file does not exist, STAT is nil.
+
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.

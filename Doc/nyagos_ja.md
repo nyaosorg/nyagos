@@ -412,6 +412,23 @@ C言語の access 関数と同じです。
 
 ターミナルの横幅と高さを返します。
 
+### `STAT = nyagos.stat(FILENAME)`
+
+ファイルの情報を返します。
+ファイルが存在する時、テーブル STAT は下記のようなメンバーを持ちます。
+
+    STAT.name
+    STAT.isdir (ディレクトリなら true, さもなければ false)
+    STAT.size  (バイト数)
+    STAT.mtime.year
+    STAT.mtime.month
+    STAT.mtime.day
+    STAT.mtime.hour
+    STAT.mtime.minute
+    STAT.mtime.second
+
+ファイルがない時、STAT は nil です。
+
 ### `nyagos.getkey()`
 
 入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
