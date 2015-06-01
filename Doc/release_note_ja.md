@@ -1,6 +1,7 @@
 * Luaテーブル `nyagos.env` を追加
 * Luaフック `nyagos.on_command_not_found` を追加
 * Lua関数 `nyagos.getviewwidth` を追加
+* キー入力時のサロゲートペアをサポート
 
 NYAGOS 4.0.8\_0
 ===============

@@ -1,6 +1,7 @@
 * Add the lua-table `nyagos.env`
 * Add the lua-hook `nyagos.on_command_not_found`
 * Add the lua-function `nyagos.getviewwidth`
+* Supported Surrogate-Pair on GetKey
 
 NYAGOS 4.0.8\_0
 ===============
