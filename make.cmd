@@ -11,6 +11,7 @@ goto build
         set "X_VERSION=-X main.version %VERSION%"
 
 :build
+        for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         pushd "%~dp0main"
         for %%I in (windres.exe) do if not "%%~$PATH:I" == "" cscript //nologo make_rc.js | windres.exe --output-format=coff -o nyagos.syso
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
@@ -19,11 +20,6 @@ goto build
 
 :status
         nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
-        goto end
-
-:fmt
-        for /R . %%I in (*~) do del %%I
-        for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         goto end
 
 :clean
