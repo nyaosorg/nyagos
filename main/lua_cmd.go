@@ -45,7 +45,7 @@ func cmdSetAlias(L lua.Lua) int {
 }
 
 func cmdGetAlias(L lua.Lua) int {
-	name, nameErr := L.ToString(1)
+	name, nameErr := L.ToString(-1)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
 	}
