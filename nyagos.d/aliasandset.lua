@@ -1,7 +1,8 @@
 local function expand(text)
-    return string.gsub(text,"%%(%w+)%%",function(w)
+    local result,_ = string.gsub(text,"%%(%w+)%%",function(w)
         return nyagos.getenv(w)
     end)
+    return result
 end
 
 local function set_(f,equation,expand)
