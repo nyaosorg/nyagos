@@ -92,6 +92,8 @@ Acknowledgement
 * [hokorobi](https://github.com/hokorobi)
 * [amuramatsu](https://github.com/amuramatsu)
 * [spiegel-im-spiegel](https://github.com/spiegel-im-spiegel)
+* [rururutan](https://github.com/rururutan/)
+* [hogewest](https://github.com/hogewest)
 
 Author
 ------
