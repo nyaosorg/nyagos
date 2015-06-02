@@ -1,8 +1,14 @@
+NYAGOS 4.0.9\_0
+===============
 * Luaテーブル `nyagos.env` を追加
 * Luaフック `nyagos.on_command_not_found` を追加
-* Lua関数 `nyagos.getviewwidth` を追加
-* キー入力時のサロゲートペアをサポート
+* Lua関数 `nyagos.getviewwidth` を追加 (Thx @nocd5)
+* キー入力時のサロゲートペアをサポート (Thx @rururutan)
 * Lua関数 `nyagos.stat` を追加
+* Fix #72 空白とリダイレクト記号の前に空の引数が挿入されていた (Thx @hogewest)
+* Luaスクリプトのカタログフォルダー catalog.d を作成した(読み込まれない)
+* 拡張子 .py に IronPython か CPython のいずれかを自動で関連づけるようにした (@hattya)
+* catalog.d\ezoe.lua を添付(nyagos.d にコピーすると一部エラーを「コマンドではない。」「ディレクトリではない。」におきかえる)
 
 NYAGOS 4.0.8\_0
 ===============

@@ -1,8 +1,13 @@
+NYAGOS 4.0.9\_0
+===============
 * Add the lua-table `nyagos.env`
 * Add the lua-hook `nyagos.on_command_not_found`
-* Add the lua-function `nyagos.getviewwidth`
-* Supported Surrogate-Pair on GetKey
+* Add the lua-function `nyagos.getviewwidth` (Thx @nocd5)
+* Supported Surrogate-Pair on GetKey (Thx @rururutan)
 * Add the lua-function `nyagos.stat`
+* Fixed #72 an empty argument was inserted before SPACE & REDIRECT-MARK (Thx @hogewest)
+* Made lua-script catalog folder 'catalog.d'(not loaded automatically)
+* Associated the suffix .py to either of IronPython or CPython automatically(Thx @hattya)
 
 NYAGOS 4.0.8\_0
 ===============
@@ -25,7 +30,7 @@ Bugfix
 * Fixed #66 `echo a>a` makes a empty file named `aa`
 * Fixed suffix.lua problem (#69 Thx hattya)
 * Fixed panic when nyagos.argsfilter returns empty array(#68 Thx hattya)
-* Reset to default color after ls (#67 Thx hattya)
+* Reset to default color after ls (#67 Thx @hattya)
 
 NYAGOS 4.0.7\_5
 ===============
