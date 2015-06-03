@@ -165,6 +165,7 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 		var pipeIn *os.File = nil
 		for _, state := range pipeline {
 			cmd := new(Interpreter)
+			cmd.Tag = this.Tag
 			cmd.HookCount = this.HookCount
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
