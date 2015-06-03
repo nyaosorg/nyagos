@@ -197,7 +197,9 @@ func main() {
 		}
 		L.SetTop(stackPos)
 
-		whatToDo, err := interpreter.New().Interpret(line)
+		it := interpreter.New()
+		it.Tag = L
+		whatToDo, err := t.Interpret(line)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}

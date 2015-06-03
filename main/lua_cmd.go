@@ -101,15 +101,18 @@ func cmdExec(L lua.Lua) int {
 			}
 			L.Pop(1)
 		}
-		interpreter1 := interpreter.New()
-		interpreter1.Args = args
-		_, err = interpreter1.Spawnvp()
+		it := interpreter.New()
+		it.Tag = L
+		it.Args = args
+		_, err = it.Spawnvp()
 	} else {
 		statement, statementErr := L.ToString(1)
 		if statementErr != nil {
 			return L.Push(nil, statementErr)
 		}
-		_, err = interpreter.New().Interpret(statement)
+		it := interpreter.New()
+		it.Tag = L
+		_, err = it.Interpret(statement)
 	}
 	if err != nil {
 		var out io.Writer = os.Stderr
@@ -139,6 +142,7 @@ func cmdEval(L lua.Lua) int {
 	}
 	go func(statement string, w *os.File) {
 		it := interpreter.New()
+		it.Tag = L
 		it.SetStdout(w)
 		it.Interpret(statement)
 		w.Close()

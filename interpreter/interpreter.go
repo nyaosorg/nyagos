@@ -35,6 +35,7 @@ type Interpreter struct {
 	HookCount    int
 	IsBackGround bool
 	Closer       io.Closer
+	Tag          interface{}
 }
 
 func New() *Interpreter {
@@ -44,6 +45,7 @@ func New() *Interpreter {
 	this.Stdin = os.Stdin
 	this.Stdout = os.Stdout
 	this.Stderr = os.Stderr
+	this.Tag = nil
 	return &this
 }
 
@@ -69,13 +71,14 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.Stdout = this.Stdout
 	rv.Stderr = this.Stderr
 	rv.HookCount = this.HookCount
+	rv.Tag = this.Tag
 	// Dont Copy 'Closer' and 'IsBackGround'
 	return rv
 }
 
-type ArgsHookT func(args []string) []string
+type ArgsHookT func(it *Interpreter, args []string) []string
 
-var argsHook = func(args []string) []string {
+var argsHook = func(it *Interpreter, args []string) []string {
 	return args
 }
 
@@ -116,7 +119,7 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 	var err error = nil
 
 	if argsHook != nil {
-		this.Args = argsHook(this.Args)
+		this.Args = argsHook(this, this.Args)
 	}
 	if len(this.Args) > 0 {
 		whatToDo, err = hook(this)

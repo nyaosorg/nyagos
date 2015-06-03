@@ -31,10 +31,14 @@ func optionParse(L lua.Lua) bool {
 	result := true
 
 	if *optionK != "" {
-		interpreter.New().Interpret(*optionK)
+		it := interpreter.New()
+		it.Tag = L
+		it.Interpret(*optionK)
 	}
 	if *optionC != "" {
-		interpreter.New().Interpret(*optionC)
+		it := interpreter.New()
+		it.Tag = L
+		it.Interpret(*optionC)
 		result = false
 	}
 	if *optionF != "" {

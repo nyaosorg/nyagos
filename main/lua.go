@@ -70,6 +70,50 @@ func ioLinesNext(this lua.Lua) int {
 	}
 }
 
+var orgArgHook func(*interpreter.Interpreter, []string) []string
+
+func newArgHook(it *interpreter.Interpreter, args []string) []string {
+	L, Lok := it.Tag.(*lua.Lua)
+	if !Lok {
+		return orgArgHook(it, args)
+	}
+	pos := L.GetTop()
+	defer L.SetTop(pos)
+	L.GetGlobal("nyagos")
+	L.GetField(-1, "argsfilter")
+	if !L.IsFunction(-1) {
+		return orgArgHook(it, args)
+	}
+	L.NewTable()
+	for i := 0; i < len(args); i++ {
+		L.PushString(args[i])
+		L.RawSetI(-2, lua.Integer(i))
+	}
+	if err := L.Call(1, 1); err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		return orgArgHook(it, args)
+	}
+	if L.GetType(-1) != lua.LUA_TTABLE {
+		return orgArgHook(it, args)
+	}
+	newargs := []string{}
+	for i := lua.Integer(0); true; i++ {
+		L.PushInteger(i)
+		L.GetTable(-2)
+		if L.GetType(-1) == lua.LUA_TNIL {
+			break
+		}
+		arg1, arg1err := L.ToString(-1)
+		if arg1err == nil {
+			newargs = append(newargs, arg1)
+		} else {
+			fmt.Fprintln(os.Stderr, arg1err.Error())
+		}
+		L.Pop(1)
+	}
+	return orgArgHook(it, newargs)
+}
+
 func SetLuaFunctions(this lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
@@ -146,44 +190,7 @@ func SetLuaFunctions(this lua.Lua) {
 	this.SetField(-2, "lines")   // +1
 	this.Pop(1)                  // 0
 
-	var orgArgHook func([]string) []string
-	orgArgHook = interpreter.SetArgsHook(func(args []string) []string {
-		pos := this.GetTop()
-		defer this.SetTop(pos)
-		this.GetGlobal("nyagos")
-		this.GetField(-1, "argsfilter")
-		if !this.IsFunction(-1) {
-			return orgArgHook(args)
-		}
-		this.NewTable()
-		for i := 0; i < len(args); i++ {
-			this.PushString(args[i])
-			this.RawSetI(-2, lua.Integer(i))
-		}
-		if err := this.Call(1, 1); err != nil {
-			fmt.Fprintf(os.Stderr, "%s\n", err)
-			return orgArgHook(args)
-		}
-		if this.GetType(-1) != lua.LUA_TTABLE {
-			return orgArgHook(args)
-		}
-		newargs := []string{}
-		for i := lua.Integer(0); true; i++ {
-			this.PushInteger(i)
-			this.GetTable(-2)
-			if this.GetType(-1) == lua.LUA_TNIL {
-				break
-			}
-			arg1, arg1err := this.ToString(-1)
-			if arg1err == nil {
-				newargs = append(newargs, arg1)
-			} else {
-				fmt.Fprintln(os.Stderr, arg1err.Error())
-			}
-			this.Pop(1)
-		}
-		return orgArgHook(newargs)
-	})
+	orgArgHook = interpreter.SetArgsHook(newArgHook)
 
 	orgOnCommandNotFound := interpreter.OnCommandNotFound
 	interpreter.OnCommandNotFound = func(inte *interpreter.Interpreter, err error) error {
