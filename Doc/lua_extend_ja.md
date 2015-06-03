@@ -69,7 +69,7 @@ UAC 昇格させて、コマンドを実行します。
 (nyagos.d\suffix.lua にて定義)
 
 - `FOO.pl  ...` は `perl   FOO.pl ...` に置換されます。
-- `FOO.py  ...` は `python FOO.py ...` に置換されます。
+- `FOO.py  ...` は `ipy FOO.pl`、`py FOO.py`、`python FOO.py ...` のいずれかに置換されます。(最初に見付かったインタプリタ名が挿入されます)
 - `FOO.rb  ...` は `ruby   FOO.rb ...` に置換されます。
 - `FOO.lua ...` は `lua    FOO.lua ...` に置換されます。
 - `FOO.awk ...` は `awk -f FOO.awk ...` に置換されます。

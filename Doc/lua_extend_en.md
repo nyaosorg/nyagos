@@ -69,7 +69,7 @@ Inserting Interpreter-name
 (defined in nyagos.d\suffix.lua)
 
 - `FOO.pl  ...` is replaced to `perl   FOO.pl ...`
-- `FOO.py  ...` is replaced to `python FOO.py ...`
+- `FOO.py  ...` is replaced to `ipy FOO.py ...` , `py FOO.py` or `python FOO.py ...` (inserted the first found interpreter's name)
 - `FOO.rb  ...` is replaced to `ruby   FOO.rb ...`
 - `FOO.lua ...` is replaced to `lua    FOO.lua ...`
 - `FOO.awk ...` is replaced to `awk -f FOO.awk ...`
