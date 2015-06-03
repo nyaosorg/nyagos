@@ -1,3 +1,5 @@
+* Fixed nyagos.exec() crashed when it was redirected.
+
 NYAGOS 4.0.9\_0
 ===============
 * Add the lua-table `nyagos.env`
