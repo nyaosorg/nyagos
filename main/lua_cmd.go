@@ -101,8 +101,14 @@ func cmdExec(L lua.Lua) int {
 			}
 			L.Pop(1)
 		}
-		it := interpreter.New()
-		it.Tag = L
+		var it *interpreter.Interpreter
+		var ok bool
+		if it, ok = LuaInstanceToCmd[L.State()]; !ok {
+			it = interpreter.New()
+			it.Tag = L
+		} else {
+			it = it.Clone()
+		}
 		it.Args = args
 		_, err = it.Spawnvp()
 	} else {
@@ -110,8 +116,12 @@ func cmdExec(L lua.Lua) int {
 		if statementErr != nil {
 			return L.Push(nil, statementErr)
 		}
-		it := interpreter.New()
-		it.Tag = L
+		var it *interpreter.Interpreter
+		var ok bool
+		if it, ok = LuaInstanceToCmd[L.State()]; !ok {
+			it = interpreter.New()
+			it.Tag = L
+		}
 		_, err = it.Interpret(statement)
 	}
 	if err != nil {

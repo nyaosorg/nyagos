@@ -199,7 +199,7 @@ func main() {
 
 		it := interpreter.New()
 		it.Tag = L
-		whatToDo, err := t.Interpret(line)
+		whatToDo, err := it.Interpret(line)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
