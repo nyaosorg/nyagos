@@ -3,7 +3,6 @@ nyagos.on_command_not_found = function(args)
     return true
 end
 
-local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
 local cd = nyagos.alias.cd
 nyagos.alias.cd = function(args)
     local success=true
