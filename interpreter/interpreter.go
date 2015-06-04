@@ -72,7 +72,8 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.Stderr = this.Stderr
 	rv.HookCount = this.HookCount
 	rv.Tag = this.Tag
-	// Dont Copy 'Closer' and 'IsBackGround'
+	rv.Closer = nil
+	rv.IsBackGround = false
 	return rv
 }
 
