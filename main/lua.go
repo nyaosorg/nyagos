@@ -114,6 +114,35 @@ func newArgHook(it *interpreter.Interpreter, args []string) []string {
 	return orgArgHook(it, newargs)
 }
 
+var orgOnCommandNotFound func(*interpreter.Interpreter, error) error
+
+func on_command_not_found(inte *interpreter.Interpreter, err error) error {
+	L, Lok := inte.Tag.(lua.Lua)
+	if !Lok {
+		panic("on_command_not_found: Interpreter.Tag is not lua instance")
+	}
+	L.GetGlobal("nyagos")
+	L.GetField(-1, "on_command_not_found")
+	L.Remove(-2) // remove nyagos.
+	if L.IsFunction(-1) {
+		L.NewTable()
+		for key, val := range inte.Args {
+			L.PushString(val)
+			L.RawSetI(-2, lua.Integer(key))
+		}
+		L.Call(1, 1)
+		defer L.Pop(1)
+		if L.ToBool(-1) {
+			return nil
+		} else {
+			return orgOnCommandNotFound(inte, err)
+		}
+	} else {
+		L.Pop(1)
+		return orgOnCommandNotFound(inte, err)
+	}
+}
+
 func SetLuaFunctions(this lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
@@ -192,27 +221,6 @@ func SetLuaFunctions(this lua.Lua) {
 
 	orgArgHook = interpreter.SetArgsHook(newArgHook)
 
-	orgOnCommandNotFound := interpreter.OnCommandNotFound
-	interpreter.OnCommandNotFound = func(inte *interpreter.Interpreter, err error) error {
-		this.GetGlobal("nyagos")
-		this.GetField(-1, "on_command_not_found")
-		this.Remove(-2) // remove nyagos.
-		if this.IsFunction(-1) {
-			this.NewTable()
-			for key, val := range inte.Args {
-				this.PushString(val)
-				this.RawSetI(-2, lua.Integer(key))
-			}
-			this.Call(1, 1)
-			defer this.Pop(1)
-			if this.ToBool(-1) {
-				return nil
-			} else {
-				return orgOnCommandNotFound(inte, err)
-			}
-		} else {
-			this.Pop(1)
-			return orgOnCommandNotFound(inte, err)
-		}
-	}
+	orgOnCommandNotFound = interpreter.OnCommandNotFound
+	interpreter.OnCommandNotFound = on_command_not_found
 }
