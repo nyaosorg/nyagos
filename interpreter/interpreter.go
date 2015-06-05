@@ -29,6 +29,19 @@ const (
 	SHUTDOWN NextT = 2
 )
 
+func (this NextT) String() string {
+	switch this {
+	case THROUGH:
+		return "THROUGH"
+	case CONTINUE:
+		return "CONTINUE"
+	case SHUTDOWN:
+		return "SHUTDOWN"
+	default:
+		return "UNKNOWN"
+	}
+}
+
 type Interpreter struct {
 	exec.Cmd
 	Stdio        [3]*os.File
@@ -127,34 +140,19 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 		if whatToDo == THROUGH {
 			this.Path, err = exec.LookPath(this.Args[0])
 			if err == nil {
-				if this.IsBackGround {
-					go func() {
-						this.Run()
-						if this.Closer != nil {
-							this.Closer.Close()
-							this.Closer = nil
-						}
-					}()
-				} else {
-					err = this.Run()
-				}
+				err = this.Run()
 			} else {
 				err = OnCommandNotFound(this, err)
 			}
+			whatToDo = CONTINUE
 		}
-	}
-	if err != nil {
-		m := errorStatusPattern.FindStringSubmatch(err.Error())
-		if m != nil {
-			ErrorLevel = m[1]
-			err = nil
-		} else {
-			ErrorLevel = "-1"
-		}
-	} else {
-		ErrorLevel = "0"
 	}
 	return whatToDo, err
+}
+
+type result_t struct {
+	NextValue NextT
+	Error     error
 }
 
 func (this *Interpreter) Interpret(text string) (NextT, error) {
@@ -162,37 +160,40 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 	if statementsErr != nil {
 		return CONTINUE, statementsErr
 	}
+	var result chan result_t = nil
 	for _, pipeline := range statements {
-		var pipeIn *os.File = nil
-		for _, state := range pipeline {
+		var pipeOut *os.File = nil
+		for i := len(pipeline) - 1; i >= 0; i-- {
+			state := pipeline[i]
+
 			cmd := new(Interpreter)
 			cmd.Tag = this.Tag
 			cmd.HookCount = this.HookCount
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
 			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
-			if pipeIn != nil {
-				cmd.SetStdin(pipeIn)
-				pipeIn = nil
-			}
-			var err error = nil
-			var pipeOut *os.File = nil
-			isBackGround := false
 
-			switch state.Term {
-			case "|", "|&":
-				isBackGround = true
-				pipeIn, pipeOut, err = os.Pipe()
-				if err != nil {
-					return CONTINUE, err
-				}
-				// defer pipeIn.Close()
+			var err error = nil
+
+			if state.Term[0] == '|' {
 				cmd.SetStdout(pipeOut)
 				if state.Term == "|&" {
 					cmd.SetStderr(pipeOut)
 				}
-			case "&":
-				isBackGround = true
+				cmd.Closer = pipeOut
+			} else {
+				cmd.Closer = nil
+			}
+
+			if i > 0 && pipeline[i-1].Term[0] == '|' {
+				var pipeIn *os.File
+				pipeIn, pipeOut, err = os.Pipe()
+				if err != nil {
+					return CONTINUE, err
+				}
+				cmd.SetStdin(pipeIn)
+			} else {
+				pipeOut = nil
 			}
 
 			for _, red := range state.Redirect {
@@ -202,13 +203,39 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				}
 			}
 			cmd.Args = state.Argv
-			cmd.IsBackGround = isBackGround
-			cmd.Closer = pipeOut
-			whatToDo, err := cmd.Spawnvp()
-			if whatToDo == SHUTDOWN || err != nil {
-				return whatToDo, err
+
+			if i == len(pipeline)-1 && state.Term != "&" {
+				result = make(chan result_t)
+				go func() {
+					whatToDo, err := cmd.Spawnvp()
+					result <- result_t{whatToDo, err}
+				}()
+			} else {
+				go func() {
+					cmd.Spawnvp()
+					if cmd.Closer != nil {
+						cmd.Closer.Close()
+					}
+				}()
 			}
 		}
 	}
-	return CONTINUE, nil
+	if result != nil {
+		resultValue := <-result
+		if resultValue.Error != nil {
+			m := errorStatusPattern.FindStringSubmatch(
+				resultValue.Error.Error())
+			if m != nil {
+				ErrorLevel = m[1]
+				resultValue.Error = nil
+			} else {
+				ErrorLevel = "-1"
+			}
+		} else {
+			ErrorLevel = "0"
+		}
+		return resultValue.NextValue, resultValue.Error
+	} else {
+		return CONTINUE, nil
+	}
 }

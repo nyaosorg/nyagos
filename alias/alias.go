@@ -77,13 +77,6 @@ func quoteAndJoin(list []string) string {
 
 var nextHook interpreter.HookT
 
-func doClose(callee Callable, cmd *interpreter.Interpreter) {
-	callee.Call(cmd)
-	if cmd.Closer != nil {
-		cmd.Closer.Close()
-	}
-}
-
 func hook(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if cmd.HookCount > 5 {
 		return nextHook(cmd)
@@ -92,16 +85,8 @@ func hook(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	if !ok {
 		return nextHook(cmd)
 	}
-	if cmd.IsBackGround {
-		go doClose(callee, cmd)
-		return interpreter.CONTINUE, nil
-	} else {
-		next, err := callee.Call(cmd)
-		if next != interpreter.THROUGH && cmd.Closer != nil {
-			cmd.Closer.Close()
-		}
-		return next, err
-	}
+	next, err := callee.Call(cmd)
+	return next, err
 }
 
 func Init() {
