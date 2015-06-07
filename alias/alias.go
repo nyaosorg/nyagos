@@ -85,7 +85,7 @@ func doClose(callee Callable, cmd *interpreter.Interpreter) {
 }
 
 func hook(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	if cmd.HookCount > 0 {
+	if cmd.HookCount > 5 {
 		return nextHook(cmd)
 	}
 	callee, ok := Table[strings.ToLower(cmd.Args[0])]
