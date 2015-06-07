@@ -21,15 +21,47 @@ func (this LuaFunction) String() string {
 }
 
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
-	this.L.NewTable()
+	L := this.L
+	L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
+	L.NewTable()
 	for i, arg1 := range cmd.Args {
-		this.L.PushString(arg1)
-		this.L.RawSetI(-2, lua.Integer(i))
+		L.PushString(arg1)
+		L.RawSetI(-2, lua.Integer(i))
 	}
-	save := LuaInstanceToCmd[this.L.State()]
-	LuaInstanceToCmd[this.L.State()] = cmd
-	err := this.L.Call(1, 0)
+	save := LuaInstanceToCmd[L.State()]
+	LuaInstanceToCmd[L.State()] = cmd
+	err := L.Call(1, 1)
+	if err == nil {
+		newargs := make([]string, 0)
+		if L.IsTable(-1) {
+			L.PushInteger(0)
+			L.GetTable(-2)
+			if val, err1 := L.ToString(-1); val != "" && err1 == nil {
+				newargs = append(newargs, val)
+			}
+			L.Pop(1)
+			for i := 1; ; i++ {
+				L.PushInteger(lua.Integer(i))
+				L.GetTable(-2)
+				if L.IsNil(-1) {
+					L.Pop(1)
+					break
+				}
+				val, err1 := L.ToString(-1)
+				L.Pop(1)
+				if err1 != nil {
+					break
+				}
+				newargs = append(newargs, val)
+			}
+			it := cmd.Clone()
+			it.Args = newargs
+			it.Spawnvp()
+		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
+			cmd.Interpret(val)
+		}
+	}
+	L.Pop(1)
 	LuaInstanceToCmd[this.L.State()] = save
 	return interpreter.CONTINUE, err
 }
