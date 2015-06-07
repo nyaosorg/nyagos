@@ -23,3 +23,7 @@ func (this Lua) IsString(index int) bool {
 	rc, _, _ := lua_isstring.Call(this.State(), uintptr(index))
 	return rc != 0
 }
+
+func (this Lua) IsNil(index int) bool {
+	return this.GetType(index) == LUA_TNIL
+}
