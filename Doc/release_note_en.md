@@ -1,3 +1,5 @@
+* Fixed the limiter of alias subsutitution was only one. Changed upto 5
+
 NYAGOS 4.0.9\_1
 ===============
 * Fixed nyagos.exec() crashed when it was redirected.
