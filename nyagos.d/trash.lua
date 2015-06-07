@@ -11,9 +11,18 @@ if nyagos.ole then
     local trashBox = shellApp:NameSpace(math.tointeger(10))
     if trashBox.MoveHere then
         nyagos.alias.trash = function(args)
+            if #args <= 0 then
+                nyagos.writerr("Move files or directories to Windows Trashbox\n")
+                nyagos.writerr("Usage: trash file(s)...\n")
+                return
+            end
             args = nyagos.glob(table.unpack(args))
             for i=1,#args do
-                trashBox:MoveHere(fsObj:GetAbsolutePathName(args[i]))
+                if fsObj:FileExists(args[i]) or fsObj:FolderExists(args[i]) then
+                    trashBox:MoveHere(fsObj:GetAbsolutePathName(args[i]))
+                else
+                    nyagos.writerr(args[i]..": such a file or directory not found.\n")
+                end
             end
         end
     else
