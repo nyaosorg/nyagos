@@ -27,8 +27,10 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 		this.L.PushString(arg1)
 		this.L.RawSetI(-2, lua.Integer(i))
 	}
+	save := LuaInstanceToCmd[this.L.State()]
 	LuaInstanceToCmd[this.L.State()] = cmd
 	err := this.L.Call(1, 0)
+	LuaInstanceToCmd[this.L.State()] = save
 	return interpreter.CONTINUE, err
 }
 
