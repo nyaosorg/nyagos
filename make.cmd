@@ -18,6 +18,10 @@ goto build
         popd
         goto end
 
+:fmt
+        for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
+        goto end
+
 :status
         nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
         goto end
