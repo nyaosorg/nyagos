@@ -91,8 +91,8 @@ func Join(paths ...string) string {
 
 // Expand filenames matching with wildcard-pattern.
 func Glob(pattern string) ([]string, error) {
-	name := filepath.Base(pattern)
-	if strings.IndexAny(name, "*?") < 0 {
+	pname := filepath.Base(pattern)
+	if strings.IndexAny(pname, "*?") < 0 {
 		return nil, nil
 	}
 	findf, err := FindFirst(pattern)
@@ -103,7 +103,7 @@ func Glob(pattern string) ([]string, error) {
 	dirname := filepath.Dir(pattern)
 	match := make([]string, 0, 100)
 	for {
-		if name := findf.Name(); name[0] != '.' || pattern[0] == '.' {
+		if name := findf.Name(); name[0] != '.' || pname[0] == '.' {
 			match = append(match, filepath.Join(dirname, name))
 		}
 		err := findf.FindNext()
