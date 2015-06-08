@@ -205,6 +205,7 @@ func (this Lua) Load(fname string) error {
 	if rc == 0 {
 		return nil
 	}
+	defer this.Pop(1)
 	msg, err := this.ToString(-1)
 	if err == nil {
 		return fmt.Errorf("%s: %s..", fname, msg)
@@ -224,6 +225,7 @@ func (this Lua) LoadString(code string) error {
 	if rc == 0 {
 		return nil
 	}
+	defer this.Pop(1)
 	msg, err := this.ToString(-1)
 	if err == nil {
 		return errors.New(msg)
@@ -235,12 +237,17 @@ func (this Lua) LoadString(code string) error {
 var lua_pcallk = luaDLL.NewProc("lua_pcallk")
 
 func (this Lua) Call(nargs, nresult int) error {
-	rc, _, _ := lua_pcallk.Call(this.State(),
+	rc, _, _ := lua_pcallk.Call(
+		this.State(),
 		uintptr(nargs),
-		uintptr(nresult), 0, 0, 0)
+		uintptr(nresult),
+		0,
+		0,
+		0)
 	if rc == 0 {
 		return nil
 	}
+	defer this.Pop(1)
 	if this.IsString(-1) {
 		msg, err := this.ToString(-1)
 		if err == nil {
