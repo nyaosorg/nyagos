@@ -50,7 +50,7 @@ type Interpreter struct {
 	Tag       interface{}
 }
 
-func (this *Interpreter)closeAtEnd() {
+func (this *Interpreter) closeAtEnd() {
 	if this.Closer != nil {
 		for _, c := range this.Closer {
 			c.Close()
