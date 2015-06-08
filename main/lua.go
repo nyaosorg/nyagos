@@ -58,7 +58,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, e
 			it.Args = newargs
 			it.Spawnvp()
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-			cmd.Interpret(val)
+			cmd.Clone().Interpret(val)
 		}
 	}
 	L.Pop(1)

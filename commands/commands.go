@@ -42,23 +42,8 @@ func Exec(cmd *Interpreter) (NextT, error) {
 		}
 	}
 	cmd.Args = newArgs
-	if cmd.IsBackGround {
-		go func(cmd *Interpreter) {
-			function(cmd)
-			if cmd.Closer != nil {
-				cmd.Closer.Close()
-				cmd.Closer = nil
-			}
-		}(cmd)
-		return CONTINUE, nil
-	} else {
-		next, err := function(cmd)
-		if cmd.Closer != nil {
-			cmd.Closer.Close()
-			cmd.Closer = nil
-		}
-		return next, err
-	}
+	next, err := function(cmd)
+	return next, err
 }
 
 func Init() {

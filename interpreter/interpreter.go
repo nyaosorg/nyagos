@@ -44,11 +44,19 @@ func (this NextT) String() string {
 
 type Interpreter struct {
 	exec.Cmd
-	Stdio        [3]*os.File
-	HookCount    int
-	IsBackGround bool
-	Closer       io.Closer
-	Tag          interface{}
+	Stdio     [3]*os.File
+	HookCount int
+	Closer    []io.Closer
+	Tag       interface{}
+}
+
+func (this *Interpreter)closeAtEnd() {
+	if this.Closer != nil {
+		for _, c := range this.Closer {
+			c.Close()
+		}
+		this.Closer = nil
+	}
 }
 
 func New() *Interpreter {
@@ -86,7 +94,6 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.HookCount = this.HookCount
 	rv.Tag = this.Tag
 	rv.Closer = nil
-	rv.IsBackGround = false
 	return rv
 }
 
@@ -180,9 +187,7 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				if state.Term == "|&" {
 					cmd.SetStderr(pipeOut)
 				}
-				cmd.Closer = pipeOut
-			} else {
-				cmd.Closer = nil
+				cmd.Closer = append(cmd.Closer, pipeOut)
 			}
 
 			if i > 0 && pipeline[i-1].Term[0] == '|' {
@@ -192,6 +197,7 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 					return CONTINUE, err
 				}
 				cmd.SetStdin(pipeIn)
+				cmd.Closer = append(cmd.Closer, pipeIn)
 			} else {
 				pipeOut = nil
 			}
@@ -208,14 +214,13 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				result = make(chan result_t)
 				go func() {
 					whatToDo, err := cmd.Spawnvp()
+					cmd.closeAtEnd()
 					result <- result_t{whatToDo, err}
 				}()
 			} else {
 				go func() {
 					cmd.Spawnvp()
-					if cmd.Closer != nil {
-						cmd.Closer.Close()
-					}
+					cmd.closeAtEnd()
 				}()
 			}
 		}
