@@ -1,4 +1,5 @@
 * Fixed the limiter of alias subsutitution was only one. Changed upto 5
+* Fixed more than one nyagos.argsfiler could run at once on pipelines. It caused to crash the process.
 
 NYAGOS 4.0.9\_1
 ===============
