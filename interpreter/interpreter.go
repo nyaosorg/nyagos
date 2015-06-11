@@ -164,6 +164,13 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 	if statementsErr != nil {
 		return CONTINUE, statementsErr
 	}
+	if argsHook != nil {
+		for i := 0; i < len(statements); i++ {
+			for j := 0; j < len(statements[i]); j++ {
+				statements[i][j].Argv = argsHook(this, statements[i][j].Argv)
+			}
+		}
+	}
 	var result chan result_t = nil
 	for _, pipeline := range statements {
 		var pipeOut *os.File = nil
@@ -206,9 +213,6 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				}
 			}
 			cmd.Args = state.Argv
-			if argsHook != nil {
-				cmd.Args = argsHook(cmd, cmd.Args)
-			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				result = make(chan result_t)
 				go func() {
