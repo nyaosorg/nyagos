@@ -139,9 +139,6 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 	var whatToDo NextT = CONTINUE
 	var err error = nil
 
-	if argsHook != nil {
-		this.Args = argsHook(this, this.Args)
-	}
 	if len(this.Args) > 0 {
 		whatToDo, err = hook(this)
 		if whatToDo == THROUGH {
@@ -209,7 +206,9 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				}
 			}
 			cmd.Args = state.Argv
-
+			if argsHook != nil {
+				cmd.Args = argsHook(cmd, cmd.Args)
+			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				result = make(chan result_t)
 				go func() {
