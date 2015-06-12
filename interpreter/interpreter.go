@@ -165,9 +165,9 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 		return CONTINUE, statementsErr
 	}
 	if argsHook != nil {
-		for i := 0; i < len(statements); i++ {
-			for j := 0; j < len(statements[i]); j++ {
-				statements[i][j].Argv = argsHook(this, statements[i][j].Argv)
+		for _, pipeline := range statements {
+			for _, state := range pipeline {
+				state.Argv = argsHook(this, state.Argv)
 			}
 		}
 	}

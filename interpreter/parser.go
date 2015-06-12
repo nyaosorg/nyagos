@@ -146,14 +146,14 @@ func dequote(source *bytes.Buffer) string {
 	return buffer.String()
 }
 
-func terminate(statements *[]StatementT,
+func terminate(statements *[]*StatementT,
 	isRedirected *bool,
 	redirect *[]*Redirecter,
 	buffer *bytes.Buffer,
 	argv *[]string,
 	term string) {
 
-	var statement1 StatementT
+	statement1 := new(StatementT)
 	if buffer.Len() > 0 {
 		if *isRedirected && len(*redirect) > 0 {
 			(*redirect)[len(*redirect)-1].SetPath(dequote(buffer))
@@ -175,10 +175,10 @@ func terminate(statements *[]StatementT,
 	*statements = append(*statements, statement1)
 }
 
-func parse1(text string) ([]StatementT, error) {
+func parse1(text string) ([]*StatementT, error) {
 	quoteNow := NOTQUOTED
 	yenCount := 0
-	statements := make([]StatementT, 0)
+	statements := make([]*StatementT, 0)
 	argv := make([]string, 0)
 	lastchar := ' '
 	var buffer bytes.Buffer
@@ -298,15 +298,15 @@ func parse1(text string) ([]StatementT, error) {
 }
 
 // Make arrays whose elements are pipelines
-func parse2(statements []StatementT) [][]StatementT {
-	result := make([][]StatementT, 1)
+func parse2(statements []*StatementT) [][]*StatementT {
+	result := make([][]*StatementT, 1)
 	for _, statement1 := range statements {
 		result[len(result)-1] = append(result[len(result)-1], statement1)
 		switch statement1.Term {
 		case "|", "|&":
 
 		default:
-			result = append(result, make([]StatementT, 0))
+			result = append(result, make([]*StatementT, 0))
 		}
 	}
 	if len(result[len(result)-1]) <= 0 {
@@ -315,7 +315,7 @@ func parse2(statements []StatementT) [][]StatementT {
 	return result
 }
 
-func Parse(text string) ([][]StatementT, error) {
+func Parse(text string) ([][]*StatementT, error) {
 	result1, err := parse1(text)
 	if err != nil {
 		return nil, err
