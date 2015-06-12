@@ -3,8 +3,12 @@ nyagos.alias("open",function(args)
     for i=1,#args do
         local list=nyagos.glob(args[i])
         if list and #list >= 1 then
-            for i=1,#list do
-                assert(nyagos.shellexecute("open",list[i]))
+            for j=1,#list do
+                if nyagos.access(list[j],0) then
+                    assert(nyagos.shellexecute("open",list[j]))
+                else
+                    print(args[i] .. ": can not get status")
+                end
             end
         else
             if nyagos.access(args[i],0) then
