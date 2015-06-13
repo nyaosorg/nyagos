@@ -2,7 +2,6 @@ package dos
 
 import (
 	"fmt"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"syscall"
@@ -63,45 +62,4 @@ func Chdir(folder_ string) error {
 		}
 	}
 	return err
-}
-
-var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[/\\\\]")
-var rxDrive = regexp.MustCompile("^[a-zA-Z]:")
-
-func joinPath2(a, b string) string {
-	if len(a) <= 0 || rxRoot.MatchString(b) || rxDrive.MatchString(b) {
-		return b
-	}
-	switch a[len(a)-1] {
-	case '\\', '/', ':':
-		return a + b
-	default:
-		return a + "\\" + b
-	}
-}
-
-// Equals filepath.Join but this works right when path has drive-letter.
-func Join(paths ...string) string {
-	result := paths[len(paths)-1]
-	for i := len(paths) - 2; i >= 0; i-- {
-		result = joinPath2(paths[i], result)
-	}
-	return result
-}
-
-// Expand filenames matching with wildcard-pattern.
-func Glob(pattern string) ([]string, error) {
-	pname := filepath.Base(pattern)
-	if strings.IndexAny(pname, "*?") < 0 {
-		return nil, nil
-	}
-	match := make([]string, 0, 100)
-	dirname := filepath.Dir(pattern)
-	err := ForFiles(pattern, func(findf *FileInfo) bool {
-		if name := findf.Name(); name[0] != '.' || pname[0] == '.' {
-			match = append(match, filepath.Join(dirname, name))
-		}
-		return true
-	})
-	return match, err
 }
