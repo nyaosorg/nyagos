@@ -54,7 +54,7 @@ func listUpFiles(str string) ([]string, error) {
 	}
 	commons := make([]string, 0)
 	STR := strings.ToUpper(str)
-	fdErr := dos.ForFiles(wildcard, func(fd *dos.FindFiles) bool {
+	fdErr := dos.ForFiles(wildcard, func(fd *dos.FileInfo) bool {
 		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
 			return true
 		}

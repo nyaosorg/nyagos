@@ -6,21 +6,21 @@ import (
 	"time"
 )
 
-type FindFiles struct {
+type FileInfo struct {
 	handle syscall.Handle
 	data1  syscall.Win32finddata
 }
 
-func (this *FindFiles) Clone() *FindFiles {
-	return &FindFiles{this.handle, this.data1}
+func (this *FileInfo) clone() *FileInfo {
+	return &FileInfo{this.handle, this.data1}
 }
 
-func FindFirst(pattern string) (*FindFiles, error) {
+func findFirst(pattern string) (*FileInfo, error) {
 	pattern16, err := syscall.UTF16PtrFromString(pattern)
 	if err != nil {
 		return nil, err
 	}
-	this := new(FindFiles)
+	this := new(FileInfo)
 	this.handle, err = syscall.FindFirstFile(pattern16, &this.data1)
 	if err != nil {
 		return nil, err
@@ -28,19 +28,19 @@ func FindFirst(pattern string) (*FindFiles, error) {
 	return this, nil
 }
 
-func (this *FindFiles) Name() string {
+func (this *FileInfo) Name() string {
 	return syscall.UTF16ToString(this.data1.FileName[:])
 }
 
-func (this *FindFiles) Size() int64 {
+func (this *FileInfo) Size() int64 {
 	return int64((this.data1.FileSizeHigh << 32) | this.data1.FileSizeLow)
 }
 
-func (this *FindFiles) ModTime() time.Time {
+func (this *FileInfo) ModTime() time.Time {
 	return time.Unix(0, this.data1.LastWriteTime.Nanoseconds())
 }
 
-func (this *FindFiles) Mode() os.FileMode {
+func (this *FileInfo) Mode() os.FileMode {
 	m := os.FileMode(0444)
 	if this.IsDir() {
 		m |= 0111 | os.ModeDir
@@ -51,43 +51,43 @@ func (this *FindFiles) Mode() os.FileMode {
 	return m
 }
 
-func (this *FindFiles) Sys() interface{} {
+func (this *FileInfo) Sys() interface{} {
 	return this.data1
 }
 
-func (this *FindFiles) FindNext() error {
+func (this *FileInfo) findNext() error {
 	return syscall.FindNextFile(this.handle, &this.data1)
 }
 
-func (this *FindFiles) Close() {
+func (this *FileInfo) close() {
 	syscall.FindClose(this.handle)
 }
 
-func (this *FindFiles) Attribute() uint32 {
+func (this *FileInfo) Attribute() uint32 {
 	return this.data1.FileAttributes
 }
 
-func (this *FindFiles) IsReparsePoint() bool {
+func (this *FileInfo) IsReparsePoint() bool {
 	return (this.Attribute() & FILE_ATTRIBUTE_REPARSE_POINT) != 0
 }
 
-func (this *FindFiles) IsReadOnly() bool {
+func (this *FileInfo) IsReadOnly() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_READONLY) != 0
 }
 
-func (this *FindFiles) IsExecutable() bool {
+func (this *FileInfo) IsExecutable() bool {
 	return IsExecutableSuffix(this.Name())
 }
 
-func (this *FindFiles) IsDir() bool {
+func (this *FileInfo) IsDir() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_DIRECTORY) != 0
 }
 
-func (this *FindFiles) IsHidden() bool {
+func (this *FileInfo) IsHidden() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_HIDDEN) != 0
 }
 
-func (this *FindFiles) IsSystem() bool {
+func (this *FileInfo) IsSystem() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_SYSTEM) != 0
 }
 
@@ -106,17 +106,17 @@ func DirName(path string) string {
 	}
 }
 
-func ForFiles(pattern string, callback func(*FindFiles) bool) error {
-	this, err := FindFirst(pattern)
+func ForFiles(pattern string, callback func(*FileInfo) bool) error {
+	this, err := findFirst(pattern)
 	if err != nil {
 		return err
 	}
-	defer this.Close()
+	defer this.close()
 	for {
-		if !callback(this.Clone()) {
+		if !callback(this.clone()) {
 			return nil
 		}
-		if err := this.FindNext(); err != nil {
+		if err := this.findNext(); err != nil {
 			return nil
 		}
 	}

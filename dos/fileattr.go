@@ -8,7 +8,7 @@ import (
 func GetFileAttributesFromFileInfo(status os.FileInfo) uint32 {
 	if it, ok := status.Sys().(*syscall.Win32FileAttributeData); ok {
 		return it.FileAttributes
-	} else if it, ok := status.(*FindFiles); ok {
+	} else if it, ok := status.(*FileInfo); ok {
 		return it.data1.FileAttributes
 	} else {
 		panic("Can not get fileatttribute")

@@ -228,7 +228,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	} else {
 		wildcard = dos.Join(folder, "*")
 	}
-	dos.ForFiles(wildcard, func(f *dos.FindFiles) bool {
+	dos.ForFiles(wildcard, func(f *dos.FileInfo) bool {
 		if (flag & O_ALL) == 0 {
 			if strings.HasPrefix(f.Name(), ".") {
 				return true
