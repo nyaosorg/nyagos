@@ -6,16 +6,12 @@ import (
 )
 
 func TestFindFirst(t *testing.T) {
-	fd, err := FindFirst("*")
-	if err != nil {
-		return
-	}
-	defer fd.Close()
-	for ; err == nil; err = fd.FindNext() {
+	ForFiles("*", func(fd *FileInfo) bool {
 		fmt.Print(fd.Name())
 		if fd.IsDir() {
 			fmt.Print("/")
 		}
 		fmt.Println()
-	}
+		return true
+	})
 }
