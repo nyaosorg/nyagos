@@ -1,5 +1,6 @@
 * Fixed nyagos.stat did not work on reparsepoints.
 * Fixed #74 "ls -a" never prints "." and ".." (current and parent directory)
+* Disabled ls-color when stdout is not console even if -o option exists.
 
 NYAGOS 4.0.9\_2
 ===============
