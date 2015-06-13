@@ -95,20 +95,13 @@ func Glob(pattern string) ([]string, error) {
 	if strings.IndexAny(pname, "*?") < 0 {
 		return nil, nil
 	}
-	findf, err := FindFirst(pattern)
-	if err != nil {
-		return nil, err
-	}
-	defer findf.Close()
-	dirname := filepath.Dir(pattern)
 	match := make([]string, 0, 100)
-	for {
+	dirname := filepath.Dir(pattern)
+	err := ForFiles(pattern, func(findf *FindFiles) bool {
 		if name := findf.Name(); name[0] != '.' || pname[0] == '.' {
 			match = append(match, filepath.Join(dirname, name))
 		}
-		err := findf.FindNext()
-		if err != nil {
-			return match, nil
-		}
-	}
+		return true
+	})
+	return match, err
 }
