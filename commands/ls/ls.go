@@ -392,6 +392,10 @@ func Main(args []string, out io.Writer) error {
 		message = append(message, "] [PATH(s)]..."...)
 		return errors.New(string(message))
 	}
+	if _, ok := out.(io.Closer); ok {
+		// output is a not ansicolor instance.
+		flag &^= O_COLOR
+	}
 	if (flag & O_COLOR) != 0 {
 		io.WriteString(out, ANSI_END)
 	}

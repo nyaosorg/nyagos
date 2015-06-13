@@ -1,6 +1,9 @@
 package commands
 
 import (
+	"io"
+	"os"
+
 	"github.com/shiena/ansicolor"
 
 	"../interpreter"
@@ -8,6 +11,11 @@ import (
 )
 
 func cmd_ls(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
-	return interpreter.CONTINUE,
-		ls.Main(cmd.Args[1:], ansicolor.NewAnsiColorWriter(cmd.Stdout))
+	var out io.Writer
+	if cmd.Stdout == os.Stdout {
+		out = ansicolor.NewAnsiColorWriter(cmd.Stdout)
+	} else {
+		out = cmd.Stdout
+	}
+	return interpreter.CONTINUE, ls.Main(cmd.Args[1:], out)
 }
