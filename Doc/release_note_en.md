@@ -1,3 +1,6 @@
+* Fixed nyagos.stat did not work on reparsepoints.
+* Fixed #74 "ls -a" never prints "." and ".." (current and parent directory)
+
 NYAGOS 4.0.9\_2
 ===============
 * Fixed the limiter of alias subsutitution was only one. Changed upto 5
