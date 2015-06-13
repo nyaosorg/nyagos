@@ -215,37 +215,36 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	} else {
 		folder_ = folder
 	}
-	fd, err := os.Open(folder_)
-	if err != nil {
-		return err
-	}
 	nodesArray := fileInfoCollection{flag: flag}
-	nodesArray.nodes, err = fd.Readdir(-1)
-	fd.Close()
-	if err != nil {
-		return err
-	}
-	tmp := make([]os.FileInfo, 0)
 	var folders []string = nil
 	if (flag & O_RECURSIVE) != 0 {
 		folders = make([]string, 0)
 	}
-	for _, f := range nodesArray.nodes {
+	tmp := make([]os.FileInfo, 0)
+
+	var wildcard string
+	if folder == "" {
+		wildcard = "*"
+	} else {
+		wildcard = dos.Join(folder, "*")
+	}
+	dos.ForFiles(wildcard, func(f *dos.FindFiles) bool {
 		if (flag & O_ALL) == 0 {
 			if strings.HasPrefix(f.Name(), ".") {
-				continue
+				return true
 			}
 			attr := dos.GetFileAttributesFromFileInfo(f)
 			if (attr & dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
-				continue
+				return true
 			}
 		}
-		if f.IsDir() && folders != nil {
+		if f.IsDir() && folders != nil && f.Name() != "." && f.Name() != ".." {
 			folders = append(folders, f.Name())
 		} else {
 			tmp = append(tmp, f)
 		}
-	}
+		return true
+	})
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	if (flag & O_ONE) != 0 {
@@ -269,7 +268,7 @@ var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
 
 func lsCore(paths []string, flag int, out io.Writer) error {
 	if len(paths) <= 0 {
-		return lsFolder(".", flag, out)
+		return lsFolder("", flag, out)
 	}
 	dirs := make([]string, 0)
 	printCount := 0
