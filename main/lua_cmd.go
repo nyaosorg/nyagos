@@ -341,7 +341,17 @@ func cmdStat(L lua.Lua) int {
 	if pathErr != nil {
 		return L.Push(nil, pathErr)
 	}
-	stat, statErr := os.Stat(path)
+	var stat os.FileInfo
+	var path_ string
+	if len(path) >= 0 && path[len(path)-1] == '\\' {
+		path_ = dos.Join(path, ".")
+	} else {
+		path_ = path
+	}
+	statErr := dos.ForFiles(path_, func(f *dos.FileInfo) bool {
+		stat = f
+		return false
+	})
 	if statErr != nil {
 		return L.Push(nil, statErr)
 	}
