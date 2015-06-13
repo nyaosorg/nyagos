@@ -52,17 +52,11 @@ func listUpFiles(str string) ([]string, error) {
 		directory = wd[0:2] + directory
 		cutprefix = 2
 	}
-
-	fd, fdErr := dos.FindFirst(wildcard)
-	if fdErr != nil {
-		return nil, fdErr
-	}
-	defer fd.Close()
 	commons := make([]string, 0)
 	STR := strings.ToUpper(str)
-	for ; fdErr == nil; fdErr = fd.FindNext() {
+	fdErr := dos.ForFiles(wildcard, func(fd *dos.FindFiles) bool {
 		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
-			continue
+			return true
 		}
 		name := dos.Join(directory, fd.Name())
 		if fd.IsDir() {
@@ -78,6 +72,7 @@ func listUpFiles(str string) ([]string, error) {
 			}
 			commons = append(commons, name)
 		}
-	}
-	return commons, nil
+		return true
+	})
+	return commons, fdErr
 }
