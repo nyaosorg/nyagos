@@ -32,8 +32,8 @@ func Exec(cmd *Interpreter) (NextT, error) {
 	}
 	newArgs := make([]string, 0)
 	for _, arg1 := range cmd.Args {
-		matches, _ := dos.Glob(arg1)
-		if matches == nil {
+		matches, err := dos.Glob(arg1)
+		if matches == nil || len(matches) <= 0 || err != nil {
 			newArgs = append(newArgs, arg1)
 		} else {
 			for _, s := range matches {
