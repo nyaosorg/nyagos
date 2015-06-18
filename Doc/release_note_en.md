@@ -1,3 +1,5 @@
+* Fixed `ls ZERO_MATCH_WILDCARD` worked as if `ls (no-arguments)`
+
 NYAGOS 4.0.9\_3
 ===============
 * Fixed nyagos.stat did not work on reparsepoints.
