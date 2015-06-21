@@ -151,6 +151,8 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 			whatToDo = CONTINUE
 		}
 	}
+	this.Stdio[1].Sync()
+	this.Stdio[2].Sync()
 	return whatToDo, err
 }
 
@@ -159,7 +161,10 @@ type result_t struct {
 	Error     error
 }
 
-func (this *Interpreter) Interpret(text string) (NextT, error) {
+func (this *Interpreter) Interpret(text string) (next NextT, err error) {
+	next = CONTINUE
+	err = nil
+
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
 		return CONTINUE, statementsErr
@@ -171,8 +176,8 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 			}
 		}
 	}
-	var result chan result_t = nil
 	for _, pipeline := range statements {
+		var result chan result_t = nil
 		var pipeOut *os.File = nil
 		for i := len(pipeline) - 1; i >= 0; i-- {
 			state := pipeline[i]
@@ -227,23 +232,23 @@ func (this *Interpreter) Interpret(text string) (NextT, error) {
 				}()
 			}
 		}
-	}
-	if result != nil {
-		resultValue := <-result
-		if resultValue.Error != nil {
-			m := errorStatusPattern.FindStringSubmatch(
-				resultValue.Error.Error())
-			if m != nil {
-				ErrorLevel = m[1]
-				resultValue.Error = nil
+		if result != nil {
+			resultValue := <-result
+			if resultValue.Error != nil {
+				m := errorStatusPattern.FindStringSubmatch(
+					resultValue.Error.Error())
+				if m != nil {
+					ErrorLevel = m[1]
+					resultValue.Error = nil
+				} else {
+					ErrorLevel = "-1"
+				}
 			} else {
-				ErrorLevel = "-1"
+				ErrorLevel = "0"
 			}
-		} else {
-			ErrorLevel = "0"
+			next = resultValue.NextValue
+			err = resultValue.Error
 		}
-		return resultValue.NextValue, resultValue.Error
-	} else {
-		return CONTINUE, nil
 	}
+	return
 }
