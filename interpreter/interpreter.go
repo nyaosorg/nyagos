@@ -151,8 +151,6 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 			whatToDo = CONTINUE
 		}
 	}
-	this.Stdio[1].Sync()
-	this.Stdio[2].Sync()
 	return whatToDo, err
 }
 
