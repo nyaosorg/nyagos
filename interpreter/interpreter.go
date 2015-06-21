@@ -139,6 +139,12 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 	var whatToDo NextT = CONTINUE
 	var err error = nil
 
+	// Without these two line, on `A ; B` somtimes B's output seems
+	// not to be flushed. The reason is unknown.
+	// And replacing this.Stdio[1] to this.Stdout was NG.
+	io.WriteString(this.Stdio[1], "")
+	io.WriteString(this.Stdio[2], "")
+
 	if len(this.Args) > 0 {
 		whatToDo, err = hook(this)
 		if whatToDo == THROUGH {
