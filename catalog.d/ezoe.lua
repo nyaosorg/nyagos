@@ -8,7 +8,13 @@ nyagos.alias.cd = function(args)
     local success=true
     for i=1,#args do
         local dir=args[i]
-        if dir:sub(1,1) ~= "-" and not dir:match("%.[lL][nN][kK]$") then
+        if dir:sub(1,1) ~= "-" and
+            not dir:match("%.[lL][nN][kK]$") and
+            not dir:match("^[a-zA-Z]:[/\\]$") and
+            not dir:match("^[/\\]$") and
+            dir ~= ".." and
+            dir ~= "." then
+
             local stat = nyagos.stat(dir)
             if not stat or not stat.isdir  then
                 nyagos.writerr(dir..": ディレクトリではない。\n")
