@@ -1,4 +1,7 @@
-* Fixed `ls ZERO_MATCH_WILDCARD` worked as if `ls (no-arguments)`
+NYAGOS 4.0.9\_4
+===============
+* Fixed `ls (NO_MATCHING_WILDCARD)` worked as if `ls` with (NO-ARGUMENTS)
+* Fixed `A ; B` worked as if `A & B`.
 
 NYAGOS 4.0.9\_3
 ===============
