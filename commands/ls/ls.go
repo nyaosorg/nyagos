@@ -25,6 +25,7 @@ const (
 	O_RECURSIVE = 128
 	O_ONE       = 256
 	O_HELP      = 512
+	O_SIZESORT  = 1024
 )
 
 type fileInfoT struct {
@@ -189,11 +190,19 @@ type fileInfoCollection struct {
 func (this fileInfoCollection) Len() int {
 	return len(this.nodes)
 }
+
 func (this fileInfoCollection) Less(i, j int) bool {
 	var result bool
 	if (this.flag & O_TIME) != 0 {
 		result = this.nodes[i].ModTime().After(this.nodes[j].ModTime())
 		if !result && !this.nodes[i].ModTime().Before(this.nodes[j].ModTime()) {
+			result = (this.nodes[i].Name() < this.nodes[j].Name())
+		}
+	} else if (this.flag & O_SIZESORT) != 0 {
+		diff := this.nodes[i].Size() - this.nodes[j].Size()
+		if diff != 0 {
+			result = (diff < 0)
+		} else {
 			result = (this.nodes[i].Name() < this.nodes[j].Name())
 		}
 	} else {
@@ -351,6 +360,10 @@ var option = map[rune](func(*int) error){
 	},
 	'h': func(flag *int) error {
 		*flag |= O_HELP
+		return nil
+	},
+	'S': func(flag *int) error {
+		*flag |= O_SIZESORT
 		return nil
 	},
 }
