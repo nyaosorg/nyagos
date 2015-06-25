@@ -26,6 +26,7 @@ const (
 	O_ONE       = 256
 	O_HELP      = 512
 	O_SIZESORT  = 1024
+	O_HUMAN     = 2048
 )
 
 type fileInfoT struct {
@@ -105,8 +106,29 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 		name = filepath.Base(name)
 	}
 	stamp := status.ModTime()
-	fmt.Fprintf(out, " %8d %04d-%02d-%02d %02d:%02d %s%s%s",
-		status.Size(),
+	if (flag & O_HUMAN) != 0 {
+		size := status.Size()
+		if size >= 1024*1024*1024 {
+			MB := size / 1024 / 1024
+			GB := MB / 1024
+			MB = MB % 1024
+			fmt.Fprintf(out, " %5d.%01dG", GB, MB/102)
+		} else if size >= 1024*1024 {
+			KB := size / 1024
+			MB := KB / 1024
+			KB = KB % 1024
+			fmt.Fprintf(out, " %5d.%01dM", MB, KB/102)
+		} else if size > 1024 {
+			KB := size / 1024
+			B := size % 1024
+			fmt.Fprintf(out, " %5d.%01dK", KB, B/102)
+		} else {
+			fmt.Fprintf(out, " %8d", size)
+		}
+	} else {
+		fmt.Fprintf(out, " %8d", status.Size())
+	}
+	fmt.Fprintf(out, " %04d-%02d-%02d %02d:%02d %s%s%s",
 		stamp.Year(),
 		stamp.Month(),
 		stamp.Day(),
@@ -359,7 +381,7 @@ var option = map[rune](func(*int) error){
 		return nil
 	},
 	'h': func(flag *int) error {
-		*flag |= O_HELP
+		*flag |= O_HUMAN
 		return nil
 	},
 	'S': func(flag *int) error {
