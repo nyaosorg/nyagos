@@ -1,3 +1,5 @@
+* Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)
+
 NYAGOS 4.0.9\_4
 ===============
 * Fixed `ls (NO_MATCHING_WILDCARD)` worked as if `ls` with (NO-ARGUMENTS)
