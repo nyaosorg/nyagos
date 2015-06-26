@@ -51,6 +51,12 @@ func printPrompt(this *conio.LineEditor) int {
 	L.GetGlobal("nyagos")
 	L.GetField(-1, "prompt")
 	L.Remove(-2)
+
+	if !L.IsFunction(-1) {
+		L.Pop(1)
+		return 0
+	}
+
 	L.PushString(os.Getenv("PROMPT"))
 	L.Call(1, 1)
 	length, lengthErr := L.ToInteger(-1)
