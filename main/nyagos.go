@@ -54,6 +54,7 @@ func printPrompt(this *conio.LineEditor) int {
 	L.PushString(os.Getenv("PROMPT"))
 	L.Call(1, 1)
 	length, lengthErr := L.ToInteger(-1)
+	L.Pop(1)
 	if lengthErr == nil {
 		return length
 	} else {
