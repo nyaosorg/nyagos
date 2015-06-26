@@ -187,6 +187,7 @@ func SetLuaFunctions(this lua.Lua) {
 		"bindkey":      cmdBindKey,
 		"commonprefix": cmdCommonPrefix,
 		"eval":         cmdEval,
+		"evaluate":     cmdEvaluate,
 		"exec":         cmdExec,
 		"getalias":     cmdGetAlias,
 		"getenv":       cmdGetEnv,

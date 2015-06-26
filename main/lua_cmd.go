@@ -172,6 +172,26 @@ func cmdEval(L lua.Lua) int {
 	return 1
 }
 
+func cmdEvaluate(L lua.Lua) int {
+	argc := L.GetTop()
+	argv := make([]string, 0, argc)
+	for i := 1; i <= argc; i++ {
+		s, s_err := L.ToString(i)
+		if s_err != nil {
+			s = ""
+		}
+		argv = append(argv, s)
+	}
+	cmd1 := exec.Command(argv[0], argv[1:]...)
+	out, err := cmd1.Output()
+	if err != nil {
+		return L.Push(nil, err.Error())
+	} else {
+		L.PushAnsiString(out)
+		return 1
+	}
+}
+
 func cmdWrite(L lua.Lua) int {
 	var out io.Writer = os.Stdout
 	cmd, cmdOk := LuaInstanceToCmd[L.State()]
