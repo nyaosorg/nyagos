@@ -237,6 +237,11 @@ Otherwise status is false and error is error-message.
 It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
 When error occures, OUTPUT is set `nil`.
 
+### `OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)`
+
+It executes "COMMAND-NAME" with ARGs and returns commands' standard-output.
+COMMAND-NAME can not be a built-in command.
+
 ### `WD = nyaos.getwd()`
 
 Get current working directory.

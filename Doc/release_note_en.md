@@ -1,4 +1,5 @@
 * Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)
+* Add nyagos.raweval
 
 NYAGOS 4.0.9\_4
 ===============
