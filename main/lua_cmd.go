@@ -172,7 +172,7 @@ func cmdEval(L lua.Lua) int {
 	return 1
 }
 
-func cmdEvaluate(L lua.Lua) int {
+func cmdRawEval(L lua.Lua) int {
 	argc := L.GetTop()
 	argv := make([]string, 0, argc)
 	for i := 1; i <= argc; i++ {
