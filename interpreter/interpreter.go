@@ -48,6 +48,7 @@ type Interpreter struct {
 	HookCount int
 	Closer    []io.Closer
 	Tag       interface{}
+	PipeSeq   uint
 }
 
 func (this *Interpreter) closeAtEnd() {
@@ -66,6 +67,7 @@ func New() *Interpreter {
 	this.Stdin = os.Stdin
 	this.Stdout = os.Stdout
 	this.Stderr = os.Stderr
+	this.PipeSeq = pipeSeq
 	this.Tag = nil
 	return &this
 }
@@ -93,6 +95,7 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.Stderr = this.Stderr
 	rv.HookCount = this.HookCount
 	rv.Tag = this.Tag
+	rv.PipeSeq = rv.PipeSeq
 	rv.Closer = nil
 	return rv
 }
@@ -159,6 +162,8 @@ type result_t struct {
 	Error     error
 }
 
+var pipeSeq uint = 0
+
 func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 	next = CONTINUE
 	err = nil
@@ -177,10 +182,13 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 	for _, pipeline := range statements {
 		var result chan result_t = nil
 		var pipeOut *os.File = nil
+		pipeSeq++
+
 		for i := len(pipeline) - 1; i >= 0; i-- {
 			state := pipeline[i]
 
 			cmd := new(Interpreter)
+			cmd.PipeSeq = pipeSeq
 			cmd.Tag = this.Tag
 			cmd.HookCount = this.HookCount
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))

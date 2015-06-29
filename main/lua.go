@@ -1,8 +1,10 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"sync"
 
 	"../dos"
 	"../interpreter"
@@ -20,8 +22,25 @@ func (this LuaFunction) String() string {
 	return "<<Lua-function>>"
 }
 
+var mutex4dll sync.Mutex
+var luaUsedOnThatPipeline = map[uint]bool{}
+
+const ERRMSG_CAN_NOT_USE_TWO_LUA_ON = "Can not use two Lua-command on the same pipeline"
+
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	L := this.L
+	seq := cmd.PipeSeq
+	mutex4dll.Lock()
+	if _, ok := luaUsedOnThatPipeline[seq]; ok {
+		mutex4dll.Unlock()
+		fmt.Fprintf(os.Stderr, "%s: %s\n",
+			cmd.Args[0],
+			ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
+		return interpreter.CONTINUE, errors.New(ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
+	}
+	luaUsedOnThatPipeline[seq] = true
+	mutex4dll.Unlock()
+
 	L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
 	L.NewTable()
 	for i, arg1 := range cmd.Args {
