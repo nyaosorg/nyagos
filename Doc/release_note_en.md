@@ -1,5 +1,6 @@
 * Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)
 * Add nyagos.raweval
+* Forbade to use more than one lua-command on the same pipeline for safety.
 
 NYAGOS 4.0.9\_4
 ===============
