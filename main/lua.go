@@ -26,8 +26,16 @@ var mutex4dll sync.Mutex
 var luaUsedOnThatPipeline = map[uint]bool{}
 
 const ERRMSG_CAN_NOT_USE_TWO_LUA_ON = "Can not use two Lua-command on the same pipeline"
+const ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND = "Can not run Lua-Command on background"
 
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+	if cmd.IsBackGround {
+		fmt.Fprintf(os.Stderr, "%s: %s\n",
+			cmd.Args[0],
+			ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
+		return interpreter.CONTINUE,
+			errors.New(ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
+	}
 	L := this.L
 	seq := cmd.PipeSeq
 	mutex4dll.Lock()

@@ -44,11 +44,12 @@ func (this NextT) String() string {
 
 type Interpreter struct {
 	exec.Cmd
-	Stdio     [3]*os.File
-	HookCount int
-	Closer    []io.Closer
-	Tag       interface{}
-	PipeSeq   uint
+	Stdio        [3]*os.File
+	HookCount    int
+	Closer       []io.Closer
+	Tag          interface{}
+	PipeSeq      uint
+	IsBackGround bool
 }
 
 func (this *Interpreter) closeAtEnd() {
@@ -183,12 +184,18 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 		var result chan result_t = nil
 		var pipeOut *os.File = nil
 		pipeSeq++
+		isBackGround := false
 
 		for i := len(pipeline) - 1; i >= 0; i-- {
 			state := pipeline[i]
 
+			if pipeline[i].Term == "&" {
+				isBackGround = true
+			}
+
 			cmd := new(Interpreter)
 			cmd.PipeSeq = pipeSeq
+			cmd.IsBackGround = isBackGround
 			cmd.Tag = this.Tag
 			cmd.HookCount = this.HookCount
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
