@@ -233,16 +233,16 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 			cmd.Args = state.Argv
 			if i == len(pipeline)-1 && state.Term != "&" {
 				result = make(chan result_t)
-				go func() {
-					whatToDo, err := cmd.Spawnvp()
-					cmd.closeAtEnd()
-					result <- result_t{whatToDo, err}
-				}()
+				go func(ch chan result_t, cmd1 *Interpreter) {
+					whatToDo, err := cmd1.Spawnvp()
+					cmd1.closeAtEnd()
+					ch <- result_t{whatToDo, err}
+				}(result, cmd)
 			} else {
-				go func() {
-					cmd.Spawnvp()
-					cmd.closeAtEnd()
-				}()
+				go func(cmd1 *Interpreter) {
+					cmd1.Spawnvp()
+					cmd1.closeAtEnd()
+				}(cmd)
 			}
 		}
 		if result != nil {
