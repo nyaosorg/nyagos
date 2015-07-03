@@ -1,5 +1,5 @@
 * Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)
-* Add nyagos.raweval
+* Add nyagos.rawexec and nyagos.raweval
 * Forbade to use more than one lua-command on the same pipeline to avoid crash.
 * Forbade to run Lua background to avoid crash.
 

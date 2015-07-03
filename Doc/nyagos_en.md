@@ -232,6 +232,14 @@ It executes "COMMAND" as shell command.
 If "COMMAND" succeeds, status is true.
 Otherwise status is false and error is error-message.
 
+### `STATUS,ERROR = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
+
+It executes "COMMAND-NAME" with ARGs.
+COMMAND-NAME is not interpreted as a built-in command nor an alias
+It returns true when the command succeeded, and nil and error-string
+when the command failed.
+The difference with os.execute is that the character-code is utf-8.
+
 ### `OUTPUT = nyagos.eval("COMMAND")`
 
 It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
@@ -240,7 +248,7 @@ When error occures, OUTPUT is set `nil`.
 ### `OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)`
 
 It executes "COMMAND-NAME" with ARGs and returns commands' standard-output.
-COMMAND-NAME can not be a built-in command.
+COMMAND-NAME is not intepreted as a built-in command nor an alias.
 
 ### `WD = nyaos.getwd()`
 
