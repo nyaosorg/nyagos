@@ -224,6 +224,7 @@ func SetLuaFunctions(this lua.Lua) {
 		"glob":         cmdGlob,
 		"pathjoin":     cmdPathJoin,
 		"raweval":      cmdRawEval,
+		"rawexec":      cmdRawExec,
 		"setalias":     cmdSetAlias,
 		"setenv":       cmdSetEnv,
 		"setrunewidth": cmdSetRuneWidth,

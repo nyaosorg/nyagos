@@ -172,7 +172,7 @@ func cmdEval(L lua.Lua) int {
 	return 1
 }
 
-func cmdRawEval(L lua.Lua) int {
+func luaStackToSlice(L lua.Lua) []string {
 	argc := L.GetTop()
 	argv := make([]string, 0, argc)
 	for i := 1; i <= argc; i++ {
@@ -182,6 +182,37 @@ func cmdRawEval(L lua.Lua) int {
 		}
 		argv = append(argv, s)
 	}
+	return argv
+}
+
+func cmdRawExec(L lua.Lua) int {
+	argv := luaStackToSlice(L)
+	cmd1 := exec.Command(argv[0], argv[1:]...)
+	cmd1.Stdout = os.Stdout
+	cmd1.Stderr = os.Stderr
+	cmd1.Stdin = os.Stdin
+	if it, ok := LuaInstanceToCmd[L.State()]; ok {
+		if it.Stdout != nil {
+			cmd1.Stdout = it.Stdout
+		}
+		if it.Stderr != nil {
+			cmd1.Stderr = it.Stderr
+		}
+		if it.Stdin != nil {
+			cmd1.Stdin = it.Stdin
+		}
+	}
+	err := cmd1.Run()
+	if err != nil {
+		fmt.Fprintln(cmd1.Stderr, err.Error())
+		return L.Push(nil, err.Error())
+	} else {
+		return L.Push(true)
+	}
+}
+
+func cmdRawEval(L lua.Lua) int {
+	argv := luaStackToSlice(L)
 	cmd1 := exec.Command(argv[0], argv[1:]...)
 	out, err := cmd1.Output()
 	if err != nil {
