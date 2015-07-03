@@ -48,7 +48,7 @@ type Interpreter struct {
 	HookCount    int
 	Closer       []io.Closer
 	Tag          interface{}
-	PipeSeq      uint
+	PipeSeq      [2]uint
 	IsBackGround bool
 }
 
@@ -68,7 +68,8 @@ func New() *Interpreter {
 	this.Stdin = os.Stdin
 	this.Stdout = os.Stdout
 	this.Stderr = os.Stderr
-	this.PipeSeq = pipeSeq
+	this.PipeSeq[0] = pipeSeq
+	this.PipeSeq[1] = 0
 	this.Tag = nil
 	return &this
 }
@@ -191,7 +192,8 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 			}
 
 			cmd := new(Interpreter)
-			cmd.PipeSeq = pipeSeq
+			cmd.PipeSeq[0] = pipeSeq
+			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
 			cmd.Tag = this.Tag
 			cmd.HookCount = this.HookCount
