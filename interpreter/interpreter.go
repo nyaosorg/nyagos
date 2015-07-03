@@ -181,15 +181,12 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 		}
 	}
 	for _, pipeline := range statements {
-		var result chan result_t = nil
-		var pipeOut *os.File = nil
+		var pipeIn *os.File = nil
 		pipeSeq++
 		isBackGround := false
 
-		for i := len(pipeline) - 1; i >= 0; i-- {
-			state := pipeline[i]
-
-			if pipeline[i].Term == "&" {
+		for i, state := range pipeline {
+			if state.Term == "&" {
 				isBackGround = true
 			}
 
@@ -204,24 +201,20 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 
 			var err error = nil
 
+			if pipeIn != nil {
+				cmd.SetStdin(pipeIn)
+				cmd.Closer = append(cmd.Closer, pipeIn)
+				pipeIn = nil
+			}
+
 			if state.Term[0] == '|' {
+				var pipeOut *os.File
+				pipeIn, pipeOut, err = os.Pipe()
 				cmd.SetStdout(pipeOut)
 				if state.Term == "|&" {
 					cmd.SetStderr(pipeOut)
 				}
 				cmd.Closer = append(cmd.Closer, pipeOut)
-			}
-
-			if i > 0 && pipeline[i-1].Term[0] == '|' {
-				var pipeIn *os.File
-				pipeIn, pipeOut, err = os.Pipe()
-				if err != nil {
-					return CONTINUE, err
-				}
-				cmd.SetStdin(pipeIn)
-				cmd.Closer = append(cmd.Closer, pipeIn)
-			} else {
-				pipeOut = nil
 			}
 
 			for _, red := range state.Redirect {
@@ -230,37 +223,28 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 					return CONTINUE, err
 				}
 			}
+
 			cmd.Args = state.Argv
 			if i == len(pipeline)-1 && state.Term != "&" {
-				result = make(chan result_t)
-				go func(ch chan result_t, cmd1 *Interpreter) {
-					whatToDo, err := cmd1.Spawnvp()
-					cmd1.closeAtEnd()
-					ch <- result_t{whatToDo, err}
-				}(result, cmd)
+				next, err = cmd.Spawnvp()
+				cmd.closeAtEnd()
+				if err != nil {
+					m := errorStatusPattern.FindStringSubmatch(err.Error())
+					if m != nil {
+						ErrorLevel = m[1]
+						err = nil
+					} else {
+						ErrorLevel = "-1"
+					}
+				} else {
+					ErrorLevel = "0"
+				}
 			} else {
 				go func(cmd1 *Interpreter) {
 					cmd1.Spawnvp()
 					cmd1.closeAtEnd()
 				}(cmd)
 			}
-		}
-		if result != nil {
-			resultValue := <-result
-			if resultValue.Error != nil {
-				m := errorStatusPattern.FindStringSubmatch(
-					resultValue.Error.Error())
-				if m != nil {
-					ErrorLevel = m[1]
-					resultValue.Error = nil
-				} else {
-					ErrorLevel = "-1"
-				}
-			} else {
-				ErrorLevel = "0"
-			}
-			next = resultValue.NextValue
-			err = resultValue.Error
 		}
 	}
 	return
