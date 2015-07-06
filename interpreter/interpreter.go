@@ -126,6 +126,7 @@ func SetHook(hook_ HookT) (rv HookT) {
 
 var OnCommandNotFound = func(this *Interpreter, err error) error {
 	err = &CommandNotFound{this.Args[0], err}
+	fmt.Fprintln(this.Stderr, err.Error())
 	return err
 }
 
