@@ -7,6 +7,7 @@ NYAGOS is the commandline-shell for Windows written with the
 Programming Language GO and Lua.
 
 * UNIX-Like Shell
+  * Keybinding like Emacs.
   * History (Ctrl-P and !-mark)
   * Alias
   * Filename/Command-name completion

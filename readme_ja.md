@@ -6,6 +6,7 @@ The Nihongo Yet Another GOing Shell
 NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェルです。
 
 * UNIX風シェル
+  * Emacs風キーバインド
   * ヒストリ (Ctrl-P や ! マークによる)
   * エイリアス
   * ファイル名・コマンド名補完
