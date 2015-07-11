@@ -14,7 +14,7 @@ nyagos.alias.go = function(args)
     else
         args[0] = "go"
     end
-    assert(nyagos.rawexec(args[0],table.unpack(args)))
+    assert(nyagos.rawexec(args))
 end
 nyagos.alias.git = function(args)
     if #args >=1 and go_only[args[1]] then
@@ -22,5 +22,5 @@ nyagos.alias.git = function(args)
     else
         args[0] = "git"
     end
-    assert(nyagos.rawexec(args[0],table.unpack(args)))
+    assert(nyagos.rawexec(args))
 end
