@@ -93,8 +93,7 @@ func cmdExec(L lua.Lua) int {
 		L.Pop(1)
 		args := make([]string, 0, n+1)
 		for i := 0; i <= n; i++ {
-			L.PushInteger(lua.Integer(i))
-			L.GetTable(-2)
+			L.RawGetI(-1, lua.Integer(i))
 			arg1, err := L.ToString(-1)
 			if err == nil && arg1 != "" {
 				args = append(args, arg1)
