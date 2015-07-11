@@ -186,12 +186,14 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 		var pipeIn *os.File = nil
 		pipeSeq++
 		isBackGround := false
-
-		for i, state := range pipeline {
+		for _, state := range pipeline {
 			if state.Term == "&" {
 				isBackGround = true
+				break
 			}
+		}
 
+		for i, state := range pipeline {
 			cmd := new(Interpreter)
 			cmd.PipeSeq[0] = pipeSeq
 			cmd.PipeSeq[1] = uint(1 + i)
