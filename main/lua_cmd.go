@@ -175,11 +175,35 @@ func luaStackToSlice(L lua.Lua) []string {
 	argc := L.GetTop()
 	argv := make([]string, 0, argc)
 	for i := 1; i <= argc; i++ {
-		s, s_err := L.ToString(i)
-		if s_err != nil {
-			s = ""
+		if L.IsTable(i) {
+			L.Len(i)
+			size, size_err := L.ToInteger(-1)
+			L.Pop(1)
+			if size_err == nil {
+				// zero element
+				L.RawGetI(i, 0)
+				if s, err := L.ToString(-1); err == nil && s != "" {
+					argv = append(argv, s)
+				}
+				L.Pop(1)
+				// 1,2,3...
+				for j := 1; j <= size; j++ {
+					L.RawGetI(i, lua.Integer(j))
+					if s, err := L.ToString(-1); err == nil {
+						argv = append(argv, s)
+					} else {
+						argv = append(argv, "")
+					}
+					L.Pop(1)
+				}
+			}
+		} else {
+			s, s_err := L.ToString(i)
+			if s_err != nil {
+				s = ""
+			}
+			argv = append(argv, s)
 		}
-		argv = append(argv, s)
 	}
 	return argv
 }
