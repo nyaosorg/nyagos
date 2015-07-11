@@ -116,11 +116,20 @@ func (this Lua) NewUserData(size uintptr) unsafe.Pointer {
 
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
 
-func (this Lua) RawSetI(index int, value Integer) {
+func (this Lua) RawSetI(index int, at Integer) {
 	params := make([]uintptr, 0, 4)
 	params = append(params, this.State(), uintptr(index))
-	params = value.Expand(params)
+	params = at.Expand(params)
 	lua_rawseti.Call(params...)
+}
+
+var lua_rawgeti = luaDLL.NewProc("lua_rawgeti")
+
+func (this Lua) RawGetI(index int, at Integer) {
+	params := make([]uintptr, 0, 4)
+	params = append(params, this.State(), uintptr(index))
+	params = at.Expand(params)
+	lua_rawgeti.Call(params...)
 }
 
 // 5.2
