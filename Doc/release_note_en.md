@@ -2,6 +2,7 @@
 * Add nyagos.rawexec and nyagos.raweval
 * Forbade to use more than one lua-command on the same pipeline to avoid crash.
 * Forbade to run Lua background to avoid crash.
+* Fixed #77: echo "{a,b}" -> "a b" is printed.({a,b} should be printed)
 
 NYAGOS 4.0.9\_4
 ===============

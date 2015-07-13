@@ -6,6 +6,12 @@ nyagos.filter = function(cmdline)
             cmdline = cmdline_
         end
     end
+    local save={}
+    cmdline = cmdline:gsub("((['\"])[^%2]*%2)", function(s,_)
+        local i=#save+1
+        save[i] = s
+        return '\a('..i..')'
+    end)
     repeat
         local last = true
         cmdline = cmdline:gsub("(%S*)(%b{})(%S*)", function(left,mid,right)
@@ -33,5 +39,8 @@ nyagos.filter = function(cmdline)
             end
         end)
     until last
+    cmdline = cmdline:gsub("\a%((%d+)%)",function(s)
+        return save[s+0]
+    end)
     return cmdline
 end
