@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"runtime/debug"
 	"strings"
 
 	"github.com/shiena/ansicolor"
@@ -78,6 +79,7 @@ func when_panic() {
 	}
 	fmt.Fprintln(os.Stderr, "************ Panic Occured. ***********")
 	fmt.Fprintln(os.Stderr, err)
+	debug.PrintStack()
 	fmt.Fprintln(os.Stderr, "*** Please copy these error message ***")
 	fmt.Fprintln(os.Stderr, "*** And hit ENTER key to quit.      ***")
 	var dummy [1]byte
