@@ -1,3 +1,8 @@
+NYAGOS 4.0.9\_6
+===============
+* Fixed nyagos.stat(nil) caused a panic.
+* Fixed not all stack trace was printed when a panic was recovered.
+
 NYAGOS 4.0.9\_5
 ===============
 * Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)
