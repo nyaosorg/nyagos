@@ -1,3 +1,7 @@
+NYAGOS 4.0.9\_7
+===============
+* Fixed a panic occurs when only '||' command-line typed.
+
 NYAGOS 4.0.9\_6
 ===============
 * Fixed nyagos.stat(nil) caused a panic.
