@@ -50,6 +50,8 @@ func chomp(buffer *bytes.Buffer) {
 
 const NOTQUOTED = '\000'
 
+const EMPTY_COMMAND_FOUND = "Empty command found"
+
 func dequote(source *bytes.Buffer) string {
 	var buffer bytes.Buffer
 
@@ -223,6 +225,9 @@ func parse1(text string) ([]*StatementT, error) {
 			terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, ";")
 		} else if ch == '|' {
 			if lastchar == '|' {
+				if len(statements) <= 0 {
+					return nil, errors.New(EMPTY_COMMAND_FOUND)
+				}
 				statements[len(statements)-1].Term = "||"
 			} else {
 				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "|")
@@ -230,8 +235,14 @@ func parse1(text string) ([]*StatementT, error) {
 		} else if ch == '&' {
 			switch lastchar {
 			case '&':
+				if len(statements) <= 0 {
+					return nil, errors.New(EMPTY_COMMAND_FOUND)
+				}
 				statements[len(statements)-1].Term = "&&"
 			case '|':
+				if len(statements) <= 0 {
+					return nil, errors.New(EMPTY_COMMAND_FOUND)
+				}
 				statements[len(statements)-1].Term = "|&"
 			case '>':
 				// >&[n]
