@@ -2,6 +2,8 @@ setlocal
 
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
+if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOARCH=%%I"
+
 if not "%1" == "" goto %1
 
 goto build
@@ -42,7 +44,7 @@ goto build
 
 :package
         for /F %%I in ('nyagos -e "print(nyagos.version or (string.gsub(nyagos.stamp,[[/]],[[]])))"') do set VERSION=%%I
-        zip -9 "nyagos-%VERSION%.zip" nyagos.exe lua53.dll nyole.dll nyagos.lua .nyagos specialfolders.js lnk.js makeicon.cmd nyagos.d\*.lua catalog.d\*.lua license.txt readme_ja.md readme.md Doc\*.md
+        zip -9 "nyagos-%VERSION%-%GOARCH%.zip" nyagos.exe lua53.dll nyole.dll nyagos.lua .nyagos specialfolders.js lnk.js makeicon.cmd nyagos.d\*.lua catalog.d\*.lua license.txt readme_ja.md readme.md Doc\*.md
         goto end
 
 :install
