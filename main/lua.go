@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"runtime"
 	"sync"
 
 	"../dos"
@@ -240,6 +241,7 @@ func SetLuaFunctions(this lua.Lua) {
 	} else {
 		nyagos_table["exe"] = exeName
 	}
+	nyagos_table["goarch"] = runtime.GOARCH
 	this.Push(nyagos_table)
 
 	this.NewTable() // "nyagos.alias"
