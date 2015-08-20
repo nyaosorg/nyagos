@@ -11,13 +11,13 @@ goto build
 
 :release
         for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
-        set "X_VERSION=-X main.version %VERSION%"
+        set "X_VERSION=-X main.version=%VERSION%"
 
 :build
         for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         pushd "%~dp0main"
         for %%I in (windres.exe) do if not "%%~$PATH:I" == "" cscript //nologo make_rc.js | windres.exe --output-format=coff -o nyagos.syso
-        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp %DATE% -X main.commit %%V %X_VERSION%"
+        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o "%~dp0nyagos.exe" -ldflags "-X main.stamp=%DATE% -X main.commit=%%V %X_VERSION%"
         popd
         goto end
 
