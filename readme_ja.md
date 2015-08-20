@@ -48,8 +48,8 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
 
 次のソフトウェアが必要となります。
 
-* [go1.4.2 windows/386](http://golang.org)
-* [LuaBinaries(5.3 for Win32)](http://sourceforge.net/projects/luabinaries/files/5.3/Tools%20Executables/lua-5.3_Win32_bin.zip)
+* [go 1.5 for windows](http://golang.org)
+* [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (任意です。無い場合、幾つかの Lua 拡張が動きませんが、nyagos.exe 自体は動作します)
 
 `%GOPATH%` にて
@@ -57,11 +57,15 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
 
+(32bitの場合)
+
     unzip PATH\TO\lua-5.3_Win32_bin.zip lua53.dll
-
-NYOLE.DLL がある場合
-
     unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
+
+(64bitの場合)
+
+    unzip PATH\TO\lua-5.3_Win64_bin.zip lua53.dll
+    unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
 
 最後に:
 

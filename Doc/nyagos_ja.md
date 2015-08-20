@@ -445,6 +445,16 @@ C言語の access 関数と同じです。
 
 入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
 
+### `nyagos.goversion`
+
+ビルドに使用した Go のバージョン文字列が格納されます。
+(例：「go1.5」)
+
+### `nyagos.goarch`
+
+実行ファイルが想定している CPU アーキテクチャを示す文字列が格納されます。
+(例：「386」「amd64」)
+
 ### `nyagos.exe`
 
 nyagos.exe のフルパスが格納されています。
@@ -456,8 +466,8 @@ NYAGOS は https://github.com/zetamatta/nyagos にて公開しています。
 
 NYAGOS のビルドには
 
-* [go1.4.2 windows/386](http://golang.org)
-* [LuaBinaries(5.3 for Win32)](http://sourceforge.net/projects/luabinaries/files/5.3/Tools%20Executables/lua-5.3_Win32_bin.zip)
+* [go 1.5 windows](http://golang.org)
+* [LuaBinaries 5.3 - Release 1 for Win32 or Win64](http://luabinaries.sourceforge.net/download.html)
 
 が必要となります。言語標準以外では、以下のモジュールを
 利用させていただいております。

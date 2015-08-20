@@ -397,6 +397,16 @@ If the file exists, the table STAT has these members.
 
 If the file does not exist, STAT is nil.
 
+### `nyagos.goversion`
+
+Go-version string to build nyagos.exe
+(for example, "go1.5")
+
+### `nyagos.goarch`
+
+The string compilation architecture of nyagos.exe.
+(for example, "386" or "amd64" )
+
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.
@@ -409,8 +419,8 @@ On the New BSD-licenses, you can use NYAGOS.
 
 To build nyagos.exe , these softwares are required:
 
-* [go1.4.2 windows/386](http://golang.org)
-* [LuaBinaries(5.3 for Win32)](http://sourceforge.net/projects/luabinaries/files/5.3/Tools%20Executables/lua-5.3_Win32_bin.zip)
+* [go 1.5 for windows](http://golang.org)
+* [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
 - http://github.com/atotto/clipboard
