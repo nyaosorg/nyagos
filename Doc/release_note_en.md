@@ -1,3 +1,9 @@
+NYAGOS 4.0.9\_8
+===============
+* Build with go 1.5
+* Set go-version to Lua-variable: `nyagos.goversion` and print at startup.
+* Support to build both 32bit and 64bit executable.
+
 NYAGOS 4.0.9\_7
 ===============
 * Fixed a panic occurs when only '||' command-line typed.
