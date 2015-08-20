@@ -242,6 +242,7 @@ func SetLuaFunctions(this lua.Lua) {
 		nyagos_table["exe"] = exeName
 	}
 	nyagos_table["goarch"] = runtime.GOARCH
+	nyagos_table["goversion"] = runtime.Version()
 	this.Push(nyagos_table)
 
 	this.NewTable() // "nyagos.alias"

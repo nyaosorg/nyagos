@@ -8,8 +8,10 @@ if nyagos == nil then
     os.exit(0)
 end
 
-print(string.format("Nihongo Yet Another GOing Shell %s-%s Powered by %s",
-      (nyagos.version or "v"..nyagos.stamp),nyagos.goarch, _VERSION))
+print(string.format("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s",
+      (nyagos.version or "v"..nyagos.stamp),
+      nyagos.goarch,
+      nyagos.goversion,_VERSION))
 
 print("Copyright (c) 2014,2015 HAYAMA_Kaoru and NYAOS.ORG")
 
