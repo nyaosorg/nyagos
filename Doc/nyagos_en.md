@@ -208,6 +208,13 @@ It defines an alias. These macros are available on "REPLACE-STRING".
 It assigns the function to the command-name `"NAME"`.
 `ARGS` is the table: { 1stArgument,2nd,3rd,... }
 
+When an error occures, the function should return
+the number(integer) for %ERRORLEVEL% and error-message.
+(No 'return' equals 'return 0,nil')
+
+When the return-value is a string(or string-table), nyagos.exe
+executes the string(-table) as a new commandline.
+
 ### `VALUE = nyagos.getalias("NAME")`
 ### `VALUE = nyagos.alias["NAME"]`
 ### `VALUE = nyagos.alias.NAME`
@@ -226,11 +233,11 @@ It returns the value of the environment variable named NAME.
 
 It changes the environment variable.
 
-### `status,error = nyagos.exec("COMMAND")`
+### `errorlevel,errormessage = nyagos.exec("COMMAND")`
 
 It executes "COMMAND" as shell command.
-If "COMMAND" succeeds, status is true.
-Otherwise status is false and error is error-message.
+It returns the integer-value for %ERRORLEVEL% and the error-message.
+With no error, they are 0 and nil.
 
 ### `STATUS,ERROR = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
 
@@ -327,7 +334,7 @@ If it returns string, NYAGOS.exe replace the command-line-string it.
 ### `nyagos.argsfilter = function(args) ... end`
 
 `nyagos.argsfilter` is like `nyaos.filter`, but its argument are
-not a string but a table as string array which has each command 
+not a string but a table as string array which has each command
 arguments.
 
 ### `length = nyagos.prompt(template)`

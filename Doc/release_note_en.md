@@ -1,3 +1,7 @@
+* Lua-functions can return %ERRORLEVEL%
+* nyagos.exec returns %ERRORLEVEL% and error-message.
+* `cd` and `pwd` update %ERRORLEVEL% on error. (cdlnk.lua,too)
+
 NYAGOS 4.0.9\_8
 ===============
 * Build with go 1.5

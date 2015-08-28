@@ -1,3 +1,7 @@
+* Lua関数で、%ERRORLEVEL% の値を返せるようにした(整数として return する)
+* nyagos.exec が %ERRORLEVEL% とエラーメッセージを戻すようになった。
+* `cd`と`pwd`がエラー時に %ERRORLEVEL% を更新するようになった (cdlnk.lua含む)
+
 NYAGOS 4.0.9\_8
 ===============
 * Go 1.5 にてビルド
