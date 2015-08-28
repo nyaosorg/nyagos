@@ -59,6 +59,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 	save := LuaInstanceToCmd[L.State()]
 	LuaInstanceToCmd[L.State()] = cmd
 	err := L.Call(1, 1)
+	errorlevel := interpreter.CONTINUE
 	if err == nil {
 		newargs := make([]string, 0)
 		if L.IsTable(-1) {
@@ -84,14 +85,16 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 			}
 			it := cmd.Clone()
 			it.Args = newargs
-			it.Spawnvp()
+			errorlevel, err = it.Spawnvp()
+		} else if val, err1 := L.ToInteger(-1); err1 == nil {
+			errorlevel = interpreter.ErrorLevel(val)
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-			cmd.Clone().Interpret(val)
+			errorlevel, err = cmd.Clone().Interpret(val)
 		}
 	}
 	L.Pop(1)
 	LuaInstanceToCmd[this.L.State()] = save
-	return interpreter.CONTINUE, err
+	return errorlevel, err
 }
 
 const original_io_lines = "original_io_lines"
