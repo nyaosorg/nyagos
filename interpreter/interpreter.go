@@ -163,6 +163,9 @@ func (this *Interpreter) Spawnvp() (ErrorLevel, error) {
 			errorlevel = CONTINUE
 		}
 	}
+	if err != nil {
+		fmt.Fprintln(this.Stderr, err.Error())
+	}
 	return errorlevel, err
 }
 
