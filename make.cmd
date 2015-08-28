@@ -1,4 +1,5 @@
-setlocal
+@setlocal
+@SET PROMPT=$$$S
 
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
