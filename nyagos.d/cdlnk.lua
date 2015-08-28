@@ -40,10 +40,10 @@ if nyagos.ole then
             args[i] = arg1
         end
         if org_cd then
-            org_cd(args)
+            return org_cd(args)
         else
             args[0] = "__cd__"
-            nyagos.exec(args)
+            return nyagos.exec(args)
         end
     end
 end
