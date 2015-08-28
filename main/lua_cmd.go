@@ -86,6 +86,7 @@ func cmdGetEnv(L lua.Lua) int {
 }
 
 func cmdExec(L lua.Lua) int {
+	errorlevel := interpreter.CONTINUE
 	var err error
 	if L.IsTable(1) {
 		L.Len(1)
@@ -109,7 +110,7 @@ func cmdExec(L lua.Lua) int {
 			it = it.Clone()
 		}
 		it.Args = args
-		_, err = it.Spawnvp()
+		errorlevel, err = it.Spawnvp()
 	} else {
 		statement, statementErr := L.ToString(1)
 		if statementErr != nil {
@@ -121,12 +122,9 @@ func cmdExec(L lua.Lua) int {
 			it = interpreter.New()
 			it.Tag = L
 		}
-		_, err = it.Interpret(statement)
+		errorlevel, err = it.Interpret(statement)
 	}
-	if err != nil {
-		return L.Push(nil, err)
-	}
-	return L.Push(true)
+	return L.Push(int(errorlevel), err)
 }
 
 type emptyWriter struct{}
