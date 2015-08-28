@@ -10,7 +10,7 @@ import (
 
 type Callable interface {
 	String() string
-	Call(cmd *interpreter.Interpreter) (interpreter.NextT, error)
+	Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error)
 }
 
 type AliasFunc struct {
@@ -25,7 +25,7 @@ func (this *AliasFunc) String() string {
 	return this.BaseStr
 }
 
-func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.NextT, err error) {
+func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.ErrorLevel, err error) {
 	isReplaced := false
 	cmdline := paramMatch.ReplaceAllStringFunc(this.BaseStr, func(s string) string {
 		if s == "$*" {
@@ -77,7 +77,7 @@ func quoteAndJoin(list []string) string {
 
 var nextHook interpreter.HookT
 
-func hook(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func hook(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if cmd.HookCount > 5 {
 		return nextHook(cmd)
 	}

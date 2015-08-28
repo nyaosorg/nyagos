@@ -184,7 +184,7 @@ func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) 
 	}
 }
 
-func CmdHistory(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)

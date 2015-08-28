@@ -10,7 +10,7 @@ import (
 	"./ls"
 )
 
-func cmd_ls(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_ls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	var out io.Writer
 	if cmd.Stdout == os.Stdout {
 		out = ansicolor.NewAnsiColorWriter(cmd.Stdout)

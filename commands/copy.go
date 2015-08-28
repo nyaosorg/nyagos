@@ -15,7 +15,7 @@ type actionT struct {
 	IsDirOk bool
 }
 
-func cmd_copy(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_copy(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	return interpreter.CONTINUE,
 		cmd_xxxx(cmd, actionT{
 			func(src, dst string) error {
@@ -23,7 +23,7 @@ func cmd_copy(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 			}, false})
 }
 
-func cmd_move(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_move(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	return interpreter.CONTINUE,
 		cmd_xxxx(cmd, actionT{
 			func(src, dst string) error {

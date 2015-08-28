@@ -8,7 +8,7 @@ import (
 	. "../interpreter"
 )
 
-func cmd_pwd(cmd *Interpreter) (NextT, error) {
+func cmd_pwd(cmd *Interpreter) (ErrorLevel, error) {
 	if len(cmd.Args) >= 2 {
 		if i, err := strconv.ParseInt(cmd.Args[1], 10, 0); err == nil && i < 0 {
 			i += int64(len(cd_history))

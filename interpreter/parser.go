@@ -30,7 +30,7 @@ var PercentFunc = map[string]func() string{
 		}
 	},
 	"ERRORLEVEL": func() string {
-		return ErrorLevel
+		return ErrorLevelStr
 	},
 }
 

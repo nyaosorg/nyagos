@@ -21,24 +21,22 @@ func (this CommandNotFound) Error() string {
 	return this.Stringer()
 }
 
-type NextT int
+type ErrorLevel int
 
 const (
-	THROUGH  NextT = 0
-	CONTINUE NextT = 1
-	SHUTDOWN NextT = 2
+	CONTINUE ErrorLevel = 0
+	THROUGH  ErrorLevel = -1
+	SHUTDOWN ErrorLevel = -2
 )
 
-func (this NextT) String() string {
+func (this ErrorLevel) String() string {
 	switch this {
 	case THROUGH:
 		return "THROUGH"
-	case CONTINUE:
-		return "CONTINUE"
 	case SHUTDOWN:
 		return "SHUTDOWN"
 	default:
-		return "UNKNOWN"
+		return fmt.Sprintf("%d", this)
 	}
 }
 
@@ -113,9 +111,9 @@ func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
 	return
 }
 
-type HookT func(*Interpreter) (NextT, error)
+type HookT func(*Interpreter) (ErrorLevel, error)
 
-var hook = func(*Interpreter) (NextT, error) {
+var hook = func(*Interpreter) (ErrorLevel, error) {
 	return THROUGH, nil
 }
 
@@ -131,7 +129,7 @@ var OnCommandNotFound = func(this *Interpreter, err error) error {
 }
 
 var errorStatusPattern = regexp.MustCompile("^exit status ([0-9]+)")
-var ErrorLevel string
+var ErrorLevelStr string
 
 func nvl(a *os.File, b *os.File) *os.File {
 	if a != nil {
@@ -141,8 +139,8 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
-func (this *Interpreter) Spawnvp() (NextT, error) {
-	var whatToDo NextT = CONTINUE
+func (this *Interpreter) Spawnvp() (ErrorLevel, error) {
+	var whatToDo ErrorLevel = CONTINUE
 	var err error = nil
 
 	if len(this.Args) > 0 {
@@ -161,13 +159,13 @@ func (this *Interpreter) Spawnvp() (NextT, error) {
 }
 
 type result_t struct {
-	NextValue NextT
+	NextValue ErrorLevel
 	Error     error
 }
 
 var pipeSeq uint = 0
 
-func (this *Interpreter) Interpret(text string) (next NextT, err error) {
+func (this *Interpreter) Interpret(text string) (next ErrorLevel, err error) {
 	next = CONTINUE
 	err = nil
 
@@ -236,13 +234,13 @@ func (this *Interpreter) Interpret(text string) (next NextT, err error) {
 				if err != nil {
 					m := errorStatusPattern.FindStringSubmatch(err.Error())
 					if m != nil {
-						ErrorLevel = m[1]
+						ErrorLevelStr = m[1]
 						err = nil
 					} else {
-						ErrorLevel = "-1"
+						ErrorLevelStr = "-1"
 					}
 				} else {
-					ErrorLevel = "0"
+					ErrorLevelStr = "0"
 				}
 			} else {
 				go func(cmd1 *Interpreter) {

@@ -31,7 +31,7 @@ func push_cd_history() {
 	}
 }
 
-func cmd_cd(cmd *Interpreter) (NextT, error) {
+func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 	if len(cmd.Args) >= 2 {
 		if cmd.Args[1] == "-" {
 			if len(cd_history) < 1 {

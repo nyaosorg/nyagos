@@ -8,7 +8,7 @@ import (
 	"../interpreter"
 )
 
-func cmd_alias(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_alias(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())

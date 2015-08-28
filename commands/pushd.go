@@ -10,7 +10,7 @@ import (
 
 var dirstack = make([]string, 0, 20)
 
-func cmd_dirs(cmd *Interpreter) (NextT, error) {
+func cmd_dirs(cmd *Interpreter) (ErrorLevel, error) {
 	wd, _ := dos.Getwd()
 	fmt.Fprint(cmd.Stdout, wd)
 	for i := len(dirstack) - 1; i >= 0; i-- {
@@ -20,7 +20,7 @@ func cmd_dirs(cmd *Interpreter) (NextT, error) {
 	return CONTINUE, nil
 }
 
-func cmd_popd(cmd *Interpreter) (NextT, error) {
+func cmd_popd(cmd *Interpreter) (ErrorLevel, error) {
 	if len(dirstack) <= 0 {
 		return CONTINUE, errors.New("popd: directory stack empty.")
 	}
@@ -32,7 +32,7 @@ func cmd_popd(cmd *Interpreter) (NextT, error) {
 	return cmd_dirs(cmd)
 }
 
-func cmd_pushd(cmd *Interpreter) (NextT, error) {
+func cmd_pushd(cmd *Interpreter) (ErrorLevel, error) {
 	wd, err := dos.Getwd()
 	if err != nil {
 		return CONTINUE, err

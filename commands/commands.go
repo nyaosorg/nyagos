@@ -9,10 +9,10 @@ import (
 	. "../interpreter"
 )
 
-var BuildInCommand map[string]func(*Interpreter) (NextT, error)
+var BuildInCommand map[string]func(*Interpreter) (ErrorLevel, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func Exec(cmd *Interpreter) (NextT, error) {
+func Exec(cmd *Interpreter) (ErrorLevel, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
@@ -47,7 +47,7 @@ func Exec(cmd *Interpreter) (NextT, error) {
 }
 
 func Init() {
-	BuildInCommand = map[string]func(*Interpreter) (NextT, error){
+	BuildInCommand = map[string]func(*Interpreter) (ErrorLevel, error){
 		".":       cmd_source,
 		"alias":   cmd_alias,
 		"cd":      cmd_cd,

@@ -29,7 +29,7 @@ var luaUsedOnThatPipeline = map[uint]uint{}
 const ERRMSG_CAN_NOT_USE_TWO_LUA_ON = "Can not use two Lua-command on the same pipeline"
 const ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND = "Can not run Lua-Command on background"
 
-func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if cmd.IsBackGround {
 		fmt.Fprintf(os.Stderr, "%s: %s\n",
 			cmd.Args[0],

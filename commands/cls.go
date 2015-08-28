@@ -5,7 +5,7 @@ import (
 	"../interpreter"
 )
 
-func cmd_cls(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_cls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	conio.Cls()
 	return interpreter.CONTINUE, nil
 }

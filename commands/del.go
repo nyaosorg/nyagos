@@ -9,7 +9,7 @@ import (
 	"../interpreter"
 )
 
-func cmd_del(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_del(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	n := len(cmd.Args)
 	if n <= 1 {
 		fmt.Fprintln(cmd.Stderr, "Usage: del   FILE(S)...")

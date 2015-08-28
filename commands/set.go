@@ -8,7 +8,7 @@ import (
 	"../interpreter"
 )
 
-func cmd_set(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_set(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)

@@ -9,7 +9,7 @@ import (
 	"../interpreter"
 )
 
-func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: mkdir [/s] DIRECTORIES...")
 		return interpreter.CONTINUE, nil
@@ -23,7 +23,7 @@ func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
 	return interpreter.CONTINUE, nil
 }
 
-func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: rmdir [/s] DIRECTORIES...")
 		return interpreter.CONTINUE, nil

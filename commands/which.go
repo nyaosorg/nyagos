@@ -10,7 +10,7 @@ import (
 	. "../interpreter"
 )
 
-func cmd_which(cmd *Interpreter) (NextT, error) {
+func cmd_which(cmd *Interpreter) (ErrorLevel, error) {
 	for _, name := range cmd.Args[1:] {
 		if a, ok := alias.Table[strings.ToLower(name)]; ok {
 			fmt.Fprintf(cmd.Stdout, "%s: aliased to %s\n", name, a.String())

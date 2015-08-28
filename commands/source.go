@@ -11,7 +11,7 @@ import (
 	"../interpreter"
 )
 
-func cmd_source(cmd *interpreter.Interpreter) (interpreter.NextT, error) {
+func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	args := cmd.Args
 	verbose := false
 	if len(args) >= 2 && args[1] == "-v" {
