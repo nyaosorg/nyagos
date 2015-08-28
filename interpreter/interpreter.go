@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"regexp"
+	"syscall"
 )
 
 type CommandNotFound struct {
@@ -135,7 +135,6 @@ var OnCommandNotFound = func(this *Interpreter, err error) error {
 	return err
 }
 
-var errorStatusPattern = regexp.MustCompile("^exit status ([0-9]+)")
 var ErrorLevelStr string
 
 func nvl(a *os.File, b *os.File) *os.File {
@@ -146,22 +145,40 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
-func (this *Interpreter) Spawnvp() (ErrorLevel, error) {
-	var errorlevel ErrorLevel = CONTINUE
-	var err error = nil
-
-	if len(this.Args) > 0 {
-		errorlevel, err = hook(this)
-		if errorlevel == THROUGH {
-			this.Path, err = exec.LookPath(this.Args[0])
-			if err == nil {
-				err = this.Run()
-			} else {
-				err = OnCommandNotFound(this, err)
-			}
-			errorlevel = CONTINUE
-		}
+func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
+	// command is empty.
+	if len(this.Args) <= 0 {
+		return CONTINUE, nil
 	}
+
+	// aliases and lua-commands
+	if errorlevel, err := hook(this); errorlevel != THROUGH {
+		return errorlevel, err
+	}
+
+	// command not found hook
+	var err error
+	this.Path, err = exec.LookPath(this.Args[0])
+	if err != nil {
+		return ErrorLevel(255), OnCommandNotFound(this, err)
+	}
+
+	// executable-file
+	err = this.Run()
+
+	// find %ERRORLEVEL%
+	processState := this.ProcessState
+	if processState.Success() {
+		return CONTINUE, err
+	} else if t, ok := processState.Sys().(syscall.WaitStatus); ok {
+		return ErrorLevel(t.ExitStatus()), err
+	} else {
+		return ErrorLevel(255), err
+	}
+}
+
+func (this *Interpreter) Spawnvp() (ErrorLevel, error) {
+	errorlevel, err := this.spawnvp_noerrmsg()
 	if err != nil {
 		fmt.Fprintln(this.Stderr, err.Error())
 	}
@@ -241,19 +258,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			if i == len(pipeline)-1 && state.Term != "&" {
 				errorlevel, err = cmd.Spawnvp()
 				cmd.closeAtEnd()
-				if err != nil {
-					m := errorStatusPattern.FindStringSubmatch(err.Error())
-					if m != nil {
-						ErrorLevelStr = m[1]
-						err = nil
-					} else if errorlevel.HasError() {
-						ErrorLevelStr = errorlevel.String()
-					} else {
-						ErrorLevelStr = "-1"
-					}
-				} else {
-					ErrorLevelStr = errorlevel.String()
-				}
+				ErrorLevelStr = errorlevel.String()
 			} else {
 				go func(cmd1 *Interpreter) {
 					cmd1.Spawnvp()
