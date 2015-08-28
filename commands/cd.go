@@ -35,7 +35,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 	if len(cmd.Args) >= 2 {
 		if cmd.Args[1] == "-" {
 			if len(cd_history) < 1 {
-				return CONTINUE, errors.New("cd - : there is no previous directory")
+				return ErrorLevel(1), errors.New("cd - : there is no previous directory")
 
 			}
 			directory := cd_history[len(cd_history)-1]
@@ -53,20 +53,35 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 		} else if i, err := strconv.ParseInt(cmd.Args[1], 10, 0); err == nil && i < 0 {
 			i += int64(len(cd_history))
 			if i < 0 {
-				return CONTINUE, fmt.Errorf("cd %s: too old history", cmd.Args[1])
+				return ErrorLevel(2), fmt.Errorf("cd %s: too old history", cmd.Args[1])
 			}
 			directory := cd_history[i]
 			push_cd_history()
-			return CONTINUE, dos.Chdir(directory)
+			err := dos.Chdir(directory)
+			if err == nil {
+				return CONTINUE, nil
+			} else {
+				return ErrorLevel(3), err
+			}
 		} else {
 			push_cd_history()
-			return CONTINUE, dos.Chdir(cmd.Args[1])
+			err := dos.Chdir(cmd.Args[1])
+			if err == nil {
+				return CONTINUE, nil
+			} else {
+				return ErrorLevel(4), err
+			}
 		}
 	}
 	home := dos.GetHome()
 	if home != "" {
 		push_cd_history()
-		return CONTINUE, dos.Chdir(home)
+		err := dos.Chdir(home)
+		if err == nil {
+			return CONTINUE, nil
+		} else {
+			return ErrorLevel(5), err
+		}
 	}
 	return cmd_pwd(cmd)
 }

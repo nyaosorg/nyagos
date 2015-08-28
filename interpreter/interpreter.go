@@ -29,6 +29,14 @@ const (
 	SHUTDOWN ErrorLevel = -2
 )
 
+func (this ErrorLevel) HasValue() bool {
+	return this >= CONTINUE
+}
+
+func (this ErrorLevel) HasError() bool {
+	return this > CONTINUE
+}
+
 func (this ErrorLevel) String() string {
 	switch this {
 	case THROUGH:
@@ -140,22 +148,22 @@ func nvl(a *os.File, b *os.File) *os.File {
 }
 
 func (this *Interpreter) Spawnvp() (ErrorLevel, error) {
-	var whatToDo ErrorLevel = CONTINUE
+	var errorlevel ErrorLevel = CONTINUE
 	var err error = nil
 
 	if len(this.Args) > 0 {
-		whatToDo, err = hook(this)
-		if whatToDo == THROUGH {
+		errorlevel, err = hook(this)
+		if errorlevel == THROUGH {
 			this.Path, err = exec.LookPath(this.Args[0])
 			if err == nil {
 				err = this.Run()
 			} else {
 				err = OnCommandNotFound(this, err)
 			}
-			whatToDo = CONTINUE
+			errorlevel = CONTINUE
 		}
 	}
-	return whatToDo, err
+	return errorlevel, err
 }
 
 type result_t struct {
@@ -165,8 +173,8 @@ type result_t struct {
 
 var pipeSeq uint = 0
 
-func (this *Interpreter) Interpret(text string) (next ErrorLevel, err error) {
-	next = CONTINUE
+func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err error) {
+	errorlevel = CONTINUE
 	err = nil
 
 	statements, statementsErr := Parse(text)
@@ -229,18 +237,20 @@ func (this *Interpreter) Interpret(text string) (next ErrorLevel, err error) {
 
 			cmd.Args = state.Argv
 			if i == len(pipeline)-1 && state.Term != "&" {
-				next, err = cmd.Spawnvp()
+				errorlevel, err = cmd.Spawnvp()
 				cmd.closeAtEnd()
 				if err != nil {
 					m := errorStatusPattern.FindStringSubmatch(err.Error())
 					if m != nil {
 						ErrorLevelStr = m[1]
 						err = nil
+					} else if errorlevel.HasError() {
+						ErrorLevelStr = errorlevel.String()
 					} else {
 						ErrorLevelStr = "-1"
 					}
 				} else {
-					ErrorLevelStr = "0"
+					ErrorLevelStr = errorlevel.String()
 				}
 			} else {
 				go func(cmd1 *Interpreter) {
