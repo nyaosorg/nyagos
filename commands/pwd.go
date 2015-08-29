@@ -16,11 +16,11 @@ func cmd_pwd(cmd *Interpreter) (ErrorLevel, error) {
 				return ErrorLevel(2), fmt.Errorf("pwd %s: too old history", cmd.Args[1])
 			}
 			fmt.Fprintln(cmd.Stdout, cd_history[i])
-			return CONTINUE, nil
+			return NOERROR, nil
 		}
 	} else {
 		wd, _ := dos.Getwd()
 		fmt.Fprintln(cmd.Stdout, wd)
 	}
-	return CONTINUE, nil
+	return NOERROR, nil
 }

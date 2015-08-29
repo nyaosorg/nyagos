@@ -34,7 +34,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 		fmt.Fprintf(os.Stderr, "%s: %s\n",
 			cmd.Args[0],
 			ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
-		return interpreter.CONTINUE,
+		return interpreter.NOERROR,
 			errors.New(ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
 	}
 	L := this.L
@@ -45,7 +45,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 		fmt.Fprintf(os.Stderr, "%s: %s\n",
 			cmd.Args[0],
 			ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
-		return interpreter.CONTINUE, errors.New(ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
+		return interpreter.NOERROR, errors.New(ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
 	}
 	luaUsedOnThatPipeline[seq[0]] = seq[1]
 	mutex4dll.Unlock()
@@ -59,7 +59,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 	save := LuaInstanceToCmd[L.State()]
 	LuaInstanceToCmd[L.State()] = cmd
 	err := L.Call(1, 1)
-	errorlevel := interpreter.CONTINUE
+	errorlevel := interpreter.NOERROR
 	if err == nil {
 		newargs := make([]string, 0)
 		if L.IsTable(-1) {

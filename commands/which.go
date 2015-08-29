@@ -22,9 +22,9 @@ func cmd_which(cmd *Interpreter) (ErrorLevel, error) {
 		}
 		path, err := exec.LookPath(name)
 		if err != nil {
-			return CONTINUE, err
+			return NOERROR, err
 		}
 		fmt.Fprintln(cmd.Stdout, dos.YenYen2Yen(path))
 	}
-	return CONTINUE, nil
+	return NOERROR, nil
 }

@@ -12,7 +12,7 @@ import (
 func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: mkdir [/s] DIRECTORIES...")
-		return interpreter.CONTINUE, nil
+		return interpreter.NOERROR, nil
 	}
 	for _, arg1 := range cmd.Args[1:] {
 		err := syscall.Mkdir(arg1, 0777)
@@ -20,13 +20,13 @@ func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, err)
 		}
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }
 
 func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: rmdir [/s] DIRECTORIES...")
-		return interpreter.CONTINUE, nil
+		return interpreter.NOERROR, nil
 	}
 	s_option := false
 	message := "%s: Rmdir Are you sure? [Yes/No/Quit] "
@@ -44,7 +44,7 @@ func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 
 		case 'q', 'Q':
 			fmt.Fprintln(cmd.Stderr, "-> canceled all")
-			return interpreter.CONTINUE, nil
+			return interpreter.NOERROR, nil
 		default:
 			fmt.Fprintln(cmd.Stderr, "-> canceled")
 			continue
@@ -65,5 +65,5 @@ func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			fmt.Fprintln(cmd.Stderr, "-> done.")
 		}
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }

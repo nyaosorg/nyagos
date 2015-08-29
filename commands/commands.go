@@ -16,7 +16,7 @@ func Exec(cmd *Interpreter) (ErrorLevel, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
-		return CONTINUE, err
+		return NOERROR, err
 	}
 	function, ok := BuildInCommand[name]
 	if !ok {

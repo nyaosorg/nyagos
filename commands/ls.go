@@ -17,5 +17,5 @@ func cmd_ls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	} else {
 		out = cmd.Stdout
 	}
-	return interpreter.CONTINUE, ls.Main(cmd.Args[1:], out)
+	return interpreter.NOERROR, ls.Main(cmd.Args[1:], out)
 }

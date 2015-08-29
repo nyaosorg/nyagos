@@ -13,7 +13,7 @@ func cmd_set(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)
 		}
-		return interpreter.CONTINUE, nil
+		return interpreter.NOERROR, nil
 	}
 	for _, arg := range cmd.Args[1:] {
 		eqlPos := strings.Index(arg, "=")
@@ -27,5 +27,5 @@ func cmd_set(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			}
 		}
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }

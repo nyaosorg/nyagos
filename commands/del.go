@@ -14,7 +14,7 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if n <= 1 {
 		fmt.Fprintln(cmd.Stderr, "Usage: del   FILE(S)...")
 		fmt.Fprintln(cmd.Stderr, "       erase FILE(S)...")
-		return interpreter.CONTINUE, nil
+		return interpreter.NOERROR, nil
 	}
 	all := false
 	for i := 1; i < n; i++ {
@@ -41,7 +41,7 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			switch ch {
 			case 'q', 'Q':
 				fmt.Fprintln(cmd.Stdout)
-				return interpreter.CONTINUE, nil
+				return interpreter.NOERROR, nil
 			case 'y', 'Y':
 				break
 			case 'a', 'A':
@@ -58,5 +58,5 @@ func cmd_del(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		}
 		fmt.Println("-> done.")
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }

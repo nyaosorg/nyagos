@@ -86,7 +86,7 @@ func cmdGetEnv(L lua.Lua) int {
 }
 
 func cmdExec(L lua.Lua) int {
-	errorlevel := interpreter.CONTINUE
+	errorlevel := interpreter.NOERROR
 	var err error
 	if L.IsTable(1) {
 		L.Len(1)

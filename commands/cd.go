@@ -40,7 +40,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 			}
 			directory := cd_history[len(cd_history)-1]
 			push_cd_history()
-			return CONTINUE, dos.Chdir(directory)
+			return NOERROR, dos.Chdir(directory)
 		} else if cmd.Args[1] == "-h" || cmd.Args[1] == "?" {
 			i := len(cd_history) - 10
 			if i < 0 {
@@ -49,7 +49,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 			for ; i < len(cd_history); i++ {
 				fmt.Fprintf(cmd.Stdout, "%d %s\n", i-len(cd_history), cd_history[i])
 			}
-			return CONTINUE, nil
+			return NOERROR, nil
 		} else if i, err := strconv.ParseInt(cmd.Args[1], 10, 0); err == nil && i < 0 {
 			i += int64(len(cd_history))
 			if i < 0 {
@@ -59,7 +59,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 			push_cd_history()
 			err := dos.Chdir(directory)
 			if err == nil {
-				return CONTINUE, nil
+				return NOERROR, nil
 			} else {
 				return ErrorLevel(3), err
 			}
@@ -67,7 +67,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 			push_cd_history()
 			err := dos.Chdir(cmd.Args[1])
 			if err == nil {
-				return CONTINUE, nil
+				return NOERROR, nil
 			} else {
 				return ErrorLevel(4), err
 			}
@@ -78,7 +78,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 		push_cd_history()
 		err := dos.Chdir(home)
 		if err == nil {
-			return CONTINUE, nil
+			return NOERROR, nil
 		} else {
 			return ErrorLevel(5), err
 		}

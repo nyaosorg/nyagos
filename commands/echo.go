@@ -9,5 +9,5 @@ import (
 
 func cmd_echo(cmd *Interpreter) (ErrorLevel, error) {
 	fmt.Fprintln(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
-	return CONTINUE, nil
+	return NOERROR, nil
 }

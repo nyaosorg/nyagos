@@ -19,7 +19,7 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		args = args[1:]
 	}
 	if len(cmd.Args) < 2 {
-		return interpreter.CONTINUE, nil
+		return interpreter.NOERROR, nil
 	}
 	envTxtPath := filepath.Join(
 		os.TempDir(),
@@ -45,14 +45,14 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 
 	cmd2 := exec.Cmd{Path: params[0], Args: params}
 	if err := cmd2.Run(); err != nil {
-		return interpreter.CONTINUE, err
+		return interpreter.NOERROR, err
 	}
 	defer os.Remove(envTxtPath)
 	defer os.Remove(pwdTxtPath)
 
 	fp, err := os.Open(envTxtPath)
 	if err != nil {
-		return interpreter.CONTINUE, err
+		return interpreter.NOERROR, err
 	}
 	defer fp.Close()
 
@@ -74,12 +74,12 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 
 	fp2, err2 := os.Open(pwdTxtPath)
 	if err2 != nil {
-		return interpreter.CONTINUE, err2
+		return interpreter.NOERROR, err2
 	}
 	defer fp2.Close()
 	line, lineErr := dos.ReadAnsiLine(fp2)
 	if lineErr == nil {
 		os.Chdir(line)
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }

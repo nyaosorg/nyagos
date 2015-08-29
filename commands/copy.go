@@ -16,7 +16,7 @@ type actionT struct {
 }
 
 func cmd_copy(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	return interpreter.CONTINUE,
+	return interpreter.NOERROR,
 		cmd_xxxx(cmd, actionT{
 			func(src, dst string) error {
 				return dos.Copy(src, dst, false)
@@ -24,7 +24,7 @@ func cmd_copy(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 }
 
 func cmd_move(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	return interpreter.CONTINUE,
+	return interpreter.NOERROR,
 		cmd_xxxx(cmd, actionT{
 			func(src, dst string) error {
 				return dos.Move(src, dst)

@@ -13,7 +13,7 @@ func cmd_alias(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		for key, val := range alias.Table {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
 		}
-		return interpreter.CONTINUE, nil
+		return interpreter.NOERROR, nil
 	}
 	for _, args := range cmd.Args[1:] {
 		if eqlPos := strings.IndexRune(args, '='); eqlPos >= 0 {
@@ -32,5 +32,5 @@ func cmd_alias(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			}
 		}
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }

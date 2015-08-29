@@ -24,17 +24,17 @@ func (this CommandNotFound) Error() string {
 type ErrorLevel int
 
 const (
-	CONTINUE ErrorLevel = 0
+	NOERROR  ErrorLevel = 0
 	THROUGH  ErrorLevel = -1
 	SHUTDOWN ErrorLevel = -2
 )
 
 func (this ErrorLevel) HasValue() bool {
-	return this >= CONTINUE
+	return this >= NOERROR
 }
 
 func (this ErrorLevel) HasError() bool {
-	return this > CONTINUE
+	return this > NOERROR
 }
 
 func (this ErrorLevel) String() string {
@@ -148,7 +148,7 @@ func nvl(a *os.File, b *os.File) *os.File {
 func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	// command is empty.
 	if len(this.Args) <= 0 {
-		return CONTINUE, nil
+		return NOERROR, nil
 	}
 
 	// aliases and lua-commands
@@ -169,7 +169,7 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	// find %ERRORLEVEL%
 	processState := this.ProcessState
 	if processState.Success() {
-		return CONTINUE, err
+		return NOERROR, err
 	} else if t, ok := processState.Sys().(syscall.WaitStatus); ok {
 		return ErrorLevel(t.ExitStatus()), err
 	} else {
@@ -193,12 +193,12 @@ type result_t struct {
 var pipeSeq uint = 0
 
 func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err error) {
-	errorlevel = CONTINUE
+	errorlevel = NOERROR
 	err = nil
 
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
-		return CONTINUE, statementsErr
+		return NOERROR, statementsErr
 	}
 	if argsHook != nil {
 		for _, pipeline := range statements {
@@ -250,7 +250,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			for _, red := range state.Redirect {
 				err = red.OpenOn(cmd)
 				if err != nil {
-					return CONTINUE, err
+					return NOERROR, err
 				}
 			}
 

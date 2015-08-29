@@ -7,5 +7,5 @@ import (
 
 func cmd_cls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	conio.Cls()
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }

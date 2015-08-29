@@ -191,10 +191,10 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		if err != nil {
 			switch err.(type) {
 			case *strconv.NumError:
-				return interpreter.CONTINUE, fmt.Errorf(
+				return interpreter.NOERROR, fmt.Errorf(
 					"history: %s not a number", cmd.Args[1])
 			default:
-				return interpreter.CONTINUE, err
+				return interpreter.NOERROR, err
 			}
 		}
 		num = int(num64)
@@ -213,7 +213,7 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	for i, s := range conio.DefaultEditor.Histories[start:] {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
 	}
-	return interpreter.CONTINUE, nil
+	return interpreter.NOERROR, nil
 }
 
 const max_histories = 2000
