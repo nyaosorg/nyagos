@@ -239,13 +239,11 @@ It executes "COMMAND" as shell command.
 It returns the integer-value for %ERRORLEVEL% and the error-message.
 With no error, they are 0 and nil.
 
-### `STATUS,ERROR = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
+### `errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
 
-It executes "COMMAND-NAME" with ARGs.
-COMMAND-NAME is not interpreted as a built-in command nor an alias
-It returns true when the command succeeded, and nil and error-string
-when the command failed.
-The difference with os.execute is that the character-code is utf-8.
+It executes "COMMAND-NAME" with ARGs. COMMAND-NAME is not interpreted as
+a built-in command nor an alias. The difference with os.execute is that
+the errormessage is written with utf8.
 
 ### `OUTPUT = nyagos.eval("COMMAND")`
 
