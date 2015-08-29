@@ -219,11 +219,15 @@ func cmdRawExec(L lua.Lua) int {
 		}
 	}
 	err := cmd1.Run()
+	errorlevel, errorlevelOk := interpreter.GetErrorLevel(cmd1.ProcessState)
+	if !errorlevelOk {
+		errorlevel = 255
+	}
 	if err != nil {
 		fmt.Fprintln(cmd1.Stderr, err.Error())
-		return L.Push(nil, err.Error())
+		return L.Push(errorlevel, err.Error())
 	} else {
-		return L.Push(true)
+		return L.Push(errorlevel)
 	}
 }
 

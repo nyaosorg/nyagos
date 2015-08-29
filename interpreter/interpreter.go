@@ -145,6 +145,16 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
+func GetErrorLevel(processState *os.ProcessState) (int, bool) {
+	if processState.Success() {
+		return 0, true
+	} else if t, ok := processState.Sys().(syscall.WaitStatus); ok {
+		return t.ExitStatus(), true
+	} else {
+		return 255, false
+	}
+}
+
 func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	// command is empty.
 	if len(this.Args) <= 0 {
@@ -166,12 +176,9 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	// executable-file
 	err = this.Run()
 
-	// find %ERRORLEVEL%
-	processState := this.ProcessState
-	if processState.Success() {
-		return NOERROR, err
-	} else if t, ok := processState.Sys().(syscall.WaitStatus); ok {
-		return ErrorLevel(t.ExitStatus()), err
+	errorlevel, errorlevelOk := GetErrorLevel(this.ProcessState)
+	if errorlevelOk {
+		return ErrorLevel(errorlevel), err
 	} else {
 		return ErrorLevel(255), err
 	}
