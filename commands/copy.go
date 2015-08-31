@@ -7,7 +7,7 @@ import (
 
 	"../conio"
 	"../dos"
-	"../interpreter"
+	. "../interpreter"
 )
 
 type actionT struct {
@@ -15,23 +15,21 @@ type actionT struct {
 	IsDirOk bool
 }
 
-func cmd_copy(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	return interpreter.NOERROR,
-		cmd_xxxx(cmd, actionT{
-			func(src, dst string) error {
-				return dos.Copy(src, dst, false)
-			}, false})
+func cmd_copy(cmd *Interpreter) (ErrorLevel, error) {
+	return cmd_xxxx(cmd, actionT{
+		func(src, dst string) error {
+			return dos.Copy(src, dst, false)
+		}, false})
 }
 
-func cmd_move(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	return interpreter.NOERROR,
-		cmd_xxxx(cmd, actionT{
-			func(src, dst string) error {
-				return dos.Move(src, dst)
-			}, true})
+func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
+	return cmd_xxxx(cmd, actionT{
+		func(src, dst string) error {
+			return dos.Move(src, dst)
+		}, true})
 }
 
-func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
+func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
 	switch len(cmd.Args) {
 	case 0, 1, 2:
 		fmt.Fprintf(cmd.Stderr,
@@ -45,7 +43,7 @@ func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
 			fi, err := os.Stat(src)
 			if err == nil && fi.Mode().IsDir() {
 				fmt.Fprintf(cmd.Stderr, "%s is directory and passed.\n", src)
-				return nil
+				return NOERROR, nil
 			}
 		}
 		fi, err := os.Stat(dst)
@@ -59,10 +57,14 @@ func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
 			ch := conio.GetCh()
 			fmt.Fprintf(cmd.Stderr, "%c\n", ch)
 			if ch != 'y' && ch != 'Y' {
-				return nil
+				return NOERROR, nil
 			}
 		}
-		return action.Do(src, dst)
+		if err := action.Do(src, dst); err == nil {
+			return NOERROR, nil
+		} else {
+			return ErrorLevel(1), err
+		}
 	default:
 		all := false
 		for i, n := 1, len(cmd.Args)-1; i < n; i++ {
@@ -91,7 +93,7 @@ func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
 					case 'a', 'A':
 						all = true
 					case 'q', 'Q':
-						return nil
+						return NOERROR, nil
 					default:
 						continue
 					}
@@ -99,9 +101,9 @@ func cmd_xxxx(cmd *interpreter.Interpreter, action actionT) error {
 			}
 			err := action.Do(src, dst)
 			if err != nil {
-				return err
+				return ErrorLevel(1), err
 			}
 		}
 	}
-	return nil
+	return NOERROR, nil
 }
