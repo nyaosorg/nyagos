@@ -14,13 +14,15 @@ func cmd_mkdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		fmt.Println("Usage: mkdir [/s] DIRECTORIES...")
 		return interpreter.NOERROR, nil
 	}
+	var errorcount interpreter.ErrorLevel = 0
 	for _, arg1 := range cmd.Args[1:] {
 		err := syscall.Mkdir(arg1, 0777)
 		if err != nil {
 			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, err)
+			errorcount++
 		}
 	}
-	return interpreter.NOERROR, nil
+	return errorcount, nil
 }
 
 func cmd_rmdir(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
