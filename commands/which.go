@@ -10,6 +10,10 @@ import (
 	. "../interpreter"
 )
 
+const (
+	WHICH_NOT_FOUND ErrorLevel = 1
+)
+
 func cmd_which(cmd *Interpreter) (ErrorLevel, error) {
 	for _, name := range cmd.Args[1:] {
 		if a, ok := alias.Table[strings.ToLower(name)]; ok {
@@ -22,7 +26,7 @@ func cmd_which(cmd *Interpreter) (ErrorLevel, error) {
 		}
 		path, err := exec.LookPath(name)
 		if err != nil {
-			return NOERROR, err
+			return WHICH_NOT_FOUND, err
 		}
 		fmt.Fprintln(cmd.Stdout, dos.YenYen2Yen(path))
 	}
