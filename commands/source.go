@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -8,10 +9,10 @@ import (
 	"strings"
 
 	"../dos"
-	"../interpreter"
+	. "../interpreter"
 )
 
-func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
 	args := cmd.Args
 	verbose := false
 	if len(args) >= 2 && args[1] == "-v" {
@@ -19,7 +20,7 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		args = args[1:]
 	}
 	if len(cmd.Args) < 2 {
-		return interpreter.NOERROR, nil
+		return ErrorLevel(255), nil
 	}
 	envTxtPath := filepath.Join(
 		os.TempDir(),
@@ -40,19 +41,23 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 				")", "^)", -1))
 	}
 	params = append(params,
-		"&", "set", ">", envTxtPath,
-		"&", "cd", ">", pwdTxtPath)
+		"&&", "set", ">", envTxtPath,
+		"&&", "cd", ">", pwdTxtPath)
 
 	cmd2 := exec.Cmd{Path: params[0], Args: params}
 	if err := cmd2.Run(); err != nil {
-		return interpreter.NOERROR, err
+		return ErrorLevel(1), err
+	}
+	errorlevel, errorlevelOk := GetErrorLevel(cmd2.ProcessState)
+	if !errorlevelOk {
+		errorlevel = 255
 	}
 	defer os.Remove(envTxtPath)
 	defer os.Remove(pwdTxtPath)
 
 	fp, err := os.Open(envTxtPath)
 	if err != nil {
-		return interpreter.NOERROR, err
+		return ErrorLevel(1), err
 	}
 	defer fp.Close()
 
@@ -74,12 +79,13 @@ func cmd_source(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 
 	fp2, err2 := os.Open(pwdTxtPath)
 	if err2 != nil {
-		return interpreter.NOERROR, err2
+		return ErrorLevel(1), err2
 	}
 	defer fp2.Close()
 	line, lineErr := dos.ReadAnsiLine(fp2)
-	if lineErr == nil {
-		os.Chdir(line)
+	if lineErr != nil {
+		return ErrorLevel(1), errors.New("source : could not get current-directory")
 	}
-	return interpreter.NOERROR, nil
+	os.Chdir(line)
+	return ErrorLevel(errorlevel), nil
 }
