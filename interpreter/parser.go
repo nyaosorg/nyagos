@@ -3,6 +3,7 @@ package interpreter
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"os"
 	"regexp"
 	"strconv"
@@ -35,6 +36,20 @@ var PercentFunc = map[string]func() string{
 }
 
 var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
+
+func OurGetEnv(name string) (string, bool) {
+	value := os.Getenv(name)
+	if value != "" {
+		return value, true
+	} else if m := rxUnicode.FindStringSubmatch(name); m != nil {
+		ucode, _ := strconv.ParseInt(m[1], 16, 32)
+		return fmt.Sprintf("%c", rune(ucode)), true
+	} else if f, ok := PercentFunc[strings.ToUpper(name)]; ok {
+		return f(), true
+	} else {
+		return "", false
+	}
+}
 
 func chomp(buffer *bytes.Buffer) {
 	original := buffer.String()
@@ -83,14 +98,8 @@ func dequote(source *bytes.Buffer) string {
 				}
 				if ch == '%' {
 					nameStr := nameBuf.String()
-					value := os.Getenv(nameStr)
-					if value != "" {
+					if value, ok := OurGetEnv(nameStr); ok {
 						buffer.WriteString(value)
-					} else if m := rxUnicode.FindStringSubmatch(nameStr); m != nil {
-						ucode, _ := strconv.ParseInt(m[1], 16, 32)
-						buffer.WriteRune(rune(ucode))
-					} else if f, ok := PercentFunc[nameStr]; ok {
-						buffer.WriteString(f())
 					} else {
 						buffer.WriteRune('%')
 						buffer.WriteString(nameStr)

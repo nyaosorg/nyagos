@@ -76,8 +76,8 @@ func cmdGetEnv(L lua.Lua) int {
 	if nameErr != nil {
 		return L.Push(nil)
 	}
-	value := os.Getenv(name)
-	if len(value) > 0 {
+	value, ok := interpreter.OurGetEnv(name)
+	if ok && len(value) > 0 {
 		L.PushString(value)
 	} else {
 		L.PushNil()
