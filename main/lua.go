@@ -139,7 +139,12 @@ func ioLinesNext(this lua.Lua) int {
 
 var orgArgHook func(*interpreter.Interpreter, []string) []string
 
+var newArgsHookLock sync.Mutex
+
 func newArgHook(it *interpreter.Interpreter, args []string) []string {
+	newArgsHookLock.Lock()
+	defer newArgsHookLock.Unlock()
+
 	if dbg {
 		print("Enter newArgHook")
 		for _, arg1 := range args {
