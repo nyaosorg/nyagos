@@ -12,6 +12,8 @@ import (
 	"../lua"
 )
 
+const dbg = false
+
 type LuaFunction struct {
 	L            lua.Lua
 	registoryKey string
@@ -138,6 +140,14 @@ func ioLinesNext(this lua.Lua) int {
 var orgArgHook func(*interpreter.Interpreter, []string) []string
 
 func newArgHook(it *interpreter.Interpreter, args []string) []string {
+	if dbg {
+		print("Enter newArgHook")
+		for _, arg1 := range args {
+			print("[", arg1, "]")
+		}
+		print("\n")
+		defer print("Leave newArgHook\n")
+	}
 	L, Lok := it.Tag.(lua.Lua)
 	if !Lok {
 		panic("main/lua.go: can get interpreter instance")
