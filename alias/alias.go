@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"strings"
 
+	"../conio"
 	"../interpreter"
 )
 
@@ -50,7 +51,13 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 		cmdline = string(buffer)
 	}
 	it := cmd.Clone()
-	it.HookCount = cmd.HookCount + 1
+
+	newargs := conio.SplitQ(cmdline)
+	if strings.EqualFold(newargs[0], cmd.Args[0]) {
+		it.HookCount = 100
+	} else {
+		it.HookCount = cmd.HookCount + 1
+	}
 	next, err = it.Interpret(cmdline)
 	return
 }
