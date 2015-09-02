@@ -7,7 +7,7 @@ import (
 
 const NULQUOTE = '\000'
 
-func QuotedWordCutter(reader *strings.Reader) (string, bool) {
+func quotedWordCutter(reader *strings.Reader) (string, bool) {
 	var buffer bytes.Buffer
 	for {
 		if reader.Len() <= 0 {
@@ -48,7 +48,7 @@ func SplitQ(line string) []string {
 	args := make([]string, 0, 10)
 	reader := strings.NewReader(line)
 	for reader.Len() > 0 {
-		word, ok := QuotedWordCutter(reader)
+		word, ok := quotedWordCutter(reader)
 		if ok {
 			args = append(args, word)
 		}
@@ -58,6 +58,6 @@ func SplitQ(line string) []string {
 
 func QuotedFirstWord(line string) string {
 	reader := strings.NewReader(line)
-	str, _ := QuotedWordCutter(reader)
+	str, _ := quotedWordCutter(reader)
 	return str
 }
