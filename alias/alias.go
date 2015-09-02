@@ -52,8 +52,8 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 	}
 	it := cmd.Clone()
 
-	newargs := conio.SplitQ(cmdline)
-	if strings.EqualFold(newargs[0], cmd.Args[0]) {
+	arg1 := conio.QuotedFirstWord(cmdline)
+	if strings.EqualFold(arg1, cmd.Args[0]) {
 		it.HookCount = 100
 	} else {
 		it.HookCount = cmd.HookCount + 1
