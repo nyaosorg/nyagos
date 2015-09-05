@@ -210,7 +210,10 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 			L.PushString(val)
 			L.RawSetI(-2, lua.Integer(key))
 		}
+		save := LuaInstanceToCmd[L.State()]
+		LuaInstanceToCmd[L.State()] = inte
 		L.Call(1, 1)
+		LuaInstanceToCmd[L.State()] = save
 		defer L.Pop(1)
 		if L.ToBool(-1) {
 			return nil
