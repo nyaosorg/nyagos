@@ -73,9 +73,7 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 		L.PushString(arg1)
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	save := LuaInstanceToCmd[L.State()]
-	LuaInstanceToCmd[L.State()] = cmd
-	err := L.Call(1, 1)
+	err := NyagosCallLua(cmd, 1, 1)
 	errorlevel := interpreter.NOERROR
 	if err == nil {
 		newargs := make([]string, 0)
@@ -110,7 +108,6 @@ func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLev
 		}
 	}
 	L.Pop(1)
-	LuaInstanceToCmd[this.L.State()] = save
 	return errorlevel, err
 }
 
