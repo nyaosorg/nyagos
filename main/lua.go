@@ -184,7 +184,7 @@ func newArgHook(it *interpreter.Interpreter, args []string) []string {
 		L.PushString(args[i])
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	if err := L.Call(1, 1); err != nil {
+	if err := NyagosCallLua(it, 1, 1); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return orgArgHook(it, args)
 	}
