@@ -25,6 +25,21 @@ func (this LuaFunction) String() string {
 	return "<<Lua-function>>"
 }
 
+func NyagosCallLua(it *interpreter.Interpreter, nargs int, nresult int) error {
+	if it == nil {
+		return errors.New("NyagosCallLua: Interpreter instance is nil")
+	}
+	L, ok := it.Tag.(lua.Lua)
+	if !ok {
+		return errors.New("NyagosCallLua: Lua instance not found")
+	}
+	save := LuaInstanceToCmd[L.State()]
+	LuaInstanceToCmd[L.State()] = it
+	err := L.Call(1, 1)
+	LuaInstanceToCmd[L.State()] = save
+	return err
+}
+
 var mutex4dll sync.Mutex
 var luaUsedOnThatPipeline = map[uint]uint{}
 
@@ -199,29 +214,28 @@ var orgOnCommandNotFound func(*interpreter.Interpreter, error) error
 func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 	L, Lok := inte.Tag.(lua.Lua)
 	if !Lok {
-		panic("on_command_not_found: Interpreter.Tag is not lua instance")
+		return errors.New("on_command_not_found: Interpreter.Tag is not lua instance")
 	}
 	L.GetGlobal("nyagos")
 	L.GetField(-1, "on_command_not_found")
 	L.Remove(-2) // remove nyagos.
-	if L.IsFunction(-1) {
-		L.NewTable()
-		for key, val := range inte.Args {
-			L.PushString(val)
-			L.RawSetI(-2, lua.Integer(key))
-		}
-		save := LuaInstanceToCmd[L.State()]
-		LuaInstanceToCmd[L.State()] = inte
-		L.Call(1, 1)
-		LuaInstanceToCmd[L.State()] = save
-		defer L.Pop(1)
-		if L.ToBool(-1) {
-			return nil
-		} else {
-			return orgOnCommandNotFound(inte, err)
-		}
-	} else {
+	if !L.IsFunction(-1) {
 		L.Pop(1)
+		return orgOnCommandNotFound(inte, err)
+	}
+	L.NewTable()
+	for key, val := range inte.Args {
+		L.PushString(val)
+		L.RawSetI(-2, lua.Integer(key))
+	}
+	err1 := NyagosCallLua(inte, 1, 1)
+	defer L.Pop(1)
+	if err1 != nil {
+		return err
+	}
+	if L.ToBool(-1) {
+		return nil
+	} else {
 		return orgOnCommandNotFound(inte, err)
 	}
 }
