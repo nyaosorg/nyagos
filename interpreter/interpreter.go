@@ -109,10 +109,10 @@ func (this *Interpreter) Clone() *Interpreter {
 	return rv
 }
 
-type ArgsHookT func(it *Interpreter, args []string) []string
+type ArgsHookT func(it *Interpreter, args []string) ([]string, error)
 
-var argsHook = func(it *Interpreter, args []string) []string {
-	return args
+var argsHook = func(it *Interpreter, args []string) ([]string, error) {
+	return args, nil
 }
 
 func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
@@ -214,7 +214,10 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 	if argsHook != nil {
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
-				state.Argv = argsHook(this, state.Argv)
+				state.Argv, err = argsHook(this, state.Argv)
+				if err != nil {
+					return ErrorLevel(255), err
+				}
 			}
 		}
 	}

@@ -149,11 +149,11 @@ func ioLinesNext(this lua.Lua) int {
 	}
 }
 
-var orgArgHook func(*interpreter.Interpreter, []string) []string
+var orgArgHook func(*interpreter.Interpreter, []string) ([]string, error)
 
 var newArgsHookLock sync.Mutex
 
-func newArgHook(it *interpreter.Interpreter, args []string) []string {
+func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 	newArgsHookLock.Lock()
 	defer newArgsHookLock.Unlock()
 
@@ -167,7 +167,7 @@ func newArgHook(it *interpreter.Interpreter, args []string) []string {
 	}
 	L, Lok := it.Tag.(lua.Lua)
 	if !Lok {
-		panic("main/lua.go: can get interpreter instance")
+		return nil, errors.New("main/lua.go: can get interpreter instance")
 	}
 	pos := L.GetTop()
 	defer L.SetTop(pos)
