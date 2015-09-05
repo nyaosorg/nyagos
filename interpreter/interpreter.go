@@ -1,6 +1,7 @@
 package interpreter
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -200,6 +201,9 @@ type result_t struct {
 var pipeSeq uint = 0
 
 func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err error) {
+	if this == nil {
+		return ErrorLevel(255), errors.New("Fatal Error: Interpret: instance is nil")
+	}
 	errorlevel = NOERROR
 	err = nil
 
