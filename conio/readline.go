@@ -118,11 +118,17 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
+type LineEditorAbort struct{}
+
+func (this *LineEditorAbort) Error() string {
+	return "^D"
+}
+
 // Call LineEditor
-// - ENTER typed -> returns TEXT and true
-// - CTRL-C typed -> returns "" and true
-// - CTRL-D typed -> returns "" and false
-func (session *LineEditor) ReadLine() (string, bool) {
+// - ENTER typed -> returns TEXT and nil
+// - CTRL-C typed -> returns "" and nil
+// - CTRL-D typed -> returns "" and LineEditorAbort
+func (session *LineEditor) ReadLine() (string, error) {
 	this := Buffer{
 		Buffer:  make([]rune, 20),
 		Session: session,
@@ -130,7 +136,12 @@ func (session *LineEditor) ReadLine() (string, bool) {
 	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
-	this.ViewWidth = this.ViewWidth - session.Prompt(session)
+	width1, err1 := session.Prompt(session)
+	if err1 != nil {
+		return "", err1
+	}
+	this.ViewWidth = this.ViewWidth - width1
+
 	for {
 		stdOut.Flush()
 		shineCursor()
@@ -166,17 +177,21 @@ func (session *LineEditor) ReadLine() (string, bool) {
 			if last := session.LastHistory(); last == nil || result != last.Line {
 				session.HistoryPush(result)
 			}
-			return result, rc == ENTER
+			if rc == ENTER {
+				return result, nil
+			} else {
+				return result, new(LineEditorAbort)
+			}
 		}
 	}
 }
 
 // Not used on NYAGOS. Provide this as library for other applications.
-func ReadLinePromptStr(promptStr string) (string, bool) {
+func ReadLinePromptStr(promptStr string) (string, error) {
 	width := GetStringWidth(promptStr)
-	DefaultEditor.Prompt = func(*LineEditor) int {
+	DefaultEditor.Prompt = func(*LineEditor) (int, error) {
 		fmt.Print(promptStr)
-		return width
+		return width, nil
 	}
 	return DefaultEditor.ReadLine()
 }
