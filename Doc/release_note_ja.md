@@ -1,6 +1,9 @@
-* Lua関数で、%ERRORLEVEL% の値を返せるようにした(整数として return する)
-* nyagos.exec が %ERRORLEVEL% とエラーメッセージを戻すようになった。
-* `cd`と`pwd`がエラー時に %ERRORLEVEL% を更新するようになった (cdlnk.lua含む)
+NYAGOS 4.0.9\_9
+===============
+* 【蟲繕】内蔵コマンドとエイリアスが ERRORLEVEL を返せなかった問題を修正(#80)
+* nyagos.exec が %ERRORLEVEL% とエラーメッセージを返すようにした
+* 【蟲繕】`nyagos.on_command_not_found` より nyagos.exec を呼ぶと panic する時があった (#83)
+* 【蟲繕】置換型のエイリアス同士をパイプラインでつなぐと panic する時があった (#82)
 
 NYAGOS 4.0.9\_8
 ===============

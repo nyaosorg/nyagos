@@ -1,6 +1,9 @@
-* Lua-functions can return %ERRORLEVEL%
-* nyagos.exec returns %ERRORLEVEL% and error-message.
-* `cd` and `pwd` update %ERRORLEVEL% on error. (cdlnk.lua,too)
+NYAGOS 4.0.9\_9
+===============
+* Fixed #80 built-in commands and aliases could not return errorlevel
+* Let nyagos.exec return %ERRORLEVEL% and error-message.
+* Fixed #83 panic: calling `nyagos.exec` on `nyagos.on_command_not_found`
+* Fixed #82 panic: using pipeline between replacing-type-aliases.
 
 NYAGOS 4.0.9\_8
 ===============
