@@ -4,6 +4,7 @@ NYAGOS 4.0.9\_9
 * nyagos.exec が %ERRORLEVEL% とエラーメッセージを返すようにした
 * 【蟲繕】`nyagos.on_command_not_found` より nyagos.exec を呼ぶと panic する時があった (#83)
 * 【蟲繕】置換型のエイリアス同士をパイプラインでつなぐと panic する時があった (#82)
+* 【蟲繕】ディレクトリでないものへの rmdir がプロンプト前にエラーを出さなかった (#81)
 
 NYAGOS 4.0.9\_8
 ===============

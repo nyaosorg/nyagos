@@ -4,6 +4,7 @@ NYAGOS 4.0.9\_9
 * Let nyagos.exec return %ERRORLEVEL% and error-message.
 * Fixed #83 panic: calling `nyagos.exec` on `nyagos.on_command_not_found`
 * Fixed #82 panic: using pipeline between replacing-type-aliases.
+* Fixed #81 No errors reported on rmdir NOT directory before prompt.
 
 NYAGOS 4.0.9\_8
 ===============
