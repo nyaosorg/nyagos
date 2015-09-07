@@ -98,6 +98,7 @@ make.cmd の使い方については `make.cmd help` を参照してください。
 * [spiegel-im-spiegel](https://github.com/spiegel-im-spiegel)
 * [rururutan](https://github.com/rururutan/)
 * [hogewest](https://github.com/hogewest)
+* [cagechi](https://github.com/cagechi)
 
 開発者
 ------
