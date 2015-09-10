@@ -1,3 +1,5 @@
+* Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)
+
 NYAGOS 4.0.9\_9
 ===============
 * Fixed #80 built-in commands and aliases could not return errorlevel

@@ -99,6 +99,7 @@ make.cmd の使い方については `make.cmd help` を参照してください。
 * [rururutan](https://github.com/rururutan/)
 * [hogewest](https://github.com/hogewest)
 * [cagechi](https://github.com/cagechi)
+* [Matsuyanagi](https://github.com/Matsuyanagi)
 
 開発者
 ------

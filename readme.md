@@ -100,6 +100,7 @@ Acknowledgement
 * [rururutan](https://github.com/rururutan/)
 * [hogewest](https://github.com/hogewest)
 * [cagechi](https://github.com/cagechi)
+* [Matsuyanagi](https://github.com/Matsuyanagi)
 
 Author
 ------
