@@ -31,10 +31,7 @@ func Format2Prompt(format string) string {
 			} else if c == 'c' {
 				buffer.WriteRune('(')
 			} else if c == 'd' {
-				year, month, day := time.Now().Date()
-				buffer.WriteString(
-					fmt.Sprintf("%04d-%02d-%02d",
-						year, month+1, day))
+				buffer.WriteString(time.Now().Format("2006-01-02"))
 			} else if c == 'e' {
 				buffer.WriteRune('\x1B')
 			} else if c == 'f' {
