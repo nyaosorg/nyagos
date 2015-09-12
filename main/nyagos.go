@@ -46,9 +46,13 @@ func nyagosPrompt(L lua.Lua) int {
 }
 
 func printPrompt(this *conio.LineEditor) (int, error) {
-	L, ok := this.Tag.(lua.Lua)
-	if !ok {
-		return 0, errors.New("printPrompt conio.LineEditor.Tag is not lua.Lua")
+	it, it_ok := this.Tag.(*interpreter.Interpreter)
+	if !it_ok {
+		return 0, errors.New("nyagos.go: printPrompt: conio.LineEditor.Tag is not interpreter.Interpreter")
+	}
+	L, L_ok := it.Tag.(lua.Lua)
+	if !L_ok {
+		return 0, errors.New("nyagos.go: printPrompt: interpreter.Interpreter.Tag is not lua.Lua")
 	}
 	L.GetGlobal("nyagos")
 	L.GetField(-1, "prompt")
@@ -60,16 +64,13 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 	}
 
 	L.PushString(os.Getenv("PROMPT"))
-	L.Call(1, 1)
+	NyagosCallLua(it, 1, 1)
 	length, lengthErr := L.ToInteger(-1)
 	L.Pop(1)
 	if lengthErr == nil {
 		return length, nil
 	} else {
-		fmt.Fprintf(os.Stderr,
-			"nyagos.prompt: Length invalid: %s\n",
-			lengthErr.Error())
-		return 0, nil
+		return 0, fmt.Errorf("nyagos.go: printPrompt: length invalid: %s", lengthErr)
 	}
 }
 
@@ -152,10 +153,13 @@ func main() {
 		}
 	}
 
-	conio.DefaultEditor.Tag = L
 	conio.DefaultEditor.Prompt = printPrompt
 
 	for {
+		it := interpreter.New()
+		it.Tag = L
+		conio.DefaultEditor.Tag = it
+
 		wd, wdErr := os.Getwd()
 		if wdErr == nil {
 			conio.SetTitle("NYAGOS - " + wd)
@@ -208,8 +212,6 @@ func main() {
 		}
 		L.SetTop(stackPos)
 
-		it := interpreter.New()
-		it.Tag = L
 		whatToDo, err := it.Interpret(line)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
