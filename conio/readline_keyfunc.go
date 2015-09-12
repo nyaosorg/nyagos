@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/atotto/clipboard"
 )
@@ -191,6 +192,28 @@ func KeyFuncClear(this *Buffer) Result {
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
+	return CONTINUE
+}
+
+func KeyFuncWordRubout(this *Buffer) Result {
+	org_cursor := this.Cursor
+	for this.Cursor > 0 && unicode.IsSpace(this.Buffer[this.Cursor-1]) {
+		this.Cursor--
+	}
+	i := this.CurrentWordTop()
+	var killbuf bytes.Buffer
+	for j := i; j < org_cursor; j++ {
+		killbuf.WriteRune(this.Buffer[j])
+	}
+	clipboard.WriteAll(killbuf.String())
+	keta := this.Delete(i, org_cursor-i)
+	if i >= this.ViewStart {
+		Backspace(keta)
+	} else {
+		Backspace(this.GetWidthBetween(this.ViewStart, org_cursor))
+	}
+	this.Cursor = i
+	this.Repaint(i, keta)
 	return CONTINUE
 }
 
