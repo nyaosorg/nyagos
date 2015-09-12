@@ -101,6 +101,7 @@ Acknowledgement
 * [hogewest](https://github.com/hogewest)
 * [cagechi](https://github.com/cagechi)
 * [Matsuyanagi](https://github.com/Matsuyanagi)
+* [Shougo](https://github.com/Shougo)
 
 Author
 ------

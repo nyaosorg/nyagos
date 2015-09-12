@@ -1,4 +1,5 @@
 * Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)
+* Support C-w (unix-word-rubout) like nyaos (#85)
 
 NYAGOS 4.0.9\_9
 ===============

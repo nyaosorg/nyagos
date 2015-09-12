@@ -100,6 +100,7 @@ make.cmd の使い方については `make.cmd help` を参照してください。
 * [hogewest](https://github.com/hogewest)
 * [cagechi](https://github.com/cagechi)
 * [Matsuyanagi](https://github.com/Matsuyanagi)
+* [Shougo](https://github.com/Shougo)
 
 開発者
 ------

@@ -71,7 +71,7 @@ Execute SCRIPTCODE with Lua interpretor and quit.
 * TAB , Ctrl-I       : Complete file or command-name
 * Ctrl-C             : Drop text all
 * Ctrl-R             : Incremental search
-
+* Ctrl-W             : Remove current word.
 
 ## Built-in commnads
 
