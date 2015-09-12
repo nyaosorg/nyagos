@@ -151,6 +151,12 @@ NYAGOS を終了します。
 
 * `PROMPT` … プロンプトの文字列を設定します。`$P` 等のマクロ文字はCMD.EXE と同じです。shiena 様開発のモジュールによりエスケープシーケンスが使えます。
 
+### `which [-a] COMMAND-NAME`
+
+コマンド名に対して、どのファイルが実行されるか表示します
+
+* `-a` - %PATH% 上の全ての実行ファイルを表示します。
+
 ### `copy SOURCE-FILENAME DESTINATE-FILENAME`
 ### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
 ### `move OLD-FILENAME NEW-FILENAME`

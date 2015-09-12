@@ -134,6 +134,12 @@ you should `set "ENV=VAR"`.
 
 * `PROMPT` ... Escape sequences are avaliable.
 
+### `which [-a] COMMAND-NAME`
+
+Report which file is executed.
+
+* `-a` - report all executable on %PATH%
+
 ### `copy SOURCE-FILENAME DESTINATE-FILENAME`
 ### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
 ### `move OLD-FILENAME NEW-FILENAME`
