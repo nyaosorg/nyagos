@@ -17,7 +17,7 @@ goto build
 :build
         for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         pushd "%~dp0main"
-        for %%I in (windres.exe) do if not "%%~$PATH:I" == "" cscript //nologo make_rc.js | windres.exe --output-format=coff -o nyagos.syso
+        powershell -ExecutionPolicy RemoteSigned -File makesyso.ps1
         popd
         for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o nyagos.exe -ldflags "-X main.stamp=%DATE% -X main.commit=%%V %X_VERSION%" .\main
         goto end
