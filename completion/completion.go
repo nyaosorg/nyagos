@@ -2,12 +2,14 @@ package completion
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
 	"unicode"
 
 	"../conio"
+	"../interpreter"
 	"../lua"
 )
 
@@ -40,10 +42,20 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 	} else {
 		rv.List, err = listUpCommands(rv.Word)
 	}
-	L, Lok := this.Session.Tag.(lua.Lua)
-	if !Lok {
-		panic("conio.LineEditor.Tag is not lua.Lua")
+	var L lua.Lua
+	var L_ok bool
+
+	if it, it_ok := this.Session.Tag.(*interpreter.Interpreter); !it_ok {
+		if L, L_ok = this.Session.Tag.(lua.Lua); !L_ok {
+			return nil, errors.New("listUpComplete: could not get lua instance")
+		}
+	} else {
+		L, L_ok = it.Tag.(lua.Lua)
 	}
+	if !L_ok {
+		return nil, errors.New("listUpComplete: could not get lua instance")
+	}
+
 	L.GetGlobal("nyagos")
 	L.GetField(-1, "completion_hook")
 	L.Remove(-2) // remove nyagos-table
