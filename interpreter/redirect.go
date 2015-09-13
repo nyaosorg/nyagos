@@ -49,7 +49,7 @@ func (this *Redirecter) open() (*os.File, error) {
 	}
 }
 
-func (this *Redirecter) OpenOn(cmd *Interpreter) error {
+func (this *Redirecter) OpenOn(cmd *Interpreter) (*os.File, error) {
 	var fd *os.File
 	var err error
 
@@ -59,7 +59,7 @@ func (this *Redirecter) OpenOn(cmd *Interpreter) error {
 	default:
 		fd, err = this.open()
 		if err != nil {
-			return err
+			return nil, err
 		}
 	}
 	switch this.FileNo() {
@@ -72,5 +72,5 @@ func (this *Redirecter) OpenOn(cmd *Interpreter) error {
 	default:
 		panic("Assertion failed: Redirecter.OpenAs: this.no not in (0,1,2)")
 	}
-	return nil
+	return fd, nil
 }

@@ -262,10 +262,12 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			}
 
 			for _, red := range state.Redirect {
-				err = red.OpenOn(cmd)
+				var fd *os.File
+				fd, err = red.OpenOn(cmd)
 				if err != nil {
 					return NOERROR, err
 				}
+				defer fd.Close()
 			}
 
 			cmd.Args = state.Argv
