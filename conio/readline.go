@@ -2,6 +2,7 @@ package conio
 
 import (
 	"fmt"
+	"os"
 	"strings"
 )
 
@@ -139,9 +140,11 @@ func (session *LineEditor) ReadLine() (string, error) {
 
 	width1, err1 := session.Prompt(session)
 	if err1 != nil {
-		return "", err1
+		fmt.Fprintf(os.Stderr, "%s\n$ ", err1.Error())
+		this.ViewWidth = this.ViewWidth - 2
+	} else {
+		this.ViewWidth = this.ViewWidth - width1
 	}
-	this.ViewWidth = this.ViewWidth - width1
 
 	for {
 		stdOut.Flush()

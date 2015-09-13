@@ -70,7 +70,7 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 	if lengthErr == nil {
 		return length, nil
 	} else {
-		return 0, fmt.Errorf("nyagos.go: printPrompt: length invalid: %s", lengthErr)
+		return 0, fmt.Errorf("nyagos.prompt: return-value(length) is invalid: %s", lengthErr.Error())
 	}
 }
 
