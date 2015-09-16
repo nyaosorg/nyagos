@@ -1,6 +1,15 @@
-* Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)
-* Support C-w (unix-word-rubout) like nyaos (#85)
+NYAGOS 4.0.9\_10
+================
+* Build with go 1.5.1
+* Fixed #88 Ctrl-U (`UNIX_LINE_DISCARD`) did not consider scroll.
+* Fixed #87 Querying not-starting process's errorlevel which occured crash.
+* Do not quit and do warn only when nyagos.prompt returns NaN.
+* Fixed file-handle created with REDIRECT was not closed.
+* Improved make.cmd
+* Fixed interpreter instance was not given to nyagos.prompt.
 * `which` command supports -a option
+* Support C-w (unix-word-rubout) like nyaos (#85)
+* Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)
 
 NYAGOS 4.0.9\_9
 ===============
