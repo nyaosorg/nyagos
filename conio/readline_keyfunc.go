@@ -218,14 +218,16 @@ func KeyFuncWordRubout(this *Buffer) Result {
 }
 
 func KeyFuncClearBefore(this *Buffer) Result {
+	keta := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	var killbuf bytes.Buffer
 	for i := 0; i < this.Cursor; i++ {
 		killbuf.WriteRune(this.Buffer[i])
 	}
 	clipboard.WriteAll(killbuf.String())
-	keta := this.Delete(0, this.Cursor)
+	this.Delete(0, this.Cursor)
 	Backspace(keta)
 	this.Cursor = 0
+	this.ViewStart = 0
 	this.Repaint(0, keta)
 	return CONTINUE
 }

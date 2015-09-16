@@ -162,15 +162,24 @@ func (this *Buffer) Repaint(pos int, del int) {
 
 	for i := pos; i < this.Length; i++ {
 		w1 := GetCharWidth(this.Buffer[i])
-		vp += w1
-		if vp >= this.ViewWidth {
+		if vp+w1 >= this.ViewWidth {
 			break
 		}
 		PutRune(this.Buffer[i])
+		vp += w1
 		bs += w1
 	}
-	PutRunes(' ', del)
-	Backspace(bs + del)
+	if del > 0 {
+		for i := 0; vp+1 < this.ViewWidth && i < del; i++ {
+			PutRune(' ')
+			vp++
+			bs++
+		}
+		Backspace(bs)
+	} else {
+		// for readline_keyfunc.go: KeyFuncInsertSelf()
+		Backspace(bs + del)
+	}
 }
 
 func (this *Buffer) RepaintAll() {
