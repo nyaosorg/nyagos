@@ -147,7 +147,9 @@ func nvl(a *os.File, b *os.File) *os.File {
 }
 
 func GetErrorLevel(processState *os.ProcessState) (int, bool) {
-	if processState.Success() {
+	if processState == nil {
+		return 255, false
+	} else if processState.Success() {
 		return 0, true
 	} else if t, ok := processState.Sys().(syscall.WaitStatus); ok {
 		return t.ExitStatus(), true
