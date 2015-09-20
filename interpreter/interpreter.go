@@ -7,8 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
-
-	"../lua"
 )
 
 type CommandNotFound struct {
@@ -241,11 +239,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			cmd.PipeSeq[0] = pipeSeq
 			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
-			if L, L_ok := this.Tag.(lua.Lua); L_ok {
-				cmd.Tag = L.NewThread()
-			} else {
-				cmd.Tag = this.Tag
-			}
+			cmd.Tag = this.Tag
 			cmd.HookCount = this.HookCount
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
