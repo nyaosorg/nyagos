@@ -274,3 +274,10 @@ var lua_len = luaDLL.NewProc("lua_len")
 func (this Lua) Len(index int) {
 	lua_len.Call(this.State(), uintptr(index))
 }
+
+var lua_newthread = luaDLL.NewProc("lua_newthread")
+
+func (this Lua) NewThread() Lua {
+	newthread, _, _ := lua_newthread.Call(this.State())
+	return Lua(newthread)
+}
