@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"sync"
 	"syscall"
 )
 
@@ -233,7 +234,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				break
 			}
 		}
-
+		var wg sync.WaitGroup
 		for i, state := range pipeline {
 			cmd := new(Interpreter)
 			cmd.PipeSeq[0] = pipeSeq
@@ -281,11 +282,20 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				cmd.closeAtEnd()
 				ErrorLevelStr = errorlevel.String()
 			} else {
+				if !isBackGround {
+					wg.Add(1)
+				}
 				go func(cmd1 *Interpreter) {
+					if !isBackGround {
+						defer wg.Done()
+					}
 					cmd1.Spawnvp()
 					cmd1.closeAtEnd()
 				}(cmd)
 			}
+		}
+		if !isBackGround {
+			wg.Wait()
 		}
 	}
 	return
