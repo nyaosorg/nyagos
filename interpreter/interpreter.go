@@ -165,7 +165,7 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	}
 
 	// aliases and lua-commands
-	if errorlevel, err := hook(this); errorlevel != THROUGH {
+	if errorlevel, err := hook(this); errorlevel != THROUGH || err != nil {
 		return errorlevel, err
 	}
 
@@ -226,7 +226,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 	for _, pipeline := range statements {
 		var pipeIn *os.File = nil
 		pipeSeq++
-		isBackGround := false
+		isBackGround := this.IsBackGround
 		for _, state := range pipeline {
 			if state.Term == "&" {
 				isBackGround = true
@@ -273,6 +273,9 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			}
 
 			cmd.Args = state.Argv
+			if i > 0 {
+				cmd.IsBackGround = true
+			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				errorlevel, err = cmd.Spawnvp()
 				cmd.closeAtEnd()

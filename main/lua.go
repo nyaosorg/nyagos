@@ -12,6 +12,18 @@ import (
 	"../lua"
 )
 
+type LuaNotRunBackGroundError struct {
+	name string
+}
+
+func (this LuaNotRunBackGroundError) Error() string {
+	if this.name == "" {
+		return ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND
+	} else {
+		return fmt.Sprintf("%s: %s", this.name, ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
+	}
+}
+
 const dbg = false
 
 type LuaFunction struct {
@@ -29,6 +41,9 @@ func NyagosCallLua(it *interpreter.Interpreter, nargs int, nresult int) error {
 	if it == nil {
 		return errors.New("NyagosCallLua: Interpreter instance is nil")
 	}
+	if it.IsBackGround {
+		return &LuaNotRunBackGroundError{}
+	}
 	L, ok := it.Tag.(lua.Lua)
 	if !ok {
 		return errors.New("NyagosCallLua: Lua instance not found")
@@ -43,26 +58,22 @@ func NyagosCallLua(it *interpreter.Interpreter, nargs int, nresult int) error {
 var mutex4dll sync.Mutex
 var luaUsedOnThatPipeline = map[uint]uint{}
 
-const ERRMSG_CAN_NOT_USE_TWO_LUA_ON = "Can not use two Lua-command on the same pipeline"
 const ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND = "Can not run Lua-Command on background"
 
 func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	if cmd.IsBackGround {
-		fmt.Fprintf(os.Stderr, "%s: %s\n",
-			cmd.Args[0],
-			ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
-		return interpreter.NOERROR,
-			errors.New(ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
+		err := LuaNotRunBackGroundError{cmd.Args[0]}
+		fmt.Fprintln(os.Stderr, err.Error())
+		return interpreter.NOERROR, &err
 	}
 	L := this.L
 	seq := cmd.PipeSeq
 	mutex4dll.Lock()
 	if p, ok := luaUsedOnThatPipeline[seq[0]]; ok && p != seq[1] {
 		mutex4dll.Unlock()
-		fmt.Fprintf(os.Stderr, "%s: %s\n",
-			cmd.Args[0],
-			ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
-		return interpreter.NOERROR, errors.New(ERRMSG_CAN_NOT_USE_TWO_LUA_ON)
+		err := LuaNotRunBackGroundError{cmd.Args[0]}
+		fmt.Fprintln(os.Stderr, err.Error())
+		return interpreter.NOERROR, &err
 	}
 	luaUsedOnThatPipeline[seq[0]] = seq[1]
 	mutex4dll.Unlock()
@@ -154,6 +165,9 @@ var orgArgHook func(*interpreter.Interpreter, []string) ([]string, error)
 var newArgsHookLock sync.Mutex
 
 func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
+	if it.IsBackGround {
+		return nil, &LuaNotRunBackGroundError{}
+	}
 	newArgsHookLock.Lock()
 	defer newArgsHookLock.Unlock()
 
@@ -209,6 +223,9 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 var orgOnCommandNotFound func(*interpreter.Interpreter, error) error
 
 func on_command_not_found(inte *interpreter.Interpreter, err error) error {
+	if inte.IsBackGround {
+		return &LuaNotRunBackGroundError{"nyagos.on_command_not_found"}
+	}
 	L, Lok := inte.Tag.(lua.Lua)
 	if !Lok {
 		return errors.New("on_command_not_found: Interpreter.Tag is not lua instance")
