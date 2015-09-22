@@ -50,10 +50,14 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 	if !it_ok {
 		return 0, errors.New("nyagos.go: printPrompt: conio.LineEditor.Tag is not interpreter.Interpreter")
 	}
+	if it.IsBackGround {
+		return 0, &LuaNotRunBackGroundError{"nyagos.prompt"}
+	}
 	L, L_ok := it.Tag.(lua.Lua)
 	if !L_ok {
 		return 0, errors.New("nyagos.go: printPrompt: interpreter.Interpreter.Tag is not lua.Lua")
 	}
+	defer L.SetTop(L.GetTop())
 	L.GetGlobal("nyagos")
 	L.GetField(-1, "prompt")
 	L.Remove(-2)
@@ -62,9 +66,10 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 		L.Pop(1)
 		return 0, nil
 	}
-
 	L.PushString(os.Getenv("PROMPT"))
-	NyagosCallLua(it, 1, 1)
+	if err := NyagosCallLua(it, 1, 1); err != nil {
+		return 0, err
+	}
 	length, lengthErr := L.ToInteger(-1)
 	L.Pop(1)
 	if lengthErr == nil {
