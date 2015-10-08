@@ -12,7 +12,7 @@ Programming Language GO and Lua.
   * Alias
   * Filename/Command-name completion
 * Support UNICODE
-  * Can paste unicode charactor on clipboard and edit them.
+  * Can paste unicode character on clipboard and edit them.
   * Unicode-literal %U+XXXX%
   * Prompt Macro $Uxxxx
 * Built-in ls
