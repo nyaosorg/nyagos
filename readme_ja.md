@@ -101,6 +101,7 @@ make.cmd の使い方については `make.cmd help` を参照してください。
 * [cagechi](https://github.com/cagechi)
 * [Matsuyanagi](https://github.com/Matsuyanagi)
 * [Shougo](https://github.com/Shougo)
+* [orthographic-pedant](https://github.com/orthographic-pedant)
 
 開発者
 ------
