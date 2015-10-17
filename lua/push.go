@@ -71,6 +71,10 @@ func (this Lua) PushGoFunction(fn func(Lua) int) {
 	lua_pushcclosure.Call(uintptr(this), syscall.NewCallbackCDecl(fn), 0)
 }
 
+type Pushable interface {
+	Push(Lua) int
+}
+
 func (this Lua) Push(values ...interface{}) int {
 	for _, value := range values {
 		if value == nil {
@@ -103,6 +107,8 @@ func (this Lua) Push(values ...interface{}) int {
 			}
 		case unsafe.Pointer:
 			this.PushLightUserData(t)
+		case Pushable:
+			t.Push(this)
 		default:
 			panic(fmt.Sprintf("lua.Lua.Push(%T): value is not supported type", t))
 		}

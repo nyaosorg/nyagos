@@ -254,67 +254,94 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 	}
 }
 
+type MetaOnlyTableT struct {
+	Table map[string]interface{}
+}
+
+func (this *MetaOnlyTableT) Push(L lua.Lua) int {
+	L.NewTable()
+	L.NewTable()
+	for key, val := range this.Table {
+		L.Push(val)
+		L.SetField(-2, key)
+	}
+	L.SetMetaTable(-2)
+	return 1
+}
+
+var nyagos_table = map[string]interface{}{
+	"access": cmdAccess,
+	"alias": &MetaOnlyTableT{map[string]interface{}{
+		"__call":     cmdSetAlias,
+		"__newindex": cmdSetAlias,
+		"__index":    cmdGetAlias,
+	}},
+	"atou":         cmdAtoU,
+	"bindkey":      cmdBindKey,
+	"commonprefix": cmdCommonPrefix,
+	"env": &MetaOnlyTableT{map[string]interface{}{
+		"__newindex": cmdSetEnv,
+		"__index":    cmdGetEnv,
+	}},
+	"eval":         cmdEval,
+	"exec":         cmdExec,
+	"getalias":     cmdGetAlias,
+	"getenv":       cmdGetEnv,
+	"gethistory":   cmdGetHistory,
+	"getkey":       cmdGetKey,
+	"getviewwidth": cmdGetViewWidth,
+	"getwd":        cmdGetwd,
+	"glob":         cmdGlob,
+	"pathjoin":     cmdPathJoin,
+	"raweval":      cmdRawEval,
+	"rawexec":      cmdRawExec,
+	"setalias":     cmdSetAlias,
+	"setenv":       cmdSetEnv,
+	"setrunewidth": cmdSetRuneWidth,
+	"shellexecute": cmdShellExecute,
+	"stat":         cmdStat,
+	"utoa":         cmdUtoA,
+	"which":        cmdWhich,
+	"write":        cmdWrite,
+	"writerr":      cmdWriteErr,
+	"goarch":       runtime.GOARCH,
+	"goversion":    runtime.Version(),
+}
+
+func nyagos_index(L lua.Lua) int {
+	index, index_err := L.ToString(2)
+	if index_err != nil {
+		return L.Push(nil, index_err.Error())
+	}
+	if entry, entry_ok := nyagos_table[index]; entry_ok {
+		return L.Push(entry)
+	} else if index == "exe" {
+		if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
+			return L.Push(nil, exeNameErr.Error())
+		} else {
+			L.PushString(exeName)
+			return 1
+		}
+	} else {
+		L.PushNil()
+		return 1
+	}
+}
+
+var nyagos_top_meta_table = &MetaOnlyTableT{map[string]interface{}{
+	"__index": nyagos_index,
+}}
+
+func make_nyaos_table(L lua.Lua) {
+	L.Push(nyagos_top_meta_table)
+	L.SetGlobal("nyagos")
+}
+
 func SetLuaFunctions(this lua.Lua) {
 	stackPos := this.GetTop()
 	defer this.SetTop(stackPos)
 
-	nyagos_table := map[string]interface{}{
-		"access":       cmdAccess,
-		"atou":         cmdAtoU,
-		"bindkey":      cmdBindKey,
-		"commonprefix": cmdCommonPrefix,
-		"eval":         cmdEval,
-		"exec":         cmdExec,
-		"getalias":     cmdGetAlias,
-		"getenv":       cmdGetEnv,
-		"gethistory":   cmdGetHistory,
-		"getkey":       cmdGetKey,
-		"getviewwidth": cmdGetViewWidth,
-		"getwd":        cmdGetwd,
-		"glob":         cmdGlob,
-		"pathjoin":     cmdPathJoin,
-		"raweval":      cmdRawEval,
-		"rawexec":      cmdRawExec,
-		"setalias":     cmdSetAlias,
-		"setenv":       cmdSetEnv,
-		"setrunewidth": cmdSetRuneWidth,
-		"shellexecute": cmdShellExecute,
-		"stat":         cmdStat,
-		"utoa":         cmdUtoA,
-		"which":        cmdWhich,
-		"write":        cmdWrite,
-		"writerr":      cmdWriteErr,
-	}
-	if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
-		fmt.Fprintln(os.Stderr, exeNameErr)
-	} else {
-		nyagos_table["exe"] = exeName
-	}
-	nyagos_table["goarch"] = runtime.GOARCH
-	nyagos_table["goversion"] = runtime.Version()
-	this.Push(nyagos_table)
-
-	this.NewTable() // "nyagos.alias"
-	this.NewTable() // metatable.
-	this.PushGoFunction(cmdSetAlias)
-	this.SetField(-2, "__call")
-	this.PushGoFunction(cmdSetAlias)
-	this.SetField(-2, "__newindex")
-	this.PushGoFunction(cmdGetAlias)
-	this.SetField(-2, "__index")
-	this.SetMetaTable(-2)
-	this.SetField(-2, "alias")
-
-	this.NewTable() // "nyagos.env"
-	this.NewTable() // metatable
-	this.PushGoFunction(cmdSetEnv)
-	this.SetField(-2, "__newindex")
-	this.PushGoFunction(cmdGetEnv)
-	this.SetField(-2, "__index")
-	this.SetMetaTable(-2)
-	this.SetField(-2, "env")
-
-	this.SetGlobal("nyagos")
+	make_nyaos_table(this)
 
 	// replace os.getenv
 	this.GetGlobal("os")           // +1
