@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -18,7 +19,64 @@ import (
 	"../lua"
 )
 
-const alias_prefix = "nyagos.alias."
+type LuaBinaryChank struct {
+	Chank []byte
+}
+
+func (this *LuaBinaryChank) String() string {
+	return "(lua-function)"
+}
+
+func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+	L, L_ok := cmd.Tag.(lua.Lua)
+	if !L_ok {
+		return interpreter.ErrorLevel(255), errors.New("LuaBinaryChank.Call: Lua instance not found")
+	}
+	if err := L.LoadBufferX(cmd.Args[0], this.Chank, "b"); err != nil {
+		return interpreter.ErrorLevel(255), err
+	}
+	L.NewTable()
+	for i, arg1 := range cmd.Args {
+		L.PushString(arg1)
+		L.RawSetI(-2, lua.Integer(i))
+	}
+	err := NyagosCallLua(cmd, 1, 1)
+	errorlevel := interpreter.NOERROR
+	if err == nil {
+		newargs := make([]string, 0)
+		if L.IsTable(-1) {
+			L.PushInteger(0)
+			L.GetTable(-2)
+			if val, err1 := L.ToString(-1); val != "" && err1 == nil {
+				newargs = append(newargs, val)
+			}
+			L.Pop(1)
+			for i := 1; ; i++ {
+				L.PushInteger(lua.Integer(i))
+				L.GetTable(-2)
+				if L.IsNil(-1) {
+					L.Pop(1)
+					break
+				}
+				val, err1 := L.ToString(-1)
+				L.Pop(1)
+				if err1 != nil {
+					break
+				}
+				newargs = append(newargs, val)
+			}
+			it := cmd.Clone()
+			it.Args = newargs
+			errorlevel, err = it.Spawnvp()
+		} else if val, err1 := L.ToInteger(-1); err1 == nil {
+			errorlevel = interpreter.ErrorLevel(val)
+		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
+			errorlevel, err = cmd.Clone().Interpret(val)
+		}
+	}
+	L.Pop(1)
+	return errorlevel, err
+}
 
 func cmdSetAlias(L lua.Lua) int {
 	name, nameErr := L.ToString(-2)
@@ -29,17 +87,14 @@ func cmdSetAlias(L lua.Lua) int {
 	switch L.GetType(-1) {
 	case lua.LUA_TSTRING:
 		value, err := L.ToString(-1)
-		regkey := alias_prefix + key
-		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
 		if err == nil {
 			alias.Table[key] = alias.New(value)
 		} else {
 			return L.Push(nil, err)
 		}
 	case lua.LUA_TFUNCTION:
-		regkey := alias_prefix + key
-		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
-		alias.Table[key] = LuaFunction{L, regkey}
+		chank := L.Dump()
+		alias.Table[key] = &LuaBinaryChank{Chank: chank}
 	}
 	return L.Push(true)
 }
@@ -49,8 +104,19 @@ func cmdGetAlias(L lua.Lua) int {
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
 	}
-	regkey := alias_prefix + strings.ToLower(name)
-	L.GetField(lua.LUA_REGISTRYINDEX, regkey)
+	value, ok := alias.Table[name]
+	if !ok {
+		L.PushNil()
+		return 1
+	}
+	switch v := value.(type) {
+	case *LuaBinaryChank:
+		if err := L.LoadBufferX(name, v.Chank, "b"); err != nil {
+			return L.Push(nil, err.Error())
+		}
+	default:
+		L.PushString(v.String())
+	}
 	return 1
 }
 

@@ -281,3 +281,56 @@ func (this Lua) NewThread() Lua {
 	newthread, _, _ := lua_newthread.Call(this.State())
 	return Lua(newthread)
 }
+
+func callback_writer(L, p, sz, ud uintptr) uintptr {
+	buffer := (*[]byte)(unsafe.Pointer(ud))
+	for i := uintptr(0); i < sz; i++ {
+		*buffer = append(*buffer, *(*byte)(unsafe.Pointer(p)))
+		p++
+	}
+	return 0
+}
+
+var lua_dump = luaDLL.NewProc("lua_dump")
+
+func (this Lua) Dump() []byte {
+	buffer := make([]byte, 0, 1024)
+
+	rc, _, _ := lua_dump.Call(
+		this.State(),
+		syscall.NewCallbackCDecl(callback_writer),
+		uintptr(unsafe.Pointer(&buffer)))
+	if rc == 0 {
+		return buffer
+	} else {
+		return nil
+	}
+}
+
+var luaL_loadbufferx = luaDLL.NewProc("luaL_loadbufferx")
+
+func (this Lua) LoadBufferX(title string, chank []byte, mode string) error {
+	if this == 0 {
+		return errors.New("lua.LoadBufferX: this is null.")
+	}
+	title_ptr, title_err := syscall.BytePtrFromString(title)
+	if title_err != nil {
+		return title_err
+	}
+	mode_ptr, mode_err := syscall.BytePtrFromString(mode)
+	if mode_err != nil {
+		return mode_err
+	}
+
+	rc, _, _ := luaL_loadbufferx.Call(
+		this.State(),
+		uintptr(unsafe.Pointer(&chank[0])),
+		uintptr(len(chank)),
+		uintptr(unsafe.Pointer(title_ptr)),
+		uintptr(unsafe.Pointer(mode_ptr)))
+	if rc == 0 {
+		return nil
+	} else {
+		return fmt.Errorf("LUA_ERROR(%d)", rc)
+	}
+}
