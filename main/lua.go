@@ -269,7 +269,7 @@ func (this *MetaOnlyTableT) Push(L lua.Lua) int {
 	return 1
 }
 
-var nyagos_table = map[string]interface{}{
+var nyagos_table_member = map[string]interface{}{
 	"access": cmdAccess,
 	"alias": &MetaOnlyTableT{map[string]interface{}{
 		"__call":     cmdSetAlias,
@@ -308,12 +308,12 @@ var nyagos_table = map[string]interface{}{
 	"goversion":    runtime.Version(),
 }
 
-func nyagos_index(L lua.Lua) int {
+func get_nyagos_table_member(L lua.Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err.Error())
 	}
-	if entry, entry_ok := nyagos_table[index]; entry_ok {
+	if entry, entry_ok := nyagos_table_member[index]; entry_ok {
 		return L.Push(entry)
 	} else if index == "exe" {
 		if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
@@ -329,7 +329,7 @@ func nyagos_index(L lua.Lua) int {
 }
 
 var nyagos_top_meta_table = &MetaOnlyTableT{map[string]interface{}{
-	"__index": nyagos_index,
+	"__index": get_nyagos_table_member,
 }}
 
 func make_nyaos_table(L lua.Lua) {
