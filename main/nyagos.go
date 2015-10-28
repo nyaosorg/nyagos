@@ -117,22 +117,17 @@ func main() {
 	L := lua.New()
 	L.OpenLibs()
 	SetLuaFunctions(L)
-	L.GetGlobal("nyagos")
+
 	if stamp != "" {
-		L.PushString(stamp)
-		L.SetField(-2, "stamp")
+		nyagos_table_member["stamp"] = stamp
 	}
 	if commit != "" {
-		L.PushString(commit)
-		L.SetField(-2, "commit")
+		nyagos_table_member["commit"] = commit
 	}
 	if version != "" {
-		L.PushString(version)
-		L.SetField(-2, "version")
+		nyagos_table_member["version"] = version
 	}
-	L.PushGoFunction(nyagosPrompt)
-	L.SetField(-2, "prompt")
-	L.Pop(1)
+	nyagos_table_member["prompt"] = nyagosPrompt
 	defer L.Close()
 
 	if !optionParse(L) {
