@@ -81,7 +81,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 func cmdSetAlias(L lua.Lua) int {
 	name, nameErr := L.ToString(-2)
 	if nameErr != nil {
-		return L.Push(nil, nameErr)
+		return L.Push(nil, nameErr.Error())
 	}
 	key := strings.ToLower(name)
 	switch L.GetType(-1) {
