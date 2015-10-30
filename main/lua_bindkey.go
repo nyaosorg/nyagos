@@ -12,8 +12,8 @@ import (
 )
 
 type KeyLuaFuncT struct {
-	L            lua.Lua
-	registoryKey string
+	L     lua.Lua
+	Chank []byte
 }
 
 func getBufferForCallBack(L lua.Lua) (*conio.Buffer, int) {
@@ -116,7 +116,7 @@ func callBoxListing(L lua.Lua) int {
 }
 
 func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
-	this.L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
+	this.L.LoadBufferX("", this.Chank, "b")
 	pos := -1
 	var text bytes.Buffer
 	for i, c := range buffer.Buffer {
@@ -168,9 +168,8 @@ func cmdBindKey(L lua.Lua) int {
 	key = strings.Replace(strings.ToUpper(key), "-", "_", -1)
 	switch L.GetType(-1) {
 	case lua.LUA_TFUNCTION:
-		regkey := "nyagos.bind." + key
-		L.SetField(lua.LUA_REGISTRYINDEX, regkey)
-		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, regkey}); err != nil {
+		chank := L.Dump()
+		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, chank}); err != nil {
 			return L.Push(nil, err)
 		} else {
 			return L.Push(true)
