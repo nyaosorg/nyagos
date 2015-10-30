@@ -26,16 +26,7 @@ func (this LuaNotRunBackGroundError) Error() string {
 
 const dbg = false
 
-type LuaFunction struct {
-	L            lua.Lua
-	registoryKey string
-}
-
 var LuaInstanceToCmd = map[uintptr]*interpreter.Interpreter{}
-
-func (this LuaFunction) String() string {
-	return "<<Lua-function>>"
-}
 
 func NyagosCallLua(it *interpreter.Interpreter, nargs int, nresult int) error {
 	if it == nil {
@@ -59,68 +50,6 @@ var mutex4dll sync.Mutex
 var luaUsedOnThatPipeline = map[uint]uint{}
 
 const ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND = "Can not run Lua-Command on background"
-
-func (this LuaFunction) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	if cmd.IsBackGround {
-		err := LuaNotRunBackGroundError{cmd.Args[0]}
-		fmt.Fprintln(os.Stderr, err.Error())
-		return interpreter.NOERROR, &err
-	}
-	L := this.L
-	seq := cmd.PipeSeq
-	mutex4dll.Lock()
-	if p, ok := luaUsedOnThatPipeline[seq[0]]; ok && p != seq[1] {
-		mutex4dll.Unlock()
-		err := LuaNotRunBackGroundError{cmd.Args[0]}
-		fmt.Fprintln(os.Stderr, err.Error())
-		return interpreter.NOERROR, &err
-	}
-	luaUsedOnThatPipeline[seq[0]] = seq[1]
-	mutex4dll.Unlock()
-
-	L.GetField(lua.LUA_REGISTRYINDEX, this.registoryKey)
-	L.NewTable()
-	for i, arg1 := range cmd.Args {
-		L.PushString(arg1)
-		L.RawSetI(-2, lua.Integer(i))
-	}
-	err := NyagosCallLua(cmd, 1, 1)
-	errorlevel := interpreter.NOERROR
-	if err == nil {
-		newargs := make([]string, 0)
-		if L.IsTable(-1) {
-			L.PushInteger(0)
-			L.GetTable(-2)
-			if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-				newargs = append(newargs, val)
-			}
-			L.Pop(1)
-			for i := 1; ; i++ {
-				L.PushInteger(lua.Integer(i))
-				L.GetTable(-2)
-				if L.IsNil(-1) {
-					L.Pop(1)
-					break
-				}
-				val, err1 := L.ToString(-1)
-				L.Pop(1)
-				if err1 != nil {
-					break
-				}
-				newargs = append(newargs, val)
-			}
-			it := cmd.Clone()
-			it.Args = newargs
-			errorlevel, err = it.Spawnvp()
-		} else if val, err1 := L.ToInteger(-1); err1 == nil {
-			errorlevel = interpreter.ErrorLevel(val)
-		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-			errorlevel, err = cmd.Clone().Interpret(val)
-		}
-	}
-	L.Pop(1)
-	return errorlevel, err
-}
 
 const original_io_lines = "original_io_lines"
 
