@@ -114,20 +114,7 @@ func main() {
 	alias.Init()
 
 	// Lua extension
-	L := lua.New()
-	L.OpenLibs()
-	SetLuaFunctions(L)
-
-	if stamp != "" {
-		nyagos_table_member["stamp"] = stamp
-	}
-	if commit != "" {
-		nyagos_table_member["commit"] = commit
-	}
-	if version != "" {
-		nyagos_table_member["version"] = version
-	}
-	nyagos_table_member["prompt"] = nyagosPrompt
+	L := NewNyagosLua()
 	defer L.Close()
 
 	if !optionParse(L) {

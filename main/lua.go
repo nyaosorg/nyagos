@@ -269,6 +269,14 @@ func (this *MetaOnlyTableT) Push(L lua.Lua) int {
 	return 1
 }
 
+func emptyToNil(s string) interface{} {
+	if s == "" {
+		return nil
+	} else {
+		return s
+	}
+}
+
 var nyagos_table_member = map[string]interface{}{
 	"access": cmdAccess,
 	"alias": &MetaOnlyTableT{map[string]interface{}{
@@ -278,6 +286,7 @@ var nyagos_table_member = map[string]interface{}{
 	}},
 	"atou":         cmdAtoU,
 	"bindkey":      cmdBindKey,
+	"commit":       emptyToNil(commit),
 	"commonprefix": cmdCommonPrefix,
 	"env": &MetaOnlyTableT{map[string]interface{}{
 		"__newindex": cmdSetEnv,
@@ -300,12 +309,15 @@ var nyagos_table_member = map[string]interface{}{
 	"setrunewidth": cmdSetRuneWidth,
 	"shellexecute": cmdShellExecute,
 	"stat":         cmdStat,
+	"stamp":        emptyToNil(stamp),
 	"utoa":         cmdUtoA,
 	"which":        cmdWhich,
 	"write":        cmdWrite,
 	"writerr":      cmdWriteErr,
 	"goarch":       runtime.GOARCH,
 	"goversion":    runtime.Version(),
+	"version":      emptyToNil(version),
+	"prompt":       nyagosPrompt,
 }
 
 func get_nyagos_table_member(L lua.Lua) int {
@@ -337,9 +349,9 @@ func make_nyaos_table(L lua.Lua) {
 	L.SetGlobal("nyagos")
 }
 
-func SetLuaFunctions(this lua.Lua) {
-	stackPos := this.GetTop()
-	defer this.SetTop(stackPos)
+func NewNyagosLua() lua.Lua {
+	this := lua.New()
+	this.OpenLibs()
 
 	make_nyaos_table(this)
 
@@ -365,4 +377,6 @@ func SetLuaFunctions(this lua.Lua) {
 
 	orgOnCommandNotFound = interpreter.OnCommandNotFound
 	interpreter.OnCommandNotFound = on_command_not_found
+
+	return this
 }
