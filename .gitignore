@@ -5,7 +5,7 @@
 *.syso
 *.zip
 *.gz
-.*.un~
+*~
 *.gz
 lua/include/
 lua/lua-5*/
