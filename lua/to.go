@@ -2,6 +2,7 @@ package lua
 
 import (
 	"errors"
+	"fmt"
 	"unsafe"
 )
 
@@ -84,6 +85,13 @@ func (this *TFunction) Push(L Lua) int {
 	}
 }
 
+var lua_next = luaDLL.NewProc("lua_next")
+
+func (this Lua) Next(index int) int {
+	rc, _, _ := lua_next.Call(this.State(), uintptr(index))
+	return int(rc)
+}
+
 func (this Lua) ToSomething(index int) (interface{}, error) {
 	switch this.GetType(index) {
 	case LUA_TBOOLEAN:
@@ -99,7 +107,31 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 	case LUA_TSTRING:
 		return TString{this.ToAnsiString(index)}, nil
 	case LUA_TTABLE:
-		return nil, errors.New("lua.ToAnything: LUA_TTABLE not supported.")
+		top := this.GetTop()
+		defer this.SetTop(top)
+		table := map[string]interface{}{}
+		this.PushNil()
+		if index < 0 {
+			index--
+		}
+		for this.Next(index) != 0 {
+			key, keyErr := this.ToSomething(-2)
+			if keyErr == nil {
+				val, valErr := this.ToSomething(-1)
+				if valErr == nil {
+					switch t := key.(type) {
+					case string:
+						table[t] = val
+					case int:
+						table[fmt.Sprintf("%d", t)] = val
+					case nil:
+						table[""] = val
+					}
+				}
+			}
+			this.Pop(1)
+		}
+		return table, nil
 	case LUA_TUSERDATA:
 		return nil, errors.New("lua.ToAnything: LUA_TUSERDATA not supported.")
 	default:
