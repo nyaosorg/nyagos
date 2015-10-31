@@ -1,6 +1,8 @@
 @setlocal
 @SET PROMPT=$$$S
 
+pushd "%~dp0"
+
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
 if exist goarch.txt for /F %%I in (goarch.txt) do set "GOARCH=%%I"
@@ -90,3 +92,4 @@ goto build
         echo     : Copy binaries to last INSTALLDIR
 :end
         echo @set "INSTALLDIR=%INSTALLDIR%" > "%~dp0Misc\version.cmd"
+        popd
