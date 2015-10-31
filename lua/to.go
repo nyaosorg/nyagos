@@ -85,11 +85,38 @@ func (this TFunction) Push(L Lua) int {
 	}
 }
 
+type TLightUserData struct {
+	Data unsafe.Pointer
+}
+
+func (this TLightUserData) Push(L Lua) int {
+	L.PushLightUserData(this.Data)
+	return 1
+}
+
+type TFullUserData []byte
+
+func (this TFullUserData) Push(L Lua) int {
+	size := len([]byte(this))
+	p := L.NewUserData(uintptr(size))
+	for i := 0; i < size; i++ {
+		*(*byte)(unsafe.Pointer(uintptr(p) + uintptr(i))) = this[i]
+	}
+	return 1
+}
+
 var lua_next = luaDLL.NewProc("lua_next")
 
 func (this Lua) Next(index int) int {
 	rc, _, _ := lua_next.Call(this.State(), uintptr(index))
 	return int(rc)
+}
+
+var lua_rawlen = luaDLL.NewProc("lua_rawlen")
+
+func (this Lua) RawLen(index int) uintptr {
+	size, _, _ := lua_rawlen.Call(this.State(), uintptr(index))
+	return size
 }
 
 func (this Lua) ToSomething(index int) (interface{}, error) {
@@ -99,7 +126,7 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 	case LUA_TFUNCTION:
 		return TFunction{Chank: this.Dump()}, nil
 	case LUA_TLIGHTUSERDATA:
-		return nil, errors.New("lua.ToAnything: LUA_TLIGHTUSERDATA not supported.")
+		return &TLightUserData{this.ToUserData(index)}, nil
 	case LUA_TNIL:
 		return nil, nil
 	case LUA_TNUMBER:
@@ -133,8 +160,10 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 		}
 		return table, nil
 	case LUA_TUSERDATA:
-		return nil, errors.New("lua.ToAnything: LUA_TUSERDATA not supported.")
+		size := this.RawLen(index)
+		ptr := this.ToUserData(index)
+		return TFullUserData(CGoBytes(uintptr(ptr), uintptr(size))), nil
 	default:
-		return nil, errors.New("lua.ToAnything: Not supported type found.")
+		return nil, errors.New("lua.ToSomeThing: Not supported type found.")
 	}
 }
