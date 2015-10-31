@@ -269,8 +269,22 @@ func get_nyagos_table_member(L lua.Lua) int {
 	}
 }
 
+func set_nyagos_table_member(L lua.Lua) int {
+	index, index_err := L.ToString(2)
+	if index_err != nil {
+		return L.Push(nil, index_err)
+	}
+	value, value_err := L.ToSomething(3)
+	if value_err != nil {
+		return L.Push(nil, value_err)
+	}
+	nyagos_table_member[index] = value
+	return L.Push(true)
+}
+
 var nyagos_top_meta_table = &MetaOnlyTableT{map[string]interface{}{
-	"__index": get_nyagos_table_member,
+	"__index":    get_nyagos_table_member,
+	"__newindex": set_nyagos_table_member,
 }}
 
 func make_nyaos_table(L lua.Lua) {
