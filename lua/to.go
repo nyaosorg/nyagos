@@ -76,7 +76,7 @@ type TFunction struct {
 	Chank []byte
 }
 
-func (this *TFunction) Push(L Lua) int {
+func (this TFunction) Push(L Lua) int {
 	err := L.LoadBufferX("(anonymous)", this.Chank, "b")
 	if err == nil {
 		return 1
