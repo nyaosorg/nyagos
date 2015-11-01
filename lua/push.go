@@ -68,7 +68,11 @@ func (this Lua) PushValue(index int) {
 var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
 
 func (this Lua) PushGoFunction(fn func(Lua) int) {
-	lua_pushcclosure.Call(uintptr(this), syscall.NewCallbackCDecl(fn), 0)
+	lua_pushcclosure.Call(this.State(), syscall.NewCallbackCDecl(fn), 0)
+}
+
+func (this Lua) PushCFunction(fn uintptr) {
+	lua_pushcclosure.Call(this.State(), fn, 0)
 }
 
 type Pushable interface {

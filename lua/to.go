@@ -72,17 +72,31 @@ func (this *TString) Push(L Lua) int {
 	return 1
 }
 
+var lua_tocfunction = luaDLL.NewProc("lua_tocfunction")
+
+func (this *Lua) ToCFunction(index int) uintptr {
+	rc, _, _ := lua_tocfunction.Call(this.State(), uintptr(index))
+	return rc
+}
+
 type TFunction struct {
-	Chank []byte
+	IsCFunc bool
+	Address uintptr
+	Chank   []byte
 }
 
 func (this TFunction) Push(L Lua) int {
-	err := L.LoadBufferX("(anonymous)", this.Chank, "b")
-	if err == nil {
-		return 1
+	if this.IsCFunc {
+		// CFunction
+		L.PushCFunction(this.Address)
 	} else {
-		return 0
+		// LuaFunction
+		err := L.LoadBufferX("(anonymous)", this.Chank, "b")
+		if err != nil {
+			return 0
+		}
 	}
+	return 1
 }
 
 type TLightUserData struct {
@@ -124,7 +138,13 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 	case LUA_TBOOLEAN:
 		return this.ToBool(index), nil
 	case LUA_TFUNCTION:
-		return TFunction{Chank: this.Dump()}, nil
+		if p := this.ToCFunction(index); p != 0 {
+			// CFunction
+			return TFunction{IsCFunc: true, Address: p}, nil
+		} else {
+			// LuaFunction
+			return TFunction{IsCFunc: false, Chank: this.Dump()}, nil
+		}
 	case LUA_TLIGHTUSERDATA:
 		return &TLightUserData{this.ToUserData(index)}, nil
 	case LUA_TNIL:
