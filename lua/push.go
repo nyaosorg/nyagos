@@ -88,8 +88,6 @@ func (this Lua) Push(values ...interface{}) int {
 		switch t := value.(type) {
 		case bool:
 			this.PushBool(t)
-		case Integer:
-			this.PushInteger(Integer(t))
 		case int:
 			this.PushInteger(Integer(t))
 		case int64:

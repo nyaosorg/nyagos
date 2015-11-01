@@ -21,6 +21,11 @@ func (value Integer) Expand(list []uintptr) []uintptr {
 	return list
 }
 
+func (value Integer) Push(L Lua) int {
+	L.PushInteger(value)
+	return 1
+}
+
 func CGoBytes(p, length uintptr) []byte {
 	if length <= 0 || p == 0 {
 		return []byte{}
