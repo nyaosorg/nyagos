@@ -95,6 +95,14 @@ func (this Lua) SetMetaTable(index int) {
 	lua_setmetatable.Call(this.State(), uintptr(index))
 }
 
+var lua_getmetatable = luaDLL.NewProc("lua_getmetatable")
+
+func (this Lua) GetMetaTable(index int) bool {
+	rc, _, _ := lua_getmetatable.Call(this.State(), uintptr(index))
+	return rc != 0
+	// true: has a metatable / false: has no metatables.
+}
+
 var lua_gettop = luaDLL.NewProc("lua_gettop")
 
 func (this Lua) GetTop() int {
