@@ -67,7 +67,7 @@ func (this *TString) String() (string, error) {
 	}
 }
 
-func (this *TString) Push(L Lua) int {
+func (this TString) Push(L Lua) int {
 	L.PushAnsiString(this.Value)
 	return 1
 }
@@ -161,6 +161,8 @@ func (this Lua) ToTable(index int) (*map[string]interface{}, error) {
 				return nil, valErr
 			} else {
 				switch t := key.(type) {
+				case TString:
+					table[string(t.Value)] = val
 				case string:
 					table[t] = val
 				case int:
