@@ -178,6 +178,8 @@ func (this Lua) ToTable(index int) (*map[string]interface{}, error) {
 func (this Lua) ToSomething(index int) (interface{}, error) {
 	var result interface{}
 	var err error = nil
+	seek_metatable := false
+
 	switch this.GetType(index) {
 	case LUA_TBOOLEAN:
 		result = this.ToBool(index)
@@ -191,6 +193,7 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 		}
 	case LUA_TLIGHTUSERDATA:
 		result = &TLightUserData{this.ToUserData(index)}
+		seek_metatable = true
 	case LUA_TNIL:
 		result = nil
 	case LUA_TNUMBER:
@@ -199,17 +202,19 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 		result = TString{this.ToAnsiString(index)}
 	case LUA_TTABLE:
 		result, err = this.ToTable(index)
+		seek_metatable = true
 	case LUA_TUSERDATA:
 		size := this.RawLen(index)
 		ptr := this.ToUserData(index)
 		result = TFullUserData(CGoBytes(uintptr(ptr), uintptr(size)))
+		seek_metatable = true
 	default:
 		return nil, errors.New("lua.ToSomeThing: Not supported type found.")
 	}
 	if err != nil {
 		return nil, err
 	}
-	if this.GetMetaTable(index) {
+	if seek_metatable && this.GetMetaTable(index) {
 		metatable, err := this.ToTable(-1)
 		defer this.Pop(1)
 		if err != nil {
