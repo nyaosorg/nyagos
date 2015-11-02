@@ -79,24 +79,21 @@ func (this *Lua) ToCFunction(index int) uintptr {
 	return rc
 }
 
-type TFunction struct {
-	IsCFunc bool
-	Address uintptr
-	Chank   []byte
+type TCFunction uintptr
+
+func (this TCFunction) Push(L Lua) int {
+	L.PushCFunction(uintptr(this))
+	return 1
 }
 
-func (this TFunction) Push(L Lua) int {
-	if this.IsCFunc {
-		// CFunction
-		L.PushCFunction(this.Address)
+type TLuaFunction []byte
+
+func (this TLuaFunction) Push(L Lua) int {
+	if L.LoadBufferX("(annonymous)", this, "b") != nil {
+		return 1
 	} else {
-		// LuaFunction
-		err := L.LoadBufferX("(anonymous)", this.Chank, "b")
-		if err != nil {
-			return 0
-		}
+		return 0
 	}
-	return 1
 }
 
 type TLightUserData struct {
@@ -188,10 +185,10 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 	case LUA_TFUNCTION:
 		if p := this.ToCFunction(index); p != 0 {
 			// CFunction
-			result = TFunction{IsCFunc: true, Address: p}
+			result = TCFunction(p)
 		} else {
 			// LuaFunction
-			result = TFunction{IsCFunc: false, Chank: this.Dump()}
+			result = TLuaFunction(this.Dump())
 		}
 	case LUA_TLIGHTUSERDATA:
 		result = &TLightUserData{this.ToUserData(index)}
