@@ -133,57 +133,89 @@ func (this Lua) RawLen(index int) uintptr {
 	return size
 }
 
+type MetaTableOwner struct {
+	Body interface{}
+	Meta *map[string]interface{}
+}
+
+func (this *MetaTableOwner) Push(L Lua) int {
+	L.Push(this.Body)
+	L.Push(this.Meta)
+	L.SetMetaTable(-2)
+	return 1
+}
+
+func (this Lua) ToTable(index int) (*map[string]interface{}, error) {
+	top := this.GetTop()
+	defer this.SetTop(top)
+	table := make(map[string]interface{})
+	this.PushNil()
+	if index < 0 {
+		index--
+	}
+	for this.Next(index) != 0 {
+		key, keyErr := this.ToSomething(-2)
+		if keyErr == nil {
+			val, valErr := this.ToSomething(-1)
+			if valErr != nil {
+				return nil, valErr
+			} else {
+				switch t := key.(type) {
+				case string:
+					table[t] = val
+				case int:
+					table[fmt.Sprintf("%d", t)] = val
+				case nil:
+					table[""] = val
+				}
+			}
+		}
+		this.Pop(1)
+	}
+	return &table, nil
+}
+
 func (this Lua) ToSomething(index int) (interface{}, error) {
+	var result interface{}
+	var err error = nil
 	switch this.GetType(index) {
 	case LUA_TBOOLEAN:
-		return this.ToBool(index), nil
+		result = this.ToBool(index)
 	case LUA_TFUNCTION:
 		if p := this.ToCFunction(index); p != 0 {
 			// CFunction
-			return TFunction{IsCFunc: true, Address: p}, nil
+			result = TFunction{IsCFunc: true, Address: p}
 		} else {
 			// LuaFunction
-			return TFunction{IsCFunc: false, Chank: this.Dump()}, nil
+			result = TFunction{IsCFunc: false, Chank: this.Dump()}
 		}
 	case LUA_TLIGHTUSERDATA:
-		return &TLightUserData{this.ToUserData(index)}, nil
+		result = &TLightUserData{this.ToUserData(index)}
 	case LUA_TNIL:
-		return nil, nil
+		result = nil
 	case LUA_TNUMBER:
-		return this.ToInteger(index)
+		result, err = this.ToInteger(index)
 	case LUA_TSTRING:
-		return TString{this.ToAnsiString(index)}, nil
+		result = TString{this.ToAnsiString(index)}
 	case LUA_TTABLE:
-		top := this.GetTop()
-		defer this.SetTop(top)
-		table := map[string]interface{}{}
-		this.PushNil()
-		if index < 0 {
-			index--
-		}
-		for this.Next(index) != 0 {
-			key, keyErr := this.ToSomething(-2)
-			if keyErr == nil {
-				val, valErr := this.ToSomething(-1)
-				if valErr == nil {
-					switch t := key.(type) {
-					case string:
-						table[t] = val
-					case int:
-						table[fmt.Sprintf("%d", t)] = val
-					case nil:
-						table[""] = val
-					}
-				}
-			}
-			this.Pop(1)
-		}
-		return table, nil
+		result, err = this.ToTable(index)
 	case LUA_TUSERDATA:
 		size := this.RawLen(index)
 		ptr := this.ToUserData(index)
-		return TFullUserData(CGoBytes(uintptr(ptr), uintptr(size))), nil
+		result = TFullUserData(CGoBytes(uintptr(ptr), uintptr(size)))
 	default:
 		return nil, errors.New("lua.ToSomeThing: Not supported type found.")
 	}
+	if err != nil {
+		return nil, err
+	}
+	if this.GetMetaTable(index) {
+		metatable, err := this.ToTable(-1)
+		defer this.Pop(1)
+		if err != nil {
+			return nil, err
+		}
+		result = &MetaTableOwner{Body: result, Meta: metatable}
+	}
+	return result, nil
 }
