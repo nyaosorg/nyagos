@@ -107,6 +107,13 @@ func (this Lua) Push(values ...interface{}) int {
 				this.Push(val)
 				this.SetTable(-3)
 			}
+		case *map[string]interface{}:
+			this.NewTable()
+			for key, val := range *t {
+				this.PushString(key)
+				this.Push(val)
+				this.SetTable(-3)
+			}
 		case unsafe.Pointer:
 			this.PushLightUserData(t)
 		case Pushable:
