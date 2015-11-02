@@ -188,7 +188,9 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 			result = TCFunction(p)
 		} else {
 			// LuaFunction
+			this.PushValue(index)
 			result = TLuaFunction(this.Dump())
+			this.Pop(1)
 		}
 	case LUA_TLIGHTUSERDATA:
 		result = &TLightUserData{this.ToUserData(index)}
