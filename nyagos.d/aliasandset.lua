@@ -1,5 +1,5 @@
 local function expand(text)
-    local result,_ = string.gsub(text,"%%(%w+)%%",function(w)
+    local result,_ = string.gsub(text,"%%([%w_%(%)]+)%%",function(w)
         return nyagos.getenv(w)
     end)
     return result
