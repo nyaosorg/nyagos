@@ -1,4 +1,4 @@
-nyagos.alias("sudo",function(args)
+nyagos.alias.sudo = function(args)
     if #args <= 0 then
         nyagos.shellexecute("runas",nyagos.exe)
         return
@@ -6,9 +6,9 @@ nyagos.alias("sudo",function(args)
     local prog = args[1]
     table.remove(args,1)
     assert(nyagos.shellexecute("runas",prog,table.concat(args," "),nyagos.getwd()))
-end)
+end
 
-local function clone(action)
+nyagos._clone = function(action)
     local status,err = nyagos.shellexecute(action,nyagos.exe)
     if not status and string.match(err,"^Error%(5%)") then
 	status,err = nyagos.shellexecute(action,nyagos.getenv("COMSPEC"),'/c "'..nyagos.exe..'"')
@@ -16,9 +16,9 @@ local function clone(action)
     return status,err
 end
 
-nyagos.alias("su",function()
-    assert(clone("runas"))
-end)
-nyagos.alias("clone",function()
-    assert(clone("open"))
-end)
+nyagos.alias.su = function()
+    assert(nyagos._clone("runas"))
+end
+nyagos.alias.clone = function()
+    assert(nyagos._clone("open"))
+end

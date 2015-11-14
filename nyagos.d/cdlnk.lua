@@ -7,10 +7,10 @@ if not nyagos.ole then
 end
 
 if nyagos.ole then
-    local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
-    local wshObj = nyagos.ole.create_object_utf8("WScript.Shell")
+    nyagos._shortcut_getfolder = function(arg1)
+        local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
+        local wshObj = nyagos.ole.create_object_utf8("WScript.Shell")
 
-    local function getfolder(arg1)
         local shortcut1 = wshObj:CreateShortcut(arg1)
         if not shortcut1 then
             return arg1
@@ -30,17 +30,17 @@ if nyagos.ole then
         return arg1
     end
 
-    local org_cd = nyagos.alias.cd
+    nyagos.org_cdlnk_alias_cd = nyagos.alias.cd
     nyagos.alias.cd=function(args)
         for i=1,#args do
             local arg1 = args[i]
             if string.match(arg1,"%.[lL][nN][kK]$") then
-                arg1 = getfolder(arg1)
+                arg1 = nyagos._shortcut_getfolder(arg1)
             end
             args[i] = arg1
         end
-        if org_cd then
-            return org_cd(args)
+        if org_cdlnk_alias_cd then
+            return org_cdlnk_alias_cd(args)
         else
             args[0] = "__cd__"
             return nyagos.exec(args)

@@ -6,11 +6,11 @@ if not nyagos.ole then
     end
 end
 if nyagos.ole then
-    local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
-    local shellApp = nyagos.ole.create_object_utf8("Shell.Application")
-    local trashBox = shellApp:NameSpace(math.tointeger(10))
-    if trashBox.MoveHere then
-        nyagos.alias.trash = function(args)
+    nyagos.alias.trash = function(args)
+        local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
+        local shellApp = nyagos.ole.create_object_utf8("Shell.Application")
+        local trashBox = shellApp:NameSpace(math.tointeger(10))
+        if trashBox.MoveHere then
             if #args <= 0 then
                 nyagos.writerr("Move files or directories to Windows Trashbox\n")
                 nyagos.writerr("Usage: trash file(s)...\n")
@@ -24,8 +24,8 @@ if nyagos.ole then
                     nyagos.writerr(args[i]..": such a file or directory not found.\n")
                 end
             end
+        else
+            nyagos.writerr("Warning: trash.lua requires nyaole.dll 0.0.0.5 or later\n")
         end
-    else
-        nyagos.writerr("Warning: trash.lua requires nyaole.dll 0.0.0.5 or later\n")
     end
 end

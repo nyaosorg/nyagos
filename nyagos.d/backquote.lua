@@ -1,7 +1,7 @@
-local orgfilter = nyagos.filter
+nyagos.org_backquote_filter = nyagos.filter
 nyagos.filter = function(cmdline)
-    if orgfilter then
-        local cmdline_ = orgfilter(cmdline)
+    if nyagos.org_backquote_filter then
+        local cmdline_ = nyagos.org_backquote_filter(cmdline)
         if cmdline_ then
             cmdline = cmdline_
         end
