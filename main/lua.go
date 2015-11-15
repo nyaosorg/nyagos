@@ -206,48 +206,7 @@ func emptyToNil(s string) interface{} {
 	}
 }
 
-var nyagos_table_member = map[string]interface{}{
-	"access": cmdAccess,
-	"alias": &MetaOnlyTableT{map[string]interface{}{
-		"__call":     cmdSetAlias,
-		"__newindex": cmdSetAlias,
-		"__index":    cmdGetAlias,
-	}},
-	"atou":         cmdAtoU,
-	"bindkey":      cmdBindKey,
-	"commit":       emptyToNil(commit),
-	"commonprefix": cmdCommonPrefix,
-	"env": &MetaOnlyTableT{map[string]interface{}{
-		"__newindex": cmdSetEnv,
-		"__index":    cmdGetEnv,
-	}},
-	"eval":         cmdEval,
-	"exec":         cmdExec,
-	"getalias":     cmdGetAlias,
-	"getenv":       cmdGetEnv,
-	"gethistory":   cmdGetHistory,
-	"getkey":       cmdGetKey,
-	"getviewwidth": cmdGetViewWidth,
-	"getwd":        cmdGetwd,
-	"glob":         cmdGlob,
-	"pathjoin":     cmdPathJoin,
-	"raweval":      cmdRawEval,
-	"rawexec":      cmdRawExec,
-	"setalias":     cmdSetAlias,
-	"setenv":       cmdSetEnv,
-	"setrunewidth": cmdSetRuneWidth,
-	"shellexecute": cmdShellExecute,
-	"stat":         cmdStat,
-	"stamp":        emptyToNil(stamp),
-	"utoa":         cmdUtoA,
-	"which":        cmdWhich,
-	"write":        cmdWrite,
-	"writerr":      cmdWriteErr,
-	"goarch":       runtime.GOARCH,
-	"goversion":    runtime.Version(),
-	"version":      emptyToNil(version),
-	"prompt":       nyagosPrompt,
-}
+var nyagos_table_member map[string]interface{}
 
 func get_nyagos_table_member(L lua.Lua) int {
 	index, index_err := L.ToString(2)
@@ -292,6 +251,8 @@ func make_nyaos_table(L lua.Lua) {
 	L.SetGlobal("nyagos")
 }
 
+var hook_setuped = false
+
 func NewNyagosLua() lua.Lua {
 	this := lua.New()
 	this.OpenLibs()
@@ -316,10 +277,57 @@ func NewNyagosLua() lua.Lua {
 	this.SetField(-2, "lines")   // +1
 	this.Pop(1)                  // 0
 
-	orgArgHook = interpreter.SetArgsHook(newArgHook)
+	if !hook_setuped {
+		orgArgHook = interpreter.SetArgsHook(newArgHook)
 
-	orgOnCommandNotFound = interpreter.OnCommandNotFound
-	interpreter.OnCommandNotFound = on_command_not_found
-
+		orgOnCommandNotFound = interpreter.OnCommandNotFound
+		interpreter.OnCommandNotFound = on_command_not_found
+		hook_setuped = true
+	}
 	return this
+}
+
+func init() {
+	nyagos_table_member = map[string]interface{}{
+		"access": cmdAccess,
+		"alias": &MetaOnlyTableT{map[string]interface{}{
+			"__call":     cmdSetAlias,
+			"__newindex": cmdSetAlias,
+			"__index":    cmdGetAlias,
+		}},
+		"atou":         cmdAtoU,
+		"bindkey":      cmdBindKey,
+		"commit":       emptyToNil(commit),
+		"commonprefix": cmdCommonPrefix,
+		"env": &MetaOnlyTableT{map[string]interface{}{
+			"__newindex": cmdSetEnv,
+			"__index":    cmdGetEnv,
+		}},
+		"eval":         cmdEval,
+		"exec":         cmdExec,
+		"getalias":     cmdGetAlias,
+		"getenv":       cmdGetEnv,
+		"gethistory":   cmdGetHistory,
+		"getkey":       cmdGetKey,
+		"getviewwidth": cmdGetViewWidth,
+		"getwd":        cmdGetwd,
+		"glob":         cmdGlob,
+		"pathjoin":     cmdPathJoin,
+		"raweval":      cmdRawEval,
+		"rawexec":      cmdRawExec,
+		"setalias":     cmdSetAlias,
+		"setenv":       cmdSetEnv,
+		"setrunewidth": cmdSetRuneWidth,
+		"shellexecute": cmdShellExecute,
+		"stat":         cmdStat,
+		"stamp":        emptyToNil(stamp),
+		"utoa":         cmdUtoA,
+		"which":        cmdWhich,
+		"write":        cmdWrite,
+		"writerr":      cmdWriteErr,
+		"goarch":       runtime.GOARCH,
+		"goversion":    runtime.Version(),
+		"version":      emptyToNil(version),
+		"prompt":       nyagosPrompt,
+	}
 }

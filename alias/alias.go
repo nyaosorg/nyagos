@@ -9,6 +9,8 @@ import (
 	"../interpreter"
 )
 
+var dbg = false
+
 type Callable interface {
 	String() string
 	Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error)
@@ -28,15 +30,22 @@ func (this *AliasFunc) String() string {
 
 func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.ErrorLevel, err error) {
 	isReplaced := false
+	if dbg {
+		print("AliasFunc.Call('", cmd.Args[0], "')\n")
+	}
 	cmdline := paramMatch.ReplaceAllStringFunc(this.BaseStr, func(s string) string {
 		if s == "$*" {
 			isReplaced = true
-			return quoteAndJoin(cmd.Args[1:])
+			if cmd.Args != nil && len(cmd.Args) >= 2 {
+				return quoteAndJoin(cmd.Args[1:])
+			} else {
+				return ""
+			}
 		}
 		i, err := strconv.ParseInt(s[1:], 10, 0)
 		if err == nil {
 			isReplaced = true
-			if 0 <= i && int(i) < len(cmd.Args) {
+			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args) {
 				return cmd.Args[i]
 			}
 		}
@@ -50,7 +59,17 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 		buffer = append(buffer, quoteAndJoin(cmd.Args[1:])...)
 		cmdline = string(buffer)
 	}
-	it := cmd.Clone()
+	if dbg {
+		print("replaced cmdline=='", cmdline, "'\n")
+		print("cmd.Clone\n")
+	}
+	it, err := cmd.Clone()
+	if err != nil {
+		return interpreter.ErrorLevel(255), err
+	}
+	if dbg {
+		print("done cmd.Clone\n")
+	}
 
 	arg1 := conio.QuotedFirstWord(cmdline)
 	if strings.EqualFold(arg1, cmd.Args[0]) {
@@ -58,7 +77,13 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 	} else {
 		it.HookCount = cmd.HookCount + 1
 	}
+	if dbg {
+		print("it.Interpret\n")
+	}
 	next, err = it.Interpret(cmdline)
+	if dbg {
+		print("done it.Interpret\n")
+	}
 	return
 }
 

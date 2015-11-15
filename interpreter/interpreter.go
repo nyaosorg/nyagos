@@ -10,6 +10,8 @@ import (
 	"syscall"
 )
 
+var dbg = false
+
 type CommandNotFound struct {
 	Name string
 	Err  error
@@ -58,6 +60,9 @@ type Interpreter struct {
 	Tag          interface{}
 	PipeSeq      [2]uint
 	IsBackGround bool
+
+	CloneHook func(*Interpreter) error
+	CloseHook func(*Interpreter)
 }
 
 func (this *Interpreter) closeAtEnd() {
@@ -66,6 +71,13 @@ func (this *Interpreter) closeAtEnd() {
 			c.Close()
 		}
 		this.Closer = nil
+	}
+}
+
+func (this *Interpreter) Close() {
+	if this.CloseHook != nil {
+		this.CloseHook(this)
+		this.CloseHook = nil
 	}
 }
 
@@ -95,7 +107,7 @@ func (this *Interpreter) SetStderr(f *os.File) {
 	this.Stderr = f
 }
 
-func (this *Interpreter) Clone() *Interpreter {
+func (this *Interpreter) Clone() (*Interpreter, error) {
 	rv := new(Interpreter)
 	rv.Stdio[0] = this.Stdio[0]
 	rv.Stdio[1] = this.Stdio[1]
@@ -107,7 +119,14 @@ func (this *Interpreter) Clone() *Interpreter {
 	rv.Tag = this.Tag
 	rv.PipeSeq = rv.PipeSeq
 	rv.Closer = nil
-	return rv
+	rv.CloseHook = this.CloseHook
+	rv.CloneHook = this.CloneHook
+	if this.CloneHook != nil {
+		if err := this.CloneHook(rv); err != nil {
+			return nil, err
+		}
+	}
+	return rv, nil
 }
 
 type ArgsHookT func(it *Interpreter, args []string) ([]string, error)
@@ -164,6 +183,9 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	if len(this.Args) <= 0 {
 		return NOERROR, nil
 	}
+	if dbg {
+		print("spawnvp_noerrmsg('", this.Args[0], "')\n")
+	}
 
 	// aliases and lua-commands
 	if errorlevel, err := hook(this); errorlevel != THROUGH || err != nil {
@@ -204,6 +226,9 @@ type result_t struct {
 var pipeSeq uint = 0
 
 func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err error) {
+	if dbg {
+		print("Interpret('", text, "')\n")
+	}
 	if this == nil {
 		return ErrorLevel(255), errors.New("Fatal Error: Interpret: instance is nil")
 	}
@@ -212,9 +237,15 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
+		if dbg {
+			print("Parse Error:", statementsErr.Error(), "\n")
+		}
 		return NOERROR, statementsErr
 	}
 	if argsHook != nil {
+		if dbg {
+			print("call argsHook\n")
+		}
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
 				state.Argv, err = argsHook(this, state.Argv)
@@ -222,6 +253,9 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 					return ErrorLevel(255), err
 				}
 			}
+		}
+		if dbg {
+			print("done argsHook\n")
 		}
 	}
 	for _, pipeline := range statements {
@@ -236,6 +270,9 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 		}
 		var wg sync.WaitGroup
 		for i, state := range pipeline {
+			if dbg {
+				print(i, ": pipeline loop(", state.Argv[0], ")\n")
+			}
 			cmd := new(Interpreter)
 			cmd.PipeSeq[0] = pipeSeq
 			cmd.PipeSeq[1] = uint(1 + i)
@@ -245,6 +282,12 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
 			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
+			cmd.CloneHook = this.CloneHook
+			if this.CloneHook != nil {
+				if err := this.CloneHook(cmd); err != nil {
+					return ErrorLevel(255), err
+				}
+			}
 
 			var err error = nil
 
@@ -281,6 +324,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				errorlevel, err = cmd.Spawnvp()
 				cmd.closeAtEnd()
 				ErrorLevelStr = errorlevel.String()
+				cmd.Close()
 			} else {
 				if !isBackGround {
 					wg.Add(1)
@@ -291,6 +335,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 					}
 					cmd1.Spawnvp()
 					cmd1.closeAtEnd()
+					cmd1.Close()
 				}(cmd)
 			}
 		}

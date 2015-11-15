@@ -65,13 +65,24 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 				}
 				newargs = append(newargs, val)
 			}
-			it := cmd.Clone()
-			it.Args = newargs
-			errorlevel, err = it.Spawnvp()
+			it, err1 := cmd.Clone()
+			if err1 != nil {
+				errorlevel = interpreter.ErrorLevel(255)
+				err = err1
+			} else {
+				it.Args = newargs
+				errorlevel, err = it.Spawnvp()
+			}
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
 			errorlevel = interpreter.ErrorLevel(val)
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-			errorlevel, err = cmd.Clone().Interpret(val)
+			it, err1 := cmd.Clone()
+			if err1 != nil {
+				errorlevel = interpreter.ErrorLevel(255)
+				err = err1
+			} else {
+				errorlevel, err = it.Interpret(val)
+			}
 		}
 	}
 	L.Pop(1)
@@ -171,9 +182,22 @@ func cmdExec(L lua.Lua) int {
 		var ok bool
 		if it, ok = LuaInstanceToCmd[L.State()]; !ok {
 			it = interpreter.New()
-			it.Tag = L
+			it.Tag = NewNyagosLua()
+			it.CloneHook = func(this *interpreter.Interpreter) error {
+				this.Tag = NewNyagosLua()
+				it.CloseHook = func(this *interpreter.Interpreter) {
+					if L, ok := it.Tag.(lua.Lua); ok {
+						L.Close()
+					}
+					it.Tag = nil
+				}
+				return nil
+			}
 		} else {
-			it = it.Clone()
+			it, err = it.Clone()
+			if err != nil {
+				return L.Push(nil, err)
+			}
 		}
 		it.Args = args
 		errorlevel, err = it.Spawnvp()

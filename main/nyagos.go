@@ -145,6 +145,18 @@ func main() {
 	for {
 		it := interpreter.New()
 		it.Tag = L
+		it.CloneHook = func(this *interpreter.Interpreter) error {
+			this.Tag = NewNyagosLua()
+			it.CloseHook = func(this *interpreter.Interpreter) {
+				if this.Tag != nil {
+					if L, ok := this.Tag.(lua.Lua); ok {
+						L.Close()
+					}
+					this.Tag = nil
+				}
+			}
+			return nil
+		}
 		conio.DefaultEditor.Tag = it
 
 		wd, wdErr := os.Getwd()
