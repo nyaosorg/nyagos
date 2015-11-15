@@ -8,5 +8,5 @@ for _,name in pairs{
     "start",
     "type" ,
 } do
-    nyagos.alias(name,"%COMSPEC% /c "..name.." $*")
+    nyagos.alias[name] = "%COMSPEC% /c "..name.." $*"
 end

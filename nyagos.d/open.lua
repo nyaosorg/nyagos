@@ -1,4 +1,4 @@
-nyagos.alias("open",function(args)
+nyagos.alias.open = function(args)
     local count=0
     for i=1,#args do
         local list=nyagos.glob(args[i])
@@ -26,4 +26,4 @@ nyagos.alias("open",function(args)
             assert(nyagos.shellexecute("open","."))
         end
     end
-end)
+end
