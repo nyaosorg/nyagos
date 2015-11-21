@@ -228,10 +228,33 @@ func get_nyagos_table_member(L lua.Lua) int {
 	}
 }
 
+type Property struct {
+	Pointer *lua.Pushable
+}
+
+func (this Property) Push(L lua.Lua) int {
+	return (*this.Pointer).Push(L)
+}
+
+func (this *Property) Set(L lua.Lua, index int) error {
+	var err error
+	*this.Pointer, err = L.ToPushable(index)
+	return err
+}
+
 func set_nyagos_table_member(L lua.Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err)
+	}
+	if current_value, exists := nyagos_table_member[index]; exists {
+		if property, castOk := current_value.(Property); castOk {
+			if err := property.Set(L, -3); err != nil {
+				return L.Push(nil, err)
+			} else {
+				return L.Push(true)
+			}
+		}
 	}
 	value, value_err := L.ToPushable(3)
 	if value_err != nil {
