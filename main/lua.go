@@ -184,13 +184,13 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 }
 
 type MetaOnlyTableT struct {
-	Table map[string]interface{}
+	Table lua.TTable
 }
 
 func (this *MetaOnlyTableT) Push(L lua.Lua) int {
 	L.NewTable()
 	L.NewTable()
-	for key, val := range this.Table {
+	for key, val := range this.Table.Map {
 		L.Push(val)
 		L.SetField(-2, key)
 	}
@@ -198,15 +198,15 @@ func (this *MetaOnlyTableT) Push(L lua.Lua) int {
 	return 1
 }
 
-func emptyToNil(s string) interface{} {
+func emptyToNil(s string) lua.Pushable {
 	if s == "" {
-		return nil
+		return &lua.TNil{}
 	} else {
-		return s
+		return &lua.TString{s}
 	}
 }
 
-var nyagos_table_member map[string]interface{}
+var nyagos_table_member map[string]lua.Pushable
 
 func get_nyagos_table_member(L lua.Lua) int {
 	index, index_err := L.ToString(2)
@@ -233,7 +233,7 @@ func set_nyagos_table_member(L lua.Lua) int {
 	if index_err != nil {
 		return L.Push(nil, index_err)
 	}
-	value, value_err := L.ToSomething(3)
+	value, value_err := L.ToPushable(3)
 	if value_err != nil {
 		return L.Push(nil, value_err)
 	}
@@ -241,10 +241,14 @@ func set_nyagos_table_member(L lua.Lua) int {
 	return L.Push(true)
 }
 
-var nyagos_top_meta_table = &MetaOnlyTableT{map[string]interface{}{
-	"__index":    get_nyagos_table_member,
-	"__newindex": set_nyagos_table_member,
-}}
+var nyagos_top_meta_table = &MetaOnlyTableT{
+	lua.TTable{
+		map[string]lua.Pushable{
+			"__index":    &lua.TGoFunction{get_nyagos_table_member},
+			"__newindex": &lua.TGoFunction{set_nyagos_table_member},
+		},
+	},
+}
 
 func make_nyaos_table(L lua.Lua) {
 	L.Push(nyagos_top_meta_table)
@@ -288,46 +292,54 @@ func NewNyagosLua() lua.Lua {
 }
 
 func init() {
-	nyagos_table_member = map[string]interface{}{
-		"access": cmdAccess,
-		"alias": &MetaOnlyTableT{map[string]interface{}{
-			"__call":     cmdSetAlias,
-			"__newindex": cmdSetAlias,
-			"__index":    cmdGetAlias,
-		}},
-		"atou":         cmdAtoU,
-		"bindkey":      cmdBindKey,
+	nyagos_table_member = map[string]lua.Pushable{
+		"access": &lua.TGoFunction{cmdAccess},
+		"alias": &MetaOnlyTableT{
+			lua.TTable{
+				map[string]lua.Pushable{
+					"__call":     &lua.TGoFunction{cmdSetAlias},
+					"__newindex": &lua.TGoFunction{cmdSetAlias},
+					"__index":    &lua.TGoFunction{cmdGetAlias},
+				},
+			},
+		},
+		"atou":         &lua.TGoFunction{cmdAtoU},
+		"bindkey":      &lua.TGoFunction{cmdBindKey},
 		"commit":       emptyToNil(commit),
-		"commonprefix": cmdCommonPrefix,
-		"env": &MetaOnlyTableT{map[string]interface{}{
-			"__newindex": cmdSetEnv,
-			"__index":    cmdGetEnv,
-		}},
-		"eval":         cmdEval,
-		"exec":         cmdExec,
-		"getalias":     cmdGetAlias,
-		"getenv":       cmdGetEnv,
-		"gethistory":   cmdGetHistory,
-		"getkey":       cmdGetKey,
-		"getviewwidth": cmdGetViewWidth,
-		"getwd":        cmdGetwd,
-		"glob":         cmdGlob,
-		"pathjoin":     cmdPathJoin,
-		"raweval":      cmdRawEval,
-		"rawexec":      cmdRawExec,
-		"setalias":     cmdSetAlias,
-		"setenv":       cmdSetEnv,
-		"setrunewidth": cmdSetRuneWidth,
-		"shellexecute": cmdShellExecute,
-		"stat":         cmdStat,
+		"commonprefix": &lua.TGoFunction{cmdCommonPrefix},
+		"env": &MetaOnlyTableT{
+			lua.TTable{
+				map[string]lua.Pushable{
+					"__newindex": &lua.TGoFunction{cmdSetEnv},
+					"__index":    &lua.TGoFunction{cmdGetEnv},
+				},
+			},
+		},
+		"eval":         &lua.TGoFunction{cmdEval},
+		"exec":         &lua.TGoFunction{cmdExec},
+		"getalias":     &lua.TGoFunction{cmdGetAlias},
+		"getenv":       &lua.TGoFunction{cmdGetEnv},
+		"gethistory":   &lua.TGoFunction{cmdGetHistory},
+		"getkey":       &lua.TGoFunction{cmdGetKey},
+		"getviewwidth": &lua.TGoFunction{cmdGetViewWidth},
+		"getwd":        &lua.TGoFunction{cmdGetwd},
+		"glob":         &lua.TGoFunction{cmdGlob},
+		"pathjoin":     &lua.TGoFunction{cmdPathJoin},
+		"raweval":      &lua.TGoFunction{cmdRawEval},
+		"rawexec":      &lua.TGoFunction{cmdRawExec},
+		"setalias":     &lua.TGoFunction{cmdSetAlias},
+		"setenv":       &lua.TGoFunction{cmdSetEnv},
+		"setrunewidth": &lua.TGoFunction{cmdSetRuneWidth},
+		"shellexecute": &lua.TGoFunction{cmdShellExecute},
+		"stat":         &lua.TGoFunction{cmdStat},
 		"stamp":        emptyToNil(stamp),
-		"utoa":         cmdUtoA,
-		"which":        cmdWhich,
-		"write":        cmdWrite,
-		"writerr":      cmdWriteErr,
-		"goarch":       runtime.GOARCH,
-		"goversion":    runtime.Version(),
+		"utoa":         &lua.TGoFunction{cmdUtoA},
+		"which":        &lua.TGoFunction{cmdWhich},
+		"write":        &lua.TGoFunction{cmdWrite},
+		"writerr":      &lua.TGoFunction{cmdWriteErr},
+		"goarch":       &lua.TString{runtime.GOARCH},
+		"goversion":    &lua.TString{runtime.Version()},
 		"version":      emptyToNil(version),
-		"prompt":       nyagosPrompt,
+		"prompt":       &lua.TGoFunction{nyagosPrompt},
 	}
 }

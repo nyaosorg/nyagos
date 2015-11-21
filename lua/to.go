@@ -2,7 +2,6 @@ package lua
 
 import (
 	"errors"
-	"fmt"
 	"unsafe"
 )
 
@@ -41,6 +40,15 @@ func (this Lua) ToString(index int) (string, error) {
 	return CGoStringN(p, length), nil
 }
 
+type TString struct {
+	Value string
+}
+
+func (this TString) Push(L Lua) int {
+	L.PushString(this.Value)
+	return 1
+}
+
 var lua_touserdata = luaDLL.NewProc("lua_touserdata")
 
 func (this Lua) ToUserData(index int) unsafe.Pointer {
@@ -55,11 +63,11 @@ func (this Lua) ToBool(index int) bool {
 	return rv != 0
 }
 
-type TString struct {
+type TRawString struct {
 	Value []byte
 }
 
-func (this *TString) String() (string, error) {
+func (this *TRawString) String() (string, error) {
 	if len(this.Value) <= 0 {
 		return "", nil
 	} else {
@@ -67,7 +75,7 @@ func (this *TString) String() (string, error) {
 	}
 }
 
-func (this TString) Push(L Lua) int {
+func (this TRawString) Push(L Lua) int {
 	L.PushAnsiString(this.Value)
 	return 1
 }
@@ -131,39 +139,51 @@ func (this Lua) RawLen(index int) uintptr {
 }
 
 type MetaTableOwner struct {
-	Body interface{}
-	Meta *map[string]interface{}
+	Body Pushable
+	Meta Pushable
 }
 
 func (this *MetaTableOwner) Push(L Lua) int {
-	L.Push(this.Body)
-	L.Push(this.Meta)
+	this.Body.Push(L)
+	this.Meta.Push(L)
 	L.SetMetaTable(-2)
 	return 1
 }
 
-func (this Lua) ToTable(index int) (*map[string]interface{}, error) {
+type TTable struct {
+	Map map[string]Pushable
+}
+
+func (this TTable) Push(L Lua) int {
+	L.NewTable()
+	for key, val := range this.Map {
+		L.PushString(key)
+		val.Push(L)
+		L.SetTable(-3)
+	}
+	return 1
+}
+
+func (this Lua) ToTable(index int) (Pushable, error) {
 	top := this.GetTop()
 	defer this.SetTop(top)
-	table := make(map[string]interface{})
+	table := make(map[string]Pushable)
 	this.PushNil()
 	if index < 0 {
 		index--
 	}
 	for this.Next(index) != 0 {
-		key, keyErr := this.ToSomething(-2)
+		key, keyErr := this.ToPushable(-2)
 		if keyErr == nil {
-			val, valErr := this.ToSomething(-1)
+			val, valErr := this.ToPushable(-1)
 			if valErr != nil {
 				return nil, valErr
 			} else {
 				switch t := key.(type) {
 				case TString:
+					table[t.Value] = val
+				case TRawString:
 					table[string(t.Value)] = val
-				case string:
-					table[t] = val
-				case int:
-					table[fmt.Sprintf("%d", t)] = val
 				case nil:
 					table[""] = val
 				}
@@ -171,17 +191,32 @@ func (this Lua) ToTable(index int) (*map[string]interface{}, error) {
 		}
 		this.Pop(1)
 	}
-	return &table, nil
+	return &TTable{table}, nil
 }
 
-func (this Lua) ToSomething(index int) (interface{}, error) {
-	var result interface{}
-	var err error = nil
-	seek_metatable := false
+type TBool struct {
+	Value bool
+}
 
+func (this TBool) Push(L Lua) int {
+	L.PushBool(this.Value)
+	return 1
+}
+
+type TNil struct{}
+
+func (this TNil) Push(L Lua) int {
+	L.PushNil()
+	return 1
+}
+
+func (this Lua) ToPushable(index int) (Pushable, error) {
+	seek_metatable := false
+	var err error = nil
+	var result Pushable
 	switch this.GetType(index) {
 	case LUA_TBOOLEAN:
-		result = this.ToBool(index)
+		result = TBool{this.ToBool(index)}
 	case LUA_TFUNCTION:
 		if p := this.ToCFunction(index); p != 0 {
 			// CFunction
@@ -196,11 +231,13 @@ func (this Lua) ToSomething(index int) (interface{}, error) {
 		result = &TLightUserData{this.ToUserData(index)}
 		seek_metatable = true
 	case LUA_TNIL:
-		result = nil
+		result = TNil{}
 	case LUA_TNUMBER:
-		result, err = this.ToInteger(index)
+		var int_result int
+		int_result, err = this.ToInteger(index)
+		result = Integer(int_result)
 	case LUA_TSTRING:
-		result = TString{this.ToAnsiString(index)}
+		result = TRawString{this.ToAnsiString(index)}
 	case LUA_TTABLE:
 		result, err = this.ToTable(index)
 		seek_metatable = true

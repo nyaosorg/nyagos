@@ -71,6 +71,15 @@ func (this Lua) PushGoFunction(fn func(Lua) int) {
 	lua_pushcclosure.Call(this.State(), syscall.NewCallbackCDecl(fn), 0)
 }
 
+type TGoFunction struct {
+	Value func(Lua) int
+}
+
+func (this TGoFunction) Push(L Lua) int {
+	L.PushGoFunction(this.Value)
+	return 1
+}
+
 func (this Lua) PushCFunction(fn uintptr) {
 	lua_pushcclosure.Call(this.State(), fn, 0)
 }
@@ -100,16 +109,9 @@ func (this Lua) Push(values ...interface{}) int {
 			this.PushAnsiString(t)
 		case error:
 			this.PushString(t.Error())
-		case map[string]interface{}:
+		case TTable:
 			this.NewTable()
-			for key, val := range t {
-				this.PushString(key)
-				this.Push(val)
-				this.SetTable(-3)
-			}
-		case *map[string]interface{}:
-			this.NewTable()
-			for key, val := range *t {
+			for key, val := range t.Map {
 				this.PushString(key)
 				this.Push(val)
 				this.SetTable(-3)
