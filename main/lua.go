@@ -101,7 +101,6 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 	defer newArgsHookLock.Unlock()
 
 	if dbg {
-		print("Enter newArgHook")
 		for _, arg1 := range args {
 			print("[", arg1, "]")
 		}
@@ -236,7 +235,7 @@ func (this Property) Push(L lua.Lua) int {
 	return (*this.Pointer).Push(L)
 }
 
-func (this *Property) Set(L lua.Lua, index int) error {
+func (this Property) Set(L lua.Lua, index int) error {
 	var err error
 	*this.Pointer, err = L.ToPushable(index)
 	return err
@@ -249,7 +248,7 @@ func set_nyagos_table_member(L lua.Lua) int {
 	}
 	if current_value, exists := nyagos_table_member[index]; exists {
 		if property, castOk := current_value.(Property); castOk {
-			if err := property.Set(L, -3); err != nil {
+			if err := property.Set(L, 3); err != nil {
 				return L.Push(nil, err)
 			} else {
 				return L.Push(true)
@@ -363,6 +362,6 @@ func init() {
 		"goarch":       &lua.TString{runtime.GOARCH},
 		"goversion":    &lua.TString{runtime.Version()},
 		"version":      emptyToNil(version),
-		"prompt":       &lua.TGoFunction{nyagosPrompt},
+		"prompt":       Property{&prompt_hook},
 	}
 }

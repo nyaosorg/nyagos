@@ -45,6 +45,8 @@ func nyagosPrompt(L lua.Lua) int {
 	return 1
 }
 
+var prompt_hook lua.Pushable = lua.TGoFunction{nyagosPrompt}
+
 func printPrompt(this *conio.LineEditor) (int, error) {
 	it, it_ok := this.Tag.(*interpreter.Interpreter)
 	if !it_ok {
@@ -58,9 +60,7 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 		return 0, errors.New("nyagos.go: printPrompt: interpreter.Interpreter.Tag is not lua.Lua")
 	}
 	defer L.SetTop(L.GetTop())
-	L.GetGlobal("nyagos")
-	L.GetField(-1, "prompt")
-	L.Remove(-2)
+	L.Push(prompt_hook)
 
 	if !L.IsFunction(-1) {
 		L.Pop(1)
