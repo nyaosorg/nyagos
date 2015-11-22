@@ -1,32 +1,32 @@
-nyagos._suffixes={}
+share._suffixes={}
 
-nyagos._setsuffix = function(suffix,cmdline)
+share._setsuffix = function(suffix,cmdline)
     local suffix=string.lower(suffix)
     if string.sub(suffix,1,1)=='.' then
         suffix = string.sub(suffix,2)
     end
-    if not nyagos._suffixes[suffix] then
+    if not share._suffixes[suffix] then
         local orgpathext = nyagos.getenv("PATHEXT")
         local newext="."..suffix
         if not string.find(";"..orgpathext..";",";"..newext..";",1,true) then
             nyagos.setenv("PATHEXT",orgpathext..";"..newext)
         end
     end
-    local table = nyagos._suffixes
+    local table = share._suffixes
     table[suffix]=cmdline
-    nyagos._suffixes = table
+    share._suffixes = table
 end
 
 suffix = setmetatable({},{
-    __call = function(t,k,v) nyagos._setsuffix(k,v) return end,
-    __newindex = function(t,k,v) nyagos._setsuffix(k,v) return end,
-    __index = function(t,k) return nyagos._suffixes[k] end
+    __call = function(t,k,v) share._setsuffix(k,v) return end,
+    __newindex = function(t,k,v) share._setsuffix(k,v) return end,
+    __index = function(t,k) return share._suffixes[k] end
 })
 
-nyagos._org_suffix_argsfilter=nyagos.argsfilter
+share._org_suffix_argsfilter=nyagos.argsfilter
 nyagos.argsfilter = function(args)
-    if nyagos._org_suffix_argsfilter then
-        local args_ = nyagos._org_suffix_argsfilter(args)
+    if share._org_suffix_argsfilter then
+        local args_ = share._org_suffix_argsfilter(args)
         if args_ then
             args = args_
         end
@@ -39,7 +39,7 @@ nyagos.argsfilter = function(args)
     if not m then
         return
     end
-    local cmdline = nyagos._suffixes[ string.lower(m) ]
+    local cmdline = share._suffixes[ string.lower(m) ]
     if not cmdline then
         return
     end

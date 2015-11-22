@@ -1,15 +1,15 @@
-if not nyagos.ole then
+if not share.ole then
     local status
-    status, nyagos.ole = pcall(require,"nyole")
+    status, share.ole = pcall(require,"nyole")
     if not status then
-        nyagos.ole = nil
+        share.ole = nil
     end
 end
 
-if nyagos.ole then
-    nyagos._shortcut_getfolder = function(arg1)
-        local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
-        local wshObj = nyagos.ole.create_object_utf8("WScript.Shell")
+if share.ole then
+    share._shortcut_getfolder = function(arg1)
+        local fsObj = share.ole.create_object_utf8("Scripting.FileSystemObject")
+        local wshObj = share.ole.create_object_utf8("WScript.Shell")
 
         local shortcut1 = wshObj:CreateShortcut(arg1)
         if not shortcut1 then
@@ -24,23 +24,23 @@ if nyagos.ole then
             return path
         end
         path = fsObj:GetParentFolderName(shortcut1.TargetPath)
-        if nyagos.fsObj:FolderExists(path) then
+        if fsObj:FolderExists(path) then
             return path
         end
         return arg1
     end
 
-    nyagos.org_cdlnk_alias_cd = nyagos.alias.cd
+    share.org_cdlnk_alias_cd = nyagos.alias.cd
     nyagos.alias.cd=function(args)
         for i=1,#args do
             local arg1 = args[i]
             if string.match(arg1,"%.[lL][nN][kK]$") then
-                arg1 = nyagos._shortcut_getfolder(arg1)
+                arg1 = share._shortcut_getfolder(arg1)
             end
             args[i] = arg1
         end
-        if org_cdlnk_alias_cd then
-            return org_cdlnk_alias_cd(args)
+        if share.org_cdlnk_alias_cd then
+            return share.org_cdlnk_alias_cd(args)
         else
             args[0] = "__cd__"
             return nyagos.exec(args)

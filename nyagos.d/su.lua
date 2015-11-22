@@ -8,7 +8,7 @@ nyagos.alias.sudo = function(args)
     assert(nyagos.shellexecute("runas",prog,table.concat(args," "),nyagos.getwd()))
 end
 
-nyagos._clone = function(action)
+share._clone = function(action)
     local status,err = nyagos.shellexecute(action,nyagos.exe)
     if not status and string.match(err,"^Error%(5%)") then
 	status,err = nyagos.shellexecute(action,nyagos.getenv("COMSPEC"),'/c "'..nyagos.exe..'"')
@@ -17,8 +17,8 @@ nyagos._clone = function(action)
 end
 
 nyagos.alias.su = function()
-    assert(nyagos._clone("runas"))
+    assert(share._clone("runas"))
 end
 nyagos.alias.clone = function()
-    assert(nyagos._clone("open"))
+    assert(share._clone("open"))
 end

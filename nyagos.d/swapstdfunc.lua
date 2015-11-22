@@ -6,7 +6,7 @@ function nyagos.echo(...)
     nyagos.write("\n")
 end
 
-original_print = print
+share.original_print = print
 print = nyagos.echo
 
 function x(s)

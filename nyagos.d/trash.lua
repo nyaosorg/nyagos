@@ -1,14 +1,14 @@
-if not nyagos.ole then
+if not share.ole then
     local status
-    status,nyagos.ole = pcall(require,"nyole")
+    status,share.ole = pcall(require,"nyole")
     if not status then
-        nyagos.ole = nil
+        share.ole = nil
     end
 end
-if nyagos.ole then
+if share.ole then
     nyagos.alias.trash = function(args)
-        local fsObj = nyagos.ole.create_object_utf8("Scripting.FileSystemObject")
-        local shellApp = nyagos.ole.create_object_utf8("Shell.Application")
+        local fsObj = share.ole.create_object_utf8("Scripting.FileSystemObject")
+        local shellApp = share.ole.create_object_utf8("Shell.Application")
         local trashBox = shellApp:NameSpace(math.tointeger(10))
         if trashBox.MoveHere then
             if #args <= 0 then

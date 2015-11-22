@@ -2,14 +2,12 @@
 -- Edit and put it on %USERPROFILE% or %HOME%
 
 -- Simple Prompt for CMD.EXE
-set{
-    PROMPT='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
-}
+nyagos.env.prompt='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
 
 -- Coloring Prompt for NYAGOS.exe
-nyagos.tmp_prompter=nyagos.prompt
+share.org_prompter=nyagos.prompt
 nyagos.prompt = function(this)
-    return nyagos.tmp_prompter('$e[36;40;1m'..this..'$e[37;1m')
+    return share.org_prompter('$e[36;40;1m'..this..'$e[37;1m')
 end
 
 -- vim:set ft=lua: --

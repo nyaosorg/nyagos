@@ -1,7 +1,7 @@
-nyagos.org_brace_filter = nyagos.filter
+share.org_brace_filter = nyagos.filter
 nyagos.filter = function(cmdline)
-    if nyagos.org_brace_filter then
-        local cmdline_ = nyagos.org_brace_filter(cmdline)
+    if share.org_brace_filter then
+        local cmdline_ = share.org_brace_filter(cmdline)
         if cmdline_ then
             cmdline = cmdline_
         end
