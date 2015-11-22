@@ -376,6 +376,13 @@ The argument `c` is the table which has these members.
 `nyagos.completion_hook` should return updated list(table) or `nil`.
 Returning nil equals to returning c.list with no change.
 
+### `nyagos.on_command_not_found = function(args) ... end`
+
+It is called when the command which user typed is not found.
+The command-name and parameters are set to args[0]...args[#args].
+If the function returns nil or false, nyagos.exe prints errors of
+usual.
+
 ### `nyagos.getkey()`
 
 It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
