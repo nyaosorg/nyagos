@@ -169,21 +169,6 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 	}
 }
 
-type MetaOnlyTableT struct {
-	Table lua.TTable
-}
-
-func (this MetaOnlyTableT) Push(L lua.Lua) int {
-	L.NewTable()
-	L.NewTable()
-	for key, val := range this.Table.Dict {
-		L.Push(val)
-		L.SetField(-2, key)
-	}
-	L.SetMetaTable(-2)
-	return 1
-}
-
 func emptyToNil(s string) lua.Pushable {
 	if s == "" {
 		return &lua.TNil{}
@@ -194,7 +179,7 @@ func emptyToNil(s string) lua.Pushable {
 
 var nyagos_table_member map[string]lua.Pushable
 
-func get_nyagos_table_member(L lua.Lua) int {
+func getNyagosTable(L lua.Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err.Error())
@@ -214,27 +199,13 @@ func get_nyagos_table_member(L lua.Lua) int {
 	}
 }
 
-type Property struct {
-	Pointer *lua.Pushable
-}
-
-func (this Property) Push(L lua.Lua) int {
-	return (*this.Pointer).Push(L)
-}
-
-func (this Property) Set(L lua.Lua, index int) error {
-	var err error
-	*this.Pointer, err = L.ToPushable(index)
-	return err
-}
-
-func set_nyagos_table_member(L lua.Lua) int {
+func setNyagosTable(L lua.Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err)
 	}
 	if current_value, exists := nyagos_table_member[index]; exists {
-		if property, castOk := current_value.(Property); castOk {
+		if property, castOk := current_value.(lua.Property); castOk {
 			if err := property.Set(L, 3); err != nil {
 				return L.Push(nil, err)
 			} else {
@@ -250,19 +221,9 @@ func set_nyagos_table_member(L lua.Lua) int {
 	return L.Push(true)
 }
 
-var nyagos_top_meta_table = &MetaOnlyTableT{
-	lua.TTable{
-		Dict: map[string]lua.Pushable{
-			"__index":    &lua.TGoFunction{get_nyagos_table_member},
-			"__newindex": &lua.TGoFunction{set_nyagos_table_member},
-		},
-		Array: map[int]lua.Pushable{},
-	},
-}
-
 var share_table = map[string]lua.Pushable{}
 
-func get_share_table(L lua.Lua) int {
+func getShareTable(L lua.Lua) int {
 	key, keyErr := L.ToString(-1)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
@@ -275,7 +236,7 @@ func get_share_table(L lua.Lua) int {
 	}
 }
 
-func set_share_table(L lua.Lua) int {
+func setShareTable(L lua.Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
@@ -288,28 +249,16 @@ func set_share_table(L lua.Lua) int {
 	return 1
 }
 
-func make_nyaos_table(L lua.Lua) {
-	L.Push(nyagos_top_meta_table)
-	L.SetGlobal("nyagos")
-}
-
 var hook_setuped = false
 
 func NewNyagosLua() lua.Lua {
 	this := lua.New()
 	this.OpenLibs()
 
-	make_nyaos_table(this)
+	this.Push(lua.NewVirtualTable(getNyagosTable, setNyagosTable))
+	this.SetGlobal("nyagos")
 
-	this.Push(MetaOnlyTableT{
-		lua.TTable{
-			Dict: map[string]lua.Pushable{
-				"__newindex": &lua.TGoFunction{set_share_table},
-				"__index":    &lua.TGoFunction{get_share_table},
-			},
-			Array: map[int]lua.Pushable{},
-		},
-	})
+	this.Push(lua.NewVirtualTable(getShareTable, setShareTable))
 	this.SetGlobal("share")
 
 	// replace os.getenv
@@ -342,30 +291,13 @@ func NewNyagosLua() lua.Lua {
 
 func init() {
 	nyagos_table_member = map[string]lua.Pushable{
-		"access": &lua.TGoFunction{cmdAccess},
-		"alias": &MetaOnlyTableT{
-			lua.TTable{
-				Dict: map[string]lua.Pushable{
-					"__call":     &lua.TGoFunction{cmdSetAlias},
-					"__newindex": &lua.TGoFunction{cmdSetAlias},
-					"__index":    &lua.TGoFunction{cmdGetAlias},
-				},
-				Array: map[int]lua.Pushable{},
-			},
-		},
+		"access":       &lua.TGoFunction{cmdAccess},
+		"alias":        lua.NewVirtualTable(cmdGetAlias, cmdSetAlias),
 		"atou":         &lua.TGoFunction{cmdAtoU},
 		"bindkey":      &lua.TGoFunction{cmdBindKey},
 		"commit":       emptyToNil(commit),
 		"commonprefix": &lua.TGoFunction{cmdCommonPrefix},
-		"env": &MetaOnlyTableT{
-			lua.TTable{
-				Dict: map[string]lua.Pushable{
-					"__newindex": &lua.TGoFunction{cmdSetEnv},
-					"__index":    &lua.TGoFunction{cmdGetEnv},
-				},
-				Array: map[int]lua.Pushable{},
-			},
-		},
+		"env":          lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
 		"eval":         &lua.TGoFunction{cmdEval},
 		"exec":         &lua.TGoFunction{cmdExec},
 		"getalias":     &lua.TGoFunction{cmdGetAlias},
@@ -391,8 +323,8 @@ func init() {
 		"goarch":       &lua.TString{runtime.GOARCH},
 		"goversion":    &lua.TString{runtime.Version()},
 		"version":      emptyToNil(version),
-		"prompt":       Property{&prompt_hook},
-		"argsfilter":   Property{&luaArgsFilter},
-		"filter":       Property{&luaFilter},
+		"prompt":       lua.Property{&prompt_hook},
+		"argsfilter":   lua.Property{&luaArgsFilter},
+		"filter":       lua.Property{&luaFilter},
 	}
 }
