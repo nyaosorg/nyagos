@@ -173,7 +173,7 @@ type MetaOnlyTableT struct {
 	Table lua.TTable
 }
 
-func (this *MetaOnlyTableT) Push(L lua.Lua) int {
+func (this MetaOnlyTableT) Push(L lua.Lua) int {
 	L.NewTable()
 	L.NewTable()
 	for key, val := range this.Table.Dict {
@@ -260,6 +260,34 @@ var nyagos_top_meta_table = &MetaOnlyTableT{
 	},
 }
 
+var share_table = map[string]lua.Pushable{}
+
+func get_share_table(L lua.Lua) int {
+	key, keyErr := L.ToString(-1)
+	if keyErr != nil {
+		return L.Push(nil, keyErr)
+	}
+	if value, ok := share_table[key]; ok {
+		return L.Push(value)
+	} else {
+		L.PushNil()
+		return 1
+	}
+}
+
+func set_share_table(L lua.Lua) int {
+	key, keyErr := L.ToString(-2)
+	if keyErr != nil {
+		return L.Push(nil, keyErr)
+	}
+	value, valErr := L.ToPushable(-1)
+	if valErr != nil {
+		return L.Push(nil, valErr)
+	}
+	share_table[key] = value
+	return 1
+}
+
 func make_nyaos_table(L lua.Lua) {
 	L.Push(nyagos_top_meta_table)
 	L.SetGlobal("nyagos")
@@ -272,6 +300,17 @@ func NewNyagosLua() lua.Lua {
 	this.OpenLibs()
 
 	make_nyaos_table(this)
+
+	this.Push(MetaOnlyTableT{
+		lua.TTable{
+			Dict: map[string]lua.Pushable{
+				"__newindex": &lua.TGoFunction{set_share_table},
+				"__index":    &lua.TGoFunction{get_share_table},
+			},
+			Array: map[int]lua.Pushable{},
+		},
+	})
+	this.SetGlobal("share")
 
 	// replace os.getenv
 	this.GetGlobal("os")           // +1
