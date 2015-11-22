@@ -93,28 +93,15 @@ var orgArgHook func(*interpreter.Interpreter, []string) ([]string, error)
 
 var newArgsHookLock sync.Mutex
 
+var luaArgsFilter lua.Pushable = lua.TNil{}
+
 func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
-	if it.IsBackGround {
-		return nil, &LuaNotRunBackGroundError{}
-	}
 	newArgsHookLock.Lock()
 	defer newArgsHookLock.Unlock()
 
-	if dbg {
-		for _, arg1 := range args {
-			print("[", arg1, "]")
-		}
-		print("\n")
-		defer print("Leave newArgHook\n")
-	}
-	L, Lok := it.Tag.(lua.Lua)
-	if !Lok {
-		return nil, errors.New("main/lua.go: can get interpreter instance")
-	}
-	pos := L.GetTop()
-	defer L.SetTop(pos)
-	L.GetGlobal("nyagos")
-	L.GetField(-1, "argsfilter")
+	L := NewNyagosLua()
+	defer L.Close()
+	L.Push(luaArgsFilter)
 	if !L.IsFunction(-1) {
 		return orgArgHook(it, args)
 	}
@@ -123,7 +110,7 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 		L.PushString(args[i])
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	if err := NyagosCallLua(it, 1, 1); err != nil {
+	if err := L.Call(1, 1); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return orgArgHook(it, args)
 	}
@@ -189,7 +176,7 @@ type MetaOnlyTableT struct {
 func (this *MetaOnlyTableT) Push(L lua.Lua) int {
 	L.NewTable()
 	L.NewTable()
-	for key, val := range this.Table.Map {
+	for key, val := range this.Table.Dict {
 		L.Push(val)
 		L.SetField(-2, key)
 	}
@@ -265,10 +252,11 @@ func set_nyagos_table_member(L lua.Lua) int {
 
 var nyagos_top_meta_table = &MetaOnlyTableT{
 	lua.TTable{
-		map[string]lua.Pushable{
+		Dict: map[string]lua.Pushable{
 			"__index":    &lua.TGoFunction{get_nyagos_table_member},
 			"__newindex": &lua.TGoFunction{set_nyagos_table_member},
 		},
+		Array: map[int]lua.Pushable{},
 	},
 }
 
@@ -318,11 +306,12 @@ func init() {
 		"access": &lua.TGoFunction{cmdAccess},
 		"alias": &MetaOnlyTableT{
 			lua.TTable{
-				map[string]lua.Pushable{
+				Dict: map[string]lua.Pushable{
 					"__call":     &lua.TGoFunction{cmdSetAlias},
 					"__newindex": &lua.TGoFunction{cmdSetAlias},
 					"__index":    &lua.TGoFunction{cmdGetAlias},
 				},
+				Array: map[int]lua.Pushable{},
 			},
 		},
 		"atou":         &lua.TGoFunction{cmdAtoU},
@@ -331,10 +320,11 @@ func init() {
 		"commonprefix": &lua.TGoFunction{cmdCommonPrefix},
 		"env": &MetaOnlyTableT{
 			lua.TTable{
-				map[string]lua.Pushable{
+				Dict: map[string]lua.Pushable{
 					"__newindex": &lua.TGoFunction{cmdSetEnv},
 					"__index":    &lua.TGoFunction{cmdGetEnv},
 				},
+				Array: map[int]lua.Pushable{},
 			},
 		},
 		"eval":         &lua.TGoFunction{cmdEval},
@@ -363,5 +353,6 @@ func init() {
 		"goversion":    &lua.TString{runtime.Version()},
 		"version":      emptyToNil(version),
 		"prompt":       Property{&prompt_hook},
+		"argsfilter":   Property{&luaArgsFilter},
 	}
 }

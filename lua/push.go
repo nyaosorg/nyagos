@@ -111,8 +111,13 @@ func (this Lua) Push(values ...interface{}) int {
 			this.PushString(t.Error())
 		case TTable:
 			this.NewTable()
-			for key, val := range t.Map {
+			for key, val := range t.Dict {
 				this.PushString(key)
+				this.Push(val)
+				this.SetTable(-3)
+			}
+			for key, val := range t.Array {
+				this.Push(key)
 				this.Push(val)
 				this.SetTable(-3)
 			}

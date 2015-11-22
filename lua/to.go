@@ -151,13 +151,19 @@ func (this *MetaTableOwner) Push(L Lua) int {
 }
 
 type TTable struct {
-	Map map[string]Pushable
+	Dict  map[string]Pushable
+	Array map[int]Pushable
 }
 
 func (this TTable) Push(L Lua) int {
 	L.NewTable()
-	for key, val := range this.Map {
+	for key, val := range this.Dict {
 		L.PushString(key)
+		val.Push(L)
+		L.SetTable(-3)
+	}
+	for key, val := range this.Array {
+		L.Push(key)
 		val.Push(L)
 		L.SetTable(-3)
 	}
@@ -168,6 +174,7 @@ func (this Lua) ToTable(index int) (Pushable, error) {
 	top := this.GetTop()
 	defer this.SetTop(top)
 	table := make(map[string]Pushable)
+	array := make(map[int]Pushable)
 	this.PushNil()
 	if index < 0 {
 		index--
@@ -184,6 +191,8 @@ func (this Lua) ToTable(index int) (Pushable, error) {
 					table[t.Value] = val
 				case TRawString:
 					table[string(t.Value)] = val
+				case Integer:
+					array[int(t)] = val
 				case nil:
 					table[""] = val
 				}
@@ -191,7 +200,7 @@ func (this Lua) ToTable(index int) (Pushable, error) {
 		}
 		this.Pop(1)
 	}
-	return &TTable{table}, nil
+	return &TTable{Dict: table, Array: array}, nil
 }
 
 type TBool struct {
