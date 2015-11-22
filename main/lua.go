@@ -393,5 +393,6 @@ func init() {
 		"version":      emptyToNil(version),
 		"prompt":       Property{&prompt_hook},
 		"argsfilter":   Property{&luaArgsFilter},
+		"filter":       Property{&luaFilter},
 	}
 }

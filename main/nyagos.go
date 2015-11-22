@@ -93,6 +93,8 @@ func when_panic() {
 	os.Stdin.Read(dummy[:])
 }
 
+var luaFilter lua.Pushable = lua.TNil{}
+
 func main() {
 	defer when_panic()
 
@@ -193,8 +195,7 @@ func main() {
 		}
 
 		stackPos := L.GetTop()
-		L.GetGlobal("nyagos")
-		L.GetField(-1, "filter")
+		L.Push(luaFilter)
 		if L.IsFunction(-1) {
 			L.PushString(line)
 			err := L.Call(1, 1)
