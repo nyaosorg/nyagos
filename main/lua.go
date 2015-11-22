@@ -137,17 +137,13 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 
 var orgOnCommandNotFound func(*interpreter.Interpreter, error) error
 
+var luaOnCommandNotFound lua.Pushable = lua.TNil{}
+
 func on_command_not_found(inte *interpreter.Interpreter, err error) error {
-	if inte.IsBackGround {
-		return &LuaNotRunBackGroundError{"nyagos.on_command_not_found"}
-	}
-	L, Lok := inte.Tag.(lua.Lua)
-	if !Lok {
-		return errors.New("on_command_not_found: Interpreter.Tag is not lua instance")
-	}
-	L.GetGlobal("nyagos")
-	L.GetField(-1, "on_command_not_found")
-	L.Remove(-2) // remove nyagos.
+	L := NewNyagosLua()
+	defer L.Close()
+
+	L.Push(luaOnCommandNotFound)
 	if !L.IsFunction(-1) {
 		L.Pop(1)
 		return orgOnCommandNotFound(inte, err)
@@ -157,7 +153,7 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 		L.PushString(val)
 		L.RawSetI(-2, lua.Integer(key))
 	}
-	err1 := NyagosCallLua(inte, 1, 1)
+	err1 := L.Call(1, 1)
 	defer L.Pop(1)
 	if err1 != nil {
 		return err
@@ -291,40 +287,41 @@ func NewNyagosLua() lua.Lua {
 
 func init() {
 	nyagos_table_member = map[string]lua.Pushable{
-		"access":       &lua.TGoFunction{cmdAccess},
-		"alias":        lua.NewVirtualTable(cmdGetAlias, cmdSetAlias),
-		"atou":         &lua.TGoFunction{cmdAtoU},
-		"bindkey":      &lua.TGoFunction{cmdBindKey},
-		"commit":       emptyToNil(commit),
-		"commonprefix": &lua.TGoFunction{cmdCommonPrefix},
-		"env":          lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
-		"eval":         &lua.TGoFunction{cmdEval},
-		"exec":         &lua.TGoFunction{cmdExec},
-		"getalias":     &lua.TGoFunction{cmdGetAlias},
-		"getenv":       &lua.TGoFunction{cmdGetEnv},
-		"gethistory":   &lua.TGoFunction{cmdGetHistory},
-		"getkey":       &lua.TGoFunction{cmdGetKey},
-		"getviewwidth": &lua.TGoFunction{cmdGetViewWidth},
-		"getwd":        &lua.TGoFunction{cmdGetwd},
-		"glob":         &lua.TGoFunction{cmdGlob},
-		"pathjoin":     &lua.TGoFunction{cmdPathJoin},
-		"raweval":      &lua.TGoFunction{cmdRawEval},
-		"rawexec":      &lua.TGoFunction{cmdRawExec},
-		"setalias":     &lua.TGoFunction{cmdSetAlias},
-		"setenv":       &lua.TGoFunction{cmdSetEnv},
-		"setrunewidth": &lua.TGoFunction{cmdSetRuneWidth},
-		"shellexecute": &lua.TGoFunction{cmdShellExecute},
-		"stat":         &lua.TGoFunction{cmdStat},
-		"stamp":        emptyToNil(stamp),
-		"utoa":         &lua.TGoFunction{cmdUtoA},
-		"which":        &lua.TGoFunction{cmdWhich},
-		"write":        &lua.TGoFunction{cmdWrite},
-		"writerr":      &lua.TGoFunction{cmdWriteErr},
-		"goarch":       &lua.TString{runtime.GOARCH},
-		"goversion":    &lua.TString{runtime.Version()},
-		"version":      emptyToNil(version),
-		"prompt":       lua.Property{&prompt_hook},
-		"argsfilter":   lua.Property{&luaArgsFilter},
-		"filter":       lua.Property{&luaFilter},
+		"access":               &lua.TGoFunction{cmdAccess},
+		"alias":                lua.NewVirtualTable(cmdGetAlias, cmdSetAlias),
+		"atou":                 &lua.TGoFunction{cmdAtoU},
+		"bindkey":              &lua.TGoFunction{cmdBindKey},
+		"commit":               emptyToNil(commit),
+		"commonprefix":         &lua.TGoFunction{cmdCommonPrefix},
+		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
+		"eval":                 &lua.TGoFunction{cmdEval},
+		"exec":                 &lua.TGoFunction{cmdExec},
+		"getalias":             &lua.TGoFunction{cmdGetAlias},
+		"getenv":               &lua.TGoFunction{cmdGetEnv},
+		"gethistory":           &lua.TGoFunction{cmdGetHistory},
+		"getkey":               &lua.TGoFunction{cmdGetKey},
+		"getviewwidth":         &lua.TGoFunction{cmdGetViewWidth},
+		"getwd":                &lua.TGoFunction{cmdGetwd},
+		"glob":                 &lua.TGoFunction{cmdGlob},
+		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
+		"raweval":              &lua.TGoFunction{cmdRawEval},
+		"rawexec":              &lua.TGoFunction{cmdRawExec},
+		"setalias":             &lua.TGoFunction{cmdSetAlias},
+		"setenv":               &lua.TGoFunction{cmdSetEnv},
+		"setrunewidth":         &lua.TGoFunction{cmdSetRuneWidth},
+		"shellexecute":         &lua.TGoFunction{cmdShellExecute},
+		"stat":                 &lua.TGoFunction{cmdStat},
+		"stamp":                emptyToNil(stamp),
+		"utoa":                 &lua.TGoFunction{cmdUtoA},
+		"which":                &lua.TGoFunction{cmdWhich},
+		"write":                &lua.TGoFunction{cmdWrite},
+		"writerr":              &lua.TGoFunction{cmdWriteErr},
+		"goarch":               &lua.TString{runtime.GOARCH},
+		"goversion":            &lua.TString{runtime.Version()},
+		"version":              emptyToNil(version),
+		"prompt":               lua.Property{&prompt_hook},
+		"argsfilter":           lua.Property{&luaArgsFilter},
+		"filter":               lua.Property{&luaFilter},
+		"on_command_not_found": lua.Property{&luaOnCommandNotFound},
 	}
 }
