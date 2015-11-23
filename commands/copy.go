@@ -30,79 +30,52 @@ func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
 }
 
 func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
-	switch len(cmd.Args) {
-	case 0, 1, 2:
+	if len(cmd.Args) <= 2 {
 		fmt.Fprintf(cmd.Stderr,
-			"Usage: %s SOURCE-FILENAME DESITINATE-FILENAME\n"+
-				"       %s FILENAMES... DESINATE-DIRECTORY\n",
+			"Usage: %s [/y] SOURCE-FILENAME DESITINATE-FILENAME\n"+
+				"       %s [/y] FILENAMES... DESINATE-DIRECTORY\n",
 			cmd.Args[0], cmd.Args[0])
-	case 3:
-		src := cmd.Args[1]
-		dst := cmd.Args[2]
+	}
+	all := false
+	for i, n := 1, len(cmd.Args)-1; i < n; i++ {
+		if cmd.Args[i] == "/y" {
+			all = true
+			continue
+		}
+		src := cmd.Args[i]
+		dst := dos.Join(cmd.Args[n], filepath.Base(src))
 		if !action.IsDirOk {
 			fi, err := os.Stat(src)
 			if err == nil && fi.Mode().IsDir() {
 				fmt.Fprintf(cmd.Stderr, "%s is directory and passed.\n", src)
-				return NOERROR, nil
+				continue
 			}
 		}
-		fi, err := os.Stat(dst)
-		if err == nil && fi != nil && fi.Mode().IsDir() {
-			dst = dos.Join(dst, filepath.Base(src))
-			fi, err = os.Stat(dst)
-		}
+
 		fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
-		if fi != nil && err == nil {
-			fmt.Fprintf(cmd.Stderr, "%s: override? [Yes/No] ", dst)
-			ch := conio.GetCh()
-			fmt.Fprintf(cmd.Stderr, "%c\n", ch)
-			if ch != 'y' && ch != 'Y' {
-				return NOERROR, nil
-			}
-		}
-		if err := action.Do(src, dst); err == nil {
-			return NOERROR, nil
-		} else {
-			return ErrorLevel(1), err
-		}
-	default:
-		all := false
-		for i, n := 1, len(cmd.Args)-1; i < n; i++ {
-			src := cmd.Args[i]
-			dst := dos.Join(cmd.Args[n], filepath.Base(src))
-			if !action.IsDirOk {
-				fi, err := os.Stat(src)
-				if err == nil && fi.Mode().IsDir() {
-					fmt.Fprintf(cmd.Stderr, "%s is directory and passed.\n", src)
+		if !all {
+			fi, err := os.Stat(dst)
+			if fi != nil && err == nil {
+				fmt.Fprintf(cmd.Stderr,
+					"%s: override? [Yes/No/All/Quit] ",
+					dst)
+				ch := conio.GetCh()
+				fmt.Fprintf(cmd.Stderr, "%c\n", ch)
+				switch ch {
+				case 'y', 'Y':
+
+				case 'a', 'A':
+					all = true
+				case 'q', 'Q':
+					return NOERROR, nil
+				default:
 					continue
 				}
 			}
-
-			fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
-			if !all {
-				fi, err := os.Stat(dst)
-				if fi != nil && err == nil {
-					fmt.Fprintf(cmd.Stderr,
-						"%s: override? [Yes/No/All/Quit] ",
-						dst)
-					ch := conio.GetCh()
-					fmt.Fprintf(cmd.Stderr, "%c\n", ch)
-					switch ch {
-					case 'y', 'Y':
-
-					case 'a', 'A':
-						all = true
-					case 'q', 'Q':
-						return NOERROR, nil
-					default:
-						continue
-					}
-				}
-			}
-			err := action.Do(src, dst)
-			if err != nil {
-				return ErrorLevel(1), err
-			}
+		}
+		err := action.Do(src, dst)
+		if err != nil {
+			return ErrorLevel(1), err
 		}
 	}
 	return NOERROR, nil
