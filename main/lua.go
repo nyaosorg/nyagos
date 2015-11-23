@@ -197,14 +197,18 @@ func setNyagosTable(L lua.Lua) int {
 			} else {
 				return L.Push(true)
 			}
+		} else {
+			value, value_err := L.ToPushable(3)
+			if value_err != nil {
+				return L.Push(nil, value_err)
+			}
+			nyagos_table_member[index] = value
+			return L.Push(true)
 		}
+	} else {
+		fmt.Fprintf(os.Stderr, "nyagos.%s: reserved variable.\n", index)
+		return L.Push(nil)
 	}
-	value, value_err := L.ToPushable(3)
-	if value_err != nil {
-		return L.Push(nil, value_err)
-	}
-	nyagos_table_member[index] = value
-	return L.Push(true)
 }
 
 var share_table = map[string]lua.Pushable{}
