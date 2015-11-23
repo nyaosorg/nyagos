@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -45,7 +46,7 @@ const (
 
 func (this fileInfoT) Name() string { return this.name }
 
-func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
+func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Writer) {
 	indicator := " "
 	prefix := ""
 	postfix := ""
@@ -123,10 +124,10 @@ func lsOneLong(folder string, status os.FileInfo, flag int, out io.Writer) {
 			B := size % 1024
 			fmt.Fprintf(out, " %5d.%01dK", KB, B/102)
 		} else {
-			fmt.Fprintf(out, " %8d", size)
+			fmt.Fprintf(out, " %*d", width, size)
 		}
 	} else {
-		fmt.Fprintf(out, " %8d", status.Size())
+		fmt.Fprintf(out, " %*d", width, status.Size())
 	}
 	fmt.Fprintf(out, " %04d-%02d-%02d %02d:%02d %s%s%s",
 		stamp.Year(),
@@ -193,8 +194,15 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 }
 
 func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
+	size := int64(1)
 	for _, finfo := range nodes {
-		lsOneLong(folder, finfo, flag, out)
+		if finfo.Size() > size {
+			size = finfo.Size()
+		}
+	}
+	width := int(math.Floor(math.Log10(float64(size)))) + 1
+	for _, finfo := range nodes {
+		lsOneLong(folder, finfo, flag, width, out)
 	}
 }
 
@@ -320,15 +328,16 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 			}
 		} else if status.IsDir() {
 			dirs = append(dirs, name)
-		} else if (flag & O_LONG) != 0 {
-			lsOneLong(".", &fileInfoT{name, status}, flag, out)
-			printCount += 1
 		} else {
 			files = append(files, &fileInfoT{name, status})
 		}
 	}
 	if len(files) > 0 {
-		lsBox(".", files, flag, out)
+		if (flag & O_LONG) != 0 {
+			lsLong(".", files, flag, out)
+		} else {
+			lsBox(".", files, flag, out)
+		}
 		printCount = len(files)
 	}
 	for _, name := range dirs {
