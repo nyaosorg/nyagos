@@ -40,7 +40,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.PushString(arg1)
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	err := NyagosCallLua(cmd, 1, 1)
+	err := NyagosCallLua(L, cmd, 1, 1)
 	errorlevel := interpreter.NOERROR
 	if err == nil {
 		newargs := make([]string, 0)
@@ -178,9 +178,8 @@ func cmdExec(L lua.Lua) int {
 			}
 			L.Pop(1)
 		}
-		var it *interpreter.Interpreter
-		var ok bool
-		if it, ok = LuaInstanceToCmd[L.State()]; !ok {
+		it := getRegInt(L)
+		if it == nil {
 			it = interpreter.New()
 			it.Tag = NewNyagosLua()
 			it.CloneHook = func(this *interpreter.Interpreter) error {
@@ -206,9 +205,8 @@ func cmdExec(L lua.Lua) int {
 		if statementErr != nil {
 			return L.Push(nil, statementErr)
 		}
-		var it *interpreter.Interpreter
-		var ok bool
-		if it, ok = LuaInstanceToCmd[L.State()]; !ok {
+		it := getRegInt(L)
+		if it == nil {
 			it = interpreter.New()
 			it.Tag = L
 		}
@@ -297,7 +295,7 @@ func cmdRawExec(L lua.Lua) int {
 	cmd1.Stdout = os.Stdout
 	cmd1.Stderr = os.Stderr
 	cmd1.Stdin = os.Stdin
-	if it, ok := LuaInstanceToCmd[L.State()]; ok {
+	if it := getRegInt(L); it != nil {
 		if it.Stdout != nil {
 			cmd1.Stdout = it.Stdout
 		}
@@ -335,8 +333,8 @@ func cmdRawEval(L lua.Lua) int {
 
 func cmdWrite(L lua.Lua) int {
 	var out io.Writer = os.Stdout
-	cmd, cmdOk := LuaInstanceToCmd[L.State()]
-	if cmdOk && cmd != nil && cmd.Stdout != nil {
+	cmd := getRegInt(L)
+	if cmd != nil && cmd.Stdout != nil {
 		out = cmd.Stdout
 	}
 	return cmdWriteSub(L, out)
@@ -344,8 +342,8 @@ func cmdWrite(L lua.Lua) int {
 
 func cmdWriteErr(L lua.Lua) int {
 	var out io.Writer = os.Stderr
-	cmd, cmdOk := LuaInstanceToCmd[L.State()]
-	if cmdOk && cmd != nil && cmd.Stderr != nil {
+	cmd := getRegInt(L)
+	if cmd != nil && cmd.Stderr != nil {
 		out = cmd.Stderr
 	}
 	return cmdWriteSub(L, out)

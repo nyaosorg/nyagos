@@ -1,11 +1,11 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"runtime"
 	"sync"
+	"unsafe"
 
 	"../dos"
 	"../interpreter"
@@ -26,23 +26,28 @@ func (this LuaNotRunBackGroundError) Error() string {
 
 const dbg = false
 
-var LuaInstanceToCmd = map[uintptr]*interpreter.Interpreter{}
+const REGKEY_INTERPRETER = "nyagos.interpreter"
 
-func NyagosCallLua(it *interpreter.Interpreter, nargs int, nresult int) error {
-	if it == nil {
-		return errors.New("NyagosCallLua: Interpreter instance is nil")
-	}
-	if it.IsBackGround {
-		return &LuaNotRunBackGroundError{}
-	}
-	L, ok := it.Tag.(lua.Lua)
-	if !ok {
-		return errors.New("NyagosCallLua: Lua instance not found")
-	}
-	save := LuaInstanceToCmd[L.State()]
-	LuaInstanceToCmd[L.State()] = it
-	err := L.Call(1, 1)
-	LuaInstanceToCmd[L.State()] = save
+func setRegInt(L lua.Lua, it *interpreter.Interpreter) {
+	L.PushValue(lua.LUA_REGISTRYINDEX)
+	L.PushLightUserData(unsafe.Pointer(it))
+	L.SetField(-2, REGKEY_INTERPRETER)
+	L.Pop(1)
+}
+
+func getRegInt(L lua.Lua) *interpreter.Interpreter {
+	L.PushValue(lua.LUA_REGISTRYINDEX)
+	L.GetField(-1, REGKEY_INTERPRETER)
+	rc := (*interpreter.Interpreter)(L.ToUserData(-1))
+	L.Pop(2)
+	return rc
+}
+
+func NyagosCallLua(L lua.Lua, it *interpreter.Interpreter, nargs int, nresult int) error {
+	save := getRegInt(L)
+	setRegInt(L, it)
+	err := L.Call(nargs, nresult)
+	setRegInt(L, save)
 	return err
 }
 
@@ -67,7 +72,11 @@ func ioLines(this lua.Lua) int {
 }
 
 func ioLinesNext(this lua.Lua) int {
-	cmd := LuaInstanceToCmd[this.State()]
+	cmd := getRegInt(this)
+	if cmd == nil {
+		print("main.ioLinesNext: deadlinked to interpreter\n")
+		return 0
+	}
 
 	line := make([]byte, 0, 256)
 	var ch [1]byte
