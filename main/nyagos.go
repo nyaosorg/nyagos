@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -48,18 +47,8 @@ func nyagosPrompt(L lua.Lua) int {
 var prompt_hook lua.Pushable = lua.TGoFunction{nyagosPrompt}
 
 func printPrompt(this *conio.LineEditor) (int, error) {
-	it, it_ok := this.Tag.(*interpreter.Interpreter)
-	if !it_ok {
-		return 0, errors.New("nyagos.go: printPrompt: conio.LineEditor.Tag is not interpreter.Interpreter")
-	}
-	if it.IsBackGround {
-		return 0, &LuaNotRunBackGroundError{"nyagos.prompt"}
-	}
-	L, L_ok := it.Tag.(lua.Lua)
-	if !L_ok {
-		return 0, errors.New("nyagos.go: printPrompt: interpreter.Interpreter.Tag is not lua.Lua")
-	}
-	defer L.SetTop(L.GetTop())
+	L := NewNyagosLua()
+	defer L.Close()
 	L.Push(prompt_hook)
 
 	if !L.IsFunction(-1) {
@@ -67,7 +56,7 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 		return 0, nil
 	}
 	L.PushString(os.Getenv("PROMPT"))
-	if err := NyagosCallLua(it, 1, 1); err != nil {
+	if err := L.Call(1, 1); err != nil {
 		return 0, err
 	}
 	length, lengthErr := L.ToInteger(-1)
