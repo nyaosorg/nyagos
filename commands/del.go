@@ -12,18 +12,23 @@ import (
 func cmd_del(cmd *Interpreter) (ErrorLevel, error) {
 	n := len(cmd.Args)
 	if n <= 1 {
-		fmt.Fprintln(cmd.Stderr, "Usage: del   FILE(S)...")
-		fmt.Fprintln(cmd.Stderr, "       erase FILE(S)...")
+		fmt.Fprintln(cmd.Stderr, "Usage: del   [/q] FILE(S)...")
+		fmt.Fprintln(cmd.Stderr, "       erase [/q] FILE(S)...")
 		return NOERROR, nil
 	}
 	all := false
 	errorcount := ErrorLevel(0)
-	for i := 1; i < n; i++ {
-		path := cmd.Args[i]
-		stat, statErr := os.Lstat(path)
-		if statErr != nil {
-			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: %s\n",
-				i, n-1, path, statErr.Error())
+	i := 1
+	for _, arg1 := range cmd.Args[1:] {
+		if arg1 == "/q" {
+			all = true
+			n--
+			continue
+		}
+		path := arg1
+		stat, err := os.Lstat(path)
+		if err != nil {
+			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: %s\n", i, n-1, path, err)
 			errorcount++
 			continue
 		}
@@ -54,13 +59,14 @@ func cmd_del(cmd *Interpreter) (ErrorLevel, error) {
 				continue
 			}
 		}
-		err := syscall.Unlink(path)
+		err = syscall.Unlink(path)
 		if err != nil {
-			fmt.Printf("-> %s\n", err.Error())
+			fmt.Printf("-> %s\n", err)
 			errorcount++
 			continue
 		}
 		fmt.Println("-> done.")
+		i++
 	}
 	return errorcount, nil
 }
