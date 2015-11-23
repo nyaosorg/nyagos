@@ -12,20 +12,6 @@ import (
 	"../lua"
 )
 
-type LuaNotRunBackGroundError struct {
-	name string
-}
-
-func (this LuaNotRunBackGroundError) Error() string {
-	if this.name == "" {
-		return ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND
-	} else {
-		return fmt.Sprintf("%s: %s", this.name, ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND)
-	}
-}
-
-const dbg = false
-
 const REGKEY_INTERPRETER = "nyagos.interpreter"
 
 func setRegInt(L lua.Lua, it *interpreter.Interpreter) {
@@ -50,11 +36,6 @@ func NyagosCallLua(L lua.Lua, it *interpreter.Interpreter, nargs int, nresult in
 	setRegInt(L, save)
 	return err
 }
-
-var mutex4dll sync.Mutex
-var luaUsedOnThatPipeline = map[uint]uint{}
-
-const ERRMSG_CAN_NOT_RUN_LUA_ON_BACKGROUND = "Can not run Lua-Command on background"
 
 const original_io_lines = "original_io_lines"
 
