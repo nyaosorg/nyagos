@@ -1,13 +1,10 @@
 io.getenv = nyagos.getenv
 io.setenv = nyagos.setenv
 
-function nyagos.echo(...)
+print = function(...)
     nyagos.write(...)
     nyagos.write("\n")
 end
-
-share.original_print = print
-print = nyagos.echo
 
 function x(s)
     for line in string.gmatch(s,'[^\r\n]+') do
