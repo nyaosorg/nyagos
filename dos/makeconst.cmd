@@ -3,5 +3,8 @@ lua %~dp0..\makeconst.lua dos ^
 	FILE_ATTRIBUTE_REPARSE_POINT ^
 	FILE_ATTRIBUTE_HIDDEN ^
 	CP_THREAD_ACP ^
+	MOVEFILE_REPLACE_EXISTING ^
+	MOVEFILE_COPY_ALLOWED ^
+	MOVEFILE_WRITE_THROUGH ^
 	C:\MingW\include > const.go
 go fmt const.go

@@ -6,7 +6,7 @@ import (
 )
 
 var copyFile = kernel32.NewProc("CopyFileW")
-var moveFile = kernel32.NewProc("MoveFileW")
+var moveFileEx = kernel32.NewProc("MoveFileExW")
 
 func Copy(src string, dst string, isFailIfExists bool) error {
 	cSrc, cSrcErr := syscall.UTF16PtrFromString(src)
@@ -43,9 +43,10 @@ func Move(src, dst string) error {
 	if cDstErr != nil {
 		return cDstErr
 	}
-	rc, _, err := moveFile.Call(
+	rc, _, err := moveFileEx.Call(
 		uintptr(unsafe.Pointer(cSrc)),
-		uintptr(unsafe.Pointer(cDst)))
+		uintptr(unsafe.Pointer(cDst)),
+		MOVEFILE_REPLACE_EXISTING|MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH)
 	if rc != 0 {
 		return nil
 	} else {
