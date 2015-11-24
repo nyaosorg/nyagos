@@ -28,21 +28,26 @@ func cmd_mkdir(cmd *Interpreter) (ErrorLevel, error) {
 
 func cmd_rmdir(cmd *Interpreter) (ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
-		fmt.Println("Usage: rmdir [/s] DIRECTORIES...")
+		fmt.Println("Usage: rmdir [/s] [/q] DIRECTORIES...")
 		return NOERROR, nil
 	}
 	s_option := false
+	quiet := false
 	message := "%s: Rmdir Are you sure? [Yes/No/Quit] "
 	errorcount := ErrorLevel(0)
 	for _, arg1 := range cmd.Args[1:] {
-		if arg1 == "/s" {
+		switch arg1 {
+		case "/s":
 			s_option = true
 			message = "%s : Delete Tree. Are you sure? [Yes/No/Quit] "
 			continue
+		case "/q":
+			quiet = true
+			continue
 		}
-		stat, statErr := os.Lstat(arg1)
-		if statErr != nil {
-			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, statErr)
+		stat, err := os.Lstat(arg1)
+		if err != nil {
+			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, err)
 			errorcount++
 			continue
 		}
@@ -51,31 +56,34 @@ func cmd_rmdir(cmd *Interpreter) (ErrorLevel, error) {
 			errorcount++
 			continue
 		}
-		fmt.Fprintf(cmd.Stderr, message, arg1)
-		ch := conio.GetCh()
-		fmt.Fprintf(cmd.Stderr, "%c ", ch)
-		switch ch {
-		case 'y', 'Y':
+		if !quiet {
+			fmt.Fprintf(cmd.Stderr, message, arg1)
+			ch := conio.GetCh()
+			fmt.Fprintf(cmd.Stderr, "%c ", ch)
+			switch ch {
+			case 'y', 'Y':
 
-		case 'q', 'Q':
-			fmt.Fprintln(cmd.Stderr, "-> canceled all")
-			return errorcount, nil
-		default:
-			fmt.Fprintln(cmd.Stderr, "-> canceled")
-			continue
+			case 'q', 'Q':
+				fmt.Fprintln(cmd.Stderr, "-> canceled all")
+				return errorcount, nil
+			default:
+				fmt.Fprintln(cmd.Stderr, "-> canceled")
+				continue
+			}
 		}
-		var err error
 		if s_option {
-			fmt.Fprintln(cmd.Stdout)
+			if !quiet {
+				fmt.Fprintln(cmd.Stdout)
+			}
 			err = dos.Truncate(arg1, func(path string, err error) bool {
-				fmt.Fprintf(cmd.Stderr, "%s -> %s\n", path, err.Error())
+				fmt.Fprintf(cmd.Stderr, "%s -> %s\n", path, err)
 				return true
 			}, cmd.Stdout)
 		} else {
 			err = syscall.Rmdir(arg1)
 		}
 		if err != nil {
-			fmt.Fprintf(cmd.Stderr, "-> %s\n", err.Error())
+			fmt.Fprintf(cmd.Stderr, "-> %s\n", err)
 			errorcount++
 		} else {
 			fmt.Fprintln(cmd.Stderr, "-> done.")
