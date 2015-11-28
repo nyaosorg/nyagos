@@ -56,7 +56,7 @@ func printPrompt(this *conio.LineEditor) (int, error) {
 		return 0, nil
 	}
 	L.PushString(os.Getenv("PROMPT"))
-	if err := L.Call(1, 1); err != nil {
+	if err := L.Lua.Call(1, 1); err != nil {
 		return 0, err
 	}
 	length, lengthErr := L.ToInteger(-1)
@@ -108,7 +108,7 @@ func main() {
 	L := NewNyagosLua()
 	defer L.Close()
 
-	if !optionParse(L) {
+	if !optionParse(L.Lua) {
 		return
 	}
 
@@ -140,7 +140,7 @@ func main() {
 			this.Tag = NewNyagosLua()
 			it.CloseHook = func(this *interpreter.Interpreter) {
 				if this.Tag != nil {
-					if L, ok := this.Tag.(lua.Lua); ok {
+					if L, ok := this.Tag.(NyagosLua); ok {
 						L.Close()
 					}
 					this.Tag = nil
@@ -187,7 +187,7 @@ func main() {
 		L.Push(luaFilter)
 		if L.IsFunction(-1) {
 			L.PushString(line)
-			err := L.Call(1, 1)
+			err := L.Call(it, 1, 1)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err)
 			} else {
