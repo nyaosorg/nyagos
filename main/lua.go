@@ -7,6 +7,7 @@ import (
 	"sync"
 	"unsafe"
 
+	"../completion"
 	"../dos"
 	"../interpreter"
 	"../lua"
@@ -321,5 +322,6 @@ func init() {
 		"argsfilter":           lua.Property{&luaArgsFilter},
 		"filter":               lua.Property{&luaFilter},
 		"on_command_not_found": lua.Property{&luaOnCommandNotFound},
+		"completion_hook":      lua.Property{&completion.Hook},
 	}
 }

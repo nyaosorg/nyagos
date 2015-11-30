@@ -11,7 +11,7 @@ import (
 	"../conio"
 	"../interpreter"
 	"../lua"
-)
+	/* dbg "github.com/zetamatta/goutputdebugstring" */)
 
 type CompletionList struct {
 	AllLine string
@@ -20,6 +20,8 @@ type CompletionList struct {
 	Word    string
 	Pos     int
 }
+
+var Hook lua.Pushable = lua.TNil{}
 
 func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 	var err error
@@ -47,18 +49,16 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 
 	if it, it_ok := this.Session.Tag.(*interpreter.Interpreter); !it_ok {
 		if L, L_ok = this.Session.Tag.(lua.Lua); !L_ok {
-			return nil, errors.New("listUpComplete: could not get lua instance")
+			return &rv, errors.New("listUpComplete: cast error interpreter.Tag to lua.Lua")
 		}
 	} else {
 		L, L_ok = it.Tag.(lua.Lua)
 	}
 	if !L_ok {
-		return nil, errors.New("listUpComplete: could not get lua instance")
+		return &rv, errors.New("listUpComplete: could not get lua instance")
 	}
 
-	L.GetGlobal("nyagos")
-	L.GetField(-1, "completion_hook")
-	L.Remove(-2) // remove nyagos-table
+	L.Push(Hook)
 	if L.IsFunction(-1) {
 		L.NewTable()
 		L.PushString(rv.RawWord)
@@ -106,10 +106,15 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 
 func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	comp, err := listUpComplete(this)
-	if err != nil {
+	if comp == nil {
 		return conio.CONTINUE
 	}
 	fmt.Print("\n")
+	os.Stdout.Sync()
+	if err != nil {
+		fmt.Printf("(warning) %s\n", err.Error())
+		os.Stderr.Sync()
+	}
 	conio.BoxPrint(comp.List, os.Stdout)
 	this.RepaintAll()
 	return conio.CONTINUE
@@ -145,7 +150,7 @@ func endWithRoot(path string) bool {
 
 func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	comp, err := listUpComplete(this)
-	if err != nil || comp.List == nil || len(comp.List) <= 0 {
+	if comp.List == nil || len(comp.List) <= 0 {
 		return conio.CONTINUE
 	}
 
@@ -183,6 +188,9 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	}
 	if comp.RawWord == commonStr {
 		fmt.Print("\n")
+		if err != nil {
+			fmt.Printf("(warning) %s\n", err.Error())
+		}
 		conio.BoxPrint(comp.List, os.Stdout)
 		this.RepaintAll()
 		return conio.CONTINUE

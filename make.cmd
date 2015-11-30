@@ -42,6 +42,7 @@ goto build
         go get -u github.com/mattn/go-runewidth
         go get -u github.com/shiena/ansicolor 
         go get -u github.com/atotto/clipboard       
+        go get -u github.com/zetamatta/goutputdebugstring
         goto end
 
 :package
