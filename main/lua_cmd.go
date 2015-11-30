@@ -28,7 +28,7 @@ func (this *LuaBinaryChank) String() string {
 }
 
 func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	L, L_ok := cmd.Tag.(NyagosLua)
+	L, L_ok := cmd.Tag.(lua.Lua)
 	if !L_ok {
 		return interpreter.ErrorLevel(255), errors.New("LuaBinaryChank.Call: Lua instance not found")
 	}
@@ -40,7 +40,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.PushString(arg1)
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	err := L.Call(cmd, 1, 1)
+	err := NyagosCallLua(L, cmd, 1, 1)
 	errorlevel := interpreter.NOERROR
 	if err == nil {
 		newargs := make([]string, 0)

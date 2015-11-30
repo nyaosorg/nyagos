@@ -13,10 +13,6 @@ import (
 	"../lua"
 )
 
-type NyagosLua struct {
-	lua.Lua
-}
-
 const REGKEY_INTERPRETER = "nyagos.interpreter"
 
 func setRegInt(L lua.Lua, it *interpreter.Interpreter) {
@@ -34,11 +30,11 @@ func getRegInt(L lua.Lua) *interpreter.Interpreter {
 	return rc
 }
 
-func (L NyagosLua) Call(it *interpreter.Interpreter, nargs int, nresult int) error {
-	save := getRegInt(L.Lua)
-	setRegInt(L.Lua, it)
-	err := L.Lua.Call(nargs, nresult)
-	setRegInt(L.Lua, save)
+func NyagosCallLua(L lua.Lua, it *interpreter.Interpreter, nargs int, nresult int) error {
+	save := getRegInt(L)
+	setRegInt(L, it)
+	err := L.Call(nargs, nresult)
+	setRegInt(L, save)
 	return err
 }
 
@@ -105,7 +101,7 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 		L.PushString(args[i])
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	if err := L.Call(it, 1, 1); err != nil {
+	if err := L.Call(1, 1); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return orgArgHook(it, args)
 	}
@@ -148,7 +144,7 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 		L.PushString(val)
 		L.RawSetI(-2, lua.Integer(key))
 	}
-	err1 := L.Call(inte, 1, 1)
+	err1 := L.Call(1, 1)
 	defer L.Pop(1)
 	if err1 != nil {
 		return err
@@ -246,8 +242,8 @@ func setShareTable(L lua.Lua) int {
 
 var hook_setuped = false
 
-func NewNyagosLua() NyagosLua {
-	this := NyagosLua{lua.New()}
+func NewNyagosLua() lua.Lua {
+	this := lua.New()
 	this.OpenLibs()
 
 	this.Push(lua.NewVirtualTable(getNyagosTable, setNyagosTable))
