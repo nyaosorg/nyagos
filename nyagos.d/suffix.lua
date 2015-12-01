@@ -83,4 +83,5 @@ suffix.lua="lua"
 suffix.awk={"awk","-f"}
 suffix.js={"cscript","//nologo"}
 suffix.vbs={"cscript","//nologo"}
+suffix.wsf={"cscript","//nologo"}
 suffix.ps1={"powershell","-file"}
