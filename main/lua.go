@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"runtime"
-	"sync"
 	"unsafe"
 
 	"../completion"
@@ -82,14 +81,9 @@ func ioLinesNext(this lua.Lua) int {
 
 var orgArgHook func(*interpreter.Interpreter, []string) ([]string, error)
 
-var newArgsHookLock sync.Mutex
-
 var luaArgsFilter lua.Pushable = lua.TNil{}
 
 func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
-	newArgsHookLock.Lock()
-	defer newArgsHookLock.Unlock()
-
 	L := NewNyagosLua()
 	defer L.Close()
 	L.Push(luaArgsFilter)
