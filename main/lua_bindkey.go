@@ -131,16 +131,21 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	if pos < 0 {
 		pos = text.Len() + 1
 	}
-	this.L.Push(map[string]interface{}{
-		"pos":       pos,
-		"text":      text.String(),
-		"buffer":    unsafe.Pointer(buffer),
-		"call":      callKeyFunc,
-		"insert":    callInsert,
-		"lastword":  callLastWord,
-		"firstword": callFirstWord,
-		"boxprint":  callBoxListing,
-	})
+
+	this.L.Push(
+		lua.TTable{
+			Dict: map[string]lua.Pushable{
+				"pos":       lua.Integer(pos),
+				"text":      lua.TString{text.String()},
+				"buffer":    lua.TLightUserData{unsafe.Pointer(buffer)},
+				"call":      lua.TGoFunction{callKeyFunc},
+				"insert":    lua.TGoFunction{callInsert},
+				"lastword":  lua.TGoFunction{callLastWord},
+				"firstword": lua.TGoFunction{callFirstWord},
+				"boxprint":  lua.TGoFunction{callBoxListing},
+			},
+			Array: map[int]lua.Pushable{},
+		})
 	if err := this.L.Call(1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
