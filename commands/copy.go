@@ -35,7 +35,10 @@ func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
 			"Usage: %s [/y] SOURCE-FILENAME DESITINATE-FILENAME\n"+
 				"       %s [/y] FILENAMES... DESINATE-DIRECTORY\n",
 			cmd.Args[0], cmd.Args[0])
+		return NOERROR, nil
 	}
+	fi, err := os.Stat(cmd.Args[len(cmd.Args)-1])
+	isDir := err == nil && fi.Mode().IsDir()
 	all := false
 	for i, n := 1, len(cmd.Args)-1; i < n; i++ {
 		if cmd.Args[i] == "/y" {
@@ -43,7 +46,10 @@ func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
 			continue
 		}
 		src := cmd.Args[i]
-		dst := dos.Join(cmd.Args[n], filepath.Base(src))
+		dst := cmd.Args[n]
+		if isDir {
+			dst = dos.Join(dst, filepath.Base(src))
+		}
 		if !action.IsDirOk {
 			fi, err := os.Stat(src)
 			if err == nil && fi.Mode().IsDir() {
