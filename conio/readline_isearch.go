@@ -53,7 +53,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			this.Cursor = 0
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
-		case rune('g' & 0x1F):
+		case rune('c' & 0x1F), rune('g' & 0x1F):
 			w := 0
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
