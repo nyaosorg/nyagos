@@ -1,3 +1,21 @@
+NYAGOS 4.0.9\_11
+================
+* Build with go 1.5.2
+* Readline: support Ctrl-C as interrupt on isearch (#98 Thx @hattya)
+* Add suppression options (#95,#97 Thx @hattya)
+    - Add /q option to copy,move,del,erase and rmdir.
+* ls: calculate width of file size field for each directory (#94 Thx @hattya)
+* move: be able to override files (api: MoveFileW -> MoveFileExW) (#93 Thx @hattya)
+* Fixed lua-function 'set' did not expand env-var including `_` (#92) 
+* Fixed typographical error(s)
+    - Changed charactor to character in README (#90: @orthographic-pedant)
+* `nyagos.command_not_found` became deprecated.
+    - Removed from Document (it gets deprecated)
+    - Removed catalog.d/ezoe.lua
+* To avoid crash (#89)
+    - Forbade nyagos.prompt to execute background
+    - Forbade using Lua on background or not 1st command of pipeline
+
 NYAGOS 4.0.9\_10
 ================
 * Build with go 1.5.1

@@ -1,3 +1,21 @@
+NYAGOS 4.0.9\_11
+================
+* Go 1.5.2 でビルド
+* インクリメンタルサーチを Ctrl-C で中止できるようにした(#98 Thx @hattya)
+* 問合せ抑制オプションを追加(#95,#97 Thx @hattya)
+    - /q オプションを copy,move,del,erase,rmdir に追加
+* ls: ファイルサイズの幅をディレクトリ毎に計算するようにした (#94 Thx @hattya)
+* move: 上書きできるようにした(MoveFileW API を MoveFileExW へ) (#93 Thx @hattya)
+* 【蟲繕】lua関数set で `_` を含む変数を展開していなかった (#92)
+* 【蟲繕】スペルミスを修正
+    - README の「charactor を character」へ (Thx @orthographic-pedant)
+* `nyagos.command_not_found` は非推奨とした
+    - ドキュメントから削除
+    - catalog.d/ezoe.lua を削除
+* クラッシュ回避のため(#98)
+    - nyagos.prompt をバックグラウンドで実行させるのを禁止
+    - パイプラインの2番目以降か、バックグラウンドでの Lua の使用禁止
+
 NYAGOS 4.0.9\_10
 ================
 * Go 1.5.1 でビルド
