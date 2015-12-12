@@ -1,5 +1,5 @@
-Since 4.1-alpha
-===============
+Since 4.1
+=========
 
 NYAGOS 4.0 has the problem that a panic sometimes occurs because 
 multi-goroutines call only one Lua-instance.
