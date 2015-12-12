@@ -77,18 +77,6 @@ Execute SCRIPTCODE with Lua interpretor and quit.
 
 These commands have their alias. For example, `ls` => `__ls__`.
 
-### `alias ALIAS=DEFINE`
-
-Define the alias. Macros in DEFINE:
-
-* `$n` which is replaced the n'th parameter
-* `$*` which is replaced to all parameters
-
-When DEFINE is empty, the alias is removed.
-Not found the mark =, display the define of the alias.
-
-No arguments, list up the all aliases.
-
 ### `cd DRIVE:DIRECTORY`
 
 Change the current working drive and directory.
@@ -132,7 +120,7 @@ Print the current woking drive and directory.
 Set the environment variable the value. When the value has any spaces,
 you should `set "ENV=VAR"`.
 
-* `PROMPT` ... Escape sequences are avaliable.
+* `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
 
 ### `which [-a] COMMAND-NAME`
 
@@ -153,11 +141,6 @@ Report which file is executed.
 ### `dirs`
 
 These built-in commands are always asking with prompt when files are override or removed.
-
-
-#### Special Variable
-
-* `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
 
 ### `source BATCHFILENAME`
 
@@ -200,7 +183,6 @@ These suffix are available.
 
 ## Lua extension
 
-### `nyagos.setalias("NAME","REPLACED-STRING")`
 ### `nyagos.alias.NAME = "REPLACED-STRING"`
 
 It defines an alias. These macros are available on "REPLACE-STRING".
@@ -208,7 +190,6 @@ It defines an alias. These macros are available on "REPLACE-STRING".
 * `$1`,`$2`,`$3` ... the number's argument.
 * `$\*` ... all arguments
 
-### `nyagos.setalias("NAME",function(ARGS)...end)`
 ### `nyagos.alias.NAME = function(ARGS)...end`
 
 It assigns the function to the command-name `"NAME"`.
@@ -221,8 +202,6 @@ the number(integer) for %ERRORLEVEL% and error-message.
 When the return-value is a string(or string-table), nyagos.exe
 executes the string(-table) as a new commandline.
 
-### `VALUE = nyagos.getalias("NAME")`
-### `VALUE = nyagos.alias["NAME"]`
 ### `VALUE = nyagos.alias.NAME`
 
 It returns the function definition assigned NAME.
@@ -234,7 +213,6 @@ It returns the function definition assigned NAME.
 It returns the value of the environment variable named NAME.
 
 ### `nyagos.setenv("NAME","VALUE")`
-### `nyagos.env["NAME"] = VALUE`
 ### `nyagos.env.NAME = VALUE`
 
 It changes the environment variable.
@@ -430,7 +408,7 @@ On the New BSD-licenses, you can use NYAGOS.
 
 To build nyagos.exe , these softwares are required:
 
-* [go 1.5 for windows](http://golang.org)
+* [go 1.5.2 for windows](http://golang.org)
 * [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
