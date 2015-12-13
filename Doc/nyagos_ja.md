@@ -1,150 +1,150 @@
 # NYAGOS - Nihongo Yet Another GOing Shell
 
-NYAGOS �́Ago����ɂ�� Windows �p�R�}���h���C���V�F���ł��B
-Nihongo �Ƃ���܂����AUnicode �x�[�X�Ȃ̂ŁA���ɓ���̎��R�����
-�������Ă���킯�ł͂���܂���B
+NYAGOS は、go言語による Windows 用コマンドラインシェルです。
+Nihongo とありますが、Unicode ベースなので、特に特定の自然言語に
+特化しているわけではありません。
 
-NYAGOS �́AWindows �̕����𑸏d���AUNIX �Ɋ��ꂽ�l���A
-Windows �ł��܂�X�g���X�������Ȃ��悤�Ȋ����\�z���邽�߂�
-�J������Ă���V�F���ł��Bbash �ȂǓ���̃V�F���̌݊���ڎw��
-���̂ł͂���܂���B
+NYAGOS は、Windows の文化を尊重しつつ、UNIX に慣れた人が、
+Windows であまりストレスを感じないような環境を構築するために
+開発されているシェルです。bash など特定のシェルの互換を目指す
+ものではありません。
 
-����
+特徴
 
-* ���݂̃R�[�h�y�[�W�Ɋւ�炸�AJIS�ɖ��o�^�� Unicode �������܂��B
-   * �N���b�v�{�[�h�ɂ��� Unicode �����̃y�[�X�g�E�ҏW�\
-   * ���ړ��͂ł����Ƃ� %U+XXXX% �Ƃ������e�����ŕϊ��\
-   * �v�����v�g�ɂ� $Uxxxx �Ƃ����}�N�����g�p�\
-* ���@�\���� ls
-   * �J���[�\��(-o �I�v�V����)
-   * �W�����N�V��������ʉ\(-F �I�v�V�����Łu@�v���t�@�C���������ɂ�)
-* UNIX���C�N�ȃV�F���@�\
-   * �q�X�g���@�\(Ctrl-P �� ! �����ɂ��u��)
-   * �G�C���A�X
-   * �t�@�C�����E�R�}���h���⊮
-   * �������͂ނ̂ɃV���O���N�H�[�e�[�V���������p�\
-* Lua������g�����J�X�^�}�C�Y�@�\
-   * Lua �œ����R�}���h���쐬�\
-   * ���͕������ Lua �ŉ��H�ł���
-   * �R�[�h�y�[�W�������UTF8�ϊ��֐���Aeval�֐��Ȃǂ̎x���֐����p��
+* 現在のコードページに関わらず、JISに未登録の Unicode も扱えます。
+   * クリップボードにある Unicode 文字のペースト・編集可能
+   * 直接入力できずとも %U+XXXX% というリテラルで変換可能
+   * プロンプトにも $Uxxxx というマクロが使用可能
+* 高機能内蔵 ls
+   * カラー表示(-o オプション)
+   * ジャンクションを区別可能(-F オプションで「@」がファイル名末尾につく)
+* UNIXライクなシェル機能
+   * ヒストリ機能(Ctrl-P や ! 文字による置換)
+   * エイリアス
+   * ファイル名・コマンド名補完
+   * 引数を囲むのにシングルクォーテーションが利用可能
+* Lua言語を使ったカスタマイズ機能
+   * Lua で内蔵コマンドを作成可能
+   * 入力文字列を Lua で加工できる
+   * コードページ文字列⇔UTF8変換関数や、eval関数などの支援関数も用意
 
-## �C���X�g�[��
+## インストール
 
-�t�@�C��:`nyagos.exe`,`nyagos.lua`,`lua53.dll`�A�f�B���N�g��`nyagos.d`��
-`%PATH%` �̍����f�B���N�g���ɒu���Ă��������B
-(����̃f�B���N�g���ɒu���Ă�������)
+ファイル:`nyagos.exe`,`nyagos.lua`,`lua53.dll`、ディレクトリ`nyagos.d`を
+`%PATH%` の差すディレクトリに置いてください。
+(同一のディレクトリに置いてください)
 
-�J�X�^�}�C�Y�p�t�@�C�� `.nyagos` �́A`%USERPROFILE%` �� `%HOME%`
-�̍����f�B���N�g���ɒu���āA�K�v�ɉ����ďC�����Ă��������B
+カスタマイズ用ファイル `.nyagos` は、`%USERPROFILE%` か `%HOME%`
+の差すディレクトリに置いて、必要に応じて修正してください。
 
-## �N���I�v�V����
+## 起動オプション
 
 ### `-h`
 
-�I�v�V�����̃w���v��\�����܂��B
+オプションのヘルプを表示します。
 
-### `-c "�R�}���h"`
+### `-c "コマンド"`
 
-�R�}���h�����s���āA�������ɏI�����܂��B
+コマンドを実行して、ただちに終了します。
 
-### `-k "�R�}���h"`
+### `-k "コマンド"`
 
-�R�}���h�����s���Ă���A�ʏ�N�����܂��B
+コマンドを実行してから、通常起動します。
 
-### `-f �X�N���v�g�t�@�C���� ����1 �c`
+### `-f スクリプトファイル名 引数1 …`
 
-Lua�C���^�v���^�ŃX�N���v�g�t�@�C�������s��A�I�����܂��B
-�����͔z�� arg[] �Ƃ����`�ŎQ�Ƃł��܂��B
+Luaインタプリタでスクリプトファイルを実行後、終了します。
+引数は配列 arg[] という形で参照できます。
 
-### `-e "�X�N���v�g�R�[�h"`
+### `-e "スクリプトコード"`
 
-Lua�C���^�v���^�ŃX�N���v�g�R�[�h�����s��A�I�����܂��B
+Luaインタプリタでスクリプトコードを実行後、終了します。
 
-## �ҏW�@�\
+## 編集機能
 
-UNIX�n�V�F���ɋ߂��L�[�o�C���h�ŁA�R�}���h���C����ҏW�\�ł��B
+UNIX系シェルに近いキーバインドで、コマンドラインを編集可能です。
 
-* BackSpace , Ctrl-H : �J�[�\�����̈ꕶ�����폜
-* Enter , Ctrl-M     : ���͏I��
-* Del                : �J�[�\����̈ꕶ�����폜
-* Home , Ctrl-A      : �J�[�\����擪�ֈړ�
-* �� , Ctrl-B        : �J�[�\�����ꕶ�����ֈړ�
-* Ctrl-D             : 0�����̎��� NYAGOS ���I���A�����Ȃ���� Del �Ɠ���
-* End , Ctrl-E       : �J�[�\���𖖔��ֈړ�
-* �� , Ctrl-F        : �J�[�\�����ꕶ���E�ֈړ�
-* Ctrl-K             : �J�[�\���ȍ~�̕�����S�č폜���A�N���b�v�{�[�h�փR�s�[
-* Ctrl-L             : ��ʂ��N���A���āA���͂������e���ĕ\��
-* Ctrl-U             : �J�[�\���܂ł̕�����S�č폜���A�N���b�v�{�[�h�փR�s�[
-* Ctrl-Y             : �N���b�v�{�[�h�̓��e��\��t����
-* Esc , Ctrl-[       : ���͓��e��S�č폜����
-* �� , Ctrl-P        : �q�X�g���F��O�̓��͓��e��W�J����
-* �� , Ctrl-N        : �q�X�g���F���̓��͓��e��W�J����
-* TAB , Ctrl-I       : �t�@�C�����E�R�}���h���⊮
-* Ctrl-C             : ���͓��e��j��
-* Ctrl-R             : �C���N�������^���T�[�`
-* Ctrl-W             : �J�[�\����̒P����폜����
+* BackSpace , Ctrl-H : カーソル左の一文字を削除
+* Enter , Ctrl-M     : 入力終結
+* Del                : カーソル上の一文字を削除
+* Home , Ctrl-A      : カーソルを先頭へ移動
+* ← , Ctrl-B        : カーソルを一文字左へ移動
+* Ctrl-D             : 0文字の時は NYAGOS を終了、さもなければ Del と同じ
+* End , Ctrl-E       : カーソルを末尾へ移動
+* → , Ctrl-F        : カーソルを一文字右へ移動
+* Ctrl-K             : カーソル以降の文字を全て削除し、クリップボードへコピー
+* Ctrl-L             : 画面をクリアして、入力した内容を再表示
+* Ctrl-U             : カーソルまでの文字を全て削除し、クリップボードへコピー
+* Ctrl-Y             : クリップボードの内容を貼り付ける
+* Esc , Ctrl-[       : 入力内容を全て削除する
+* ↑ , Ctrl-P        : ヒストリ：一つ前の入力内容を展開する
+* ↓ , Ctrl-N        : ヒストリ：一つ後の入力内容を展開する
+* TAB , Ctrl-I       : ファイル名・コマンド名補完
+* Ctrl-C             : 入力内容を破棄
+* Ctrl-R             : インクリメンタルサーチ
+* Ctrl-W             : カーソル上の単語を削除する
 
-## �����R�}���h
+## 内蔵コマンド
 
-�����̃R�}���h�̓R�}���h���Ƃ͕ʂɃG�C���A�X�������Ă��܂��B
-���Ƃ��� `ls` �� `__ls__` �Ƃ����G�C���A�X�������Ă��܂��B
+これらのコマンドはコマンド名とは別にエイリアスを持っています。
+たとえば `ls` は `__ls__` というエイリアスを持っています。
 
-### `cd �h���C�u:�f�B���N�g��`
+### `cd ドライブ:ディレクトリ`
 
-���݂̃J�����g�h���C�u�A�f�B���N�g����ύX���܂��B
-�������ȗ�����ƁACMD.EXE �ƈႢ�A���ϐ� HOME �A���邢�� 
-USERPROFILE �̍�����̃f�B���N�g���ֈړ����܂��B
-CMD.EXE �ƈႢ�A�h���C�u�������ɕύX���܂��B
+現在のカレントドライブ、ディレクトリを変更します。
+引数を省略すると、CMD.EXE と違い、環境変数 HOME 、あるいは 
+USERPROFILE の差す先のディレクトリへ移動します。
+CMD.EXE と違い、ドライブも同時に変更します。
 
-* `cd -` : ��O�ɂ����f�B���N�g���ֈړ����܂�
-* `cd -N` : N ��O�̃f�B���N�g���ֈړ����܂�
-* `cd -h` , `cd ?` : �ߋ������f�B���N�g����\�����܂�
+* `cd -` : 一つ前にいたディレクトリへ移動します
+* `cd -N` : N 回前のディレクトリへ移動します
+* `cd -h` , `cd ?` : 過去いたディレクトリを表示します
 
 ### `exit`
 
-NYAGOS ���I�����܂��B
+NYAGOS を終了します。
 
-### `history [����]`
+### `history [件数]`
 
-�q�X�g�����e��\�����܂��B�������ȗ�����ƁA�ŋ߂�10�����\������܂��B
+ヒストリ内容を表示します。件数を省略すると、最近の10件が表示されます。
 
-### `ls [-�I�v�V����] �c`
+### `ls [-オプション] …`
 
-�f�B���N�g���̈ꗗ��\�����܂��B
-�T�|�[�g���Ă���I�v�V�����͈ȉ��̒ʂ�ł��B
+ディレクトリの一覧を表示します。
+サポートしているオプションは以下の通りです。
 
-* `-l` �����O�t�H�[�}�b�g�ňꗗ��\�����܂��B
-* `-F` �f�B���N�g�����̖����� /  ���A���s�t�@�C�����̖����� * ��\�����܂��B
-* `-o` �J���[�����܂�
-* `-a` �B���t�@�C����u.�v�Ŏn�܂�t�@�C�������܂߁A�S�ĕ\�����܂��B
-* `-R` �T�u�f�B���N�g���ȉ����\�����܂��B
-* `-1` �t�@�C����������\�����܂��B
-* `-t` �ŏI�ύX�����Ń\�[�g���܂��B
-* `-r` �\�[�g�����t�]���܂��B
-* `-h` -l �g�p���ɁA�l�Ԃ��ǂ݂₷���`���ŃT�C�Y��\�L���܂� (��:1K 234M 2G)
-* `-S` �t�@�C���T�C�Y�Ń\�[�g���܂��B
+* `-l` ロングフォーマットで一覧を表示します。
+* `-F` ディレクトリ名の末尾に /  を、実行ファイル名の末尾に * を表示します。
+* `-o` カラー化します
+* `-a` 隠しファイルや「.」で始まるファイル名を含め、全て表示します。
+* `-R` サブディレクトリ以下も表示します。
+* `-1` ファイル名だけを表示します。
+* `-t` 最終変更日時でソートします。
+* `-r` ソート順を逆転します。
+* `-h` -l 使用時に、人間が読みやすい形式でサイズを表記します (例:1K 234M 2G)
+* `-S` ファイルサイズでソートします。
 
 ### `pwd`
 
-���݂̃J�����g�h���C�u + �f�B���N�g����\�����܂��B
+現在のカレントドライブ + ディレクトリを表示します。
 
-* `pwd -N` : N �� cd �ňړ�����O�̃f�B���N�g����\�����܂��B
+* `pwd -N` : N 回 cd で移動する前のディレクトリを表示します。
 
-### `set �ϐ���=�l`
+### `set 変数名=値`
 
-���ϐ��ɒl��ݒ肵�܂��B�l�ɋ󔒓����܂ޏꍇ�ACMD.EXE �Ɠ��l��
-�u`set "�ϐ���=�l"`�v�Ƃ��܂��B= �ȍ~���ȗ�����ƁA���݂̕ϐ��̓��e��
-�\�����܂��B
+環境変数に値を設定します。値に空白等を含む場合、CMD.EXE と同様に
+「`set "変数名=値"`」とします。= 以降を省略すると、現在の変数の内容を
+表示します。
 
-�ȉ��̕ϐ��͓��ʂȈӖ��������܂��B
+以下の変数は特別な意味を持ちます。
 
-* `PROMPT` �c �v�����v�g�̕������ݒ肵�܂��B`$P` ���̃}�N��������CMD.EXE �Ɠ����ł��Bshiena �l�J���̃��W���[���ɂ��G�X�P�[�v�V�[�P���X���g���܂��B
+* `PROMPT` … プロンプトの文字列を設定します。`$P` 等のマクロ文字はCMD.EXE と同じです。shiena 様開発のモジュールによりエスケープシーケンスが使えます。
 
 ### `which [-a] COMMAND-NAME`
 
-�R�}���h���ɑ΂��āA�ǂ̃t�@�C�������s����邩�\�����܂�
+コマンド名に対して、どのファイルが実行されるか表示します
 
-* `-a` - %PATH% ��̑S�Ă̎��s�t�@�C����\�����܂��B
+* `-a` - %PATH% 上の全ての実行ファイルを表示します。
 
 ### `copy SOURCE-FILENAME DESTINATE-FILENAME`
 ### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
@@ -158,148 +158,148 @@ NYAGOS ���I�����܂��B
 ### `popd`
 ### `dirs`
 
-�����̓����ł́A�㏑����폜�̍ۂɏ�Ƀv�����v�g�Ŏ��s�ۂ�₢���킹�܂��B
+これらの内蔵版は、上書きや削除の際に常にプロンプトで実行可否を問い合わせます。
 
-### `source �o�b�`�t�@�C����`
+### `source バッチファイル名`
 
-�o�b�`�t�@�C���� CMD.EXE �Ŏ��s���āACMD.EXE ���ύX�������ϐ���
-�J�����g�f�B���N�g���� NYAGOS.EXE �Ɏ�荞�݂܂��B
+バッチファイルを CMD.EXE で実行して、CMD.EXE が変更した環境変数と
+カレントディレクトリを NYAGOS.EXE に取り込みます。
 
-�R�}���h���Ƃ��āu`source`�v�̑���Ɂu`.`�v(�h�b�g)�ꕶ�����g��
-���Ƃ��ł��܂��B
+コマンド名として「`source`」の代わりに「`.`」(ドット)一文字も使う
+ことができます。
 
-## �N������
+## 起動処理
 
-1. �N������ nyagos.exe �Ɠ����t�H���_�� nyagos.lua ��ǂݍ��݂܂��Bnyagos.lua ��Lua �ŋL�q����Ă���A��������X�Ƀz�[���f�B���N�g��(%HOME% or %USERPROFILE%)�� .nyagos �� Lua �R�[�h��ǂݍ��݂܂�(nyagos�g���͌�q)�B���[�U�J�X�^�}�C�Y�́A���� .nyagos ��ҏW���čs�����Ƃ��ł��܂��B
-2. �ߋ��̃q�X�g�����e�� `%APPDATA%\NYAOS_ORG\nyagos.history` ����ǂݏo���܂��BNYAGOS �I�����ɂ́A���̃t�@�C���ɍĂэŌ�̃q�X�g�����e�������o����܂��B
+1. 起動時に nyagos.exe と同じフォルダの nyagos.lua を読み込みます。nyagos.lua はLua で記述されており、ここから更にホームディレクトリ(%HOME% or %USERPROFILE%)の .nyagos の Lua コードを読み込みます(nyagos拡張は後述)。ユーザカスタマイズは、この .nyagos を編集して行うことができます。
+2. 過去のヒストリ内容を `%APPDATA%\NYAOS_ORG\nyagos.history` から読み出します。NYAGOS 終了時には、このファイルに再び最後のヒストリ内容が書き出されます。
 
-## �R�}���h���C���u��
+## コマンドライン置換
 
-### �q�X�g���u��
+### ヒストリ置換
 
-* `!!`  ��O�̓��͕������
-* `!n`  �ŏ����� n �Ԗڂɓ��͕������
-* `!-n` n �O�ɓ��͂����������
-* `!STR` STR �Ŏn�܂���͕������
-* `!?STR?` STR ���܂ޓ��͕������
+* `!!`  一つ前の入力文字列へ
+* `!n`  最初から n 番目に入力文字列へ
+* `!-n` n 個前に入力した文字列へ
+* `!STR` STR で始まる入力文字列へ
+* `!?STR?` STR を含む入力文字列へ
 
-�ȉ��̂悤�Ȍ�������邱�Ƃ��ł��܂��B
+以下のような語尾をつけることができます。
 
-* `:0` �R�}���h�������p����B
-* `:m` m �Ԗڂ̈������������p����B
-* `^`  �ŏ��̈��������𔲂��o���B
-* `$`  �Ō�̈��������𔲂��o���B
-* `*`  �S�Ă̈��������p����B
+* `:0` コマンド名を引用する。
+* `:m` m 番目の引数だけを引用する。
+* `^`  最初の引数だけを抜き出す。
+* `$`  最後の引数だけを抜き出す。
+* `*`  全ての引数を引用する。
 
-### ���ϐ��u��
+### 環境変数置換
 
-* �R�}���h������擪�� `~` �� `%HOME%` ���邢�� `%USERPROFILE%` �ɒu�����܂��B
+* コマンドや引数先頭の `~` を `%HOME%` あるいは `%USERPROFILE%` に置換します。
 
-### Unicode ���e����
+### Unicode リテラル
 
-* `%u+XXXX%` (XXXX:16�i��) �� Unicode �����ɒu�����܂��B
+* `%u+XXXX%` (XXXX:16進数) を Unicode 文字に置換します。
 
-## Lua�g��
+## Lua拡張
 
-nyagos �ł́AEXE �̖{�̂̋@�\�̓R���p�N�g�Ƃ��A�֗��@�\�� 
-�Ȃ�ׂ� Lua �ŋ@�\���g���ł���悤�݌v��i�߂Ă��܂��B
-���݂͈ȉ��̂悤�Ȋ֐����g�p�ł��܂��B
+nyagos では、EXE の本体の機能はコンパクトとし、便利機能は 
+なるべく Lua で機能を拡張できるよう設計を進めています。
+現在は以下のような関数が使用できます。
 
-### `nyagos.alias.�G�C���A�X�� = "�u���R�[�h"`
+### `nyagos.alias.エイリアス名 = "置換コード"`
 
-�G�C���A�X��ݒ肵�܂��Bnyagos.lua ���ŁA������ȗ�����
+エイリアスを設定します。nyagos.lua 内で、これを簡略した
 
-* `alias "�G�C���A�X��=�u���R�[�h"`
-* `alias{ �G�C���A�X��="�u���R�[�h" , �G�C���A�X��="�u���R�[�h" �c }`
+* `alias "エイリアス名=置換コード"`
+* `alias{ エイリアス名="置換コード" , エイリアス名="置換コード" … }`
 
-����`����Ă��܂�(Lua �͈�������̏ꍇ�͊��ʂ��ȗ��ł��܂�)�B
-�u���R�[�h�ł́ualias�v�R�}���h�Ɠ��l�A`$1` �� `$*` �Ȃǂ̃}�N����
-�g�p�\�ł��B
+が定義されています(Lua は引数が一つの場合は括弧を省略できます)。
+置換コードでは「alias」コマンドと同様、`$1` や `$*` などのマクロが
+使用可能です。
 
-### `nyagos.alias.�G�C���A�X�� = function(args)�`end`
+### `nyagos.alias.エイリアス名 = function(args)～end`
 
-Lua �֐����G�C���A�X�R�}���h�Ƃ��ČĂяo����悤�ɂ��܂��B
-args �ɂ͑S�������i�[�����e�[�u��������܂��B
+Lua 関数をエイリアスコマンドとして呼び出せるようにします。
+args には全引数を格納したテーブルが入ります。
 
-�G���[�����������A�֐��� %ERRORLEVEL% �Ɋi�[���ׂ��u�����l�v��
-�G���[���b�Z�[�W�̓�l��Ԃ��Ȃ��Ă͂����܂���B
-(return �Ȃ��̏ꍇ�́ureturn 0,nil�v�Ɠ����ł�)
+エラーがあった時、関数は %ERRORLEVEL% に格納すべき「整数値」と
+エラーメッセージの二値を返さなくてはいけません。
+(return なしの場合は「return 0,nil」と同じです)
 
-�߂�l���������A������e�[�u���̏ꍇ�A���̕�����(�e�[�u��)��
-�V�R�}���h���C���Ƃ��Ď��s����܂��B
+戻り値が文字列や、文字列テーブルの場合、その文字列(テーブル)が
+新コマンドラインとして実行されます。
 
-### `VALUE = nyagos.alias.�G�C���A�X��`
+### `VALUE = nyagos.alias.エイリアス名`
 
-���� "�G�C���A�X��" �ɐݒ肳��Ă��镶����������� Lua �֐����Ԃ��܂��B
+現在 "エイリアス名" に設定されている文字列もしくは Lua 関数が返します。
 
 ### `VALUE = nyagos.env.NAME`
 
-���ϐ� NAME ���Q�Ƃ��܂�
+環境変数 NAME を参照します
 
-### `nyagos.setenv("���ϐ���","�ϐ����e")`
-### `nyagos.env.���ϐ��� = "�ϐ����e"`
+### `nyagos.setenv("環境変数名","変数内容")`
+### `nyagos.env.環境変数名 = "変数内容"`
 
-���ϐ� NAME ��ݒ肵�܂��B
+環境変数 NAME を設定します。
 
-### `errorlevel,errormessage = nyagos.exec("�V�F���R�}���h")`
+### `errorlevel,errormessage = nyagos.exec("シェルコマンド")`
 
-�V�F���R�}���h�����s���܂��B�G���[�������������A
-�߂�l�� %ERRORLEVEL% �Ɋi�[���ׂ������l�ƃG���[���b�Z�[�W������܂��B
-�G���[���������� (0,nil) ���߂�܂��B
+シェルコマンドを実行します。エラーが発生した時、
+戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。
+エラーが無い時は (0,nil) が戻ります。
 
-### `errorlevel,errormessage = nyagos.rawexec("�O���R�}���h��","����1","����2"�c)`
+### `errorlevel,errormessage = nyagos.rawexec("外部コマンド名","引数1","引数2"…)`
 
-�O���R�}���h�����s���܂��B
-�߂�l�� %ERRORLEVEL% �Ɋi�[���ׂ������l�ƃG���[���b�Z�[�W������܂��B
-�G���[���������� (0,nil) ���߂�܂��B
-(os.execute �Ƃ̈Ⴂ�͈����� UTF8 �Ɖ��߂����_�ł�)
+外部コマンドを実行します。
+戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。
+エラーが無い時は (0,nil) が戻ります。
+(os.execute との違いは引数が UTF8 と解釈される点です)
 
-### `nyagos.eval("�V�F���R�}���h")`
+### `nyagos.eval("シェルコマンド")`
 
-nyagos.exec �Ɠ����ł����A�W���o�͂���荞��ŁA�߂�l�Ƃ��ĕԂ��܂��B
-���s�Ɏ��s�����ꍇ�Ȃǂ� nil ���߂�܂��B
+nyagos.exec と同じですが、標準出力を取り込んで、戻り値として返します。
+実行に失敗した場合などは nil が戻ります。
 
-### `OUTPUT,ERR = nyagos.raweval("�O���R�}���h��","����1","����2"�c)`
+### `OUTPUT,ERR = nyagos.raweval("外部コマンド名","引数1","引数2"…)`
 
-�O���R�}���h�����s���āA�W���o�͂̓��e��߂�l�Ƃ��ĕԂ��܂��B
-���s�Ɏ��s�����ꍇ�� nil �ƃG���[���߂�܂��B
+外部コマンドを実行して、標準出力の内容を戻り値として返します。
+実行に失敗した場合は nil とエラーが戻ります。
 
-### `nyagos.write(�e�L�X�g)`
+### `nyagos.write(テキスト)`
 
-�e�L�X�g��W���o�͂ɏo�͂��܂����A���_�C���N�g����Ă���ꍇ��
-�����R�[�h��UTF8 �ɂȂ�܂��B���� Lua �� print �� 
-nyagos.write(�e�L�X�g..'\n') �ɍ����ւ����Ă��܂��B
+テキストを標準出力に出力しますが、リダイレクトされている場合は
+文字コードはUTF8 になります。内蔵 Lua の print は 
+nyagos.write(テキスト..'\n') に差し替えられています。
 
-### `nyagos.writerr(�e�L�X�g)`
+### `nyagos.writerr(テキスト)`
 
-�e�L�X�g��W���G���[�o�͂ɏo�͂��܂����A���_�C���N�g����Ă���ꍇ��
-�����R�[�h��UTF8 �ɂȂ�܂��B
+テキストを標準エラー出力に出力しますが、リダイレクトされている場合は
+文字コードはUTF8 になります。
 
 ### `nyagos.getwd()`
 
-���݂̃J�����g�f�B���N�g����Ԃ��܂��B
+現在のカレントディレクトリを返します。
 
-### `nyagos.utoa(UTF8������)`
+### `nyagos.utoa(UTF8文字列)`
 
-UTF8��������A���݂̃R�[�h�y�[�W�̕�����ɕϊ����܂��B
+UTF8文字列を、現在のコードページの文字列に変換します。
 
-### `nyagos.atou(ANSI������)`
+### `nyagos.atou(ANSI文字列)`
 
-���݂̃R�[�h�y�[�W�̕�������AUTF8 �֕ϊ����܂��B
+現在のコードページの文字列を、UTF8 へ変換します。
 
-### `nyagos.glob(���C���h�J�[�h������1,���C���h�J�[�h������2,...)`
+### `nyagos.glob(ワイルドカード文字列1,ワイルドカード文字列2,...)`
 
-���C���h�J�[�h��W�J���A�������i�[�����e�[�u����Ԃ��܂��B
+ワイルドカードを展開し、それらを格納したテーブルを返します。
 
-### `path = nyagos.pathjoin('�p�X1','�p�X2'...)`
+### `path = nyagos.pathjoin('パス1','パス2'...)`
 
-�p�X�̗v�f��A�����āA��̃p�X�ɂ��܂��B
+パスの要素を連結して、一つのパスにします。
 
-### `nyagos.bindkey("�L�[��","�@�\��")`
+### `nyagos.bindkey("キー名","機能名")`
 
-��s���͂̃L�[�ɋ@�\�����蓖�Ă܂��B
+一行入力のキーに機能を割り当てます。
 
-�L�[���Ƃ��Ĉȉ����g���܂��B
+キー名として以下が使えます。
 
         "C_A" "C_B" ... "C_Z" "M_A" "M_B" ... "M_Z"
         "F1" "F2" ... "F24"
@@ -307,7 +307,7 @@ UTF8��������A���݂̃R�[�h�y�[�W�̕�����ɕϊ����܂��B
         "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP",
         "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
 
-�@�\���Ƃ��Ĉȉ����g���܂��B
+機能名として以下が使えます。
 
         "BACKWARD_DELETE_CHAR" "BACKWARD_CHAR" "CLEAR_SCREEN" "DELETE_CHAR"
         "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
@@ -315,62 +315,62 @@ UTF8��������A���݂̃R�[�h�y�[�W�̕�����ɕϊ����܂��B
         "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
         "ISEARCH_BACKWARD"
 
-��������� true ���A���s����� nil �ƃG���[���b�Z�[�W��Ԃ��܂��B
-�啶���E�������͋�ʂ����A\_ �̂����� - ���g�����Ƃ��ł��܂��B
+成功すると true を、失敗すると nil とエラーメッセージを返します。
+大文字・小文字は区別せず、\_ のかわりに - を使うことができます。
 
-### `nyagos.bindkey("�L�[��",function(this) ... end)`
+### `nyagos.bindkey("キー名",function(this) ... end)`
 
-�L�[���������ꂽ���A�֐����Ăяo���܂��B���� this �͎��̂悤��
-�����o�[���������e�[�u���ł��B
+キーが押下された時、関数を呼び出します。引数 this は次のような
+メンバーを持ったテーブルです。
 
-* `this.pos` �c �o�C�g���Ő������J�[�\���ʒu(�擪�� 1 �ɂȂ�܂�)
-* `this.text` �c utf8 �ŕ\�����ꂽ���݂̓��̓e�L�X�g
-* `this:call("FUNCNAME")` ... `this.call("BACKWARD_DELETE_CHAR")` �̂悤�ɋ@�\���Ăяo��
-* `this:insert("TEXT")` ... TEXT ���J�[�\���ʒu�ɑ}�����܂�
-* `this:firstword()` ... �R�}���h���C���̐擪�̒P��(�R�}���h��)��Ԃ��܂�
-* `this:lastword()` ... �R�}���h���C���̍Ō�̒P��Ƃ��̈ʒu��Ԃ��܂�
-* `this:boxprint({...})` ... �e�[�u���̗v�f��⊮��⃊�X�g���ɕ\�����܂�
+* `this.pos` … バイト数で数えたカーソル位置(先頭は 1 になります)
+* `this.text` … utf8 で表現された現在の入力テキスト
+* `this:call("FUNCNAME")` ... `this.call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
+* `this:insert("TEXT")` ... TEXT をカーソル位置に挿入します
+* `this:firstword()` ... コマンドラインの先頭の単語(コマンド名)を返します
+* `this:lastword()` ... コマンドラインの最後の単語とその位置を返します
+* `this:boxprint({...})` ... テーブルの要素を補完候補リスト風に表示します
 
-�܂��A�߂�l�͎��̂悤�Ɏg���܂��B
+また、戻り値は次のように使われます。
 
-* ������̎�: �J�[�\���ʒu�ɑ}������܂��B
-* true �̎�: Enter ���������ꂽ�̂Ɠ��l�ɓ��͂��I�����܂�
-* false �̎�: Ctrl-C ���������ꂽ�̂Ɠ��l�ɓ��e��j�����ē��͂��I�����܂��B
-* nil �̎�: ��������܂��B
+* 文字列の時: カーソル位置に挿入されます。
+* true の時: Enter が押下されたのと同様に入力を終結します
+* false の時: Ctrl-C が押下されたのと同様に内容を破棄して入力を終結します。
+* nil の時: 無視されます。
 
 ### `nyagos.filter`
 
-�ʏ탆�[�U���Ăяo�����Ƃ͂���܂���B
-���֐����`����ƁA���[�U�����͂����R�}���h���C���̓��e�������Ƃ���
-NYAGOS.EXE ����Ăяo����܂��B��������H���Ė߂�l�Ƃ���ƁA
-NYAGOS.EXE �̓R�}���h���C�����A���̕�����ƒu�������܂��B
+通常ユーザが呼び出すことはありません。
+当関数を定義すると、ユーザが入力したコマンドラインの内容を引数として
+NYAGOS.EXE から呼び出されます。これを加工して戻り値とすると、
+NYAGOS.EXE はコマンドラインを、その文字列と置き換えます。
 
-�W���� nyagos.lua �ł� nyagos.filter �ɂ́A�t�N�H�[�g�@�\����������֐���
-��`����Ă��܂��B�������e�Ƃ��Ă� nyagos.eval �ŃR�}���h�̏o�͂���荞�݁A
-nyagos.atou �� UTF8 �ɕϊ����āANYAGOS.EXE �ɕԂ��Ă��܂��B
+標準の nyagos.lua では nyagos.filter には、逆クォート機能を実現する関数が
+定義されています。処理内容としては nyagos.eval でコマンドの出力を取り込み、
+nyagos.atou で UTF8 に変換して、NYAGOS.EXE に返しています。
 
 ### `nyagos.argsfilter`
 
-nyagos.argsfilter �� nyagos.filter �Ǝ��Ă��܂����A�R�}���h���C��
-�������͂�����́A�����z��(args)�����H�ł���_���Ⴂ�܂��B
+nyagos.argsfilter は nyagos.filter と似ていますが、コマンドライン
+を字句解析した後の、引数配列(args)を加工できる点が違います。
 
-�W���� nyagos.lua �ł� nyagos.argsfilter ���g���āA
-suffix �Ƃ����R�}���h���쐬���Ă��܂��B
+標準の nyagos.lua では nyagos.argsfilter を使って、
+suffix というコマンドを作成しています。
 
-    �R�}���h
-        suffix �g���q �C���^�v���^�� ����1 ����2 �c
-    Lua:�֐�
-        suffix("�g���q",{"�C���^�v���^��","����1"�c})
+    コマンド
+        suffix 拡張子 インタプリタ名 引数1 引数2 …
+    Lua:関数
+        suffix("拡張子",{"インタプリタ名","引数1"…})
 
-����̓R�}���h�ɓ���̊g���q���������ɁA�C���^�v���^����
-�擪�ɑ}��������̂ł��B
+これはコマンドに特定の拡張子がついた時に、インタプリタ名を
+先頭に挿入するものです。
 
 ### `length = nyagos.prompt(template)`
 
-�ʏ탆�[�U�����ڌĂяo�����Ƃ͂���܂���B
-�����̃v�����v�g�̃e���v���[�g(=%PROMPT%)��W�J���āA�v�����v�g�������
-�������ĕ\���A�����̌�����߂�l��Ԃ��֐����i�[����Ă��܂��B
-���[�U�͂��������肵�ēƎ��̃v�����v�g�\�����������邱�Ƃ��ł��܂��B
+通常ユーザが直接呼び出すことはありません。
+引数のプロンプトのテンプレート(=%PROMPT%)を展開して、プロンプト文字列を
+生成して表示、文字の桁数を戻り値を返す関数が格納されています。
+ユーザはこれを横取りして独自のプロンプト表示を改造することができます。
 
     local prompt_ = nyagos.prompt
     nyagos.prompt = function(template)
@@ -380,47 +380,47 @@ suffix �Ƃ����R�}���h���쐬���Ă��܂��B
 
 ### `nyagos.gethistory(N)`
 
-N �Ԗڂ̃q�X�g�����e��Ԃ��܂��BN �����̎��͌��݂���(-N)�ߋ���
-�q�X�g����Ԃ��܂��B�����������ꍇ�́A�q�X�g���̑�����Ԃ��܂��B
+N 番目のヒストリ内容を返します。N が負の時は現在から(-N)個過去の
+ヒストリを返します。引数が無い場合は、ヒストリの総数を返します。
 
 ### `nyagos.access(PATH,MODE)`
 
-PATH �Ŏ������t�@�C�����A�N�Z�X�\���ǂ����� boolean �l�ŕԂ��܂��B
-C����� access �֐��Ɠ����ł��B
+PATH で示されるファイルがアクセス可能かどうかを boolean 値で返します。
+C言語の access 関数と同じです。
 
 ### `nyagos.completion_hook(c)`
 
-�⊮�̃t�b�N�ł��B�֐��������Ă��������B
-���� c �͉��L�̂悤�ȗv�f�����e�[�u���ł��B
+補完のフックです。関数を代入してください。
+引数 c は下記のような要素を持つテーブルです。
 
-    c.list[1] .. c.list[#c.list] - �R�}���h���E�t�@�C�����̕⊮���
-    c.word - �⊮���̒P��(��d���p�����܂܂Ȃ�)
-    c.rawword - �⊮���̒P��(��d���p�����܂ޏꍇ������)
-    c.pos - �⊮���̒P��̎n�܂�ʒu(0�N�_)
-    c.text - �R�}���h���C���̑S������
+    c.list[1] .. c.list[#c.list] - コマンド名・ファイル名の補完候補
+    c.word - 補完元の単語(二重引用符を含まない)
+    c.rawword - 補完元の単語(二重引用符を含む場合がある)
+    c.pos - 補完元の単語の始まる位置(0起点)
+    c.text - コマンドラインの全文字列
 
-`nyagos.completion_hook` �͍X�V������⃊�X�g�̃e�[�u���� nil ��
-�߂�l�Ƃ��Ă��������Bnil �́A�X�V���Ȃ� c.list �Ɠ����ł��B
+`nyagos.completion_hook` は更新した候補リストのテーブルか nil を
+戻り値としてください。nil は、更新しない c.list と等価です。
 
 ### `nyagos.on_command_not_found = function(args) ... end`
 
-��`����Ă���ƁA�R�}���h�����t����Ȃ��������ɌĂяo����܂��B
-�R�}���h���ƃp�����[�^�� args[0] �` args[#args] �ɃZ�b�g����܂��B
-�֐��� nil �� false ��Ԃ����ꍇ�� nyagos.exe �͒ʏ�̃G���[��
-�\�����܂��B
+定義されていると、コマンドが見付からなかった時に呼び出されます。
+コマンド名とパラメータが args[0] ～ args[#args] にセットされます。
+関数が nil か false を返した場合は nyagos.exe は通常のエラーを
+表示します。
 
 ### `WIDTH,HEIGHT = nyagos.getviewwidth()`
 
-�^�[�~�i���̉����ƍ�����Ԃ��܂��B
+ターミナルの横幅と高さを返します。
 
 ### `STAT = nyagos.stat(FILENAME)`
 
-�t�@�C���̏���Ԃ��܂��B
-�t�@�C�������݂��鎞�A�e�[�u�� STAT �͉��L�̂悤�ȃ����o�[�������܂��B
+ファイルの情報を返します。
+ファイルが存在する時、テーブル STAT は下記のようなメンバーを持ちます。
 
     STAT.name
-    STAT.isdir (�f�B���N�g���Ȃ� true, �����Ȃ���� false)
-    STAT.size  (�o�C�g��)
+    STAT.isdir (ディレクトリなら true, さもなければ false)
+    STAT.size  (バイト数)
     STAT.mtime.year
     STAT.mtime.month
     STAT.mtime.day
@@ -428,41 +428,43 @@ C����� access �֐��Ɠ����ł��B
     STAT.mtime.minute
     STAT.mtime.second
 
-�t�@�C�����Ȃ����ASTAT �� nil �ł��B
+ファイルがない時、STAT は nil です。
 
 ### `nyagos.getkey()`
 
-���͂��ꂽ�L�[�́AUnicode�A�X�L�����R�[�h�A�V�t�g��Ԃ�Ԃ��܂��B
+入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
 
 ### `nyagos.goversion`
 
-�r���h�Ɏg�p���� Go �̃o�[�W���������񂪊i�[����܂��B
-(��F�ugo1.5�v)
+ビルドに使用した Go のバージョン文字列が格納されます。
+(例：「go1.5」)
 
 ### `nyagos.goarch`
 
-���s�t�@�C�����z�肵�Ă��� CPU �A�[�L�e�N�`�������������񂪊i�[����܂��B
-(��F�u386�v�uamd64�v)
+実行ファイルが想定している CPU アーキテクチャを示す文字列が格納されます。
+(例：「386」「amd64」)
 
 ### `nyagos.exe`
 
-nyagos.exe �̃t���p�X���i�[����Ă��܂��B
+nyagos.exe のフルパスが格納されています。
 
-## ���̑�
+## その他
 
-NYAGOS �� https://github.com/zetamatta/nyagos �ɂČ��J���Ă��܂��B
-�\�[�X�͏C��BSD���C�Z���X�ɂĔz�z�E���ς��\�ł��B
+NYAGOS は https://github.com/zetamatta/nyagos にて公開しています。
+ソースは修正BSDライセンスにて配布・改変が可能です。
 
-NYAGOS �̃r���h�ɂ�
+NYAGOS のビルドには
 
 * [go 1.5.2 windows](http://golang.org)
 * [LuaBinaries 5.3 - Release 1 for Win32 or Win64](http://luabinaries.sourceforge.net/download.html)
 
-���K�v�ƂȂ�܂��B����W���ȊO�ł́A�ȉ��̃��W���[����
-���p�����Ă��������Ă���܂��B
+が必要となります。言語標準以外では、以下のモジュールを
+利用させていただいております。
 
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
 - http://github.com/atotto/clipboard
 
-�ȏ�
+以上
+
+<!-- vim:set fenc=utf8 -->

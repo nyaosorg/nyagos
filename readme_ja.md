@@ -6,84 +6,84 @@ The Nihongo Yet Another GOing Shell
 / [Manual](./Doc/nyagos_ja.md)
 / [History 4.0](./Doc/history_4.0_ja.md)
 
-NYAGOS ‚Í Go ‚Æ Lua ‚Å‹Lq‚³‚ê‚½ Windows —pƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ƒVƒFƒ‹‚Å‚·B
+NYAGOS ã¯ Go ã¨ Lua ã§è¨˜è¿°ã•ã‚ŒãŸ Windows ç”¨ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚·ã‚§ãƒ«ã§ã™ã€‚
 
-* UNIX•—ƒVƒFƒ‹
-  * Emacs•—ƒL[ƒoƒCƒ“ƒh
-  * ƒqƒXƒgƒŠ (Ctrl-P ‚â ! ƒ}[ƒN‚É‚æ‚é)
-  * ƒGƒCƒŠƒAƒX
-  * ƒtƒ@ƒCƒ‹–¼EƒRƒ}ƒ“ƒh–¼•âŠ®
-* UnicodeƒTƒ|[ƒg
-  * Unicode•¶Žš‚ðƒRƒsƒyE•ÒW‰Â”\
-  * UnicodeƒŠƒeƒ‰ƒ‹ %U+XXXX%
-  * ƒvƒƒ“ƒvƒgŒü‚¯ƒ}ƒNƒ $Uxxxx
-* “à‘ ls
-  * ƒJƒ‰[ƒTƒ|[ƒg(-oƒIƒvƒVƒ‡ƒ“)
-  * ƒWƒƒƒ“ƒNƒVƒ‡ƒ“EƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN‚ð @ •\Ž¦(-FƒIƒvƒVƒ‡ƒ“)
-* Lua ‚É‚æ‚éƒJƒXƒ^ƒ}ƒCƒY
-  * Lua ‚Å“à‘ ƒRƒ}ƒ“ƒh‚ð‘gž‚Ý
-  * ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ƒtƒBƒ‹ƒ^[
-  * ƒR[ƒhƒy[ƒW•¶Žš—ñ‚ÆUTF8‚Æ‚ÌƒRƒ“ƒo[ƒgŠÖ”
+* UNIXé¢¨ã‚·ã‚§ãƒ«
+  * Emacsé¢¨ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰
+  * ãƒ’ã‚¹ãƒˆãƒª (Ctrl-P ã‚„ ! ãƒžãƒ¼ã‚¯ã«ã‚ˆã‚‹)
+  * ã‚¨ã‚¤ãƒªã‚¢ã‚¹
+  * ãƒ•ã‚¡ã‚¤ãƒ«åãƒ»ã‚³ãƒžãƒ³ãƒ‰åè£œå®Œ
+* Unicodeã‚µãƒãƒ¼ãƒˆ
+  * Unicodeæ–‡å­—ã‚’ã‚³ãƒ”ãƒšãƒ»ç·¨é›†å¯èƒ½
+  * Unicodeãƒªãƒ†ãƒ©ãƒ« %U+XXXX%
+  * ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆå‘ã‘ãƒžã‚¯ãƒ­ $Uxxxx
+* å†…è”µls
+  * ã‚«ãƒ©ãƒ¼ã‚µãƒãƒ¼ãƒˆ(-oã‚ªãƒ—ã‚·ãƒ§ãƒ³)
+  * ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ãƒ»ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯ã‚’ @ è¡¨ç¤º(-Fã‚ªãƒ—ã‚·ãƒ§ãƒ³)
+* Lua ã«ã‚ˆã‚‹ã‚«ã‚¹ã‚¿ãƒžã‚¤ã‚º
+  * Lua ã§å†…è”µã‚³ãƒžãƒ³ãƒ‰ã‚’çµ„è¾¼ã¿
+  * ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼
+  * ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸æ–‡å­—åˆ—ã¨UTF8ã¨ã®ã‚³ãƒ³ãƒãƒ¼ãƒˆé–¢æ•°
 
-ƒCƒ“ƒXƒg[ƒ‹
+ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
 ------------
 
-ƒoƒCƒiƒŠƒtƒ@ƒCƒ‹‚Í https://github.com/zetamatta/nyagos/releases ‚æ‚èƒ_ƒEƒ“ƒ[ƒh‰Â”\‚Å‚·B
+ãƒã‚¤ãƒŠãƒªãƒ•ã‚¡ã‚¤ãƒ«ã¯ https://github.com/zetamatta/nyagos/releases ã‚ˆã‚Šãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰å¯èƒ½ã§ã™ã€‚
 
     mkdir PATH\TO\INSTALLDIR
     cd PATH\TO\INSTALLDIR
     unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
     makeicon.cmd
 
-ƒoƒbƒ`ƒtƒ@ƒCƒ‹ `makeicon.cmd` ‚ÍƒfƒXƒNƒgƒbƒv‚ÉƒAƒCƒRƒ“‚ðì¬‚µ‚Ü‚·B
+ãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ« `makeicon.cmd` ã¯ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—ã«ã‚¢ã‚¤ã‚³ãƒ³ã‚’ä½œæˆã—ã¾ã™ã€‚
 
-* [‰pŒêƒ}ƒjƒ…ƒAƒ‹](Doc/nyagos_en.md)
-* [“ú–{Œêƒ}ƒjƒ…ƒAƒ‹](Doc/nyagos_ja.md)
+* [è‹±èªžãƒžãƒ‹ãƒ¥ã‚¢ãƒ«](Doc/nyagos_en.md)
+* [æ—¥æœ¬èªžãƒžãƒ‹ãƒ¥ã‚¢ãƒ«](Doc/nyagos_ja.md)
 
-ƒAƒ“ƒCƒ“ƒXƒg[ƒ‹
+ã‚¢ãƒ³ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
 ----------------
 
-UNZIP ‚Å“WŠJ‚³‚ê‚½ƒtƒ@ƒCƒ‹‚Æ %APPDATA%\NYAOS.ORG ˆÈ‰ºAƒfƒXƒNƒgƒbƒv
-ƒAƒCƒRƒ“‚ðíœ‚µ‚Ä‚­‚¾‚³‚¢BNYAGOS.exe ‚ÍƒŒƒWƒXƒgƒŠ‚ð“Ç‚Ý‘‚«‚µ‚Ü‚¹‚ñB
+UNZIP ã§å±•é–‹ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã¨ %APPDATA%\NYAOS.ORG ä»¥ä¸‹ã€ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—
+ã‚¢ã‚¤ã‚³ãƒ³ã‚’å‰Šé™¤ã—ã¦ãã ã•ã„ã€‚NYAGOS.exe ã¯ãƒ¬ã‚¸ã‚¹ãƒˆãƒªã‚’èª­ã¿æ›¸ãã—ã¾ã›ã‚“ã€‚
 
-ƒrƒ‹ƒh•û–@
+ãƒ“ãƒ«ãƒ‰æ–¹æ³•
 ----------
 
-ŽŸ‚Ìƒ\ƒtƒgƒEƒFƒA‚ª•K—v‚Æ‚È‚è‚Ü‚·B
+æ¬¡ã®ã‚½ãƒ•ãƒˆã‚¦ã‚§ã‚¢ãŒå¿…è¦ã¨ãªã‚Šã¾ã™ã€‚
 
 * [go 1.5 for windows](http://golang.org)
 * [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
-* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (”CˆÓ‚Å‚·B–³‚¢ê‡AŠô‚Â‚©‚Ì Lua Šg’£‚ª“®‚«‚Ü‚¹‚ñ‚ªAnyagos.exe Ž©‘Ì‚Í“®ì‚µ‚Ü‚·)
+* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (ä»»æ„ã§ã™ã€‚ç„¡ã„å ´åˆã€å¹¾ã¤ã‹ã® Lua æ‹¡å¼µãŒå‹•ãã¾ã›ã‚“ãŒã€nyagos.exe è‡ªä½“ã¯å‹•ä½œã—ã¾ã™)
 
-`%GOPATH%` ‚É‚Ä
+`%GOPATH%` ã«ã¦
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
 
-(32bit‚Ìê‡)
+(32bitã®å ´åˆ)
 
     unzip PATH\TO\lua-5.3_Win32_bin.zip lua53.dll
     unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
 
-(64bit‚Ìê‡)
+(64bitã®å ´åˆ)
 
     unzip PATH\TO\lua-5.3_Win64_bin.zip lua53.dll
     unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
 
-ÅŒã‚É:
+æœ€å¾Œã«:
 
     make.cmd get
     make.cmd
     make.cmd install INSTALLDIR
 
-make.cmd ‚ÌŽg‚¢•û‚É‚Â‚¢‚Ä‚Í `make.cmd help` ‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+make.cmd ã®ä½¿ã„æ–¹ã«ã¤ã„ã¦ã¯ `make.cmd help` ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 
-ƒ‰ƒCƒZƒ“ƒX
+ãƒ©ã‚¤ã‚»ãƒ³ã‚¹
 ----------
 
-C³BSDƒ‰ƒCƒZƒ“ƒX‚ÉŠî‚¢‚ÄAŽg—pEƒRƒs[E‰ü•Ï‚ª‰Â”\‚Å‚·B
+ä¿®æ­£BSDãƒ©ã‚¤ã‚»ãƒ³ã‚¹ã«åŸºã„ã¦ã€ä½¿ç”¨ãƒ»ã‚³ãƒ”ãƒ¼ãƒ»æ”¹å¤‰ãŒå¯èƒ½ã§ã™ã€‚
 
-ŽÓŽ«
+è¬è¾ž
 ----
 
 * [nocd5](https://github.com/nocd5)
@@ -106,7 +106,9 @@ make.cmd ‚ÌŽg‚¢•û‚É‚Â‚¢‚Ä‚Í `make.cmd help` ‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B
 * [Shougo](https://github.com/Shougo)
 * [orthographic-pedant](https://github.com/orthographic-pedant)
 
-ŠJ”­ŽÒ
+é–‹ç™ºè€…
 ------
 
-* ‚Í‚â‚Ü‚©‚¨‚é : [zetamatta](https://github.com/zetamatta) 
+* ã¯ã‚„ã¾ã‹ãŠã‚‹ : [zetamatta](https://github.com/zetamatta) 
+
+<!-- vim:set fenc=utf8 -->
