@@ -202,20 +202,15 @@ the number(integer) for %ERRORLEVEL% and error-message.
 When the return-value is a string(or string-table), nyagos.exe
 executes the string(-table) as a new commandline.
 
-### `VALUE = nyagos.alias.NAME`
+Aliases run on the other Lua-instance and can not access variables
+assigned on .nyagos but `share[]`. You can use share[] as you like.
+Only the member of the table `share[]` are shared on all Lua-instances 
+of nyagos.
 
-It returns the function definition assigned NAME.
+### `nyagos.env.NAME`
 
-### `VALUE = nyagos.getenv("NAME")`
-### `VALUE = nyagos.env["NAME"]`
-### `VALUE = nyagos.env.NAME`
-
-It returns the value of the environment variable named NAME.
-
-### `nyagos.setenv("NAME","VALUE")`
-### `nyagos.env.NAME = VALUE`
-
-It changes the environment variable.
+It is linked to the the environment variable, which are able 
+to be refered and assigned.
 
 ### `errorlevel,errormessage = nyagos.exec("COMMAND")`
 
@@ -324,10 +319,10 @@ arguments.
 `nyagos.prompt` is assigned function which draw prompt.
 You can swap the prompt-function as below.
 
-    local prompt_ = nyagos.prompt
+    share.backup_prompt = nyagos.prompt
     nyagos.prompt = function(template)
         nyagos.echo("xxxxx")
-        return prompt_(template)
+        return share.backup_prompt(template)
     end
 
 ### `nyagos.gethistory(N)`
@@ -340,7 +335,7 @@ With no arguments, get the count of the command-line history.
 Returns the boolean value whether the PATH can be access with MODE.
 It equals the access function of the programming language C.
 
-### `nyagos.completion_hook(c)`
+### `nyagos.completion_hook = function(c) ... end`
 
 This is the Hook for completion. It should be assigned a function.
 The argument `c` is the table which has these members.
@@ -360,6 +355,9 @@ It is called when the command which user typed is not found.
 The command-name and parameters are set to args[0]...args[#args].
 If the function returns nil or false, nyagos.exe prints errors of
 usual.
+
+Since the function runs the other Lua-instance, accesss to variables
+assigned on .nyagos have the same restriction with aliases. 
 
 ### `nyagos.getkey()`
 

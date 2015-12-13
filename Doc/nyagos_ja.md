@@ -207,14 +207,8 @@ nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 
 ### `nyagos.alias.エイリアス名 = "置換コード"`
 
-エイリアスを設定します。nyagos.lua 内で、これを簡略した
-
-* `alias "エイリアス名=置換コード"`
-* `alias{ エイリアス名="置換コード" , エイリアス名="置換コード" … }`
-
-が定義されています(Lua は引数が一つの場合は括弧を省略できます)。
-置換コードでは「alias」コマンドと同様、`$1` や `$*` などのマクロが
-使用可能です。
+エイリアスを設定します。
+置換コードでは、`$1` や `$*` などのマクロが使用可能です。
 
 ### `nyagos.alias.エイリアス名 = function(args)～end`
 
@@ -228,18 +222,14 @@ args には全引数を格納したテーブルが入ります。
 戻り値が文字列や、文字列テーブルの場合、その文字列(テーブル)が
 新コマンドラインとして実行されます。
 
-### `VALUE = nyagos.alias.エイリアス名`
+エイリアスは Lua の別のインスタンスで実行されるため、.nyagos で
+定義された変数は、共有テーブルshare[] を除いて、参照できません。
+share[] はユーザが自由に使用可能ですが、全てのインスタンスで、
+ただちに同期されるのは share[] 直下のメンバーのみです。
 
-現在 "エイリアス名" に設定されている文字列もしくは Lua 関数が返します。
+### `nyagos.env.環境変数名`
 
-### `VALUE = nyagos.env.NAME`
-
-環境変数 NAME を参照します
-
-### `nyagos.setenv("環境変数名","変数内容")`
-### `nyagos.env.環境変数名 = "変数内容"`
-
-環境変数 NAME を設定します。
+環境変数にリンクしています。参照・変更が可能です。
 
 ### `errorlevel,errormessage = nyagos.exec("シェルコマンド")`
 
@@ -372,10 +362,10 @@ suffix というコマンドを作成しています。
 生成して表示、文字の桁数を戻り値を返す関数が格納されています。
 ユーザはこれを横取りして独自のプロンプト表示を改造することができます。
 
-    local prompt_ = nyagos.prompt
+    share.backup_prompt = nyagos.prompt
     nyagos.prompt = function(template)
         nyagos.echo("xxxxx")
-        return prompt_(template)
+        return share.backup_prompt(template)
     end
 
 ### `nyagos.gethistory(N)`
@@ -388,7 +378,7 @@ N 番目のヒストリ内容を返します。N が負の時は現在から(-N)
 PATH で示されるファイルがアクセス可能かどうかを boolean 値で返します。
 C言語の access 関数と同じです。
 
-### `nyagos.completion_hook(c)`
+### `nyagos.completion_hook = function(c) ... end`
 
 補完のフックです。関数を代入してください。
 引数 c は下記のような要素を持つテーブルです。
@@ -408,6 +398,9 @@ C言語の access 関数と同じです。
 コマンド名とパラメータが args[0] ～ args[#args] にセットされます。
 関数が nil か false を返した場合は nyagos.exe は通常のエラーを
 表示します。
+
+関数は別の Lua インスタンスで実行されるため、.nyagos で定義された変数への
+アクセスはエイリアス同様の制限があります。
 
 ### `WIDTH,HEIGHT = nyagos.getviewwidth()`
 
