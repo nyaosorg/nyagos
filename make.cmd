@@ -19,7 +19,7 @@ goto build
 :build
         for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         powershell -ExecutionPolicy RemoteSigned "cd '%~dp0main' ; . '%~dp0main\makesyso.ps1'"
-        for /F %%V in ('git log -1 --pretty^=format:%%H') do go build -o nyagos.exe -ldflags "-X main.stamp=%DATE% -X main.commit=%%V %X_VERSION%" .\main
+        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" .\main
         goto end
 
 :fmt
