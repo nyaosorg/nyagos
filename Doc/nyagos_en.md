@@ -94,6 +94,12 @@ Quit NYAGOS.exe.
 
 Display the history. No arguments, the last ten are displayed.
 
+### `ln [-s] SRC DST`
+
+Make hardlink or symbolic-link.
+The alias 'lns' defined on `nyagos.d\lns.lua` shows UAC-dialog
+and calls `ln -s`.
+
 ### `ls -OPTION FILES`
 
 List the directory. Supported options are below:
