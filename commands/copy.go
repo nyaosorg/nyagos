@@ -29,6 +29,13 @@ func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
 		}, true})
 }
 
+func cmd_ln(cmd *Interpreter) (ErrorLevel, error) {
+	return cmd_xxxx(cmd, actionT{
+		func(src, dst string) error {
+			return os.Link(src, dst)
+		}, false})
+}
+
 func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
 	if len(cmd.Args) <= 2 {
 		fmt.Fprintf(cmd.Stderr,
