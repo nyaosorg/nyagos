@@ -30,12 +30,26 @@ func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
 }
 
 func cmd_ln(cmd *Interpreter) (ErrorLevel, error) {
-	return cmd_xxxx(cmd.Args,
-		cmd.Stderr,
-		func(src, dst string) error {
-			return os.Link(src, dst)
-		},
-		false)
+	if len(cmd.Args) >= 2 && cmd.Args[1] == "-s" {
+		args := make([]string, 0, len(cmd.Args)-1)
+		args = append(args, cmd.Args[0])
+		args = append(args, cmd.Args[2:]...)
+		return cmd_xxxx(
+			args,
+			cmd.Stderr,
+			func(src, dst string) error {
+				return os.Symlink(src, dst)
+			},
+			true)
+	} else {
+		return cmd_xxxx(
+			cmd.Args,
+			cmd.Stderr,
+			func(src, dst string) error {
+				return os.Link(src, dst)
+			},
+			false)
+	}
 }
 
 func cmd_xxxx(args []string,
