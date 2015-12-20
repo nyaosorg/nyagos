@@ -2,6 +2,7 @@ package commands
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -10,70 +11,74 @@ import (
 	. "../interpreter"
 )
 
-type actionT struct {
-	Do      func(src, dst string) error
-	IsDirOk bool
-}
-
 func cmd_copy(cmd *Interpreter) (ErrorLevel, error) {
-	return cmd_xxxx(cmd, actionT{
+	return cmd_xxxx(cmd.Args,
+		cmd.Stderr,
 		func(src, dst string) error {
 			return dos.Copy(src, dst, false)
-		}, false})
+		},
+		false)
 }
 
 func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
-	return cmd_xxxx(cmd, actionT{
+	return cmd_xxxx(cmd.Args,
+		cmd.Stderr,
 		func(src, dst string) error {
 			return dos.Move(src, dst)
-		}, true})
+		},
+		true)
 }
 
 func cmd_ln(cmd *Interpreter) (ErrorLevel, error) {
-	return cmd_xxxx(cmd, actionT{
+	return cmd_xxxx(cmd.Args,
+		cmd.Stderr,
 		func(src, dst string) error {
 			return os.Link(src, dst)
-		}, false})
+		},
+		false)
 }
 
-func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
-	if len(cmd.Args) <= 2 {
-		fmt.Fprintf(cmd.Stderr,
+func cmd_xxxx(args []string,
+	out io.Writer,
+	action func(src, dst string) error,
+	isDirOk bool) (ErrorLevel, error) {
+	if len(args) <= 2 {
+		fmt.Fprintf(out,
 			"Usage: %s [/y] SOURCE-FILENAME DESITINATE-FILENAME\n"+
 				"       %s [/y] FILENAMES... DESINATE-DIRECTORY\n",
-			cmd.Args[0], cmd.Args[0])
+			args[0], args[0])
 		return NOERROR, nil
 	}
-	fi, err := os.Stat(cmd.Args[len(cmd.Args)-1])
+	fi, err := os.Stat(args[len(args)-1])
 	isDir := err == nil && fi.Mode().IsDir()
 	all := false
-	for i, n := 1, len(cmd.Args)-1; i < n; i++ {
-		if cmd.Args[i] == "/y" {
+	for i, n := 1, len(args)-1; i < n; i++ {
+		if args[i] == "/y" {
 			all = true
 			continue
 		}
-		src := cmd.Args[i]
-		dst := cmd.Args[n]
+		src := args[i]
+		dst := args[n]
 		if isDir {
 			dst = dos.Join(dst, filepath.Base(src))
 		}
-		if !action.IsDirOk {
+		if !isDirOk {
 			fi, err := os.Stat(src)
 			if err == nil && fi.Mode().IsDir() {
-				fmt.Fprintf(cmd.Stderr, "%s is directory and passed.\n", src)
+				fmt.Fprintf(out, "%s is directory and passed.\n", src)
 				continue
 			}
 		}
 
-		fmt.Fprintf(cmd.Stderr, "%s -> %s\n", src, dst)
+		fmt.Fprintf(out, "%s -> %s\n", src, dst)
 		if !all {
 			fi, err := os.Stat(dst)
 			if fi != nil && err == nil {
-				fmt.Fprintf(cmd.Stderr,
+				fmt.Fprintf(out,
 					"%s: override? [Yes/No/All/Quit] ",
 					dst)
 				ch := conio.GetCh()
-				fmt.Fprintf(cmd.Stderr, "%c\n", ch)
+				fmt.Fprintf(out, "%c\n", ch)
 				switch ch {
 				case 'y', 'Y':
 
@@ -86,7 +91,7 @@ func cmd_xxxx(cmd *Interpreter, action actionT) (ErrorLevel, error) {
 				}
 			}
 		}
-		err := action.Do(src, dst)
+		err := action(src, dst)
 		if err != nil {
 			return ErrorLevel(1), err
 		}
