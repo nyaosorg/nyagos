@@ -141,6 +141,15 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	if (flag & O_INDICATOR) > 0 {
 		io.WriteString(out, indicator)
 	}
+	if indicator == "@" {
+		path := dos.Join(folder, name)
+		link_to, err := os.Readlink(path)
+		if err == nil {
+			fmt.Fprintf(out, " -> %s", link_to)
+		} else {
+			fmt.Fprintf(out, " -> (err:%s)", err)
+		}
+	}
 	io.WriteString(out, "\n")
 }
 
