@@ -146,8 +146,6 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		link_to, err := os.Readlink(path)
 		if err == nil {
 			fmt.Fprintf(out, " -> %s", link_to)
-		} else {
-			fmt.Fprintf(out, " -> (err:%s)", err)
 		}
 	}
 	io.WriteString(out, "\n")
