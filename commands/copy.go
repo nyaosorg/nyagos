@@ -107,7 +107,18 @@ func cmd_xxxx(args []string,
 		}
 		err := action(src, dst)
 		if err != nil {
-			return ErrorLevel(1), err
+			if i == n-1 {
+				return ErrorLevel(1), err
+			}
+			fmt.Fprintf(out, "%s\nContinue? [Yes/No] ", err.Error())
+			ch := conio.GetCh()
+			fmt.Fprintf(out, "%c\n", ch)
+			switch ch {
+			case 'y', 'Y':
+
+			default:
+				return NOERROR, nil
+			}
 		}
 	}
 	return NOERROR, nil
