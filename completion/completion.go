@@ -23,22 +23,34 @@ type CompletionList struct {
 
 var Hook lua.Pushable = lua.TNil{}
 
-func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
+func listUpComplete(this *conio.Buffer) (*CompletionList, rune, error) {
 	var err error
 	rv := CompletionList{}
 
 	// environment completion.
 	rv.AllLine = this.String()
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
+	default_delimiter := rune(conio.Delimiters[0])
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
 		rv.RawWord = rv.AllLine[rv.Pos:]
 		rv.Word = rv.RawWord
-		return &rv, nil
+		return &rv, default_delimiter, nil
 	}
 
 	// filename or commandname completion
 	rv.RawWord, rv.Pos = this.CurrentWord()
-	rv.Word = strings.Replace(rv.RawWord, "\"", "", -1)
+	found_delimter := false
+	rv.Word = strings.Map(func(c rune) rune {
+		if strings.ContainsRune(conio.Delimiters, c) {
+			if !found_delimter {
+				default_delimiter = c
+			}
+			found_delimter = true
+			return -1
+		} else {
+			return c
+		}
+	}, rv.RawWord)
 	if rv.Pos > 0 {
 		rv.List, err = listUpFiles(rv.Word)
 	} else {
@@ -49,13 +61,13 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 
 	if it, it_ok := this.Session.Tag.(*interpreter.Interpreter); !it_ok {
 		if L, L_ok = this.Session.Tag.(lua.Lua); !L_ok {
-			return &rv, errors.New("listUpComplete: cast error interpreter.Tag to lua.Lua")
+			return &rv, default_delimiter, errors.New("listUpComplete: cast error interpreter.Tag to lua.Lua")
 		}
 	} else {
 		L, L_ok = it.Tag.(lua.Lua)
 	}
 	if !L_ok {
-		return &rv, errors.New("listUpComplete: could not get lua instance")
+		return &rv, default_delimiter, errors.New("listUpComplete: could not get lua instance")
 	}
 
 	L.Push(Hook)
@@ -101,11 +113,11 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, error) {
 		}
 	}
 	L.Pop(1) // remove something not function or result-table
-	return &rv, err
+	return &rv, default_delimiter, err
 }
 
 func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
-	comp, err := listUpComplete(this)
+	comp, _, err := listUpComplete(this)
 	if comp == nil {
 		return conio.CONTINUE
 	}
@@ -149,7 +161,7 @@ func endWithRoot(path string) bool {
 }
 
 func KeyFuncCompletion(this *conio.Buffer) conio.Result {
-	comp, err := listUpComplete(this)
+	comp, default_delimiter, err := listUpComplete(this)
 	if comp.List == nil || len(comp.List) <= 0 {
 		return conio.CONTINUE
 	}
@@ -162,21 +174,23 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 	}
 
 	commonStr := CommonPrefix(comp.List)
-	needQuote := strings.ContainsRune(comp.Word, '"')
-	if !needQuote {
+	quotechar := byte(0)
+	if i := strings.IndexAny(comp.Word, conio.Delimiters); i >= 0 {
+		quotechar = comp.Word[i]
+	} else {
 		for _, node := range comp.List {
 			if strings.ContainsAny(node, " &") {
-				needQuote = true
+				quotechar = byte(default_delimiter)
 				break
 			}
 		}
 	}
-	if needQuote {
+	if quotechar != 0 {
 		buffer := make([]byte, 0, 100)
-		buffer = append(buffer, '"')
+		buffer = append(buffer, quotechar)
 		buffer = append(buffer, commonStr...)
 		if len(comp.List) == 1 && !endWithRoot(comp.List[0]) {
-			buffer = append(buffer, '"')
+			buffer = append(buffer, quotechar)
 		}
 		commonStr = string(buffer)
 	}

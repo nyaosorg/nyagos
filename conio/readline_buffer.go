@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"os"
+	"strings"
 	"unicode"
 )
 
@@ -198,14 +199,20 @@ func (this Buffer) String() string {
 	return result.String()
 }
 
+var Delimiters = "'\""
+
 func (this *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
-	isQuoted := false
+	quotedchar := '\000'
 	for i := 0; i < this.Cursor; i++ {
-		if this.Buffer[i] == '"' {
-			isQuoted = !isQuoted
+		if quotedchar == '\000' {
+			if strings.ContainsRune(Delimiters, this.Buffer[i]) {
+				quotedchar = this.Buffer[i]
+			}
+		} else if this.Buffer[i] == quotedchar {
+			quotedchar = '\000'
 		}
-		if unicode.IsSpace(this.Buffer[i]) && !isQuoted {
+		if unicode.IsSpace(this.Buffer[i]) && quotedchar == '\000' {
 			wordTop = -1
 		} else if wordTop < 0 {
 			wordTop = i
