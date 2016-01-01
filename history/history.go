@@ -43,9 +43,16 @@ func Replace(line string) (string, bool) {
 	reader := strings.NewReader(line)
 	history_count := conio.DefaultEditor.HistoryLen()
 
+	isQuoted := false
+
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
-		if ch != mark || reader.Len() <= 0 {
+		if ch == '\'' {
+			isQuoted = !isQuoted
+			buffer.WriteRune(ch)
+			continue
+		}
+		if ch != mark || reader.Len() <= 0 || isQuoted {
 			buffer.WriteRune(ch)
 			continue
 		}
