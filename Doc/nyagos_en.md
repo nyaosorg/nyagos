@@ -179,6 +179,9 @@ These suffix are available.
 * `$` last argument
 * `\*` all argument
 
+You can change the mark for substitution with the lua-variable
+`nyagos.histchar`.
+
 ### Environment variable
 
 * `~` (tilde) are replaced to `%HOME%` or `%USERPROFILE%`.

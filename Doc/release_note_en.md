@@ -2,6 +2,7 @@
 * Add lua-command `lns` which shows UAC and do `ln -s`
 * `ls -l` shows the destination of the symbolic-link.
 * Query continue or not when copy/move failed on one of parameters.
+* `nyagos.histchar` can change the history-substitution-mark.
 
 NYAGOS 4.1-beta
 ================
