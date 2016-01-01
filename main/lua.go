@@ -7,6 +7,7 @@ import (
 	"unsafe"
 
 	"../completion"
+	"../conio"
 	"../dos"
 	"../history"
 	"../interpreter"
@@ -300,6 +301,7 @@ func init() {
 		"getwd":                &lua.TGoFunction{cmdGetwd},
 		"glob":                 &lua.TGoFunction{cmdGlob},
 		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
+		"quotation":            lua.StringProperty{&conio.Delimiters},
 		"raweval":              &lua.TGoFunction{cmdRawEval},
 		"rawexec":              &lua.TGoFunction{cmdRawExec},
 		"setalias":             &lua.TGoFunction{cmdSetAlias},
