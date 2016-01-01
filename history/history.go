@@ -10,7 +10,6 @@ import (
 
 	"../conio"
 	"../interpreter"
-	"../lua"
 )
 
 func atoi_(reader *strings.Reader) (int, int) {
@@ -30,19 +29,13 @@ func atoi_(reader *strings.Reader) (int, int) {
 	return n, count
 }
 
-var Mark lua.Pushable = lua.TString{"!"}
+var Mark = "!"
 
 func Replace(line string) (string, bool) {
-	var mark = '!'
-	if tstr1, ok := Mark.(lua.TString); ok {
-		for _, c := range tstr1.Value {
-			mark = c
-			break
-		}
-	} else if tstr1, ok := Mark.(lua.TRawString); ok {
-		mark = rune(tstr1.Value[0])
-	} else {
-		return line, false
+	var mark rune
+	for _, c := range Mark {
+		mark = c
+		break
 	}
 
 	var buffer bytes.Buffer

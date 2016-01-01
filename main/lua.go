@@ -181,13 +181,18 @@ func getNyagosTable(L lua.Lua) int {
 	}
 }
 
+type IProperty interface {
+	Push(lua.Lua) int
+	Set(lua.Lua, int) error
+}
+
 func setNyagosTable(L lua.Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err)
 	}
 	if current_value, exists := nyagos_table_member[index]; exists {
-		if property, castOk := current_value.(lua.Property); castOk {
+		if property, castOk := current_value.(IProperty); castOk {
 			if err := property.Set(L, 3); err != nil {
 				return L.Push(nil, err)
 			} else {
@@ -286,7 +291,7 @@ func init() {
 		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
 		"eval":                 &lua.TGoFunction{cmdEval},
 		"exec":                 &lua.TGoFunction{cmdExec},
-		"histchar":             lua.Property{&history.Mark},
+		"histchar":             lua.StringProperty{&history.Mark},
 		"getalias":             &lua.TGoFunction{cmdGetAlias},
 		"getenv":               &lua.TGoFunction{cmdGetEnv},
 		"gethistory":           &lua.TGoFunction{cmdGetHistory},

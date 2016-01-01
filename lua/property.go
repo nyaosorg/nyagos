@@ -14,6 +14,23 @@ func (this Property) Set(L Lua, index int) error {
 	return err
 }
 
+type StringProperty struct {
+	Pointer *string
+}
+
+func (this StringProperty) Push(L Lua) int {
+	L.PushString(*this.Pointer)
+	return 1
+}
+
+func (this StringProperty) Set(L Lua, index int) error {
+	s, err := L.ToString(index)
+	if err == nil {
+		*this.Pointer = s
+	}
+	return err
+}
+
 type MetaOnlyTableT struct {
 	Table TTable
 }
