@@ -10,6 +10,7 @@ import (
 
 	"../conio"
 	"../interpreter"
+	"../lua"
 )
 
 func atoi_(reader *strings.Reader) (int, int) {
@@ -29,7 +30,21 @@ func atoi_(reader *strings.Reader) (int, int) {
 	return n, count
 }
 
+var Mark lua.Pushable = lua.TString{"!"}
+
 func Replace(line string) (string, bool) {
+	var mark = '!'
+	if tstr1, ok := Mark.(lua.TString); ok {
+		for _, c := range tstr1.Value {
+			mark = c
+			break
+		}
+	} else if tstr1, ok := Mark.(lua.TRawString); ok {
+		mark = rune(tstr1.Value[0])
+	} else {
+		return line, false
+	}
+
 	var buffer bytes.Buffer
 	isReplaced := false
 	reader := strings.NewReader(line)
@@ -37,7 +52,7 @@ func Replace(line string) (string, bool) {
 
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
-		if ch != '!' || reader.Len() <= 0 {
+		if ch != mark || reader.Len() <= 0 {
 			buffer.WriteRune(ch)
 			continue
 		}
@@ -50,13 +65,13 @@ func Replace(line string) (string, bool) {
 			}
 			continue
 		}
-		if ch == '!' { // !!
+		if ch == mark { // !!
 			if history_count >= 2 {
 				insertHistory(&buffer, reader, history_count-2)
 				isReplaced = true
 				continue
 			} else {
-				buffer.WriteRune('!')
+				buffer.WriteRune(mark)
 				continue
 			}
 		}
@@ -80,7 +95,8 @@ func Replace(line string) (string, bool) {
 					insertHistory(&buffer, reader, backno)
 					isReplaced = true
 				} else {
-					buffer.WriteString("!-0")
+					buffer.WriteRune(mark)
+					buffer.WriteString("-0")
 				}
 				continue
 			} else {
@@ -139,7 +155,7 @@ func Replace(line string) (string, bool) {
 			}
 		}
 		if !found {
-			buffer.WriteRune('!')
+			buffer.WriteRune(mark)
 			buffer.WriteRune(ch)
 		}
 	}

@@ -8,6 +8,7 @@ import (
 
 	"../completion"
 	"../dos"
+	"../history"
 	"../interpreter"
 	"../lua"
 )
@@ -285,6 +286,7 @@ func init() {
 		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
 		"eval":                 &lua.TGoFunction{cmdEval},
 		"exec":                 &lua.TGoFunction{cmdExec},
+		"histchar":             lua.Property{&history.Mark},
 		"getalias":             &lua.TGoFunction{cmdGetAlias},
 		"getenv":               &lua.TGoFunction{cmdGetEnv},
 		"gethistory":           &lua.TGoFunction{cmdGetHistory},
