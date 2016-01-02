@@ -199,7 +199,7 @@ func (this Buffer) String() string {
 	return result.String()
 }
 
-var Delimiters = "'\""
+var Delimiters = "\"'"
 
 func (this *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
