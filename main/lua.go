@@ -285,6 +285,7 @@ func init() {
 	nyagos_table_member = map[string]lua.Pushable{
 		"access":               &lua.TGoFunction{cmdAccess},
 		"alias":                lua.NewVirtualTable(cmdGetAlias, cmdSetAlias),
+		"antihistquot":         lua.StringProperty{&history.DisableMarks},
 		"atou":                 &lua.TGoFunction{cmdAtoU},
 		"bindkey":              &lua.TGoFunction{cmdBindKey},
 		"commit":               emptyToNil(commit),

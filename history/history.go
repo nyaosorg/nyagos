@@ -31,6 +31,8 @@ func atoi_(reader *strings.Reader) (int, int) {
 
 var Mark = "!"
 
+var DisableMarks = "\"'"
+
 func Replace(line string) (string, bool) {
 	var mark rune
 	for _, c := range Mark {
@@ -43,16 +45,20 @@ func Replace(line string) (string, bool) {
 	reader := strings.NewReader(line)
 	history_count := conio.DefaultEditor.HistoryLen()
 
-	isQuoted := false
+	quotedChar := '\000'
 
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
-		if ch == '\'' {
-			isQuoted = !isQuoted
+		if quotedChar == '\000' && strings.IndexRune(DisableMarks, ch) >= 0 {
+			quotedChar = ch
+			buffer.WriteRune(ch)
+			continue
+		} else if ch == quotedChar {
+			quotedChar = '\000'
 			buffer.WriteRune(ch)
 			continue
 		}
-		if ch != mark || reader.Len() <= 0 || isQuoted {
+		if ch != mark || reader.Len() <= 0 || quotedChar != '\000' {
 			buffer.WriteRune(ch)
 			continue
 		}
