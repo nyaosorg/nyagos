@@ -13,7 +13,7 @@ print(string.format("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s",
       nyagos.goarch,
       nyagos.goversion,_VERSION))
 
-print("Copyright (c) 2014,2015 HAYAMA_Kaoru and NYAOS.ORG")
+print("Copyright (c) 2014-2016 HAYAMA_Kaoru and NYAOS.ORG")
 
 local function include(fname)
     local chank,err=loadfile(fname)
