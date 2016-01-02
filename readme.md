@@ -20,7 +20,7 @@ Programming Language GO and Lua.
   * Prompt Macro $Uxxxx
 * Built-in ls
   * color support (-o option)
-  * indicate junction-mark as @
+  * print hard-link,symbolic-link and junction's target-path
 * Customizing with Lua
   * built-in command written with Lua
   * filtering command-line
