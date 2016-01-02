@@ -179,8 +179,10 @@ These suffix are available.
 * `$` last argument
 * `\*` all argument
 
-You can change the mark for substitution with the lua-variable
-`nyagos.histchar`.
+#### Variables
+
+* `nyagos.histchar`: header-character for substitution (default:`!`)
+* `nyagos.antihistquot`: characters to disable (default: `'"`)
 
 ### Environment variable
 
