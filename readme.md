@@ -52,8 +52,8 @@ Build
 
 These sortwares are required.
 
-* [go 1.5 for windows](http://golang.org)
-* [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
+* [go 1.5.2 for windows](http://golang.org)
+* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (Optionally. Without it, some lua-extensions does not work, but nyagos.exe itself is available.)
 
 On `%GOPATH%` folder,

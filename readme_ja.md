@@ -51,8 +51,8 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスク�
 
 次のソフトウェアが必要となります。
 
-* [go 1.5 for windows](http://golang.org)
-* [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
+* [go 1.5.2 for windows](http://golang.org)
+* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (任意です。無い場合、幾つかの Lua 拡張が動きませんが、nyagos.exe 自体は動作します)
 
 `%GOPATH%` にて
