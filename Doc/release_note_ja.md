@@ -1,10 +1,21 @@
+NYAGOS 4.1.0\_0
+===============
+
 * 内蔵コマンド ln を追加
-* Lua コマンド lns を追加(UACを表示後、`ln -s` を実行する)
+* Lua コマンド lns を追加 (UACを表示後、`ln -s` を実行する)
 * `ls -l` でシンボリックリンクの宛先を表示
 * あるファイルでcopy/move 時に失敗した時、以降のファイルを続けるか問合せるようにした。
-* 新変数: `nyagos.histchar`: ヒストリ置換文字(デフォルト「!」)
-* 新変数: `nyagos.antihistquot`: ヒストリ置換を抑制する引用符(デフォルト「'"」)
-* 新変数: `nyagos.quotation`: 補完でのデリミタ文字(デフォルト「"'」)
+* 新変数: `nyagos.histchar`: ヒストリ置換文字(デフォルト「`!`」)
+    - ヒストリ置換を完全に無効にする場合、`nyagos.histchar = nil`
+* 新変数: `nyagos.antihistquot`: ヒストリ置換を抑制する引用符(デフォルト「`'"`」)
+    - 【注意】`"!!"` は「デフォルト」では置換されなくなりました
+* 新変数: `nyagos.quotation`: 補完でのデリミタ文字(デフォルト「`"'`」)。
+    - `nyagos.quotation` の最初の文字がデフォルトの引用符となる。
+    - 二番目以降の文字は、ユーザが補完前に使用していた場合に採用される
+    - `nyagos.quotation=[["']]`の場合
+        - `C:\Prog[TAB]` → `"C:\Program Files\ ` (`"` が挿入される)
+        - `'C:\Prog[TAB]` → `'C:\Program Files\ ` (`'` が維持される)
+        - `"C:\Prog[TAB]` → `"C:\Program Files\ ` (`"` が維持される)
 
 NYAGOS 4.1-beta
 ================
