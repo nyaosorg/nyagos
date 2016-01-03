@@ -1,26 +1,28 @@
 NYAGOS 4.1.0\_0
 ===============
 
-* �����R�}���h ln ��ǉ�
-* Lua �R�}���h lns ��ǉ� (UAC��\����A`ln -s` �����s����)
-* `ls -l` �ŃV���{���b�N�����N�̈����\��
-* ����t�@�C����copy/move ���Ɏ��s�������A�ȍ~�̃t�@�C���𑱂��邩�⍇����悤�ɂ����B
-* �V�ϐ�: `nyagos.histchar`: �q�X�g���u������(�f�t�H���g�u`!`�v)
-    - �q�X�g���u�������S�ɖ����ɂ���ꍇ�A`nyagos.histchar = nil`
-* �V�ϐ�: `nyagos.antihistquot`: �q�X�g���u����}��������p��(�f�t�H���g�u`'"`�v)
-    - �y���Ӂz`"!!"` �́u�f�t�H���g�v�ł͒u������Ȃ��Ȃ�܂���
-* �V�ϐ�: `nyagos.quotation`: �⊮�ł̃f���~�^����(�f�t�H���g�u`"'`�v)�B
-    - `nyagos.quotation` �̍ŏ��̕������f�t�H���g�̈��p���ƂȂ�B
-    - ��Ԗڈȍ~�̕����́A���[�U���⊮�O�Ɏg�p���Ă����ꍇ�ɍ̗p�����
-    - `nyagos.quotation=[["']]`�̏ꍇ
-        - `C:\Prog[TAB]` �� `"C:\Program Files\ ` (`"` ���}�������)
-        - `'C:\Prog[TAB]` �� `'C:\Program Files\ ` (`'` ���ێ������)
-        - `"C:\Prog[TAB]` �� `"C:\Program Files\ ` (`"` ���ێ������)
+* 内蔵コマンド ln を追加
+* Lua コマンド lns を追加 (UACを表示後、`ln -s` を実行する)
+* `ls -l` でシンボリックリンクの宛先を表示
+* あるファイルでcopy/move 時に失敗した時、以降のファイルを続けるか問合せるようにした。
+* 新変数: `nyagos.histchar`: ヒストリ置換文字(デフォルト「`!`」)
+    - ヒストリ置換を完全に無効にする場合、`nyagos.histchar = nil`
+* 新変数: `nyagos.antihistquot`: ヒストリ置換を抑制する引用符(デフォルト「`'"`」)
+    - 【注意】`"!!"` は「デフォルト」では置換されなくなりました
+* 新変数: `nyagos.quotation`: 補完でのデリミタ文字(デフォルト「`"'`」)。
+    - `nyagos.quotation` の最初の文字がデフォルトの引用符となる。
+    - 二番目以降の文字は、ユーザが補完前に使用していた場合に採用される
+    - `nyagos.quotation=[["']]`の場合
+        - `C:\Prog[TAB]` → `"C:\Program Files\ ` (`"` が挿入される)
+        - `'C:\Prog[TAB]` → `'C:\Program Files\ ` (`'` が維持される)
+        - `"C:\Prog[TAB]` → `"C:\Program Files\ ` (`"` が維持される)
 
 NYAGOS 4.1-beta
 ================
-* �N���b�V������̂��߁A�S�Ă�Lua �̃R�[���o�b�N�֐��͂��ꂼ��� Lua 
-  �C���X�^���X�����悤�ɂ����B
-* �R�[���o�b�N�֐��� .nyagos �ԂŒl�����L���邽�߁A�e�[�u�� share[] �������
-* `*.wsf` �� cscript �Ɋ֘A�t����
-* `nyagos[]` �ւ̕s�K�؂ȑ�����x������悤�ɂ����B
+* クラッシュ回避のため、全てのLua のコールバック関数はそれぞれの Lua 
+  インスタンスを持つようにした。
+* コールバック関数と .nyagos 間で値を共有するため、テーブル share[] を作った
+* `*.wsf` を cscript に関連付けた
+* `nyagos[]` への不適切な代入を警告するようにした。
+
+<!-- vim:set fenc=utf8: -->
