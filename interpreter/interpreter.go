@@ -17,6 +17,12 @@ type CommandNotFound struct {
 	Err  error
 }
 
+// from "TDM-GCC-64/x86_64-w64-mingw32/include/winbase.h"
+const (
+	CREATE_NEW_CONSOLE       = 0x10
+	CREATE_NEW_PROCESS_GROUP = 0x200
+)
+
 func (this CommandNotFound) Stringer() string {
 	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", this.Name)
 }
@@ -200,6 +206,10 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	}
 
 	// executable-file
+	if this.SysProcAttr != nil && (this.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
+		err = this.Start()
+		return ErrorLevel(0), err
+	}
 	err = this.Run()
 
 	errorlevel, errorlevelOk := GetErrorLevel(this.ProcessState)
@@ -339,7 +349,14 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 					wg.Add(1)
 				}
 				go func(cmd1 *Interpreter) {
-					if !isBackGround {
+					if isBackGround {
+						if len(pipeline) == 1 {
+							cmd1.SysProcAttr = &syscall.SysProcAttr{
+								CreationFlags: CREATE_NEW_CONSOLE |
+									CREATE_NEW_PROCESS_GROUP,
+							}
+						}
+					} else {
 						defer wg.Done()
 					}
 					cmd1.Spawnvp()
