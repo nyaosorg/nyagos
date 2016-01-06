@@ -65,7 +65,7 @@ func chomp(buffer *bytes.Buffer) {
 
 const NOTQUOTED = '\000'
 
-const EMPTY_COMMAND_FOUND = "Empty command found"
+var EmptyCommandFound = errors.New("Empty command found")
 
 func dequote(source *bytes.Buffer) string {
 	var buffer bytes.Buffer
@@ -162,7 +162,7 @@ func terminate(statements *[]*StatementT,
 	redirect *[]*Redirecter,
 	buffer *bytes.Buffer,
 	argv *[]string,
-	term string) {
+	term string) error {
 
 	statement1 := new(StatementT)
 	if buffer.Len() > 0 {
@@ -175,7 +175,7 @@ func terminate(statements *[]*StatementT,
 		}
 		buffer.Reset()
 	} else if len(*argv) <= 0 {
-		return
+		return EmptyCommandFound
 	} else {
 		statement1.Argv = *argv
 	}
@@ -184,6 +184,7 @@ func terminate(statements *[]*StatementT,
 	*argv = make([]string, 0)
 	statement1.Term = term
 	*statements = append(*statements, statement1)
+	return nil
 }
 
 func parse1(text string) ([]*StatementT, error) {
@@ -231,26 +232,30 @@ func parse1(text string) ([]*StatementT, error) {
 				isNextRedirect = false
 			}
 		} else if lastchar == ' ' && ch == ';' {
-			terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, ";")
+			if err := terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, ";"); err != nil {
+				return nil, err
+			}
 		} else if ch == '|' {
 			if lastchar == '|' {
 				if len(statements) <= 0 {
-					return nil, errors.New(EMPTY_COMMAND_FOUND)
+					return nil, EmptyCommandFound
 				}
 				statements[len(statements)-1].Term = "||"
 			} else {
-				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "|")
+				if err := terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "|"); err != nil {
+					return nil, err
+				}
 			}
 		} else if ch == '&' {
 			switch lastchar {
 			case '&':
 				if len(statements) <= 0 {
-					return nil, errors.New(EMPTY_COMMAND_FOUND)
+					return nil, EmptyCommandFound
 				}
 				statements[len(statements)-1].Term = "&&"
 			case '|':
 				if len(statements) <= 0 {
-					return nil, errors.New(EMPTY_COMMAND_FOUND)
+					return nil, EmptyCommandFound
 				}
 				statements[len(statements)-1].Term = "|&"
 			case '>':
@@ -273,7 +278,9 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				isNextRedirect = false
 			default:
-				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "&")
+				if err := terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "&"); err != nil {
+					return nil, err
+				}
 			}
 		} else if ch == '>' {
 			switch lastchar {
@@ -313,7 +320,9 @@ func parse1(text string) ([]*StatementT, error) {
 		}
 		lastchar = ch
 	}
-	terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, " ")
+	if err := terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, " "); err != nil {
+		return nil, err
+	}
 	return statements, nil
 }
 
