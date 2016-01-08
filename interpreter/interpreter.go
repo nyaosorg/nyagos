@@ -259,6 +259,15 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 		}
 	}
 	for _, pipeline := range statements {
+		for i, state := range pipeline {
+			if state.Term == "|" && (i+1 >= len(pipeline) || len(pipeline[i+1].Argv) <= 0) {
+				return ErrorLevel(255), errors.New("The syntax of the command is incorrect.")
+			}
+		}
+	}
+
+	for _, pipeline := range statements {
+
 		var pipeIn *os.File = nil
 		pipeSeq++
 		isBackGround := this.IsBackGround
