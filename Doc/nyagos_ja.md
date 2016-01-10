@@ -158,7 +158,7 @@ NYAGOS を終了します。
 ### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
 ### `del FILE(S)...`
 ### `erase FILE(S)...`
-### `mkdir NEWDIR(S)...`
+### `mkdir [/p] NEWDIR(S)...`
 ### `rmdir [/s] DIR(S)...`
 ### `pushd`
 ### `popd`

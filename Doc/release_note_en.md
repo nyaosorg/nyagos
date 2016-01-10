@@ -1,3 +1,5 @@
+* `mkdir` suppports /p: make parent directories as needed.
+
 NYAGOS 4.1.0\_0
 ===============
 
