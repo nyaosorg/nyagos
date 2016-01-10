@@ -12,12 +12,17 @@ import (
 
 func cmd_mkdir(cmd *Interpreter) (ErrorLevel, error) {
 	if len(cmd.Args) <= 1 {
-		fmt.Println("Usage: mkdir [/s] DIRECTORIES...")
+		fmt.Println("Usage: mkdir [/p] DIRECTORIES...")
 		return NOERROR, nil
 	}
 	var errorcount ErrorLevel = 0
+	mkdir := os.Mkdir
 	for _, arg1 := range cmd.Args[1:] {
-		err := syscall.Mkdir(arg1, 0777)
+		if arg1 == "/p" {
+			mkdir = os.MkdirAll
+			continue
+		}
+		err := mkdir(arg1, 0777)
 		if err != nil {
 			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, err)
 			errorcount++
