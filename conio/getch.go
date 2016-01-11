@@ -73,27 +73,34 @@ func getKeys() []keyInfo {
 	getConsoleMode.Call(uintptr(hConin),
 		uintptr(unsafe.Pointer(&orgConMode)))
 	setConsoleMode.Call(uintptr(hConin), 0)
-	readConsoleInput.Call(
-		uintptr(hConin),
-		uintptr(unsafe.Pointer(&events[0])),
-		uintptr(len(events)),
-		uintptr(unsafe.Pointer(&numberOfEventsRead)))
-	setConsoleMode.Call(uintptr(hConin), uintptr(orgConMode))
-	for i := uint32(0); i < numberOfEventsRead; i++ {
-		if events[i].eventType == KEY_EVENT && events[i].bKeyDown != 0 {
-			var keycode rune
-			if events[i].unicodeChar == 0 {
-				keycode = rune(0)
-			} else {
-				keycode = utf16.Decode([]uint16{events[i].unicodeChar})[0]
+	var precode rune = 0
+	for len(result) <= 0 {
+		readConsoleInput.Call(
+			uintptr(hConin),
+			uintptr(unsafe.Pointer(&events[0])),
+			uintptr(len(events)),
+			uintptr(unsafe.Pointer(&numberOfEventsRead)))
+		for i := uint32(0); i < numberOfEventsRead; i++ {
+			if events[i].eventType == KEY_EVENT && events[i].bKeyDown != 0 {
+				var keycode = rune(events[i].unicodeChar)
+				if keycode != 0 {
+					if precode != 0 {
+						keycode = utf16.DecodeRune(precode, keycode)
+						precode = 0
+					} else if utf16.IsSurrogate(keycode) {
+						precode = keycode
+						continue
+					}
+				}
+				result = append(result, keyInfo{
+					keycode,
+					events[i].wVirtualKeyCode,
+					events[i].dwControlKeyState,
+				})
 			}
-			result = append(result, keyInfo{
-				keycode,
-				events[i].wVirtualKeyCode,
-				events[i].dwControlKeyState,
-			})
 		}
 	}
+	setConsoleMode.Call(uintptr(hConin), uintptr(orgConMode))
 	return result
 }
 
