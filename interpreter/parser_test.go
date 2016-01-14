@@ -12,7 +12,7 @@ func TestParser(t *testing.T) {
 	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
 		for _, stsub := range st {
-			for _, word := range stsub.Argv {
+			for _, word := range stsub.Args {
 				fmt.Printf("  [%s]", word)
 			}
 			fmt.Println()

@@ -14,7 +14,7 @@ import (
 )
 
 type StatementT struct {
-	Argv     []string
+	Args     []string
 	Redirect []*Redirecter
 	Term     string
 }
@@ -161,7 +161,7 @@ func terminate(statements *[]*StatementT,
 	isRedirected *bool,
 	redirect *[]*Redirecter,
 	buffer *bytes.Buffer,
-	argv *[]string,
+	args *[]string,
 	term string) {
 
 	statement1 := new(StatementT)
@@ -169,19 +169,19 @@ func terminate(statements *[]*StatementT,
 		if *isRedirected && len(*redirect) > 0 {
 			(*redirect)[len(*redirect)-1].SetPath(dequote(buffer))
 			*isRedirected = false
-			statement1.Argv = *argv
+			statement1.Args = *args
 		} else {
-			statement1.Argv = append(*argv, dequote(buffer))
+			statement1.Args = append(*args, dequote(buffer))
 		}
 		buffer.Reset()
-	} else if len(*argv) <= 0 {
+	} else if len(*args) <= 0 {
 		return
 	} else {
-		statement1.Argv = *argv
+		statement1.Args = *args
 	}
 	statement1.Redirect = *redirect
 	*redirect = make([]*Redirecter, 0, 3)
-	*argv = make([]string, 0)
+	*args = make([]string, 0)
 	statement1.Term = term
 	*statements = append(*statements, statement1)
 }
@@ -190,7 +190,7 @@ func parse1(text string) ([]*StatementT, error) {
 	quoteNow := NOTQUOTED
 	yenCount := 0
 	statements := make([]*StatementT, 0)
-	argv := make([]string, 0)
+	args := make([]string, 0)
 	lastchar := ' '
 	var buffer bytes.Buffer
 	isNextRedirect := false
@@ -201,7 +201,7 @@ func parse1(text string) ([]*StatementT, error) {
 			redirect[len(redirect)-1].SetPath(dequote(&buffer))
 		} else {
 			if buffer.Len() > 0 {
-				argv = append(argv, dequote(&buffer))
+				args = append(args, dequote(&buffer))
 			}
 		}
 		buffer.Reset()
@@ -231,7 +231,7 @@ func parse1(text string) ([]*StatementT, error) {
 				isNextRedirect = false
 			}
 		} else if lastchar == ' ' && ch == ';' {
-			terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, ";")
+			terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, ";")
 		} else if ch == '|' {
 			if lastchar == '|' {
 				if len(statements) <= 0 {
@@ -239,7 +239,7 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				statements[len(statements)-1].Term = "||"
 			} else {
-				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "|")
+				terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, "|")
 			}
 		} else if ch == '&' {
 			switch lastchar {
@@ -273,7 +273,7 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				isNextRedirect = false
 			default:
-				terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, "&")
+				terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, "&")
 			}
 		} else if ch == '>' {
 			switch lastchar {
@@ -313,7 +313,7 @@ func parse1(text string) ([]*StatementT, error) {
 		}
 		lastchar = ch
 	}
-	terminate(&statements, &isNextRedirect, &redirect, &buffer, &argv, " ")
+	terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, " ")
 	return statements, nil
 }
 

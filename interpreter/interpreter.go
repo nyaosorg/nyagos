@@ -262,7 +262,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 		}
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
-				state.Argv, err = argsHook(this, state.Argv)
+				state.Args, err = argsHook(this, state.Args)
 				if err != nil {
 					return ErrorLevel(255), err
 				}
@@ -274,7 +274,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 	}
 	for _, pipeline := range statements {
 		for i, state := range pipeline {
-			if state.Term == "|" && (i+1 >= len(pipeline) || len(pipeline[i+1].Argv) <= 0) {
+			if state.Term == "|" && (i+1 >= len(pipeline) || len(pipeline[i+1].Args) <= 0) {
 				return ErrorLevel(255), errors.New("The syntax of the command is incorrect.")
 			}
 		}
@@ -294,7 +294,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 		var wg sync.WaitGroup
 		for i, state := range pipeline {
 			if dbg {
-				print(i, ": pipeline loop(", state.Argv[0], ")\n")
+				print(i, ": pipeline loop(", state.Args[0], ")\n")
 			}
 			cmd := new(Interpreter)
 			cmd.PipeSeq[0] = pipeSeq
@@ -339,7 +339,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				defer fd.Close()
 			}
 
-			cmd.Args = state.Argv
+			cmd.Args = state.Args
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
