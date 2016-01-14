@@ -10,6 +10,8 @@ import (
 	"syscall"
 )
 
+const FLAG_AMP2NEWCONSOLE = false
+
 var dbg = false
 
 type CommandNotFound struct {
@@ -206,9 +208,11 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	}
 
 	// executable-file
-	if this.SysProcAttr != nil && (this.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
-		err = this.Start()
-		return ErrorLevel(0), err
+	if FLAG_AMP2NEWCONSOLE {
+		if this.SysProcAttr != nil && (this.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
+			err = this.Start()
+			return ErrorLevel(0), err
+		}
 	}
 	err = this.Run()
 
@@ -350,10 +354,12 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				}
 				go func(cmd1 *Interpreter) {
 					if isBackGround {
-						if len(pipeline) == 1 {
-							cmd1.SysProcAttr = &syscall.SysProcAttr{
-								CreationFlags: CREATE_NEW_CONSOLE |
-									CREATE_NEW_PROCESS_GROUP,
+						if FLAG_AMP2NEWCONSOLE {
+							if len(pipeline) == 1 {
+								cmd1.SysProcAttr = &syscall.SysProcAttr{
+									CreationFlags: CREATE_NEW_CONSOLE |
+										CREATE_NEW_PROCESS_GROUP,
+								}
 							}
 						}
 					} else {
