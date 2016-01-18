@@ -140,8 +140,13 @@ func (session *LineEditor) ReadLine() (string, error) {
 
 	width1, err1 := session.Prompt(session)
 	if err1 != nil {
+		// unable to get prompt-string.
 		fmt.Fprintf(os.Stderr, "%s\n$ ", err1.Error())
 		this.ViewWidth = this.ViewWidth - 2
+	} else if width1 >= this.ViewWidth-3 {
+		// ViewWidth is too narrow to edit.
+		fmt.Fprint(os.Stderr, "\n")
+		this.ViewWidth = width1
 	} else {
 		this.ViewWidth = this.ViewWidth - width1
 	}
