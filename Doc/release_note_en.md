@@ -1,3 +1,5 @@
+- Force to insert a line feed when prompt is too wide (#104)
+
 NYAGOS 4.1.1\_0
 ===============
 
