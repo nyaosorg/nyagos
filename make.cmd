@@ -32,6 +32,7 @@ goto build
 
 :clean
         for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
+        for /R %%I in (*~ *.bak) do if exist %%I del %%I
         goto end
 
 :sweep
