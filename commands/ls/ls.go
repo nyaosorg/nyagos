@@ -330,6 +330,8 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 		if err != nil {
 			if os.IsNotExist(err) {
 				return fmt.Errorf("ls: %s not exist.", nameStat)
+			} else if _, ok := err.(*os.PathError); ok {
+				return fmt.Errorf("ls: %s: Path Error.", nameStat)
 			} else {
 				return err
 			}
