@@ -1,4 +1,5 @@
 - Force to insert a line feed when prompt is too wide (#104)
+- Fix the error message when no files matches with a given wildcard (#108)
 
 NYAGOS 4.1.1\_0
 ===============
