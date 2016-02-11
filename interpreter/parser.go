@@ -93,24 +93,23 @@ func dequote(source *bytes.Buffer) string {
 				ch, _, err = source.ReadRune()
 				if err != nil {
 					buffer.WriteRune('%')
-					buffer.WriteString(nameBuf.String())
+					nameBuf.WriteTo(&buffer)
 					return buffer.String()
 				}
 				if ch == '%' {
-					nameStr := nameBuf.String()
-					if value, ok := OurGetEnv(nameStr); ok {
+					if value, ok := OurGetEnv(nameBuf.String()); ok {
 						buffer.WriteString(value)
 					} else {
 						buffer.WriteRune('%')
-						buffer.WriteString(nameStr)
+						nameBuf.WriteTo(&buffer)
 						buffer.WriteRune('%')
 					}
 					break
 				}
-				if !unicode.IsLower(ch) && !unicode.IsUpper(ch) && !unicode.IsNumber(ch) && ch != '_' && ch != '+' {
+				if ch == '=' {
 					source.UnreadRune()
 					buffer.WriteRune('%')
-					buffer.WriteString(nameBuf.String())
+					nameBuf.WriteTo(&buffer)
 					break
 				}
 				nameBuf.WriteRune(ch)
