@@ -1,5 +1,7 @@
 # NYAGOS - Nihongo Yet Another GOing Shell
 
+[..](../readme.md) / English / [Japanese](./nyagos_ja.md)
+
 NYAGOS is the commandline-shell for Windows written with the
 Programming Language GO and Lua.
 
@@ -418,7 +420,7 @@ On the New BSD-licenses, you can use NYAGOS.
 To build nyagos.exe , these softwares are required:
 
 * [go 1.5.2 for windows](http://golang.org)
-* [LuaBinaries 5.3 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
+* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
 - http://github.com/atotto/clipboard

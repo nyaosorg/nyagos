@@ -63,12 +63,12 @@ On `%GOPATH%` folder,
 
 For 32bit ,
 
-    unzip PATH\TO\lua-5.3_Win32_bin.zip lua53.dll
+    unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
     unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
 
 For 64bit ,
 
-    unzip PATH\TO\lua-5.3_Win64_bin.zip lua53.dll
+    unzip PATH\TO\lua-5.3.2_Win64_dllw4_lib.zip lua53.dll
     unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
 
 Finally

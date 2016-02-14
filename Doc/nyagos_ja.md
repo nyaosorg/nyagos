@@ -1,5 +1,7 @@
 # NYAGOS - Nihongo Yet Another GOing Shell
 
+[..](../readme_ja.md) / [English](./nyagos_en.md) / Japanese
+
 NYAGOS は、go言語による Windows 用コマンドラインシェルです。
 Nihongo とありますが、Unicode ベースなので、特に特定の自然言語に
 特化しているわけではありません。
@@ -460,7 +462,7 @@ NYAGOS は https://github.com/zetamatta/nyagos にて公開しています。
 NYAGOS のビルドには
 
 * [go 1.5.2 windows](http://golang.org)
-* [LuaBinaries 5.3 - Release 1 for Win32 or Win64](http://luabinaries.sourceforge.net/download.html)
+* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 
 が必要となります。言語標準以外では、以下のモジュールを
 利用させていただいております。

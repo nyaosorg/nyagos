@@ -62,12 +62,12 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスク�
 
 (32bitの場合)
 
-    unzip PATH\TO\lua-5.3_Win32_bin.zip lua53.dll
+    unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
     unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
 
 (64bitの場合)
 
-    unzip PATH\TO\lua-5.3_Win64_bin.zip lua53.dll
+    unzip PATH\TO\lua-5.3.2_Win64_bin.zip lua53.dll
     unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
 
 最後に:
