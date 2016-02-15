@@ -1,3 +1,5 @@
+NYAGOS 4.1.1\_1
+===============
 * Force to insert a line feed when prompt is too wide (#104)
 * Fix the error message when no files matches with a given wildcard (#108)
 * Fix the environment variable like %ProgramFiles(x86)% were not expanded. (#109 Thx @hattya)
