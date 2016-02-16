@@ -1,3 +1,5 @@
+NYAGOS 4.1.1\_2
+===============
 * Fix the miss to convert filename UTF8 to ANSI for loadfile() of Lua (#110,Thx Mr.HABATA)
 
 NYAGOS 4.1.1\_1
