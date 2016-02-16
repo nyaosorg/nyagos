@@ -1,3 +1,5 @@
+* Fix the miss to convert filename UTF8 to ANSI for loadfile() of Lua (#110,Thx Mr.HABATA)
+
 NYAGOS 4.1.1\_1
 ===============
 * Force to insert a line feed when prompt is too wide (#104)
