@@ -41,8 +41,8 @@ func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
 				")", "^)", -1))
 	}
 	params = append(params,
-		"&&", "set", ">", envTxtPath,
-		"&&", "cd", ">", pwdTxtPath)
+		"&", "set", ">", envTxtPath,
+		"&", "cd", ">", pwdTxtPath)
 
 	cmd2 := exec.Cmd{Path: params[0], Args: params}
 	if err := cmd2.Run(); err != nil {
