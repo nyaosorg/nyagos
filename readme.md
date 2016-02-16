@@ -106,6 +106,7 @@ Acknowledgement
 * [Matsuyanagi](https://github.com/Matsuyanagi)
 * [Shougo](https://github.com/Shougo)
 * [orthographic-pedant](https://github.com/orthographic-pedant)
+* HABATA Katsuyuki
 
 Author
 ------
