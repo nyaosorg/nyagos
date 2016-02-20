@@ -156,35 +156,6 @@ func dequote(source *bytes.Buffer) string {
 	return buffer.String()
 }
 
-func terminate(statements *[]*StatementT,
-	isRedirected *bool,
-	redirect *[]*Redirecter,
-	buffer *bytes.Buffer,
-	args *[]string,
-	term string) {
-
-	statement1 := new(StatementT)
-	if buffer.Len() > 0 {
-		if *isRedirected && len(*redirect) > 0 {
-			(*redirect)[len(*redirect)-1].SetPath(dequote(buffer))
-			*isRedirected = false
-			statement1.Args = *args
-		} else {
-			statement1.Args = append(*args, dequote(buffer))
-		}
-		buffer.Reset()
-	} else if len(*args) <= 0 {
-		return
-	} else {
-		statement1.Args = *args
-	}
-	statement1.Redirect = *redirect
-	*redirect = make([]*Redirecter, 0, 3)
-	*args = make([]string, 0)
-	statement1.Term = term
-	*statements = append(*statements, statement1)
-}
-
 func parse1(text string) ([]*StatementT, error) {
 	quoteNow := NOTQUOTED
 	yenCount := 0
@@ -194,6 +165,29 @@ func parse1(text string) ([]*StatementT, error) {
 	var buffer bytes.Buffer
 	isNextRedirect := false
 	redirect := make([]*Redirecter, 0, 3)
+
+	terminate := func(term string) {
+		statement1 := new(StatementT)
+		if buffer.Len() > 0 {
+			if isNextRedirect && len(redirect) > 0 {
+				redirect[len(redirect)-1].SetPath(dequote(&buffer))
+				isNextRedirect = false
+				statement1.Args = args
+			} else {
+				statement1.Args = append(args, dequote(&buffer))
+			}
+			buffer.Reset()
+		} else if len(args) <= 0 {
+			return
+		} else {
+			statement1.Args = args
+		}
+		statement1.Redirect = redirect
+		redirect = make([]*Redirecter, 0, 3)
+		args = make([]string, 0)
+		statement1.Term = term
+		statements = append(statements, statement1)
+	}
 
 	TermWord := func() {
 		if isNextRedirect && len(redirect) > 0 {
@@ -230,7 +224,7 @@ func parse1(text string) ([]*StatementT, error) {
 				isNextRedirect = false
 			}
 		} else if lastchar == ' ' && ch == ';' {
-			terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, ";")
+			terminate(";")
 		} else if ch == '|' {
 			if lastchar == '|' {
 				if len(statements) <= 0 {
@@ -238,7 +232,7 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				statements[len(statements)-1].Term = "||"
 			} else {
-				terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, "|")
+				terminate("|")
 			}
 		} else if ch == '&' {
 			switch lastchar {
@@ -272,7 +266,7 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				isNextRedirect = false
 			default:
-				terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, "&")
+				terminate("&")
 			}
 		} else if ch == '>' {
 			switch lastchar {
@@ -312,7 +306,7 @@ func parse1(text string) ([]*StatementT, error) {
 		}
 		lastchar = ch
 	}
-	terminate(&statements, &isNextRedirect, &redirect, &buffer, &args, " ")
+	terminate(" ")
 	return statements, nil
 }
 
