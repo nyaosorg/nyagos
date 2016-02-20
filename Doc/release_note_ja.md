@@ -1,3 +1,5 @@
+* `echo` で CMD.EXE と同様に二重引用符を表示するようにした
+
 NYAGOS 4.1.1\_2
 ===============
 * Lua の loadfile 等を呼ぶ際に UTF8 を ANSI へコンバートしていなかった不具合を修正 (#110,Thx Mr.HABATA)
