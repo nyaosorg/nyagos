@@ -68,6 +68,7 @@ type Interpreter struct {
 	Tag          interface{}
 	PipeSeq      [2]uint
 	IsBackGround bool
+	RawArgs      []string
 
 	CloneHook func(*Interpreter) error
 	CloseHook func(*Interpreter)
@@ -340,6 +341,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			}
 
 			cmd.Args = state.Args
+			cmd.RawArgs = state.RawArgs
 			if i > 0 {
 				cmd.IsBackGround = true
 			}

@@ -15,6 +15,7 @@ import (
 
 type StatementT struct {
 	Args     []string
+	RawArgs  []string
 	Redirect []*Redirecter
 	Term     string
 }
@@ -161,6 +162,7 @@ func parse1(text string) ([]*StatementT, error) {
 	yenCount := 0
 	statements := make([]*StatementT, 0)
 	args := make([]string, 0)
+	rawArgs := make([]string, 0)
 	lastchar := ' '
 	var buffer bytes.Buffer
 	isNextRedirect := false
@@ -172,18 +174,22 @@ func parse1(text string) ([]*StatementT, error) {
 			if isNextRedirect && len(redirect) > 0 {
 				redirect[len(redirect)-1].SetPath(dequote(&buffer))
 				isNextRedirect = false
+				statement1.RawArgs = rawArgs
 				statement1.Args = args
 			} else {
+				statement1.RawArgs = append(rawArgs, buffer.String())
 				statement1.Args = append(args, dequote(&buffer))
 			}
 			buffer.Reset()
 		} else if len(args) <= 0 {
 			return
 		} else {
+			statement1.RawArgs = rawArgs
 			statement1.Args = args
 		}
 		statement1.Redirect = redirect
 		redirect = make([]*Redirecter, 0, 3)
+		rawArgs = make([]string, 0)
 		args = make([]string, 0)
 		statement1.Term = term
 		statements = append(statements, statement1)
@@ -194,6 +200,7 @@ func parse1(text string) ([]*StatementT, error) {
 			redirect[len(redirect)-1].SetPath(dequote(&buffer))
 		} else {
 			if buffer.Len() > 0 {
+				rawArgs = append(rawArgs, buffer.String())
 				args = append(args, dequote(&buffer))
 			}
 		}
