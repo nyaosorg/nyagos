@@ -200,13 +200,25 @@ These suffix are available.
 
 It defines an alias. These macros are available on "REPLACE-STRING".
 
-* `$1`,`$2`,`$3` ... the number's argument.
-* `$\*` ... all arguments
+* `$1`,`$2`,`$3` ... the number's argument (removed quotations)
+* `$\*` ... all arguments (not removed quotations)
 
 ### `nyagos.alias.NAME = function(ARGS)...end`
 
 It assigns the function to the command-name `"NAME"`.
-`ARGS` is the table: { 1stArgument,2nd,3rd,... }
+`ARGS` is the table:
+    {
+        [1]=1stArgument,
+        [2]=2ndArgument,
+        [3]=3rdArgument,
+            :
+        ["rawargs"]={
+            [1]=1stArgument(not quotatations removed),
+            [2]=2ndArgument(not quotatations removed),
+            [3]=3rdArgument(not quotatations removed),
+                :
+        }
+    }
 
 When an error occures, the function should return
 the number(integer) for %ERRORLEVEL% and error-message.

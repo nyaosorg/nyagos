@@ -1,4 +1,6 @@
 * `echo` prints quotations as same as cmd.exe.
+* Add member 'rawargs' to lua-function's first parameter table,
+  which contains parameters not removed quotations from user-typed ones.
 
 NYAGOS 4.1.1\_2
 ===============
