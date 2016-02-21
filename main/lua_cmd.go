@@ -40,6 +40,12 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.PushString(arg1)
 		L.RawSetI(-2, lua.Integer(i))
 	}
+	L.NewTable()
+	for i, arg1 := range cmd.RawArgs {
+		L.PushString(arg1)
+		L.RawSetI(-2, lua.Integer(i))
+	}
+	L.SetField(-2, "rawargs")
 	err := NyagosCallLua(L, cmd, 1, 1)
 	errorlevel := interpreter.NOERROR
 	if err == nil {
