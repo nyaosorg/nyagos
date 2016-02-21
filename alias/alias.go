@@ -37,7 +37,7 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 		if s == "$*" {
 			isReplaced = true
 			if cmd.Args != nil && len(cmd.Args) >= 2 {
-				return quoteAndJoin(cmd.Args[1:])
+				return strings.Join(cmd.RawArgs[1:], " ")
 			} else {
 				return ""
 			}
@@ -46,7 +46,7 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 		if err == nil {
 			isReplaced = true
 			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args) {
-				return cmd.Args[i]
+				return cmd.RawArgs[i]
 			}
 		}
 		return s
@@ -55,8 +55,10 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 	if !isReplaced {
 		buffer := make([]byte, 0, 200)
 		buffer = append(buffer, this.BaseStr...)
-		buffer = append(buffer, ' ')
-		buffer = append(buffer, quoteAndJoin(cmd.Args[1:])...)
+		for _, s := range cmd.RawArgs[1:] {
+			buffer = append(buffer, ' ')
+			buffer = append(buffer, s...)
+		}
 		cmdline = string(buffer)
 	}
 	if dbg {
