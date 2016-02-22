@@ -1,8 +1,8 @@
 package dos
 
-import "os"
+import "io"
 
-func ReadAnsiLine(f *os.File) (string, error) {
+func ReadAnsiLine(f io.Reader) (string, error) {
 	line := make([]byte, 0, 1024)
 	var ch [1]byte
 	for {
