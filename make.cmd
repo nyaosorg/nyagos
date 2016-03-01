@@ -32,6 +32,7 @@ goto build
 
 :clean
         for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
+        for %%I in (alias commands completion conio dos history interpreter lua main) do (cd "%%I" & go clean & cd ..)
         for /R %%I in (*~ *.bak) do if exist %%I del %%I
         goto end
 
