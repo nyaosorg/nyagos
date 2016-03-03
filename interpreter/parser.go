@@ -68,7 +68,7 @@ const NOTQUOTED = '\000'
 
 const EMPTY_COMMAND_FOUND = "Empty command found"
 
-func dequote(source *bytes.Buffer) string {
+func buffer2word(source bytes.Buffer, removeQuote bool) string {
 	var buffer bytes.Buffer
 
 	lastchar := ' '
@@ -119,12 +119,18 @@ func dequote(source *bytes.Buffer) string {
 		}
 
 		if quoteNow != NOTQUOTED && ch == quoteNow && yenCount%2 == 0 {
+			if !removeQuote {
+				buffer.WriteRune(ch)
+			}
 			// Close Quotation.
 			for ; yenCount >= 2; yenCount -= 2 {
 				buffer.WriteRune('\\')
 			}
 			quoteNow = NOTQUOTED
 		} else if (ch == '\'' || ch == '"') && quoteNow == NOTQUOTED && yenCount%2 == 0 {
+			if !removeQuote {
+				buffer.WriteRune(ch)
+			}
 			// Open Qutation.
 			for ; yenCount >= 2; yenCount -= 2 {
 				buffer.WriteRune('\\')
@@ -172,13 +178,13 @@ func parse1(text string) ([]*StatementT, error) {
 		statement1 := new(StatementT)
 		if buffer.Len() > 0 {
 			if isNextRedirect && len(redirect) > 0 {
-				redirect[len(redirect)-1].SetPath(dequote(&buffer))
+				redirect[len(redirect)-1].SetPath(buffer2word(buffer, true))
 				isNextRedirect = false
 				statement1.RawArgs = rawArgs
 				statement1.Args = args
 			} else {
-				statement1.RawArgs = append(rawArgs, buffer.String())
-				statement1.Args = append(args, dequote(&buffer))
+				statement1.RawArgs = append(rawArgs, buffer2word(buffer, false))
+				statement1.Args = append(args, buffer2word(buffer, true))
 			}
 			buffer.Reset()
 		} else if len(args) <= 0 {
@@ -197,11 +203,11 @@ func parse1(text string) ([]*StatementT, error) {
 
 	TermWord := func() {
 		if isNextRedirect && len(redirect) > 0 {
-			redirect[len(redirect)-1].SetPath(dequote(&buffer))
+			redirect[len(redirect)-1].SetPath(buffer2word(buffer, true))
 		} else {
 			if buffer.Len() > 0 {
-				rawArgs = append(rawArgs, buffer.String())
-				args = append(args, dequote(&buffer))
+				rawArgs = append(rawArgs, buffer2word(buffer, false))
+				args = append(args, buffer2word(buffer, true))
 			}
 		}
 		buffer.Reset()
