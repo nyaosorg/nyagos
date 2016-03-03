@@ -174,7 +174,7 @@ func parse1(text string) ([]*StatementT, error) {
 	isNextRedirect := false
 	redirect := make([]*Redirecter, 0, 3)
 
-	terminate := func(term string) {
+	term_line := func(term string) {
 		statement1 := new(StatementT)
 		if buffer.Len() > 0 {
 			if isNextRedirect && len(redirect) > 0 {
@@ -201,7 +201,7 @@ func parse1(text string) ([]*StatementT, error) {
 		statements = append(statements, statement1)
 	}
 
-	TermWord := func() {
+	term_word := func() {
 		if isNextRedirect && len(redirect) > 0 {
 			redirect[len(redirect)-1].SetPath(buffer2word(buffer, true))
 		} else {
@@ -233,11 +233,11 @@ func parse1(text string) ([]*StatementT, error) {
 			buffer.WriteRune(ch)
 		} else if ch == ' ' {
 			if buffer.Len() > 0 {
-				TermWord()
+				term_word()
 				isNextRedirect = false
 			}
 		} else if lastchar == ' ' && ch == ';' {
-			terminate(";")
+			term_line(";")
 		} else if ch == '|' {
 			if lastchar == '|' {
 				if len(statements) <= 0 {
@@ -245,7 +245,7 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				statements[len(statements)-1].Term = "||"
 			} else {
-				terminate("|")
+				term_line("|")
 			}
 		} else if ch == '&' {
 			switch lastchar {
@@ -279,34 +279,34 @@ func parse1(text string) ([]*StatementT, error) {
 				}
 				isNextRedirect = false
 			default:
-				terminate("&")
+				term_line("&")
 			}
 		} else if ch == '>' {
 			switch lastchar {
 			case '1':
 				// 1>
 				chomp(&buffer)
-				TermWord()
+				term_word()
 				redirect = append(redirect, NewRedirecter(1))
 			case '2':
 				// 2>
 				chomp(&buffer)
-				TermWord()
+				term_word()
 				redirect = append(redirect, NewRedirecter(2))
 			case '>':
 				// >>
-				TermWord()
+				term_word()
 				if len(redirect) >= 0 {
 					redirect[len(redirect)-1].SetAppend()
 				}
 			default:
 				// >
-				TermWord()
+				term_word()
 				redirect = append(redirect, NewRedirecter(1))
 			}
 			isNextRedirect = true
 		} else if ch == '<' {
-			TermWord()
+			term_word()
 			redirect = append(redirect, NewRedirecter(0))
 			isNextRedirect = true
 		} else {
@@ -319,7 +319,7 @@ func parse1(text string) ([]*StatementT, error) {
 		}
 		lastchar = ch
 	}
-	terminate(" ")
+	term_line(" ")
 	return statements, nil
 }
 
