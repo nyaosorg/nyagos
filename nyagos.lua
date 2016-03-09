@@ -29,6 +29,13 @@ local function include(fname)
     end
 end
 
+function use(name)
+    local catalog_d = string.gsub(nyagos.exe,"[^%\\%/]+$","catalog.d")
+    name = string.gsub(name,"%.lua$","") .. ".lua"
+    local script = nyagos.pathjoin(catalog_d,name)
+    include(script)
+end
+
 local addons=nyagos.glob((nyagos.exe:gsub("%.[eE][xX][eE]$",".d\\*.lua")))
 for i=1,#addons do
     include(addons[i])
