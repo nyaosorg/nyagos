@@ -74,6 +74,10 @@ goto build
         if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
         goto end
 
+:install_catalog
+        robocopy catalog.d "%INSTALLDIR%\catalog.d" /E
+        goto end
+
 :icon
         makeicon.cmd
         goto end
