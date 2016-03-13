@@ -30,7 +30,7 @@ local function include(fname)
 end
 
 function use(name)
-    local catalog_d = string.gsub(nyagos.exe,"[^%\\%/]+$","catalog.d")
+    local catalog_d = string.gsub(nyagos.exe,"%.[eE][xX][eE]$",".d\\catalog")
     name = string.gsub(name,"%.lua$","") .. ".lua"
     local script = nyagos.pathjoin(catalog_d,name)
     include(script)

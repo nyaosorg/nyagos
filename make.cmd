@@ -74,15 +74,6 @@ goto build
         if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
         goto end
 
-:install_catalog
-        if not "%2" == "" set "INSTALLDIR=%2"
-        if "%INSTALLDIR%" == "" (
-            echo Please %0.cmd %1 PATH\TO\BIN, once
-            goto end
-        )
-        robocopy catalog.d "%INSTALLDIR%\catalog.d" /E
-        goto end
-
 :icon
         makeicon.cmd
         goto end
