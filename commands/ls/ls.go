@@ -344,7 +344,9 @@ func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
 		}
 	}
 	if len(files) > 0 {
-		if (flag & O_LONG) != 0 {
+		if (flag & O_ONE) != 0 {
+			lsSimple(".", files, flag, out)
+		} else if (flag & O_LONG) != 0 {
 			lsLong(".", files, flag, out)
 		} else {
 			lsBox(".", files, flag, out)
