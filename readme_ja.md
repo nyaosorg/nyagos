@@ -106,6 +106,7 @@ make.cmd の使い方については `make.cmd help` を参照してください
 * [Shougo](https://github.com/Shougo)
 * [orthographic-pedant](https://github.com/orthographic-pedant)
 * HABATA Katsuyuki
+* [hisomura](https://github.com/hisomura)
 
 開発者
 ------
