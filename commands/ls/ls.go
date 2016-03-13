@@ -312,7 +312,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 
 var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
 
-func lsCore(paths []string, flag int, out io.Writer) error {
+func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
 	if len(paths) <= 0 {
 		return lsFolder("", flag, out)
 	}
@@ -329,12 +329,13 @@ func lsCore(paths []string, flag int, out io.Writer) error {
 		status, err := os.Stat(nameStat)
 		if err != nil {
 			if os.IsNotExist(err) {
-				return fmt.Errorf("ls: %s not exist.", nameStat)
+				fmt.Fprintf(errout, "ls: %s not exist.\n", nameStat)
 			} else if _, ok := err.(*os.PathError); ok {
-				return fmt.Errorf("ls: %s: Path Error.", nameStat)
+				fmt.Fprintf(errout, "ls: %s: Path Error.\n", nameStat)
 			} else {
-				return err
+				fmt.Fprintf(errout, "ls: %s\n", err.Error())
 			}
+			continue
 		} else if status.IsDir() {
 			dirs = append(dirs, name)
 		} else {
@@ -418,7 +419,7 @@ func (this OptionError) Error() string {
 }
 
 // ls 機能のエントリ:引数をオプションとパスに分離する
-func Main(args []string, out io.Writer) error {
+func Main(args []string, out io.Writer, err io.Writer) error {
 	flag := 0
 	paths := make([]string, 0)
 	for _, arg := range args {
@@ -452,7 +453,7 @@ func Main(args []string, out io.Writer) error {
 	if (flag & O_COLOR) != 0 {
 		io.WriteString(out, ANSI_END)
 	}
-	return lsCore(paths, flag, out)
+	return lsCore(paths, flag, out, err)
 }
 
 // vim:set fenc=utf8 ts=4 sw=4 noet:
