@@ -16,18 +16,19 @@ import (
 )
 
 const (
-	O_STRIP_DIR = 1
-	O_LONG      = 2
-	O_INDICATOR = 4
-	O_COLOR     = 8
-	O_ALL       = 16
-	O_TIME      = 32
-	O_REVERSE   = 64
-	O_RECURSIVE = 128
-	O_ONE       = 256
-	O_HELP      = 512
-	O_SIZESORT  = 1024
-	O_HUMAN     = 2048
+	O_STRIP_DIR     = 1
+	O_LONG          = 2
+	O_INDICATOR     = 4
+	O_COLOR         = 8
+	O_ALL           = 16
+	O_TIME          = 32
+	O_REVERSE       = 64
+	O_RECURSIVE     = 128
+	O_ONE           = 256
+	O_HELP          = 512
+	O_SIZESORT      = 1024
+	O_HUMAN         = 2048
+	O_NOT_RECURSIVE = 4096
 )
 
 type fileInfoT struct {
@@ -336,7 +337,7 @@ func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
 				fmt.Fprintf(errout, "ls: %s\n", err.Error())
 			}
 			continue
-		} else if status.IsDir() {
+		} else if status.IsDir() && (flag&O_NOT_RECURSIVE) == 0 {
 			dirs = append(dirs, name)
 		} else {
 			files = append(files, &fileInfoT{name, status})
@@ -405,6 +406,10 @@ var option = map[rune](func(*int) error){
 	},
 	'S': func(flag *int) error {
 		*flag |= O_SIZESORT
+		return nil
+	},
+	'd': func(flag *int) error {
+		*flag |= O_NOT_RECURSIVE
 		return nil
 	},
 }
