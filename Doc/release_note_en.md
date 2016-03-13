@@ -1,6 +1,14 @@
 * `echo` prints quotations as same as cmd.exe.
 * Add member 'rawargs' to lua-function's first parameter table,
   which contains parameters not removed quotations from user-typed ones.
+* Made scripts-catalog system
+    - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
+    - We can import cataloged functions with `use "NAME"`
+        - `use "dollar"` -> Expand the environment variable like `$PATH`
+        - `use "peco_history"` -> Incremental history search with peco.exe
+        - `use "peco_complete"` -> Completion with peco.exe
+* ls does not stop listing even if broken symbolic file exists.
+* Support: `ls -d`
 
 NYAGOS 4.1.1\_2
 ===============
