@@ -346,7 +346,7 @@ You can swap the prompt-function as below.
 
     share.backup_prompt = nyagos.prompt
     nyagos.prompt = function(template)
-        nyagos.echo("xxxxx")
+        print("xxxxx")
         return share.backup_prompt(template)
     end
 
