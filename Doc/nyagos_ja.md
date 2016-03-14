@@ -393,7 +393,7 @@ suffix というコマンドを作成しています。
 
     share.backup_prompt = nyagos.prompt
     nyagos.prompt = function(template)
-        nyagos.echo("xxxxx")
+        print("xxxxx")
         return share.backup_prompt(template)
     end
 
