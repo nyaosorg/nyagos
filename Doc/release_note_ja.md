@@ -3,10 +3,10 @@
   (ユーザ入力文字列から引用符が削除されていない文字列を格納したテーブル)
 * スクリプトのカタログシステムを作った
     - スクリプト `catalog.d\*.lua` を `nyagos.d\catalog\.` へ移動
-    - カタログのスクリプトを `use "NAME"` で利用できるようにした
-        - `use "dollar"` -> `$PATH`形式で環境変数を展開
-        - `use "peco_history"` -> peco.exe を使ったインクリメンタルサーチ
-        - `use "peco_complete"` -> peco.exe を使ったファイル名補完
+    - カタログのスクリプトを .nyagos より `use "NAME"` で利用できるようにした
+        - `use "dollar"` → `$PATH`形式で環境変数を展開
+        - `use "peco_history"` → [peco](https://github.com/peco/peco) を使ったインクリメンタルサーチ(C-r)
+        - `use "peco_complete"` → [peco](https://github.com/peco/peco) を使ったファイル名補完(C-o)
 * 壊れたシンボリックリンクがあっても ls は中断しないようにした。
 * `ls -d` をサポート
 

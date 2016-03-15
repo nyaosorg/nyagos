@@ -3,10 +3,10 @@
   which contains parameters not removed quotations from user-typed ones.
 * Made scripts-catalog system
     - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
-    - We can import cataloged functions with `use "NAME"`
+    - We can import cataloged functions with `use "NAME"` in `.nyagos`
         - `use "dollar"` -> Expand the environment variable like `$PATH`
-        - `use "peco_history"` -> Incremental history search with peco.exe
-        - `use "peco_complete"` -> Completion with peco.exe
+        - `use "peco_history"` -> C-r: Incremental history search with [peco](https://github.com/peco/peco)
+        - `use "peco_complete"` -> C-o: Completion with [peco](https://github.com/peco/peco)
 * ls does not stop listing even if broken symbolic file exists.
 * Support: `ls -d`
 
