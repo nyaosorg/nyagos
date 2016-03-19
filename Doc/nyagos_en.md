@@ -24,11 +24,12 @@ Programming Language GO and Lua.
 
 ## Install
 
-Put files:`nyagos.exe`, `nyagos.lua` and `lua53.dll`, and
+1. Put files:`nyagos.exe`, `nyagos.lua` and `lua53.dll`, and
 directory `nyagos.d` into the one directory pointed with `%PATH%`.
-
-Put .nyagos into the directory pointed with %USERPROFILE%
-or %HOME% and modify as you like.
+2. Put `.nyagos` into 
+    - the directory pointed with `%USERPROFILE%` or `%HOME%`
+    - OR the same directory with `nyagos.exe`.
+3. Modify `.nyagos` as you like.
 
 ## Option for NYAGOS.EXE
 
@@ -160,7 +161,11 @@ We use . (one-period) as an alias of source.
 
 ## On the Startup
 
-1. NYAGOS.exe loads and execute nyagos.lua where NYAGOS.exe are put. NYAGOS.lua is wrritten with the programming language Lua, and it load .nyagos on HOME directory(=%USERPROFILE% or %HOME%). Users can customize with the .nyagos .
+1. NYAGOS.exe loads and execute nyagos.lua where NYAGOS.exe are put. 
+    NYAGOS.lua is wrritten with the programming language Lua,
+    and it load `.nyagos` on HOME directory(=%USERPROFILE% or %HOME%) 
+    or same directory with nyagos.exe.
+    Users can customize with the .nyagos .
 2. History are recorded on %APPDATA%\NYAOS_ORG\nyagos.history
 
 ## Substitution

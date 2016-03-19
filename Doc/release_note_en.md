@@ -9,6 +9,7 @@
         - `use "peco_complete"` -> C-o: Completion with [peco](https://github.com/peco/peco)
 * ls does not stop listing even if broken symbolic file exists.
 * Support: `ls -d`
+* .nyagos can be put on the same directory with nyagos.exe
 
 NYAGOS 4.1.1\_2
 ===============

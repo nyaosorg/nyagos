@@ -9,6 +9,7 @@
         - `use "peco_complete"` → [peco](https://github.com/peco/peco) を使ったファイル名補完(C-o)
 * 壊れたシンボリックリンクがあっても ls は中断しないようにした。
 * `ls -d` をサポート
+* .nyagos を nyagos.exe と同じディレクトリに置けるようにした。
 
 NYAGOS 4.1.1\_2
 ===============
