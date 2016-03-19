@@ -48,5 +48,12 @@ if home then
     if fd then
         fd:close()
         include(dotfile)
+    else
+        dotfile = string.gsub(nyagos.exe,"[^\\\\\\/]+$",".nyagos")
+        fd = io.open(nyagos.utoa(dotfile))
+        if fd then
+            fd:close()
+            include(dotfile)
+        end
     end
 end
