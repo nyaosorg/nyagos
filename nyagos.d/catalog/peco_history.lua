@@ -5,3 +5,11 @@ nyagos.bindkey("C_R", function(this)
     return result
 end)
 
+nyagos.bindkey("M_H" , function(this)
+    local result = nyagos.eval('cd --history | peco')
+    this:call("CLEAR_SCREEN")
+    if string.find(result,' ') then
+        result = '"'..result..'"'
+    end
+    return result
+end)
