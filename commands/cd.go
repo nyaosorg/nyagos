@@ -55,6 +55,10 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 			directory := cd_history[len(cd_history)-1]
 			push_cd_history()
 			return cmd_cd_sub(directory)
+		} else if cmd.Args[1] == "--history" {
+			for i := len(cd_history) - 1; i >= 0; i-- {
+				fmt.Fprintln(cmd.Stdout, cd_history[i])
+			}
 		} else if cmd.Args[1] == "-h" || cmd.Args[1] == "?" {
 			i := len(cd_history) - 10
 			if i < 0 {
