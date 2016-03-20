@@ -10,6 +10,7 @@
 * ls does not stop listing even if broken symbolic file exists.
 * Support: `ls -d`
 * .nyagos can be put on the same directory with nyagos.exe
+* Add: cd --history: print all the directory stayed with no decorations.
 
 NYAGOS 4.1.1\_2
 ===============

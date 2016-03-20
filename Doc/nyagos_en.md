@@ -88,6 +88,7 @@ No arguments, move to %HOME% or %USERPROFILE%.
 * `cd -` : move the previous directory.
 * `cd -N` (N:digit) : move the N-previous directory.
 * `cd -h` , `cd ?` : listing directories stayed.
+* `cd --history` : listing directories stayed all with no decoration
 
 ### `exit`
 
