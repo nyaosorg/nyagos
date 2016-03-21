@@ -43,7 +43,11 @@ func (this *Redirecter) open() (*os.File, error) {
 	if this.no == 0 {
 		return os.Open(this.path)
 	} else if this.isAppend {
-		return os.OpenFile(this.path, os.O_APPEND, 0666)
+		f, err := os.OpenFile(this.path, os.O_APPEND, 0666)
+		if err != nil && os.IsNotExist(err) {
+			f, err = os.Create(this.path)
+		}
+		return f, err
 	} else {
 		return os.Create(this.path)
 	}
