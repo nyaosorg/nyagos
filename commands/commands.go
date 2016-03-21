@@ -72,6 +72,7 @@ func Init() {
 		"rmdir":   cmd_rmdir,
 		"set":     cmd_set,
 		"source":  cmd_source,
+		"touch":   cmd_touch,
 		"which":   cmd_which,
 	}
 	SetHook(Exec)
