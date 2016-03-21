@@ -132,6 +132,10 @@ you should `set "ENV=VAR"`.
 
 * `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
 
+### `touch FILENAME(s)`
+
+If FILENAME exists, update its timestamp, otherwise create it.
+
 ### `which [-a] COMMAND-NAME`
 
 Report which file is executed.

@@ -11,6 +11,7 @@
 * Support: `ls -d`
 * .nyagos can be put on the same directory with nyagos.exe
 * Add: cd --history: print all the directory stayed with no decorations.
+* Implemented built-in command tiny `touch`
 * Fix: `>> bar` fails when `bar` does not exist(#121)
 
 
