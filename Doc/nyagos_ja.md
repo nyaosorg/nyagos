@@ -465,7 +465,7 @@ C言語の access 関数と同じです。
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。
-(例：「go1.5」)
+(例：「go1.6」)
 
 ### `nyagos.goarch`
 
@@ -483,7 +483,7 @@ NYAGOS は https://github.com/zetamatta/nyagos にて公開しています。
 
 NYAGOS のビルドには
 
-* [go 1.5.2 windows](http://golang.org)
+* [go 1.6 windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 
 が必要となります。言語標準以外では、以下のモジュールを

@@ -423,7 +423,7 @@ If the file does not exist, STAT is nil.
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe
-(for example, "go1.5")
+(for example, "go1.6")
 
 ### `nyagos.goarch`
 
@@ -442,7 +442,7 @@ On the New BSD-licenses, you can use NYAGOS.
 
 To build nyagos.exe , these softwares are required:
 
-* [go 1.5.2 for windows](http://golang.org)
+* [go 1.6 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
