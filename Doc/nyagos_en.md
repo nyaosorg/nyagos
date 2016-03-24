@@ -330,6 +330,7 @@ When the key is pressed, call the function.
 * `this:firstword()` ... get the first word(=command-name) on the command-line.
 * `this:lastword()` ... get the last word and its position on the command-line.
 * `this:boxprint({...})` ... listing table values like completion-list.
+* `this:replacefrom(POS,"TEXT")` ... replace TEXT between POS and cursor.
 
 The return value of function is used as below
 
