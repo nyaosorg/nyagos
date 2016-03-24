@@ -1,6 +1,3 @@
-* `echo` prints quotations as same as cmd.exe.
-* Add member 'rawargs' to lua-function's first parameter table,
-  which contains parameters not removed quotations from user-typed ones.
 * Made scripts-catalog system
     - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
     - We can import cataloged functions with `use "NAME"` in `.nyagos`
@@ -17,6 +14,8 @@
 * Add: `cd --history`: print all the directory stayed with no decorations.
 * Implemented built-in command tiny `touch`
 * Fix: `>> bar` fails when `bar` does not exist(#121)
+* Add member 'rawargs' to lua-function's first parameter table,
+  which contains parameters not removed quotations from user-typed ones.
 
 
 NYAGOS 4.1.1\_2
