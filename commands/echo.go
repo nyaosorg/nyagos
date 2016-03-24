@@ -8,6 +8,6 @@ import (
 )
 
 func cmd_echo(cmd *Interpreter) (ErrorLevel, error) {
-	fmt.Fprintln(cmd.Stdout, strings.Join(cmd.RawArgs[1:], " "))
+	fmt.Fprintln(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
 	return NOERROR, nil
 }
