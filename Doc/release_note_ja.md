@@ -5,10 +5,14 @@
     - スクリプト `catalog.d\*.lua` を `nyagos.d\catalog\.` へ移動
     - カタログのスクリプトを .nyagos より `use "NAME"` で利用できるようにした
         - `use "dollar"` → `$PATH`形式で環境変数を展開
-        - `use "peco_history"` → [peco](https://github.com/peco/peco) を使ったインクリメンタルサーチ(C-r)
-        - `use "peco_complete"` → [peco](https://github.com/peco/peco) を使ったファイル名補完(C-o)
-* 壊れたシンボリックリンクがあっても ls は中断しないようにした。
-* `ls -d` をサポート
+        - `use "peco"` → [peco](https://github.com/peco/peco) 向け拡張
+            * C-r: ヒストリ
+            * C-o: ファイル名
+            * M-h: ディレクトリヒストリ
+            * M-g: Git のリビジョン名
+* ls
+    - 壊れたシンボリックリンクがあっても ls は中断しないようにした。
+    - `ls -d` をサポート
 * .nyagos を nyagos.exe と同じディレクトリに置けるようにした。
 * cd のヒストリ全てを `cd --history` で出せるようにした
 * 組込みの簡易`touch`コマンドを実装

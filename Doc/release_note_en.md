@@ -5,12 +5,16 @@
     - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
     - We can import cataloged functions with `use "NAME"` in `.nyagos`
         - `use "dollar"` -> Expand the environment variable like `$PATH`
-        - `use "peco_history"` -> C-r: Incremental history search with [peco](https://github.com/peco/peco)
-        - `use "peco_complete"` -> C-o: Completion with [peco](https://github.com/peco/peco)
-* ls does not stop listing even if broken symbolic file exists.
-* Support: `ls -d`
+        - `use "peco"` -> powered by [peco](https://github.com/peco/peco)
+            * C-r: History
+            * C-o: Filename completion
+            * M-h: Directory history
+            * M-g: Git-revision
+* ls 
+    - not stop listing even if broken symbolic file exists.
+    - Support: `ls -d`
 * .nyagos can be put on the same directory with nyagos.exe
-* Add: cd --history: print all the directory stayed with no decorations.
+* Add: `cd --history`: print all the directory stayed with no decorations.
 * Implemented built-in command tiny `touch`
 * Fix: `>> bar` fails when `bar` does not exist(#121)
 
