@@ -14,7 +14,8 @@ func Glob(pattern string) ([]string, error) {
 	match := make([]string, 0, 100)
 	dirname := filepath.Dir(pattern)
 	err := ForFiles(pattern, func(findf *FileInfo) bool {
-		if name := findf.Name(); name[0] != '.' || pname[0] == '.' {
+		name := findf.Name()
+		if (name[0] != '.' || pname[0] == '.') && !findf.IsHidden() {
 			match = append(match, filepath.Join(dirname, name))
 		}
 		return true
