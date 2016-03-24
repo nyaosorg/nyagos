@@ -32,6 +32,27 @@ func getBufferForCallBack(L lua.Lua) (*conio.Buffer, int) {
 	return buffer, 0
 }
 
+func callReplace(L lua.Lua) int {
+	buffer, stackRc := getBufferForCallBack(L)
+	if buffer == nil {
+		return stackRc
+	}
+	pos, pos_err := L.ToInteger(-2)
+	if pos_err != nil {
+		return L.Push(nil, pos_err.Error())
+	}
+	str, str_err := L.ToString(-1)
+	if str_err != nil {
+		return L.Push(nil, str_err.Error())
+	}
+	pos_zero_base := pos - 1
+	if pos_zero_base > buffer.Length {
+		return L.Push(nil, fmt.Errorf(":replace: pos=%d: Too big.", pos))
+	}
+	buffer.ReplaceAndRepaint(pos_zero_base, str)
+	return L.Push(true, nil)
+}
+
 func callInsert(L lua.Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
@@ -135,14 +156,15 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 	this.L.Push(
 		lua.TTable{
 			Dict: map[string]lua.Pushable{
-				"pos":       lua.Integer(pos),
-				"text":      lua.TString{text.String()},
-				"buffer":    lua.TLightUserData{unsafe.Pointer(buffer)},
-				"call":      lua.TGoFunction{callKeyFunc},
-				"insert":    lua.TGoFunction{callInsert},
-				"lastword":  lua.TGoFunction{callLastWord},
-				"firstword": lua.TGoFunction{callFirstWord},
-				"boxprint":  lua.TGoFunction{callBoxListing},
+				"pos":         lua.Integer(pos),
+				"text":        lua.TString{text.String()},
+				"buffer":      lua.TLightUserData{unsafe.Pointer(buffer)},
+				"call":        lua.TGoFunction{callKeyFunc},
+				"insert":      lua.TGoFunction{callInsert},
+				"replacefrom": lua.TGoFunction{callReplace},
+				"lastword":    lua.TGoFunction{callLastWord},
+				"firstword":   lua.TGoFunction{callFirstWord},
+				"boxprint":    lua.TGoFunction{callBoxListing},
 			},
 			Array: map[int]lua.Pushable{},
 		})
