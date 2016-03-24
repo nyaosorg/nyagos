@@ -14,8 +14,9 @@
 * Add: `cd --history`: print all the directory stayed with no decorations.
 * Implemented built-in command tiny `touch`
 * Fix: `>> bar` fails when `bar` does not exist(#121)
-* Add member 'rawargs' to lua-function's first parameter table,
+* Add the field `rawargs` to lua-command's parameter table,
   which contains parameters not removed quotations from user-typed ones.
+* Add the method `replacefrom` to bindkey-function's parameter table.
 
 
 NYAGOS 4.1.1\_2
