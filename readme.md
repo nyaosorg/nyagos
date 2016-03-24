@@ -113,5 +113,3 @@ Author
 ------
 
 * HAYAMA\_Kaoru : [zetamatta](https://github.com/zetamatta) 
-
-I dedicate this code to my late father.
