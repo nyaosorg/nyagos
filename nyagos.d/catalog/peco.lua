@@ -31,3 +31,9 @@ nyagos.bindkey("M_H" , function(this)
     end
     return result
 end)
+
+nyagos.bindkey("M_G" , function(this)
+    local result = nyagos.eval('git log --pretty="format:%h %s" | peco')
+    this:call("CLEAR_SCREEN")
+    return string.match(result,"^%S+") or ""
+end)
