@@ -5,6 +5,7 @@ The Nihongo Yet Another GOing Shell
 / [Since 4.1](./Doc/since_4.1_ja.md)
 / [Manual](./Doc/nyagos_ja.md)
 / [History 4.0](./Doc/history_4.0_ja.md)
+/ [Extensions](./Doc/use.md)
 
 NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェルです。
 

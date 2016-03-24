@@ -5,6 +5,7 @@ English / [Japanese](./readme_ja.md)
 / [Since 4.1](./Doc/since_4.1_en.md)
 / [Manual](./Doc/nyagos_en.md)
 / [History 4.0](./Doc/history_4.0_en.md)
+/ [Extensions](./Doc/use.md)
 
 NYAGOS is the commandline-shell for Windows written with the
 Programming Language GO and Lua.
