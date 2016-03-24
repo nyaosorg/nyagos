@@ -6,6 +6,7 @@ end
 
 nyagos.bindkey("C-o",function(this)
     local word,pos = this:lastword()
+    word = string.gsub(word,'"','')
     share.peco_temp_out = nyagos.glob(word.."*")
     local result=nyagos.eval('peco_temp_out | peco')
     this:call("CLEAR_SCREEN")
