@@ -1,3 +1,5 @@
+NYAGOS 4.1.2\_0
+===============
 * Made scripts-catalog system
     - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
     - We can import cataloged functions with `use "NAME"` in `.nyagos`
