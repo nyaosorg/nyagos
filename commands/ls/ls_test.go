@@ -11,7 +11,7 @@ func TestMain(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ls .: %s", err.Error())
 	}
-	err = Main([]string{"-l","ls_test.go"}, os.Stdout, os.Stderr)
+	err = Main([]string{"-l", "ls_test.go"}, os.Stdout, os.Stderr)
 	if err != nil {
 		t.Fatalf("ls *: %s", err.Error())
 	}
