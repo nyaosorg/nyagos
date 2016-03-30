@@ -420,6 +420,10 @@ If the file exists, the table STAT has these members.
 
 If the file does not exist, STAT is nil.
 
+### `nyagos.open(PATH,MODE)`
+
+Same as io.open but PATH must be written in UTF8.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe

@@ -1,3 +1,5 @@
+* Add: nyagos.open(PATH,MODE) which PATH is in UTF8.
+
 NYAGOS 4.1.2\_0
 ===============
 * Made scripts-catalog system

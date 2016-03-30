@@ -1,3 +1,5 @@
+* Add: nyagos.open(PATH,MODE) UTF8版io.open
+
 NYAGOS 4.1.2\_0
 ===============
 * スクリプトのカタログシステムを作った

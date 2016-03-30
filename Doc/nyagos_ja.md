@@ -462,6 +462,10 @@ C言語の access 関数と同じです。
 
 入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
 
+### `nyagos.open(PATH,MODE)`
+
+PATH が utf8 と解釈される以外は io.open と等価です。
+
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。
