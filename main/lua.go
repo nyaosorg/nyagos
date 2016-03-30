@@ -301,6 +301,7 @@ func init() {
 		"getviewwidth":         &lua.TGoFunction{cmdGetViewWidth},
 		"getwd":                &lua.TGoFunction{cmdGetwd},
 		"glob":                 &lua.TGoFunction{cmdGlob},
+		"open":                 &lua.TGoFunction{lua.OpenByUtf8Path},
 		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
 		"quotation":            lua.StringProperty{&conio.Delimiters},
 		"raweval":              &lua.TGoFunction{cmdRawEval},
