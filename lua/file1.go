@@ -8,13 +8,13 @@ import (
 )
 
 type CFileT struct {
-	FilePtr uintptr
+	FilePtr ansicfile.FilePtr
 	Closer  uintptr
 }
 
 func ioClose(L Lua) int {
 	userdata := (*CFileT)(L.ToUserData(1))
-	ansicfile.Close(userdata.FilePtr)
+	userdata.FilePtr.Close()
 	return 0
 }
 

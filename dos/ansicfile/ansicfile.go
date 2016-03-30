@@ -10,7 +10,9 @@ var wfopen = msvcrt.NewProc("_wfopen")
 var fclose = msvcrt.NewProc("fclose")
 var fputc = msvcrt.NewProc("fputc")
 
-func Open(path string, mode string) (uintptr, error) {
+type FilePtr uintptr
+
+func Open(path string, mode string) (FilePtr, error) {
 	path_ptr, path_err := syscall.UTF16PtrFromString(path)
 	if path_err != nil {
 		return 0, path_err
@@ -24,17 +26,14 @@ func Open(path string, mode string) (uintptr, error) {
 	if rc == 0 {
 		return 0, err
 	} else {
-		return rc, nil
+		return FilePtr(rc), nil
 	}
 }
 
-// Close has to be not a method but a simple function
-// because it uses as callback function from DLLs (ex lua53.dll).
-
-func Close(fp uintptr) {
-	fclose.Call(fp)
+func (fp FilePtr) Close() {
+	fclose.Call(uintptr(fp))
 }
 
-func Putc(c byte, fp uintptr) {
-	fputc.Call(uintptr(c), fp)
+func (fp FilePtr) Putc(c byte) {
+	fputc.Call(uintptr(c), uintptr(fp))
 }
