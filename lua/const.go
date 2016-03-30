@@ -10,3 +10,4 @@ const LUA_TSTRING = 4
 const LUA_TTABLE = 5
 const LUA_TTHREAD = 8
 const LUA_TUSERDATA = 7
+const LUA_FILEHANDLE = "FILE*"
