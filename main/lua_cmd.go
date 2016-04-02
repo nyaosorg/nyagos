@@ -644,3 +644,16 @@ func cmdOpenFile(L lua.Lua) int {
 	L.PushNil()
 	return 2
 }
+
+func cmdLoadFile(L lua.Lua) int {
+	path, path_err := L.ToString(-1)
+	if path_err != nil {
+		return L.Push(nil, path_err.Error())
+	}
+	_, err := L.LoadFile(path, "bt")
+	if err != nil {
+		return L.Push(nil, err.Error())
+	} else {
+		return 1
+	}
+}
