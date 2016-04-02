@@ -16,7 +16,7 @@ print(string.format("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s",
 print("Copyright (c) 2014-2016 HAYAMA_Kaoru and NYAOS.ORG")
 
 local function include(fname)
-    local chank,err=loadfile(nyagos.utoa(fname))
+    local chank,err=nyagos.loadfile(fname)
     if err then
         print(err)
     elseif chank then
@@ -44,13 +44,13 @@ end
 local home = nyagos.getenv("HOME") or nyagos.getenv("USERPROFILE")
 if home then 
     local dotfile = nyagos.pathjoin(home,'.nyagos')
-    local fd=io.open(nyagos.utoa(dotfile))
+    local fd=nyagos.open(dotfile)
     if fd then
         fd:close()
         include(dotfile)
     else
         dotfile = string.gsub(nyagos.exe,"[^\\\\\\/]+$",".nyagos")
-        fd = io.open(nyagos.utoa(dotfile))
+        fd = nyagos.open(dotfile)
         if fd then
             fd:close()
             include(dotfile)
