@@ -628,21 +628,25 @@ func cmdGetViewWidth(L lua.Lua) int {
 }
 
 func cmdOpenFile(L lua.Lua) int {
-	path, path_err := L.ToString(-2)
+	path, path_err := L.ToString(1)
 	if path_err != nil {
 		return L.Push(nil, path_err.Error())
 	}
-	mode, mode_err := L.ToString(-1)
+	mode, mode_err := L.ToString(2)
 	if mode_err != nil {
 		return L.Push(nil, mode_err.Error())
 	}
+	if mode == "" {
+		mode = "r"
+	}
 	fd, fd_err := ansicfile.Open(path, mode)
 	if fd_err != nil {
+		// print("-- open '", path, "' failed --\n")
 		return L.Push(nil, fd_err)
 	}
+	// print("-- open '", path, "' success --\n")
 	L.PushStream(fd)
-	L.PushNil()
-	return 2
+	return 1
 }
 
 func cmdLoadFile(L lua.Lua) int {
