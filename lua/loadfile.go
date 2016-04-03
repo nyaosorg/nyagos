@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"sync"
 	"syscall"
 	"unsafe"
 )
@@ -11,6 +12,7 @@ import (
 var lua_load = luaDLL.NewProc("lua_load")
 
 var static_load_buffer [4096]byte
+var load_buffer_mutex sync.Mutex
 
 func callback_reader(L uintptr, fd *os.File, size *uintptr) *byte {
 	n, err := fd.Read(static_load_buffer[:])
@@ -39,6 +41,8 @@ func (L Lua) LoadFile(path string, mode string) (int, error) {
 		return 0, err
 	}
 	callback := syscall.NewCallbackCDecl(callback_reader)
+	load_buffer_mutex.Lock()
+	defer load_buffer_mutex.Unlock()
 	rc, _, _ := lua_load.Call(
 		L.State(),
 		callback,
