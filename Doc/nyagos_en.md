@@ -424,6 +424,10 @@ If the file does not exist, STAT is nil.
 
 Same as io.open but PATH must be written in UTF8.
 
+### `nyagos.loadfile(PATH)`
+
+Same as loadfile on root-namespace but PATH must be written in UTF8.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe

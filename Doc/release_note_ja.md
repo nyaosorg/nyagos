@@ -1,4 +1,5 @@
 * Add: nyagos.open(PATH,MODE) UTF8版io.open
+* Add: nyagos.loadfile(PATH) UTF8版loadfile
 
 NYAGOS 4.1.2\_0
 ===============

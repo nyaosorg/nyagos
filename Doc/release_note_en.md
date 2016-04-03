@@ -1,4 +1,5 @@
 * Add: nyagos.open(PATH,MODE) which PATH is in UTF8.
+* Add: nyagos.loadfile(PATH) which PATH is in UTF8.
 
 NYAGOS 4.1.2\_0
 ===============

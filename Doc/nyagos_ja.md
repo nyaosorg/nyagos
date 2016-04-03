@@ -466,6 +466,10 @@ C言語の access 関数と同じです。
 
 PATH が utf8 と解釈される以外は io.open と等価です。
 
+### `nyagos.loadfile(PATH)`
+
+PATH が UTF8 と解釈される以外は、通常の loadfile と等価です。
+
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。
