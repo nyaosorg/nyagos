@@ -1,4 +1,4 @@
-## Built-in commnads
+## Built-in commands
 
 These commands have their alias. For example, `ls` => `__ls__`.
 
