@@ -1,11 +1,10 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-[English](./readme.md) / Japanese
-/ [Since 4.1](./Doc/since_4.1_ja.md)
-/ [Manual](./Doc/nyagos_ja.md)
-/ [History 4.0](./Doc/history_4.0_ja.md)
-/ [Extensions](./Doc/use.md)
+[English](./readme.md)
+/ Japanese
+/ [Manual(English)](Doc/00-Index_en.md)
+/ [Manual(Japanese)](Doc/00-Index_ja.md)
 
 NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェルです。
 
@@ -55,6 +54,9 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスク�
 * [go 1.6 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (任意です。無い場合、幾つかの Lua 拡張が動きませんが、nyagos.exe 自体は動作します)
+* http://github.com/mattn/go-runewidth
+* http://github.com/shiena/ansicolor
+* http://github.com/atotto/clipboard
 
 `%GOPATH%` にて
 

@@ -1,11 +1,10 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-English / [Japanese](./readme_ja.md)
-/ [Since 4.1](./Doc/since_4.1_en.md)
-/ [Manual](./Doc/nyagos_en.md)
-/ [History 4.0](./Doc/history_4.0_en.md)
-/ [Extensions](./Doc/use.md)
+English
+/ [Japanese](./readme_ja.md)
+/ [Manual(English)](Doc/00-Index_en.md)
+/ [Manual(Japanese)](Doc/00-Index_ja.md)
 
 NYAGOS is the commandline-shell for Windows written with the
 Programming Language GO and Lua.
@@ -56,6 +55,9 @@ These sortwares are required.
 * [go 1.6 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (Optionally. Without it, some lua-extensions does not work, but nyagos.exe itself is available.)
+- http://github.com/mattn/go-runewidth
+- http://github.com/shiena/ansicolor
+- http://github.com/atotto/clipboard
 
 On `%GOPATH%` folder,
 
