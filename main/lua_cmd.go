@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
@@ -8,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"unsafe"
 
 	"github.com/shiena/ansicolor"
 
@@ -660,4 +662,62 @@ func cmdLoadFile(L lua.Lua) int {
 	} else {
 		return 1
 	}
+}
+
+type iolines_t struct {
+	Fd   *os.File
+	Scnr *bufio.Scanner
+}
+
+func iolines_t_gc(L lua.Lua) int {
+	userdata := (*iolines_t)(L.ToUserData(1))
+	// print("iolines_t_gc: gc\n")
+	if userdata == nil || userdata.Fd == nil {
+		// print("iolines_t_gc: nil\n")
+		return 0
+	}
+	// print("iolines_t_g: close\n")
+	userdata.Fd.Close()
+	userdata.Fd = nil
+	return 0
+}
+
+func cmdLinesCallback(L lua.Lua) int {
+	userdata := (*iolines_t)(L.ToUserData(1))
+	if userdata == nil || userdata.Fd == nil || userdata.Scnr == nil {
+		// print("cmdLinesCallback: nil\n")
+		return L.Push(nil)
+	}
+	if !userdata.Scnr.Scan() {
+		// print("cmdLinesCallback: eof\n")
+		userdata.Scnr = nil
+		userdata.Fd.Close()
+		userdata.Fd = nil
+		return L.Push(nil)
+	}
+	text := userdata.Scnr.Text()
+	// print("cmdLinesCallback: text='", text, "'\n")
+	return L.Push(text)
+}
+
+func cmdLines(L lua.Lua) int {
+	path, path_err := L.ToString(1)
+	if path_err != nil {
+		return L.Push(nil, path_err.Error())
+	}
+	fd, fd_err := os.Open(path)
+	if fd_err != nil {
+		return L.Push(nil, fd_err.Error())
+	}
+	L.Push(cmdLinesCallback)
+	var userdata *iolines_t
+	userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
+	userdata.Fd = fd
+	userdata.Scnr = bufio.NewScanner(fd)
+	L.NewTable()
+	L.Push(iolines_t_gc)
+	L.SetField(-2, "__gc")
+	L.SetMetaTable(-2)
+	// print("cmdLines: end\n")
+	return 2
 }
