@@ -88,6 +88,7 @@ func (this *Interpreter) Close() {
 		this.CloseHook(this)
 		this.CloseHook = nil
 	}
+	this.closeAtEnd()
 }
 
 func New() *Interpreter {

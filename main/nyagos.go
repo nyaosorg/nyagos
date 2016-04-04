@@ -84,6 +84,14 @@ func when_panic() {
 
 var luaFilter lua.Pushable = lua.TNil{}
 
+func itprCloneHook(this *interpreter.Interpreter) error {
+	LL := NewNyagosLua()
+	this.Tag = LL
+	this.CloneHook = itprCloneHook
+	this.Closer = append(this.Closer, LL)
+	return nil
+}
+
 func main() {
 	defer when_panic()
 
@@ -136,18 +144,8 @@ func main() {
 	for {
 		it := interpreter.New()
 		it.Tag = L
-		it.CloneHook = func(this *interpreter.Interpreter) error {
-			this.Tag = NewNyagosLua()
-			it.CloseHook = func(this *interpreter.Interpreter) {
-				if this.Tag != nil {
-					if L, ok := this.Tag.(lua.Lua); ok {
-						L.Close()
-					}
-					this.Tag = nil
-				}
-			}
-			return nil
-		}
+		it.CloneHook = itprCloneHook
+		it.Closer = append(it.Closer, L)
 		conio.DefaultEditor.Tag = it
 
 		wd, wdErr := os.Getwd()

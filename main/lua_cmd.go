@@ -190,17 +190,10 @@ func cmdExec(L lua.Lua) int {
 		it := getRegInt(L)
 		if it == nil {
 			it = interpreter.New()
-			it.Tag = NewNyagosLua()
-			it.CloneHook = func(this *interpreter.Interpreter) error {
-				this.Tag = NewNyagosLua()
-				it.CloseHook = func(this *interpreter.Interpreter) {
-					if L, ok := it.Tag.(lua.Lua); ok {
-						L.Close()
-					}
-					it.Tag = nil
-				}
-				return nil
-			}
+			L := NewNyagosLua()
+			it.Tag = L
+			it.Closer = append(it.Closer, L)
+			it.CloneHook = itprCloneHook
 		} else {
 			it, err = it.Clone()
 			if err != nil {
