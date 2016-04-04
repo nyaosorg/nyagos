@@ -66,8 +66,9 @@ func (this Lua) OpenLibs() {
 
 var lua_close = luaDLL.NewProc("lua_close")
 
-func (this Lua) Close() {
+func (this Lua) Close() error {
 	lua_close.Call(this.State())
+	return nil
 }
 
 func (this Lua) Source(fname string) error {
