@@ -192,8 +192,8 @@ func cmdExec(L lua.Lua) int {
 			it = interpreter.New()
 			L := NewNyagosLua()
 			it.Tag = L
-			it.Closer = append(it.Closer, L)
-			it.CloneHook = itprCloneHook
+			it.Closers = append(it.Closers, L)
+			it.OnClone = itprCloneHook
 		} else {
 			it, err = it.Clone()
 			if err != nil {

@@ -87,8 +87,8 @@ var luaFilter lua.Pushable = lua.TNil{}
 func itprCloneHook(this *interpreter.Interpreter) error {
 	LL := NewNyagosLua()
 	this.Tag = LL
-	this.CloneHook = itprCloneHook
-	this.Closer = append(this.Closer, LL)
+	this.OnClone = itprCloneHook
+	this.Closers = append(this.Closers, LL)
 	return nil
 }
 
@@ -144,8 +144,8 @@ func main() {
 	for {
 		it := interpreter.New()
 		it.Tag = L
-		it.CloneHook = itprCloneHook
-		it.Closer = append(it.Closer, L)
+		it.OnClone = itprCloneHook
+		it.Closers = append(it.Closers, L)
 		conio.DefaultEditor.Tag = it
 
 		wd, wdErr := os.Getwd()

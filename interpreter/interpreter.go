@@ -64,30 +64,25 @@ type Interpreter struct {
 	exec.Cmd
 	Stdio        [3]*os.File
 	HookCount    int
-	Closer       []io.Closer
 	Tag          interface{}
 	PipeSeq      [2]uint
 	IsBackGround bool
 	RawArgs      []string
 
-	CloneHook func(*Interpreter) error
-	CloseHook func(*Interpreter)
+	OnClone func(*Interpreter) error
+	Closers []io.Closer
 }
 
 func (this *Interpreter) closeAtEnd() {
-	if this.Closer != nil {
-		for _, c := range this.Closer {
+	if this.Closers != nil {
+		for _, c := range this.Closers {
 			c.Close()
 		}
-		this.Closer = nil
+		this.Closers = nil
 	}
 }
 
 func (this *Interpreter) Close() {
-	if this.CloseHook != nil {
-		this.CloseHook(this)
-		this.CloseHook = nil
-	}
 	this.closeAtEnd()
 }
 
@@ -128,11 +123,10 @@ func (this *Interpreter) Clone() (*Interpreter, error) {
 	rv.HookCount = this.HookCount
 	rv.Tag = this.Tag
 	rv.PipeSeq = rv.PipeSeq
-	rv.Closer = nil
-	rv.CloseHook = this.CloseHook
-	rv.CloneHook = this.CloneHook
-	if this.CloneHook != nil {
-		if err := this.CloneHook(rv); err != nil {
+	rv.Closers = nil
+	rv.OnClone = this.OnClone
+	if this.OnClone != nil {
+		if err := this.OnClone(rv); err != nil {
 			return nil, err
 		}
 	}
@@ -307,9 +301,9 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
 			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
-			cmd.CloneHook = this.CloneHook
-			if this.CloneHook != nil {
-				if err := this.CloneHook(cmd); err != nil {
+			cmd.OnClone = this.OnClone
+			if this.OnClone != nil {
+				if err := this.OnClone(cmd); err != nil {
 					return ErrorLevel(255), err
 				}
 			}
@@ -318,7 +312,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 
 			if pipeIn != nil {
 				cmd.SetStdin(pipeIn)
-				cmd.Closer = append(cmd.Closer, pipeIn)
+				cmd.Closers = append(cmd.Closers, pipeIn)
 				pipeIn = nil
 			}
 
@@ -329,7 +323,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				if state.Term == "|&" {
 					cmd.SetStderr(pipeOut)
 				}
-				cmd.Closer = append(cmd.Closer, pipeOut)
+				cmd.Closers = append(cmd.Closers, pipeOut)
 			}
 
 			for _, red := range state.Redirect {
