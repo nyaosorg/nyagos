@@ -113,6 +113,7 @@ Acknowledgement
 * HABATA Katsuyuki
 * [hisomura](https://github.com/hisomura)
 * [tsuyoshicho](https://github.com/tsuyoshicho)
+* [rane-hs](https://github.com/rane-hs)
 
 Author
 ------

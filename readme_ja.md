@@ -112,6 +112,7 @@ make.cmd の使い方については `make.cmd help` を参照してください
 * HABATA Katsuyuki
 * [hisomura](https://github.com/hisomura)
 * [tsuyoshicho](https://github.com/tsuyoshicho)
+* [rane-hs](https://github.com/rane-hs)
 
 開発者
 ------
