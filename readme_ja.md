@@ -37,8 +37,8 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
 
 バッチファイル `makeicon.cmd` はデスクトップにアイコンを作成します。
 
-* [英語マニュアル](Doc/nyagos_en.md)
-* [日本語マニュアル](Doc/nyagos_ja.md)
+* [英語マニュアル](Doc/00-Index_en.md)
+* [日本語マニュアル](Doc/00-Index_ja.md)
 
 アンインストール
 ----------------

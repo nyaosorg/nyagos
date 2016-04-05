@@ -38,8 +38,8 @@ The binary files can be downloaded on [Release](https://github.com/zetamatta/nya
 
 The batchfile: `makeicon.cmd` makes icon on your desktop.
 
-* [English Document](Doc/nyagos_en.md)
-* [Japanese Document](Doc/nyagos_ja.md)
+* [English Document](Doc/00-Index_en.md)
+* [Japanese Document](Doc/00-Index_ja.md)
 
 Uninstall
 ---------
