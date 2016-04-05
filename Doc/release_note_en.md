@@ -1,5 +1,6 @@
 * Add: nyagos.open(PATH,MODE) which PATH is in UTF8.
 * Add: nyagos.loadfile(PATH) which PATH is in UTF8.
+* Built-in `echo` uses CRLF not LF as the end of line.(#124)
 
 NYAGOS 4.1.2\_0
 ===============
