@@ -45,6 +45,7 @@ goto build
         go get -u github.com/shiena/ansicolor 
         go get -u github.com/atotto/clipboard       
         go get -u github.com/zetamatta/goutputdebugstring
+        go get -u github.com/mattn/go-isatty
         goto end
 
 :package
