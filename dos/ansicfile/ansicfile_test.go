@@ -5,8 +5,8 @@ import "testing"
 func TestOpen(t *testing.T) {
 	fp, err := Open("あ", "w")
 	if err == nil {
-		Putc(byte('1'), fp)
-		Close(fp)
+		fp.Putc(byte('1'))
+		fp.Close()
 	} else {
 		t.Fatalf("NG: Open(\"あ\") Failed by %s", err.Error())
 	}
