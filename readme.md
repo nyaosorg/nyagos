@@ -58,6 +58,7 @@ These sortwares are required.
 - http://github.com/mattn/go-runewidth
 - http://github.com/shiena/ansicolor
 - http://github.com/atotto/clipboard
+- http://github.com/mattn/go-isatty
 
 On `%GOPATH%` folder,
 
@@ -111,6 +112,7 @@ Acknowledgement
 * [orthographic-pedant](https://github.com/orthographic-pedant)
 * HABATA Katsuyuki
 * [hisomura](https://github.com/hisomura)
+* [tsuyoshicho](https://github.com/tsuyoshicho)
 
 Author
 ------

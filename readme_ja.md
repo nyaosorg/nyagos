@@ -57,6 +57,7 @@ UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスク�
 * http://github.com/mattn/go-runewidth
 * http://github.com/shiena/ansicolor
 * http://github.com/atotto/clipboard
+* http://github.com/mattn/go-isatty
 
 `%GOPATH%` にて
 
@@ -110,6 +111,7 @@ make.cmd の使い方については `make.cmd help` を参照してください
 * [orthographic-pedant](https://github.com/orthographic-pedant)
 * HABATA Katsuyuki
 * [hisomura](https://github.com/hisomura)
+* [tsuyoshicho](https://github.com/tsuyoshicho)
 
 開発者
 ------
