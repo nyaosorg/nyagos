@@ -1,6 +1,7 @@
 * Add: nyagos.open(PATH,MODE) UTF8版io.open
 * Add: nyagos.loadfile(PATH) UTF8版loadfile
 * 内蔵`echo`の改行コードとして LF ではなく CRLF を使うようにした (#124)
+* Lua のデフォルト入出力を NYAGOS のリダイレクトに追随させるようにした
 
 NYAGOS 4.1.2\_0
 ===============
