@@ -46,6 +46,16 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.Call(1, 0)
 		L.Pop(1) // remove io-table
 	}
+	if f, f_ok := cmd.Stdin.(*os.File); f_ok && f != nil {
+		L.GetGlobal("io")       // +1
+		L.GetField(-1, "input") // +1 (get function pointer)
+		if err := L.PushFileReader(f); err != nil {
+			L.Pop(2)
+			return interpreter.ErrorLevel(255), err
+		}
+		L.Call(1, 0)
+		L.Pop(1) // remove io-table
+	}
 
 	if err := L.LoadBufferX(cmd.Args[0], this.Chank, "b"); err != nil {
 		return interpreter.ErrorLevel(255), err
