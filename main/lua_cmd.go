@@ -36,7 +36,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		return interpreter.ErrorLevel(255), errors.New("LuaBinaryChank.Call: Lua instance not found")
 	}
 
-	if f, f_ok := cmd.Stdout.(*os.File); f_ok && f != nil && f != os.Stdout && f != os.Stderr {
+	if f := cmd.Stdio[1]; f != os.Stdout && f != os.Stderr {
 		L.GetGlobal("io")        // +1
 		L.GetField(-1, "output") // +1 (get function pointer)
 		if err := L.PushFileWriter(f); err != nil {
@@ -46,7 +46,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.Call(1, 0)
 		L.Pop(1) // remove io-table
 	}
-	if f, f_ok := cmd.Stdin.(*os.File); f_ok && f != nil && f != os.Stdin {
+	if f := cmd.Stdio[0]; f != os.Stdin {
 		L.GetGlobal("io")       // +1
 		L.GetField(-1, "input") // +1 (get function pointer)
 		if err := L.PushFileReader(f); err != nil {
