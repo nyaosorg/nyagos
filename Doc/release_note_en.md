@@ -2,6 +2,7 @@
 * Add: nyagos.loadfile(PATH) which PATH is in UTF8.
 * Built-in `echo` uses CRLF not LF as the end of line.(#124)
 * Lua's default file handles follow nyagos's redirect and pipeline
+* Implemented touch's -r and -t option
 
 NYAGOS 4.1.2\_0
 ===============

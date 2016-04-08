@@ -54,7 +54,7 @@ you should `set "ENV=VAR"`.
 
 * `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
 
-### `touch FILENAME(s)`
+### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r ref_file ] FILENAME(s)`
 
 If FILENAME exists, update its timestamp, otherwise create it.
 

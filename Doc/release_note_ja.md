@@ -2,6 +2,7 @@
 * Add: nyagos.loadfile(PATH) UTF8版loadfile
 * 内蔵`echo`の改行コードとして LF ではなく CRLF を使うようにした (#124)
 * Lua のデフォルト入出力を NYAGOS のリダイレクトに追随させるようにした
+* touch コマンドに -r と -t オプションを実装した
 
 NYAGOS 4.1.2\_0
 ===============
