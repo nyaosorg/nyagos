@@ -21,31 +21,67 @@ func atoiOr(s string, orelse int) int {
 	return val
 }
 
+func readTimeStamp(s string) *time.Time {
+	m := timePattern.FindStringSubmatch(s)
+	if m == nil {
+		return nil
+	}
+	yy, yy_err := strconv.Atoi(m[2])
+	if yy_err != nil {
+		yy = time.Now().Year() % 100
+	}
+	cc, cc_err := strconv.Atoi(m[1])
+	if cc_err != nil {
+		if yy <= 68 {
+			cc = 20
+		} else {
+			cc = 19
+		}
+	}
+	year := yy + cc*100
+	month, _ := strconv.Atoi(m[3])
+	mday, _ := strconv.Atoi(m[4])
+	hour := atoiOr(m[5], 0)
+	min := atoiOr(m[6], 0)
+	sec := atoiOr(m[7], 0)
+	stamp := time.Date(year, time.Month(month), mday, hour, min, sec, 0, time.Local)
+	return &stamp
+}
+
 func cmd_touch(this *Interpreter) (ErrorLevel, error) {
 	errcnt := 0
 	stamp := time.Now()
-	for _, arg1 := range this.Args[1:] {
-		if arg1[0] == '-' {
+	for i := 1; i < len(this.Args); i++ {
+		arg1 := this.Args[i]
+		if arg1 == "-t" {
+			i++
+			if i >= len(this.Args) {
+				fmt.Fprintf(this.Stderr, "-t: Too Few Arguments.\n")
+				return ErrorLevel(255), nil
+			}
+			stamp_ := readTimeStamp(this.Args[i])
+			if stamp_ == nil {
+				fmt.Fprintf(this.Stderr, "-t: %s: Invalid time format.\n",
+					this.Args[i])
+				return ErrorLevel(255), nil
+			}
+			stamp = *stamp_
+		} else if arg1 == "-r" {
+			i++
+			if i >= len(this.Args) {
+				fmt.Fprintf(this.Stderr, "-r: Too Few Arguments.\n")
+				return ErrorLevel(255), nil
+			}
+			stat, statErr := os.Stat(this.Args[i])
+			if statErr != nil {
+				fmt.Fprintf(this.Stderr, "-r: %s: %s\n", this.Args[i], statErr)
+				return ErrorLevel(255), nil
+			}
+			stamp = stat.ModTime()
+		} else if arg1[0] == '-' {
 			fmt.Fprintf(this.Stderr,
 				"%s: built-in touch: Not implemented.\n",
 				arg1)
-		} else if m := timePattern.FindStringSubmatch(arg1); m != nil {
-			yy := atoiOr(m[2], stamp.Year()%100)
-			cc, cc_err := strconv.Atoi(m[1])
-			if cc_err != nil {
-				if yy <= 68 {
-					cc = 20
-				} else {
-					cc = 19
-				}
-			}
-			year := yy + cc*100
-			month, _ := strconv.Atoi(m[3])
-			mday, _ := strconv.Atoi(m[4])
-			hour := atoiOr(m[5], 0)
-			min := atoiOr(m[6], 0)
-			sec := atoiOr(m[7], 0)
-			stamp = time.Date(year, time.Month(month), mday, hour, min, sec, 0, time.Local)
 		} else {
 			fd, err := os.OpenFile(arg1, os.O_APPEND, 0666)
 			if err != nil && os.IsNotExist(err) {
