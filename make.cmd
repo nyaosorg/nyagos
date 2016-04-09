@@ -17,14 +17,14 @@ goto build
         set "X_VERSION=-X main.version=%VERSION%"
 
 :build
-        for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
+        call :fmt
         powershell -ExecutionPolicy RemoteSigned "cd '%~dp0main' ; . '%~dp0main\makesyso.ps1'"
         for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" .\main
         goto end
 
 :fmt
         for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
-        goto end
+        exit /b
 
 :status
         nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
@@ -32,7 +32,7 @@ goto build
 
 :clean
         for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
-        for %%I in (alias commands completion conio dos history interpreter lua main) do (cd "%%I" & go clean & cd ..)
+        powershell "ls -R | ?{ $_ -match '\.go$' } | %%{ [System.IO.Path]::GetDirectoryName($_.FullName)} | Sort-Object | Get-Unique | %%{ Write-Host 'go clean on',$_ ;  pushd $_ ; go clean ; popd }"
         for /R %%I in (*~ *.bak) do if exist %%I del %%I
         goto end
 
