@@ -1,5 +1,9 @@
 nyagos.alias.ls='ls -oF $*'
-nyagos.alias.lua_e=function(args) assert(load(args[1]))() end
+nyagos.alias.lua_e=function(args)
+    if #args >= 1 then
+        assert(load(args[1]))() 
+    end
+end
 nyagos.alias.lua_f=function(args)
     local path=table.remove(args,1)
     assert(loadfile(path))(args)
