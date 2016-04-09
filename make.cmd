@@ -41,11 +41,7 @@ goto build
         goto end
 
 :get
-        go get -u github.com/mattn/go-runewidth
-        go get -u github.com/shiena/ansicolor 
-        go get -u github.com/atotto/clipboard       
-        go get -u github.com/zetamatta/goutputdebugstring
-        go get -u github.com/mattn/go-isatty
+        powershell "findstr /S github.com/ *.go | %%{ $_.Split()[-1] } | ?{ $_ -match 'github.com' } | Sort-Object | Get-Unique | %%{ Write-Host 'go get',$_ ; go get -u $_ }"
         goto end
 
 :package
