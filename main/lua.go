@@ -228,6 +228,7 @@ func init() {
 		"antihistquot":         lua.StringProperty{&history.DisableMarks},
 		"atou":                 &lua.TGoFunction{cmdAtoU},
 		"bindkey":              &lua.TGoFunction{cmdBindKey},
+		"chdir":                &lua.TGoFunction{cmdChdir},
 		"commit":               emptyToNil(commit),
 		"commonprefix":         &lua.TGoFunction{cmdCommonPrefix},
 		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),

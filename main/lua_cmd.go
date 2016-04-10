@@ -736,3 +736,12 @@ func cmdLines(L lua.Lua) int {
 	// print("cmdLines: end\n")
 	return 2
 }
+
+func cmdChdir(L lua.Lua) int {
+	path, path_err := L.ToString(1)
+	if path_err != nil {
+		return L.Push(nil, path_err.Error())
+	}
+	dos.Chdir(path)
+	return L.Push(true)
+}
