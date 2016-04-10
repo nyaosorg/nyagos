@@ -63,9 +63,13 @@ When error occures, OUTPUT is set `nil`.
 It executes "COMMAND-NAME" with ARGs and returns commands' standard-output.
 COMMAND-NAME is not intepreted as a built-in command nor an alias.
 
-### `WD = nyaos.getwd()`
+### `WD = nyagos.getwd()`
 
 Get current working directory.
+
+### `nyagos.chdir('DIRECTORY')`
+
+Set new current working directory.
 
 ### `nyagos.write("TEXT")`
 
