@@ -37,13 +37,30 @@ func readTimeStamp(s string) *time.Time {
 		} else {
 			cc = 19
 		}
+	} else if cc < 19 {
+		return nil
 	}
 	year := yy + cc*100
 	month, _ := strconv.Atoi(m[3])
+	if month < 1 || month > 12 {
+		return nil
+	}
 	mday, _ := strconv.Atoi(m[4])
+	if mday < 1 || mday > 31 {
+		return nil
+	}
 	hour := atoiOr(m[5], 0)
+	if hour < 0 || hour >= 24 {
+		return nil
+	}
 	min := atoiOr(m[6], 0)
+	if min < 0 || min >= 60 {
+		return nil
+	}
 	sec := atoiOr(m[7], 0)
+	if sec < 0 || sec > 60 {
+		return nil
+	}
 	stamp := time.Date(year, time.Month(month), mday, hour, min, sec, 0, time.Local)
 	return &stamp
 }
