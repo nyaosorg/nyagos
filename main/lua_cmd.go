@@ -681,7 +681,7 @@ func cmdLoadFile(L lua.Lua) int {
 
 type iolines_t struct {
 	Fd         *os.File
-	Scnr       *bufio.Scanner
+	Reader     *bufio.Reader
 	HasToClose bool
 }
 
@@ -702,22 +702,26 @@ func iolines_t_gc(L lua.Lua) int {
 
 func cmdLinesCallback(L lua.Lua) int {
 	userdata := (*iolines_t)(L.ToUserData(1))
-	if userdata == nil || userdata.Fd == nil || userdata.Scnr == nil {
+	if userdata == nil || userdata.Fd == nil || userdata.Reader == nil {
 		// print("cmdLinesCallback: nil\n")
 		return L.Push(nil)
 	}
-	if !userdata.Scnr.Scan() {
+	line, line_err := userdata.Reader.ReadBytes('\n')
+	if line_err != nil {
 		// print("cmdLinesCallback: eof\n")
-		userdata.Scnr = nil
+		userdata.Reader = nil
 		if userdata.HasToClose {
 			userdata.Fd.Close()
 		}
 		userdata.Fd = nil
 		return L.Push(nil)
 	}
-	text := userdata.Scnr.Text()
 	// print("cmdLinesCallback: text='", text, "'\n")
-	return L.Push(text)
+	if line[len(line)-1] == '\r' {
+		line = line[:len(line)-1]
+	}
+	L.PushAnsiString(line)
+	return 1
 }
 
 func cmdLines(L lua.Lua) int {
@@ -727,7 +731,7 @@ func cmdLines(L lua.Lua) int {
 		userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
 		cmd := getRegInt(L)
 		userdata.Fd = cmd.Stdio[0]
-		userdata.Scnr = bufio.NewScanner(cmd.Stdio[0])
+		userdata.Reader = bufio.NewReader(cmd.Stdio[0])
 		userdata.HasToClose = false
 		return 2
 	}
@@ -743,7 +747,7 @@ func cmdLines(L lua.Lua) int {
 	var userdata *iolines_t
 	userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
 	userdata.Fd = fd
-	userdata.Scnr = bufio.NewScanner(fd)
+	userdata.Reader = bufio.NewReader(fd)
 	userdata.HasToClose = true
 	L.NewTable()
 	L.Push(iolines_t_gc)
