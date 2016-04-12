@@ -67,8 +67,16 @@ func (this Lua) PushValue(index int) {
 
 var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
 
+func (this Lua) PushGoClosure(fn func(Lua) int, n uintptr) {
+	lua_pushcclosure.Call(this.State(), syscall.NewCallbackCDecl(fn), n)
+}
+
 func (this Lua) PushGoFunction(fn func(Lua) int) {
-	lua_pushcclosure.Call(this.State(), syscall.NewCallbackCDecl(fn), 0)
+	this.PushGoClosure(fn, 0)
+}
+
+func UpValueIndex(i int) int {
+	return LUA_REGISTRYINDEX - i
 }
 
 type TGoFunction struct {
