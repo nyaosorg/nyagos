@@ -226,6 +226,18 @@ Same as io.open but PATH must be written in UTF8.
 
 Same as loadfile on root-namespace but PATH must be written in UTF8.
 
+### `nyagos.lines(PATH)'
+
+Same as io.lines but PATH must be written in UTF8.
+
+```
+for text in nyagos.lines(PATH) do ... end
+```
+
+`text` is bytearray as same as io.lines().
+
+
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe

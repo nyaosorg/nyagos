@@ -255,6 +255,17 @@ PATH が utf8 と解釈される以外は io.open と等価です。
 
 PATH が UTF8 と解釈される以外は、通常の loadfile と等価です。
 
+### `nyagos.lines(PATH)`
+
+PATH が UTF8 と解釈される以外は、通常の io.lines と等価です。
+
+```
+for text in nyagos.lines(PATH) do ... end
+```
+
+`text` は UTF8 変換などはなく、io.lines 同様、ただのバイト列です
+
+
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。
