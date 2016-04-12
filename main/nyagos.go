@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -9,6 +10,7 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/mattn/go-isatty"
 	"github.com/shiena/ansicolor"
 
 	"../alias"
@@ -139,26 +141,50 @@ func main() {
 		}
 	}
 
-	conio.DefaultEditor.Prompt = printPrompt
+	var command_stream func(it *interpreter.Interpreter) (string, error)
+	if isatty.IsTerminal(os.Stdin.Fd()) {
+		conio.DefaultEditor.Prompt = printPrompt
+		command_stream = func(it *interpreter.Interpreter) (string, error) {
+			conio.DefaultEditor.Tag = it
+			wd, wdErr := os.Getwd()
+			if wdErr == nil {
+				conio.SetTitle("NYAGOS - " + wd)
+			} else {
+				conio.SetTitle("NYAGOS - " + wdErr.Error())
+			}
+			return conio.DefaultEditor.ReadLine()
+		}
+	} else {
+		breader := bufio.NewReader(os.Stdin)
+		command_stream = func(it *interpreter.Interpreter) (string, error) {
+			line, err := breader.ReadString('\n')
+			if err != nil {
+				return "", err
+			}
+			if line[len(line)-1] == '\n' {
+				line = line[:len(line)-1]
+			}
+			if line[len(line)-1] == '\r' {
+				line = line[:len(line)-1]
+			}
+			return line, nil
+		}
+	}
 
 	for {
 		it := interpreter.New()
 		it.Tag = L
 		it.OnClone = itprCloneHook
 		it.Closers = append(it.Closers, L)
-		conio.DefaultEditor.Tag = it
 
-		wd, wdErr := os.Getwd()
-		if wdErr == nil {
-			conio.SetTitle("NYAGOS - " + wd)
-		} else {
-			conio.SetTitle("NYAGOS - " + wdErr.Error())
-		}
 		history_count := conio.DefaultEditor.HistoryLen()
-		line, err := conio.DefaultEditor.ReadLine()
+
+		line, err := command_stream(it)
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-			break
+			if err != io.EOF {
+				fmt.Fprintln(os.Stderr, err.Error())
+			}
+			return
 		}
 
 		var isReplaced bool
