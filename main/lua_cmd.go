@@ -680,8 +680,9 @@ func cmdLoadFile(L lua.Lua) int {
 }
 
 type iolines_t struct {
-	Fd   *os.File
-	Scnr *bufio.Scanner
+	Fd         *os.File
+	Scnr       *bufio.Scanner
+	HasToClose bool
 }
 
 func iolines_t_gc(L lua.Lua) int {
@@ -692,7 +693,9 @@ func iolines_t_gc(L lua.Lua) int {
 		return 0
 	}
 	// print("iolines_t_g: close\n")
-	userdata.Fd.Close()
+	if userdata.HasToClose {
+		userdata.Fd.Close()
+	}
 	userdata.Fd = nil
 	return 0
 }
@@ -706,7 +709,9 @@ func cmdLinesCallback(L lua.Lua) int {
 	if !userdata.Scnr.Scan() {
 		// print("cmdLinesCallback: eof\n")
 		userdata.Scnr = nil
-		userdata.Fd.Close()
+		if userdata.HasToClose {
+			userdata.Fd.Close()
+		}
 		userdata.Fd = nil
 		return L.Push(nil)
 	}
@@ -716,6 +721,16 @@ func cmdLinesCallback(L lua.Lua) int {
 }
 
 func cmdLines(L lua.Lua) int {
+	if L.GetTop() < 1 || L.IsNil(1) {
+		L.Push(cmdLinesCallback)
+		var userdata *iolines_t
+		userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
+		cmd := getRegInt(L)
+		userdata.Fd = cmd.Stdio[0]
+		userdata.Scnr = bufio.NewScanner(cmd.Stdio[0])
+		userdata.HasToClose = false
+		return 2
+	}
 	path, path_err := L.ToString(1)
 	if path_err != nil {
 		return L.Push(nil, path_err.Error())
@@ -729,6 +744,7 @@ func cmdLines(L lua.Lua) int {
 	userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
 	userdata.Fd = fd
 	userdata.Scnr = bufio.NewScanner(fd)
+	userdata.HasToClose = true
 	L.NewTable()
 	L.Push(iolines_t_gc)
 	L.SetField(-2, "__gc")
