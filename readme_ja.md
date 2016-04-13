@@ -1,10 +1,7 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-[English](./readme.md)
-/ Japanese
-/ [Manual(English)](Doc/00-Index_en.md)
-/ [Manual(Japanese)](Doc/00-Index_ja.md)
+[English](./readme.md) / Japanese
 
 NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェルです。
 
@@ -25,62 +22,27 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
   * コマンドラインフィルター
   * コードページ文字列とUTF8とのコンバート関数
 
-インストール
-------------
+目次
+----
 
-バイナリファイルは https://github.com/zetamatta/nyagos/releases よりダウンロード可能です。
+### リリースノートと履歴
 
-    mkdir PATH\TO\INSTALLDIR
-    cd PATH\TO\INSTALLDIR
-    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
-    makeicon.cmd
+- [最新](Doc/release_note_ja.md)
+- [4.0まで](Doc/history_4.0_ja.md)
+- [4.1で変わったこと](Doc/since_4.1_ja.md)
 
-バッチファイル `makeicon.cmd` はデスクトップにアイコンを作成します。
+### ドキュメント
 
-* [英語マニュアル](Doc/00-Index_en.md)
-* [日本語マニュアル](Doc/00-Index_ja.md)
-
-アンインストール
-----------------
-
-UNZIP で展開されたファイルと %APPDATA%\NYAOS.ORG 以下、デスクトップ
-アイコンを削除してください。NYAGOS.exe はレジストリを読み書きしません。
-
-ビルド方法
-----------
-
-次のソフトウェアが必要となります。
-
-* [go 1.6 for windows](http://golang.org)
-* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
-* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (任意です。無い場合、幾つかの Lua 拡張が動きませんが、nyagos.exe 自体は動作します)
-* http://github.com/mattn/go-runewidth
-* http://github.com/shiena/ansicolor
-* http://github.com/atotto/clipboard
-* http://github.com/mattn/go-isatty
-
-`%GOPATH%` にて
-
-    git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos
-
-(32bitの場合)
-
-    unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
-
-(64bitの場合)
-
-    unzip PATH\TO\lua-5.3.2_Win64_bin.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
-
-最後に:
-
-    make.cmd get
-    make.cmd
-    make.cmd install INSTALLDIR
-
-make.cmd の使い方については `make.cmd help` を参照してください。
+1. [インストール](Doc/01-Install_ja.md)
+2. [起動オプション](Doc/02-Options_ja.md)
+3. [編集機能](Doc/03-Readline_ja.md)
+4. [内蔵コマンド](Doc/04-Commands_ja.md)
+5. [起動処理](Doc/05-Startup_ja.md)
+6. [コマンドライン置換](Doc/06-Substitution_ja.md)
+7. [Lua拡張](Doc/07-LuaFunctions_ja.md)
+8. [付属のLuaスクリプト](Doc/08-LuaScripts_ja.md)
+9. [アンインストール](Doc/09-Uninstall_ja.md)
+10. [ビルド方法](Doc/10-Build_ja.md)
 
 ライセンス
 ----------

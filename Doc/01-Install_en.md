@@ -1,8 +1,13 @@
 ## Install
 
-1. Put files:`nyagos.exe`, `nyagos.lua` and `lua53.dll`, and
-directory `nyagos.d` into the one directory pointed with `%PATH%`.
-2. Put `.nyagos` into 
-    - the directory pointed with `%USERPROFILE%` or `%HOME%`
-    - OR the same directory with `nyagos.exe`.
-3. Modify `.nyagos` as you like.
+The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).
+
+    mkdir PATH\TO\INSTALLDIR
+    cd PATH\TO\INSTALLDIR
+    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
+    makeicon.cmd
+
+    copy .nyagos "%USERPROFILE%\."
+    notepad "%USERPROFILE%\.nyagos"
+
+And please customize `%USERPROFILE%\.nyagos`

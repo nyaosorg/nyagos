@@ -1,10 +1,16 @@
-## インストール
+インストール
+------------
 
-1. ファイル:`nyagos.exe`,`nyagos.lua`,`lua53.dll`、ディレクトリ`nyagos.d`を
-    `%PATH%` の差すディレクトリに置いてください。
-    (同一のディレクトリに置いてください)
-2.  カスタマイズ用ファイル`.nyagos`は、以下のいずれかに置いて、必要に応じて修正してください
-    - `%USERPROFILE%` か `%HOME%`の差すディレクトリ
-    - `nyagos.exe` と同じディレクトリ
+バイナリファイルは https://github.com/zetamatta/nyagos/releases よりダウンロード可能です。
 
-<!-- set:fenc=utf8: -->
+    mkdir PATH\TO\INSTALLDIR
+    cd PATH\TO\INSTALLDIR
+    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
+    makeicon.cmd
+
+バッチファイル `makeicon.cmd` はデスクトップにアイコンを作成します。
+
+    copy .nyagos "%USERPROFILE%\."
+    notepad "%USERPROFILE%\.nyagos"
+
+`%USERPROFILE%\.nyagos` をカスタマイズしてください

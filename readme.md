@@ -3,8 +3,6 @@ The Nihongo Yet Another GOing Shell
 
 English
 / [Japanese](./readme_ja.md)
-/ [Manual(English)](Doc/00-Index_en.md)
-/ [Manual(Japanese)](Doc/00-Index_ja.md)
 
 NYAGOS is the commandline-shell for Windows written with the
 Programming Language GO and Lua.
@@ -26,62 +24,27 @@ Programming Language GO and Lua.
   * filtering command-line
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
 
-Install
--------
+Contents
+--------
 
-The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).
+### Release note and history 
 
-    mkdir PATH\TO\INSTALLDIR
-    cd PATH\TO\INSTALLDIR
-    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
-    makeicon.cmd
+- [Current Release note](Doc/release_note_en.md)
+- [History ~4.0](Doc/history_4.0_en.md)
+- [What is new since 4.1](Doc/since_4.1_en.md)
 
-The batchfile: `makeicon.cmd` makes icon on your desktop.
+### Documents
 
-* [English Document](Doc/00-Index_en.md)
-* [Japanese Document](Doc/00-Index_ja.md)
-
-Uninstall
----------
-
-Remove unzipped files and `%APPDATA%\NYAOS.ORG` and icon on the desktop.
-NYAGOS.exe writes nothing on registry.
-
-Build
------
-
-These sortwares are required.
-
-* [go 1.6 for windows](http://golang.org)
-* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
-* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (Optionally. Without it, some lua-extensions does not work, but nyagos.exe itself is available.)
-- http://github.com/mattn/go-runewidth
-- http://github.com/shiena/ansicolor
-- http://github.com/atotto/clipboard
-- http://github.com/mattn/go-isatty
-
-On `%GOPATH%` folder,
-
-    git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos
-
-For 32bit ,
-
-    unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
-
-For 64bit ,
-
-    unzip PATH\TO\lua-5.3.2_Win64_dllw4_lib.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
-
-Finally
-
-    make.cmd get
-    make.cmd
-    make.cmd install INSTALLDIR
-
-How to use make.cmd is shown with `make.cmd help`
+1. [Install](Doc/01-Install_en.md)
+2. [Option for NYAGOS.EXE](Doc/02-Options_en.md)
+3. [Editor](Doc/03-Readline_en.md)
+4. [Built-in commands](Doc/04-Commands_en.md)
+5. [What is done on the Startup](Doc/05-Startup_en.md)
+6. [Substitution](Doc/06-Substitution_en.md)
+7. [Lua functions extenteded by NYAGOS](Doc/07-LuaFunctions_en.md)
+8. [Bundled Lua scripts](Doc/08-LuaScripts_en.md)
+9. [Uninstall](Doc/09-Uninstall_en.md)
+10. [How To Build](Doc/10-Build_en.md)
 
 License
 -------
