@@ -1,8 +1,12 @@
-* Add: nyagos.open(PATH,MODE) which PATH is in UTF8.
-* Add: nyagos.loadfile(PATH) which PATH is in UTF8.
+* Add: `nyagos.open(PATH,MODE)` which `PATH` is in UTF8 and compatible with `io.open`.
+* Add: `nyagos.loadfile(PATH)` which `PATH` is in UTF8 and compatible with `loadfile`.
+* Add: `nyagos.lines(PATH)` which `PATH` is in UTF8 and compatible with `io.lines`. (Be careful that it returns bytearray-string not always UTF8!)
 * Built-in `echo` uses CRLF not LF as the end of line.(#124)
 * Lua's default file handles follow nyagos's redirect and pipeline
 * Implemented touch's -r and -t option
+* `touch` do tiny validation for timestamp format.
+* `make install` makes log and closes installing window after 3sec(#107)
+* `nyagos < TEXTFILE` is available.(#125)
 
 NYAGOS 4.1.2\_0
 ===============

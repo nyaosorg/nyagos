@@ -1,8 +1,12 @@
-* Add: nyagos.open(PATH,MODE) UTF8版io.open
-* Add: nyagos.loadfile(PATH) UTF8版loadfile
+* Add: `nyagos.open(PATH,MODE)` UTF8版`io.open`
+* Add: `nyagos.loadfile(PATH)` UTF8版`loadfile`
+* Add: `nyagos.lines(PATH)` UTF8版`io.lines`(注意:戻り値はバイト列、ファイル名だけがUTF8指定になった)
 * 内蔵`echo`の改行コードとして LF ではなく CRLF を使うようにした (#124)
 * Lua のデフォルト入出力を NYAGOS のリダイレクトに追随させるようにした
 * touch コマンドに -r と -t オプションを実装した
+* touch コマンドで簡易日時フォーマットチェックを入れた
+* `make install` でログを残して、3秒後にインストール窓を閉じるようにした(#107)
+* `nyagos < TEXTFILE` が利用可能になった (#125)
 
 NYAGOS 4.1.2\_0
 ===============
