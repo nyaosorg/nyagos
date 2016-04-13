@@ -63,13 +63,15 @@ goto build
         goto end
 
 :install.
-        robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
-        taskkill /F /im nyagos.exe
-        copy nyagos.exe "%INSTALLDIR%\."
-        copy nyagos.lua "%INSTALLDIR%\."
-        copy nyole.dll "%INSTALLDIR%\."
-        if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
-        goto end
+        ( robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
+          taskkill /F /im nyagos.exe
+          copy nyagos.exe "%INSTALLDIR%\."
+          copy nyagos.lua "%INSTALLDIR%\."
+          copy nyole.dll "%INSTALLDIR%\."
+          if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
+        ) 1> "%~dp0install.log" 2>&1
+        powershell "for($i=3 ; $i -ge 0 ; $i-- ){ Start-Sleep -s 1; Write-Host $i }"
+        exit %ERRORLEVEL%
 
 :icon
         makeicon.cmd
