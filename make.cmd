@@ -59,17 +59,18 @@ goto build
             echo Please %0.cmd install EXIST\PATH\TO\BIN,  once
             goto end
         )
-        start %~0 install.
+
+        robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
+        if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
+        copy nyagos.lua "%INSTALLDIR%\."
+        copy nyagos.exe "%INSTALLDIR%\." && copy nyole.dll "%INSTALLDIR%\."
+        if errorlevel 1 (start %~0 install_ & exit /b)
         goto end
 
-:install.
-        ( robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
-          taskkill /F /im nyagos.exe
-          copy nyagos.exe "%INSTALLDIR%\."
-          copy nyagos.lua "%INSTALLDIR%\."
-          copy nyole.dll "%INSTALLDIR%\."
-          if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
-        ) 1> "%~dp0install.log" 2>&1
+:install_
+        taskkill /F /im nyagos.exe
+        copy nyagos.exe "%INSTALLDIR%\."
+        copy nyole.dll "%INSTALLDIR%\."
         powershell "for($i=3 ; $i -ge 0 ; $i-- ){ Start-Sleep -s 1; Write-Host $i }"
         exit %ERRORLEVEL%
 
