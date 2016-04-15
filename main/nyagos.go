@@ -141,11 +141,16 @@ func main() {
 		}
 	}
 
-	var command_stream func(it *interpreter.Interpreter) (string, error)
+	it := interpreter.New()
+	it.Tag = L
+	it.OnClone = itprCloneHook
+	it.Closers = append(it.Closers, L)
+
+	var command_stream func() (string, error)
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		conio.DefaultEditor.Prompt = printPrompt
-		command_stream = func(it *interpreter.Interpreter) (string, error) {
-			conio.DefaultEditor.Tag = it
+		conio.DefaultEditor.Tag = it
+		command_stream = func() (string, error) {
 			wd, wdErr := os.Getwd()
 			if wdErr == nil {
 				conio.SetTitle("NYAGOS - " + wd)
@@ -156,7 +161,7 @@ func main() {
 		}
 	} else {
 		breader := bufio.NewReader(os.Stdin)
-		command_stream = func(it *interpreter.Interpreter) (string, error) {
+		command_stream = func() (string, error) {
 			line, err := breader.ReadString('\n')
 			if err != nil {
 				return "", err
@@ -172,14 +177,7 @@ func main() {
 	}
 
 	for {
-		it := interpreter.New()
-		it.Tag = L
-		it.OnClone = itprCloneHook
-		it.Closers = append(it.Closers, L)
-
-		history_count := conio.DefaultEditor.HistoryLen()
-
-		line, err := command_stream(it)
+		line, err := command_stream()
 		if err != nil {
 			if err != io.EOF {
 				fmt.Fprintln(os.Stderr, err.Error())
@@ -195,7 +193,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		if conio.DefaultEditor.HistoryLen() > history_count {
+		if conio.DefaultEditor.HistoryLen() > conio.DefaultEditor.HistoryLen() {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 			if err == nil {
 				fmt.Fprintln(fd, line)
