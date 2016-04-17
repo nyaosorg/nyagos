@@ -1,12 +1,4 @@
-powershell -ExecutionPolicy RemoteSigned -File  "%~dp0..\makeconst.ps1" ^
-        conio ^
-        CTRL_CLOSE_EVENT ^
-        CTRL_LOGOFF_EVENT ^
-        CTRL_SHUTDOWN_EVENT ^
-        CTRL_C_EVENT ^
-        ENABLE_ECHO_INPUT ^
-        ENABLE_PROCESSED_INPUT ^
-        STD_INPUT_HANDLE ^
-        STD_OUTPUT_HANDLE ^
-        KEY_EVENT > const.go
-go fmt const.go
+pushd "%~dp0"
+gcc makeconst\makeconst.c && a > const.go && go fmt const.go
+if exist a.exe del a.exe
+popd
