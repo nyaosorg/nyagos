@@ -1,3 +1,5 @@
-gcc %~dp0.\makeconst\makeconst.c -o %~dp0.\makeconst\makeconst.exe
-%~dp0.\makeconst\makeconst.exe > const.go
-go fmt const.go
+pushd "%~dp0"
+gcc makeconst\makeconst.c && a > const.go && go fmt const.go
+if exist a.exe del a.exe
+popd
+
