@@ -18,7 +18,9 @@ goto build
 
 :build
         call :fmt
-        powershell -ExecutionPolicy RemoteSigned "cd '%~dp0main' ; . '%~dp0main\makesyso.ps1'"
+        pushd "%~dp0main"
+        powershell -ExecutionPolicy RemoteSigned -File makesyso.ps1
+        popd
         for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" .\main
         goto end
 
