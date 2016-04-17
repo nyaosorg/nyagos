@@ -94,6 +94,32 @@ func itprCloneHook(this *interpreter.Interpreter) error {
 	return nil
 }
 
+func NewCmdStreamFile(f *os.File) func() (string, error) {
+	breader := bufio.NewReader(os.Stdin)
+	return func() (string, error) {
+		line, err := breader.ReadString('\n')
+		if err != nil {
+			return "", err
+		}
+		line = strings.TrimRight(line, "\r\n")
+		return line, nil
+	}
+}
+
+func NewCmdStreamConsole(it *interpreter.Interpreter) func() (string, error) {
+	conio.DefaultEditor.Prompt = printPrompt
+	conio.DefaultEditor.Tag = it
+	return func() (string, error) {
+		wd, wdErr := os.Getwd()
+		if wdErr == nil {
+			conio.SetTitle("NYAGOS - " + wd)
+		} else {
+			conio.SetTitle("NYAGOS - " + wdErr.Error())
+		}
+		return conio.DefaultEditor.ReadLine()
+	}
+}
+
 func main() {
 	defer when_panic()
 
@@ -148,32 +174,9 @@ func main() {
 
 	var command_stream func() (string, error)
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		conio.DefaultEditor.Prompt = printPrompt
-		conio.DefaultEditor.Tag = it
-		command_stream = func() (string, error) {
-			wd, wdErr := os.Getwd()
-			if wdErr == nil {
-				conio.SetTitle("NYAGOS - " + wd)
-			} else {
-				conio.SetTitle("NYAGOS - " + wdErr.Error())
-			}
-			return conio.DefaultEditor.ReadLine()
-		}
+		command_stream = NewCmdStreamConsole(it)
 	} else {
-		breader := bufio.NewReader(os.Stdin)
-		command_stream = func() (string, error) {
-			line, err := breader.ReadString('\n')
-			if err != nil {
-				return "", err
-			}
-			if line[len(line)-1] == '\n' {
-				line = line[:len(line)-1]
-			}
-			if line[len(line)-1] == '\r' {
-				line = line[:len(line)-1]
-			}
-			return line, nil
-		}
+		command_stream = NewCmdStreamFile(os.Stdin)
 	}
 
 	for {
