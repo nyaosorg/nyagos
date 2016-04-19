@@ -43,7 +43,11 @@ goto build
         goto end
 
 :get
-        powershell "findstr /S github.com/ *.go | %%{ $_.Split()[-1] } | ?{ $_ -match 'github.com' } | Sort-Object | Get-Unique | %%{ Write-Host 'go get',$_ ; go get -u $_ }"
+        powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ $_.Split()[-1] } | ?{ $_ -match 'github.com/' } } | Sort-Object | Get-Unique | %%{ Write-Host "$_" ; go get -u $_ }"
+        goto end
+
+:const
+        for %%I in (conio dos lua) do pushd %%I & gcc makeconst\makeconst.c & a > const.go & go fmt const.go & del a.exe & popd
         goto end
 
 :package
