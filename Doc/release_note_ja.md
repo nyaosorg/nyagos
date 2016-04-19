@@ -8,6 +8,7 @@
 * `make install` でログを残して、3秒後にインストール窓を閉じるようにした(#107)
 * `nyagos < TEXTFILE` が利用可能になった (#125)
 * {conio,dos}/const.go を再作成するのに lua.exe,findstr.exe は不要になった
+* 標準エイリアス suffix が機能していなかった
 
 NYAGOS 4.1.2\_0
 ===============

@@ -8,6 +8,7 @@
 * `make install` makes log and closes installing window after 3sec(#107)
 * `nyagos < TEXTFILE` is available.(#125)
 * lua.exe & findstr.exe got unnecessary to make {conio,dos}/const.go.
+* Fix: alias `suffix` dit not work.
 
 NYAGOS 4.1.2\_0
 ===============
