@@ -59,15 +59,32 @@ nyagos.argsfilter = function(args)
 end
 
 nyagos.alias.suffix = function(args)
-    if #args < 2 then
-        print "Usage: suffix SUFFIX COMMAND"
-    else
-        local cmdline={}
-        for i=2,#args do
-            cmdline[#cmdline+1]=args[i]
+    if #args < 1 then
+        for key,val in pairs(share._suffixes) do
+            local right=val
+            if type(val) == "table" then
+                right = table.concat(val," ")
+            end
+            print(key .. "=" .. right)
         end
-        suffix(args[1],cmdline)
+        return
     end
+    if string.sub(args[1],1,1) == "." then
+        args[1] = string.sub(args[1],2)
+    end
+    if #args == 1 then
+        local right = share._suffixes[args[1]] or ""
+        if type(right) == "table" then
+            right = table.concat(right," ")
+        end
+        print(args[1].."=".. right)
+        return
+    end
+    local cmdline={}
+    for i=2,#args do
+        cmdline[#cmdline+1]=args[i]
+    end
+    share._setsuffix(args[1],cmdline)
 end
 
 suffix.pl="perl"
