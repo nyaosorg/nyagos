@@ -765,3 +765,12 @@ func cmdChdir(L lua.Lua) int {
 	dos.Chdir(path)
 	return L.Push(true)
 }
+
+func cmdNetDriveToUNC(L lua.Lua) int {
+	path, path_err := L.ToString(1)
+	if path_err != nil {
+		return L.Push(path)
+	}
+	unc := dos.NetDriveToUNC(path)
+	return L.Push(unc)
+}

@@ -244,6 +244,7 @@ func init() {
 		"glob":                 &lua.TGoFunction{cmdGlob},
 		"lines":                &lua.TGoFunction{cmdLines},
 		"loadfile":             &lua.TGoFunction{cmdLoadFile},
+		"netdrivetounc":        &lua.TGoFunction{cmdNetDriveToUNC},
 		"open":                 &lua.TGoFunction{cmdOpenFile},
 		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
 		"quotation":            lua.StringProperty{&conio.Delimiters},
