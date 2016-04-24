@@ -8,6 +8,8 @@ if nyagos == nil then
     os.exit(0)
 end
 
+local wd = nyagos.getwd()
+
 print(string.format("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s",
       (nyagos.version or "v"..nyagos.stamp),
       nyagos.goarch,
@@ -57,3 +59,5 @@ if home then
         end
     end
 end
+
+nyagos.chdir(wd)

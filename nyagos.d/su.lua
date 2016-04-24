@@ -5,13 +5,16 @@ nyagos.alias.sudo = function(args)
     end
     local prog = args[1]
     table.remove(args,1)
-    assert(nyagos.shellexecute("runas",prog,table.concat(args," "),nyagos.getwd()))
+    local cwd = nyagos.netdrivetounc(nyagos.getwd())
+    assert(nyagos.shellexecute("runas",prog,table.concat(args," "),cwd))
 end
 
 share._clone = function(action)
-    local status,err = nyagos.shellexecute(action,nyagos.exe)
+    local cwd = nyagos.netdrivetounc(nyagos.getwd())
+    print(cwd)
+    local status,err = nyagos.shellexecute(action,nyagos.exe,"",cwd)
     if not status and string.match(err,"^Error%(5%)") then
-	status,err = nyagos.shellexecute(action,nyagos.getenv("COMSPEC"),'/c "'..nyagos.exe..'"')
+	status,err = nyagos.shellexecute(action,nyagos.getenv("COMSPEC"),'/c "'..nyagos.exe,"",cwd)
     end
     return status,err
 end
