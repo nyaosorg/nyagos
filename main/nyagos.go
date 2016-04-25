@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -120,8 +121,15 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) func() (string, error) {
 	}
 }
 
+var optionK = flag.String("k", "", "like `cmd /k`")
+var optionC = flag.String("c", "", "like `cmd /c`")
+var optionF = flag.String("f", "", "run lua script")
+var optionE = flag.String("e", "", "run inline-lua-code")
+
 func main() {
 	defer when_panic()
+
+	flag.Parse()
 
 	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
 	defer dos.CoUninitialize()
@@ -144,8 +152,8 @@ func main() {
 	L := NewNyagosLua()
 	defer L.Close()
 
-	if !optionParse(L) {
-		return
+	if !isatty.IsTerminal(os.Stdin.Fd()) || *optionC != "" || *optionF != "" || *optionE != "" {
+		silentmode = true
 	}
 
 	appData := filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
@@ -171,6 +179,10 @@ func main() {
 	it.Tag = L
 	it.OnClone = itprCloneHook
 	it.Closers = append(it.Closers, L)
+
+	if !optionParse(it, L) {
+		return
+	}
 
 	var command_stream func() (string, error)
 	if isatty.IsTerminal(os.Stdin.Fd()) {

@@ -20,24 +20,13 @@ func setLuaArg(L lua.Lua, arg0 string) {
 	L.SetGlobal("arg")
 }
 
-func optionParse(L lua.Lua) bool {
-	optionK := flag.String("k", "", "like `cmd /k`")
-	optionC := flag.String("c", "", "like `cmd /c`")
-	optionF := flag.String("f", "", "run lua script")
-	optionE := flag.String("e", "", "run inline-lua-code")
-
-	flag.Parse()
-
+func optionParse(it *interpreter.Interpreter, L lua.Lua) bool {
 	result := true
 
 	if *optionK != "" {
-		it := interpreter.New()
-		it.Tag = L
 		it.Interpret(*optionK)
 	}
 	if *optionC != "" {
-		it := interpreter.New()
-		it.Tag = L
 		it.Interpret(*optionC)
 		result = false
 	}

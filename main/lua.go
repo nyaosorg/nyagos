@@ -221,6 +221,8 @@ func NewNyagosLua() lua.Lua {
 	return this
 }
 
+var silentmode = false
+
 func init() {
 	nyagos_table_member = map[string]lua.Pushable{
 		"access":               &lua.TGoFunction{cmdAccess},
@@ -254,6 +256,7 @@ func init() {
 		"setenv":               &lua.TGoFunction{cmdSetEnv},
 		"setrunewidth":         &lua.TGoFunction{cmdSetRuneWidth},
 		"shellexecute":         &lua.TGoFunction{cmdShellExecute},
+		"silentmode":           &lua.BoolProperty{&silentmode},
 		"stat":                 &lua.TGoFunction{cmdStat},
 		"stamp":                emptyToNil(stamp),
 		"utoa":                 &lua.TGoFunction{cmdUtoA},
