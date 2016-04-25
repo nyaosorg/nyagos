@@ -77,7 +77,7 @@ goto build
         taskkill /F /im nyagos.exe
         copy nyagos.exe "%INSTALLDIR%\."
         copy nyole.dll "%INSTALLDIR%\."
-        powershell "for($i=3 ; $i -ge 0 ; $i-- ){ Start-Sleep -s 1; Write-Host $i }"
+        timeout /T 3
         exit %ERRORLEVEL%
 
 :icon
