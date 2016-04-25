@@ -31,6 +31,20 @@ func (this StringProperty) Set(L Lua, index int) error {
 	return err
 }
 
+type BoolProperty struct {
+	Pointer *bool
+}
+
+func (this BoolProperty) Push(L Lua) int {
+	L.PushBool(*this.Pointer)
+	return 1
+}
+
+func (this BoolProperty) Set(L Lua, index int) error {
+	*this.Pointer = L.ToBool(index)
+	return nil
+}
+
 type MetaOnlyTableT struct {
 	Table TTable
 }
