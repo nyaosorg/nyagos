@@ -77,6 +77,7 @@ Acknowledgement
 * [hisomura](https://github.com/hisomura)
 * [tsuyoshicho](https://github.com/tsuyoshicho)
 * [rane-hs](https://github.com/rane-hs)
+* [hami-jp](https://github.com/hami-jp)
 
 Author
 ------
