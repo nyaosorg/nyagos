@@ -673,7 +673,7 @@ func cmdLoadFile(L lua.Lua) int {
 	}
 	_, err := L.LoadFile(path, "bt")
 	if err != nil {
-		return L.Push(nil, err.Error())
+		return L.Push(nil, path+": "+err.Error())
 	} else {
 		return 1
 	}
