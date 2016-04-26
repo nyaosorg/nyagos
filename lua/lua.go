@@ -72,7 +72,7 @@ func (this Lua) Close() error {
 }
 
 func (this Lua) Source(fname string) error {
-	if err := this.Load(fname); err != nil {
+	if _, err := this.LoadFile(fname, "bt"); err != nil {
 		return err
 	}
 	return this.Call(0, 0)
@@ -217,7 +217,7 @@ func (this Lua) NewTable() {
 
 var luaL_loadfilex = luaDLL.NewProc("luaL_loadfilex")
 
-func (this Lua) Load(fname string) error {
+func (this Lua) LoadFileAnsi(fname string) error {
 	cfname, err := syscall.BytePtrFromString(fname)
 	if err != nil {
 		return err
