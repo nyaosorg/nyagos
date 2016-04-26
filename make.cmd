@@ -56,7 +56,7 @@ goto build
         goto end
 
 :install
-        if not "%2" == "" set "INSTALLDIR=%2"
+        if not "%2" == "" set "INSTALLDIR=%2" & echo @set "INSTALLDIR=%2" > "%~dp0Misc\version.cmd"
         if "%INSTALLDIR%" == "" (
             echo Please %0.cmd install PATH\TO\BIN, once
             goto end
@@ -100,5 +100,4 @@ goto build
         echo  %0 install  
         echo     : Copy binaries to last INSTALLDIR
 :end
-        echo @set "INSTALLDIR=%INSTALLDIR%" > "%~dp0Misc\version.cmd"
         popd
