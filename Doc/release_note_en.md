@@ -12,6 +12,8 @@
 * When the current working drive is a network drive, `su` starts new nyagos.exe as administrator on the same directory with UNC-Path.
 * On `nyagos -c "CMD"`, CMD is executed after executing `nyagos.lua`.
 * `nyagos -[cfe] "..."` & `nyagos < TEXTFILE` do not display copyrights.
+* Fix: `make install DIR` did not save DIR to Misc/version.cmd
+* Fix: nyagos.exe could not load nyagos.lua when nyagos.exe exists on non-ascii-path (#133)
 
 NYAGOS 4.1.2\_0
 ===============

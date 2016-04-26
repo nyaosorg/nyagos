@@ -12,6 +12,8 @@
 * カレントドライブがネットワークドライブでも、`su` は新しい管理者モード nyagos を同じ UNC-Path でディレクトリで起動させられるようにした。
 * `nyagos -c 'CMD'` で CMD は `nyagos.lua` の後に実行するようにした。
 * `nyagos -[cfe] "..."や `nyagos < TEXTFILE` では著作権表示を出さないようにした
+* Fix: `make install DIR` が次回の `make install` 向けに DIR をセーブしていなかった。
+* Fix: nyagos.exe が日本語フォルダーに置いてある時、nyagos.lua をロードできていなかった。
 
 NYAGOS 4.1.2\_0
 ===============
