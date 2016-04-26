@@ -9,6 +9,9 @@
 * `nyagos < TEXTFILE` が利用可能になった (#125)
 * {conio,dos}/const.go を再作成するのに lua.exe,findstr.exe は不要になった
 * 標準エイリアス suffix が機能していなかった
+* カレントドライブがネットワークドライブでも、`su` は新しい管理者モード nyagos を同じ UNC-Path でディレクトリで起動させられるようにした。
+* `nyagos -c 'CMD'` で CMD は `nyagos.lua` の後に実行するようにした。
+* `nyagos -[cfe] "..."や `nyagos < TEXTFILE` では著作権表示を出さないようにした
 
 NYAGOS 4.1.2\_0
 ===============

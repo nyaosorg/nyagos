@@ -7,8 +7,11 @@
 * `touch` do tiny validation for timestamp format.
 * `make install` makes log and closes installing window after 3sec(#107)
 * `nyagos < TEXTFILE` is available.(#125)
-* lua.exe & findstr.exe got unnecessary to make {conio,dos}/const.go.
+* lua.exe & findstr.exe is no longer needed to make {conio,dos}/const.go.
 * Fix: alias `suffix` dit not work.
+* When the current working drive is a network drive, `su` starts new nyagos.exe as administrator on the same directory with UNC-Path.
+* On `nyagos -c "CMD"`, CMD is executed after executing `nyagos.lua`.
+* `nyagos -[cfe] "..."` & `nyagos < TEXTFILE` do not display copyrights.
 
 NYAGOS 4.1.2\_0
 ===============
