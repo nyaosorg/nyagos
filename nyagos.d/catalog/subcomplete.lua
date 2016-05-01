@@ -1,4 +1,4 @@
-local maincmds = {}
+share.maincmds = {}
 
 local githelp=io.popen("git help -a 2>nul","r")
 if githelp then
@@ -12,7 +12,9 @@ if githelp then
     end
     githelp:close()
     if #gitcmds > 1 then
+        local maincmds = share.maincmds
         maincmds["git"] = gitcmds
+        share.maincmds = maincmds
     end
 end
 local svnhelp=io.popen("svn help 2>nul","r")
@@ -26,7 +28,9 @@ if svnhelp then
     end
     svnhelp:close()
     if #svncmds > 1 then
+        local maincmds = share.maincmds
         maincmds["svn"] = svncmds
+        share.maincmds = maincmds
     end
 end
 
@@ -40,11 +44,13 @@ if hghelp then
     end
     hghelp:close()
     if #hgcmds > 1 then
+        local maincmds=share.maincmds
         maincmds["hg"] = hgcmds
+        share.maincmds = maincmds
     end
 end
 
-if next(maincmds) then
+if next(share.maincmds) then
     nyagos.completion_hook = function(c)
         if c.pos <= 1 then
             return nil
@@ -53,7 +59,7 @@ if next(maincmds) then
         if not cmdname then
             return nil
         end
-        local subcmds = maincmds[cmdname]
+        local subcmds = share.maincmds[cmdname]
         if not subcmds then
             return nil
         end
