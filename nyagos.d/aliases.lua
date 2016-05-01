@@ -29,3 +29,9 @@ nyagos.alias.killall = function(args)
         end
     end
 end
+
+-- on chcp, font-width is changed.
+nyagos.alias.chcp = function(args)
+    nyagos.resetcharwidth()
+    nyagos.rawexec(args[0],table.unpack(args))
+end

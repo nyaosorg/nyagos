@@ -252,6 +252,7 @@ func init() {
 		"quotation":            lua.StringProperty{&conio.Delimiters},
 		"raweval":              &lua.TGoFunction{cmdRawEval},
 		"rawexec":              &lua.TGoFunction{cmdRawExec},
+		"resetcharwidth":       &lua.TGoFunction{cmdResetCharWidth},
 		"setalias":             &lua.TGoFunction{cmdSetAlias},
 		"setenv":               &lua.TGoFunction{cmdSetEnv},
 		"setrunewidth":         &lua.TGoFunction{cmdSetRuneWidth},

@@ -4,6 +4,10 @@ import "github.com/mattn/go-runewidth"
 
 var widthCache = map[rune]int{}
 
+func ResetCharWidth() {
+	widthCache = map[rune]int{}
+}
+
 func SetCharWidth(c rune, width int) {
 	widthCache[c] = width
 }

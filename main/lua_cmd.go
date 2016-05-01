@@ -774,3 +774,8 @@ func cmdNetDriveToUNC(L lua.Lua) int {
 	unc := dos.NetDriveToUNC(path)
 	return L.Push(unc)
 }
+
+func cmdResetCharWidth(L lua.Lua) int {
+	conio.ResetCharWidth()
+	return 0
+}
