@@ -226,7 +226,7 @@ Same as io.open but PATH must be written in UTF8.
 
 Same as loadfile on root-namespace but PATH must be written in UTF8.
 
-### `nyagos.lines(PATH)'
+### `nyagos.lines(PATH)`
 
 Same as io.lines but PATH must be written in UTF8.
 
