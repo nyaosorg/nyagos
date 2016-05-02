@@ -37,11 +37,11 @@ type fileInfoT struct {
 }
 
 const (
-	ANSI_EXEC     = "\x1B[1;35m"
-	ANSI_DIR      = "\x1B[1;32m"
-	ANSI_NORM     = "\x1B[1;37m"
-	ANSI_READONLY = "\x1B[1;33m"
-	ANSI_HIDDEN   = "\x1B[1;34m"
+	ANSI_EXEC     = "\x1B[35;1m"
+	ANSI_DIR      = "\x1B[32;1m"
+	ANSI_NORM     = "\x1B[37;1m"
+	ANSI_READONLY = "\x1B[33;1m"
+	ANSI_HIDDEN   = "\x1B[34;1m"
 	ANSI_END      = "\x1B[0m"
 )
 
