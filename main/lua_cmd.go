@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unsafe"
 
-	"github.com/shiena/ansicolor"
+	"github.com/mattn/go-colorable"
 
 	"../alias"
 	"../completion"
@@ -374,9 +374,9 @@ func cmdWriteErr(L lua.Lua) int {
 }
 
 func cmdWriteSub(L lua.Lua, out io.Writer) int {
-	switch out.(type) {
+	switch f := out.(type) {
 	case *os.File:
-		out = ansicolor.NewAnsiColorWriter(out)
+		out = colorable.NewColorable(f)
 	}
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {

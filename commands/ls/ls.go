@@ -454,7 +454,7 @@ func Main(args []string, out io.Writer, err io.Writer) error {
 		return errors.New(string(message))
 	}
 	if _, ok := out.(io.Closer); ok {
-		// output is a not ansicolor instance.
+		// output is a not colorable instance.
 		flag &^= O_COLOR
 	}
 	if (flag & O_COLOR) != 0 {

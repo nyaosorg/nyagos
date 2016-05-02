@@ -11,8 +11,8 @@ import (
 	"runtime/debug"
 	"strings"
 
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
-	"github.com/shiena/ansicolor"
 
 	"../alias"
 	"../commands"
@@ -143,7 +143,7 @@ func main() {
 	}
 
 	// ANSI Escape Sequence Support
-	ansiOut = ansicolor.NewAnsiColorWriter(os.Stdout)
+	ansiOut = colorable.NewColorableStdout()
 
 	commands.Init()
 	alias.Init()

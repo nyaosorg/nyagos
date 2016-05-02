@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/shiena/ansicolor"
+	"github.com/mattn/go-colorable"
 
 	"../interpreter"
 	"./ls"
@@ -13,7 +13,7 @@ import (
 func cmd_ls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	var out io.Writer
 	if cmd.Stdout == os.Stdout {
-		out = ansicolor.NewAnsiColorWriter(cmd.Stdout)
+		out = colorable.NewColorableStdout()
 	} else {
 		out = cmd.Stdout
 	}
