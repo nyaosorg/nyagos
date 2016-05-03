@@ -7,7 +7,7 @@ nyagos.env.prompt='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
 -- Coloring Prompt for NYAGOS.exe
 share.org_prompter=nyagos.prompt
 nyagos.prompt = function(this)
-    return share.org_prompter('$e[36;40;1m'..this..'$e[37;1m')
+    return share.org_prompter('$e[40;36;1m'..this..'$e[37;1m')
 end
 
 -- vim:set ft=lua: --
