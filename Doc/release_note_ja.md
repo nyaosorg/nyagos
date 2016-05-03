@@ -14,6 +14,9 @@
 * `nyagos -[cfe] "..."や `nyagos < TEXTFILE` では著作権表示を出さないようにした
 * Fix: `make install DIR` が次回の `make install` 向けに DIR をセーブしていなかった。
 * Fix: nyagos.exe が日本語フォルダーに置いてある時、nyagos.lua をロードできていなかった。
+* Fix: nyagos.d/catalog/subcomplete.lua が 4.1 以降で動かなくなっていた (#135)
+* エスケープシーケンスエミュレータをgithub.com/mattn/go-colorable に変更 (#137)
+* Fix: `ls -ltr * `で時系列でソートされていなかった (#136)
 
 NYAGOS 4.1.2\_0
 ===============

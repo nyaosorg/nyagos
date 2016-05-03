@@ -14,6 +14,9 @@
 * `nyagos -[cfe] "..."` & `nyagos < TEXTFILE` do not display copyrights.
 * Fix: `make install DIR` did not save DIR to Misc/version.cmd
 * Fix: nyagos.exe could not load nyagos.lua when nyagos.exe exists on non-ascii-path (#133)
+* Fix: nyagos.d/catalog/subcomplete.lua does not work after 4.1 (#135)
+* Switch escape sequence emulater to github.com/mattn/go-colorable (#137)
+* Fix: `ls -ltr *` was not sorted by modified time. (#136)
 
 NYAGOS 4.1.2\_0
 ===============
