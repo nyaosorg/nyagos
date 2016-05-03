@@ -20,7 +20,7 @@ func KeyFuncEnter(this *Buffer) Result { // Ctrl-M
 func KeyFuncIntr(this *Buffer) Result { // Ctrl-C
 	this.Length = 0
 	this.Cursor = 0
-	this.Buffer = []rune{}
+	this.ViewStart = 0
 	return ENTER
 }
 
