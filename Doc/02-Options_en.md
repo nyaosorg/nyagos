@@ -12,10 +12,13 @@ Execute `COMMAND` and quit.
 
 Execute `COMMAND` and continue the command-line.
 
-### `-f SCRIPTFILE ARG1 ARG2 ...`
+### `-f FILE ARG1 ARG2 ...`
 
-Execute SCRIPTFILE with Lua interpretor and quit.
-The script can refer arguments as `arg[]`.
+If FILE's suffix is .lua, execute Lua-code on it.
+(The script can refer arguments as `arg[]`)
+
+Otherwise, read and execute commands on it.
+
 
 ### `-e "SCRIPTCODE"`
 

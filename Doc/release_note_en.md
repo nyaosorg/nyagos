@@ -17,6 +17,7 @@
 * Fix: nyagos.d/catalog/subcomplete.lua does not work after 4.1 (#135)
 * Switch escape sequence emulater to github.com/mattn/go-colorable (#137)
 * Fix: `ls -ltr *` was not sorted by modified time. (#136)
+* Support: nyagos -f NOT-Lua-Script(COMMANDS-Script)
 
 NYAGOS 4.1.2\_0
 ===============

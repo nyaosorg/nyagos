@@ -17,6 +17,7 @@
 * Fix: nyagos.d/catalog/subcomplete.lua が 4.1 以降で動かなくなっていた (#135)
 * エスケープシーケンスエミュレータをgithub.com/mattn/go-colorable に変更 (#137)
 * Fix: `ls -ltr * `で時系列でソートされていなかった (#136)
+* nyagos -f で拡張子が .lua で無い時、シェルコマンドが格納されたファイルと解釈するようにした
 
 NYAGOS 4.1.2\_0
 ===============
