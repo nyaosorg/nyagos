@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"../interpreter"
 	"../lua"
@@ -31,10 +33,25 @@ func optionParse(it *interpreter.Interpreter, L lua.Lua) bool {
 		result = false
 	}
 	if *optionF != "" {
-		setLuaArg(L, *optionF)
-		err := L.Source(*optionF)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+		if strings.HasSuffix(strings.ToLower(*optionF), ".lua") {
+			// lua script
+			setLuaArg(L, *optionF)
+			err := L.Source(*optionF)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, err)
+			}
+		} else {
+			// command script
+			fd, fd_err := os.Open(*optionF)
+			if fd_err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", *optionF, fd_err.Error())
+			} else {
+				scanner := bufio.NewScanner(fd)
+				for scanner.Scan() {
+					it.Interpret(scanner.Text())
+				}
+				fd.Close()
+			}
 		}
 		result = false
 	}
