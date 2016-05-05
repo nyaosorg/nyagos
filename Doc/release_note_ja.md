@@ -1,3 +1,6 @@
+NYAGOS 4.1.3\_0
+===============
+
 * Add: `nyagos.open(PATH,MODE)` UTF8版`io.open`
 * Add: `nyagos.loadfile(PATH)` UTF8版`loadfile`
 * Add: `nyagos.lines(PATH)` UTF8版`io.lines`(注意:戻り値はバイト列、ファイル名だけがUTF8指定になった)
