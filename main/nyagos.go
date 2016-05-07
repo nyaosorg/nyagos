@@ -192,6 +192,8 @@ func main() {
 	}
 
 	for {
+		history_count := conio.DefaultEditor.HistoryLen()
+
 		line, err := command_stream()
 		if err != nil {
 			if err != io.EOF {
@@ -208,7 +210,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		if conio.DefaultEditor.HistoryLen() > conio.DefaultEditor.HistoryLen() {
+		if conio.DefaultEditor.HistoryLen() > history_count {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 			if err == nil {
 				fmt.Fprintln(fd, line)
