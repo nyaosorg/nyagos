@@ -1,3 +1,5 @@
+Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)
+
 NYAGOS 4.1.3\_0
 ===============
 
