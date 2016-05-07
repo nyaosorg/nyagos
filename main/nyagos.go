@@ -212,6 +212,10 @@ func main() {
 		}
 		if conio.DefaultEditor.HistoryLen() > history_count {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
+			if err != nil && os.IsNotExist(err) {
+				// print("create ", histPath, "\n")
+				fd, err = os.Create(histPath)
+			}
 			if err == nil {
 				fmt.Fprintln(fd, line)
 				fd.Close()
