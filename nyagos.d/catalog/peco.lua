@@ -18,9 +18,12 @@ end)
 
 nyagos.bindkey("C_R", function(this)
     local path = nyagos.pathjoin(nyagos.env.appdata,'NYAOS_ORG\\nyagos.history')
-    local result = nyagos.eval('peco < '..path)
-    this:call("CLEAR_SCREEN")
-    return result
+    local stat = nyagos.stat(path)
+    if stat and stat.size > 0 then
+        local result = nyagos.eval('peco < '..path)
+        this:call("CLEAR_SCREEN")
+        return result
+    end
 end)
 
 nyagos.bindkey("M_H" , function(this)
