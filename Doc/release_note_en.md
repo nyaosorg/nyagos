@@ -1,4 +1,6 @@
 Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)
+Fix: when nyagos.history was deleted, warnings are displayed until `exit` was typed.
+Fix: nyagos.d/catalog/peco.lua: when nyagos.history does not exist, peco hangs
 
 NYAGOS 4.1.3\_0
 ===============
