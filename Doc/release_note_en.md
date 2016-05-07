@@ -1,10 +1,11 @@
+NYAGOS 4.1.3\_1
+===============
 Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)
 Fix: when nyagos.history was deleted, warnings are displayed until `exit` was typed.
 Fix: nyagos.d/catalog/peco.lua: when nyagos.history does not exist, peco hangs
 
 NYAGOS 4.1.3\_0
 ===============
-
 * Add: `nyagos.open(PATH,MODE)` which `PATH` is in UTF8 and compatible with `io.open`.
 * Add: `nyagos.loadfile(PATH)` which `PATH` is in UTF8 and compatible with `loadfile`.
 * Add: `nyagos.lines(PATH)` which `PATH` is in UTF8 and compatible with `io.lines`. (Be careful that it returns bytearray-string not always UTF8!)
