@@ -33,7 +33,7 @@ goto build
         goto end
 
 :clean
-        for %%I in (nyagos.exe nyagos.syso version.now) do if exist %%I del %%I
+        for %%I in (nyagos.exe main\nyagos.syso version.now) do if exist %%I del %%I
         powershell "ls -R | ?{ $_ -match '\.go$' } | %%{ [System.IO.Path]::GetDirectoryName($_.FullName)} | Sort-Object | Get-Unique | %%{ Write-Host 'go clean on',$_ ;  pushd $_ ; go clean ; popd }"
         for /R %%I in (*~ *.bak) do if exist %%I del %%I
         goto end

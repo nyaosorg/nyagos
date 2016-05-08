@@ -8,6 +8,11 @@ try{
     exit
 }
 
+if ( [IO.File]::Exists("nyagos.syso") -and -not $env:version ){
+    Write-Host "makesyso.ps1: nothing to do"
+    exit
+}
+
 $text = @"
 #include <winver.h>
 
