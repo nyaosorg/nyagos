@@ -12,6 +12,7 @@ import (
 	"../history"
 	"../interpreter"
 	"../lua"
+	ole "../lua/ole"
 )
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"
@@ -231,6 +232,7 @@ func init() {
 		"atou":                 &lua.TGoFunction{cmdAtoU},
 		"bindkey":              &lua.TGoFunction{cmdBindKey},
 		"chdir":                &lua.TGoFunction{cmdChdir},
+		"create_object":        &lua.TGoFunction{ole.CreateObject},
 		"commit":               emptyToNil(commit),
 		"commonprefix":         &lua.TGoFunction{cmdCommonPrefix},
 		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
