@@ -1,31 +1,18 @@
-if not share.ole then
-    local status
-    status,share.ole = pcall(require,"nyole")
-    if not status then
-        share.ole = nil
+nyagos.alias.trash = function(args)
+    if #args <= 0 then
+        nyagos.writerr("Move files or directories to Windows Trashbox\n")
+        nyagos.writerr("Usage: trash file(s)...\n")
+        return
     end
-end
-if share.ole then
-    nyagos.alias.trash = function(args)
-        local fsObj = share.ole.create_object_utf8("Scripting.FileSystemObject")
-        local shellApp = share.ole.create_object_utf8("Shell.Application")
-        local trashBox = shellApp:NameSpace(math.tointeger(10))
-        if trashBox.MoveHere then
-            if #args <= 0 then
-                nyagos.writerr("Move files or directories to Windows Trashbox\n")
-                nyagos.writerr("Usage: trash file(s)...\n")
-                return
-            end
-            args = nyagos.glob(table.unpack(args))
-            for i=1,#args do
-                if fsObj:FileExists(args[i]) or fsObj:FolderExists(args[i]) then
-                    trashBox:MoveHere(fsObj:GetAbsolutePathName(args[i]))
-                else
-                    nyagos.writerr(args[i]..": such a file or directory not found.\n")
-                end
-            end
+    local fsObj = nyagos.create_object("Scripting.FileSystemObject")
+    local shellApp = nyagos.create_object("Shell.Application")
+    local trashBox = shellApp:_call("NameSpace",math.tointeger(10))
+    args = nyagos.glob(table.unpack(args))
+    for i=1,#args do
+        if fsObj:_call("FileExists",args[i]) or fsObj:_call("FolderExists",args[i]) then
+            trashBox:_call("MoveHere",fsObj:_call("GetAbsolutePathName",args[i]))
         else
-            nyagos.writerr("Warning: trash.lua requires nyaole.dll 0.0.0.5 or later\n")
+            nyagos.writerr(args[i]..": such a file or directory not found.\n")
         end
     end
 end
