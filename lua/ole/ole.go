@@ -55,25 +55,74 @@ func lua2interface(L lua.Lua, index int) (interface{}, error) {
 	}
 }
 
+func lua2interfaceS(L lua.Lua, start, end int) ([]interface{}, error) {
+	result := make([]interface{}, 0, end-start+1)
+	for i := start; i <= end; i++ {
+		val, val_err := lua2interface(L, i)
+		if val_err != nil {
+			return nil, val_err
+		}
+		result = append(result, val)
+	}
+	return result, nil
+}
+
 func call(L lua.Lua) int {
 	p := (*capsule_t)(L.ToUserData(1))
 	if p == nil {
 		return L.Push(nil, "OLEOBJECT._call: the receiver is null")
 	}
-	params := make([]interface{}, 0, 10)
 	count := L.GetTop()
 	name, name_err := L.ToString(2)
 	if name_err != nil {
 		return L.Push(nil, name_err)
 	}
-	for i := 3; i <= count; i++ {
-		if val, val_err := lua2interface(L, i); val_err == nil {
-			params = append(params, val)
-		} else {
-			return L.Push(nil, val_err)
-		}
+	params, params_err := lua2interfaceS(L, 3, count)
+	if params_err != nil {
+		return L.Push(nil, params_err)
 	}
 	result, result_err := oleutil.CallMethod(p.Data, name, params...)
+	if result_err != nil {
+		return L.Push(nil, result_err)
+	}
+	if result.VT == ole.VT_DISPATCH {
+		return capsule_t{result.ToIDispatch()}.Push(L)
+	} else {
+		return L.Push(result.Value())
+	}
+}
+
+func set(L lua.Lua) int {
+	p := (*capsule_t)(L.ToUserData(1))
+	if p == nil {
+		return L.Push(nil, "OLEOBJECT._set: the receiver is null")
+	}
+	name, name_err := L.ToString(2)
+	if name_err != nil {
+		return L.Push(nil, name_err)
+	}
+	key, key_err := lua2interfaceS(L, 3, L.GetTop())
+	if key_err != nil {
+		return L.Push(nil, key_err)
+	}
+	oleutil.PutProperty(p.Data, name, key...)
+	return L.Push(true, nil)
+}
+
+func get(L lua.Lua) int {
+	p := (*capsule_t)(L.ToUserData(1))
+	if p == nil {
+		return L.Push(nil, "OLEOBJECT._set: the receiver is null")
+	}
+	name, name_err := L.ToString(2)
+	if name_err != nil {
+		return L.Push(nil, name_err)
+	}
+	key, key_err := lua2interfaceS(L, 3, L.GetTop())
+	if key_err != nil {
+		return L.Push(nil, key_err)
+	}
+	result, result_err := oleutil.GetProperty(p.Data, name, key...)
 	if result_err != nil {
 		return L.Push(nil, result_err)
 	}
@@ -91,10 +140,16 @@ func index(L lua.Lua) int {
 		// print(name_err.Error(), "\n")
 		return L.Push(nil, name_err)
 	}
-	if name == "_call" {
+	switch name {
+	case "_call":
 		return L.Push(call, nil)
+	case "_set":
+		return L.Push(set, nil)
+	case "_get":
+		return L.Push(get, nil)
+	default:
+		return 0
 	}
-	return 0
 }
 
 func CreateObject(L lua.Lua) int {
