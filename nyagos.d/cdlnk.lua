@@ -1,49 +1,39 @@
-if not share.ole then
-    local status
-    status, share.ole = pcall(require,"nyole")
-    if not status then
-        share.ole = nil
-    end
-end
+share._shortcut_getfolder = function(arg1)
+    local fsObj = nyagos.create_object("Scripting.FileSystemObject")
+    local wshObj = nyagos.create_object("WScript.Shell")
 
-if share.ole then
-    share._shortcut_getfolder = function(arg1)
-        local fsObj = share.ole.create_object_utf8("Scripting.FileSystemObject")
-        local wshObj = share.ole.create_object_utf8("WScript.Shell")
-
-        local shortcut1 = wshObj:CreateShortcut(arg1)
-        if not shortcut1 then
-            return arg1
-        end
-        local path = shortcut1.TargetPath
-        if fsObj:FolderExists(path) then
-            return path
-        end
-        path = shortcut1.WorkingDirectory
-        if fsObj:FolderExists(path) then
-            return path
-        end
-        path = fsObj:GetParentFolderName(shortcut1.TargetPath)
-        if fsObj:FolderExists(path) then
-            return path
-        end
+    local shortcut1 = wshObj:_call("CreateShortcut",arg1)
+    if not shortcut1 then
         return arg1
     end
+    local path = shortcut1:_get("TargetPath")
+    if (fsObj:_call("FolderExists",path)) then
+        return path
+    end
+    path = shortcut1:_get("WorkingDirectory")
+    if (fsObj:_call("FolderExists",path)) then
+        return path
+    end
+    path = fsObj:_call("GetParentFolderName",shortcut1.TargetPath)
+    if (fsObj:_call("FolderExists",path)) then
+        return path
+    end
+    return arg1
+end
 
-    share.org_cdlnk_alias_cd = nyagos.alias.cd
-    nyagos.alias.cd=function(args)
-        for i=1,#args do
-            local arg1 = args[i]
-            if string.match(arg1,"%.[lL][nN][kK]$") then
-                arg1 = share._shortcut_getfolder(arg1)
-            end
-            args[i] = arg1
+share.org_cdlnk_alias_cd = nyagos.alias.cd
+nyagos.alias.cd=function(args)
+    for i=1,#args do
+        local arg1 = args[i]
+        if string.match(arg1,"%.[lL][nN][kK]$") then
+            arg1 = share._shortcut_getfolder(arg1)
         end
-        if share.org_cdlnk_alias_cd then
-            return share.org_cdlnk_alias_cd(args)
-        else
-            args[0] = "__cd__"
-            return nyagos.exec(args)
-        end
+        args[i] = arg1
+    end
+    if share.org_cdlnk_alias_cd then
+        return share.org_cdlnk_alias_cd(args)
+    else
+        args[0] = "__cd__"
+        return nyagos.exec(args)
     end
 end
