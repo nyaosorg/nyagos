@@ -1,3 +1,5 @@
+* Implemented built-in tiny OLE interface and nyole.dll is not necessary now.
+
 NYAGOS 4.1.3\_1
 ===============
 * Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)
