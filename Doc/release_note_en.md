@@ -29,6 +29,11 @@ NYAGOS 4.1.3\_0
 * Fix: `ls -ltr *` was not sorted by modified time. (#136)
 * Support: nyagos -f NOT-Lua-Script(COMMANDS-Script)
 
+(Add forgotten change May 17 2016)
+----------------------------------
+
+* Not to confuse whether the encoding is ANSI or UTF8 string , stop to print('UTF8-String with ESCAPE-SEQUENCE'). Now print remains to be the bundled one of lua53.dll. ( #129 )
+
 NYAGOS 4.1.2\_0
 ===============
 * Made scripts-catalog system
