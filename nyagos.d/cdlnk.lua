@@ -2,20 +2,20 @@ share._shortcut_getfolder = function(arg1)
     local fsObj = nyagos.create_object("Scripting.FileSystemObject")
     local wshObj = nyagos.create_object("WScript.Shell")
 
-    local shortcut1 = wshObj:_call("CreateShortcut",arg1)
+    local shortcut1 = wshObj:CreateShortcut(arg1)
     if not shortcut1 then
         return arg1
     end
     local path = shortcut1:_get("TargetPath")
-    if (fsObj:_call("FolderExists",path)) then
+    if (fsObj:FolderExists(path)) then
         return path
     end
     path = shortcut1:_get("WorkingDirectory")
-    if (fsObj:_call("FolderExists",path)) then
+    if (fsObj:FolderExists(path)) then
         return path
     end
-    path = fsObj:_call("GetParentFolderName",shortcut1.TargetPath)
-    if (fsObj:_call("FolderExists",path)) then
+    path = fsObj:GetParentFolderName(shortcut1:_get("TargetPath"))
+    if (fsObj:FolderExists(path)) then
         return path
     end
     return arg1
