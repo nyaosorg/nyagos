@@ -15,6 +15,10 @@ type capsule_t struct {
 	Data *ole.IDispatch
 }
 
+type method_t struct {
+	Name string
+}
+
 func (this capsule_t) Push(L lua.Lua) int {
 	p := (*capsule_t)(L.NewUserData(unsafe.Sizeof(this)))
 	p.Data = this.Data
@@ -67,21 +71,39 @@ func lua2interfaceS(L lua.Lua, start, end int) ([]interface{}, error) {
 	return result, nil
 }
 
-func call(L lua.Lua) int {
+// this:_call("METHODNAME",params...)
+func call1(L lua.Lua) int {
 	p := (*capsule_t)(L.ToUserData(1))
 	if p == nil {
 		return L.Push(nil, "OLEOBJECT._call: the receiver is null")
 	}
-	count := L.GetTop()
 	name, name_err := L.ToString(2)
 	if name_err != nil {
 		return L.Push(nil, name_err)
 	}
+	return call_common(L, p.Data, name)
+}
+
+// this:METHODNAME(params...)
+func call2(L lua.Lua) int {
+	m := (*method_t)(L.ToUserData(1))
+	if m == nil || m.Name == "" {
+		return L.Push(nil, "OLEOBJECT(): the method is null")
+	}
+	p := (*capsule_t)(L.ToUserData(2))
+	if p == nil || p.Data == nil {
+		return L.Push(nil, "OLEOBJECT(): the receiver is null")
+	}
+	return call_common(L, p.Data, m.Name)
+}
+
+func call_common(L lua.Lua, com1 *ole.IDispatch, name string) int {
+	count := L.GetTop()
 	params, params_err := lua2interfaceS(L, 3, count)
 	if params_err != nil {
 		return L.Push(nil, params_err)
 	}
-	result, result_err := oleutil.CallMethod(p.Data, name, params...)
+	result, result_err := oleutil.CallMethod(com1, name, params...)
 	if result_err != nil {
 		return L.Push(nil, result_err)
 	}
@@ -134,21 +156,26 @@ func get(L lua.Lua) int {
 }
 
 func index(L lua.Lua) int {
-	// p := (*capsule_t)(L.ToUserData(1))
 	name, name_err := L.ToString(2)
 	if name_err != nil {
-		// print(name_err.Error(), "\n")
 		return L.Push(nil, name_err)
 	}
 	switch name {
 	case "_call":
-		return L.Push(call, nil)
+		return L.Push(call1, nil)
 	case "_set":
 		return L.Push(set, nil)
 	case "_get":
 		return L.Push(get, nil)
 	default:
-		return 0
+		var method1 *method_t
+		method1 = (*method_t)(L.NewUserData(unsafe.Sizeof(*method1)))
+		method1.Name = name
+		L.NewTable()
+		L.PushGoFunction(call2)
+		L.SetField(-2, "__call")
+		L.SetMetaTable(-2)
+		return 1
 	}
 }
 
