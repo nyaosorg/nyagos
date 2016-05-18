@@ -140,12 +140,24 @@ func (this Lua) RawLen(index int) uintptr {
 
 type MetaTableOwner struct {
 	Body Pushable
-	Meta Pushable
+	Meta *TTable
 }
 
 func (this *MetaTableOwner) Push(L Lua) int {
 	this.Body.Push(L)
-	this.Meta.Push(L)
+	if nameObj, nameObj_ok := this.Meta.Dict["__name"]; nameObj_ok {
+		if name, name_ok := nameObj.(*TRawString); name_ok {
+			print("found meta-name: ", string(name.Value), "\n")
+			L.NewMetaTable(string(name.Value))
+			this.Meta.PushWithoutNewTable(L)
+		} else {
+			print("found meta-name, but could not cast\n")
+			this.Meta.Push(L)
+		}
+	} else {
+		print("not meta table\n")
+		this.Meta.Push(L)
+	}
 	L.SetMetaTable(-2)
 	return 1
 }
@@ -155,8 +167,7 @@ type TTable struct {
 	Array map[int]Pushable
 }
 
-func (this TTable) Push(L Lua) int {
-	L.NewTable()
+func (this TTable) PushWithoutNewTable(L Lua) int {
 	for key, val := range this.Dict {
 		L.PushString(key)
 		val.Push(L)
@@ -170,7 +181,12 @@ func (this TTable) Push(L Lua) int {
 	return 1
 }
 
-func (this Lua) ToTable(index int) (Pushable, error) {
+func (this TTable) Push(L Lua) int {
+	L.NewTable()
+	return this.PushWithoutNewTable(L)
+}
+
+func (this Lua) ToTable(index int) (*TTable, error) {
 	top := this.GetTop()
 	defer this.SetTop(top)
 	table := make(map[string]Pushable)
