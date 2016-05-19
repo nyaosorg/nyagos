@@ -69,14 +69,13 @@ goto build
         robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
         if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
         copy nyagos.lua "%INSTALLDIR%\."
-        copy nyagos.exe "%INSTALLDIR%\." && copy nyole.dll "%INSTALLDIR%\."
+        copy nyagos.exe "%INSTALLDIR%\."
         if errorlevel 1 (start %~0 install_ & exit /b)
         goto end
 
 :install_
         taskkill /F /im nyagos.exe
         copy nyagos.exe "%INSTALLDIR%\."
-        copy nyole.dll "%INSTALLDIR%\."
         timeout /T 3
         exit %ERRORLEVEL%
 
