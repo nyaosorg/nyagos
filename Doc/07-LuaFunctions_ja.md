@@ -265,6 +265,16 @@ for text in nyagos.lines(PATH) do ... end
 
 `text` は UTF8 変換などはなく、io.lines 同様、ただのバイト列です
 
+### `OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')`
+
+OLEオブジェクトを作成します。OLEオブジェクトはメソッド・プロパティー
+を持ちます。
+
+- メソッド
+    - `OLEOBJECT:METHOD(PARAMETERS)`.
+- プロパティ
+    - `OLEOBJECT:_set('PROPERTYNAME',value)`
+    - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
 ### `nyagos.goversion`
 

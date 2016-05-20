@@ -23,6 +23,7 @@ Programming Language GO and Lua.
   * built-in command written with Lua
   * filtering command-line
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
+  * Support to call COM(OLE)
 
 Contents
 --------

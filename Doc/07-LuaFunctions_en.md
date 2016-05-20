@@ -236,7 +236,15 @@ for text in nyagos.lines(PATH) do ... end
 
 `text` is bytearray as same as io.lines().
 
+### `OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')`
 
+Create OLEObject. OLEOBJECTs have methods and property.
+
+- Method
+    - `OLEOBJECT:METHOD(PARAMETERS)`.
+- Property
+    - `OLEOBJECT:_set('PROPERTYNAME',value)`
+    - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
 ### `nyagos.goversion`
 
@@ -251,5 +259,3 @@ The string compilation architecture of nyagos.exe.
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.
-
-
