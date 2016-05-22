@@ -32,7 +32,15 @@ var version string
 var ansiOut io.Writer
 
 func nyagosPrompt(L lua.Lua) int {
-	template, err := L.ToString(-1)
+	title, title_err := L.ToString(2)
+	if title_err == nil && title != "" {
+		conio.SetTitle(title)
+	} else if wd, wdErr := os.Getwd(); wdErr == nil {
+		conio.SetTitle("NYAGOS - " + wd)
+	} else {
+		conio.SetTitle("NYAGOS")
+	}
+	template, err := L.ToString(1)
 	if err != nil {
 		template = "[" + err.Error() + "]"
 	}
@@ -110,15 +118,7 @@ func NewCmdStreamFile(f *os.File) func() (string, error) {
 func NewCmdStreamConsole(it *interpreter.Interpreter) func() (string, error) {
 	conio.DefaultEditor.Prompt = printPrompt
 	conio.DefaultEditor.Tag = it
-	return func() (string, error) {
-		wd, wdErr := os.Getwd()
-		if wdErr == nil {
-			conio.SetTitle("NYAGOS - " + wd)
-		} else {
-			conio.SetTitle("NYAGOS - " + wdErr.Error())
-		}
-		return conio.DefaultEditor.ReadLine()
-	}
+	return conio.DefaultEditor.ReadLine
 }
 
 var optionK = flag.String("k", "", "like `cmd /k`")

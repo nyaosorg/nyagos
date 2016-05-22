@@ -235,6 +235,7 @@ func init() {
 		"create_object":        &lua.TGoFunction{ole.CreateObject},
 		"commit":               emptyToNil(commit),
 		"commonprefix":         &lua.TGoFunction{cmdCommonPrefix},
+		"default_prompt":       &lua.TGoFunction{nyagosPrompt},
 		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
 		"eval":                 &lua.TGoFunction{cmdEval},
 		"exec":                 &lua.TGoFunction{cmdExec},
