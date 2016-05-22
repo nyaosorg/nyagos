@@ -1,4 +1,6 @@
 * Implemented built-in tiny OLE interface and nyole.dll is not necessary now.
+* Define default-prompt function as `nyagos.default_prompt` and it can change
+console-title(second parameter)
 
 NYAGOS 4.1.3\_1
 ===============

@@ -153,11 +153,13 @@ arguments.
 `nyagos.prompt` is assigned function which draw prompt.
 You can swap the prompt-function as below.
 
-    share.backup_prompt = nyagos.prompt
-    nyagos.prompt = function(template)
-        print("xxxxx")
-        return share.backup_prompt(template)
+    nyagos.prompt = function(this)
+        local title = "NYAGOS - ".. nyagos.getwd():gsub('\\','/')
+        return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
     end
+
+`nyagos.default_prompt` is the default prompt function which can
+change the title of the terminal-window with the second parameter.
 
 ### `nyagos.gethistory(N)`
 

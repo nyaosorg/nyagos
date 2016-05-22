@@ -182,11 +182,13 @@ suffix というコマンドを作成しています。
 生成して表示、文字の桁数を戻り値を返す関数が格納されています。
 ユーザはこれを横取りして独自のプロンプト表示を改造することができます。
 
-    share.backup_prompt = nyagos.prompt
-    nyagos.prompt = function(template)
-        print("xxxxx")
-        return share.backup_prompt(template)
+    nyagos.prompt = function(this)
+        local title = "NYAGOS - ".. nyagos.getwd():gsub('\\','/')
+        return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
     end
+
+`nyagos.default_prompt` はデフォルトのプロンプト表示関数です。
+第二引数でターミナルのタイトルを変更することができます。
 
 ### `nyagos.gethistory(N)`
 
