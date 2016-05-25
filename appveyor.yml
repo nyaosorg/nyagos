@@ -1,0 +1,82 @@
+# Appveyor file
+# http://www.appveyor.com/docs/appveyor-yml
+
+#---------------------------------#
+#      general configuration      #
+#---------------------------------#
+
+branches:
+  except:
+    - gh-pages
+
+
+#---------------------------------#
+#    environment configuration    #
+#---------------------------------#
+
+init:
+  - git config --global core.autocrlf true
+
+clone_folder: C:\Users\appveyor\nyagos
+
+environment:
+  global:
+    dest_dir: bin
+    gopath: C:\gopath
+    go_shortv: 16
+    lua_ver: 5.3.2
+    lua_shortv: 53
+  matrix:
+    - platform: i386
+    - platform: amd64
+
+
+install:
+  - set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\%DEST_DIR%\%PLATFORM%
+  - ps: |
+      if ($env:PLATFORM -eq "i386") {
+        $env:PATH="C:\msys64\mingw32\bin;C:\go" + $env:GO_SHORTV + "-x86;" + $env:PATH
+        $script:bit = 32
+      } else {
+        $env:PATH="C:\msys64\mingw64\bin;C:\go" + $env:GO_SHORTV + ";" + $env:PATH
+        $script:bit = 64
+      }
+      $targetURL = "http://sourceforge.net/projects/luabinaries/files/" + $env:LUA_VER + "/Tools%20Executables/lua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
+      $outputPath = $env:APPVEYOR_BUILD_FOLDER + "\lua.zip"
+      $webClient = new-object System.Net.WebClient
+      [int]$trials = 0
+      do {
+        try {
+          $trials +=1
+          $webClient.DownloadFile($targetURL, $outputPath)
+          break
+        } catch [System.Net.WebException] {
+          write-host "Problem downloading $targetURL `tTrial $trials `
+                     `n`tException: " $_.Exception.Message
+          sleep 3
+        }
+      }
+      while ($trials -lt 5)
+  - cd %APPVEYOR_BUILD_FOLDER%
+  - 7z x lua.zip -oc:lua -y > nul
+  - move %APPVEYOR_BUILD_FOLDER%\lua\lua%LUA_SHORTV%.dll %APPVEYOR_BUILD_FOLDER%
+  - md %INSTALL_DIR% > nul 2>&1
+
+
+#---------------------------------#
+#       build configuration       #
+#---------------------------------#
+
+build_script:
+  - make.cmd get
+  - make.cmd
+  - make.cmd install %INSTALL_DIR%
+
+
+#---------------------------------#
+#      artifacts configuration    #
+#---------------------------------#
+
+artifacts:
+  - path: $(DEST_DIR)\$(PLATFORM)
+    name: nyagos-$(PLATFORM)-$(APPVEYOR_BUILD_VERSION)
