@@ -41,7 +41,7 @@ install:
         $env:PATH="C:\msys64\mingw64\bin;C:\go" + $env:GO_SHORTV + ";" + $env:PATH
         $script:bit = 64
       }
-      $targetURL = "http://sourceforge.net/projects/luabinaries/files/" + $env:LUA_VER + "/Tools%20Executables/lua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
+      $targetURL = "http://osdn.jp/frs/g_redir.php?m=liquidtelecom&f=%2Fluabinaries%2F" + $env:LUA_VER + "%2FTools+Executables%2Flua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
       $outputPath = $env:APPVEYOR_BUILD_FOLDER + "\lua.zip"
       $webClient = new-object System.Net.WebClient
       [int]$trials = 0
