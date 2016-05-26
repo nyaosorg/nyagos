@@ -717,9 +717,7 @@ func cmdLinesCallback(L lua.Lua) int {
 		return L.Push(nil)
 	}
 	// print("cmdLinesCallback: text='", text, "'\n")
-	if line[len(line)-1] == '\r' {
-		line = line[:len(line)-1]
-	}
+	line = bytes.TrimRight(line, "\r\n")
 	L.PushAnsiString(line)
 	return 1
 }
