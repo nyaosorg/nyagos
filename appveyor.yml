@@ -41,7 +41,7 @@ install:
       } else {
         $env:PATH="C:\msys64\mingw64\bin;C:\go" + $env:GO_SHORTV + ";" + $env:PATH
         $script:bit = 64
-        $env:GOARCH = "amd646"
+        $env:GOARCH = "amd64"
       }
       $targetURL = "http://osdn.jp/frs/g_redir.php?m=liquidtelecom&f=%2Fluabinaries%2F" + $env:LUA_VER + "%2FTools+Executables%2Flua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
       $outputPath = $env:APPVEYOR_BUILD_FOLDER + "\lua.zip"
