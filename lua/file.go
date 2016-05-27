@@ -22,10 +22,9 @@ func (L Lua) pushFile(f *os.File, modeFlg int, modeStr string) error {
 }
 
 func (L Lua) PushFileWriter(f *os.File) error {
-	return L.pushFile(f, os.O_APPEND, "w")
-
+	return L.pushFile(f, ansicfile.O_APPEND|ansicfile.O_TEXT, "wt")
 }
 
 func (L Lua) PushFileReader(f *os.File) error {
-	return L.pushFile(f, os.O_RDONLY, "r")
+	return L.pushFile(f, ansicfile.O_RDONLY|ansicfile.O_TEXT, "rt")
 }
