@@ -27,18 +27,19 @@ environment:
     lua_ver: 5.3.2
     lua_shortv: 53
   matrix:
-    - platform: i386
-    - platform: amd64
+    - GOARCH: 386
+    - GOARCH: amd64
 
 
 install:
-  - set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\%DEST_DIR%\%PLATFORM%
+  - set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\%DEST_DIR%\%GOARCH%
   - ps: |
-      if ($env:PLATFORM -eq "i386") {
-        $env:PATH="C:\msys64\mingw32\bin;C:\go" + $env:GO_SHORTV + "-x86;" + $env:PATH
+      $env:PATH="C:\go" + $env:GO_SHORTV + ";" + $env:PATH
+      if ($env:GOARCH -eq "386") {
+        $env:PATH="C:\msys64\mingw32\bin;" + $env:PATH
         $script:bit = 32
       } else {
-        $env:PATH="C:\msys64\mingw64\bin;C:\go" + $env:GO_SHORTV + ";" + $env:PATH
+        $env:PATH="C:\msys64\mingw64\bin;" + $env:PATH
         $script:bit = 64
       }
       $targetURL = "http://osdn.jp/frs/g_redir.php?m=liquidtelecom&f=%2Fluabinaries%2F" + $env:LUA_VER + "%2FTools+Executables%2Flua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
@@ -78,5 +79,5 @@ build_script:
 #---------------------------------#
 
 artifacts:
-  - path: $(DEST_DIR)\$(PLATFORM)
-    name: nyagos-$(PLATFORM)-$(APPVEYOR_BUILD_VERSION)
+  - path: $(DEST_DIR)\$(GOARCH)
+    name: nyagos-$(GOARCH)-$(APPVEYOR_BUILD_VERSION)
