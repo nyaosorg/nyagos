@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/bh7866s6oasvchpj?svg=true)](https://ci.appveyor.com/project/zetamatta/nyagos)
+
 The Nihongo Yet Another GOing Shell
 ===================================
 
