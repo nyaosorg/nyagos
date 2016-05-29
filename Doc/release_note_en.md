@@ -3,6 +3,7 @@
 console-title(second parameter)
 * Fix: nyagos.lines() did not remove CRLF (not compatible with io.lines() ) #144
 * Fix: Lua's default file handles(STDIN/STDOUT) were opened by binary-mode. #146
+* nyagos.d/catalog/peco.lua: C-r: revert order of display and improved speed.
 
 NYAGOS 4.1.3\_1
 ===============
