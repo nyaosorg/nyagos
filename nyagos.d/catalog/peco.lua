@@ -16,14 +16,21 @@ nyagos.bindkey("C-o",function(this)
     assert( this:replacefrom(pos,result) )
 end)
 
-nyagos.bindkey("C_R", function(this)
-    local path = nyagos.pathjoin(nyagos.env.appdata,'NYAOS_ORG\\nyagos.history')
-    local stat = nyagos.stat(path)
-    if stat and stat.size > 0 then
-        local result = nyagos.eval('peco < '..path)
-        this:call("CLEAR_SCREEN")
-        return result
+nyagos.alias.__dump_history = function()
+    local uniq={}
+    for i=nyagos.gethistory()-1,1,-1 do
+        local line = nyagos.gethistory(i)
+        if line ~= "" and not uniq[line] then
+            nyagos.write(line,"\n")
+            uniq[line] = true
+        end
     end
+end
+
+nyagos.bindkey("C_R", function(this)
+    local result = nyagos.eval('__dump_history | peco')
+    this:call("CLEAR_SCREEN")
+    return result
 end)
 
 nyagos.bindkey("M_H" , function(this)
