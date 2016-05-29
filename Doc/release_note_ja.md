@@ -1,8 +1,10 @@
+NYAGOS 4.1.4\_0
+===============
 * 簡易OLEインターフェイスを実装した。NYOLE.DLL は不要になった。
 * デフォルトのプロンプト表示関数を `nyagos.default_prompt` と定義し、第二引数で端末タイトルを変更できるようにした
-* Fix: nyagos.lines() が改行を削除していなかった(io.lines非互換だった)
+* Fix: nyagos.lines() が改行を削除していなかった
 * Fix: Lua のデフォルトファイルハンドル(標準入出力)がバイナリモードでオープンされていた(#146)
-* nyagos.d/catalog/peco.lua: 表示順を反転させて、速度を改善した。
+* nyagos.d/catalog/peco.lua: C-r: 表示順を反転させて、速度を改善した。
 
 NYAGOS 4.1.3\_1
 ===============

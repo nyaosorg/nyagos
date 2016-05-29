@@ -1,7 +1,9 @@
+NYAGOS 4.1.4\_0
+===============
 * Implemented built-in tiny OLE interface and nyole.dll is not necessary now.
 * Define default-prompt function as `nyagos.default_prompt` and it can change
 console-title(second parameter)
-* Fix: nyagos.lines() did not remove CRLF (not compatible with io.lines() ) #144
+* Fix: nyagos.lines() did not remove CRLF #144
 * Fix: Lua's default file handles(STDIN/STDOUT) were opened by binary-mode. #146
 * nyagos.d/catalog/peco.lua: C-r: revert order of display and improved speed.
 
