@@ -18,6 +18,7 @@ import (
 	"../conio"
 	"../dos"
 	"../dos/ansicfile"
+	"../dos/mbcs"
 	"../interpreter"
 	"../lua"
 )
@@ -418,7 +419,7 @@ func cmdWhich(L lua.Lua) int {
 }
 
 func cmdAtoU(L lua.Lua) int {
-	str, err := dos.AtoU(L.ToAnsiString(1))
+	str, err := mbcs.AtoU(L.ToAnsiString(1))
 	if err == nil {
 		L.PushString(str)
 		return 1
@@ -432,7 +433,7 @@ func cmdUtoA(L lua.Lua) int {
 	if utf8err != nil {
 		return L.Push(nil, utf8err)
 	}
-	str, err := dos.UtoA(utf8)
+	str, err := mbcs.UtoA(utf8)
 	if err != nil {
 		return L.Push(nil, err)
 	}

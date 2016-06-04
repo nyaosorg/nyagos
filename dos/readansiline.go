@@ -1,6 +1,9 @@
 package dos
 
-import "io"
+import (
+	"./mbcs"
+	"io"
+)
 
 func ReadAnsiLine(f io.Reader) (string, error) {
 	line := make([]byte, 0, 1024)
@@ -17,5 +20,5 @@ func ReadAnsiLine(f io.Reader) (string, error) {
 			line = append(line, ch[0])
 		}
 	}
-	return AtoU(line)
+	return mbcs.AtoU(line)
 }
