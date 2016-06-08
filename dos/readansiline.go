@@ -1,8 +1,9 @@
 package dos
 
 import (
-	"./mbcs"
 	"io"
+
+	"github.com/zetamatta/go-mbcs"
 )
 
 func ReadAnsiLine(f io.Reader) (string, error) {

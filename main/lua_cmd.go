@@ -12,6 +12,7 @@ import (
 	"unsafe"
 
 	"github.com/mattn/go-colorable"
+	"github.com/zetamatta/go-mbcs"
 
 	"../alias"
 	"../completion"
@@ -19,7 +20,6 @@ import (
 	"../conio/getch"
 	"../dos"
 	"../dos/ansicfile"
-	"../dos/mbcs"
 	"../interpreter"
 	"../lua"
 )
