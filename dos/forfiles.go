@@ -91,21 +91,6 @@ func (this *FileInfo) IsSystem() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_SYSTEM) != 0
 }
 
-func DirName(path string) string {
-	lastroot := -1
-	for i, i_end := 0, len(path); i < i_end; i++ {
-		switch path[i] {
-		case '\\', '/', ':':
-			lastroot = i
-		}
-	}
-	if lastroot >= 0 {
-		return path[0:(lastroot + 1)]
-	} else {
-		return ""
-	}
-}
-
 func ForFiles(pattern string, callback func(*FileInfo) bool) error {
 	this, err := findFirst(pattern)
 	if err != nil {
