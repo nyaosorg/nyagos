@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode"
 
-	"./getch"
+	"github.com/zetamatta/go-getch"
 )
 
 func KeyFuncIncSearch(this *Buffer) Result {

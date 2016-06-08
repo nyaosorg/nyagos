@@ -13,12 +13,12 @@ import (
 
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
+	"github.com/zetamatta/go-getch"
 
 	"../alias"
 	"../commands"
 	"../completion"
 	"../conio"
-	"../conio/getch"
 	"../dos"
 	"../history"
 	"../interpreter"

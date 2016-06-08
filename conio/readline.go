@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"./getch"
+	"github.com/zetamatta/go-getch"
 )
 
 type Result int

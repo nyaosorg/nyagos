@@ -5,8 +5,8 @@ import (
 	"os"
 	"syscall"
 
-	"../conio/getch"
 	. "../interpreter"
+	"github.com/zetamatta/go-getch"
 )
 
 func cmd_del(cmd *Interpreter) (ErrorLevel, error) {

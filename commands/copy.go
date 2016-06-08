@@ -6,7 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"../conio/getch"
+	"github.com/zetamatta/go-getch"
+
 	"../dos"
 	. "../interpreter"
 )

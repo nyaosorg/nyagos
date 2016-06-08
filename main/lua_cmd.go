@@ -12,12 +12,12 @@ import (
 	"unsafe"
 
 	"github.com/mattn/go-colorable"
+	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
 	"../alias"
 	"../completion"
 	"../conio"
-	"../conio/getch"
 	"../dos"
 	"../dos/ansicfile"
 	"../interpreter"

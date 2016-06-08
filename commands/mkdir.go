@@ -5,7 +5,8 @@ import (
 	"os"
 	"syscall"
 
-	"../conio/getch"
+	"github.com/zetamatta/go-getch"
+
 	"../dos"
 	. "../interpreter"
 )
