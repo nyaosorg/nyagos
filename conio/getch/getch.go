@@ -1,4 +1,4 @@
-package conio
+package getch
 
 import (
 	"fmt"
@@ -8,6 +8,8 @@ import (
 	"unicode/utf16"
 	"unsafe"
 )
+
+var kernel32 = syscall.NewLazyDLL("kernel32")
 
 const (
 	RIGHT_ALT_PRESSED  = 1
@@ -117,7 +119,7 @@ func getKey() (rune, uint16, uint32) {
 	return r.KeyCode, r.ScanCode, r.ShiftState
 }
 
-func GetKey() (rune, uint16, uint32) {
+func Full() (rune, uint16, uint32) {
 	code, scan, shift := getKey()
 	if code < 0xDC00 || 0xDFFF < code {
 		return code, scan, shift
@@ -126,9 +128,9 @@ func GetKey() (rune, uint16, uint32) {
 	return utf16.DecodeRune(code, code2), scan, shift
 }
 
-func GetCh() rune {
+func Rune() rune {
 	for {
-		ch, _, _ := GetKey()
+		ch, _, _ := Full()
 		if ch != 0 {
 			return ch
 		}

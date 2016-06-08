@@ -15,6 +15,5 @@ int main()
     d(ENABLE_PROCESSED_INPUT);
     u(STD_INPUT_HANDLE);
     u(STD_OUTPUT_HANDLE);
-    d(KEY_EVENT);
     return 0;
 }

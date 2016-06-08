@@ -5,7 +5,7 @@ import (
 	"os"
 	"syscall"
 
-	"../conio"
+	"../conio/getch"
 	"../dos"
 	. "../interpreter"
 )
@@ -63,7 +63,7 @@ func cmd_rmdir(cmd *Interpreter) (ErrorLevel, error) {
 		}
 		if !quiet {
 			fmt.Fprintf(cmd.Stderr, message, arg1)
-			ch := conio.GetCh()
+			ch := getch.Rune()
 			fmt.Fprintf(cmd.Stderr, "%c ", ch)
 			switch ch {
 			case 'y', 'Y':

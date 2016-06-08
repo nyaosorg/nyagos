@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"../conio"
+	"../conio/getch"
 	"../dos"
 	. "../interpreter"
 )
@@ -91,7 +91,7 @@ func cmd_xxxx(args []string,
 				fmt.Fprintf(out,
 					"%s: override? [Yes/No/All/Quit] ",
 					dst)
-				ch := conio.GetCh()
+				ch := getch.Rune()
 				fmt.Fprintf(out, "%c\n", ch)
 				switch ch {
 				case 'y', 'Y':
@@ -111,7 +111,7 @@ func cmd_xxxx(args []string,
 				return ErrorLevel(1), err
 			}
 			fmt.Fprintf(out, "%s\nContinue? [Yes/No] ", err.Error())
-			ch := conio.GetCh()
+			ch := getch.Rune()
 			fmt.Fprintf(out, "%c\n", ch)
 			switch ch {
 			case 'y', 'Y':

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
+
+	"./getch"
 )
 
 func KeyFuncIncSearch(this *Buffer) Result {
@@ -33,7 +35,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 		lastDrawWidth = drawWidth
 		stdOut.Flush()
 		shineCursor()
-		charcode, _, _ := GetKey()
+		charcode := getch.Rune()
 		Backspace(drawWidth)
 		switch charcode {
 		case '\b':

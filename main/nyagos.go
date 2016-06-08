@@ -18,6 +18,7 @@ import (
 	"../commands"
 	"../completion"
 	"../conio"
+	"../conio/getch"
 	"../dos"
 	"../history"
 	"../interpreter"
@@ -134,7 +135,7 @@ func main() {
 	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
 	defer dos.CoUninitialize()
 
-	conio.DisableCtrlC()
+	getch.DisableCtrlC()
 
 	completion := conio.KeyGoFuncT{F: completion.KeyFuncCompletion}
 

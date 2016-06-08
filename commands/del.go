@@ -5,7 +5,7 @@ import (
 	"os"
 	"syscall"
 
-	"../conio"
+	"../conio/getch"
 	. "../interpreter"
 )
 
@@ -44,7 +44,7 @@ func cmd_del(cmd *Interpreter) (ErrorLevel, error) {
 			fmt.Fprintf(cmd.Stdout,
 				"(%d/%d) %s: Remove ? [Yes/No/All/Quit] ",
 				i, n-1, path)
-			ch := conio.GetCh()
+			ch := getch.Rune()
 			fmt.Fprintf(cmd.Stdout, "%c ", ch)
 			switch ch {
 			case 'q', 'Q':

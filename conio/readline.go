@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"./getch"
 )
 
 type Result int
@@ -154,11 +156,11 @@ func (session *LineEditor) ReadLine() (string, error) {
 	for {
 		stdOut.Flush()
 		shineCursor()
-		this.Unicode, this.Keycode, this.ShiftState = GetKey()
+		this.Unicode, this.Keycode, this.ShiftState = getch.Full()
 		var f KeyFuncT
 		var ok bool
-		if (this.ShiftState&ALT_PRESSED) != 0 &&
-			(this.ShiftState&CTRL_PRESSED) == 0 {
+		if (this.ShiftState&getch.ALT_PRESSED) != 0 &&
+			(this.ShiftState&getch.CTRL_PRESSED) == 0 {
 			f, ok = altMap[this.Keycode]
 			if !ok {
 				continue

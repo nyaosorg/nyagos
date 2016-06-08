@@ -16,6 +16,7 @@ import (
 	"../alias"
 	"../completion"
 	"../conio"
+	"../conio/getch"
 	"../dos"
 	"../dos/ansicfile"
 	"../dos/mbcs"
@@ -631,7 +632,7 @@ func cmdCommonPrefix(L lua.Lua) int {
 }
 
 func cmdGetKey(L lua.Lua) int {
-	keycode, scancode, shiftstatus := conio.GetKey()
+	keycode, scancode, shiftstatus := getch.Full()
 	L.PushInteger(lua.Integer(keycode))
 	L.PushInteger(lua.Integer(scancode))
 	L.PushInteger(lua.Integer(shiftstatus))
