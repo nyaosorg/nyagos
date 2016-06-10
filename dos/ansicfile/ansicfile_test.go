@@ -1,11 +1,16 @@
 package ansicfile
 
-import "testing"
+import (
+	"bufio"
+	"testing"
+)
 
 func TestOpen(t *testing.T) {
 	fp, err := Open("あ", "w")
 	if err == nil {
-		fp.Putc(byte('1'))
+		w := bufio.NewWriter(fp)
+		w.WriteString("12345678910")
+		w.Flush()
 		fp.Close()
 	} else {
 		t.Fatalf("NG: Open(\"あ\") Failed by %s", err.Error())

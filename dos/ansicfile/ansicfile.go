@@ -1,6 +1,7 @@
 package ansicfile
 
 import (
+	"errors"
 	"syscall"
 	"unsafe"
 )
@@ -8,7 +9,7 @@ import (
 var msvcrt = syscall.NewLazyDLL("msvcrt")
 var wfopen = msvcrt.NewProc("_wfopen")
 var fclose = msvcrt.NewProc("fclose")
-var fputc = msvcrt.NewProc("fputc")
+var fwrite = msvcrt.NewProc("fwrite")
 
 type FilePtr uintptr
 
@@ -34,6 +35,15 @@ func (fp FilePtr) Close() {
 	fclose.Call(uintptr(fp))
 }
 
-func (fp FilePtr) Putc(c byte) {
-	fputc.Call(uintptr(c), uintptr(fp))
+func (fp FilePtr) Write(p []byte) (int, error) {
+	rc, _, err := fwrite.Call(uintptr(unsafe.Pointer(&p[0])),
+		1, uintptr(len(p)), uintptr(fp))
+	n := int(rc)
+	if n == len(p) {
+		return n, nil
+	} else if err != nil {
+		return n, err
+	} else {
+		return n, errors.New("ansicfile.FilePtr.Write error")
+	}
 }
