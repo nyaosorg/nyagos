@@ -1,5 +1,5 @@
 package ansicfile
 
-const O_APPEND = 8
-const O_RDONLY = 0
-const O_TEXT = 16384
+const _O_APPEND = 8
+const _O_RDONLY = 0
+const _O_TEXT = 16384

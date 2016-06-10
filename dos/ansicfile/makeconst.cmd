@@ -1,4 +1,1 @@
-pushd "%~dp0"
-gcc makeconst\makeconst.c && a > const.go && go fmt const.go
-if exist a.exe del a.exe
-popd
+go-importconst "<fcntl.h>" ansicfile d(_O_APPEND) d(_O_RDONLY) d(_O_TEXT)
