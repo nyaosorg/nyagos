@@ -1,4 +1,5 @@
 * `&&` や `||` が ` ;`と等価になっていた不具合を修正(#151)
+* @DeaR さん提供の autocd.lua & autols.lua を nyagos.d/catalog に追加(#149)
 
 NYAGOS 4.1.4\_0
 ===============

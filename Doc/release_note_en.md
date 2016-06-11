@@ -1,4 +1,5 @@
 * Fix #151 `&&` and `||` work same as ` ;`
+* Add nyagos.d/catalog/autocd.lua & autols.lua (#149 Thx @DeaR)
 
 NYAGOS 4.1.4\_0
 ===============
