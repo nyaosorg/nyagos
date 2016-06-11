@@ -3,7 +3,7 @@ package lua
 import (
 	"os"
 
-	"../dos/ansicfile"
+	"github.com/zetamatta/go-ansicfile"
 )
 
 func (L Lua) pushFile(f *os.File, modeFlg int, modeStr string) error {

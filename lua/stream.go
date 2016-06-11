@@ -4,7 +4,7 @@ import (
 	"syscall"
 	"unsafe"
 
-	"../dos/ansicfile"
+	"github.com/zetamatta/go-ansicfile"
 )
 
 type stream_t struct {
