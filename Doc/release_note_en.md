@@ -1,3 +1,5 @@
+* Fix #151 `&&` and `||` work same as ` ;`
+
 NYAGOS 4.1.4\_0
 ===============
 * Implemented built-in tiny OLE interface and nyole.dll is not necessary now.
