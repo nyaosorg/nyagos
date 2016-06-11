@@ -1,6 +1,9 @@
-package conio
+package readline
 
-import "fmt"
+import (
+	. "../conio"
+	"fmt"
+)
 
 type HistoryLine struct {
 	Line string

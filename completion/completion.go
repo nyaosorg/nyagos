@@ -11,6 +11,7 @@ import (
 	"../conio"
 	"../interpreter"
 	"../lua"
+	"../readline"
 	/* dbg "github.com/zetamatta/goutputdebugstring" */)
 
 type CompletionList struct {
@@ -23,14 +24,14 @@ type CompletionList struct {
 
 var Hook lua.Pushable = lua.TNil{}
 
-func listUpComplete(this *conio.Buffer) (*CompletionList, rune, error) {
+func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	var err error
 	rv := CompletionList{}
 
 	// environment completion.
 	rv.AllLine = this.String()
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
-	default_delimiter := rune(conio.Delimiters[0])
+	default_delimiter := rune(readline.Delimiters[0])
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
 		rv.RawWord = rv.AllLine[rv.Pos:]
 		rv.Word = rv.RawWord
@@ -41,7 +42,7 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, rune, error) {
 	rv.RawWord, rv.Pos = this.CurrentWord()
 	found_delimter := false
 	rv.Word = strings.Map(func(c rune) rune {
-		if strings.ContainsRune(conio.Delimiters, c) {
+		if strings.ContainsRune(readline.Delimiters, c) {
 			if !found_delimter {
 				default_delimiter = c
 			}
@@ -116,10 +117,10 @@ func listUpComplete(this *conio.Buffer) (*CompletionList, rune, error) {
 	return &rv, default_delimiter, err
 }
 
-func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
+func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 	comp, _, err := listUpComplete(this)
 	if comp == nil {
-		return conio.CONTINUE
+		return readline.CONTINUE
 	}
 	fmt.Print("\n")
 	os.Stdout.Sync()
@@ -129,7 +130,7 @@ func KeyFuncCompletionList(this *conio.Buffer) conio.Result {
 	}
 	conio.BoxPrint(comp.List, os.Stdout)
 	this.RepaintAll()
-	return conio.CONTINUE
+	return readline.CONTINUE
 }
 
 func CommonPrefix(list []string) string {
@@ -160,10 +161,10 @@ func endWithRoot(path string) bool {
 	return strings.HasSuffix(path, "\\") || strings.HasSuffix(path, "/")
 }
 
-func KeyFuncCompletion(this *conio.Buffer) conio.Result {
+func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 	comp, default_delimiter, err := listUpComplete(this)
 	if comp.List == nil || len(comp.List) <= 0 {
-		return conio.CONTINUE
+		return readline.CONTINUE
 	}
 
 	slashToBackSlash := true
@@ -175,7 +176,7 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 
 	commonStr := CommonPrefix(comp.List)
 	quotechar := byte(0)
-	if i := strings.IndexAny(comp.Word, conio.Delimiters); i >= 0 {
+	if i := strings.IndexAny(comp.Word, readline.Delimiters); i >= 0 {
 		quotechar = comp.Word[i]
 	} else {
 		for _, node := range comp.List {
@@ -207,8 +208,8 @@ func KeyFuncCompletion(this *conio.Buffer) conio.Result {
 		}
 		conio.BoxPrint(comp.List, os.Stdout)
 		this.RepaintAll()
-		return conio.CONTINUE
+		return readline.CONTINUE
 	}
 	this.ReplaceAndRepaint(comp.Pos, commonStr)
-	return conio.CONTINUE
+	return readline.CONTINUE
 }

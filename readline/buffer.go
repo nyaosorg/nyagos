@@ -1,4 +1,4 @@
-package conio
+package readline
 
 import (
 	"bufio"
@@ -6,6 +6,8 @@ import (
 	"os"
 	"strings"
 	"unicode"
+
+	. "../conio"
 )
 
 var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)

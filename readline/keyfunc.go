@@ -1,4 +1,4 @@
-package conio
+package readline
 
 import (
 	"bytes"
@@ -7,6 +7,8 @@ import (
 	"unicode"
 
 	"github.com/atotto/clipboard"
+
+	. "../conio"
 )
 
 func KeyFuncPass(this *Buffer) Result {

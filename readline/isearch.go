@@ -1,4 +1,4 @@
-package conio
+package readline
 
 import (
 	"bytes"
@@ -7,6 +7,8 @@ import (
 	"unicode"
 
 	"github.com/zetamatta/go-getch"
+
+	. "../conio"
 )
 
 func KeyFuncIncSearch(this *Buffer) Result {

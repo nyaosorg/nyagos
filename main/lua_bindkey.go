@@ -9,6 +9,7 @@ import (
 
 	"../conio"
 	"../lua"
+	"../readline"
 )
 
 type KeyLuaFuncT struct {
@@ -16,7 +17,7 @@ type KeyLuaFuncT struct {
 	Chank []byte
 }
 
-func getBufferForCallBack(L lua.Lua) (*conio.Buffer, int) {
+func getBufferForCallBack(L lua.Lua) (*readline.Buffer, int) {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		return nil, L.Push(nil, "bindKeyExec: call with : not .")
 	}
@@ -24,7 +25,7 @@ func getBufferForCallBack(L lua.Lua) (*conio.Buffer, int) {
 	if L.GetType(-1) != lua.LUA_TLIGHTUSERDATA {
 		return nil, L.Push(nil, "bindKey.Call: invalid object")
 	}
-	buffer := (*conio.Buffer)(L.ToUserData(-1))
+	buffer := (*readline.Buffer)(L.ToUserData(-1))
 	if buffer == nil {
 		return nil, L.Push(nil, "bindKey.Call: invalid member")
 	}
@@ -75,14 +76,14 @@ func callKeyFunc(L lua.Lua) int {
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
 	}
-	function, funcErr := conio.GetFunc(key)
+	function, funcErr := readline.GetFunc(key)
 	if funcErr != nil {
 		return L.Push(nil, funcErr)
 	}
 	switch function.Call(buffer) {
-	case conio.ENTER:
+	case readline.ENTER:
 		return L.Push(true, true)
-	case conio.ABORT:
+	case readline.ABORT:
 		return L.Push(true, false)
 	default:
 		return L.Push(nil)
@@ -136,7 +137,7 @@ func callBoxListing(L lua.Lua) int {
 	return 0
 }
 
-func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
+func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.LoadBufferX("", this.Chank, "b")
 	pos := -1
 	var text bytes.Buffer
@@ -182,9 +183,9 @@ func (this *KeyLuaFuncT) Call(buffer *conio.Buffer) conio.Result {
 			buffer.Buffer = []rune{}
 			buffer.Length = 0
 		}
-		return conio.ENTER
+		return readline.ENTER
 	}
-	return conio.CONTINUE
+	return readline.CONTINUE
 }
 
 func cmdBindKey(L lua.Lua) int {
@@ -196,7 +197,7 @@ func cmdBindKey(L lua.Lua) int {
 	switch L.GetType(-1) {
 	case lua.LUA_TFUNCTION:
 		chank := L.Dump()
-		if err := conio.BindKeyFunc(key, &KeyLuaFuncT{L, chank}); err != nil {
+		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, chank}); err != nil {
 			return L.Push(nil, err)
 		} else {
 			return L.Push(true)
@@ -206,7 +207,7 @@ func cmdBindKey(L lua.Lua) int {
 		if valErr != nil {
 			return L.Push(nil, valErr)
 		}
-		err := conio.BindKeySymbol(key, val)
+		err := readline.BindKeySymbol(key, val)
 		if err != nil {
 			return L.Push(nil, err)
 		} else {

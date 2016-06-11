@@ -23,6 +23,7 @@ import (
 	"../history"
 	"../interpreter"
 	"../lua"
+	"../readline"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
@@ -58,7 +59,7 @@ func nyagosPrompt(L lua.Lua) int {
 
 var prompt_hook lua.Pushable = lua.TGoFunction{nyagosPrompt}
 
-func printPrompt(this *conio.LineEditor) (int, error) {
+func printPrompt(this *readline.LineEditor) (int, error) {
 	L := NewNyagosLua()
 	defer L.Close()
 	L.Push(prompt_hook)
@@ -117,9 +118,9 @@ func NewCmdStreamFile(f *os.File) func() (string, error) {
 }
 
 func NewCmdStreamConsole(it *interpreter.Interpreter) func() (string, error) {
-	conio.DefaultEditor.Prompt = printPrompt
-	conio.DefaultEditor.Tag = it
-	return conio.DefaultEditor.ReadLine
+	readline.DefaultEditor.Prompt = printPrompt
+	readline.DefaultEditor.Tag = it
+	return readline.DefaultEditor.ReadLine
 }
 
 var optionK = flag.String("k", "", "like `cmd /k`")
@@ -137,9 +138,9 @@ func main() {
 
 	getch.DisableCtrlC()
 
-	completion := conio.KeyGoFuncT{F: completion.KeyFuncCompletion}
+	completion := readline.KeyGoFuncT{F: completion.KeyFuncCompletion}
 
-	if err := conio.BindKeySymbolFunc(conio.K_CTRL_I, "COMPLETE", &completion); err != nil {
+	if err := readline.BindKeySymbolFunc(readline.K_CTRL_I, "COMPLETE", &completion); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
@@ -193,7 +194,7 @@ func main() {
 	}
 
 	for {
-		history_count := conio.DefaultEditor.HistoryLen()
+		history_count := readline.DefaultEditor.HistoryLen()
 
 		line, err := command_stream()
 		if err != nil {
@@ -211,7 +212,7 @@ func main() {
 		if line == "" {
 			continue
 		}
-		if conio.DefaultEditor.HistoryLen() > history_count {
+		if readline.DefaultEditor.HistoryLen() > history_count {
 			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 			if err != nil && os.IsNotExist(err) {
 				// print("create ", histPath, "\n")
@@ -224,7 +225,7 @@ func main() {
 				fmt.Fprintln(os.Stderr, err.Error())
 			}
 		} else {
-			conio.DefaultEditor.HistoryResetPointer()
+			readline.DefaultEditor.HistoryResetPointer()
 		}
 
 		stackPos := L.GetTop()

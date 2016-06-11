@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"../conio"
 	"../interpreter"
+	"../readline"
 )
 
 func atoi_(reader *strings.Reader) (int, int) {
@@ -43,7 +43,7 @@ func Replace(line string) (string, bool) {
 	var buffer bytes.Buffer
 	isReplaced := false
 	reader := strings.NewReader(line)
-	history_count := conio.DefaultEditor.HistoryLen()
+	history_count := readline.DefaultEditor.HistoryLen()
 
 	quotedChar := '\000'
 
@@ -123,8 +123,8 @@ func Replace(line string) (string, bool) {
 			seekStr := seekStrBuf.String()
 			found := false
 			for i := history_count - 2; i >= 0; i-- {
-				if strings.Contains(conio.DefaultEditor.Histories[i].Line, seekStr) {
-					buffer.WriteString(conio.DefaultEditor.Histories[i].Line)
+				if strings.Contains(readline.DefaultEditor.Histories[i].Line, seekStr) {
+					buffer.WriteString(readline.DefaultEditor.Histories[i].Line)
 					isReplaced = true
 					found = true
 					break
@@ -153,8 +153,8 @@ func Replace(line string) (string, bool) {
 		seekStr := seekStrBuf.String()
 		found := false
 		for i := history_count - 2; i >= 0; i-- {
-			if strings.HasPrefix(conio.DefaultEditor.Histories[i].Line, seekStr) {
-				buffer.WriteString(conio.DefaultEditor.Histories[i].Line)
+			if strings.HasPrefix(readline.DefaultEditor.Histories[i].Line, seekStr) {
+				buffer.WriteString(readline.DefaultEditor.Histories[i].Line)
 				isReplaced = true
 				found = true
 				break
@@ -165,19 +165,19 @@ func Replace(line string) (string, bool) {
 			buffer.WriteRune(ch)
 		}
 	}
-	result := conio.NewHistoryLine(buffer.String())
+	result := readline.NewHistoryLine(buffer.String())
 	if isReplaced {
 		if history_count > 0 {
-			conio.DefaultEditor.Histories[history_count-1] = result
+			readline.DefaultEditor.Histories[history_count-1] = result
 		} else {
-			conio.DefaultEditor.Histories = append(conio.DefaultEditor.Histories, result)
+			readline.DefaultEditor.Histories = append(readline.DefaultEditor.Histories, result)
 		}
 	}
 	return result.Line, isReplaced
 }
 
 func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) {
-	history1 := conio.DefaultEditor.Histories[historyNo]
+	history1 := readline.DefaultEditor.Histories[historyNo]
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
 		if len(history1.Word) >= 2 {
@@ -227,12 +227,12 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		num = 10
 	}
 	var start int
-	if conio.DefaultEditor.HistoryLen() > num {
-		start = conio.DefaultEditor.HistoryLen() - num
+	if readline.DefaultEditor.HistoryLen() > num {
+		start = readline.DefaultEditor.HistoryLen() - num
 	} else {
 		start = 0
 	}
-	for i, s := range conio.DefaultEditor.Histories[start:] {
+	for i, s := range readline.DefaultEditor.Histories[start:] {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
 	}
 	return interpreter.NOERROR, nil
@@ -241,18 +241,18 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 const max_histories = 2000
 
 func Save(path string) error {
-	conio.DefaultEditor.ShrinkHistory()
+	readline.DefaultEditor.ShrinkHistory()
 	start := 0
-	if conio.DefaultEditor.HistoryLen() > max_histories {
-		start = conio.DefaultEditor.HistoryLen() - max_histories
+	if readline.DefaultEditor.HistoryLen() > max_histories {
+		start = readline.DefaultEditor.HistoryLen() - max_histories
 	}
 	fd, err := os.Create(path)
 	if err != nil {
 		return err
 	}
 	defer fd.Close()
-	for i := start; i < len(conio.DefaultEditor.Histories); i++ {
-		fmt.Fprintln(fd, conio.DefaultEditor.Histories[i].Line)
+	for i := start; i < len(readline.DefaultEditor.Histories); i++ {
+		fmt.Fprintln(fd, readline.DefaultEditor.Histories[i].Line)
 	}
 	return nil
 }
@@ -265,8 +265,8 @@ func Load(path string) error {
 	defer fd.Close()
 	sc := bufio.NewScanner(fd)
 	for sc.Scan() {
-		conio.DefaultEditor.Histories = append(conio.DefaultEditor.Histories, conio.NewHistoryLine(sc.Text()))
+		readline.DefaultEditor.Histories = append(readline.DefaultEditor.Histories, readline.NewHistoryLine(sc.Text()))
 	}
-	conio.DefaultEditor.ShrinkHistory()
+	readline.DefaultEditor.ShrinkHistory()
 	return nil
 }

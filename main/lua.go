@@ -7,12 +7,12 @@ import (
 	"unsafe"
 
 	"../completion"
-	"../conio"
 	"../dos"
 	"../history"
 	"../interpreter"
 	"../lua"
 	ole "../lua/ole"
+	"../readline"
 )
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"
@@ -252,7 +252,7 @@ func init() {
 		"netdrivetounc":        &lua.TGoFunction{cmdNetDriveToUNC},
 		"open":                 &lua.TGoFunction{cmdOpenFile},
 		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
-		"quotation":            lua.StringProperty{&conio.Delimiters},
+		"quotation":            lua.StringProperty{&readline.Delimiters},
 		"raweval":              &lua.TGoFunction{cmdRawEval},
 		"rawexec":              &lua.TGoFunction{cmdRawExec},
 		"resetcharwidth":       &lua.TGoFunction{cmdResetCharWidth},

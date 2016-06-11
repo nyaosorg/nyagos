@@ -1,10 +1,11 @@
-package conio
+package readline
 
 import (
 	"fmt"
 	"os"
 	"strings"
 
+	. "../conio"
 	"github.com/zetamatta/go-getch"
 )
 
