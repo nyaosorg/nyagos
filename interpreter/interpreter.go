@@ -370,6 +370,18 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 		}
 		if !isBackGround {
 			wg.Wait()
+			if len(pipeline) > 0 {
+				switch pipeline[len(pipeline)-1].Term {
+				case "&&":
+					if errorlevel != 0 {
+						return errorlevel, nil
+					}
+				case "||":
+					if errorlevel == 0 {
+						return errorlevel, nil
+					}
+				}
+			}
 		}
 	}
 	return
