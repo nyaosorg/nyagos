@@ -82,6 +82,8 @@ Acknowledgement
 * [rane-hs](https://github.com/rane-hs)
 * [hami-jp](https://github.com/hami-jp)
 * [3bch](https://github.com/3bch)
+* [AoiMoe](https://github.com/aoimoe)
+* [DeaR](https://github.com/DeaR)
 
 Author
 ------
