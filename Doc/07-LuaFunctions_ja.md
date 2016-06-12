@@ -278,6 +278,10 @@ OLEオブジェクトを作成します。OLEオブジェクトはメソッド�
     - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
+### `nyagos.option_glob`
+
+true の時、外部コマンドに対するワイルドカード展開を有効にします。
+
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。

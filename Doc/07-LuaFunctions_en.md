@@ -248,6 +248,10 @@ Create OLEObject. OLEOBJECTs have methods and property.
     - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
+### `nyagos.option_glob`
+
+If it is true , enables the wildcard expansion on external commands also.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe
