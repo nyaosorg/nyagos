@@ -30,18 +30,7 @@ func Exec(cmd *Interpreter) (ErrorLevel, error) {
 			return THROUGH, nil
 		}
 	}
-	newArgs := make([]string, 0)
-	for _, arg1 := range cmd.Args {
-		matches, err := dos.Glob(arg1)
-		if matches == nil || len(matches) <= 0 || err != nil {
-			newArgs = append(newArgs, arg1)
-		} else {
-			for _, s := range matches {
-				newArgs = append(newArgs, s)
-			}
-		}
-	}
-	cmd.Args = newArgs
+	cmd.Args = dos.Globs(cmd.Args)
 	next, err := function(cmd)
 	return next, err
 }

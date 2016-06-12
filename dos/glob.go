@@ -22,3 +22,18 @@ func Glob(pattern string) ([]string, error) {
 	})
 	return match, err
 }
+
+func Globs(patterns []string) []string {
+	result := make([]string, 0, len(patterns))
+	for _, pattern1 := range patterns {
+		matches, err := Glob(pattern1)
+		if matches == nil || len(matches) <= 0 || err != nil {
+			result = append(result, pattern1)
+		} else {
+			for _, s := range matches {
+				result = append(result, s)
+			}
+		}
+	}
+	return result
+}
