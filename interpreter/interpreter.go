@@ -8,9 +8,13 @@ import (
 	"os/exec"
 	"sync"
 	"syscall"
+
+	"../dos"
 )
 
 const FLAG_AMP2NEWCONSOLE = false
+
+var WildCardExpansionAlways = false
 
 var dbg = false
 
@@ -201,6 +205,10 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	this.Path, err = exec.LookPath(this.Args[0])
 	if err != nil {
 		return ErrorLevel(255), OnCommandNotFound(this, err)
+	}
+
+	if WildCardExpansionAlways {
+		this.Args = dos.Globs(this.Args)
 	}
 
 	// executable-file
