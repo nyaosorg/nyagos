@@ -248,7 +248,7 @@ Create OLEObject. OLEOBJECTs have methods and property.
     - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
-### `nyagos.option_glob`
+### `nyagos.option.glob`
 
 If it is true , enables the wildcard expansion on external commands also.
 

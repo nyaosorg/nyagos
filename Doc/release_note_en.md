@@ -1,4 +1,4 @@
-* On lua, `nyagos.option_glob = true` enables the wildcard expansion on external commands also.(#150)
+* On lua, `nyagos.option.glob = true` enables the wildcard expansion on external commands also.(#150)
 
 NYAGOS 4.1.4\_1
 ===============
