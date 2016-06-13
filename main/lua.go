@@ -119,6 +119,36 @@ func emptyToNil(s string) lua.Pushable {
 	}
 }
 
+var option_table_member = map[string]IProperty{
+	"glob": &lua.BoolProperty{&interpreter.WildCardExpansionAlways},
+}
+
+func getOption(L lua.Lua) int {
+	key, key_err := L.ToString(2)
+	if key_err != nil {
+		return L.Push(nil, key_err)
+	}
+	val, val_ok := option_table_member[key]
+	if !val_ok {
+		return L.Push(nil)
+	}
+	return L.Push(val)
+}
+
+func setOption(L lua.Lua) int {
+	key, key_err := L.ToString(2)
+	if key_err != nil {
+		return L.Push(nil, key_err)
+	}
+	opt, opt_ok := option_table_member[key]
+	if !opt_ok {
+		print(key, " not found\n")
+		return L.Push(nil)
+	}
+	opt.Set(L, 3)
+	return L.Push(true)
+}
+
 var nyagos_table_member map[string]lua.Pushable
 
 func getNyagosTable(L lua.Lua) int {
@@ -257,7 +287,7 @@ func init() {
 		"netdrivetounc":        &lua.TGoFunction{cmdNetDriveToUNC},
 		"on_command_not_found": lua.Property{&luaOnCommandNotFound},
 		"open":                 &lua.TGoFunction{cmdOpenFile},
-		"option_glob":          &lua.BoolProperty{&interpreter.WildCardExpansionAlways},
+		"option":               lua.NewVirtualTable(getOption, setOption),
 		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
 		"prompt":               lua.Property{&prompt_hook},
 		"quotation":            lua.StringProperty{&readline.Delimiters},
