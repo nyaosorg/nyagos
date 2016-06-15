@@ -1,16 +1,13 @@
 package dos
 
 import (
+	"os"
 	"syscall"
 
 	"./findfile"
 )
 
-type SysHolder interface {
-	Sys() interface{}
-}
-
-func GetFileAttributesFromFileInfo(status SysHolder) uint32 {
+func GetFileAttributesFromFileInfo(status os.FileInfo) uint32 {
 	if it, ok := status.Sys().(*syscall.Win32FileAttributeData); ok {
 		return it.FileAttributes
 	} else if it, ok := status.(*findfile.FileInfo); ok {
