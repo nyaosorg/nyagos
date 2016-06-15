@@ -11,9 +11,10 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/zetamatta/go-findfile"
+
 	"../../conio"
 	"../../dos"
-	"../../dos/findfile"
 )
 
 const (

@@ -1,13 +1,12 @@
 package completion
 
 import (
+	"../dos"
+	"../interpreter"
+	"github.com/zetamatta/go-findfile"
 	"os"
 	"regexp"
 	"strings"
-
-	"../dos"
-	"../dos/findfile"
-	"../interpreter"
 )
 
 const (

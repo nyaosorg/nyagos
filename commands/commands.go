@@ -5,8 +5,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/zetamatta/go-findfile"
+
 	"../dos"
-	"../dos/findfile"
 	"../history"
 )
 

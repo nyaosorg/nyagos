@@ -9,8 +9,9 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/zetamatta/go-findfile"
+
 	"../dos"
-	"../dos/findfile"
 )
 
 const FLAG_AMP2NEWCONSOLE = false

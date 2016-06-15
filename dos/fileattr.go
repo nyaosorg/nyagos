@@ -4,7 +4,7 @@ import (
 	"os"
 	"syscall"
 
-	"./findfile"
+	"github.com/zetamatta/go-findfile"
 )
 
 func GetFileAttributesFromFileInfo(status os.FileInfo) uint32 {
