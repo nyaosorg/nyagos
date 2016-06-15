@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 	"strings"
 
-	"../alias"
-	"../commands"
 	"../dos"
 )
 
@@ -69,28 +67,26 @@ func removeDup(list []string) []string {
 	return result
 }
 
+var command_listupper = []func() []string{
+	listUpAllExecutableOnPath,
+}
+
+func AppendCommandLister(f func() []string) {
+	command_listupper = append(command_listupper, f)
+}
+
 func listUpCommands(str string) ([]string, error) {
 	list, listErr := listUpCurrentAllExecutable(str)
 	if listErr != nil {
 		return nil, listErr
 	}
 	strUpr := strings.ToUpper(str)
-	for _, name := range listUpAllExecutableOnPath() {
-		name1Upr := strings.ToUpper(name)
-		if strings.HasPrefix(name1Upr, strUpr) {
-			list = append(list, name)
-		}
-	}
-	for name, _ := range commands.BuildInCommand {
-		name1Upr := strings.ToUpper(name)
-		if strings.HasPrefix(name1Upr, strUpr) {
-			list = append(list, name)
-		}
-	}
-	for name, _ := range alias.Table {
-		name1Upr := strings.ToUpper(name)
-		if strings.HasPrefix(name1Upr, strUpr) {
-			list = append(list, name)
+	for _, f := range command_listupper {
+		for _, name := range f() {
+			name1Upr := strings.ToUpper(name)
+			if strings.HasPrefix(name1Upr, strUpr) {
+				list = append(list, name)
+			}
 		}
 	}
 	return removeDup(list), nil

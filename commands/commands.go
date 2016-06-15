@@ -40,6 +40,14 @@ func Exec(cmd *exec.Cmd) (int, error) {
 	return next, err
 }
 
+func AllNames() []string {
+	names := make([]string, 0, len(BuildInCommand))
+	for name1, _ := range BuildInCommand {
+		names = append(names, name1)
+	}
+	return names
+}
+
 func Init() {
 	BuildInCommand = map[string]func(*exec.Cmd) (int, error){
 		".":       cmd_source,

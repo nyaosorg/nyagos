@@ -92,6 +92,14 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 var Table = map[string]Callable{}
 var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
 
+func AllNames() []string {
+	names := make([]string, 0, len(Table))
+	for name1, _ := range Table {
+		names = append(names, name1)
+	}
+	return names
+}
+
 func quoteAndJoin(list []string) string {
 	buffer := make([]byte, 0, 100)
 	for i, value := range list {
