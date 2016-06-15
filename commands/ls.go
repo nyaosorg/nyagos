@@ -3,19 +3,19 @@ package commands
 import (
 	"io"
 	"os"
+	"os/exec"
 
 	"github.com/mattn/go-colorable"
 
-	"../interpreter"
 	"./ls"
 )
 
-func cmd_ls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func cmd_ls(cmd *exec.Cmd) (int, error) {
 	var out io.Writer
 	if cmd.Stdout == os.Stdout {
 		out = colorable.NewColorableStdout()
 	} else {
 		out = cmd.Stdout
 	}
-	return interpreter.NOERROR, ls.Main(cmd.Args[1:], out, cmd.Stderr)
+	return 0, ls.Main(cmd.Args[1:], out, cmd.Stderr)
 }

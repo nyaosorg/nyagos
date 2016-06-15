@@ -8,11 +8,10 @@ import (
 
 	"../alias"
 	"../dos"
-	. "../interpreter"
 )
 
 const (
-	WHICH_NOT_FOUND ErrorLevel = 1
+	WHICH_NOT_FOUND = 1
 )
 
 func envToList(first1, env string) []string {
@@ -23,7 +22,7 @@ func envToList(first1, env string) []string {
 	return result
 }
 
-func cmd_which(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_which(cmd *exec.Cmd) (int, error) {
 	all := false
 	var pathList []string
 	var extList []string
@@ -65,5 +64,5 @@ func cmd_which(cmd *Interpreter) (ErrorLevel, error) {
 			fmt.Fprintln(cmd.Stdout, dos.YenYen2Yen(path))
 		}
 	}
-	return NOERROR, nil
+	return 0, nil
 }

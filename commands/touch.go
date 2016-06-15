@@ -3,11 +3,11 @@ package commands
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"regexp"
 	"strconv"
 	"time"
 
-	. "../interpreter"
 	"./timecheck"
 )
 
@@ -54,7 +54,7 @@ func readTimeStamp(s string) *time.Time {
 	return &stamp
 }
 
-func cmd_touch(this *Interpreter) (ErrorLevel, error) {
+func cmd_touch(this *exec.Cmd) (int, error) {
 	errcnt := 0
 	stamp := time.Now()
 	for i := 1; i < len(this.Args); i++ {
@@ -63,25 +63,25 @@ func cmd_touch(this *Interpreter) (ErrorLevel, error) {
 			i++
 			if i >= len(this.Args) {
 				fmt.Fprintf(this.Stderr, "-t: Too Few Arguments.\n")
-				return ErrorLevel(255), nil
+				return 255, nil
 			}
 			stamp_ := readTimeStamp(this.Args[i])
 			if stamp_ == nil {
 				fmt.Fprintf(this.Stderr, "-t: %s: Invalid time format.\n",
 					this.Args[i])
-				return ErrorLevel(255), nil
+				return 255, nil
 			}
 			stamp = *stamp_
 		} else if arg1 == "-r" {
 			i++
 			if i >= len(this.Args) {
 				fmt.Fprintf(this.Stderr, "-r: Too Few Arguments.\n")
-				return ErrorLevel(255), nil
+				return 255, nil
 			}
 			stat, statErr := os.Stat(this.Args[i])
 			if statErr != nil {
 				fmt.Fprintf(this.Stderr, "-r: %s: %s\n", this.Args[i], statErr)
-				return ErrorLevel(255), nil
+				return 255, nil
 			}
 			stamp = stat.ModTime()
 		} else if arg1[0] == '-' {
@@ -102,5 +102,5 @@ func cmd_touch(this *Interpreter) (ErrorLevel, error) {
 			}
 		}
 	}
-	return ErrorLevel(errcnt), nil
+	return errcnt, nil
 }

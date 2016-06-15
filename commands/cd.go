@@ -4,10 +4,10 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"strconv"
 
 	"../dos"
-	. "../interpreter"
 )
 
 var cd_history = make([]string, 0, 100)
@@ -32,20 +32,20 @@ func push_cd_history() {
 }
 
 const (
-	CHDIR_FAIL ErrorLevel = 1
-	NO_HISTORY ErrorLevel = 2
+	CHDIR_FAIL = 1
+	NO_HISTORY = 2
 )
 
-func cmd_cd_sub(dir string) (ErrorLevel, error) {
+func cmd_cd_sub(dir string) (int, error) {
 	err := dos.Chdir(dir)
 	if err == nil {
-		return NOERROR, nil
+		return 0, nil
 	} else {
 		return CHDIR_FAIL, err
 	}
 }
 
-func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_cd(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 {
 		if cmd.Args[1] == "-" {
 			if len(cd_history) < 1 {
@@ -67,7 +67,7 @@ func cmd_cd(cmd *Interpreter) (ErrorLevel, error) {
 			for ; i < len(cd_history); i++ {
 				fmt.Fprintf(cmd.Stdout, "%d %s\n", i-len(cd_history), cd_history[i])
 			}
-			return NOERROR, nil
+			return 0, nil
 		} else if i, err := strconv.ParseInt(cmd.Args[1], 10, 0); err == nil && i < 0 {
 			i += int64(len(cd_history))
 			if i < 0 {

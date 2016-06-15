@@ -2,10 +2,10 @@ package commands
 
 import (
 	"../conio"
-	"../interpreter"
+	"os/exec"
 )
 
-func cmd_cls(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func cmd_cls(cmd *exec.Cmd) (int, error) {
 	conio.Cls()
-	return interpreter.NOERROR, nil
+	return 0, nil
 }

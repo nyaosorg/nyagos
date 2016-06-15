@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/zetamatta/go-getch"
 
 	"../dos"
-	. "../interpreter"
 )
 
-func cmd_copy(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_copy(cmd *exec.Cmd) (int, error) {
 	return cmd_xxxx(cmd.Args,
 		cmd.Stderr,
 		func(src, dst string) error {
@@ -21,7 +21,7 @@ func cmd_copy(cmd *Interpreter) (ErrorLevel, error) {
 		false)
 }
 
-func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_move(cmd *exec.Cmd) (int, error) {
 	return cmd_xxxx(cmd.Args,
 		cmd.Stderr,
 		func(src, dst string) error {
@@ -30,7 +30,7 @@ func cmd_move(cmd *Interpreter) (ErrorLevel, error) {
 		true)
 }
 
-func cmd_ln(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_ln(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 && cmd.Args[1] == "-s" {
 		args := make([]string, 0, len(cmd.Args)-1)
 		args = append(args, cmd.Args[0])
@@ -56,13 +56,13 @@ func cmd_ln(cmd *Interpreter) (ErrorLevel, error) {
 func cmd_xxxx(args []string,
 	out io.Writer,
 	action func(src, dst string) error,
-	isDirOk bool) (ErrorLevel, error) {
+	isDirOk bool) (int, error) {
 	if len(args) <= 2 {
 		fmt.Fprintf(out,
 			"Usage: %s [/y] SOURCE-FILENAME DESITINATE-FILENAME\n"+
 				"       %s [/y] FILENAMES... DESINATE-DIRECTORY\n",
 			args[0], args[0])
-		return NOERROR, nil
+		return 0, nil
 	}
 	fi, err := os.Stat(args[len(args)-1])
 	isDir := err == nil && fi.Mode().IsDir()
@@ -100,7 +100,7 @@ func cmd_xxxx(args []string,
 				case 'a', 'A':
 					all = true
 				case 'q', 'Q':
-					return NOERROR, nil
+					return 0, nil
 				default:
 					continue
 				}
@@ -109,7 +109,7 @@ func cmd_xxxx(args []string,
 		err := action(src, dst)
 		if err != nil {
 			if i == n-1 {
-				return ErrorLevel(1), err
+				return 1, err
 			}
 			fmt.Fprintf(out, "%s\nContinue? [Yes/No] ", err.Error())
 			ch := getch.Rune()
@@ -118,9 +118,9 @@ func cmd_xxxx(args []string,
 			case 'y', 'Y':
 
 			default:
-				return NOERROR, nil
+				return 0, nil
 			}
 		}
 	}
-	return NOERROR, nil
+	return 0, nil
 }

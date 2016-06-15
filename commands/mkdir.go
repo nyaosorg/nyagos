@@ -3,20 +3,20 @@ package commands
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"syscall"
 
 	"github.com/zetamatta/go-getch"
 
 	"../dos"
-	. "../interpreter"
 )
 
-func cmd_mkdir(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_mkdir(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: mkdir [/p] DIRECTORIES...")
-		return NOERROR, nil
+		return 0, nil
 	}
-	var errorcount ErrorLevel = 0
+	errorcount := 0
 	mkdir := os.Mkdir
 	for _, arg1 := range cmd.Args[1:] {
 		if arg1 == "/p" {
@@ -32,15 +32,15 @@ func cmd_mkdir(cmd *Interpreter) (ErrorLevel, error) {
 	return errorcount, nil
 }
 
-func cmd_rmdir(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_rmdir(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: rmdir [/s] [/q] DIRECTORIES...")
-		return NOERROR, nil
+		return 0, nil
 	}
 	s_option := false
 	quiet := false
 	message := "%s: Rmdir Are you sure? [Yes/No/Quit] "
-	errorcount := ErrorLevel(0)
+	errorcount := 0
 	for _, arg1 := range cmd.Args[1:] {
 		switch arg1 {
 		case "/s":

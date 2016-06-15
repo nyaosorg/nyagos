@@ -1,33 +1,38 @@
 package commands
 
 import (
+	"os/exec"
 	"regexp"
 	"strings"
 
 	"../dos"
 	"../history"
-	. "../interpreter"
 )
 
-var BuildInCommand map[string]func(*Interpreter) (ErrorLevel, error)
+const (
+	THROUGH  = -1
+	SHUTDOWN = -2
+)
+
+var BuildInCommand map[string]func(*exec.Cmd) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func Exec(cmd *Interpreter) (ErrorLevel, error) {
+func Exec(cmd *exec.Cmd) (int, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
-		return NOERROR, err
+		return 0, err
 	}
 	function, ok := BuildInCommand[name]
 	if !ok {
 		m := unscoNamePattern.FindStringSubmatch(name)
 		if m == nil {
-			return THROUGH, nil
+			return -1, nil
 		}
 		name = m[1]
 		function, ok = BuildInCommand[name]
 		if !ok {
-			return THROUGH, nil
+			return -1, nil
 		}
 	}
 	cmd.Args = dos.Globs(cmd.Args)
@@ -36,7 +41,7 @@ func Exec(cmd *Interpreter) (ErrorLevel, error) {
 }
 
 func Init() {
-	BuildInCommand = map[string]func(*Interpreter) (ErrorLevel, error){
+	BuildInCommand = map[string]func(*exec.Cmd) (int, error){
 		".":       cmd_source,
 		"alias":   cmd_alias,
 		"cd":      cmd_cd,
@@ -64,5 +69,4 @@ func Init() {
 		"touch":   cmd_touch,
 		"which":   cmd_which,
 	}
-	SetHook(Exec)
 }

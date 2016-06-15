@@ -9,10 +9,9 @@ import (
 	"strings"
 
 	"../dos"
-	. "../interpreter"
 )
 
-func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_source(cmd *exec.Cmd) (int, error) {
 	args := cmd.Args
 	verbose := false
 	if len(args) >= 2 && args[1] == "-v" {
@@ -20,7 +19,7 @@ func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
 		args = args[1:]
 	}
 	if len(cmd.Args) < 2 {
-		return ErrorLevel(255), nil
+		return 255, nil
 	}
 	envTxtPath := filepath.Join(
 		os.TempDir(),
@@ -46,9 +45,9 @@ func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
 
 	cmd2 := exec.Cmd{Path: params[0], Args: params}
 	if err := cmd2.Run(); err != nil {
-		return ErrorLevel(1), err
+		return 1, err
 	}
-	errorlevel, errorlevelOk := GetErrorLevel(cmd2.ProcessState)
+	errorlevel, errorlevelOk := dos.GetErrorLevel(&cmd2)
 	if !errorlevelOk {
 		errorlevel = 255
 	}
@@ -57,7 +56,7 @@ func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
 
 	fp, err := os.Open(envTxtPath)
 	if err != nil {
-		return ErrorLevel(1), err
+		return 1, err
 	}
 	defer fp.Close()
 
@@ -79,13 +78,13 @@ func cmd_source(cmd *Interpreter) (ErrorLevel, error) {
 
 	fp2, err2 := os.Open(pwdTxtPath)
 	if err2 != nil {
-		return ErrorLevel(1), err2
+		return 1, err2
 	}
 	defer fp2.Close()
 	line, lineErr := dos.ReadAnsiLine(fp2)
 	if lineErr != nil {
-		return ErrorLevel(1), errors.New("source : could not get current-directory")
+		return 1, errors.New("source : could not get current-directory")
 	}
 	os.Chdir(line)
-	return ErrorLevel(errorlevel), nil
+	return errorlevel, nil
 }

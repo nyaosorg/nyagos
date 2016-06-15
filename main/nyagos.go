@@ -133,6 +133,11 @@ func main() {
 
 	flag.Parse()
 
+	interpreter.SetHook(func(it *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+		rc, err := commands.Exec(&it.Cmd)
+		return interpreter.ErrorLevel(rc), err
+	})
+
 	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
 	defer dos.CoUninitialize()
 

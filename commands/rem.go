@@ -1,7 +1,7 @@
 package commands
 
-import . "../interpreter"
+import "os/exec"
 
-func cmd_rem(cmd *Interpreter) (ErrorLevel, error) {
-	return NOERROR, nil
+func cmd_rem(cmd *exec.Cmd) (int, error) {
+	return 0, nil
 }

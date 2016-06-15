@@ -2,18 +2,18 @@ package commands
 
 import (
 	"fmt"
+	"os/exec"
 	"strings"
 
 	"../alias"
-	"../interpreter"
 )
 
-func cmd_alias(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func cmd_alias(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
 		}
-		return interpreter.NOERROR, nil
+		return 0, nil
 	}
 	for _, args := range cmd.Args[1:] {
 		if eqlPos := strings.IndexRune(args, '='); eqlPos >= 0 {
@@ -32,5 +32,5 @@ func cmd_alias(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			}
 		}
 	}
-	return interpreter.NOERROR, nil
+	return 0, nil
 }

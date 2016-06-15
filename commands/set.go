@@ -3,17 +3,16 @@ package commands
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
-
-	"../interpreter"
 )
 
-func cmd_set(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func cmd_set(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)
 		}
-		return interpreter.NOERROR, nil
+		return 0, nil
 	}
 	for _, arg := range cmd.Args[1:] {
 		eqlPos := strings.Index(arg, "=")
@@ -27,5 +26,5 @@ func cmd_set(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 			}
 		}
 	}
-	return interpreter.NOERROR, nil
+	return 0, nil
 }

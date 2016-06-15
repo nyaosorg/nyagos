@@ -1,7 +1,9 @@
 package commands
 
-import "../interpreter"
+import (
+	"os/exec"
+)
 
-func cmd_exit(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-	return interpreter.SHUTDOWN, nil
+func cmd_exit(cmd *exec.Cmd) (int, error) {
+	return SHUTDOWN, nil
 }

@@ -3,21 +3,21 @@ package commands
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"syscall"
 
-	. "../interpreter"
 	"github.com/zetamatta/go-getch"
 )
 
-func cmd_del(cmd *Interpreter) (ErrorLevel, error) {
+func cmd_del(cmd *exec.Cmd) (int, error) {
 	n := len(cmd.Args)
 	if n <= 1 {
 		fmt.Fprintln(cmd.Stderr, "Usage: del   [/q] FILE(S)...")
 		fmt.Fprintln(cmd.Stderr, "       erase [/q] FILE(S)...")
-		return NOERROR, nil
+		return 0, nil
 	}
 	all := false
-	errorcount := ErrorLevel(0)
+	errorcount := 0
 	i := 1
 	for _, arg1 := range cmd.Args[1:] {
 		if arg1 == "/q" {

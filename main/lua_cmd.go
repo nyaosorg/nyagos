@@ -334,7 +334,7 @@ func cmdRawExec(L lua.Lua) int {
 		}
 	}
 	err := cmd1.Run()
-	errorlevel, errorlevelOk := interpreter.GetErrorLevel(cmd1.ProcessState)
+	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
 	if !errorlevelOk {
 		errorlevel = 255
 	}

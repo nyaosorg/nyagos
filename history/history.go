@@ -5,10 +5,10 @@ import (
 	"bytes"
 	"fmt"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 
-	"../interpreter"
 	"../readline"
 )
 
@@ -206,17 +206,17 @@ func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) 
 	}
 }
 
-func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func CmdHistory(cmd *exec.Cmd) (int, error) {
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
 		if err != nil {
 			switch err.(type) {
 			case *strconv.NumError:
-				return interpreter.NOERROR, fmt.Errorf(
+				return 0, fmt.Errorf(
 					"history: %s not a number", cmd.Args[1])
 			default:
-				return interpreter.NOERROR, err
+				return 0, err
 			}
 		}
 		num = int(num64)
@@ -235,7 +235,7 @@ func CmdHistory(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 	for i, s := range readline.DefaultEditor.Histories[start:] {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
 	}
-	return interpreter.NOERROR, nil
+	return 0, nil
 }
 
 const max_histories = 2000
