@@ -1,4 +1,4 @@
-package dos
+package findfile
 
 import (
 	"os"
@@ -7,12 +7,12 @@ import (
 )
 
 type FileInfo struct {
+	syscall.Win32finddata
 	handle syscall.Handle
-	data1  syscall.Win32finddata
 }
 
 func (this *FileInfo) clone() *FileInfo {
-	return &FileInfo{this.handle, this.data1}
+	return &FileInfo{this.Win32finddata, this.handle}
 }
 
 func findFirst(pattern string) (*FileInfo, error) {
@@ -21,7 +21,7 @@ func findFirst(pattern string) (*FileInfo, error) {
 		return nil, err
 	}
 	this := new(FileInfo)
-	this.handle, err = syscall.FindFirstFile(pattern16, &this.data1)
+	this.handle, err = syscall.FindFirstFile(pattern16, &this.Win32finddata)
 	if err != nil {
 		return nil, err
 	}
@@ -29,15 +29,15 @@ func findFirst(pattern string) (*FileInfo, error) {
 }
 
 func (this *FileInfo) Name() string {
-	return syscall.UTF16ToString(this.data1.FileName[:])
+	return syscall.UTF16ToString(this.FileName[:])
 }
 
 func (this *FileInfo) Size() int64 {
-	return int64((this.data1.FileSizeHigh << 32) | this.data1.FileSizeLow)
+	return int64((this.FileSizeHigh << 32) | this.FileSizeLow)
 }
 
 func (this *FileInfo) ModTime() time.Time {
-	return time.Unix(0, this.data1.LastWriteTime.Nanoseconds())
+	return time.Unix(0, this.LastWriteTime.Nanoseconds())
 }
 
 func (this *FileInfo) Mode() os.FileMode {
@@ -52,11 +52,11 @@ func (this *FileInfo) Mode() os.FileMode {
 }
 
 func (this *FileInfo) Sys() interface{} {
-	return this.data1
+	return &this.Win32finddata
 }
 
 func (this *FileInfo) findNext() error {
-	return syscall.FindNextFile(this.handle, &this.data1)
+	return syscall.FindNextFile(this.handle, &this.Win32finddata)
 }
 
 func (this *FileInfo) close() {
@@ -64,7 +64,7 @@ func (this *FileInfo) close() {
 }
 
 func (this *FileInfo) Attribute() uint32 {
-	return this.data1.FileAttributes
+	return this.FileAttributes
 }
 
 func (this *FileInfo) IsReparsePoint() bool {
@@ -73,10 +73,6 @@ func (this *FileInfo) IsReparsePoint() bool {
 
 func (this *FileInfo) IsReadOnly() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_READONLY) != 0
-}
-
-func (this *FileInfo) IsExecutable() bool {
-	return IsExecutableSuffix(this.Name())
 }
 
 func (this *FileInfo) IsDir() bool {
@@ -91,7 +87,7 @@ func (this *FileInfo) IsSystem() bool {
 	return (this.Attribute() & syscall.FILE_ATTRIBUTE_SYSTEM) != 0
 }
 
-func ForFiles(pattern string, callback func(*FileInfo) bool) error {
+func Walk(pattern string, callback func(*FileInfo) bool) error {
 	this, err := findFirst(pattern)
 	if err != nil {
 		return err

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"../dos"
+	"../dos/findfile"
 	"../history"
 )
 
@@ -35,7 +36,7 @@ func Exec(cmd *exec.Cmd) (int, error) {
 			return -1, nil
 		}
 	}
-	cmd.Args = dos.Globs(cmd.Args)
+	cmd.Args = findfile.Globs(cmd.Args)
 	next, err := function(cmd)
 	return next, err
 }

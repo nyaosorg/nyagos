@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"../dos"
+	"../dos/findfile"
 	"../interpreter"
 )
 
@@ -54,7 +55,7 @@ func listUpFiles(str string) ([]string, error) {
 	}
 	commons := make([]string, 0)
 	STR := strings.ToUpper(str)
-	fdErr := dos.ForFiles(wildcard, func(fd *dos.FileInfo) bool {
+	fdErr := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
 		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
 			return true
 		}

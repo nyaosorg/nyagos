@@ -20,6 +20,7 @@ import (
 	"../completion"
 	"../conio"
 	"../dos"
+	"../dos/findfile"
 	"../interpreter"
 	"../lua"
 	"../readline"
@@ -455,7 +456,7 @@ func cmdGlob(L lua.Lua) int {
 		if wildcard == "" || wildcardErr != nil {
 			break
 		}
-		list, err := dos.Glob(wildcard)
+		list, err := findfile.Glob(wildcard)
 		if list == nil || err != nil {
 			result = append(result, wildcard)
 		} else {
@@ -534,7 +535,7 @@ func cmdStat(L lua.Lua) int {
 	} else {
 		path_ = path
 	}
-	statErr := dos.ForFiles(path_, func(f *dos.FileInfo) bool {
+	statErr := findfile.Walk(path_, func(f *findfile.FileInfo) bool {
 		stat = f
 		return false
 	})

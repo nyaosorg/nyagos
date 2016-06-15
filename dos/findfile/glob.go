@@ -1,4 +1,4 @@
-package dos
+package findfile
 
 import (
 	"path/filepath"
@@ -13,7 +13,7 @@ func Glob(pattern string) ([]string, error) {
 	}
 	match := make([]string, 0, 100)
 	dirname := filepath.Dir(pattern)
-	err := ForFiles(pattern, func(findf *FileInfo) bool {
+	err := Walk(pattern, func(findf *FileInfo) bool {
 		name := findf.Name()
 		if (name[0] != '.' || pname[0] == '.') && !findf.IsHidden() {
 			match = append(match, filepath.Join(dirname, name))

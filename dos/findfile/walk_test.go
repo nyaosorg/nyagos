@@ -1,12 +1,12 @@
-package dos
+package findfile
 
 import (
 	"fmt"
 	"testing"
 )
 
-func TestFindFirst(t *testing.T) {
-	ForFiles("*", func(fd *FileInfo) bool {
+func TestWalk(t *testing.T) {
+	Walk("*", func(fd *FileInfo) bool {
 		fmt.Print(fd.Name())
 		if fd.IsDir() {
 			fmt.Print("/")

@@ -10,6 +10,7 @@ import (
 	"syscall"
 
 	"../dos"
+	"../dos/findfile"
 )
 
 const FLAG_AMP2NEWCONSOLE = false
@@ -196,7 +197,7 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	}
 
 	if WildCardExpansionAlways {
-		this.Args = dos.Globs(this.Args)
+		this.Args = findfile.Globs(this.Args)
 	}
 
 	// executable-file

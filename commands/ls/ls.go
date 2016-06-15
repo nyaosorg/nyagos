@@ -13,6 +13,7 @@ import (
 
 	"../../conio"
 	"../../dos"
+	"../../dos/findfile"
 )
 
 const (
@@ -275,7 +276,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	} else {
 		wildcard = dos.Join(folder, "*")
 	}
-	dos.ForFiles(wildcard, func(f *dos.FileInfo) bool {
+	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
 		if (flag & O_ALL) == 0 {
 			if strings.HasPrefix(f.Name(), ".") {
 				return true
