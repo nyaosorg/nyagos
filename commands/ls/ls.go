@@ -70,7 +70,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	mode := status.Mode()
 	perm := mode.Perm()
 	name := status.Name()
-	attr := dos.GetFileAttributesFromFileInfo(status)
+	attr := findfile.GetFileAttributes(status)
 
 	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		indicator = "@"
@@ -188,7 +188,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				indicator = "*"
 			}
 		}
-		attr := dos.GetFileAttributesFromFileInfo(val)
+		attr := findfile.GetFileAttributes(val)
 		if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
 			(flag&O_COLOR) != 0 {
 			prefix = ANSI_HIDDEN
@@ -282,7 +282,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 			if strings.HasPrefix(f.Name(), ".") {
 				return true
 			}
-			attr := dos.GetFileAttributesFromFileInfo(f)
+			attr := findfile.GetFileAttributes(f)
 			if (attr & dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
 				return true
 			}
