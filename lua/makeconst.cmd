@@ -1,5 +1,20 @@
-pushd "%~dp0"
-gcc makeconst\makeconst.c && a > const.go && go fmt const.go
-if exist a.exe del a.exe
-popd
-
+go-importconst ^
+    "../include/lua.h" ^
+    "../include/lualib.h" ^
+    "../include/lauxlib.h" ^
+    lua ^
+    d(LUA_REGISTRYINDEX) ^
+    d(LUA_TBOOLEAN) ^
+    d(LUA_TFUNCTION) ^
+    d(LUA_TLIGHTUSERDATA) ^
+    d(LUA_TNIL) ^
+    d(LUA_TNUMBER) ^
+    d(LUA_TSTRING) ^
+    d(LUA_TTABLE) ^
+    d(LUA_TTHREAD) ^
+    d(LUA_TUSERDATA) ^
+    s(LUA_FILEHANDLE) ^
+    d(LUA_OK) ^
+    d(LUA_ERRSYNTAX) ^
+    d(LUA_ERRMEM) ^
+    d(LUA_ERRGCMM)
