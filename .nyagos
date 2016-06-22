@@ -6,7 +6,14 @@ nyagos.env.prompt='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
 
 -- Coloring Prompt for NYAGOS.exe
 nyagos.prompt = function(this)
-    local title = "NYAGOS - ".. nyagos.getwd():gsub('\\','/')
+    local wd = nyagos.getwd()
+    local env = nyagos.env
+    local home = env.home or env.userprofile
+    local home_len = home:len()
+    if wd:sub(1,home_len) == home then
+        wd = "~" .. wd:sub(home_len+1)
+    end
+    local title = wd .. " - NYAGOS"
     return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
 end
 
