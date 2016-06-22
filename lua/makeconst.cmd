@@ -3,18 +3,18 @@ go-importconst ^
     "../include/lualib.h" ^
     "../include/lauxlib.h" ^
     lua ^
-    d(LUA_REGISTRYINDEX) ^
-    d(LUA_TBOOLEAN) ^
-    d(LUA_TFUNCTION) ^
-    d(LUA_TLIGHTUSERDATA) ^
-    d(LUA_TNIL) ^
-    d(LUA_TNUMBER) ^
-    d(LUA_TSTRING) ^
-    d(LUA_TTABLE) ^
-    d(LUA_TTHREAD) ^
-    d(LUA_TUSERDATA) ^
-    s(LUA_FILEHANDLE) ^
-    d(LUA_OK) ^
-    d(LUA_ERRSYNTAX) ^
-    d(LUA_ERRMEM) ^
-    d(LUA_ERRGCMM)
+    LUA_REGISTRYINDEX ^
+    LUA_TBOOLEAN ^
+    LUA_TFUNCTION ^
+    LUA_TLIGHTUSERDATA ^
+    LUA_TNIL ^
+    LUA_TNUMBER ^
+    LUA_TSTRING ^
+    LUA_TTABLE ^
+    LUA_TTHREAD ^
+    LUA_TUSERDATA ^
+    LUA_FILEHANDLE::\"%%s\" ^
+    LUA_OK ^
+    LUA_ERRSYNTAX ^
+    LUA_ERRMEM ^
+    LUA_ERRGCMM
