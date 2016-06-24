@@ -10,11 +10,14 @@ func testJoin_(a, b string) {
 }
 
 func TestJoin(t *testing.T) {
-	testJoin_("a", "b")
-	testJoin_("a", "\\b")
-	testJoin_("a:", "b")
-	testJoin_("a/", "b")
-	testJoin_("a\\", "b")
-	testJoin_("a", "c:b")
-	testJoin_("a", "c:\\b")
+	testJoin_(`foo`, `bar`)
+	testJoin_(`foo`, `\bar`)
+	testJoin_(`c:`, `bar`)
+	testJoin_(`foo/`, `bar`)
+	testJoin_(`foo\`, `bar`)
+	testJoin_(`foo`, `c:bar`)
+	testJoin_(`foo`, `c:\bar`)
+	testJoin_(`c:foo`, `\bar`)
+	testJoin_(`c:foo`, `\\host\path\to`)
+	testJoin_(`\\host\path\to`, `c:foo`)
 }

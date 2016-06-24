@@ -1,13 +1,22 @@
 package dos
 
-import "regexp"
+import (
+	"regexp"
+	"strings"
+)
 
-var rxRoot = regexp.MustCompile("^([a-zA-Z]:)?[/\\\\]")
 var rxDrive = regexp.MustCompile("^[a-zA-Z]:")
 
 func joinPath2(a, b string) string {
-	if len(a) <= 0 || rxRoot.MatchString(b) || rxDrive.MatchString(b) {
+	if len(a) <= 0 || strings.HasPrefix(b, `\\`) || rxDrive.MatchString(b) {
 		return b
+	}
+	if b[0] == '\\' || b[0] == '/' {
+		if rxDrive.MatchString(a) {
+			return a[:2] + b
+		} else {
+			return b
+		}
 	}
 	switch a[len(a)-1] {
 	case '\\', '/', ':':
