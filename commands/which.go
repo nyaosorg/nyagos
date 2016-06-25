@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"../alias"
@@ -61,7 +62,7 @@ func cmd_which(cmd *exec.Cmd) (int, error) {
 			if err != nil {
 				return WHICH_NOT_FOUND, err
 			}
-			fmt.Fprintln(cmd.Stdout, dos.YenYen2Yen(path))
+			fmt.Fprintln(cmd.Stdout, filepath.Clean(path))
 		}
 	}
 	return 0, nil
