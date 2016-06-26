@@ -9,7 +9,6 @@ import (
 	"unicode"
 
 	"../cpath"
-	"../dos"
 )
 
 func Format2Prompt(format string) string {
@@ -49,7 +48,7 @@ func Format2Prompt(format string) string {
 					buffer.WriteString(wd[:2])
 				}
 			} else if c == 'p' {
-				if wd, err := dos.Getwd(); err != nil {
+				if wd, err := cpath.Getwd(); err != nil {
 					fmt.Fprintf(os.Stderr, "$P: %s\n", err.Error())
 				} else {
 					buffer.WriteString(cpath.ReplaceHomeToTildeSlash(wd))

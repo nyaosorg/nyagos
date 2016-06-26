@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"strconv"
 
-	"../dos"
+	"../cpath"
 )
 
 func cmd_pwd(cmd *exec.Cmd) (int, error) {
@@ -19,7 +19,7 @@ func cmd_pwd(cmd *exec.Cmd) (int, error) {
 			return 0, nil
 		}
 	} else {
-		wd, _ := dos.Getwd()
+		wd, _ := cpath.Getwd()
 		fmt.Fprintln(cmd.Stdout, wd)
 	}
 	return 0, nil

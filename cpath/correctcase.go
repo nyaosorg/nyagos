@@ -1,4 +1,4 @@
-package dos
+package cpath
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ func correct(path string) (string, string, error) {
 	return dirname, fname, fmt.Errorf("%s: not found.", path)
 }
 
-func CorrectPathCase(path string) (string, error) {
+func CorrectCase(path string) (string, error) {
 	if len(path) <= 3 {
 		return strings.ToUpper(path), nil
 	}
@@ -36,7 +36,7 @@ func CorrectPathCase(path string) (string, error) {
 	}
 	if len(dirname) > 3 {
 		// NOT root directory.
-		dirname, err = CorrectPathCase(dirname)
+		dirname, err = CorrectCase(dirname)
 	} else {
 		// root directory.
 		dirname = strings.ToUpper(dirname)
@@ -49,6 +49,6 @@ func Getwd() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	wd, _ = CorrectPathCase(wd)
+	wd, _ = CorrectCase(wd)
 	return wd, nil
 }

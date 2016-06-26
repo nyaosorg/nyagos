@@ -1,4 +1,4 @@
-package dos
+package cpath
 
 import (
 	"os"
@@ -7,9 +7,9 @@ import (
 )
 
 func testFixPathCase(t *testing.T, path string) {
-	newpath, err := CorrectPathCase(path)
+	newpath, err := CorrectCase(path)
 	if err != nil {
-		t.Errorf("CorrectPathCase: %v", err)
+		t.Errorf("CorrectCase: %v", err)
 	}
 	println(path, "->", newpath)
 }

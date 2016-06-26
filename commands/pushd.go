@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 
+	"../cpath"
 	"../dos"
 )
 
@@ -16,7 +17,7 @@ const (
 )
 
 func cmd_dirs(cmd *exec.Cmd) (int, error) {
-	wd, err := dos.Getwd()
+	wd, err := cpath.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
 	}
@@ -41,7 +42,7 @@ func cmd_popd(cmd *exec.Cmd) (int, error) {
 }
 
 func cmd_pushd(cmd *exec.Cmd) (int, error) {
-	wd, err := dos.Getwd()
+	wd, err := cpath.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
 	}
