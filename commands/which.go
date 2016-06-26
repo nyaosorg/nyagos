@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"../alias"
-	"../dos"
 )
 
 const (
@@ -49,7 +48,7 @@ func cmd_which(cmd *exec.Cmd) (int, error) {
 		if all {
 			for _, dir1 := range pathList {
 				for _, ext1 := range extList {
-					fullpath1 := dos.Join(dir1, name)
+					fullpath1 := filepath.Join(dir1, name)
 					fullpath1 = fullpath1 + ext1
 					if _, err1 := os.Stat(fullpath1); err1 == nil {
 						fmt.Fprintln(cmd.Stdout, fullpath1)
