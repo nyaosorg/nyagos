@@ -26,7 +26,8 @@ func joinPath2(a, b string) string {
 	}
 }
 
-// Equals filepath.Join but this works right when path has drive-letter.
+// Compatible Join with CPath::Combine of MFC (ex:`C:\foo` + `\bar` -> `c:\bar`)
+// Do not clean path (keep `./` on arguments)
 func Join(paths ...string) string {
 	result := paths[len(paths)-1]
 	for i := len(paths) - 2; i >= 0; i-- {

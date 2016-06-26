@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-// Get %HOME% || %USERPROFILE% || ""
+// Get %HOME% || %USERPROFILE%
 func GetHome() string {
 	home := os.Getenv("HOME")
 	if home == "" {

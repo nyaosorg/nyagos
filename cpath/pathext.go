@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// returns true if suffix exists in %PATHEXT%
 func IsExecutableSuffix(path string) bool {
 	pathExt := os.Getenv("PATHEXT")
 	if pathExt != "" {
