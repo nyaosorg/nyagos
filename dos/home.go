@@ -14,6 +14,7 @@ func GetHome() string {
 	return home
 }
 
+// C:\users\name\foo\bar -> ~\foo\bar
 func ReplaceHomeToTilde(wd string) string {
 	home := GetHome()
 	homeLen := len(home)
@@ -23,6 +24,7 @@ func ReplaceHomeToTilde(wd string) string {
 	return wd
 }
 
+// C:\users\name\foo\bar -> ~/foo/bar
 func ReplaceHomeToTildeSlash(wd string) string {
 	return strings.Replace(ReplaceHomeToTilde(wd), "\\", "/", -1)
 }
