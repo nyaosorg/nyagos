@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode"
 
-	"../dos"
+	"../cpath"
 )
 
 type StatementT struct {
@@ -80,7 +80,7 @@ func buffer2word(source bytes.Buffer, removeQuote bool) string {
 			break
 		}
 		if ch == '~' && unicode.IsSpace(lastchar) {
-			if home := dos.GetHome(); home != "" {
+			if home := cpath.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
 				buffer.WriteRune('~')

@@ -75,7 +75,7 @@ func cmd_xxxx(args []string,
 		src := args[i]
 		dst := args[n]
 		if isDir {
-			dst = dos.Join(dst, filepath.Base(src))
+			dst = filepath.Join(dst, filepath.Base(src))
 		}
 		if !isDirOk {
 			fi, err := os.Stat(src)

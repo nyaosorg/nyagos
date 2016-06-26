@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"syscall"
 )
 
@@ -27,7 +28,7 @@ func Truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 			if f.Name() == "." || f.Name() == ".." {
 				continue
 			}
-			fullpath := Join(folder, f.Name())
+			fullpath := filepath.Join(folder, f.Name())
 			var err error
 			if f.IsDir() {
 				fmt.Fprintf(out, "%s\\\n", fullpath)

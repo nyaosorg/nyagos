@@ -2,7 +2,6 @@ package dos
 
 import (
 	"os"
-	"strings"
 	"syscall"
 	"unsafe"
 )
@@ -16,16 +15,4 @@ func GetModuleFileName() (string, error) {
 		return os.Args[0], err
 	}
 	return syscall.UTF16ToString(path16[:]), nil
-}
-
-func IsExecutableSuffix(path string) bool {
-	pathExt := os.Getenv("PATHEXT")
-	if pathExt != "" {
-		for _, ext := range strings.Split(pathExt, ";") {
-			if strings.EqualFold(ext, path) {
-				return true
-			}
-		}
-	}
-	return false
 }

@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"strconv"
 
+	"../cpath"
 	"../dos"
 )
 
@@ -81,7 +82,7 @@ func cmd_cd(cmd *exec.Cmd) (int, error) {
 			return cmd_cd_sub(cmd.Args[1])
 		}
 	}
-	home := dos.GetHome()
+	home := cpath.GetHome()
 	if home != "" {
 		push_cd_history()
 		return cmd_cd_sub(home)

@@ -14,6 +14,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"../../conio"
+	"../../cpath"
 	"../../dos"
 )
 
@@ -91,7 +92,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if dos.IsExecutableSuffix(filepath.Ext(name)) {
+	} else if cpath.IsExecutableSuffix(filepath.Ext(name)) {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -145,7 +146,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		io.WriteString(out, indicator)
 	}
 	if indicator == "@" {
-		path := dos.Join(folder, name)
+		path := cpath.Join(folder, name)
 		link_to, err := os.Readlink(path)
 		if err == nil {
 			fmt.Fprintf(out, " -> %s", link_to)
@@ -179,7 +180,7 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 				postfix = ANSI_END
 			}
 		}
-		if !val.IsDir() && dos.IsExecutableSuffix(filepath.Ext(val.Name())) {
+		if !val.IsDir() && cpath.IsExecutableSuffix(filepath.Ext(val.Name())) {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
@@ -275,7 +276,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	if folder == "" {
 		wildcard = "*"
 	} else {
-		wildcard = dos.Join(folder, "*")
+		wildcard = cpath.Join(folder, "*")
 	}
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
 		if (flag & O_ALL) == 0 {
@@ -305,7 +306,7 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
-			f1fullpath := dos.Join(folder, f1)
+			f1fullpath := cpath.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
 			lsFolder(f1fullpath, flag, out)
 		}

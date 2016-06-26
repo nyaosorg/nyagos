@@ -1,12 +1,14 @@
 package completion
 
 import (
-	"../dos"
-	"../interpreter"
-	"github.com/zetamatta/go-findfile"
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/zetamatta/go-findfile"
+
+	"../cpath"
+	"../interpreter"
 )
 
 const (
@@ -35,7 +37,7 @@ func listUpFiles(str string) ([]string, error) {
 	})
 
 	str = rxTilde.ReplaceAllStringFunc(str, func(p string) string {
-		if home := dos.GetHome(); home != "" {
+		if home := cpath.GetHome(); home != "" {
 			return home + "\\"
 		} else {
 			return p
@@ -43,7 +45,7 @@ func listUpFiles(str string) ([]string, error) {
 	})
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), "\"", "", -1)
 	directory := DirName(str)
-	wildcard := dos.Join(directory, "*")
+	wildcard := cpath.Join(directory, "*")
 
 	// Drive letter
 	cutprefix := 0
@@ -58,7 +60,7 @@ func listUpFiles(str string) ([]string, error) {
 		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
 			return true
 		}
-		name := dos.Join(directory, fd.Name())
+		name := cpath.Join(directory, fd.Name())
 		if fd.IsDir() {
 			name += STD_SLASH
 		}

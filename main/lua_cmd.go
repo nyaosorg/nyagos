@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 	"unsafe"
 
@@ -531,7 +532,7 @@ func cmdStat(L lua.Lua) int {
 	var stat os.FileInfo
 	var path_ string
 	if len(path) > 0 && path[len(path)-1] == '\\' {
-		path_ = dos.Join(path, ".")
+		path_ = filepath.Join(path, ".")
 	} else {
 		path_ = path
 	}
@@ -609,7 +610,7 @@ func cmdPathJoin(L lua.Lua) int {
 		if pathIErr != nil {
 			return L.Push(nil, pathErr)
 		}
-		path = dos.Join(path, pathI)
+		path = filepath.Join(path, pathI)
 	}
 	return L.Push(path, nil)
 }

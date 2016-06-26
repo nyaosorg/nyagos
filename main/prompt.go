@@ -8,6 +8,7 @@ import (
 	"time"
 	"unicode"
 
+	"../cpath"
 	"../dos"
 )
 
@@ -51,7 +52,7 @@ func Format2Prompt(format string) string {
 				if wd, err := dos.Getwd(); err != nil {
 					fmt.Fprintf(os.Stderr, "$P: %s\n", err.Error())
 				} else {
-					buffer.WriteString(dos.ReplaceHomeToTildeSlash(wd))
+					buffer.WriteString(cpath.ReplaceHomeToTildeSlash(wd))
 				}
 			} else if c == 'q' {
 				buffer.WriteRune('=')
