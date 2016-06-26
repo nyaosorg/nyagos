@@ -31,7 +31,19 @@ ReplaceHomeToTildeSlash
 - C:\users\name\foo\bar -> ~/foo/bar
 
 IsExecutableSuffix
-==================
+------------------
 	func IsExecutableSuffix(suffix string) bool
 
 - returns true if suffix exists in %PATHEXT%
+
+CorrectCase
+-----------
+	func CorrectCase(path string) (string, error) {
+
+- correct path's case.
+
+Getwd()
+-------
+	func Getwd() (string, error) {
+
+- Get current working directory with the correct case. 

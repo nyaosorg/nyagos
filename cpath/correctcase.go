@@ -26,6 +26,7 @@ func correct(path string) (string, string, error) {
 	return dirname, fname, fmt.Errorf("%s: not found.", path)
 }
 
+// correct path's case.
 func CorrectCase(path string) (string, error) {
 	if len(path) <= 3 {
 		return strings.ToUpper(path), nil
