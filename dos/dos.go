@@ -1,9 +1,9 @@
 package dos
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
-	"strings"
 	"syscall"
 	"unicode"
 	"unsafe"
@@ -18,23 +18,13 @@ func chdrive_(n rune) uintptr {
 	return rc
 }
 
-func getFirst(s string) (rune, error) {
-	reader := strings.NewReader(s)
-	drive, _, err := reader.ReadRune()
-	if err != nil {
-		return 0, err
-	}
-	return unicode.ToUpper(drive), nil
-}
-
 // Change drive without changing the working directory there.
 func Chdrive(drive string) error {
-	driveLetter, driveErr := getFirst(drive)
-	if driveErr != nil {
-		return driveErr
+	for _, c := range drive {
+		chdrive_(unicode.ToUpper(c))
+		return nil
 	}
-	chdrive_(driveLetter)
-	return nil
+	return errors.New("Chdrive: driveletter not found")
 }
 
 var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
