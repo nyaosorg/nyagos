@@ -42,7 +42,7 @@ func listUpFiles(str string) ([]string, error) {
 		}
 	})
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), "\"", "", -1)
-	directory := dos.DirName(str)
+	directory := DirName(str)
 	wildcard := dos.Join(directory, "*")
 
 	// Drive letter
