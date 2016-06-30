@@ -1,12 +1,16 @@
 package commands
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"github.com/zetamatta/go-mbcs"
 
 	"../dos"
 )
@@ -60,11 +64,21 @@ func cmd_source(cmd *exec.Cmd) (int, error) {
 	}
 	defer fp.Close()
 
+	br := bufio.NewReader(fp)
 	for {
-		line, lineErr := dos.ReadAnsiLine(fp)
-		if lineErr != nil {
+		lineB, readErr := br.ReadBytes(byte('\n'))
+		if readErr != nil {
+			if readErr != io.EOF {
+				fmt.Fprintf(cmd.Stderr, "%s: %s (environment-readline error)\n", envTxtPath, readErr.Error())
+			}
 			break
 		}
+		line, atouErr := mbcs.AtoU(lineB)
+		if atouErr != nil {
+			fmt.Fprintf(cmd.Stderr, "%s: %s(environment-ansi-to-unicode error)\n", envTxtPath, atouErr.Error())
+			continue
+		}
+		line = strings.TrimSpace(line)
 		eqlPos := strings.Index(line, "=")
 		if eqlPos > 0 {
 			left := line[:eqlPos]
@@ -81,10 +95,15 @@ func cmd_source(cmd *exec.Cmd) (int, error) {
 		return 1, err2
 	}
 	defer fp2.Close()
-	line, lineErr := dos.ReadAnsiLine(fp2)
+	br2 := bufio.NewReader(fp2)
+	lineB, lineErr := br2.ReadBytes(byte('\n'))
 	if lineErr != nil {
 		return 1, errors.New("source : could not get current-directory")
 	}
-	os.Chdir(line)
+	line, err := mbcs.AtoU(lineB)
+	if err == nil {
+		line = strings.TrimSpace(line)
+		os.Chdir(line)
+	}
 	return errorlevel, nil
 }
