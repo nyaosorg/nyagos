@@ -57,6 +57,12 @@ func cmd_cd(cmd *exec.Cmd) (int, error) {
 			push_cd_history()
 			return cmd_cd_sub(directory)
 		} else if cmd.Args[1] == "--history" {
+			dir, dir_err := os.Getwd()
+			if dir_err == nil {
+				fmt.Fprintln(cmd.Stdout, dir)
+			} else {
+				fmt.Fprintln(cmd.Stderr, dir_err.Error())
+			}
 			for i := len(cd_history) - 1; i >= 0; i-- {
 				fmt.Fprintln(cmd.Stdout, cd_history[i])
 			}
