@@ -688,48 +688,84 @@ func cmdLoadFile(L lua.Lua) int {
 type iolines_t struct {
 	Fd         *os.File
 	Reader     *bufio.Reader
+	Marks      []string
 	HasToClose bool
+}
+
+func (this *iolines_t) Close() {
+	this.Reader = nil
+	if this.HasToClose {
+		this.Fd.Close()
+	}
+	this.Fd = nil
+}
+
+func (this *iolines_t) Ok() bool {
+	return this != nil && this.Fd != nil && this.Reader != nil
 }
 
 func iolines_t_gc(L lua.Lua) int {
 	userdata := (*iolines_t)(L.ToUserData(1))
 	// print("iolines_t_gc: gc\n")
-	if userdata == nil || userdata.Fd == nil {
+	if !userdata.Ok() {
 		// print("iolines_t_gc: nil\n")
 		return 0
 	}
-	// print("iolines_t_g: close\n")
-	if userdata.HasToClose {
-		userdata.Fd.Close()
-	}
-	userdata.Fd = nil
+	userdata.Close()
 	return 0
 }
 
 func cmdLinesCallback(L lua.Lua) int {
 	userdata := (*iolines_t)(L.ToUserData(1))
-	if userdata == nil || userdata.Fd == nil || userdata.Reader == nil {
+	if !userdata.Ok() {
 		// print("cmdLinesCallback: nil\n")
 		return L.Push(nil)
 	}
-	line, line_err := userdata.Reader.ReadBytes('\n')
-	if line_err != nil {
-		// print("cmdLinesCallback: eof\n")
-		userdata.Reader = nil
-		if userdata.HasToClose {
-			userdata.Fd.Close()
+	count := 0
+	var err error
+
+	for _, mark := range userdata.Marks {
+		if err != nil {
+			break
 		}
-		userdata.Fd = nil
+		switch mark {
+		default:
+			var line []byte
+			line, err = userdata.Reader.ReadBytes('\n')
+			if err != nil {
+				break
+			}
+			if mark != "L" {
+				line = bytes.TrimRight(line, "\r\n")
+			}
+			L.PushAnsiString(line)
+			count++
+			break
+		case "a":
+			var buffer bytes.Buffer
+			var n int64
+			n, err = buffer.ReadFrom(userdata.Reader)
+			if err != nil || n <= 0 {
+				userdata.Close()
+				return L.Push(nil)
+			}
+			L.PushAnsiString(buffer.Bytes()[:uintptr(n)])
+			count++
+			break
+		}
+	}
+	if err != nil {
+		// print("cmdLinesCallback: eof\n")
+		userdata.Close()
 		return L.Push(nil)
 	}
 	// print("cmdLinesCallback: text='", text, "'\n")
-	line = bytes.TrimRight(line, "\r\n")
-	L.PushAnsiString(line)
-	return 1
+	return count
 }
 
 func cmdLines(L lua.Lua) int {
-	if L.GetTop() < 1 || L.IsNil(1) {
+	top := L.GetTop()
+	if top < 1 || L.IsNil(1) {
 		L.Push(cmdLinesCallback)
 		var userdata *iolines_t
 		userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
@@ -737,11 +773,25 @@ func cmdLines(L lua.Lua) int {
 		userdata.Fd = cmd.Stdio[0]
 		userdata.Reader = bufio.NewReader(cmd.Stdio[0])
 		userdata.HasToClose = false
+		userdata.Marks = []string{"l"}
 		return 2
 	}
 	path, path_err := L.ToString(1)
 	if path_err != nil {
 		return L.Push(nil, path_err.Error())
+	}
+	var marks []string
+	if top < 2 {
+		marks = []string{"l"}
+	} else {
+		marks = make([]string, 0, top-2)
+		for i := 2; i <= top; i++ {
+			mark1, err1 := L.ToString(i)
+			if err1 != nil {
+				return L.Push(nil, err1.Error())
+			}
+			marks = append(marks, mark1)
+		}
 	}
 	fd, fd_err := os.Open(path)
 	if fd_err != nil {
@@ -752,6 +802,7 @@ func cmdLines(L lua.Lua) int {
 	userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
 	userdata.Fd = fd
 	userdata.Reader = bufio.NewReader(fd)
+	userdata.Marks = marks
 	userdata.HasToClose = true
 	L.NewTable()
 	L.Push(iolines_t_gc)
