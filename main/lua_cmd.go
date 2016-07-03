@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -742,14 +743,13 @@ func cmdLinesCallback(L lua.Lua) int {
 			count++
 			break
 		case "a":
-			var buffer bytes.Buffer
-			var n int64
-			n, err = buffer.ReadFrom(userdata.Reader)
-			if err != nil || n <= 0 {
+			var data []byte
+			data, err = ioutil.ReadAll(userdata.Reader)
+			if err != nil || len(data) <= 0 {
 				userdata.Close()
 				return L.Push(nil)
 			}
-			L.PushAnsiString(buffer.Bytes()[:uintptr(n)])
+			L.PushAnsiString(data)
 			count++
 			break
 		}
