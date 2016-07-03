@@ -279,7 +279,7 @@ func cmdEval(L lua.Lua) int {
 		result = append(result, buffer[0:size]...)
 	}
 	r.Close()
-	L.PushAnsiString(bytes.Trim(result, "\r\n\t "))
+	L.PushBytes(bytes.Trim(result, "\r\n\t "))
 	return 1
 }
 
@@ -357,7 +357,7 @@ func cmdRawEval(L lua.Lua) int {
 	if err != nil {
 		return L.Push(nil, err.Error())
 	} else {
-		L.PushAnsiString(out)
+		L.PushBytes(out)
 		return 1
 	}
 }
@@ -425,7 +425,7 @@ func cmdWhich(L lua.Lua) int {
 }
 
 func cmdAtoU(L lua.Lua) int {
-	str, err := mbcs.AtoU(L.ToAnsiString(1))
+	str, err := mbcs.AtoU(L.ToBytes(1))
 	if err == nil {
 		L.PushString(str)
 		return 1
@@ -444,7 +444,7 @@ func cmdUtoA(L lua.Lua) int {
 		return L.Push(nil, err)
 	}
 	if len(str) >= 1 {
-		L.PushAnsiString(str[:len(str)-1])
+		L.PushBytes(str[:len(str)-1])
 	} else {
 		L.PushString("")
 	}
@@ -739,7 +739,7 @@ func cmdLinesCallback(L lua.Lua) int {
 			if mark != "L" {
 				line = bytes.TrimRight(line, "\r\n")
 			}
-			L.PushAnsiString(line)
+			L.PushBytes(line)
 			count++
 			break
 		case "a":
@@ -749,7 +749,7 @@ func cmdLinesCallback(L lua.Lua) int {
 				userdata.Close()
 				return L.Push(nil)
 			}
-			L.PushAnsiString(data)
+			L.PushBytes(data)
 			count++
 			break
 		}

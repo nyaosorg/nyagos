@@ -20,7 +20,7 @@ func (this Lua) ToInteger(index int) (int, error) {
 
 var lua_tolstring = luaDLL.NewProc("lua_tolstring")
 
-func (this Lua) ToAnsiString(index int) []byte {
+func (this Lua) ToBytes(index int) []byte {
 	var length uintptr
 	p, _, _ := lua_tolstring.Call(this.State(),
 		uintptr(index),
@@ -76,7 +76,7 @@ func (this *TRawString) String() (string, error) {
 }
 
 func (this TRawString) Push(L Lua) int {
-	L.PushAnsiString(this.Value)
+	L.PushBytes(this.Value)
 	return 1
 }
 
@@ -262,7 +262,7 @@ func (this Lua) ToPushable(index int) (Pushable, error) {
 		int_result, err = this.ToInteger(index)
 		result = Integer(int_result)
 	case LUA_TSTRING:
-		result = TRawString{this.ToAnsiString(index)}
+		result = TRawString{this.ToBytes(index)}
 	case LUA_TTABLE:
 		result, err = this.ToTable(index)
 		seek_metatable = true

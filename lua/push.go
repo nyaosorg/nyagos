@@ -33,7 +33,7 @@ func (this Lua) PushInteger(value Integer) {
 
 var lua_pushlstring = luaDLL.NewProc("lua_pushlstring")
 
-func (this Lua) PushAnsiString(data []byte) {
+func (this Lua) PushBytes(data []byte) {
 	if data != nil && len(data) > 0 {
 		lua_pushlstring.Call(this.State(),
 			uintptr(unsafe.Pointer(&data[0])),
@@ -114,7 +114,7 @@ func (this Lua) Push(values ...interface{}) int {
 		case func(L Lua) int:
 			this.PushGoFunction(t)
 		case []byte:
-			this.PushAnsiString(t)
+			this.PushBytes(t)
 		case error:
 			this.PushString(t.Error())
 		case TTable:
