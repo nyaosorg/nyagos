@@ -6,7 +6,7 @@ import (
 	"github.com/zetamatta/go-ansicfile"
 )
 
-func (L Lua) pushFile(f *os.File, modeFlg int, modeStr string) error {
+func (this Lua) pushFile(f *os.File, modeFlg int, modeStr string) error {
 	// *os.File to file-descripter
 	fd, fd_err := ansicfile.OpenOsFHandle(f.Fd(), modeFlg)
 	if fd_err != nil {
@@ -17,14 +17,14 @@ func (L Lua) pushFile(f *os.File, modeFlg int, modeStr string) error {
 	if fp_err != nil {
 		return fp_err
 	}
-	L.PushStream(fp)
+	this.PushStream(fp)
 	return nil
 }
 
-func (L Lua) PushFileWriter(f *os.File) error {
-	return L.pushFile(f, ansicfile.O_APPEND|ansicfile.O_TEXT, "wt")
+func (this Lua) PushFileWriter(f *os.File) error {
+	return this.pushFile(f, ansicfile.O_APPEND|ansicfile.O_TEXT, "wt")
 }
 
-func (L Lua) PushFileReader(f *os.File) error {
-	return L.pushFile(f, ansicfile.O_RDONLY|ansicfile.O_TEXT, "rt")
+func (this Lua) PushFileReader(f *os.File) error {
+	return this.pushFile(f, ansicfile.O_RDONLY|ansicfile.O_TEXT, "rt")
 }

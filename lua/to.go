@@ -82,7 +82,7 @@ func (this TRawString) Push(L Lua) int {
 
 var lua_tocfunction = luaDLL.NewProc("lua_tocfunction")
 
-func (this *Lua) ToCFunction(index int) uintptr {
+func (this Lua) ToCFunction(index int) uintptr {
 	rc, _, _ := lua_tocfunction.Call(this.State(), uintptr(index))
 	return rc
 }

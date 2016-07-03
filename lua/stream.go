@@ -12,31 +12,31 @@ type stream_t struct {
 	Closer  uintptr
 }
 
-func (L Lua) pushStream(fd ansicfile.FilePtr, closer func(Lua) int) *stream_t {
+func (this Lua) pushStream(fd ansicfile.FilePtr, closer func(Lua) int) *stream_t {
 	var userdata *stream_t
-	userdata = (*stream_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
+	userdata = (*stream_t)(this.NewUserData(unsafe.Sizeof(*userdata)))
 	userdata.FilePtr = fd
 	userdata.Closer = syscall.NewCallbackCDecl(closer)
-	L.GetField(LUA_REGISTRYINDEX, LUA_FILEHANDLE) // metatable
-	L.SetMetaTable(-2)
+	this.GetField(LUA_REGISTRYINDEX, LUA_FILEHANDLE) // metatable
+	this.SetMetaTable(-2)
 	return userdata
 }
 
-func closer(L Lua) int {
-	userdata := (*stream_t)(L.ToUserData(1))
+func closer(this Lua) int {
+	userdata := (*stream_t)(this.ToUserData(1))
 	userdata.FilePtr.Close()
 	// print("stream_closed\n")
 	return 0
 }
 
-func (L Lua) PushStream(filePtr ansicfile.FilePtr) {
-	L.pushStream(filePtr, closer)
+func (this Lua) PushStream(filePtr ansicfile.FilePtr) {
+	this.pushStream(filePtr, closer)
 }
 
-func noncloser(L Lua) int {
+func noncloser(this Lua) int {
 	return 0
 }
 
-func (L Lua) PushStreamDontClose(filePtr ansicfile.FilePtr) {
-	L.pushStream(filePtr, noncloser)
+func (this Lua) PushStreamDontClose(filePtr ansicfile.FilePtr) {
+	this.pushStream(filePtr, noncloser)
 }

@@ -14,7 +14,7 @@ var lua_load = luaDLL.NewProc("lua_load")
 var static_load_buffer [4096]byte
 var load_buffer_mutex sync.Mutex
 
-func callback_reader(L uintptr, fd *os.File, size *uintptr) *byte {
+func callback_reader(this uintptr, fd *os.File, size *uintptr) *byte {
 	n, err := fd.Read(static_load_buffer[:])
 	if err != nil || n == 0 {
 		*size = 0
@@ -25,7 +25,7 @@ func callback_reader(L uintptr, fd *os.File, size *uintptr) *byte {
 	}
 }
 
-func (L Lua) LoadFile(path string, mode string) (int, error) {
+func (this Lua) LoadFile(path string, mode string) (int, error) {
 	fd, err := os.OpenFile(path, os.O_RDONLY, 0666)
 	if err != nil {
 		return 0, err
@@ -44,7 +44,7 @@ func (L Lua) LoadFile(path string, mode string) (int, error) {
 	load_buffer_mutex.Lock()
 	defer load_buffer_mutex.Unlock()
 	rc, _, _ := lua_load.Call(
-		L.State(),
+		this.State(),
 		callback,
 		uintptr(unsafe.Pointer(fd)),
 		uintptr(unsafe.Pointer(path_ptr)),
