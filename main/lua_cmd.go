@@ -269,17 +269,13 @@ func cmdEval(L lua.Lua) int {
 		w.Close()
 	}(statement, w)
 
-	var result = []byte{}
-	for {
-		buffer := make([]byte, 256)
-		size, err := r.Read(buffer)
-		if err != nil || size <= 0 {
-			break
-		}
-		result = append(result, buffer[0:size]...)
-	}
+	result, err := ioutil.ReadAll(r)
 	r.Close()
-	L.PushBytes(bytes.Trim(result, "\r\n\t "))
+	if err == nil {
+		L.PushBytes(bytes.Trim(result, "\r\n\t "))
+	} else {
+		L.PushNil()
+	}
 	return 1
 }
 
