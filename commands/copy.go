@@ -39,6 +39,7 @@ func cmd_ln(cmd *exec.Cmd) (int, error) {
 		args := make([]string, 0, len(cmd.Args)-1)
 		args = append(args, cmd.Args[0])
 		args = append(args, cmd.Args[2:]...)
+		cmd.Args = args
 		return copymove_t{
 			Cmd:     cmd,
 			Action:  os.Symlink,
