@@ -343,7 +343,7 @@ func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
 		} else if status.IsDir() && (flag&O_NOT_RECURSIVE) == 0 {
 			dirs = append(dirs, name)
 		} else {
-			files = append(files, &fileInfoT{name, status})
+			files = append(files, &fileInfoT{filepath.Clean(name), status})
 		}
 	}
 	if len(files) > 0 {
