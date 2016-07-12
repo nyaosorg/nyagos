@@ -79,17 +79,13 @@ type Interpreter struct {
 	Closers []io.Closer
 }
 
-func (this *Interpreter) closeAtEnd() {
+func (this *Interpreter) Close() {
 	if this.Closers != nil {
 		for _, c := range this.Closers {
 			c.Close()
 		}
 		this.Closers = nil
 	}
-}
-
-func (this *Interpreter) Close() {
-	this.closeAtEnd()
 }
 
 func New() *Interpreter {
@@ -340,7 +336,6 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				errorlevel, err = cmd.Spawnvp()
-				cmd.closeAtEnd()
 				ErrorLevelStr = errorlevel.String()
 				cmd.Close()
 			} else {
@@ -361,7 +356,6 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 						defer wg.Done()
 					}
 					cmd1.Spawnvp()
-					cmd1.closeAtEnd()
 					cmd1.Close()
 				}(cmd)
 			}
