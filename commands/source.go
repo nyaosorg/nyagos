@@ -25,27 +25,41 @@ func cmd_source(cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) < 2 {
 		return 255, nil
 	}
-	envTxtPath := filepath.Join(
-		os.TempDir(),
-		fmt.Sprintf("nyagos-%d.tmp", os.Getpid()))
-	pwdTxtPath := filepath.Join(
-		os.TempDir(),
-		fmt.Sprintf("nyagos_%d.tmp", os.Getpid()))
+	tempDir := os.TempDir()
+	pid := os.Getpid()
+	batchPath := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
+	envTxtPath := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
+	pwdTxtPath := filepath.Join(tempDir, fmt.Sprintf("nyagos_%d.tmp", pid))
 
 	params := []string{
 		os.Getenv("COMSPEC"),
 		"/C",
+		batchPath,
 	}
+	batchFd, batchFd_err := os.Create(batchPath)
+	if batchFd_err != nil {
+		return -1, batchFd_err
+	}
+	var batchWriter io.Writer
+	if verbose {
+		batchWriter = io.MultiWriter(batchFd, cmd.Stdout)
+	} else {
+		batchWriter = batchFd
+	}
+	fmt.Fprint(batchWriter, "@call")
 	for _, v := range args[1:] {
-		params = append(params,
-			strings.Replace(
-				strings.Replace(
-					strings.Replace(v, " ", "^ ", -1), "(", "^(", -1),
-				")", "^)", -1))
+		if strings.ContainsRune(v, ' ') {
+			fmt.Fprintf(batchWriter, " \"%s\"", v)
+		} else {
+			fmt.Fprintf(batchWriter, " %s", v)
+		}
 	}
-	params = append(params,
-		"&", "set", ">", envTxtPath,
-		"&", "cd", ">", pwdTxtPath)
+	fmt.Fprintf(batchWriter, "\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\n")
+	fmt.Fprintf(batchWriter, "@set > \"%s\"\n", envTxtPath)
+	fmt.Fprintf(batchWriter, "@cd > \"%s\"\n", pwdTxtPath)
+	fmt.Fprintf(batchWriter, "@exit /b \"%%ERRORLEVEL_%%\"\n")
+	batchFd.Close()
+	defer os.Remove(batchPath)
 
 	cmd2 := exec.Cmd{Path: params[0], Args: params}
 	if err := cmd2.Run(); err != nil {
@@ -83,10 +97,12 @@ func cmd_source(cmd *exec.Cmd) (int, error) {
 		if eqlPos > 0 {
 			left := line[:eqlPos]
 			right := line[eqlPos+1:]
-			if verbose {
-				fmt.Fprintf(cmd.Stdout, "%s=%s\n", left, right)
+			if left != "ERRORLEVEL_" {
+				if verbose {
+					fmt.Fprintf(cmd.Stdout, "%s=%s\n", left, right)
+				}
+				os.Setenv(left, right)
 			}
-			os.Setenv(left, right)
 		}
 	}
 
@@ -103,6 +119,9 @@ func cmd_source(cmd *exec.Cmd) (int, error) {
 	line, err := mbcs.AtoU(lineB)
 	if err == nil {
 		line = strings.TrimSpace(line)
+		if verbose {
+			fmt.Fprintf(cmd.Stdout, "cd \"%s\"\n", line)
+		}
 		os.Chdir(line)
 	}
 	return errorlevel, nil
