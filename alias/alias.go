@@ -13,7 +13,7 @@ var dbg = false
 
 type Callable interface {
 	String() string
-	Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error)
+	Call(cmd *interpreter.Interpreter) (int, error)
 }
 
 type AliasFunc struct {
@@ -28,7 +28,7 @@ func (this *AliasFunc) String() string {
 	return this.BaseStr
 }
 
-func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.ErrorLevel, err error) {
+func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next int, err error) {
 	isReplaced := false
 	if dbg {
 		print("AliasFunc.Call('", cmd.Args[0], "')\n")
@@ -67,7 +67,7 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next interpreter.Erro
 	}
 	it, err := cmd.Clone()
 	if err != nil {
-		return interpreter.ErrorLevel(255), err
+		return 255, err
 	}
 	if dbg {
 		print("done cmd.Clone\n")
@@ -119,7 +119,7 @@ func quoteAndJoin(list []string) string {
 
 var nextHook interpreter.HookT
 
-func hook(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func hook(cmd *interpreter.Interpreter) (int, bool, error) {
 	if cmd.HookCount > 5 {
 		return nextHook(cmd)
 	}
@@ -128,7 +128,7 @@ func hook(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
 		return nextHook(cmd)
 	}
 	next, err := callee.Call(cmd)
-	return next, err
+	return next, true, err
 }
 
 func Init() {

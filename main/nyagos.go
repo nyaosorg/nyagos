@@ -133,9 +133,9 @@ func main() {
 
 	flag.Parse()
 
-	interpreter.SetHook(func(it *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
-		rc, err := commands.Exec(&it.Cmd)
-		return interpreter.ErrorLevel(rc), err
+	interpreter.SetHook(func(it *interpreter.Interpreter) (int, bool, error) {
+		rc, done, err := commands.Exec(&it.Cmd)
+		return rc, done, err
 	})
 	completion.AppendCommandLister(commands.AllNames)
 	completion.AppendCommandLister(alias.AllNames)
@@ -208,7 +208,7 @@ func main() {
 			if err != io.EOF {
 				fmt.Fprintln(os.Stderr, err.Error())
 			}
-			return
+			break
 		}
 
 		var isReplaced bool
@@ -253,12 +253,12 @@ func main() {
 		}
 		L.SetTop(stackPos)
 
-		whatToDo, err := it.Interpret(line)
+		_, err = it.Interpret(line)
 		if err != nil {
+			if err == io.EOF {
+				break
+			}
 			fmt.Fprintln(os.Stderr, err)
-		}
-		if whatToDo == interpreter.SHUTDOWN {
-			break
 		}
 	}
 }

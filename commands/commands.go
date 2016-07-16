@@ -11,35 +11,30 @@ import (
 	"../history"
 )
 
-const (
-	THROUGH  = -1
-	SHUTDOWN = -2
-)
-
 var BuildInCommand map[string]func(*exec.Cmd) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func Exec(cmd *exec.Cmd) (int, error) {
+func Exec(cmd *exec.Cmd) (int, bool, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
-		return 0, err
+		return 0, true, err
 	}
 	function, ok := BuildInCommand[name]
 	if !ok {
 		m := unscoNamePattern.FindStringSubmatch(name)
 		if m == nil {
-			return -1, nil
+			return 0, false, nil
 		}
 		name = m[1]
 		function, ok = BuildInCommand[name]
 		if !ok {
-			return -1, nil
+			return 0, false, nil
 		}
 	}
 	cmd.Args = findfile.Globs(cmd.Args)
 	next, err := function(cmd)
-	return next, err
+	return next, true, err
 }
 
 func AllNames() []string {

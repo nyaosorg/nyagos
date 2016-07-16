@@ -39,33 +39,6 @@ func (this CommandNotFound) Error() string {
 	return this.Stringer()
 }
 
-type ErrorLevel int
-
-const (
-	NOERROR  ErrorLevel = 0
-	THROUGH  ErrorLevel = -1
-	SHUTDOWN ErrorLevel = -2
-)
-
-func (this ErrorLevel) HasValue() bool {
-	return this >= NOERROR
-}
-
-func (this ErrorLevel) HasError() bool {
-	return this > NOERROR
-}
-
-func (this ErrorLevel) String() string {
-	switch this {
-	case THROUGH:
-		return "THROUGH"
-	case SHUTDOWN:
-		return "SHUTDOWN"
-	default:
-		return fmt.Sprintf("%d", this)
-	}
-}
-
 type Interpreter struct {
 	exec.Cmd
 	Stdio        [3]*os.File
@@ -146,10 +119,10 @@ func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
 	return
 }
 
-type HookT func(*Interpreter) (ErrorLevel, error)
+type HookT func(*Interpreter) (int, bool, error)
 
-var hook = func(*Interpreter) (ErrorLevel, error) {
-	return THROUGH, nil
+var hook = func(*Interpreter) (int, bool, error) {
+	return 0, false, nil
 }
 
 func SetHook(hook_ HookT) (rv HookT) {
@@ -172,17 +145,17 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
-func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
+func (this *Interpreter) spawnvp_noerrmsg() (int, error) {
 	// command is empty.
 	if len(this.Args) <= 0 {
-		return NOERROR, nil
+		return 0, nil
 	}
 	if dbg {
 		print("spawnvp_noerrmsg('", this.Args[0], "')\n")
 	}
 
 	// aliases and lua-commands
-	if errorlevel, err := hook(this); errorlevel != THROUGH || err != nil {
+	if errorlevel, done, err := hook(this); done || err != nil {
 		return errorlevel, err
 	}
 
@@ -190,7 +163,7 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	var err error
 	this.Path, err = exec.LookPath(this.Args[0])
 	if err != nil {
-		return ErrorLevel(255), OnCommandNotFound(this, err)
+		return 255, OnCommandNotFound(this, err)
 	}
 
 	if WildCardExpansionAlways {
@@ -201,42 +174,42 @@ func (this *Interpreter) spawnvp_noerrmsg() (ErrorLevel, error) {
 	if FLAG_AMP2NEWCONSOLE {
 		if this.SysProcAttr != nil && (this.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
 			err = this.Start()
-			return ErrorLevel(0), err
+			return 0, err
 		}
 	}
 	err = this.Run()
 
 	errorlevel, errorlevelOk := dos.GetErrorLevel(&this.Cmd)
 	if errorlevelOk {
-		return ErrorLevel(errorlevel), err
+		return errorlevel, err
 	} else {
-		return ErrorLevel(255), err
+		return 255, err
 	}
 }
 
-func (this *Interpreter) Spawnvp() (ErrorLevel, error) {
+func (this *Interpreter) Spawnvp() (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg()
-	if err != nil {
+	if err != nil && err != io.EOF {
 		fmt.Fprintln(this.Stderr, err.Error())
 	}
 	return errorlevel, err
 }
 
 type result_t struct {
-	NextValue ErrorLevel
+	NextValue int
 	Error     error
 }
 
 var pipeSeq uint = 0
 
-func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err error) {
+func (this *Interpreter) Interpret(text string) (errorlevel int, err error) {
 	if dbg {
 		print("Interpret('", text, "')\n")
 	}
 	if this == nil {
-		return ErrorLevel(255), errors.New("Fatal Error: Interpret: instance is nil")
+		return 255, errors.New("Fatal Error: Interpret: instance is nil")
 	}
-	errorlevel = NOERROR
+	errorlevel = 0
 	err = nil
 
 	statements, statementsErr := Parse(text)
@@ -244,7 +217,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 		if dbg {
 			print("Parse Error:", statementsErr.Error(), "\n")
 		}
-		return NOERROR, statementsErr
+		return 0, statementsErr
 	}
 	if argsHook != nil {
 		if dbg {
@@ -254,7 +227,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			for _, state := range pipeline {
 				state.Args, err = argsHook(this, state.Args)
 				if err != nil {
-					return ErrorLevel(255), err
+					return 255, err
 				}
 			}
 		}
@@ -265,7 +238,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 	for _, pipeline := range statements {
 		for i, state := range pipeline {
 			if state.Term == "|" && (i+1 >= len(pipeline) || len(pipeline[i+1].Args) <= 0) {
-				return ErrorLevel(255), errors.New("The syntax of the command is incorrect.")
+				return 255, errors.New("The syntax of the command is incorrect.")
 			}
 		}
 	}
@@ -298,11 +271,9 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			cmd.OnClone = this.OnClone
 			if this.OnClone != nil {
 				if err := this.OnClone(cmd); err != nil {
-					return ErrorLevel(255), err
+					return 255, err
 				}
 			}
-
-			var err error = nil
 
 			if pipeIn != nil {
 				cmd.SetStdin(pipeIn)
@@ -324,7 +295,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 				var fd *os.File
 				fd, err = red.OpenOn(cmd)
 				if err != nil {
-					return NOERROR, err
+					return 0, err
 				}
 				defer fd.Close()
 			}
@@ -336,7 +307,7 @@ func (this *Interpreter) Interpret(text string) (errorlevel ErrorLevel, err erro
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				errorlevel, err = cmd.Spawnvp()
-				ErrorLevelStr = errorlevel.String()
+				ErrorLevelStr = fmt.Sprintf("%d", errorlevel)
 				cmd.Close()
 			} else {
 				if !isBackGround {

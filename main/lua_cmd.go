@@ -37,10 +37,10 @@ func (this *LuaBinaryChank) String() string {
 	return "(lua-function)"
 }
 
-func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.ErrorLevel, error) {
+func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (int, error) {
 	L, L_ok := cmd.Tag.(lua.Lua)
 	if !L_ok {
-		return interpreter.ErrorLevel(255), errors.New("LuaBinaryChank.Call: Lua instance not found")
+		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
 	}
 
 	if f := cmd.Stdio[1]; f != os.Stdout && f != os.Stderr {
@@ -48,7 +48,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.GetField(-1, "output") // +1 (get function pointer)
 		if err := L.PushFileWriter(f); err != nil {
 			L.Pop(2)
-			return interpreter.ErrorLevel(255), err
+			return 255, err
 		}
 		L.Call(1, 0)
 		L.Pop(1) // remove io-table
@@ -58,14 +58,14 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 		L.GetField(-1, "input") // +1 (get function pointer)
 		if err := L.PushFileReader(f); err != nil {
 			L.Pop(2)
-			return interpreter.ErrorLevel(255), err
+			return 255, err
 		}
 		L.Call(1, 0)
 		L.Pop(1) // remove io-table
 	}
 
 	if err := L.LoadBufferX(cmd.Args[0], this.Chank, "b"); err != nil {
-		return interpreter.ErrorLevel(255), err
+		return 255, err
 	}
 	L.NewTable()
 	for i, arg1 := range cmd.Args {
@@ -79,7 +79,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 	}
 	L.SetField(-2, "rawargs")
 	err := NyagosCallLua(L, cmd, 1, 1)
-	errorlevel := interpreter.NOERROR
+	errorlevel := 0
 	if err == nil {
 		newargs := make([]string, 0)
 		if L.IsTable(-1) {
@@ -105,18 +105,18 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (interpreter.Erro
 			}
 			it, err1 := cmd.Clone()
 			if err1 != nil {
-				errorlevel = interpreter.ErrorLevel(255)
+				errorlevel = 255
 				err = err1
 			} else {
 				it.Args = newargs
 				errorlevel, err = it.Spawnvp()
 			}
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
-			errorlevel = interpreter.ErrorLevel(val)
+			errorlevel = val
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
 			it, err1 := cmd.Clone()
 			if err1 != nil {
-				errorlevel = interpreter.ErrorLevel(255)
+				errorlevel = 255
 				err = err1
 			} else {
 				errorlevel, err = it.Interpret(val)
@@ -201,7 +201,7 @@ func cmdGetEnv(L lua.Lua) int {
 }
 
 func cmdExec(L lua.Lua) int {
-	errorlevel := interpreter.NOERROR
+	errorlevel := 0
 	var err error
 	if L.IsTable(1) {
 		L.Len(1)
