@@ -195,11 +195,6 @@ func (this *Interpreter) Spawnvp() (int, error) {
 	return errorlevel, err
 }
 
-type result_t struct {
-	NextValue int
-	Error     error
-}
-
 var pipeSeq uint = 0
 
 func (this *Interpreter) Interpret(text string) (errorlevel int, err error) {
