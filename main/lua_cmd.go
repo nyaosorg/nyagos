@@ -10,7 +10,9 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
+	"unicode"
 	"unsafe"
 
 	"github.com/mattn/go-colorable"
@@ -723,6 +725,25 @@ func cmdLinesCallback(L lua.Lua) int {
 
 	for _, mark := range userdata.Marks {
 		if err != nil {
+			break
+		}
+		if unicode.IsDigit(rune(mark[0])) {
+			var nbytes int
+			nbytes, err = strconv.Atoi(mark)
+			if err != nil {
+				break
+			}
+			line := make([]byte, nbytes)
+			var nreads int
+			nreads, err = userdata.Reader.Read(line)
+			if nreads > 0 {
+				if nreads < nbytes {
+					L.PushBytes(line[:nreads])
+				} else {
+					L.PushBytes(line)
+				}
+				count++
+			}
 			break
 		}
 		switch mark {
