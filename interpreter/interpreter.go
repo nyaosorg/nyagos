@@ -187,10 +187,24 @@ func (this *Interpreter) spawnvp_noerrmsg() (int, error) {
 	}
 }
 
+type AlreadyReportedError struct {
+	Err error
+}
+
+func (this AlreadyReportedError) Error() string {
+	return ""
+}
+
+func IsAlreadyReported(err error) bool {
+	_, ok := err.(AlreadyReportedError)
+	return ok
+}
+
 func (this *Interpreter) Spawnvp() (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg()
-	if err != nil && err != io.EOF {
+	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		fmt.Fprintln(this.Stderr, err.Error())
+		err = AlreadyReportedError{err}
 	}
 	return errorlevel, err
 }
