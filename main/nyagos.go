@@ -258,7 +258,13 @@ func main() {
 			if err == io.EOF {
 				break
 			}
-			fmt.Fprintln(os.Stderr, err)
+			if err1, ok := err.(interpreter.AlreadyReportedError); ok {
+				if err1.Err == io.EOF {
+					break
+				}
+			} else {
+				fmt.Fprintln(os.Stderr, err)
+			}
 		}
 	}
 }
