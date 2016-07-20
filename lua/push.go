@@ -34,24 +34,27 @@ func (this Lua) PushInteger(value Integer) {
 var lua_pushlstring = luaDLL.NewProc("lua_pushlstring")
 
 func (this Lua) PushBytes(data []byte) {
-	if data != nil && len(data) > 0 {
+	if data != nil {
 		lua_pushlstring.Call(this.State(),
 			uintptr(unsafe.Pointer(&data[0])),
 			uintptr(len(data)))
 	} else {
-		this.PushString("")
+		zerobyte := []byte{'\000'}
+		lua_pushlstring.Call(this.State(),
+			uintptr(unsafe.Pointer(&zerobyte[0])),
+			0)
 	}
 }
 
 var lua_pushstring = luaDLL.NewProc("lua_pushstring")
 
-func (this Lua) PushString(str string) error {
-	cstr, err := syscall.BytePtrFromString(str)
-	if err != nil {
-		return fmt.Errorf("lua.Lua.PushString: syscall.ButePtrFromString: %s", err.Error())
-	}
-	lua_pushstring.Call(this.State(), uintptr(unsafe.Pointer(cstr)))
-	return nil
+func (this Lua) PushString(str string) {
+	// BytePtrFromString can not use the string which contains NUL
+	array := make([]byte, len(str)+1)
+	copy(array, str)
+	lua_pushlstring.Call(this.State(),
+		uintptr(unsafe.Pointer(&array[0])),
+		uintptr(len(str)))
 }
 
 var lua_pushlightuserdata = luaDLL.NewProc("lua_pushlightuserdata")

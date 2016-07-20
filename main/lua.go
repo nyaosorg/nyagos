@@ -53,9 +53,7 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 	}
 	L.NewTable()
 	for i := 0; i < len(args); i++ {
-		if err := L.PushString(args[i]); err != nil {
-			return nil, err
-		}
+		L.PushString(args[i])
 		L.RawSetI(-2, lua.Integer(i))
 	}
 	if err := L.Call(1, 1); err != nil {
