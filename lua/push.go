@@ -45,12 +45,13 @@ func (this Lua) PushBytes(data []byte) {
 
 var lua_pushstring = luaDLL.NewProc("lua_pushstring")
 
-func (this Lua) PushString(str string) {
+func (this Lua) PushString(str string) error {
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
-		panic(err.Error())
+		return fmt.Errorf("lua.Lua.PushString: syscall.ButePtrFromString: %s", err.Error())
 	}
 	lua_pushstring.Call(this.State(), uintptr(unsafe.Pointer(cstr)))
+	return nil
 }
 
 var lua_pushlightuserdata = luaDLL.NewProc("lua_pushlightuserdata")
