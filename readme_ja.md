@@ -82,6 +82,7 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
 * [3bch](https://github.com/3bch)
 * [AoiMoe](https://github.com/aoimoe)
 * [DeaR](https://github.com/DeaR)
+* [gracix](https://github.com/gracix)
 
 開発者
 ------
