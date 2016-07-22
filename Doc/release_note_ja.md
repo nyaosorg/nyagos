@@ -1,5 +1,9 @@
 * カレントディレクトリのヒストリがゼロの時に peco がハングしないように、`cd --history` の先頭にカレントディレクトリを出力するようにした。
 * Luaで `nyagos.option.glob = true` とすると、外部コマンドでもワイルドカード展開するようにした。(#150)
+* source の互換性改善を試みた
+* nyagos.lines(FILENAME,X) の X='a','l','L',数値のサポート(#147)
+* Fix #156: %U+0000% でパニックが発生する
+* Fix #152: 「ls -ld Downloads\」の結果が「Downloads\/」となる
 
 NYAGOS 4.1.4\_1
 ===============
