@@ -155,11 +155,16 @@ func (session *LineEditor) ReadLine() (string, error) {
 	}
 	saveOnWindowResize := getch.OnWindowResize
 	getch.OnWindowResize = func(w, h uint) {
+		if saveOnWindowResize != nil {
+			saveOnWindowResize(w, h)
+		}
 		this.ViewWidth = int(w) - 2
 		fmt.Fprint(stdOut, "\n")
 		stdOut.Flush()
+		shineCursor()
 		this.RepaintAll()
 		stdOut.Flush()
+		shineCursor()
 	}
 	defer func() { getch.OnWindowResize = saveOnWindowResize }()
 
