@@ -5,6 +5,8 @@ m hangup with no cd histories.
 * Support nyagos.lines(FILENAME,X) X='a','l','L',Number for #147
 * Fix #156: %U+0000% causes panic
 * Fix #152 ls -ld Downloads\ -> Downloads\/ printed.
+* Fix #157 Reset the readline-width on the console window resized.
+* Moved some packages to the other repositories.
 
 NYAGOS 4.1.4\_1
 ===============
