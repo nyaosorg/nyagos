@@ -62,6 +62,7 @@ type Buffer struct {
 	ShiftState uint32
 	ViewStart  int
 	ViewWidth  int
+	TopColumn  int
 	Session    *LineEditor
 }
 
@@ -106,6 +107,18 @@ func (this *Buffer) InsertAndRepaint(str string) {
 	this.ReplaceAndRepaint(this.Cursor, str)
 }
 
+func (this *Buffer) ResetViewStart(w int) int {
+	this.ViewStart = 0
+	for i := 0; i < this.Cursor; i++ {
+		w += GetCharWidth(this.Buffer[i])
+		for w >= this.ViewWidth {
+			w -= GetCharWidth(this.Buffer[this.ViewStart])
+			this.ViewStart++
+		}
+	}
+	return w
+}
+
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
 	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
@@ -115,15 +128,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 
 	// Define ViewStart , Cursor
 	this.Cursor = pos + this.InsertString(pos, str)
-	this.ViewStart = 0
-	w := 0
-	for i := 0; i < this.Cursor; i++ {
-		w += GetCharWidth(this.Buffer[i])
-		for w >= this.ViewWidth {
-			w -= GetCharWidth(this.Buffer[this.ViewStart])
-			this.ViewStart++
-		}
-	}
+	w := this.ResetViewStart(this.TopColumn)
 
 	// Repaint
 	w = 0
@@ -186,7 +191,8 @@ func (this *Buffer) Repaint(pos int, del int) {
 }
 
 func (this *Buffer) RepaintAll() {
-	this.Session.Prompt(this.Session)
+	this.TopColumn, _ = this.Session.Prompt(this.Session)
+	this.ResetViewStart(this.TopColumn)
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRune(this.Buffer[i])
 	}

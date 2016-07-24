@@ -2,7 +2,6 @@ package readline
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	. "../conio"
@@ -141,18 +140,28 @@ func (session *LineEditor) ReadLine() (string, error) {
 	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
 	this.ViewWidth--
 
-	width1, err1 := session.Prompt(session)
+	var err1 error
+	this.TopColumn, err1 = session.Prompt(session)
 	if err1 != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(os.Stderr, "%s\n$ ", err1.Error())
+		fmt.Fprintf(stdOut, "%s\n$ ", err1.Error())
 		this.ViewWidth = this.ViewWidth - 2
-	} else if width1 >= this.ViewWidth-3 {
+	} else if this.TopColumn >= this.ViewWidth-3 {
 		// ViewWidth is too narrow to edit.
-		fmt.Fprint(os.Stderr, "\n")
-		this.ViewWidth = width1
+		fmt.Fprint(stdOut, "\n")
+		this.ViewWidth = this.TopColumn
 	} else {
-		this.ViewWidth = this.ViewWidth - width1
+		this.ViewWidth = this.ViewWidth - this.TopColumn
 	}
+	saveOnWindowResize := getch.OnWindowResize
+	getch.OnWindowResize = func(w, h uint) {
+		this.ViewWidth = int(w) - 2
+		fmt.Fprint(stdOut, "\n")
+		stdOut.Flush()
+		this.RepaintAll()
+		stdOut.Flush()
+	}
+	defer func() { getch.OnWindowResize = saveOnWindowResize }()
 
 	for {
 		stdOut.Flush()
