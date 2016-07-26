@@ -46,7 +46,7 @@ goto build
         goto end
 
 :const
-        for %%I in (conio dos lua) do pushd %%I & gcc makeconst\makeconst.c & a > const.go & go fmt const.go & del a.exe & popd
+        for /F %%I in ('dir /b /s makeconst.cmd') do pushd %%~dpI & call %%I & popd
         goto end
 
 :package
