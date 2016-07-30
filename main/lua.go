@@ -236,10 +236,10 @@ func NewNyagosLua() lua.Lua {
 	this := lua.New()
 	this.OpenLibs()
 
-	this.Push(lua.NewVirtualTable(getNyagosTable, setNyagosTable))
+	this.Push(lua.NewVirtualTable("nyagos", getNyagosTable, setNyagosTable))
 	this.SetGlobal("nyagos")
 
-	this.Push(lua.NewVirtualTable(getShareTable, setShareTable))
+	this.Push(lua.NewVirtualTable("share", getShareTable, setShareTable))
 	this.SetGlobal("share")
 
 	if !hook_setuped {
@@ -257,7 +257,7 @@ var silentmode = false
 func init() {
 	nyagos_table_member = map[string]lua.Pushable{
 		"access":               &lua.TGoFunction{cmdAccess},
-		"alias":                lua.NewVirtualTable(cmdGetAlias, cmdSetAlias),
+		"alias":                lua.NewVirtualTable("nyagos.alias", cmdGetAlias, cmdSetAlias),
 		"antihistquot":         lua.StringProperty{&history.DisableMarks},
 		"argsfilter":           lua.Property{&luaArgsFilter},
 		"atou":                 &lua.TGoFunction{cmdAtoU},
@@ -268,7 +268,7 @@ func init() {
 		"completion_hook":      lua.Property{&completion.Hook},
 		"create_object":        &lua.TGoFunction{ole.CreateObject},
 		"default_prompt":       &lua.TGoFunction{nyagosPrompt},
-		"env":                  lua.NewVirtualTable(cmdGetEnv, cmdSetEnv),
+		"env":                  lua.NewVirtualTable("nyagos.env", cmdGetEnv, cmdSetEnv),
 		"eval":                 &lua.TGoFunction{cmdEval},
 		"exec":                 &lua.TGoFunction{cmdExec},
 		"filter":               lua.Property{&luaFilter},
@@ -287,7 +287,7 @@ func init() {
 		"netdrivetounc":        &lua.TGoFunction{cmdNetDriveToUNC},
 		"on_command_not_found": lua.Property{&luaOnCommandNotFound},
 		"open":                 &lua.TGoFunction{cmdOpenFile},
-		"option":               lua.NewVirtualTable(getOption, setOption),
+		"option":               lua.NewVirtualTable("nyagos.option", getOption, setOption),
 		"pathjoin":             &lua.TGoFunction{cmdPathJoin},
 		"prompt":               lua.Property{&prompt_hook},
 		"quotation":            lua.StringProperty{&readline.Delimiters},

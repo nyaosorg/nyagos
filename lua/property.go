@@ -46,12 +46,17 @@ func (this BoolProperty) Set(L Lua, index int) error {
 }
 
 type MetaOnlyTableT struct {
+	Name  string
 	Table TTable
 }
 
 func (this MetaOnlyTableT) Push(L Lua) int {
-	L.NewTable()
-	L.NewTable()
+	L.NewUserData(0)
+	if this.Name == "" {
+		L.NewTable()
+	} else {
+		L.NewMetaTable(this.Name)
+	}
 	for key, val := range this.Table.Dict {
 		L.Push(val)
 		L.SetField(-2, key)
@@ -60,9 +65,10 @@ func (this MetaOnlyTableT) Push(L Lua) int {
 	return 1
 }
 
-func NewVirtualTable(getter func(Lua) int, setter func(Lua) int) Pushable {
+func NewVirtualTable(name string, getter func(Lua) int, setter func(Lua) int) Pushable {
 	return &MetaOnlyTableT{
-		TTable{
+		Name: name,
+		Table: TTable{
 			Dict: map[string]Pushable{
 				"__index":    &TGoFunction{getter},
 				"__newindex": &TGoFunction{setter},
