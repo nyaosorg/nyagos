@@ -9,8 +9,10 @@ func (this Property) Push(L Lua) int {
 }
 
 func (this Property) Set(L Lua, index int) error {
-	var err error
-	*this.Pointer, err = L.ToPushable(index)
+	value, err := L.ToPushable(index)
+	if err == nil {
+		*this.Pointer = value
+	}
 	return err
 }
 
