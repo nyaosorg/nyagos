@@ -5,6 +5,8 @@ import (
 	"unsafe"
 )
 
+var ClosureIsNotAvaliable = errors.New("Can't assign a closure")
+
 var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
 
 func (this Lua) ToInteger(index int) (int, error) {
@@ -248,6 +250,12 @@ func (this Lua) ToPushable(index int) (Pushable, error) {
 			result = TCFunction(p)
 		} else {
 			// LuaFunction
+			upvalues := this.GetUpValues(index)
+			for _, u := range upvalues {
+				if u.Name != "_ENV" {
+					return nil, ClosureIsNotAvaliable
+				}
+			}
 			this.PushValue(index)
 			result = TLuaFunction(this.Dump())
 			this.Pop(1)

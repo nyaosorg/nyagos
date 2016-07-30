@@ -145,8 +145,11 @@ func setOption(L lua.Lua) int {
 		print(key, " not found\n")
 		return L.Push(nil)
 	}
-	opt.Set(L, 3)
-	return L.Push(true)
+	if err := opt.Set(L, 3); err != nil {
+		return L.Push(nil, err.Error())
+	} else {
+		return L.Push(true)
+	}
 }
 
 var nyagos_table_member map[string]lua.Pushable
@@ -184,6 +187,7 @@ func setNyagosTable(L lua.Lua) int {
 	if current_value, exists := nyagos_table_member[index]; exists {
 		if property, castOk := current_value.(IProperty); castOk {
 			if err := property.Set(L, 3); err != nil {
+				fmt.Fprintf(os.Stderr, "nyagos.%s: %s\n", index, err.Error())
 				return L.Push(nil, err)
 			} else {
 				return L.Push(true)
