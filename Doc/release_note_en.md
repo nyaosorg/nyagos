@@ -1,3 +1,5 @@
+NYAGOS 4.1.5\_0
+===============
 * `cd --history` outputs the current directory at first to prevent peco(M-h) fro
 m hangup with no cd histories.
 * On lua, `nyagos.option.glob = true` enables the wildcard expansion on external commands also.(#150)
