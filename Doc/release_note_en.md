@@ -1,3 +1,5 @@
+* Error when it the upvalue named as 'prompter' is used on closures(nyagos.prompt) for invalid ~/.nyagos of 4.0.x on default for #155,#158
+
 NYAGOS 4.1.5\_0
 ===============
 * `cd --history` outputs the current directory at first to prevent peco(M-h) fro
