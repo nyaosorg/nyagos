@@ -42,7 +42,7 @@ goto build
         goto end
 
 :get
-        powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ $_.Split()[-1] } | ?{ $_ -match 'github.com/' } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
+        powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ ($_ -replace '\s*//.*$','').Split()[-1] } | ?{ $_ -match 'github.com/' } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
         goto end
 
 :const
