@@ -23,7 +23,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 		drawWidth := 0
 		for _, ch := range drawStr {
 			w1 := GetCharWidth(ch)
-			if drawWidth+w1 >= this.ViewWidth {
+			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
 			PutRune(ch)
@@ -74,7 +74,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 					break
 				}
 				w1 := GetCharWidth(this.Buffer[i])
-				if w+w1 >= this.ViewWidth {
+				if w+w1 >= this.ViewWidth() {
 					break
 				}
 				PutRune(this.Buffer[i])

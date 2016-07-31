@@ -50,7 +50,7 @@ func KeyFuncBackword(this *Buffer) Result { // Ctrl-B
 
 func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, this.Length)
-	if allength < this.ViewWidth {
+	if allength < this.ViewWidth() {
 		for ; this.Cursor < this.Length; this.Cursor++ {
 			PutRune(this.Buffer[this.Cursor])
 		}
@@ -64,7 +64,7 @@ func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 				break
 			}
 			w_ := w + GetCharWidth(this.Buffer[this.ViewStart-1])
-			if w_ >= this.ViewWidth {
+			if w_ >= this.ViewWidth() {
 				break
 			}
 			w = w_
@@ -82,7 +82,7 @@ func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
-	if w < this.ViewWidth {
+	if w < this.ViewWidth() {
 		// No Scroll
 		PutRune(this.Buffer[this.Cursor])
 	} else {
@@ -139,7 +139,7 @@ func KeyFuncInsertSelf(this *Buffer) Result {
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	w1 := GetCharWidth(ch)
-	if w+w1 >= this.ViewWidth {
+	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		Backspace(w)
 		this.Cursor++
@@ -172,7 +172,7 @@ func KeyFuncClearAfter(this *Buffer) Result {
 	}
 	clipboard.WriteAll(killbuf.String())
 
-	for i < this.Length && w < this.ViewWidth {
+	for i < this.Length && w < this.ViewWidth() {
 		w1 := GetCharWidth(this.Buffer[i])
 		PutRunes(' ', w1)
 		i++
@@ -187,8 +187,8 @@ func KeyFuncClearAfter(this *Buffer) Result {
 func KeyFuncClear(this *Buffer) Result {
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	Backspace(width)
-	PutRunes(' ', this.ViewWidth)
-	Backspace(this.ViewWidth)
+	PutRunes(' ', this.ViewWidth())
+	Backspace(this.ViewWidth())
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -278,7 +278,7 @@ func KeyFuncSwapChar(this *Buffer) Result {
 
 		w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
-		if w >= this.ViewWidth {
+		if w >= this.ViewWidth() {
 			// cursor move right and scroll
 			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
 			Backspace(w_1)

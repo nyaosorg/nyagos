@@ -150,7 +150,6 @@ func (session *LineEditor) ReadLine() (string, error) {
 		fmt.Fprint(stdOut, "\n")
 		this.TopColumn = 0
 	}
-	this.ViewWidth = this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
 	saveOnWindowResize := getch.OnWindowResize
 	getch.OnWindowResize = func(w, h uint) {
 		if this.TermWidth == int(w) {

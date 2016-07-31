@@ -64,10 +64,13 @@ type Buffer struct {
 	Keycode    uint16
 	ShiftState uint32
 	ViewStart  int
-	ViewWidth  int // not includes TopColumn
 	TermWidth  int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
 	TopColumn  int // == width of Prompt
 	Session    *LineEditor
+}
+
+func (this *Buffer) ViewWidth() int {
+	return this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
 }
 
 func (this *Buffer) Insert(pos int, c []rune) {
@@ -116,7 +119,7 @@ func (this *Buffer) ResetViewStart() {
 	w := 0
 	for i := 0; i <= this.Cursor; i++ {
 		w += GetCharWidth(this.Buffer[i])
-		for w >= this.ViewWidth {
+		for w >= this.ViewWidth() {
 			w -= GetCharWidth(this.Buffer[this.ViewStart])
 			this.ViewStart++
 		}
@@ -143,14 +146,14 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	bs := 0
 	for i := this.Cursor; i < this.Length; i++ {
 		w1 := GetCharWidth(this.Buffer[i])
-		if w+w1 >= this.ViewWidth {
+		if w+w1 >= this.ViewWidth() {
 			break
 		}
 		PutRune(this.Buffer[i])
 		w += w1
 		bs += w1
 	}
-	for w+1 < this.ViewWidth {
+	for w+1 < this.ViewWidth() {
 		PutRune(' ')
 		bs++
 		w++
@@ -174,7 +177,7 @@ func (this *Buffer) Repaint(pos int, del int) {
 
 	for i := pos; i < this.Length; i++ {
 		w1 := GetCharWidth(this.Buffer[i])
-		if vp+w1 >= this.ViewWidth {
+		if vp+w1 >= this.ViewWidth() {
 			break
 		}
 		PutRune(this.Buffer[i])
@@ -182,7 +185,7 @@ func (this *Buffer) Repaint(pos int, del int) {
 		bs += w1
 	}
 	if del > 0 {
-		for i := 0; vp+1 < this.ViewWidth && i < del; i++ {
+		for i := 0; vp+1 < this.ViewWidth() && i < del; i++ {
 			PutRune(' ')
 			vp++
 			bs++
@@ -196,7 +199,6 @@ func (this *Buffer) Repaint(pos int, del int) {
 
 func (this *Buffer) RepaintAll() {
 	this.TopColumn, _ = this.Session.Prompt(this.Session)
-	this.ViewWidth = this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
 	this.ResetViewStart()
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRune(this.Buffer[i])
