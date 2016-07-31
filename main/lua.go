@@ -228,6 +228,7 @@ func setShareTable(L lua.Lua) int {
 	}
 	value, valErr := L.ToPushable(-1)
 	if valErr != nil {
+		fmt.Fprintf(os.Stderr, "%s: %s\n", key, valErr.Error())
 		return L.Push(nil, valErr)
 	}
 	share_table[key] = value
