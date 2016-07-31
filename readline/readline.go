@@ -159,10 +159,10 @@ func (session *LineEditor) ReadLine() (string, error) {
 			saveOnWindowResize(w, h)
 		}
 		this.TermWidth = int(w)
-		fmt.Fprint(stdOut, "\n")
+		fmt.Fprintf(stdOut, "\x1B[%dG", this.TopColumn+1)
 		stdOut.Flush()
 		shineCursor()
-		this.RepaintAll()
+		this.RepaintAfterPrompt()
 		stdOut.Flush()
 		shineCursor()
 	}

@@ -8,7 +8,7 @@ import (
 	"unicode"
 
 	. "../conio"
-	"github.com/mattn/go-colorable"
+	"github.com/zetamatta/go-colorable" // "github.com/mattn/go-colorable"
 )
 
 var stdOut = bufio.NewWriter(colorable.NewColorableStdout())
@@ -197,13 +197,17 @@ func (this *Buffer) Repaint(pos int, del int) {
 	}
 }
 
-func (this *Buffer) RepaintAll() {
-	this.TopColumn, _ = this.Session.Prompt(this.Session)
+func (this *Buffer) RepaintAfterPrompt() {
 	this.ResetViewStart()
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRune(this.Buffer[i])
 	}
 	this.Repaint(this.Cursor, 0)
+}
+
+func (this *Buffer) RepaintAll() {
+	this.TopColumn, _ = this.Session.Prompt(this.Session)
+	this.RepaintAfterPrompt()
 }
 
 func (this Buffer) String() string {
