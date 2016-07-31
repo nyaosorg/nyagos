@@ -3,14 +3,15 @@ package readline
 import (
 	"bufio"
 	"bytes"
-	"os"
+	"fmt"
 	"strings"
 	"unicode"
 
 	. "../conio"
+	"github.com/mattn/go-colorable"
 )
 
-var stdOut *bufio.Writer = bufio.NewWriter(os.Stdout)
+var stdOut = bufio.NewWriter(colorable.NewColorableStdout())
 
 var hasCache = map[rune]bool{}
 
@@ -41,10 +42,10 @@ func PutRunes(ch rune, n int) {
 }
 
 func Backspace(n int) {
-	if n > 0 {
-		stdOut.Flush()
-		x, y := GetLocate()
-		Locate(x-n, y)
+	if n > 1 {
+		fmt.Fprintf(stdOut, "\x1B[%dC", n)
+	} else if n == 1 {
+		fmt.Fprint(stdOut, "\b")
 	}
 }
 
