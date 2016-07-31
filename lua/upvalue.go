@@ -17,6 +17,7 @@ func (this Lua) GetUpValue_(funcindex, n int) uintptr {
 type UpValue struct {
 	Name  string
 	Index int
+	Type  int
 	Value Pushable
 }
 
@@ -37,7 +38,8 @@ func (this Lua) GetUpValues(funcindex int) []UpValue {
 			break
 		}
 		var value1 Pushable
-		switch this.GetType(-1) {
+		typeN := this.GetType(-1)
+		switch typeN {
 		case LUA_TSTRING:
 			str, _ := this.ToString(-1)
 			value1 = TString{str}
@@ -51,7 +53,7 @@ func (this Lua) GetUpValues(funcindex int) []UpValue {
 				value1 = new(TNil)
 			}
 		}
-		values = append(values, UpValue{Name: name, Index: i, Value: value1})
+		values = append(values, UpValue{Type: typeN, Name: name, Index: i, Value: value1})
 		this.Pop(1)
 	}
 	return values

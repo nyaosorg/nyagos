@@ -5,6 +5,8 @@ import (
 	"unsafe"
 )
 
+const dbg = false
+
 var ClosureIsNotAvaliable = errors.New("Can't assign a closure")
 
 var lua_tointegerx = luaDLL.NewProc("lua_tointegerx")
@@ -149,15 +151,21 @@ func (this *MetaTableOwner) Push(L Lua) int {
 	this.Body.Push(L)
 	if nameObj, nameObj_ok := this.Meta.Dict["__name"]; nameObj_ok {
 		if name, name_ok := nameObj.(*TRawString); name_ok {
-			print("found meta-name: ", string(name.Value), "\n")
+			if dbg {
+				print("found meta-name: ", string(name.Value), "\n")
+			}
 			L.NewMetaTable(string(name.Value))
 			this.Meta.PushWithoutNewTable(L)
 		} else {
-			print("found meta-name, but could not cast\n")
+			if dbg {
+				print("found meta-name, but could not cast\n")
+			}
 			this.Meta.Push(L)
 		}
 	} else {
-		print("not meta table\n")
+		if dbg {
+			print("not meta table\n")
+		}
 		this.Meta.Push(L)
 	}
 	L.SetMetaTable(-2)
@@ -237,6 +245,8 @@ func (this TNil) Push(L Lua) int {
 	return 1
 }
 
+var NG_UPVALUE_NAME = map[string]bool{}
+
 func (this Lua) ToPushable(index int) (Pushable, error) {
 	seek_metatable := false
 	var err error = nil
@@ -252,7 +262,10 @@ func (this Lua) ToPushable(index int) (Pushable, error) {
 			// LuaFunction
 			upvalues := this.GetUpValues(index)
 			for _, u := range upvalues {
-				if u.Name != "_ENV" {
+				if _, ok := NG_UPVALUE_NAME[u.Name]; ok {
+					if dbg {
+						print(u.Name, ":", this.TypeName(u.Type), "\n")
+					}
 					return nil, ClosureIsNotAvaliable
 				}
 			}

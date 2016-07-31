@@ -131,6 +131,9 @@ var optionE = flag.String("e", "", "run inline-lua-code")
 func main() {
 	defer when_panic()
 
+	// for issue #155 & #158
+	lua.NG_UPVALUE_NAME["prompter"] = true
+
 	flag.Parse()
 
 	interpreter.SetHook(func(it *interpreter.Interpreter) (int, bool, error) {
