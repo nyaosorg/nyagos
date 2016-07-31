@@ -137,28 +137,29 @@ func (session *LineEditor) ReadLine() (string, error) {
 		Buffer:  make([]rune, 20),
 		Session: session,
 	}
-	this.ViewWidth, _ = GetScreenBufferInfo().ViewSize()
-	this.ViewWidth--
+	this.TermWidth, _ = GetScreenBufferInfo().ViewSize()
 
 	var err1 error
 	this.TopColumn, err1 = session.Prompt(session)
 	if err1 != nil {
 		// unable to get prompt-string.
 		fmt.Fprintf(stdOut, "%s\n$ ", err1.Error())
-		this.ViewWidth = this.ViewWidth - 2
-	} else if this.TopColumn >= this.ViewWidth-3 {
+		this.TopColumn = 2
+	} else if this.TopColumn >= this.TermWidth-3 {
 		// ViewWidth is too narrow to edit.
 		fmt.Fprint(stdOut, "\n")
-		this.ViewWidth = this.TopColumn
-	} else {
-		this.ViewWidth = this.ViewWidth - this.TopColumn
+		this.TopColumn = 0
 	}
+	this.ViewWidth = this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
 	saveOnWindowResize := getch.OnWindowResize
 	getch.OnWindowResize = func(w, h uint) {
+		if this.TermWidth == int(w) {
+			return
+		}
 		if saveOnWindowResize != nil {
 			saveOnWindowResize(w, h)
 		}
-		this.ViewWidth = int(w) - 2
+		this.TermWidth = int(w)
 		fmt.Fprint(stdOut, "\n")
 		stdOut.Flush()
 		shineCursor()

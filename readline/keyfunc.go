@@ -142,19 +142,17 @@ func KeyFuncInsertSelf(this *Buffer) Result {
 	if w+w1 >= this.ViewWidth {
 		// scroll left
 		Backspace(w)
-		if GetCharWidth(this.Buffer[this.ViewStart]) < w1 {
-			this.ViewStart++
-		}
-		this.ViewStart++
-		for i := this.ViewStart; i <= this.Cursor; i++ {
+		this.Cursor++
+		this.ResetViewStart()
+		for i := this.ViewStart; i < this.Cursor; i++ {
 			PutRune(this.Buffer[i])
 		}
 		PutRune(' ')
 		Backspace(1)
 	} else {
 		this.Repaint(this.Cursor, -w1)
+		this.Cursor++
 	}
-	this.Cursor++
 	return CONTINUE
 }
 
