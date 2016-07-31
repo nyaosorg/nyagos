@@ -1,3 +1,5 @@
+NYAGOS 4.1.5\_1
+===============
 * Fix #157++: Overflow line on the text appended after screen resized.
 * Error when it the upvalue named as 'prompter' is used on closures(nyagos.prompt) for invalid ~/.nyagos of 4.0.x on default for #155,#158
 
