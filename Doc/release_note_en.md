@@ -1,3 +1,7 @@
+* Use "\x1B[K" as ERASELINE instead of " " & Backspace
+* Use "\x1BmC as m-times of Backspace
+* Fix #159: Stop to print prompt again when terminal window resized
+
 NYAGOS 4.1.5\_1
 ===============
 * Fix #157++: Overflow line on the text appended after screen resized.
