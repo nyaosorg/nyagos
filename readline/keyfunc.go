@@ -95,8 +95,7 @@ func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 		for i := this.ViewStart; i <= this.Cursor; i++ {
 			PutRune(this.Buffer[i])
 		}
-		PutRune(' ')
-		Backspace(1)
+		Eraseline()
 	}
 	this.Cursor++
 	return CONTINUE
@@ -147,8 +146,7 @@ func KeyFuncInsertSelf(this *Buffer) Result {
 		for i := this.ViewStart; i < this.Cursor; i++ {
 			PutRune(this.Buffer[i])
 		}
-		PutRune(' ')
-		Backspace(1)
+		Eraseline()
 	} else {
 		this.Repaint(this.Cursor, -w1)
 		this.Cursor++
@@ -162,24 +160,13 @@ func KeyFuncInsertReport(this *Buffer) Result {
 }
 
 func KeyFuncClearAfter(this *Buffer) Result {
-	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	i := this.Cursor
-	bs := 0
-
 	var killbuf bytes.Buffer
 	for j := this.Cursor; j < this.Length; j++ {
 		killbuf.WriteRune(this.Buffer[j])
 	}
 	clipboard.WriteAll(killbuf.String())
 
-	for i < this.Length && w < this.ViewWidth() {
-		w1 := GetCharWidth(this.Buffer[i])
-		PutRunes(' ', w1)
-		i++
-		w += w1
-		bs += w1
-	}
-	Backspace(bs)
+	Eraseline()
 	this.Length = this.Cursor
 	return CONTINUE
 }
@@ -187,8 +174,7 @@ func KeyFuncClearAfter(this *Buffer) Result {
 func KeyFuncClear(this *Buffer) Result {
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	Backspace(width)
-	PutRunes(' ', this.ViewWidth())
-	Backspace(this.ViewWidth())
+	Eraseline()
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0

@@ -49,6 +49,9 @@ func Backspace(n int) {
 	}
 }
 
+func Eraseline() {
+	fmt.Fprint(stdOut, "\x1B[0K")
+}
 func shineCursor() {
 	x, y := GetLocate()
 	Locate(x, y)
@@ -153,11 +156,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		w += w1
 		bs += w1
 	}
-	for w+1 < this.ViewWidth() {
-		PutRune(' ')
-		bs++
-		w++
-	}
+	Eraseline()
 	if bs > 0 {
 		Backspace(bs)
 	}
@@ -184,12 +183,8 @@ func (this *Buffer) Repaint(pos int, del int) {
 		vp += w1
 		bs += w1
 	}
+	Eraseline()
 	if del > 0 {
-		for i := 0; vp+1 < this.ViewWidth() && i < del; i++ {
-			PutRune(' ')
-			vp++
-			bs++
-		}
 		Backspace(bs)
 	} else {
 		// for readline_keyfunc.go: KeyFuncInsertSelf()
