@@ -8,7 +8,7 @@ import (
 	"unicode"
 
 	. "../conio"
-	"github.com/zetamatta/go-colorable" // "github.com/mattn/go-colorable"
+	"github.com/mattn/go-colorable"
 )
 
 var stdOut = bufio.NewWriter(colorable.NewColorableStdout())
