@@ -36,7 +36,7 @@ func ShellExecute(action string, path string, param string, directory string) er
 	if directoryErr != nil {
 		return directoryErr
 	}
-	status, _, _ := shellExecute.Call(
+	status, _, err := shellExecute.Call(
 		uintptr(0),
 		uintptr(unsafe.Pointer(actionP)),
 		uintptr(unsafe.Pointer(pathP)),
@@ -45,7 +45,9 @@ func ShellExecute(action string, path string, param string, directory string) er
 		SW_SHOWNORMAL)
 
 	if status <= 32 {
-		if err := syscall.GetLastError(); err != nil {
+		if err != nil {
+			return err
+		} else if err = syscall.GetLastError(); err != nil {
 			return err
 		} else {
 			return fmt.Errorf("Error(%d) in ShellExecuteW()", status)
