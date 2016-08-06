@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"reflect"
 	"sync"
 	"syscall"
 
@@ -203,6 +204,10 @@ func IsAlreadyReported(err error) bool {
 func (this *Interpreter) Spawnvp() (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg()
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
+		if dbg {
+			val := reflect.ValueOf(err)
+			fmt.Fprintf(this.Stderr, "error-type=%s\n", val.Type())
+		}
 		fmt.Fprintln(this.Stderr, err.Error())
 		err = AlreadyReportedError{err}
 	}
