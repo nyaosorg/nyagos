@@ -98,7 +98,7 @@ func (this *Interpreter) Clone() (*Interpreter, error) {
 	rv.Stderr = this.Stderr
 	rv.HookCount = this.HookCount
 	rv.Tag = this.Tag
-	rv.PipeSeq = rv.PipeSeq
+	rv.PipeSeq = this.PipeSeq
 	rv.Closers = nil
 	rv.OnClone = this.OnClone
 	if this.OnClone != nil {
