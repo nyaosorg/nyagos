@@ -158,14 +158,14 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 		lua.TTable{
 			Dict: map[string]lua.Pushable{
 				"pos":         lua.Integer(pos),
-				"text":        lua.TString{text.String()},
-				"buffer":      lua.TLightUserData{unsafe.Pointer(buffer)},
-				"call":        lua.TGoFunction{callKeyFunc},
-				"insert":      lua.TGoFunction{callInsert},
-				"replacefrom": lua.TGoFunction{callReplace},
-				"lastword":    lua.TGoFunction{callLastWord},
-				"firstword":   lua.TGoFunction{callFirstWord},
-				"boxprint":    lua.TGoFunction{callBoxListing},
+				"text":        lua.TString(text.String()),
+				"buffer":      lua.TLightUserData{Data: unsafe.Pointer(buffer)},
+				"call":        lua.TGoFunction(callKeyFunc),
+				"insert":      lua.TGoFunction(callInsert),
+				"replacefrom": lua.TGoFunction(callReplace),
+				"lastword":    lua.TGoFunction(callLastWord),
+				"firstword":   lua.TGoFunction(callFirstWord),
+				"boxprint":    lua.TGoFunction(callBoxListing),
 			},
 			Array: map[int]lua.Pushable{},
 		})

@@ -42,7 +42,7 @@ func (this Lua) GetUpValues(funcindex int) []UpValue {
 		switch typeN {
 		case LUA_TSTRING:
 			str, _ := this.ToString(-1)
-			value1 = TString{str}
+			value1 = TString(str)
 		case LUA_TNUMBER:
 			int_result, _ := this.ToInteger(-1)
 			value1 = Integer(int_result)

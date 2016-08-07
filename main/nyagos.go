@@ -57,7 +57,7 @@ func nyagosPrompt(L lua.Lua) int {
 	return 1
 }
 
-var prompt_hook lua.Pushable = lua.TGoFunction{nyagosPrompt}
+var prompt_hook lua.Pushable = lua.TGoFunction(nyagosPrompt)
 
 func printPrompt(this *readline.LineEditor) (int, error) {
 	L := NewNyagosLua()

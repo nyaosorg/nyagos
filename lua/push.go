@@ -83,12 +83,10 @@ func UpValueIndex(i int) int {
 	return LUA_REGISTRYINDEX - i
 }
 
-type TGoFunction struct {
-	Value func(Lua) int
-}
+type TGoFunction func(Lua) int
 
 func (this TGoFunction) Push(L Lua) int {
-	L.PushGoFunction(this.Value)
+	L.PushGoFunction(this)
 	return 1
 }
 

@@ -72,9 +72,9 @@ func NewVirtualTable(name string, getter func(Lua) int, setter func(Lua) int) Pu
 		Name: name,
 		Table: TTable{
 			Dict: map[string]Pushable{
-				"__index":    &TGoFunction{getter},
-				"__newindex": &TGoFunction{setter},
-				"__call":     &TGoFunction{setter},
+				"__index":    TGoFunction(getter),
+				"__newindex": TGoFunction(setter),
+				"__call":     TGoFunction(setter),
 			},
 			Array: map[int]Pushable{},
 		},

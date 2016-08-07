@@ -44,12 +44,10 @@ func (this Lua) ToString(index int) (string, error) {
 	return CGoStringN(p, length), nil
 }
 
-type TString struct {
-	Value string
-}
+type TString string
 
 func (this TString) Push(L Lua) int {
-	L.PushString(this.Value)
+	L.PushString(string(this))
 	return 1
 }
 
@@ -67,20 +65,18 @@ func (this Lua) ToBool(index int) bool {
 	return rv != 0
 }
 
-type TRawString struct {
-	Value []byte
-}
+type TRawString []byte
 
-func (this *TRawString) String() (string, error) {
-	if len(this.Value) <= 0 {
+func (this TRawString) String() (string, error) {
+	if len(this) <= 0 {
 		return "", nil
 	} else {
-		return string(this.Value), nil
+		return string(this), nil
 	}
 }
 
 func (this TRawString) Push(L Lua) int {
-	L.PushBytes(this.Value)
+	L.PushBytes(this)
 	return 1
 }
 
@@ -150,11 +146,11 @@ type MetaTableOwner struct {
 func (this *MetaTableOwner) Push(L Lua) int {
 	this.Body.Push(L)
 	if nameObj, nameObj_ok := this.Meta.Dict["__name"]; nameObj_ok {
-		if name, name_ok := nameObj.(*TRawString); name_ok {
+		if name, name_ok := nameObj.(TRawString); name_ok {
 			if dbg {
-				print("found meta-name: ", string(name.Value), "\n")
+				print("found meta-name: ", string(name), "\n")
 			}
-			L.NewMetaTable(string(name.Value))
+			L.NewMetaTable(string(name))
 			this.Meta.PushWithoutNewTable(L)
 		} else {
 			if dbg {
@@ -214,9 +210,9 @@ func (this Lua) ToTable(index int) (*TTable, error) {
 			} else {
 				switch t := key.(type) {
 				case TString:
-					table[t.Value] = val
+					table[string(t)] = val
 				case TRawString:
-					table[string(t.Value)] = val
+					table[string(t)] = val
 				case Integer:
 					array[int(t)] = val
 				case nil:
@@ -274,7 +270,7 @@ func (this Lua) ToPushable(index int) (Pushable, error) {
 			this.Pop(1)
 		}
 	case LUA_TLIGHTUSERDATA:
-		result = &TLightUserData{this.ToUserData(index)}
+		result = TLightUserData{Data: this.ToUserData(index)}
 		seek_metatable = true
 	case LUA_TNIL:
 		result = TNil{}
@@ -283,7 +279,7 @@ func (this Lua) ToPushable(index int) (Pushable, error) {
 		int_result, err = this.ToInteger(index)
 		result = Integer(int_result)
 	case LUA_TSTRING:
-		result = TRawString{this.ToBytes(index)}
+		result = TRawString(this.ToBytes(index))
 	case LUA_TTABLE:
 		result, err = this.ToTable(index)
 		seek_metatable = true
