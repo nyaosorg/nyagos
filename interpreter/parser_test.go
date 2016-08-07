@@ -23,7 +23,7 @@ func TestParser(t *testing.T) {
 	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
 		for _, stsub := range st {
-			fmt.Printf("  %s\n", stsub)
+			fmt.Printf("  %s\n", stsub.String())
 		}
 	}
 }
