@@ -150,28 +150,29 @@ func (session *LineEditor) ReadLine() (string, error) {
 		fmt.Fprint(stdOut, "\n")
 		this.TopColumn = 0
 	}
-	saveOnWindowResize := getch.OnWindowResize
-	getch.OnWindowResize = func(w, h uint) {
-		if this.TermWidth == int(w) {
-			return
-		}
-		if saveOnWindowResize != nil {
-			saveOnWindowResize(w, h)
-		}
-		this.TermWidth = int(w)
-		fmt.Fprintf(stdOut, "\x1B[%dG", this.TopColumn+1)
-		stdOut.Flush()
-		shineCursor()
-		this.RepaintAfterPrompt()
-		stdOut.Flush()
-		shineCursor()
-	}
-	defer func() { getch.OnWindowResize = saveOnWindowResize }()
-
 	for {
 		stdOut.Flush()
 		shineCursor()
-		this.Unicode, this.Keycode, this.ShiftState = getch.Full()
+		e := getch.All()
+		if e.Resize != nil {
+			w := int(e.Resize.Width)
+			if this.TermWidth != w {
+				this.TermWidth = w
+				fmt.Fprintf(stdOut, "\x1B[%dG", this.TopColumn+1)
+				stdOut.Flush()
+				shineCursor()
+				this.RepaintAfterPrompt()
+				stdOut.Flush()
+				shineCursor()
+			}
+			continue
+		}
+		if e.Key == nil {
+			continue
+		}
+		this.Unicode = e.Key.Rune
+		this.Keycode = e.Key.Scan
+		this.ShiftState = e.Key.Shift
 		var f KeyFuncT
 		var ok bool
 		if (this.ShiftState&getch.ALT_PRESSED) != 0 &&
