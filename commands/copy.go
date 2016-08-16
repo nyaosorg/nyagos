@@ -64,7 +64,8 @@ func (this copymove_t) Run() (int, error) {
 	fi, err := os.Stat(this.Args[len(this.Args)-1])
 	isDir := err == nil && fi.Mode().IsDir()
 	all := false
-	for i, src := range this.Args[1 : len(this.Args)-1] {
+	srcs := this.Args[1 : len(this.Args)-1]
+	for i, src := range srcs {
 		if src == "/y" {
 			all = true
 			continue
@@ -104,7 +105,7 @@ func (this copymove_t) Run() (int, error) {
 		}
 		err := this.Action(src, dst)
 		if err != nil {
-			if i == len(this.Args)-1 {
+			if i >= len(srcs)-1 {
 				return 1, err
 			}
 			fmt.Fprintf(this.Stderr, "%s\nContinue? [Yes/No] ", err.Error())
