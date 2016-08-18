@@ -67,6 +67,10 @@ func (this copymove_t) Run() (int, error) {
 	all := false
 	srcs := this.Args[1 : len(this.Args)-1]
 	for i, src := range srcs {
+		if getch.IsCtrlCPressed() {
+			fmt.Fprintln(this.Stderr, "^C")
+			return 0, nil
+		}
 		if src == "/y" {
 			all = true
 			continue
