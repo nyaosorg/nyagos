@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"unicode"
 
 	"github.com/zetamatta/go-getch"
 
@@ -90,13 +91,17 @@ func (this copymove_t) Run() (int, error) {
 					"%s: override? [Yes/No/All/Quit] ",
 					dst)
 				ch := getch.Rune()
-				fmt.Fprintf(this.Stderr, "%c\n", ch)
+				if unicode.IsPrint(ch) {
+					fmt.Fprintf(this.Stderr, "%c\n", ch)
+				} else {
+					fmt.Fprint(this.Stderr, "\n")
+				}
 				switch ch {
 				case 'y', 'Y':
 
 				case 'a', 'A':
 					all = true
-				case 'q', 'Q':
+				case 'q', 'Q', rune(0x03):
 					return 0, nil
 				default:
 					continue
@@ -110,7 +115,11 @@ func (this copymove_t) Run() (int, error) {
 			}
 			fmt.Fprintf(this.Stderr, "%s\nContinue? [Yes/No] ", err.Error())
 			ch := getch.Rune()
-			fmt.Fprintf(this.Stderr, "%c\n", ch)
+			if unicode.IsPrint(ch) {
+				fmt.Fprintf(this.Stderr, "%c\n", ch)
+			} else {
+				fmt.Fprint(this.Stderr, "\n")
+			}
 			if ch != 'y' && ch != 'Y' {
 				return 0, nil
 			}
