@@ -13,7 +13,10 @@ share._clone = function(action)
     local cwd = nyagos.netdrivetounc(nyagos.getwd())
     print(cwd)
     local status,err = nyagos.shellexecute(action,nyagos.exe,"",cwd)
-    if not status and string.match(err,"^Error%(5%)") then
+    if status then
+        return status,err
+    end
+    if string.match(err,"^Error%(5%)") or string.match(err,"winapi error") then
 	status,err = nyagos.shellexecute(action,nyagos.getenv("COMSPEC"),'/c "'..nyagos.exe,"",cwd)
     end
     return status,err
