@@ -66,6 +66,7 @@ func cmd_cd(cmd *exec.Cmd) (int, error) {
 			for i := len(cd_history) - 1; i >= 0; i-- {
 				fmt.Fprintln(cmd.Stdout, cd_history[i])
 			}
+			return 0, nil
 		} else if cmd.Args[1] == "-h" || cmd.Args[1] == "?" {
 			i := len(cd_history) - 10
 			if i < 0 {
