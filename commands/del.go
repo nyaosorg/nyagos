@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+	"unicode"
 
 	"github.com/zetamatta/go-getch"
 )
@@ -20,6 +21,10 @@ func cmd_del(cmd *exec.Cmd) (int, error) {
 	errorcount := 0
 	i := 1
 	for _, arg1 := range cmd.Args[1:] {
+		if getch.IsCtrlCPressed() {
+			fmt.Fprintln(cmd.Stderr, "^C")
+			return 0, nil
+		}
 		if arg1 == "/q" {
 			all = true
 			n--
@@ -45,9 +50,11 @@ func cmd_del(cmd *exec.Cmd) (int, error) {
 				"(%d/%d) %s: Remove ? [Yes/No/All/Quit] ",
 				i, n-1, path)
 			ch := getch.Rune()
-			fmt.Fprintf(cmd.Stdout, "%c ", ch)
+			if unicode.IsPrint(ch) {
+				fmt.Fprintf(cmd.Stdout, "%c ", ch)
+			}
 			switch ch {
-			case 'q', 'Q':
+			case 'q', 'Q', rune(0x03):
 				fmt.Fprintln(cmd.Stdout)
 				return errorcount, nil
 			case 'y', 'Y':
