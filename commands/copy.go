@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"unicode"
 
 	"github.com/zetamatta/go-getch"
@@ -54,6 +55,19 @@ func cmd_ln(cmd *exec.Cmd) (int, error) {
 	}
 }
 
+var rxDir = regexp.MustCompile(`[\\/:].{1,2}$`)
+
+func judgeDir(path string) bool {
+	if path == "." || path == ".." || rxDir.MatchString(path) {
+		return true
+	}
+	stat, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
+	return stat.Mode().IsDir()
+}
+
 func (this copymove_t) Run() (int, error) {
 	if len(this.Args) <= 2 {
 		fmt.Fprintf(this.Stderr,
@@ -62,9 +76,8 @@ func (this copymove_t) Run() (int, error) {
 			this.Args[0], this.Args[0])
 		return 0, nil
 	}
-	fi, err := os.Stat(this.Args[len(this.Args)-1])
-	isDir := err == nil && fi.Mode().IsDir()
 	all := false
+	isDir := judgeDir(this.Args[len(this.Args)-1])
 	srcs := this.Args[1 : len(this.Args)-1]
 	for i, src := range srcs {
 		if getch.IsCtrlCPressed() {
