@@ -55,7 +55,7 @@ func cmd_ln(cmd *exec.Cmd) (int, error) {
 	}
 }
 
-var rxDir = regexp.MustCompile(`[\\/:].{1,2}$`)
+var rxDir = regexp.MustCompile(`[\\/:]\.{0,2}$`)
 
 func judgeDir(path string) bool {
 	if path == "." || path == ".." || rxDir.MatchString(path) {
