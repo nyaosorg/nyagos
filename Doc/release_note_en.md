@@ -2,6 +2,7 @@
 * Use "\x1B[mC as m-times of Backspace
 * Fix #159: Stop to print prompt again when terminal window resized
 * Fix #164: `cd --history` changed the current directory to home.
+* copy and move always regard the desitinate path matching with `[\\/:]\.{0,2}$` as a directory wheter it fails or not to stat the path.
 
 NYAGOS 4.1.5\_1
 ===============
