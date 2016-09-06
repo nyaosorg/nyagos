@@ -1,3 +1,5 @@
+NYAGOS 4.1.6\_0
+===============
 * Use "\x1B[0K" as ERASELINE instead of " " & Backspace
 * Use "\x1B[mC as m-times of Backspace
 * Fix #159: Stop to print prompt again when terminal window resized
