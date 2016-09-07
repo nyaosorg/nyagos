@@ -1,3 +1,7 @@
+NYAGOS 4.1.6\_1
+===============
+* Fix: the package zip did not have lua53.dll
+
 NYAGOS 4.1.6\_0
 ===============
 * Use "\x1B[0K" as ERASELINE instead of " " & Backspace
