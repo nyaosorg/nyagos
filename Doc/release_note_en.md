@@ -1,3 +1,5 @@
+* Abolished nyagos.lua, which role nyagos.exe do itself.
+
 NYAGOS 4.1.6\_1
 ===============
 * Fix: the package zip did not have lua53.dll
