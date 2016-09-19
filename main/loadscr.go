@@ -81,6 +81,18 @@ func loadScripts(L lua.Lua) {
 				}
 			}
 		}
+	} else if assertdir, err := AssetDir("nyagos.d"); err == nil {
+		// nyagos.d/ not found.
+		for _, name1 := range assertdir {
+			if !strings.HasSuffix(strings.ToLower(name1), ".lua") {
+				continue
+			}
+			relpath := "nyagos.d/" + name1
+			// print("try bundled ", relpath, "\n")
+			if err1 := loadBundleScript1(L, relpath); err1 != nil {
+				fmt.Fprintf(os.Stderr, "bundled %s: %s\n", relpath, err1.Error())
+			}
+		}
 	}
 	home := os.Getenv("HOME")
 	if home == "" {
