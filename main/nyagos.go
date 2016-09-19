@@ -174,18 +174,7 @@ func main() {
 	history.Load(histPath)
 	history.Save(histPath) // cut over max-line
 
-	exeName, exeNameErr := dos.GetModuleFileName()
-	if exeNameErr != nil {
-		fmt.Fprintln(os.Stderr, exeNameErr)
-	}
-	exeFolder := filepath.Dir(exeName)
-	nyagos_lua := filepath.Join(exeFolder, "nyagos.lua")
-	if _, err := os.Stat(nyagos_lua); err == nil {
-		err := L.Source(nyagos_lua)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-	}
+	loadScripts(L)
 
 	it := interpreter.New()
 	it.Tag = L
