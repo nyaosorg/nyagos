@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time"
 
 	"../dos"
 	"../lua"
@@ -17,6 +18,23 @@ func versionOrStamp() string {
 	} else {
 		return "v" + stamp
 	}
+}
+
+func loadBundleScript1(L lua.Lua, path string) error {
+	// print("try bundle version: ", path, "\n")
+	bin, err := Asset(path)
+	if err != nil {
+		return err
+	}
+	err = L.LoadString(string(bin))
+	if err != nil {
+		return err
+	}
+	err = L.Call(0, 0)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func loadScripts(L lua.Lua) {
@@ -39,12 +57,22 @@ func loadScripts(L lua.Lua) {
 	nyagos_d_fd, nyagos_d_err := os.Open(nyagos_d)
 	if nyagos_d_err == nil {
 		defer nyagos_d_fd.Close()
-		names, err := nyagos_d_fd.Readdirnames(-1)
+		finfos, err := nyagos_d_fd.Readdir(-1)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		} else {
-			for _, name1 := range names {
-				if strings.HasSuffix(strings.ToLower(name1), ".lua") {
+			for _, finfo1 := range finfos {
+				name1 := finfo1.Name()
+				if !strings.HasSuffix(strings.ToLower(name1), ".lua") {
+					continue
+				}
+				relpath := "nyagos.d/" + name1
+				asset1, assetErr := AssetInfo(relpath)
+				if assetErr == nil && !asset1.ModTime().Truncate(time.Second).Before(finfo1.ModTime().Truncate(time.Second)) {
+					if err := loadBundleScript1(L, relpath); err != nil {
+						fmt.Fprintf(os.Stderr, "cached %s: %s\n", relpath, err)
+					}
+				} else {
 					path1 := filepath.Join(nyagos_d, name1)
 					err1 := L.Source(path1)
 					if err1 != nil {
