@@ -4,11 +4,20 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"../dos"
 	"../lua"
 )
+
+func versionOrStamp() string {
+	if version != "" {
+		return version
+	} else {
+		return "v" + stamp
+	}
+}
 
 func loadScripts(L lua.Lua) {
 	exeName, exeNameErr := dos.GetModuleFileName()
@@ -25,6 +34,15 @@ func loadScripts(L lua.Lua) {
 			fmt.Fprintln(os.Stderr, err)
 		}
 		return
+	}
+
+	if !silentmode {
+		fmt.Printf("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s\n",
+			versionOrStamp(),
+			runtime.GOARCH,
+			runtime.Version(),
+			"Lua 5.3")
+		fmt.Println("Copyright (c) 2014-2016 HAYAMA_Kaoru and NYAOS.ORG")
 	}
 
 	nyagos_d := filepath.Join(exeFolder, "nyagos.d")
