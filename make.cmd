@@ -21,6 +21,7 @@ goto build
         pushd "%~dp0main"
         powershell -ExecutionPolicy RemoteSigned -File makesyso.ps1
         popd
+        if not exist main\bindata.go call :bindata
         for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" .\main
         goto end
 
@@ -33,7 +34,7 @@ goto build
         goto end
 
 :clean
-        for %%I in (nyagos.exe main\nyagos.syso version.now) do if exist %%I del %%I
+        for %%I in (nyagos.exe main\nyagos.syso version.now main\bindata.go) do if exist %%I del %%I
         powershell "ls -R | ?{ $_ -match '\.go$' } | %%{ [System.IO.Path]::GetDirectoryName($_.FullName)} | Sort-Object | Get-Unique | %%{ Write-Host 'go clean on',$_ ;  pushd $_ ; go clean ; popd }"
 
 :sweep
@@ -44,6 +45,19 @@ goto build
 :get
         powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ ($_ -replace '\s*//.*$','').Split()[-1] } | ?{ $_ -match 'github.com/' } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
         goto end
+
+:getbindata
+        go get "github.com/jteeuwen/go-bindata"
+        pushd "%GOPATH%\src\github.com\jteeuwen\go-bindata\go-bindata"
+        go build
+        copy go-bindata.exe "%~dp0\."
+        popd
+        exit /b
+
+:bindata
+        if not exist go-bindata.exe call :getbindata
+        go-bindata.exe -o "main\bindata.go" "nyagos.d/..."
+        exit /b
 
 :const
         for /F %%I in ('dir /b /s makeconst.cmd') do pushd %%~dpI & call %%I & popd
