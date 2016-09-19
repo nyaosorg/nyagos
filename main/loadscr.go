@@ -26,16 +26,6 @@ func loadScripts(L lua.Lua) {
 	}
 	exeFolder := filepath.Dir(exeName)
 
-	// for compatibility
-	nyagos_lua := filepath.Join(exeFolder, "nyagos.lua")
-	if _, err := os.Stat(nyagos_lua); err == nil {
-		err := L.Source(nyagos_lua)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		}
-		return
-	}
-
 	if !silentmode {
 		fmt.Printf("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s\n",
 			versionOrStamp(),
