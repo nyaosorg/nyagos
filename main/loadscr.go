@@ -26,7 +26,7 @@ func loadBundleScript1(L lua.Lua, path string) error {
 	if err != nil {
 		return err
 	}
-	err = L.LoadString(string(bin))
+	err = L.LoadBufferX(path, bin, "t")
 	if err != nil {
 		return err
 	}
