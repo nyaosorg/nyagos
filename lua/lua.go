@@ -316,6 +316,9 @@ func (this Lua) LoadBufferX(title string, chank []byte, mode string) error {
 	if mode_err != nil {
 		return mode_err
 	}
+	if len(chank) <= 0 {
+		chank = []byte{';'}
+	}
 
 	rc, _, _ := luaL_loadbufferx.Call(
 		this.State(),
