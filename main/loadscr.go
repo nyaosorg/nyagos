@@ -37,7 +37,7 @@ func loadBundleScript1(L lua.Lua, path string) error {
 	return nil
 }
 
-func loadScripts(L lua.Lua) {
+func loadScripts(L lua.Lua) error {
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
@@ -74,9 +74,8 @@ func loadScripts(L lua.Lua) {
 					}
 				} else {
 					path1 := filepath.Join(nyagos_d, name1)
-					err1 := L.Source(path1)
-					if err1 != nil {
-						fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err1.Error())
+					if err := L.Source(path1); err != nil {
+						fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
 					}
 				}
 			}
@@ -99,10 +98,31 @@ func loadScripts(L lua.Lua) {
 		home = os.Getenv("USERPROFILE")
 	}
 	dot_nyagos := filepath.Join(home, ".nyagos")
-	if _, err := os.Stat(dot_nyagos); err == nil {
-		err1 := L.Source(dot_nyagos)
-		if err1 != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", dot_nyagos, err1.Error())
+	dotStat, dotErr := os.Stat(dot_nyagos)
+	if dotErr != nil {
+		return nil
+	}
+	cachePath := filepath.Join(AppDataDir(), "dotnyagos.luac")
+	cacheStat, cacheErr := os.Stat(cachePath)
+	if cacheErr == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
+		// print("use cache: ", cachePath, "\n")
+		if _, err := L.LoadFile(cachePath, "b"); err == nil {
+			L.Call(0, 0)
+			return nil
 		}
 	}
+	if _, err := L.LoadFile(dot_nyagos, "bt"); err != nil {
+		return err
+	}
+	chank := L.Dump()
+	if err := L.Call(0, 0); err != nil {
+		return err
+	}
+	w, w_err := os.Create(cachePath)
+	if w_err != nil {
+		return w_err
+	}
+	w.Write(chank)
+	w.Close()
+	return nil
 }

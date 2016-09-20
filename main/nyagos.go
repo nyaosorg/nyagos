@@ -128,6 +128,16 @@ var optionC = flag.String("c", "", "like `cmd /c`")
 var optionF = flag.String("f", "", "run lua script")
 var optionE = flag.String("e", "", "run inline-lua-code")
 
+var appdatapath_ string
+
+func AppDataDir() string {
+	if appdatapath_ == "" {
+		appdatapath_ = filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
+		os.Mkdir(appdatapath_, 0777)
+	}
+	return appdatapath_
+}
+
 func main() {
 	defer when_panic()
 
@@ -168,13 +178,13 @@ func main() {
 		silentmode = true
 	}
 
-	appData := filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
-	os.Mkdir(appData, 0777)
-	histPath := filepath.Join(appData, "nyagos.history")
+	histPath := filepath.Join(AppDataDir(), "nyagos.history")
 	history.Load(histPath)
 	history.Save(histPath) // cut over max-line
 
-	loadScripts(L)
+	if err := loadScripts(L); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
 
 	it := interpreter.New()
 	it.Tag = L
