@@ -1,11 +1,12 @@
 *.a
 *.dll
 *.exe
+*.gz
+*.gz
 *.swp
 *.syso
 *.zip
-*.gz
 *~
-*.gz
+bindata.go
 include/
 version.cmd
