@@ -12,6 +12,10 @@ if not "%1" == "" goto %1
 
 goto build
 
+:debug
+        set "TAGS=-tags=debug"
+        goto build
+
 :release
         for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
         set "X_VERSION=-X main.version=%VERSION%"
@@ -22,7 +26,7 @@ goto build
         powershell -ExecutionPolicy RemoteSigned -File makesyso.ps1
         popd
         if not exist main\bindata.go call :bindata
-        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" .\main
+        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" %TAGS% .\main
         goto end
 
 :fmt
