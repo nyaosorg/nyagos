@@ -21,7 +21,9 @@ func versionOrStamp() string {
 }
 
 func loadBundleScript1(L lua.Lua, path string) error {
-	// print("try bundle version: ", path, "\n")
+	if dbg {
+		println("load cached ", path)
+	}
 	bin, err := Asset(path)
 	if err != nil {
 		return err
@@ -68,12 +70,15 @@ func loadScripts(L lua.Lua) error {
 				}
 				relpath := "nyagos.d/" + name1
 				asset1, assetErr := AssetInfo(relpath)
-				if assetErr == nil && !asset1.ModTime().Truncate(time.Second).Before(finfo1.ModTime().Truncate(time.Second)) {
+				if assetErr == nil && asset1.Size() == finfo1.Size() && !asset1.ModTime().Truncate(time.Second).Before(finfo1.ModTime().Truncate(time.Second)) {
 					if err := loadBundleScript1(L, relpath); err != nil {
 						fmt.Fprintf(os.Stderr, "cached %s: %s\n", relpath, err)
 					}
 				} else {
 					path1 := filepath.Join(nyagos_d, name1)
+					if dbg {
+						println("load real ", path1)
+					}
 					if err := L.Source(path1); err != nil {
 						fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
 					}
@@ -87,7 +92,6 @@ func loadScripts(L lua.Lua) error {
 				continue
 			}
 			relpath := "nyagos.d/" + name1
-			// print("try bundled ", relpath, "\n")
 			if err1 := loadBundleScript1(L, relpath); err1 != nil {
 				fmt.Fprintf(os.Stderr, "bundled %s: %s\n", relpath, err1.Error())
 			}
@@ -105,11 +109,16 @@ func loadScripts(L lua.Lua) error {
 	cachePath := filepath.Join(AppDataDir(), "dotnyagos.luac")
 	cacheStat, cacheErr := os.Stat(cachePath)
 	if cacheErr == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
-		// print("use cache: ", cachePath, "\n")
+		if dbg {
+			println("load cached ", cachePath)
+		}
 		if _, err := L.LoadFile(cachePath, "b"); err == nil {
 			L.Call(0, 0)
 			return nil
 		}
+	}
+	if dbg {
+		println("load real ", dot_nyagos)
 	}
 	if _, err := L.LoadFile(dot_nyagos, "bt"); err != nil {
 		return err
