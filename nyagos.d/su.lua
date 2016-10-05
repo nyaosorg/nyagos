@@ -11,7 +11,7 @@ end
 
 share._clone = function(action)
     local cwd = nyagos.netdrivetounc(nyagos.getwd())
-    print(cwd)
+    nyagos.write(cwd,"\n")
     local status,err = nyagos.shellexecute(action,nyagos.exe,"",cwd)
     if status then
         return status,err
