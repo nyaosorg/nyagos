@@ -162,7 +162,7 @@ func (this *Interpreter) spawnvp_noerrmsg() (int, error) {
 	var err error
 	this.Path = dos.LookPath(this.Args[0])
 	if this.Path == "" {
-		return 255, OnCommandNotFound(this, err)
+		return 255, OnCommandNotFound(this, os.ErrNotExist)
 	}
 	if dbg {
 		print("exec.LookPath(", this.Args[0], ")==", this.Path, "\n")
