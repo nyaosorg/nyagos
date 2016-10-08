@@ -19,8 +19,6 @@ const FLAG_AMP2NEWCONSOLE = false
 
 var WildCardExpansionAlways = false
 
-var dbg = false
-
 type CommandNotFound struct {
 	Name string
 	Err  error
@@ -162,9 +160,12 @@ func (this *Interpreter) spawnvp_noerrmsg() (int, error) {
 
 	// command not found hook
 	var err error
-	this.Path, err = exec.LookPath(this.Args[0])
-	if err != nil {
+	this.Path = dos.LookPath(this.Args[0])
+	if this.Path == "" {
 		return 255, OnCommandNotFound(this, err)
+	}
+	if dbg {
+		print("exec.LookPath(", this.Args[0], ")==", this.Path, "\n")
 	}
 
 	if WildCardExpansionAlways {
