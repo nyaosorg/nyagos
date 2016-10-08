@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"../alias"
+	"../dos"
 )
 
 const (
@@ -57,9 +58,9 @@ func cmd_which(cmd *exec.Cmd) (int, error) {
 			}
 
 		} else {
-			path, err := exec.LookPath(name)
-			if err != nil {
-				return WHICH_NOT_FOUND, err
+			path := dos.LookPath(name)
+			if path == "" {
+				return WHICH_NOT_FOUND, os.ErrNotExist
 			}
 			fmt.Fprintln(cmd.Stdout, filepath.Clean(path))
 		}
