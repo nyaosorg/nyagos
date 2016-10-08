@@ -73,9 +73,6 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	name := status.Name()
 	attr := findfile.GetFileAttributes(status)
 
-	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
-		indicator = "@"
-	}
 	if (perm & 4) > 0 {
 		io.WriteString(out, "r")
 	} else {
@@ -142,6 +139,9 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		prefix,
 		name,
 		postfix)
+	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
+		indicator = "@"
+	}
 	if (flag & O_INDICATOR) > 0 {
 		io.WriteString(out, indicator)
 	}
