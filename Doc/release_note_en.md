@@ -1,4 +1,9 @@
 * Abolished nyagos.lua, which role nyagos.exe do itself.
+* Caching ~/.nyagos with `%APPDATA%\NYAOS_ORG/dotnyagos.luac`
+* `nyagos.d/*` are bundled with nyagos.exe self.
+* Fix #167 Could not call executable symbolic-linked to relative path
+* Fix `ls -l` could not display `@` and linked path for symbolic-linked-executables
+* Fix su.lua: clone/su displayed broken path.
 
 NYAGOS 4.1.6\_1
 ===============

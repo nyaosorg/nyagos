@@ -1,4 +1,9 @@
 * nyagos.lua を廃止した。その役割は nyagos.exe 自身が担うようにした。
+* `~/.nyagos` を`%APPDATA%\NYAOS_ORG/dotnyagos.luac` にキャッシング
+* `nyagos.d/*` を nyagos.exe 自体にバンドルするようにした
+* Fix #167 相対パスにシンボリックリンクされた実行ファイルが動かなかった
+* Fix `ls -l` でリンクされた実行ファイルに @ とリンク先が表示されていなかった
+* Fix su.lua: clone/su で文字化けしたパスが表示されていた
 
 NYAGOS 4.1.6\_1
 ===============
