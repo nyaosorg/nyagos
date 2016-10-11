@@ -29,6 +29,8 @@ func lookPath(dir1, pattern string) (foundpath string) {
 					}
 					foundpath = filepath.Join(dir1, foundpath)
 					return false
+				} else if dbg {
+					print(err.Error(), "\n")
 				}
 			}
 		}
