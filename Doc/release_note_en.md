@@ -4,6 +4,7 @@
 * Fix #167 Could not call executable symbolic-linked to relative path
 * Fix `ls -l` could not display `@` and linked path for symbolic-linked-executables
 * Fix su.lua: clone/su displayed broken path.
+* Fix #168 `ls RELATIVE-SYMLINKED-FILEPATH` occured error.
 
 NYAGOS 4.1.6\_1
 ===============
