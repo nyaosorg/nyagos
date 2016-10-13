@@ -40,7 +40,7 @@ func lookPath(dir1, pattern string) (foundpath string) {
 }
 
 func LookPath(name string) string {
-	if filepath.IsAbs(name) {
+	if strings.ContainsRune(name, os.PathSeparator) {
 		return lookPath(filepath.Dir(name), name+".*")
 	}
 	pathDirList := strings.Split(".;"+os.Getenv("PATH"), ";")
