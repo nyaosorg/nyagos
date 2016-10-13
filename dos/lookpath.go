@@ -9,7 +9,7 @@ import (
 )
 
 func lookPath(dir1, pattern string) (foundpath string) {
-	pathExtList := strings.Split(os.Getenv("PATHEXT"), ";")
+	pathExtList := filepath.SplitList(os.Getenv("PATHEXT"))
 	findfile.Walk(pattern, func(f *findfile.FileInfo) bool {
 		if f.IsDir() {
 			return true
@@ -43,7 +43,7 @@ func LookPath(name string) string {
 	if strings.ContainsRune(name, os.PathSeparator) {
 		return lookPath(filepath.Dir(name), name+".*")
 	}
-	pathDirList := strings.Split(".;"+os.Getenv("PATH"), ";")
+	pathDirList := filepath.SplitList(".;" + os.Getenv("PATH"))
 
 	for _, dir1 := range pathDirList {
 		if path := lookPath(dir1, filepath.Join(dir1, name+".*")); path != "" {
