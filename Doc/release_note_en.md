@@ -5,6 +5,8 @@
 * Fix `ls -l` could not display `@` and linked path for symbolic-linked-executables
 * Fix su.lua: clone/su displayed broken path.
 * Fix #168 `ls RELATIVE-SYMLINKED-FILEPATH` occured error.
+* Fix Widths for filesize in `ls -lh` were broken
+* Set default alias ls="ls -oFh" (add -h) 
 
 NYAGOS 4.1.6\_1
 ===============
