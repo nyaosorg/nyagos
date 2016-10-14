@@ -114,16 +114,16 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 			MB := size / 1024 / 1024
 			GB := MB / 1024
 			MB = MB % 1024
-			fmt.Fprintf(out, " %5d.%01dG", GB, MB/102)
+			fmt.Fprintf(out, " %*d.%01dG", width-3, GB, MB/102)
 		} else if size >= 1024*1024 {
 			KB := size / 1024
 			MB := KB / 1024
 			KB = KB % 1024
-			fmt.Fprintf(out, " %5d.%01dM", MB, KB/102)
+			fmt.Fprintf(out, " %*d.%01dM", width-3, MB, KB/102)
 		} else if size > 1024 {
 			KB := size / 1024
 			B := size % 1024
-			fmt.Fprintf(out, " %5d.%01dK", KB, B/102)
+			fmt.Fprintf(out, " %*d.%01dK", width-3, KB, B/102)
 		} else {
 			fmt.Fprintf(out, " %*d", width, size)
 		}
