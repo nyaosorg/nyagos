@@ -47,7 +47,7 @@ func loadScripts(L lua.Lua) error {
 	exeFolder := filepath.Dir(exeName)
 
 	if !silentmode {
-		fmt.Printf("Nihongo Yet Another GOing Shell %s-%s Powered by %s & %s\n",
+		fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s & %s\n",
 			versionOrStamp(),
 			runtime.GOARCH,
 			runtime.Version(),
