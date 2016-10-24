@@ -42,10 +42,14 @@ It is linked to the the environment variable, which are able
 to be refered and assigned.
 
 ### `errorlevel,errormessage = nyagos.exec("COMMAND")`
+### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2",...}`
 
 It executes "COMMAND" as shell command.
 It returns the integer-value for %ERRORLEVEL% and the error-message.
 With no error, they are 0 and nil.
+
+
+
 
 ### `errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
 

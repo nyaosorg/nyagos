@@ -47,6 +47,7 @@ share[] はユーザが自由に使用可能ですが、全てのインスタン
 環境変数にリンクしています。参照・変更が可能です。
 
 ### `errorlevel,errormessage = nyagos.exec("シェルコマンド")`
+### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2"...}`
 
 シェルコマンドを実行します。エラーが発生した時、
 戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。
