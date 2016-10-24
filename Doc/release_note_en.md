@@ -7,6 +7,7 @@
 * Fix #168 `ls RELATIVE-SYMLINKED-FILEPATH` occured error.
 * Fix Widths for filesize in `ls -lh` were broken
 * Set default alias ls="ls -oFh" (add -h) 
+* `history` outputs history lines all when stdout is not a terminal.
 
 NYAGOS 4.1.6\_1
 ===============
