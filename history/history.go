@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/mattn/go-isatty"
+
 	"../readline"
 )
 
@@ -226,11 +228,11 @@ func CmdHistory(cmd *exec.Cmd) (int, error) {
 	} else {
 		num = 10
 	}
-	var start int
-	if readline.DefaultEditor.HistoryLen() > num {
+	start := 0
+	if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
+		readline.DefaultEditor.HistoryLen() > num {
+
 		start = readline.DefaultEditor.HistoryLen() - num
-	} else {
-		start = 0
 	}
 	for i, s := range readline.DefaultEditor.Histories[start:] {
 		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
