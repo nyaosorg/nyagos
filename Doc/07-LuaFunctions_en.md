@@ -11,6 +11,7 @@ It defines an alias. These macros are available on "REPLACE-STRING".
 
 It assigns the function to the command-name `"NAME"`.
 `ARGS` is the table:
+
     {
         [1]=1stArgument,
         [2]=2ndArgument,
@@ -102,6 +103,7 @@ It makes parts of path-string join.
 ### `nyagos.bindkey("KEYNAME","FUNCNAME")`
 
 KEYNAME are:
+
         "C_A" "C_B" ... "C_Z" "M_A" "M_B" ... "M_Z"
         "F1" "F2" ..."F24"
         "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
