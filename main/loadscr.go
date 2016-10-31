@@ -97,6 +97,10 @@ func loadScripts(L lua.Lua) error {
 			}
 		}
 	}
+	return dotNyagos(L)
+}
+
+func dotNyagos(L lua.Lua) error {
 	home := os.Getenv("HOME")
 	if home == "" {
 		home = os.Getenv("USERPROFILE")
