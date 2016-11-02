@@ -1,5 +1,7 @@
-nyagos.alias.peco_temp_out = function()
-    for _,val in ipairs(share.peco_temp_out) do
+share.selecter = share.selecter or "peco"
+
+nyagos.alias.dump_temp_out = function()
+    for _,val in ipairs(share.dump_temp_out) do
         nyagos.write(val,"\n")
     end
 end
@@ -7,8 +9,8 @@ end
 nyagos.bindkey("C-o",function(this)
     local word,pos = this:lastword()
     word = string.gsub(word,'"','')
-    share.peco_temp_out = nyagos.glob(word.."*")
-    local result=nyagos.eval('peco_temp_out | peco')
+    share.dump_temp_out = nyagos.glob(word.."*")
+    local result=nyagos.eval('dump_temp_out | ' .. share.selecter)
     this:call("CLEAR_SCREEN")
     if string.find(result," ",1,true) then
         result = '"'..result..'"'
@@ -28,13 +30,13 @@ nyagos.alias.__dump_history = function()
 end
 
 nyagos.bindkey("C_R", function(this)
-    local result = nyagos.eval('__dump_history | peco')
+    local result = nyagos.eval('__dump_history | ' .. share.selecter)
     this:call("CLEAR_SCREEN")
     return result
 end)
 
 nyagos.bindkey("M_H" , function(this)
-    local result = nyagos.eval('cd --history | peco')
+    local result = nyagos.eval('cd --history | ' .. share.selecter)
     this:call("CLEAR_SCREEN")
     if string.find(result,' ') then
         result = '"'..result..'"'
@@ -43,7 +45,7 @@ nyagos.bindkey("M_H" , function(this)
 end)
 
 nyagos.bindkey("M_G" , function(this)
-    local result = nyagos.eval('git log --pretty="format:%h %s" | peco')
+    local result = nyagos.eval('git log --pretty="format:%h %s" | ' .. share.selecter)
     this:call("CLEAR_SCREEN")
     return string.match(result,"^%S+") or ""
 end)
