@@ -224,6 +224,12 @@ func KeyFuncCLS(this *Buffer) Result {
 	return CONTINUE
 }
 
+func KeyFuncRepaintOnNewline(this *Buffer) Result {
+	PutRune('\n')
+	this.RepaintAll()
+	return CONTINUE
+}
+
 func KeyFuncPaste(this *Buffer) Result {
 	text, err := clipboard.ReadAll()
 	if err == nil {

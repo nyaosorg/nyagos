@@ -115,7 +115,7 @@ const (
 	F_KILL_LINE            = "KILL_LINE"
 	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
 	F_PASS                 = "PASS"
-	F_REPAINT              = "REPAINT"
+	F_REPAINT_ON_NEWLINE   = "REPAINT_ON_NEWLINE"
 	F_SWAPCHAR             = "SWAPCHAR"
 	F_UNIX_LINE_DISCARD    = "UNIX_LINE_DISCARD"
 	F_UNIX_WORD_RUBOUT     = "UNIX_WORD_RUBOUT"
@@ -250,4 +250,5 @@ var name2func = map[string]KeyFuncT{
 	F_UNIX_WORD_RUBOUT:     &KeyGoFuncT{KeyFuncWordRubout},
 	F_YANK:                 &KeyGoFuncT{KeyFuncPaste},
 	F_SWAPCHAR:             &KeyGoFuncT{KeyFuncSwapChar},
+	F_REPAINT_ON_NEWLINE:   &KeyGoFuncT{KeyFuncRepaintOnNewline},
 }
