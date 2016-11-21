@@ -116,7 +116,7 @@ FUNCNAME are:
         "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
         "FORWARD_CHAR" "BEGINNING_OF_LINE" "PASS" "YANK" "KILL_WHOLE_LINE"
         "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
-        "ISEARCH_BACKWARD"
+        "ISEARCH_BACKWARD" "REPAINT_ON_NEWLINE"
 
 If it succeeded, it returns true only. Failed, it returns nil and error-message.
 Cases are ignores and, the character '-' is same as '\_'.

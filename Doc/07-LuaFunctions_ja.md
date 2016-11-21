@@ -123,7 +123,7 @@ UTF8文字列を、現在のコードページの文字列に変換します。
         "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
         "FORWARD_CHAR" "BEGINNING_OF_LINE" "PASS" "YANK" "KILL_WHOLE_LINE"
         "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
-        "ISEARCH_BACKWARD"
+        "ISEARCH_BACKWARD" "REPAINT_ON_NEWLINE"
 
 成功すると true を、失敗すると nil とエラーメッセージを返します。
 大文字・小文字は区別せず、\_ のかわりに - を使うことができます。
