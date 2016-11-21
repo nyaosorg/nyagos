@@ -9,6 +9,11 @@
 * Set default alias ls="ls -oFh" (add -h) 
 * `history` outputs history lines all when stdout is not a terminal.
 * `open` prints a prompt for each files if more than one parameters are given.
+* `use "cho"` -> powered by [cho](https://github.com/mattn/cho)
+        * C-r: History
+        * C-o: Filename completion
+        * M-h: Directory history
+        * M-g: Git-revision
 
 NYAGOS 4.1.6\_1
 ===============
