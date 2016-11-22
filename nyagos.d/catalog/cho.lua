@@ -7,7 +7,12 @@ end
 nyagos.bindkey("C-o",function(this)
     local word,pos = this:lastword()
     word = string.gsub(word,'"','')
-    share.dump_temp_out = nyagos.glob(word.."*")
+    local wildcard = word.."*"
+    local list = nyagos.glob(wildcard)
+    if #list == 1 and list[1] == wildcard then
+        return
+    end
+    share.dump_temp_out = list
     nyagos.write("\n")
     local result=nyagos.eval('dump_temp_out | cho')
     this:call("REPAINT_ON_NEWLINE")
