@@ -26,6 +26,7 @@ goto build
         pushd "%~dp0main"
         powershell -ExecutionPolicy RemoteSigned -File makesyso.ps1
         popd
+        for /F %%I in ('dir /b /s /aa nyagos.d') do attrib -A "%%I" & if exist main\bindata.go del main\bindata.go
         if not exist main\bindata.go call :bindata
         for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" %TAGS% .\main
         goto end
