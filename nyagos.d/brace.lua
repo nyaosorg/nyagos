@@ -7,7 +7,12 @@ nyagos.filter = function(cmdline)
         end
     end
     local save={}
-    cmdline = cmdline:gsub("((['\"])[^%2]*%2)", function(s,_)
+    cmdline = cmdline:gsub('"[^"]*"', function(s)
+        local i=#save+1
+        save[i] = s
+        return '\a('..i..')'
+    end)
+    cmdline = cmdline:gsub("'[^']*'", function(s)
         local i=#save+1
         save[i] = s
         return '\a('..i..')'
