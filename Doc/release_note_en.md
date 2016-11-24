@@ -14,6 +14,7 @@
         * C-o: Filename completion
         * M-h: Directory history
         * M-g: Git-revision
+* Fix: brace expansion "{a,b,c}" worked even in quotated strings
 
 NYAGOS 4.1.6\_1
 ===============
