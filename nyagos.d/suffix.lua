@@ -76,25 +76,9 @@ nyagos.alias.suffix = function(args)
             for m in string.gmatch(right,"%S+") do
                 args[#args+1] = m
             end
-            share._suffixes[left] = args
+            share._setsuffix(left,args)
         else
             print(args[i].."="..(share._suffixes[args[i]] or ""))
         end
     end
 end
-
-suffix.pl="perl"
-if nyagos.which("ipy") then
-  suffix.py="ipy"
-elseif nyagos.which("py") then
-  suffix.py="py"
-else
-  suffix.py="python"
-end
-suffix.rb="ruby"
-suffix.lua="lua"
-suffix.awk={"awk","-f"}
-suffix.js={"cscript","//nologo"}
-suffix.vbs={"cscript","//nologo"}
-suffix.wsf={"cscript","//nologo"}
-suffix.ps1={"powershell","-file"}
