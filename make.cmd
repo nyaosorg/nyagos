@@ -88,6 +88,7 @@ goto build
         robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
         if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
         copy nyagos.lua "%INSTALLDIR%\."
+        copy /-Y _nyagos "%INSTALLDIR%\."
         copy nyagos.exe "%INSTALLDIR%\."
         if errorlevel 1 (start %~0 install_ & exit /b)
         goto end
