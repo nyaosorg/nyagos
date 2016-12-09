@@ -1,3 +1,5 @@
+* Add new customizing file `_nyagos`(batchlike script)
+
 NYAGOS 4.1.7\_0
 ===============
 * Abolished nyagos.lua, which role nyagos.exe do itself.
