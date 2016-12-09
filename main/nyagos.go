@@ -182,14 +182,14 @@ func main() {
 	history.Load(histPath)
 	history.Save(histPath) // cut over max-line
 
-	if err := loadScripts(L); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-	}
-
 	it := interpreter.New()
 	it.Tag = L
 	it.OnClone = itprCloneHook
 	it.Closers = append(it.Closers, L)
+
+	if err := loadScripts(it, L); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
 
 	if !optionParse(it, L) {
 		return

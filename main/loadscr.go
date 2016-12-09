@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -39,7 +40,11 @@ func loadBundleScript1(L lua.Lua, path string) error {
 	return nil
 }
 
-func loadScripts(L lua.Lua) error {
+type InterpreterT interface {
+	Interpret(string) (int, error)
+}
+
+func loadScripts(it InterpreterT, L lua.Lua) error {
 	exeName, exeNameErr := dos.GetModuleFileName()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
@@ -97,15 +102,29 @@ func loadScripts(L lua.Lua) error {
 			}
 		}
 	}
-	return dotNyagos(L)
+	if err := dotNyagos(L); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+	if err := barNyagos(it); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+	return nil
+}
+
+var home string
+
+func Home() string {
+	if home == "" {
+		home = os.Getenv("HOME")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+	}
+	return home
 }
 
 func dotNyagos(L lua.Lua) error {
-	home := os.Getenv("HOME")
-	if home == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-	dot_nyagos := filepath.Join(home, ".nyagos")
+	dot_nyagos := filepath.Join(Home(), ".nyagos")
 	dotStat, dotErr := os.Stat(dot_nyagos)
 	if dotErr != nil {
 		return nil
@@ -137,5 +156,23 @@ func dotNyagos(L lua.Lua) error {
 	}
 	w.Write(chank)
 	w.Close()
+	return nil
+}
+
+func barNyagos(it InterpreterT) error {
+	bar_nyagos := filepath.Join(Home(), "_nyagos")
+	fd, fd_err := os.Open(bar_nyagos)
+	if fd_err != nil {
+		return nil
+	}
+	defer fd.Close()
+	scanner := bufio.NewScanner(fd)
+	for scanner.Scan() {
+		text := scanner.Text()
+		_, err := it.Interpret(text)
+		if err != nil {
+			fmt.Fprint(os.Stderr, err.Error())
+		}
+	}
 	return nil
 }
