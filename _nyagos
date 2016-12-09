@@ -1,5 +1,6 @@
+alias "ls=__ls__ -oFh $*"
+alias "ll=__ls__ -lh $*"
 alias "wordpad=""%PROGRAMFILES%\Windows NT\Accessories\wordpad.exe"""
-alias "ll=ls -lh"
 
 suffix "awk=gawk -f"
 suffix "js=cscript //nologo"
