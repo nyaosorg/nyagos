@@ -69,22 +69,18 @@ nyagos.alias.suffix = function(args)
         end
         return
     end
-    if string.sub(args[1],1,1) == "." then
-        args[1] = string.sub(args[1],2)
-    end
-    if #args == 1 then
-        local right = share._suffixes[args[1]] or ""
-        if type(right) == "table" then
-            right = table.concat(right," ")
+    for i=1,#args do
+        local left,right=string.match(args[i],"^%.?([^=]+)%=(.+)$")
+        if right then
+            local args={}
+            for m in string.gmatch(right,"%S+") do
+                args[#args+1] = m
+            end
+            share._suffixes[left] = args
+        else
+            print(args[i].."="..(share._suffixes[args[i]] or ""))
         end
-        print(args[1].."=".. right)
-        return
     end
-    local cmdline={}
-    for i=2,#args do
-        cmdline[#cmdline+1]=args[i]
-    end
-    share._setsuffix(args[1],cmdline)
 end
 
 suffix.pl="perl"
