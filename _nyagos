@@ -13,4 +13,6 @@ suffix "vbs=cscript //nologo"
 suffix "wsf=cscript //nologo"
 suffix "py=python"
 
+set "PROMPT=$L%COMPUTERNAME%:$P$G$_$$$s"
+
 rem vim:set ft=dosbatch:
