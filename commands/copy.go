@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -19,24 +20,24 @@ type copymove_t struct {
 	IsDirOk bool
 }
 
-func cmd_copy(cmd *exec.Cmd) (int, error) {
+func cmd_copy(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return copymove_t{
 		Cmd: cmd,
 		Action: func(src, dst string) error {
 			return dos.Copy(src, dst, false)
 		},
-	}.Run()
+	}.Run(ctx)
 }
 
-func cmd_move(cmd *exec.Cmd) (int, error) {
+func cmd_move(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return copymove_t{
 		Cmd:     cmd,
 		Action:  dos.Move,
 		IsDirOk: true,
-	}.Run()
+	}.Run(ctx)
 }
 
-func cmd_ln(cmd *exec.Cmd) (int, error) {
+func cmd_ln(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 && cmd.Args[1] == "-s" {
 		args := make([]string, 0, len(cmd.Args)-1)
 		args = append(args, cmd.Args[0])
@@ -46,12 +47,12 @@ func cmd_ln(cmd *exec.Cmd) (int, error) {
 			Cmd:     cmd,
 			Action:  os.Symlink,
 			IsDirOk: true,
-		}.Run()
+		}.Run(ctx)
 	} else {
 		return copymove_t{
 			Cmd:    cmd,
 			Action: os.Link,
-		}.Run()
+		}.Run(ctx)
 	}
 }
 
@@ -68,7 +69,7 @@ func judgeDir(path string) bool {
 	return stat.Mode().IsDir()
 }
 
-func (this copymove_t) Run() (int, error) {
+func (this copymove_t) Run(ctx context.Context) (int, error) {
 	if len(this.Args) <= 2 {
 		fmt.Fprintf(this.Stderr,
 			"Usage: %s [/y] SOURCE-FILENAME DESITINATE-FILENAME\n"+
@@ -123,6 +124,13 @@ func (this copymove_t) Run() (int, error) {
 				default:
 					continue
 				}
+			}
+		}
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return 0, nil
+			default:
 			}
 		}
 		err := this.Action(src, dst)

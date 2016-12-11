@@ -1,6 +1,7 @@
 package ls
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -47,6 +48,8 @@ const (
 	ANSI_HIDDEN   = "\x1B[34;1m"
 	ANSI_END      = "\x1B[0m"
 )
+
+var ErrCtrlC = errors.New("C-c")
 
 func (this fileInfoT) Name() string { return this.name }
 
@@ -155,7 +158,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	io.WriteString(out, "\n")
 }
 
-func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
+func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	nodes_ := make([]string, len(nodes))
 	for key, val := range nodes {
 		prefix := ""
@@ -201,10 +204,13 @@ func lsBox(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
-	conio.BoxPrint(nodes_, out)
+	if !conio.BoxPrint(ctx, nodes_, out) {
+		return ErrCtrlC
+	}
+	return nil
 }
 
-func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
+func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	size := int64(1)
 	for _, finfo := range nodes {
 		if finfo.Size() > size {
@@ -214,13 +220,31 @@ func lsLong(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
 	width := int(math.Floor(math.Log10(float64(size)))) + 1
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return ErrCtrlC
+			default:
+
+			}
+		}
 	}
+	return nil
 }
 
-func lsSimple(folder string, nodes []os.FileInfo, flag int, out io.Writer) {
+func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
 		fmt.Fprintln(out, f.Name())
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return ErrCtrlC
+			default:
+
+			}
+		}
 	}
+	return nil
 }
 
 type fileInfoCollection struct {
@@ -258,7 +282,7 @@ func (this fileInfoCollection) Swap(i, j int) {
 	this.nodes[i], this.nodes[j] = this.nodes[j], this.nodes[i]
 }
 
-func lsFolder(folder string, flag int, out io.Writer) error {
+func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error {
 	var folder_ string
 	if rxDriveOnly.MatchString(folder) {
 		folder_ = folder + "."
@@ -297,18 +321,24 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 	})
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
+	var err error
 	if (flag & O_ONE) != 0 {
-		lsSimple(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsSimple(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else if (flag & O_LONG) != 0 {
-		lsLong(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsLong(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
-		lsBox(folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsBox(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+	}
+	if err != nil {
+		return err
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
 			f1fullpath := cpath.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
-			lsFolder(f1fullpath, flag, out)
+			if err := lsFolder(ctx, f1fullpath, flag, out); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
@@ -316,9 +346,9 @@ func lsFolder(folder string, flag int, out io.Writer) error {
 
 var rxDriveOnly = regexp.MustCompile("^[a-zA-Z]:$")
 
-func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
+func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout io.Writer) error {
 	if len(paths) <= 0 {
-		return lsFolder("", flag, out)
+		return lsFolder(ctx, "", flag, out)
 	}
 	dirs := make([]string, 0)
 	printCount := 0
@@ -349,12 +379,16 @@ func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
 	if len(files) > 0 {
 		nodesArray := fileInfoCollection{flag: flag, nodes: files}
 		sort.Sort(nodesArray)
+		var err error
 		if (flag & O_ONE) != 0 {
-			lsSimple(".", files, flag, out)
+			err = lsSimple(ctx, ".", files, flag, out)
 		} else if (flag & O_LONG) != 0 {
-			lsLong(".", files, flag, out)
+			err = lsLong(ctx, ".", files, flag, out)
 		} else {
-			lsBox(".", files, flag, out)
+			err = lsBox(ctx, ".", files, flag, out)
+		}
+		if err != nil {
+			return err
 		}
 		printCount = len(files)
 	}
@@ -365,7 +399,7 @@ func lsCore(paths []string, flag int, out io.Writer, errout io.Writer) error {
 			}
 			fmt.Fprintf(out, "%s:\n", name)
 		}
-		err := lsFolder(name, flag, out)
+		err := lsFolder(ctx, name, flag, out)
 		if err != nil {
 			return err
 		}
@@ -431,7 +465,7 @@ func (this OptionError) Error() string {
 }
 
 // ls 機能のエントリ:引数をオプションとパスに分離する
-func Main(args []string, out io.Writer, err io.Writer) error {
+func Main(ctx context.Context, args []string, out io.Writer, err io.Writer) error {
 	flag := 0
 	paths := make([]string, 0)
 	for _, arg := range args {
@@ -465,7 +499,7 @@ func Main(args []string, out io.Writer, err io.Writer) error {
 	if (flag & O_COLOR) != 0 {
 		io.WriteString(out, ANSI_END)
 	}
-	return lsCore(paths, flag, out, err)
+	return lsCore(ctx, paths, flag, out, err)
 }
 
 // vim:set fenc=utf8 ts=4 sw=4 noet:

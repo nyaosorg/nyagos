@@ -2,10 +2,12 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"flag"
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"regexp"
 	"runtime/debug"
@@ -146,8 +148,8 @@ func main() {
 
 	flag.Parse()
 
-	interpreter.SetHook(func(it *interpreter.Interpreter) (int, bool, error) {
-		rc, done, err := commands.Exec(&it.Cmd)
+	interpreter.SetHook(func(ctx context.Context, it *interpreter.Interpreter) (int, bool, error) {
+		rc, done, err := commands.Exec(ctx, &it.Cmd)
 		return rc, done, err
 	})
 	completion.AppendCommandLister(commands.AllNames)
@@ -202,10 +204,16 @@ func main() {
 		command_stream = NewCmdStreamFile(os.Stdin)
 	}
 
+	sigint := make(chan os.Signal, 1)
+	defer close(sigint)
+	quit := make(chan struct{}, 1)
+	defer close(quit)
+
 	for {
 		history_count := readline.DefaultEditor.HistoryLen()
 
 		line, err := command_stream()
+
 		if err != nil {
 			if err != io.EOF {
 				fmt.Fprintln(os.Stderr, err.Error())
@@ -255,7 +263,24 @@ func main() {
 		}
 		L.SetTop(stackPos)
 
-		_, err = it.Interpret(line)
+		ctx, cancel := context.WithCancel(context.Background())
+
+		signal.Notify(sigint, os.Interrupt)
+
+		go func(sigint_ chan os.Signal, quit_ chan struct{}, cancel_ func()) {
+			for {
+				select {
+				case <-sigint_:
+					cancel_()
+				case <-quit:
+					return
+				}
+			}
+		}(sigint, quit, cancel)
+		_, err = it.InterpretContext(ctx, line)
+		signal.Stop(sigint)
+		quit <- struct{}{}
+
 		if err != nil {
 			if err == io.EOF {
 				break

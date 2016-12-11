@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os/exec"
 	"strings"
@@ -8,7 +9,7 @@ import (
 	"../alias"
 )
 
-func cmd_alias(cmd *exec.Cmd) (int, error) {
+func cmd_alias(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		for key, val := range alias.Table {
 			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())

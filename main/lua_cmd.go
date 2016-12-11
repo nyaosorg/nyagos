@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -39,7 +40,7 @@ func (this *LuaBinaryChank) String() string {
 	return "(lua-function)"
 }
 
-func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (int, error) {
+func (this *LuaBinaryChank) Call(ctx context.Context, cmd *interpreter.Interpreter) (int, error) {
 	L, L_ok := cmd.Tag.(lua.Lua)
 	if !L_ok {
 		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
@@ -111,7 +112,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (int, error) {
 				err = err1
 			} else {
 				it.Args = newargs
-				errorlevel, err = it.Spawnvp()
+				errorlevel, err = it.SpawnvpContext(ctx)
 			}
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
 			errorlevel = val
@@ -121,7 +122,7 @@ func (this *LuaBinaryChank) Call(cmd *interpreter.Interpreter) (int, error) {
 				errorlevel = 255
 				err = err1
 			} else {
-				errorlevel, err = it.Interpret(val)
+				errorlevel, err = it.InterpretContext(ctx, val)
 			}
 		}
 	}

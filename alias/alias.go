@@ -1,6 +1,7 @@
 package alias
 
 import (
+	"context"
 	"regexp"
 	"strconv"
 	"strings"
@@ -13,7 +14,7 @@ var dbg = false
 
 type Callable interface {
 	String() string
-	Call(cmd *interpreter.Interpreter) (int, error)
+	Call(ctx context.Context, cmd *interpreter.Interpreter) (int, error)
 }
 
 type AliasFunc struct {
@@ -28,7 +29,7 @@ func (this *AliasFunc) String() string {
 	return this.BaseStr
 }
 
-func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next int, err error) {
+func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (next int, err error) {
 	isReplaced := false
 	if dbg {
 		print("AliasFunc.Call('", cmd.Args[0], "')\n")
@@ -82,7 +83,7 @@ func (this *AliasFunc) Call(cmd *interpreter.Interpreter) (next int, err error) 
 	if dbg {
 		print("it.Interpret\n")
 	}
-	next, err = it.Interpret(cmdline)
+	next, err = it.InterpretContext(ctx, cmdline)
 	if dbg {
 		print("done it.Interpret\n")
 	}
@@ -119,15 +120,15 @@ func quoteAndJoin(list []string) string {
 
 var nextHook interpreter.HookT
 
-func hook(cmd *interpreter.Interpreter) (int, bool, error) {
+func hook(ctx context.Context, cmd *interpreter.Interpreter) (int, bool, error) {
 	if cmd.HookCount > 5 {
-		return nextHook(cmd)
+		return nextHook(ctx, cmd)
 	}
 	callee, ok := Table[strings.ToLower(cmd.Args[0])]
 	if !ok {
-		return nextHook(cmd)
+		return nextHook(ctx, cmd)
 	}
-	next, err := callee.Call(cmd)
+	next, err := callee.Call(ctx, cmd)
 	return next, true, err
 }
 

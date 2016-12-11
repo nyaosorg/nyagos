@@ -132,7 +132,7 @@ func callBoxListing(L lua.Lua) int {
 		L.Pop(1)
 		list = append(list, str)
 	}
-	conio.BoxPrint(list, os.Stdout)
+	conio.BoxPrint(nil, list, os.Stdout)
 	this.RepaintAll()
 	return 0
 }

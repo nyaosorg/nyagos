@@ -3,6 +3,7 @@ package history
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -208,7 +209,7 @@ func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) 
 	}
 }
 
-func CmdHistory(cmd *exec.Cmd) (int, error) {
+func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)

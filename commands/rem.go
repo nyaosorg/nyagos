@@ -1,7 +1,10 @@
 package commands
 
-import "os/exec"
+import (
+	"context"
+	"os/exec"
+)
 
-func cmd_rem(cmd *exec.Cmd) (int, error) {
+func cmd_rem(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return 0, nil
 }

@@ -2,6 +2,7 @@ package completion
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -117,7 +118,7 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	return &rv, default_delimiter, err
 }
 
-func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
+func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
 	comp, _, err := listUpComplete(this)
 	if comp == nil {
 		return readline.CONTINUE
@@ -128,7 +129,7 @@ func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 		fmt.Printf("(warning) %s\n", err.Error())
 		os.Stderr.Sync()
 	}
-	conio.BoxPrint(comp.List, os.Stdout)
+	conio.BoxPrint(ctx, comp.List, os.Stdout)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
@@ -206,7 +207,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		if err != nil {
 			fmt.Printf("(warning) %s\n", err.Error())
 		}
-		conio.BoxPrint(comp.List, os.Stdout)
+		conio.BoxPrint(nil, comp.List, os.Stdout)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}

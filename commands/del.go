@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -10,7 +11,7 @@ import (
 	"github.com/zetamatta/go-getch"
 )
 
-func cmd_del(cmd *exec.Cmd) (int, error) {
+func cmd_del(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	n := len(cmd.Args)
 	if n <= 1 {
 		fmt.Fprintln(cmd.Stderr, "Usage: del   [/q] FILE(S)...")
@@ -21,9 +22,12 @@ func cmd_del(cmd *exec.Cmd) (int, error) {
 	errorcount := 0
 	i := 1
 	for _, arg1 := range cmd.Args[1:] {
-		if getch.IsCtrlCPressed() {
-			fmt.Fprintln(cmd.Stderr, "^C")
-			return 0, nil
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return 0, nil
+			default:
+			}
 		}
 		if arg1 == "/q" {
 			all = true

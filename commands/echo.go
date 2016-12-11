@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -9,7 +10,7 @@ import (
 	"github.com/mattn/go-isatty"
 )
 
-func cmd_echo(cmd *exec.Cmd) (int, error) {
+func cmd_echo(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	fmt.Fprint(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
 	if f, ok := cmd.Stdout.(*os.File); ok && isatty.IsTerminal(f.Fd()) {
 		fmt.Fprint(cmd.Stdout, "\n")

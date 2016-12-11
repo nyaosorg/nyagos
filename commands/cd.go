@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -46,7 +47,7 @@ func cmd_cd_sub(dir string) (int, error) {
 	}
 }
 
-func cmd_cd(cmd *exec.Cmd) (int, error) {
+func cmd_cd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 {
 		if cmd.Args[1] == "-" {
 			if len(cd_history) < 1 {
@@ -94,5 +95,5 @@ func cmd_cd(cmd *exec.Cmd) (int, error) {
 		push_cd_history()
 		return cmd_cd_sub(home)
 	}
-	return cmd_pwd(cmd)
+	return cmd_pwd(ctx, cmd)
 }

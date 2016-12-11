@@ -1,6 +1,7 @@
 package interpreter
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -118,9 +119,9 @@ func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
 	return
 }
 
-type HookT func(*Interpreter) (int, bool, error)
+type HookT func(context.Context, *Interpreter) (int, bool, error)
 
-var hook = func(*Interpreter) (int, bool, error) {
+var hook = func(context.Context, *Interpreter) (int, bool, error) {
 	return 0, false, nil
 }
 
@@ -144,7 +145,7 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
-func (this *Interpreter) spawnvp_noerrmsg() (int, error) {
+func (this *Interpreter) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	// command is empty.
 	if len(this.Args) <= 0 {
 		return 0, nil
@@ -154,7 +155,7 @@ func (this *Interpreter) spawnvp_noerrmsg() (int, error) {
 	}
 
 	// aliases and lua-commands
-	if errorlevel, done, err := hook(this); done || err != nil {
+	if errorlevel, done, err := hook(ctx, this); done || err != nil {
 		return errorlevel, err
 	}
 
@@ -203,7 +204,11 @@ func IsAlreadyReported(err error) bool {
 }
 
 func (this *Interpreter) Spawnvp() (int, error) {
-	errorlevel, err := this.spawnvp_noerrmsg()
+	return this.SpawnvpContext(nil)
+}
+
+func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
+	errorlevel, err := this.spawnvp_noerrmsg(ctx)
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if dbg {
 			val := reflect.ValueOf(err)
@@ -217,7 +222,11 @@ func (this *Interpreter) Spawnvp() (int, error) {
 
 var pipeSeq uint = 0
 
-func (this *Interpreter) Interpret(text string) (errorlevel int, err error) {
+func (this *Interpreter) Interpret(text string) (int, error) {
+	return this.InterpretContext(nil, text)
+}
+
+func (this *Interpreter) InterpretContext(ctx context.Context, text string) (errorlevel int, err error) {
 	if dbg {
 		print("Interpret('", text, "')\n")
 	}
@@ -321,10 +330,12 @@ func (this *Interpreter) Interpret(text string) (errorlevel int, err error) {
 				cmd.IsBackGround = true
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
-				errorlevel, err = cmd.Spawnvp()
+				// foreground execution.
+				errorlevel, err = cmd.SpawnvpContext(ctx)
 				ErrorLevelStr = fmt.Sprintf("%d", errorlevel)
 				cmd.Close()
 			} else {
+				// background
 				if !isBackGround {
 					wg.Add(1)
 				}

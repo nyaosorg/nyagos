@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os/exec"
@@ -16,7 +17,7 @@ const (
 	GETWD_FAIL  = 3
 )
 
-func cmd_dirs(cmd *exec.Cmd) (int, error) {
+func cmd_dirs(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	wd, err := cpath.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
@@ -29,7 +30,7 @@ func cmd_dirs(cmd *exec.Cmd) (int, error) {
 	return 0, nil
 }
 
-func cmd_popd(cmd *exec.Cmd) (int, error) {
+func cmd_popd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if len(dirstack) <= 0 {
 		return NO_DIRSTACK, errors.New("popd: directory stack empty.")
 	}
@@ -38,10 +39,10 @@ func cmd_popd(cmd *exec.Cmd) (int, error) {
 		return CHDIR_FAIL, err
 	}
 	dirstack = dirstack[:len(dirstack)-1]
-	return cmd_dirs(cmd)
+	return cmd_dirs(ctx, cmd)
 }
 
-func cmd_pushd(cmd *exec.Cmd) (int, error) {
+func cmd_pushd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	wd, err := cpath.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
@@ -62,5 +63,5 @@ func cmd_pushd(cmd *exec.Cmd) (int, error) {
 		}
 		dirstack[len(dirstack)-1] = wd
 	}
-	return cmd_dirs(cmd)
+	return cmd_dirs(ctx, cmd)
 }

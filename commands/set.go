@@ -1,13 +1,14 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
 	"strings"
 )
 
-func cmd_set(cmd *exec.Cmd) (int, error) {
+func cmd_set(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)

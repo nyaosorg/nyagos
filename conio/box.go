@@ -1,6 +1,7 @@
 package conio
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"regexp"
@@ -11,7 +12,7 @@ import (
 
 var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 
-func BoxPrint(nodes []string, out io.Writer) {
+func BoxPrint(ctx context.Context, nodes []string, out io.Writer) bool {
 	width := int(GetScreenBufferInfo().Size.X)
 	if width <= 0 || width > 999 {
 		width = 80
@@ -44,5 +45,13 @@ func BoxPrint(nodes []string, out io.Writer) {
 	}
 	for _, line := range lines {
 		fmt.Fprintln(out, strings.TrimSpace(string(line)))
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return false
+			default:
+			}
+		}
 	}
+	return true
 }

@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"os/exec"
@@ -54,7 +55,7 @@ func readTimeStamp(s string) *time.Time {
 	return &stamp
 }
 
-func cmd_touch(this *exec.Cmd) (int, error) {
+func cmd_touch(ctx context.Context, this *exec.Cmd) (int, error) {
 	errcnt := 0
 	stamp := time.Now()
 	for i := 1; i < len(this.Args); i++ {

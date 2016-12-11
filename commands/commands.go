@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -11,10 +12,10 @@ import (
 	"../history"
 )
 
-var BuildInCommand map[string]func(*exec.Cmd) (int, error)
+var BuildInCommand map[string]func(context.Context, *exec.Cmd) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func Exec(cmd *exec.Cmd) (int, bool, error) {
+func Exec(ctx context.Context, cmd *exec.Cmd) (int, bool, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
@@ -33,7 +34,7 @@ func Exec(cmd *exec.Cmd) (int, bool, error) {
 		}
 	}
 	cmd.Args = findfile.Globs(cmd.Args)
-	next, err := function(cmd)
+	next, err := function(ctx, cmd)
 	return next, true, err
 }
 
@@ -46,7 +47,7 @@ func AllNames() []string {
 }
 
 func Init() {
-	BuildInCommand = map[string]func(*exec.Cmd) (int, error){
+	BuildInCommand = map[string]func(context.Context, *exec.Cmd) (int, error){
 		".":       cmd_source,
 		"alias":   cmd_alias,
 		"cd":      cmd_cd,

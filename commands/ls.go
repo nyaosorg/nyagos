@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"context"
 	"io"
 	"os"
 	"os/exec"
@@ -10,12 +11,12 @@ import (
 	"./ls"
 )
 
-func cmd_ls(cmd *exec.Cmd) (int, error) {
+func cmd_ls(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	var out io.Writer
 	if cmd.Stdout == os.Stdout {
 		out = colorable.NewColorableStdout()
 	} else {
 		out = cmd.Stdout
 	}
-	return 0, ls.Main(cmd.Args[1:], out, cmd.Stderr)
+	return 0, ls.Main(ctx, cmd.Args[1:], out, cmd.Stderr)
 }
