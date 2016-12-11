@@ -1,4 +1,5 @@
 * Add new customizing file `_nyagos`(batchlike script)
+* Fix #173 could not stop `ls` and built-in commands with Ctrl-C
 
 NYAGOS 4.1.7\_0
 ===============
