@@ -6,7 +6,7 @@ import (
 )
 
 func TestBoxPrint(t *testing.T) {
-	BoxPrint([]string{
+	BoxPrint(nil, []string{
 		"aaaa", "bbbb", "cccc", "fjdaksljflkdajfkljsalkfjdlkf",
 		"jfkldsjflkjdsalkfjlkdsajflkajds",
 		"fsdfsdf"}, os.Stdout)
