@@ -88,6 +88,5 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
 開発者
 ------
 
-* はやまかおる : [zetamatta](https://github.com/zetamatta) 
-
+* [zetamatta](https://github.com/zetamatta)
 <!-- vim:set fenc=utf8 -->

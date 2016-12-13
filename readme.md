@@ -90,4 +90,4 @@ Acknowledgement
 Author
 ------
 
-* HAYAMA\_Kaoru : [zetamatta](https://github.com/zetamatta) 
+* [zetamatta](https://github.com/zetamatta)
