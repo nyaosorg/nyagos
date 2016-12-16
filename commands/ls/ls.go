@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"math"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -194,6 +193,15 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 	return nil
 }
 
+func keta(n int64) int {
+	count := 1
+	for n >= 10 {
+		count++
+		n /= 10
+	}
+	return count
+}
+
 func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	size := int64(1)
 	for _, finfo := range nodes {
@@ -201,7 +209,10 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 			size = finfo.Size()
 		}
 	}
-	width := int(math.Floor(math.Log10(float64(size))))*4/3 + 1
+	width := keta(size)
+	if (flag & O_HUMAN) != 0 {
+		width = width * 4 / 3
+	}
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
 		if ctx != nil {
