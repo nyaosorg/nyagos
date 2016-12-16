@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strconv"
@@ -15,21 +16,14 @@ import (
 	"../readline"
 )
 
-func atoi_(reader *strings.Reader) (int, int) {
+func atoi_(reader io.Reader) (int, int) {
 	n := 0
-	count := 0
-	for reader.Len() > 0 {
-		ch, _, _ := reader.ReadRune()
-		index := strings.IndexRune("0123456789", ch)
-		if index >= 0 {
-			n = n*10 + index
-			count++
-		} else {
-			reader.UnreadRune()
-			break
-		}
+	count, err := fmt.Fscanf(reader, "%d", &n)
+	if err == nil {
+		return n, count
+	} else {
+		return 0, 0
 	}
-	return n, count
 }
 
 var Mark = "!"
