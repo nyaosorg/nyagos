@@ -12,6 +12,7 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/dustin/go-humanize"
 	"github.com/zetamatta/go-findfile"
 
 	"../../conio"
@@ -112,24 +113,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	stamp := status.ModTime()
 	if (flag & O_HUMAN) != 0 {
-		size := status.Size()
-		if size >= 1024*1024*1024 {
-			MB := size / 1024 / 1024
-			GB := MB / 1024
-			MB = MB % 1024
-			fmt.Fprintf(out, " %*d.%01dG", width-3, GB, MB/102)
-		} else if size >= 1024*1024 {
-			KB := size / 1024
-			MB := KB / 1024
-			KB = KB % 1024
-			fmt.Fprintf(out, " %*d.%01dM", width-3, MB, KB/102)
-		} else if size > 1024 {
-			KB := size / 1024
-			B := size % 1024
-			fmt.Fprintf(out, " %*d.%01dK", width-3, KB, B/102)
-		} else {
-			fmt.Fprintf(out, " %*d", width, size)
-		}
+		fmt.Fprintf(out, " %*s", width, humanize.Comma(status.Size()))
 	} else {
 		fmt.Fprintf(out, " %*d", width, status.Size())
 	}
@@ -217,7 +201,7 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 			size = finfo.Size()
 		}
 	}
-	width := int(math.Floor(math.Log10(float64(size)))) + 1
+	width := int(math.Floor(math.Log10(float64(size))))*4/3 + 1
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
 		if ctx != nil {
