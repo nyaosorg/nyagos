@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"os/exec"
 	"strconv"
@@ -15,16 +14,6 @@ import (
 
 	"../readline"
 )
-
-func atoi_(reader io.Reader) (int, int) {
-	n := 0
-	count, err := fmt.Fscanf(reader, "%d", &n)
-	if err == nil {
-		return n, count
-	} else {
-		return 0, 0
-	}
-}
 
 var Mark = "!"
 
@@ -80,7 +69,8 @@ func Replace(line string) (string, bool) {
 		}
 		if strings.IndexRune("0123456789", ch) >= 0 { // !n
 			reader.UnreadRune()
-			backno, _ := atoi_(reader)
+			var backno int
+			fmt.Fscan(reader, &backno)
 			backno = backno % history_count
 			if 0 <= backno && backno < history_count {
 				insertHistory(&buffer, reader, backno)
@@ -89,7 +79,8 @@ func Replace(line string) (string, bool) {
 			continue
 		}
 		if ch == '-' && reader.Len() > 0 { // !-n
-			if number, count := atoi_(reader); count > 0 {
+			var number int
+			if _, err := fmt.Fscan(reader, &number); err == nil {
 				backno := history_count - number - 1
 				for backno < 0 {
 					backno += history_count
@@ -189,8 +180,8 @@ func insertHistory(buffer *bytes.Buffer, reader *strings.Reader, historyNo int) 
 			buffer.WriteString(strings.Join(history1.Word[1:], " "))
 		}
 	} else if siz > 0 && ch == ':' {
-		n, count := atoi_(reader)
-		if count <= 0 {
+		var n int
+		if _, err := fmt.Fscan(reader, &n); err != nil {
 			buffer.WriteRune(':')
 		} else if n < len(history1.Word) {
 			buffer.WriteString(history1.Word[n])
