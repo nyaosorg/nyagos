@@ -770,6 +770,16 @@ func cmdLinesCallback(L lua.Lua) int {
 			L.PushBytes(data)
 			count++
 			break
+		case "n":
+			var val int
+			if _, err := fmt.Fscan(userdata.Reader, &val); err != nil {
+				userdata.Close()
+				return L.Push(nil)
+			} else {
+				L.PushInteger(lua.Integer(val))
+				count++
+				break
+			}
 		}
 	}
 	if err != nil {
