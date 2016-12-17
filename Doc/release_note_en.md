@@ -1,6 +1,7 @@
 * Add new customizing file `_nyagos`(batchlike script)
 * Fix #173 could not stop `ls` and built-in commands with Ctrl-C
 * ls -h: display size with COMMA not Kilo,Mega or Giga
+* Support nyagos.lines(FILENAME,"n") but value is not float but int #147
 
 NYAGOS 4.1.7\_0
 ===============
