@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"../conio"
 	"../interpreter"
+	"../text"
 )
 
 var dbg = false
@@ -74,7 +74,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (
 		print("done cmd.Clone\n")
 	}
 
-	arg1 := conio.QuotedFirstWord(cmdline)
+	arg1 := text.QuotedFirstWord(cmdline)
 	if strings.EqualFold(arg1, cmd.Args[0]) {
 		it.HookCount = 100
 	} else {

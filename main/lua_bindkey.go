@@ -10,6 +10,7 @@ import (
 	"../conio"
 	"../lua"
 	"../readline"
+	"../text"
 )
 
 type KeyLuaFuncT struct {
@@ -104,7 +105,7 @@ func callFirstWord(L lua.Lua) int {
 	if this == nil {
 		return stack_count
 	}
-	word := conio.QuotedFirstWord(this.String())
+	word := text.QuotedFirstWord(this.String())
 	return L.Push(word, 0)
 }
 

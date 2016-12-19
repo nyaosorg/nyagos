@@ -1,4 +1,4 @@
-package conio
+package text
 
 import (
 	"fmt"

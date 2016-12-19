@@ -1,8 +1,10 @@
 package readline
 
 import (
-	. "../conio"
 	"fmt"
+
+	"../conio"
+	"../text"
 )
 
 type HistoryLine struct {
@@ -11,7 +13,7 @@ type HistoryLine struct {
 }
 
 func NewHistoryLine(line string) *HistoryLine {
-	return &HistoryLine{Line: line, Word: SplitQ(line)}
+	return &HistoryLine{Line: line, Word: text.SplitQ(line)}
 }
 
 func (this *HistoryLine) At(n int) string {
@@ -69,7 +71,7 @@ func (this *LineEditor) HistoryResetPointer() {
 }
 
 func (this *LineEditor) SetPromptStr(prompt string) {
-	width := GetStringWidth(prompt)
+	width := conio.GetStringWidth(prompt)
 	this.Prompt = func(*LineEditor) (int, error) {
 		fmt.Print(prompt)
 		return width, nil
