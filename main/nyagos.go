@@ -222,7 +222,7 @@ func main() {
 		}
 
 		var isReplaced bool
-		line, isReplaced = history.Replace(line)
+		line, isReplaced = historyReplace(line)
 		if isReplaced {
 			fmt.Fprintln(os.Stdout, line)
 		}
