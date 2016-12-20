@@ -91,7 +91,7 @@ bbbb
 bbbb
 cccc`
 	hisObj := &history_t{[]string{}}
-	LoadFromReader(strings.NewReader(source),hisObj)
+	LoadFromReader(strings.NewReader(source), hisObj)
 	if hisObj.Len() != 3 || hisObj.At(0) != "aaaa" ||
 		hisObj.At(1) != "bbbb" || hisObj.At(2) != "cccc" {
 
