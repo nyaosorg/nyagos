@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"strconv"
@@ -258,13 +259,8 @@ func Save(path string) error {
 	return nil
 }
 
-func Load(path string, hisObj IHistory) error {
-	fd, err := os.Open(path)
-	if err != nil {
-		return err
-	}
-	defer fd.Close()
-	sc := bufio.NewScanner(fd)
+func LoadFromReader(reader io.Reader, hisObj IHistory) {
+	sc := bufio.NewScanner(reader)
 	list := make([]string, 0, 2000)
 	hash := make(map[string]int)
 	for sc.Scan() {
@@ -280,5 +276,14 @@ func Load(path string, hisObj IHistory) error {
 			hisObj.Push(line)
 		}
 	}
+}
+
+func Load(path string, hisObj IHistory) error {
+	fd, err := os.Open(path)
+	if err != nil {
+		return err
+	}
+	LoadFromReader(fd, hisObj)
+	fd.Close()
 	return nil
 }
