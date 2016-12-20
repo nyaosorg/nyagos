@@ -258,16 +258,27 @@ func Save(path string) error {
 	return nil
 }
 
-func Load(path string) error {
+func Load(path string, hisObj IHistory) error {
 	fd, err := os.Open(path)
 	if err != nil {
 		return err
 	}
 	defer fd.Close()
 	sc := bufio.NewScanner(fd)
+	list := make([]string, 0, 2000)
+	hash := make(map[string]int)
 	for sc.Scan() {
-		readline.DefaultEditor.Histories = append(readline.DefaultEditor.Histories, readline.NewHistoryLine(sc.Text()))
+		line := sc.Text()
+		if lnum, ok := hash[line]; ok {
+			list[lnum] = ""
+		}
+		hash[line] = len(list)
+		list = append(list, line)
 	}
-	readline.DefaultEditor.ShrinkHistory()
+	for _, line := range list {
+		if line != "" {
+			hisObj.Push(line)
+		}
+	}
 	return nil
 }

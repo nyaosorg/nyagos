@@ -181,7 +181,7 @@ func main() {
 	}
 
 	histPath := filepath.Join(AppDataDir(), "nyagos.history")
-	history.Load(histPath)
+	history.Load(histPath, &THistory{readline.DefaultEditor})
 	history.Save(histPath) // cut over max-line
 
 	it := interpreter.New()
