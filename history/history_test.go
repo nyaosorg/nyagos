@@ -98,3 +98,14 @@ cccc`
 		t.Fail()
 	}
 }
+
+func TestSaveToWriter(t *testing.T) {
+	hisObj := &history_t{
+		[]string{"aaaa", "bbbb", "aaaa", "dddd", "eeee"},
+	}
+	var buffer bytes.Buffer
+	SaveToWriter(&buffer, hisObj)
+	if buffer.String() != "bbbb\naaaa\ndddd\neeee\n" {
+		t.Fail()
+	}
+}

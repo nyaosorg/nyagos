@@ -242,20 +242,33 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 const max_histories = 2000
 
-func Save(path string) error {
-	readline.DefaultEditor.ShrinkHistory()
-	start := 0
-	if readline.DefaultEditor.HistoryLen() > max_histories {
-		start = readline.DefaultEditor.HistoryLen() - max_histories
+func SaveToWriter(w io.Writer, hisObj IHistory) {
+	list := make([]string, 0, hisObj.Len())
+	hash := make(map[string]int)
+	for i := hisObj.Len() - 1; i >= 0; i-- {
+		line := hisObj.At(i)
+		if _, ok := hash[line]; !ok {
+			list = append(list, hisObj.At(i))
+			hash[line] = i
+		}
 	}
+	if len(list) > max_histories {
+		list = list[:max_histories]
+	}
+	bw := bufio.NewWriter(w)
+	for i := len(list) - 1; i >= 0; i-- {
+		fmt.Fprintln(bw, list[i])
+	}
+	bw.Flush()
+}
+
+func Save(path string, hisObj IHistory) error {
 	fd, err := os.Create(path)
 	if err != nil {
 		return err
 	}
-	defer fd.Close()
-	for i := start; i < len(readline.DefaultEditor.Histories); i++ {
-		fmt.Fprintln(fd, readline.DefaultEditor.Histories[i].Line)
-	}
+	SaveToWriter(fd, hisObj)
+	fd.Close()
 	return nil
 }
 
