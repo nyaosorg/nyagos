@@ -352,7 +352,7 @@ func (this *Interpreter) InterpretContext(ctx context.Context, text string) (err
 					} else {
 						defer wg.Done()
 					}
-					cmd1.Spawnvp()
+					cmd1.SpawnvpContext(ctx)
 					cmd1.Close()
 				}(cmd)
 			}

@@ -13,7 +13,6 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"../readline"
 	"../text"
 )
 
@@ -209,6 +208,10 @@ func InsertHistory(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 }
 
 func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
+	if ctx == nil {
+		fmt.Fprintln(cmd.Stderr, "history not found (case1)\n")
+		return 1, nil
+	}
 	var num int
 	if len(cmd.Args) >= 2 {
 		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
@@ -229,13 +232,19 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		num = 10
 	}
 	start := 0
-	if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
-		readline.DefaultEditor.HistoryLen() > num {
 
-		start = readline.DefaultEditor.HistoryLen() - num
-	}
-	for i, s := range readline.DefaultEditor.Histories[start:] {
-		fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", start+i, s.Line)
+	historyObj_ := ctx.Value("history")
+	if historyObj, ok := historyObj_.(IHistory); ok {
+		if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
+			historyObj.Len() > num {
+
+			start = historyObj.Len() - num
+		}
+		for i := start; i < historyObj.Len(); i++ {
+			fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", i, historyObj.At(i))
+		}
+	} else {
+		fmt.Fprintln(cmd.Stderr, "history not found (case 2)")
 	}
 	return 0, nil
 }

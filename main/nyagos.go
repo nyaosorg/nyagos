@@ -265,6 +265,7 @@ func main() {
 		L.SetTop(stackPos)
 
 		ctx, cancel := context.WithCancel(context.Background())
+		ctx = context.WithValue(ctx, "history", historyWrapper)
 
 		signal.Notify(sigint, os.Interrupt)
 
