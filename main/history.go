@@ -1,7 +1,6 @@
 package main
 
 import (
-	"../history"
 	"../readline"
 )
 
@@ -25,9 +24,4 @@ func (this *THistory) Push(line string) {
 func (this *THistory) Replace(line string) {
 	tmp := readline.NewHistoryLine(line)
 	this.Obj.Histories[len(this.Obj.Histories)-1] = tmp
-}
-
-func historyReplace(line string) (string, bool) {
-	hisObj := THistory{readline.DefaultEditor}
-	return history.Replace(&hisObj, line)
 }

@@ -212,13 +212,3 @@ func (session *LineEditor) ReadLine() (string, error) {
 		}
 	}
 }
-
-// Not used on NYAGOS. Provide this as library for other applications.
-func ReadLinePromptStr(promptStr string) (string, error) {
-	width := GetStringWidth(promptStr)
-	DefaultEditor.Prompt = func(*LineEditor) (int, error) {
-		fmt.Print(promptStr)
-		return width, nil
-	}
-	return DefaultEditor.ReadLine()
-}

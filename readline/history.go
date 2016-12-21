@@ -78,7 +78,7 @@ func (this *LineEditor) SetPromptStr(prompt string) {
 	}
 }
 
-var DefaultEditor = NewLineEditor()
+var DefaultEditor *LineEditor
 
 func KeyFuncHistoryUp(this *Buffer) Result {
 	if this.Session.Pointer <= 0 {

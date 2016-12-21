@@ -474,6 +474,9 @@ func cmdGlob(L lua.Lua) int {
 }
 
 func cmdGetHistory(this lua.Lua) int {
+	if readline.DefaultEditor == nil {
+		return 0
+	}
 	if this.GetType(-1) == lua.LUA_TNUMBER {
 		val, err := this.ToInteger(-1)
 		if err != nil {

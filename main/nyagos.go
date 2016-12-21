@@ -107,9 +107,9 @@ func itprCloneHook(this *interpreter.Interpreter) error {
 	return nil
 }
 
-func NewCmdStreamFile(f *os.File) func() (string, error) {
+func NewCmdStreamFile(f *os.File) func(*context.Context) (string, error) {
 	breader := bufio.NewReader(os.Stdin)
-	return func() (string, error) {
+	return func(*context.Context) (string, error) {
 		line, err := breader.ReadString('\n')
 		if err != nil {
 			return "", err
@@ -119,10 +119,54 @@ func NewCmdStreamFile(f *os.File) func() (string, error) {
 	}
 }
 
-func NewCmdStreamConsole(it *interpreter.Interpreter) func() (string, error) {
-	readline.DefaultEditor.Prompt = printPrompt
-	readline.DefaultEditor.Tag = it
-	return readline.DefaultEditor.ReadLine
+func NewCmdStreamConsole(it *interpreter.Interpreter) func(*context.Context) (string, error) {
+	editor := readline.NewLineEditor()
+	editor.Prompt = printPrompt
+	editor.Tag = it
+
+	histPath := filepath.Join(AppDataDir(), "nyagos.history")
+	historyWrapper := &THistory{editor}
+	history.Load(histPath, historyWrapper)
+	history.Save(histPath, historyWrapper)
+
+	readline.DefaultEditor = editor
+
+	return func(ctx *context.Context) (string, error) {
+		history_count := editor.HistoryLen()
+		*ctx = context.WithValue(*ctx, "history", historyWrapper)
+		var line string
+		var err error
+		for {
+			line, err = editor.ReadLine()
+			if err != nil {
+				return line, err
+			}
+			var isReplaced bool
+			line, isReplaced = history.Replace(historyWrapper, line)
+			if isReplaced {
+				fmt.Fprintln(os.Stdout, line)
+			}
+			if line != "" {
+				break
+			}
+		}
+		if editor.HistoryLen() > history_count {
+			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
+			if err != nil && os.IsNotExist(err) {
+				// print("create ", histPath, "\n")
+				fd, err = os.Create(histPath)
+			}
+			if err == nil {
+				fmt.Fprintln(fd, line)
+				fd.Close()
+			} else {
+				fmt.Fprintln(os.Stderr, err.Error())
+			}
+		} else {
+			editor.HistoryResetPointer()
+		}
+		return line, err
+	}
 }
 
 var optionK = flag.String("k", "", "like `cmd /k`")
@@ -180,11 +224,6 @@ func main() {
 		silentmode = true
 	}
 
-	histPath := filepath.Join(AppDataDir(), "nyagos.history")
-	historyWrapper := &THistory{readline.DefaultEditor}
-	history.Load(histPath, historyWrapper)
-	history.Save(histPath, historyWrapper)
-
 	it := interpreter.New()
 	it.Tag = L
 	it.OnClone = itprCloneHook
@@ -198,7 +237,7 @@ func main() {
 		return
 	}
 
-	var command_stream func() (string, error)
+	var command_stream func(*context.Context) (string, error)
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		command_stream = NewCmdStreamConsole(it)
 	} else {
@@ -211,39 +250,15 @@ func main() {
 	defer close(quit)
 
 	for {
-		history_count := readline.DefaultEditor.HistoryLen()
+		ctx, cancel := context.WithCancel(context.Background())
 
-		line, err := command_stream()
+		line, err := command_stream(&ctx)
 
 		if err != nil {
 			if err != io.EOF {
 				fmt.Fprintln(os.Stderr, err.Error())
 			}
 			break
-		}
-
-		var isReplaced bool
-		line, isReplaced = historyReplace(line)
-		if isReplaced {
-			fmt.Fprintln(os.Stdout, line)
-		}
-		if line == "" {
-			continue
-		}
-		if readline.DefaultEditor.HistoryLen() > history_count {
-			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
-			if err != nil && os.IsNotExist(err) {
-				// print("create ", histPath, "\n")
-				fd, err = os.Create(histPath)
-			}
-			if err == nil {
-				fmt.Fprintln(fd, line)
-				fd.Close()
-			} else {
-				fmt.Fprintln(os.Stderr, err.Error())
-			}
-		} else {
-			readline.DefaultEditor.HistoryResetPointer()
 		}
 
 		stackPos := L.GetTop()
@@ -263,9 +278,6 @@ func main() {
 			}
 		}
 		L.SetTop(stackPos)
-
-		ctx, cancel := context.WithCancel(context.Background())
-		ctx = context.WithValue(ctx, "history", historyWrapper)
 
 		signal.Notify(sigint, os.Interrupt)
 
