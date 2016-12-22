@@ -1,6 +1,7 @@
 package dos
 
 import (
+	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -39,14 +40,24 @@ func lookPath(dir1, pattern string) (foundpath string) {
 	return
 }
 
-func LookPath(name string) string {
+func LookPath(name string, envnames ...string) string {
 	if strings.ContainsAny(name, "\\/:") {
 		return lookPath(filepath.Dir(name), name+".*")
 	}
-	pathDirList := filepath.SplitList(".;" + os.Getenv("PATH"))
+	var envlist bytes.Buffer
+	envlist.WriteString(".;")
+	envlist.WriteString(os.Getenv("PATH"))
+	for _, name1 := range envnames {
+		envlist.WriteString(";")
+		envlist.WriteString(os.Getenv(name1))
+	}
+	// println(envlist.String())
+	pathDirList := filepath.SplitList(envlist.String())
 
 	for _, dir1 := range pathDirList {
+		// println("lookPath:" + dir1)
 		if path := lookPath(dir1, filepath.Join(dir1, name+".*")); path != "" {
+			// println("Found:" + path)
 			return path
 		}
 	}

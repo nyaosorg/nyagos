@@ -161,10 +161,11 @@ func (this *Interpreter) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 
 	// command not found hook
 	var err error
-	this.Path = dos.LookPath(this.Args[0])
+	this.Path = dos.LookPath(this.Args[0], "NYAGOSPATH")
 	if this.Path == "" {
 		return 255, OnCommandNotFound(this, os.ErrNotExist)
 	}
+	this.Args[0] = this.Path
 	if dbg {
 		print("exec.LookPath(", this.Args[0], ")==", this.Path, "\n")
 	}
