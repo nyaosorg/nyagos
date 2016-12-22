@@ -16,11 +16,13 @@ const (
 	WHICH_NOT_FOUND = 1
 )
 
-func envToList(first1, env string) []string {
-	list1 := strings.Split(os.Getenv(env), ";")
-	result := make([]string, 1, len(list1))
+func envToList(first1 string, envs ...string) []string {
+	result := make([]string, 1, 20)
 	result[0] = first1
-	result = append(result, list1...)
+	for _, env := range envs {
+		list1 := strings.Split(os.Getenv(env), ";")
+		result = append(result, list1...)
+	}
 	return result
 }
 
@@ -31,7 +33,7 @@ func cmd_which(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	for _, name := range cmd.Args[1:] {
 		if name == "-a" {
 			all = true
-			pathList = envToList(".", "PATH")
+			pathList = envToList(".", "PATH", "NYAGOSPATH")
 			extList = envToList("", "PATHEXT")
 			continue
 		}
@@ -59,7 +61,7 @@ func cmd_which(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			}
 
 		} else {
-			path := dos.LookPath(name)
+			path := dos.LookPath(name, "NYAGOSPATH")
 			if path == "" {
 				return WHICH_NOT_FOUND, os.ErrNotExist
 			}
