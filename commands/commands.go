@@ -59,6 +59,7 @@ func Init() {
 		"erase":   cmd_del,
 		"exit":    cmd_exit,
 		"history": history.CmdHistory,
+		"if":      cmd_if,
 		"ln":      cmd_ln,
 		"ls":      cmd_ls,
 		"md":      cmd_mkdir,

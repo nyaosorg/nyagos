@@ -227,7 +227,7 @@ func (this *Interpreter) Interpret(text string) (int, error) {
 	return this.InterpretContext(nil, text)
 }
 
-func (this *Interpreter) InterpretContext(ctx context.Context, text string) (errorlevel int, err error) {
+func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
 	if dbg {
 		print("Interpret('", text, "')\n")
 	}
@@ -294,6 +294,7 @@ func (this *Interpreter) InterpretContext(ctx context.Context, text string) (err
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
 			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
 			cmd.OnClone = this.OnClone
+			ctx := context.WithValue(ctx_, "interpreter", cmd)
 			if this.OnClone != nil {
 				if err := this.OnClone(cmd); err != nil {
 					return 255, err
