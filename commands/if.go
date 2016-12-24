@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 
 	"../interpreter"
@@ -30,6 +31,12 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		_, err := os.Stat(args[2])
 		status = (err == nil)
 		args = args[3:]
+		start += 2
+	} else if len(args) >= 3 && strings.EqualFold(args[1], "errorlevel") {
+		num, num_err := strconv.Atoi(args[2])
+		if num_err == nil {
+			status = (interpreter.LastErrorLevel <= num)
+		}
 		start += 2
 	}
 
