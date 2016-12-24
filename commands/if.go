@@ -16,7 +16,7 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	not := false
 	start := 1
 
-	if len(args) >= 2 && args[1] == "not" {
+	if len(args) >= 2 && strings.EqualFold(args[1], "not") {
 		not = true
 		args = args[1:]
 		start++
@@ -26,12 +26,13 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		status = (args[1] == args[3])
 		args = args[4:]
 		start += 3
-	} else if len(args) >= 3 && args[1] == "exist" {
+	} else if len(args) >= 3 && strings.EqualFold(args[1], "exist") {
 		_, err := os.Stat(args[2])
 		status = (err == nil)
 		args = args[3:]
 		start += 2
 	}
+
 	if not {
 		status = !status
 	}
