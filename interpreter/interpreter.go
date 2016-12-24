@@ -135,7 +135,7 @@ var OnCommandNotFound = func(this *Interpreter, err error) error {
 	return err
 }
 
-var ErrorLevelStr string
+var LastErrorLevel int
 
 func nvl(a *os.File, b *os.File) *os.File {
 	if a != nil {
@@ -334,7 +334,7 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 			if i == len(pipeline)-1 && state.Term != "&" {
 				// foreground execution.
 				errorlevel, err = cmd.SpawnvpContext(ctx)
-				ErrorLevelStr = fmt.Sprintf("%d", errorlevel)
+				LastErrorLevel = errorlevel
 				cmd.Close()
 			} else {
 				// background

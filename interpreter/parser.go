@@ -32,7 +32,7 @@ var PercentFunc = map[string]func() string{
 		}
 	},
 	"ERRORLEVEL": func() string {
-		return ErrorLevelStr
+		return fmt.Sprintf("%d", LastErrorLevel)
 	},
 }
 
