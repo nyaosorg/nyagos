@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"flag"
 	"fmt"
@@ -22,7 +21,6 @@ import (
 	"../completion"
 	"../conio"
 	"../dos"
-	"../history"
 	"../interpreter"
 	"../lua"
 	"../readline"
@@ -107,68 +105,6 @@ func itprCloneHook(this *interpreter.Interpreter) error {
 	return nil
 }
 
-func NewCmdStreamFile(f *os.File) func(*context.Context) (string, error) {
-	breader := bufio.NewReader(os.Stdin)
-	return func(*context.Context) (string, error) {
-		line, err := breader.ReadString('\n')
-		if err != nil {
-			return "", err
-		}
-		line = strings.TrimRight(line, "\r\n")
-		return line, nil
-	}
-}
-
-func NewCmdStreamConsole(it *interpreter.Interpreter) func(*context.Context) (string, error) {
-	editor := readline.NewLineEditor()
-	editor.Prompt = printPrompt
-	editor.Tag = it
-
-	histPath := filepath.Join(AppDataDir(), "nyagos.history")
-	historyWrapper := &THistory{editor}
-	history.Load(histPath, historyWrapper)
-	history.Save(histPath, historyWrapper)
-
-	readline.DefaultEditor = editor
-
-	return func(ctx *context.Context) (string, error) {
-		history_count := editor.HistoryLen()
-		*ctx = context.WithValue(*ctx, "history", historyWrapper)
-		var line string
-		var err error
-		for {
-			line, err = editor.ReadLine()
-			if err != nil {
-				return line, err
-			}
-			var isReplaced bool
-			line, isReplaced = history.Replace(historyWrapper, line)
-			if isReplaced {
-				fmt.Fprintln(os.Stdout, line)
-			}
-			if line != "" {
-				break
-			}
-		}
-		if editor.HistoryLen() > history_count {
-			fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
-			if err != nil && os.IsNotExist(err) {
-				// print("create ", histPath, "\n")
-				fd, err = os.Create(histPath)
-			}
-			if err == nil {
-				fmt.Fprintln(fd, line)
-				fd.Close()
-			} else {
-				fmt.Fprintln(os.Stderr, err.Error())
-			}
-		} else {
-			editor.HistoryResetPointer()
-		}
-		return line, err
-	}
-}
-
 var optionK = flag.String("k", "", "like `cmd /k`")
 var optionC = flag.String("c", "", "like `cmd /c`")
 var optionF = flag.String("f", "", "run lua script")
@@ -237,7 +173,7 @@ func main() {
 		return
 	}
 
-	var command_stream func(*context.Context) (string, error)
+	var command_stream ICmdStream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		command_stream = NewCmdStreamConsole(it)
 	} else {
@@ -252,7 +188,7 @@ func main() {
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
 
-		line, err := command_stream(&ctx)
+		line, err := command_stream.ReadLine(&ctx)
 
 		if err != nil {
 			if err != io.EOF {
