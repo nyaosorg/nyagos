@@ -175,9 +175,9 @@ func main() {
 
 	var command_stream ICmdStream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		command_stream = NewCmdStreamConsole(it)
+		command_stream = NewUnCmdStream(NewCmdStreamConsole(it))
 	} else {
-		command_stream = NewCmdStreamFile(os.Stdin)
+		command_stream = NewUnCmdStream(NewCmdStreamFile(os.Stdin))
 	}
 
 	sigint := make(chan os.Signal, 1)

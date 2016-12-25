@@ -96,3 +96,30 @@ func (this *CmdStreamFile) ReadLine(ctx *context.Context) (string, error) {
 	line = strings.TrimRight(line, "\r\n")
 	return line, nil
 }
+
+type UnCmdStream struct {
+	body  ICmdStream
+	queue []string
+}
+
+func NewUnCmdStream(body ICmdStream) *UnCmdStream {
+	return &UnCmdStream{body: body, queue: nil}
+}
+
+func (this *UnCmdStream) ReadLine(ctx *context.Context) (string, error) {
+	if this.queue == nil || len(this.queue) <= 0 {
+		return this.body.ReadLine(ctx)
+	} else {
+		line := this.queue[0]
+		this.queue = this.queue[1:]
+		return line, nil
+	}
+}
+
+func (this *UnCmdStream) UnreadLine(line string) {
+	if this.queue == nil {
+		this.queue = []string{line}
+	} else {
+		this.queue = append(this.queue, line)
+	}
+}
