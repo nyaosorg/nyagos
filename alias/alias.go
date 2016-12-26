@@ -48,6 +48,8 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (
 			isReplaced = true
 			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args) {
 				return cmd.RawArgs[i]
+			} else {
+				return ""
 			}
 		}
 		return s
