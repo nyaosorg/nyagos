@@ -35,12 +35,29 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (
 		print("AliasFunc.Call('", cmd.Args[0], "')\n")
 	}
 	cmdline := paramMatch.ReplaceAllStringFunc(this.BaseStr, func(s string) string {
-		if s == "$*" {
+		if s == "$~*" {
+			isReplaced = true
+			if cmd.Args != nil && len(cmd.Args) >= 2 {
+				return strings.Join(cmd.Args[1:], " ")
+			} else {
+				return ""
+			}
+		} else if s == "$*" {
 			isReplaced = true
 			if cmd.Args != nil && len(cmd.Args) >= 2 {
 				return strings.Join(cmd.RawArgs[1:], " ")
 			} else {
 				return ""
+			}
+		} else if len(s) >= 3 && s[0] == '$' && s[1] == '~' && strings.IndexByte("0123456789", s[2]) >= 0 {
+			i, err := strconv.ParseInt(s[2:], 10, 0)
+			if err == nil {
+				isReplaced = true
+				if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args) {
+					return cmd.Args[i]
+				} else {
+					return ""
+				}
 			}
 		}
 		i, err := strconv.ParseInt(s[1:], 10, 0)
@@ -93,7 +110,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (
 }
 
 var Table = map[string]Callable{}
-var paramMatch = regexp.MustCompile("\\$(\\*|[0-9]+)")
+var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 
 func AllNames() []string {
 	names := make([]string, 0, len(Table))
