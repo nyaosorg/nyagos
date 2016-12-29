@@ -52,6 +52,10 @@ type Interpreter struct {
 	Closers []io.Closer
 }
 
+func (this *Interpreter) GetRawArgs() []string {
+	return this.RawArgs
+}
+
 func (this *Interpreter) Close() {
 	if this.Closers != nil {
 		for _, c := range this.Closers {

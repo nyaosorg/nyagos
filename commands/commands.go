@@ -75,5 +75,6 @@ func Init() {
 		"source":  cmd_source,
 		"touch":   cmd_touch,
 		"which":   cmd_which,
+		"(":       cmd_block,
 	}
 }

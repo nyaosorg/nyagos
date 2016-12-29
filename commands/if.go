@@ -2,7 +2,7 @@ package commands
 
 import (
 	"context"
-	"fmt"
+	"errors"
 	"os"
 	"os/exec"
 	"strconv"
@@ -55,12 +55,17 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if not {
 		status = !status
 	}
+
+	it, it_ok := ctx.Value("interpreter").(*interpreter.Interpreter)
+	if !it_ok {
+		return -1, errors.New("if: not found sub shell instance")
+	}
+
 	if status {
-		it_ := ctx.Value("interpreter")
-		if it, ok := it_.(*interpreter.Interpreter); ok {
-			return it.InterpretContext(ctx, strings.Join(it.RawArgs[start:], " "))
-		} else {
-			fmt.Fprintln(cmd.Stderr, "if: not found sub shell instance")
+		return it.InterpretContext(ctx, strings.Join(it.RawArgs[start:], " "))
+	} else {
+		if it.GetRawArgs()[start] == "(" {
+			read_block(ctx, false, start+1)
 		}
 	}
 	return 1, nil

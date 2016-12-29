@@ -187,6 +187,7 @@ func main() {
 
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
+		ctx = context.WithValue(ctx, "readline", command_stream)
 
 		line, err := command_stream.ReadLine(&ctx)
 
