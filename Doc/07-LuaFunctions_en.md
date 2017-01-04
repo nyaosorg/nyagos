@@ -4,8 +4,10 @@
 
 It defines an alias. These macros are available on "REPLACE-STRING".
 
-* `$1`,`$2`,`$3` ... the number's argument (removed quotations)
-* `$\*` ... all arguments (not removed quotations)
+* `$1`,`$2`,`$3` ... the number's argument (not removed quotations)
+* `$*` ... all arguments (not removed quotations)
+* `$~1`,`$~2`,`$~3` ... the number's argument (removed quotations)
+* `$~*` ... all arguments (removed quotations)
 
 ### `nyagos.alias.NAME = function(ARGS)...end`
 
