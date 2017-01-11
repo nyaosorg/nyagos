@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"regexp"
 	"strconv"
@@ -69,7 +70,12 @@ const NOTQUOTED = '\000'
 const EMPTY_COMMAND_FOUND = "Empty command found"
 
 func buffer2word(source bytes.Buffer, removeQuote bool) string {
+	return string2word(source.String(), removeQuote)
+}
+
+func string2word(source_ string, removeQuote bool) string {
 	var buffer bytes.Buffer
+	source := strings.NewReader(source_)
 
 	lastchar := ' '
 	quoteNow := NOTQUOTED
@@ -94,23 +100,21 @@ func buffer2word(source bytes.Buffer, removeQuote bool) string {
 				ch, _, err = source.ReadRune()
 				if err != nil {
 					buffer.WriteRune('%')
-					nameBuf.WriteTo(&buffer)
-					return buffer.String()
+					source.Seek(-int64(nameBuf.Len()), io.SeekCurrent)
+					break
 				}
 				if ch == '%' {
 					if value, ok := OurGetEnv(nameBuf.String()); ok {
 						buffer.WriteString(value)
 					} else {
 						buffer.WriteRune('%')
-						nameBuf.WriteTo(&buffer)
-						buffer.WriteRune('%')
+						source.Seek(-int64(nameBuf.Len()), io.SeekCurrent)
 					}
 					break
 				}
 				if ch == '=' {
-					source.UnreadRune()
 					buffer.WriteRune('%')
-					nameBuf.WriteTo(&buffer)
+					source.Seek(-int64(nameBuf.Len()), io.SeekCurrent)
 					break
 				}
 				nameBuf.WriteRune(ch)
