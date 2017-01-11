@@ -4,6 +4,7 @@
 * nyagos.lines(FILENAME,"n") を実装した(ただし、実数ではなく整数)
 * nyagos.exe の中だけで機能する %PATH% 的な環境変数 %NYAGOSPATH% を追加
 * vim のような SET VAR+=VALUE , VAR^=VALUE をサポート
+* Fix #176 `gawk "BEGIN{ print substr(""%01"",2) }"` がエラーになっていた
 
 NYAGOS 4.1.7\_0
 ===============

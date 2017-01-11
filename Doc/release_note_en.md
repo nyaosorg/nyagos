@@ -4,6 +4,7 @@
 * Support nyagos.lines(FILENAME,"n") but value is not float but int #147
 * Add %NYAGOSPATH% which works like %PATH% only in nyagos.exe not childprocess
 * Support SET VAR+=VALUE , VAR^=VALUE like vim
+* Fix #176 Bug on `gawk "BEGIN{ print substr(""%01"",2) }"`
 
 NYAGOS 4.1.7\_0
 ===============
