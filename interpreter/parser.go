@@ -69,10 +69,6 @@ const NOTQUOTED = '\000'
 
 const EMPTY_COMMAND_FOUND = "Empty command found"
 
-func buffer2word(source bytes.Buffer, removeQuote bool) string {
-	return string2word(source.String(), removeQuote)
-}
-
 func string2word(source_ string, removeQuote bool) string {
 	var buffer bytes.Buffer
 	source := strings.NewReader(source_)
@@ -182,13 +178,13 @@ func parse1(text string) ([]*StatementT, error) {
 		statement1 := new(StatementT)
 		if buffer.Len() > 0 {
 			if isNextRedirect && len(redirect) > 0 {
-				redirect[len(redirect)-1].SetPath(buffer2word(buffer, true))
+				redirect[len(redirect)-1].SetPath(string2word(buffer.String(), true))
 				isNextRedirect = false
 				statement1.RawArgs = rawArgs
 				statement1.Args = args
 			} else {
-				statement1.RawArgs = append(rawArgs, buffer2word(buffer, false))
-				statement1.Args = append(args, buffer2word(buffer, true))
+				statement1.RawArgs = append(rawArgs, string2word(buffer.String(), false))
+				statement1.Args = append(args, string2word(buffer.String(), true))
 			}
 			buffer.Reset()
 		} else if len(args) <= 0 {
@@ -207,11 +203,11 @@ func parse1(text string) ([]*StatementT, error) {
 
 	term_word := func() {
 		if isNextRedirect && len(redirect) > 0 {
-			redirect[len(redirect)-1].SetPath(buffer2word(buffer, true))
+			redirect[len(redirect)-1].SetPath(string2word(buffer.String(), true))
 		} else {
 			if buffer.Len() > 0 {
-				rawArgs = append(rawArgs, buffer2word(buffer, false))
-				args = append(args, buffer2word(buffer, true))
+				rawArgs = append(rawArgs, string2word(buffer.String(), false))
+				args = append(args, string2word(buffer.String(), true))
 			}
 		}
 		buffer.Reset()
