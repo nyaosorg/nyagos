@@ -8,6 +8,8 @@
 
 NYAGOS 4.1.7\_0
 ===============
+on 29 Nov 2016
+
 * Abolished nyagos.lua, which role nyagos.exe do itself.
 * Caching ~/.nyagos with `%APPDATA%\NYAOS_ORG/dotnyagos.luac`
 * `nyagos.d/*` are bundled with nyagos.exe self.
@@ -28,10 +30,14 @@ NYAGOS 4.1.7\_0
 
 NYAGOS 4.1.6\_1
 ===============
+on 7 Sep 2016
+
 * Fix: the package zip did not have lua53.dll
 
 NYAGOS 4.1.6\_0
 ===============
+on 7 Sep 2016
+
 * Use "\x1B[0K" as ERASELINE instead of " " & Backspace
 * Use "\x1B[mC as m-times of Backspace
 * Fix #159: Stop to print prompt again when terminal window resized
@@ -40,11 +46,15 @@ NYAGOS 4.1.6\_0
 
 NYAGOS 4.1.5\_1
 ===============
+on 31 Jul 2016
+
 * Fix #157++: Overflow line on the text appended after screen resized.
 * Error when it the upvalue named as 'prompter' is used on closures(nyagos.prompt) for invalid ~/.nyagos of 4.0.x on default for #155,#158
 
 NYAGOS 4.1.5\_0
 ===============
+on 31 Jul 2016
+
 * `cd --history` outputs the current directory at first to prevent peco(M-h) fro
 m hangup with no cd histories.
 * On lua, `nyagos.option.glob = true` enables the wildcard expansion on external commands also.(#150)
@@ -57,11 +67,15 @@ m hangup with no cd histories.
 
 NYAGOS 4.1.4\_1
 ===============
+on 12 Jun 2016
+
 * Fix #151 `&&` and `||` work same as ` ;`
 * Add nyagos.d/catalog/autocd.lua & autols.lua (#149 Thx @DeaR)
 
 NYAGOS 4.1.4\_0
 ===============
+on 29 May 2016
+
 * Implemented built-in tiny OLE interface and nyole.dll is not necessary now.
 * Define default-prompt function as `nyagos.default_prompt` and it can change
 console-title(second parameter)
@@ -71,12 +85,16 @@ console-title(second parameter)
 
 NYAGOS 4.1.3\_1
 ===============
+on 8 May 2016
+
 * Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)
 * Fix: when nyagos.history was deleted, warnings are displayed until `exit` was typed.
 * Fix: nyagos.d/catalog/peco.lua: when nyagos.history does not exist, peco hangs
 
 NYAGOS 4.1.3\_0
 ===============
+on 5 May 2016
+
 * Add: `nyagos.open(PATH,MODE)` which `PATH` is in UTF8 and compatible with `io.open`.
 * Add: `nyagos.loadfile(PATH)` which `PATH` is in UTF8 and compatible with `loadfile`.
 * Add: `nyagos.lines(PATH)` which `PATH` is in UTF8 and compatible with `io.lines`. (Be careful that it returns bytearray-string not always UTF8!)
@@ -98,13 +116,15 @@ NYAGOS 4.1.3\_0
 * Fix: `ls -ltr *` was not sorted by modified time. (#136)
 * Support: nyagos -f NOT-Lua-Script(COMMANDS-Script)
 
-(Add forgotten change May 17 2016)
+(Add forgotten change 17 May 2016)
 ----------------------------------
 
 * Not to confuse whether the encoding is ANSI or UTF8 string , stop to print('UTF8-String with ESCAPE-SEQUENCE'). Now print remains to be the bundled one of lua53.dll. ( #129 )
 
 NYAGOS 4.1.2\_0
 ===============
+on 29 Mar 2016
+
 * Made scripts-catalog system
     - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
     - We can import cataloged functions with `use "NAME"` in `.nyagos`
@@ -128,22 +148,28 @@ NYAGOS 4.1.2\_0
 
 NYAGOS 4.1.1\_2
 ===============
+on 17 Feb 2016
+
 * Fix the miss to convert filename UTF8 to ANSI for loadfile() of Lua (#110,Thx Mr.HABATA)
 
 NYAGOS 4.1.1\_1
 ===============
+on 16 Feb 2016
+
 * Force to insert a line feed when prompt is too wide (#104)
 * Fix the error message when no files matches with a given wildcard (#108)
 * Fix the environment variable like %ProgramFiles(x86)% were not expanded. (#109 Thx @hattya)
 
 NYAGOS 4.1.1\_0
 ===============
+on 15 Jan 2016
 
 * Support UTF-16 surrogate pair on getkey
 * `mkdir` suppports /p: make parent directories as needed.
 
 NYAGOS 4.1.0\_0
 ===============
+on 3 Jan 2016
 
 * Add build-in `ln`.
 * Add lua-command `lns` which shows UAC and do `ln -s`
@@ -164,6 +190,8 @@ NYAGOS 4.1.0\_0
 
 NYAGOS 4.1-beta
 ================
+on 13 Dec 2015
+
 * All Lua-callback function have thier own Lua-instances to avoid crash.
 * Create the Lua-table `share[]` to share values between callback 
   functions and `.nyagos`.
