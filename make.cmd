@@ -25,13 +25,12 @@ exit /b
 :"release"
         for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
         set "X_VERSION=-X main.version=%VERSION%"
+        call :"build"
         exit /b
 
 :"build"
         call :"fmt"
-        pushd "%~dp0main"
-        powershell -ExecutionPolicy RemoteSigned -File makesyso.ps1
-        popd
+        call :"goversioninfo"
         for /F %%I in ('dir /b /s /aa nyagos.d') do attrib -A "%%I" & if exist main\bindata.go del main\bindata.go
         if not exist main\bindata.go call :"bindata"
         for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" %TAGS% .\main
@@ -69,6 +68,20 @@ exit /b
 :"bindata"
         if not exist go-bindata.exe call :getbindata
         go-bindata.exe -o "main\bindata.go" "nyagos.d/..."
+        exit /b
+
+:getgoversioninfo
+        go get "github.com/josephspurrier/goversioninfo"
+        pushd "%GOPATH%\src\github.com\josephspurrier\goversioninfo\cmd\goversioninfo"
+        go build
+        copy goversioninfo.exe "%~dp0\."
+        popd
+        exit /b
+
+:"goversioninfo"
+        if not exist goversioninfo.exe call :getgoversioninfo
+        powershell -ExecutionPolicy RemoteSigned -File "%~dp0main\makejson.ps1" > %~dp0Misc\version.json
+        goversioninfo.exe -icon main\nyagos.ico -o main\nyagos.syso "%~dp0Misc\version.json"
         exit /b
 
 :"const"
