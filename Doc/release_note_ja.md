@@ -1,3 +1,5 @@
+[English](release_note_en.md) / Japanese
+
 * 新規のカスタマイズ用のバッチ風スクリプトファイルとして `_nyagos` を用意した
 * Fix #173 `ls` や内蔵コマンドを Ctrl-C で止められるようになった
 * ls -h のファイルサイズを 1K,2M 等ではなく、カンマ区切りの数値とした
@@ -5,6 +7,7 @@
 * nyagos.exe の中だけで機能する %PATH% 的な環境変数 %NYAGOSPATH% を追加
 * vim のような SET VAR+=VALUE , VAR^=VALUE をサポート
 * Fix #176 `gawk "BEGIN{ print substr(""%01"",2) }"` がエラーになっていた
+* アイコンを付けるのに、windres.exe ではなく github.com/josephspurrier/goversioninfo を使うようにした
 
 NYAGOS 4.1.7\_0
 ===============

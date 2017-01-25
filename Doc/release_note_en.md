@@ -1,3 +1,5 @@
+English / [Japanese](release_note_ja.md)
+
 * Add new customizing file `_nyagos`(batchlike script)
 * Fix #173 could not stop `ls` and built-in commands with Ctrl-C
 * ls -h: display size with COMMA not Kilo,Mega or Giga
@@ -5,6 +7,7 @@
 * Add %NYAGOSPATH% which works like %PATH% only in nyagos.exe not childprocess
 * Support SET VAR+=VALUE , VAR^=VALUE like vim
 * Fix #176 Bug on `gawk "BEGIN{ print substr(""%01"",2) }"`
+* Use github.com/josephspurrier/goversioninfo instead of windres.exe to attach icon
 
 NYAGOS 4.1.7\_0
 ===============
