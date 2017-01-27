@@ -104,7 +104,7 @@ func string2word(source_ string, removeQuote bool) string {
 						buffer.WriteString(value)
 					} else {
 						buffer.WriteRune('%')
-						source.Seek(-int64(nameBuf.Len()), io.SeekCurrent)
+						source.Seek(-int64(nameBuf.Len()+1), io.SeekCurrent)
 					}
 					break
 				}
