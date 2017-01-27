@@ -8,6 +8,8 @@ if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 if exist goarch.txt for /F %%I in (goarch.txt) do set "GOARCH=%%I"
 if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOARCH=%%I"
 
+if "%GOPATH%" == "" set "GOPATH=%USERPROFILE%\go"
+
 call :"%~1"
 @popd
 @endlocal
