@@ -9,6 +9,7 @@ if exist goarch.txt for /F %%I in (goarch.txt) do set "GOARCH=%%I"
 if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOARCH=%%I"
 
 if "%GOPATH%" == "" set "GOPATH=%USERPROFILE%\go"
+for /F "delims=; tokens=1" %%I in ("%GOPATH%") do set "GOPATH1ST=%%I"
 
 call :"%~1"
 @popd
@@ -61,7 +62,7 @@ call :"%~1"
 
 :getbindata
         go get "github.com/jteeuwen/go-bindata"
-        pushd "%GOPATH%\src\github.com\jteeuwen\go-bindata\go-bindata"
+        pushd "%GOPATH1ST%\src\github.com\jteeuwen\go-bindata\go-bindata"
         go build
         copy go-bindata.exe "%~dp0\."
         popd
@@ -74,7 +75,7 @@ call :"%~1"
 
 :getgoversioninfo
         go get "github.com/josephspurrier/goversioninfo"
-        pushd "%GOPATH%\src\github.com\josephspurrier\goversioninfo\cmd\goversioninfo"
+        pushd "%GOPATH1ST%\src\github.com\josephspurrier\goversioninfo\cmd\goversioninfo"
         go build
         copy goversioninfo.exe "%~dp0\."
         popd
