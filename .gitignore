@@ -10,3 +10,4 @@
 bindata.go
 include/
 version.cmd
+version.json
