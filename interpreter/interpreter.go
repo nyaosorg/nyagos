@@ -228,7 +228,7 @@ func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
 var pipeSeq uint = 0
 
 func (this *Interpreter) Interpret(text string) (int, error) {
-	return this.InterpretContext(nil, text)
+	return this.InterpretContext(context.Background(), text)
 }
 
 func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
