@@ -214,7 +214,7 @@ func (this *Interpreter) Spawnvp() (int, error) {
 
 func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg(ctx)
-	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
+	if err != nil && err != io.EOF && err != DropAfterStatement && !IsAlreadyReported(err) {
 		if dbg {
 			val := reflect.ValueOf(err)
 			fmt.Fprintf(this.Stderr, "error-type=%s\n", val.Type())
@@ -230,6 +230,8 @@ var pipeSeq uint = 0
 func (this *Interpreter) Interpret(text string) (int, error) {
 	return this.InterpretContext(context.Background(), text)
 }
+
+var DropAfterStatement = errors.New("DropAfterStatement")
 
 func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
 	if dbg {
@@ -365,6 +367,9 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 		}
 		if !isBackGround {
 			wg.Wait()
+			if err == DropAfterStatement {
+				return errorlevel, nil
+			}
 			if len(pipeline) > 0 {
 				switch pipeline[len(pipeline)-1].Term {
 				case "&&":
