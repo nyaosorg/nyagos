@@ -1,5 +1,5 @@
 @setlocal
-@SET PROMPT=$$$S
+@set PROMPT=$$$S
 
 @pushd "%~dp0"
 
