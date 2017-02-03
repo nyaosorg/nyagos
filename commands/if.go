@@ -55,14 +55,18 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if not {
 		status = !status
 	}
-
-	it, it_ok := ctx.Value("interpreter").(*interpreter.Interpreter)
-	if !it_ok {
-		return -1, errors.New("if: not found sub shell instance")
-	}
-
 	if status {
-		return it.InterpretContext(ctx, strings.Join(it.RawArgs[start:], " "))
+		exec, exec_ok := ctx.Value("exec").(func(string) (int, error))
+		if !exec_ok {
+			return -1, errors.New("if: could not get context.Value(\"exec\")")
+		}
+		rawargs, rawargs_ok := ctx.Value("rawargs").([]string)
+		if !rawargs_ok {
+			return -1, errors.New("if: could not get context.Value(\"rawargs\")")
+		}
+		cmdline := strings.Join(rawargs[start:], " ")
+		// println(cmdline)
+		return exec(cmdline)
 	} else {
 		return 0, interpreter.DropAfterStatement
 	}

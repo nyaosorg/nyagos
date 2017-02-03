@@ -300,7 +300,13 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
 			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
 			cmd.OnClone = this.OnClone
-			ctx := context.WithValue(ctx_, "interpreter", cmd)
+
+			ctx := context.WithValue(ctx_, "rawargs", state.RawArgs)
+			ctx = context.WithValue(ctx, "exec",
+				func(cmdline string) (int, error) {
+					return cmd.InterpretContext(ctx, cmdline)
+				})
+
 			if this.OnClone != nil {
 				if err := this.OnClone(cmd); err != nil {
 					return 255, err
