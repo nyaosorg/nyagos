@@ -64,11 +64,6 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if status {
 		return it.InterpretContext(ctx, strings.Join(it.RawArgs[start:], " "))
 	} else {
-		if it.GetRawArgs()[start] == "(" {
-			read_block(ctx, false, start+1)
-		} else {
-			return 0, interpreter.DropAfterStatement
-		}
+		return 0, interpreter.DropAfterStatement
 	}
-	return 1, nil
 }
