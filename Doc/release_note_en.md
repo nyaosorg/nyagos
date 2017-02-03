@@ -1,6 +1,6 @@
 English / [Japanese](release_note_ja.md)
 
-* Add new customizing file `_nyagos`(batchlike script)
+* Add new customizing file `_nyagos`(command.com-batchlike)
 * Fix #173 could not stop `ls` and built-in commands with Ctrl-C
 * ls -h: display size with COMMA not Kilo,Mega or Giga
 * Support nyagos.lines(FILENAME,"n") but value is not float but int #147
