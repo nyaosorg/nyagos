@@ -6,42 +6,23 @@ import (
 	"../conio"
 )
 
-type THistory struct {
-	body []string
-}
-
-func (this *THistory) Len() int {
-	return len(this.body)
-}
-
-func (this *THistory) At(n int) string {
-	for n < 0 {
-		n += len(this.body)
-	}
-	return this.body[n%len(this.body)]
-}
-
-func (this *THistory) Push(line string) {
-	this.body = append(this.body, line)
-}
-
-func (this *THistory) Replace(line string) {
-	if len(this.body) >= 1 {
-		this.body[len(this.body)-1] = line
-	} else {
-		this.body = []string{line}
-	}
+type IHistory interface {
+	Len() int
+	At(int) string
+	Push(string)
+	Replace(string)
 }
 
 type LineEditor struct {
-	History THistory
+	History IHistory
 	Pointer int
 	Prompt  func(*LineEditor) (int, error)
 	Tag     interface{}
 }
 
-func NewLineEditor() *LineEditor {
+func NewLineEditor(history IHistory) *LineEditor {
 	return &LineEditor{
+		History: history,
 		Pointer: 0,
 		Prompt:  func(this *LineEditor) (int, error) { fmt.Print("\n> "); return 2, nil },
 	}

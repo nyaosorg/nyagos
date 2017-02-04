@@ -19,33 +19,33 @@ type ICmdStream interface {
 }
 
 type CmdStreamConsole struct {
-	editor         *readline.LineEditor
-	historyWrapper *THistory
-	histPath       string
+	editor   *readline.LineEditor
+	history  *THistory
+	histPath string
 }
 
 func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
-	editor := readline.NewLineEditor()
+	history1 := new(THistory)
+	editor := readline.NewLineEditor(history1)
 	editor.Prompt = printPrompt
 	editor.Tag = it
 
 	histPath := filepath.Join(AppDataDir(), "nyagos.history")
-	historyWrapper := &THistory{editor}
-	history.Load(histPath, historyWrapper)
-	history.Save(histPath, historyWrapper)
+	history.Load(histPath, history1)
+	history.Save(histPath, history1)
 
 	readline.DefaultEditor = editor
 
 	return &CmdStreamConsole{
-		editor:         editor,
-		historyWrapper: historyWrapper,
-		histPath:       histPath,
+		editor:   editor,
+		history:  history1,
+		histPath: histPath,
 	}
 }
 
 func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 	history_count := this.editor.History.Len()
-	*ctx = context.WithValue(*ctx, "history", this.historyWrapper)
+	*ctx = context.WithValue(*ctx, "history", this.history)
 	var line string
 	var err error
 	for {
@@ -54,7 +54,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			return line, err
 		}
 		var isReplaced bool
-		line, isReplaced = history.Replace(this.historyWrapper, line)
+		line, isReplaced = history.Replace(this.history, line)
 		if isReplaced {
 			fmt.Fprintln(os.Stdout, line)
 		}
@@ -75,7 +75,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	} else {
-		this.editor.Pointer = this.editor.History.Len()
+		this.editor.Pointer = this.history.Len()
 	}
 	return line, err
 }
