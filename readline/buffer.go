@@ -60,16 +60,17 @@ func shineCursor() {
 const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
-	Buffer     []rune
-	Length     int
-	Cursor     int
-	Unicode    rune
-	Keycode    uint16
-	ShiftState uint32
-	ViewStart  int
-	TermWidth  int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
-	TopColumn  int // == width of Prompt
-	Session    *LineEditor
+	Buffer         []rune
+	Length         int
+	Cursor         int
+	Unicode        rune
+	Keycode        uint16
+	ShiftState     uint32
+	ViewStart      int
+	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
+	TopColumn      int // == width of Prompt
+	HistoryPointer int
+	Session        *LineEditor
 }
 
 func (this *Buffer) ViewWidth() int {

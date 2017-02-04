@@ -134,8 +134,9 @@ func (this *LineEditorAbort) Error() string {
 // - CTRL-D typed -> returns "" and LineEditorAbort
 func (session *LineEditor) ReadLine() (string, error) {
 	this := Buffer{
-		Buffer:  make([]rune, 20),
-		Session: session,
+		Buffer:         make([]rune, 20),
+		Session:        session,
+		HistoryPointer: session.History.Len(),
 	}
 	this.TermWidth, _ = GetScreenBufferInfo().ViewSize()
 
@@ -198,10 +199,8 @@ func (session *LineEditor) ReadLine() (string, error) {
 			stdOut.WriteRune('\n')
 			stdOut.Flush()
 			result := this.String()
-			if result == "" {
-				session.Pointer = session.History.Len()
-			}
-			if last := session.History.At(-1); result != last {
+			last := session.History.At(session.History.Len() - 1)
+			if result != "" && result != last {
 				session.History.Push(result)
 			}
 			if rc == ENTER {

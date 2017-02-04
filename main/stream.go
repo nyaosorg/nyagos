@@ -74,8 +74,6 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 		} else {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
-	} else {
-		this.editor.Pointer = this.history.Len()
 	}
 	return line, err
 }

@@ -15,7 +15,6 @@ type IHistory interface {
 
 type LineEditor struct {
 	History IHistory
-	Pointer int
 	Prompt  func(*LineEditor) (int, error)
 	Tag     interface{}
 }
@@ -23,7 +22,6 @@ type LineEditor struct {
 func NewLineEditor(history IHistory) *LineEditor {
 	return &LineEditor{
 		History: history,
-		Pointer: 0,
 		Prompt:  func(this *LineEditor) (int, error) { fmt.Print("\n> "); return 2, nil },
 	}
 }
@@ -39,13 +37,13 @@ func (this *LineEditor) SetPromptStr(prompt string) {
 var DefaultEditor *LineEditor
 
 func KeyFuncHistoryUp(this *Buffer) Result {
-	if this.Session.Pointer <= 0 {
-		this.Session.Pointer = this.Session.History.Len()
+	if this.HistoryPointer <= 0 {
+		this.HistoryPointer = this.Session.History.Len()
 	}
-	this.Session.Pointer -= 1
+	this.HistoryPointer -= 1
 	KeyFuncClear(this)
-	if this.Session.Pointer >= 0 {
-		this.InsertString(0, this.Session.History.At(this.Session.Pointer))
+	if this.HistoryPointer >= 0 {
+		this.InsertString(0, this.Session.History.At(this.HistoryPointer))
 		this.ViewStart = 0
 		this.Cursor = 0
 		KeyFuncTail(this)
@@ -54,13 +52,13 @@ func KeyFuncHistoryUp(this *Buffer) Result {
 }
 
 func KeyFuncHistoryDown(this *Buffer) Result {
-	this.Session.Pointer += 1
-	if this.Session.Pointer > this.Session.History.Len() {
-		this.Session.Pointer = 0
+	this.HistoryPointer += 1
+	if this.HistoryPointer > this.Session.History.Len() {
+		this.HistoryPointer = 0
 	}
 	KeyFuncClear(this)
-	if this.Session.Pointer < this.Session.History.Len() {
-		this.InsertString(0, this.Session.History.At(this.Session.Pointer))
+	if this.HistoryPointer < this.Session.History.Len() {
+		this.InsertString(0, this.Session.History.At(this.HistoryPointer))
 		this.ViewStart = 0
 		this.Cursor = 0
 		KeyFuncTail(this)
