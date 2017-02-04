@@ -8,6 +8,8 @@ English / [Japanese](release_note_ja.md)
 * Support SET VAR+=VALUE , VAR^=VALUE like vim
 * Fix #176 Bug on `gawk "BEGIN{ print substr(""%01"",2) }"`
 * Use github.com/josephspurrier/goversioninfo instead of windres.exe to attach icon
+* Support `if` compatible with command.com's one (`==`,`not`,`errorlevel`,`/I`)
+* New alias macro `$~1` `$~2` ... `$~*`
 
 NYAGOS 4.1.7\_0
 ===============

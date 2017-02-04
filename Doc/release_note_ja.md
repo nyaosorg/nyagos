@@ -8,6 +8,8 @@
 * vim のような SET VAR+=VALUE , VAR^=VALUE をサポート
 * Fix #176 `gawk "BEGIN{ print substr(""%01"",2) }"` がエラーになっていた
 * アイコンを付けるのに、windres.exe ではなく github.com/josephspurrier/goversioninfo を使うようにした
+* command.com と同程度の `if` をサポート(`==`,`not`,`errorlevel`,`/I`)
+* alias に新マクロを追加 `$~1` `$~2` ... `$~*`
 
 NYAGOS 4.1.7\_0
 ===============
