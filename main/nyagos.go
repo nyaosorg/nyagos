@@ -192,9 +192,7 @@ func main() {
 		line, err := command_stream.ReadLine(&ctx)
 
 		if err != nil {
-			if err != io.EOF {
-				fmt.Fprintln(os.Stderr, err.Error())
-			}
+			fmt.Fprintln(os.Stderr, err.Error())
 			break
 		}
 

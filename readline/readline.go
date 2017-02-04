@@ -3,6 +3,7 @@ package readline
 import (
 	"context"
 	"fmt"
+	"io"
 	"strings"
 
 	. "../conio"
@@ -123,16 +124,10 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
-type LineEditorAbort struct{}
-
-func (this *LineEditorAbort) Error() string {
-	return "^D"
-}
-
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and nil
-// - CTRL-D typed -> returns "" and LineEditorAbort
+// - CTRL-D typed -> returns "" and io.EOF
 func (session *LineEditor) ReadLine(ctx context.Context) (string, error) {
 	this := Buffer{
 		Buffer:         make([]rune, 20),
@@ -204,7 +199,7 @@ func (session *LineEditor) ReadLine(ctx context.Context) (string, error) {
 			if rc == ENTER {
 				return result, nil
 			} else {
-				return result, new(LineEditorAbort)
+				return result, io.EOF
 			}
 		}
 	}
