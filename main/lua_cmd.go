@@ -482,9 +482,9 @@ func cmdGetHistory(this lua.Lua) int {
 		if err != nil {
 			return this.Push(nil, err.Error())
 		}
-		this.PushString(readline.DefaultEditor.GetHistoryAt(val).Line)
+		this.PushString(readline.DefaultEditor.History.At(val))
 	} else {
-		this.PushInteger(lua.Integer(readline.DefaultEditor.HistoryLen()))
+		this.PushInteger(lua.Integer(readline.DefaultEditor.History.Len()))
 	}
 	return 1
 }

@@ -199,10 +199,10 @@ func (session *LineEditor) ReadLine() (string, error) {
 			stdOut.Flush()
 			result := this.String()
 			if result == "" {
-				session.HistoryResetPointer()
+				session.Pointer = session.History.Len()
 			}
-			if last := session.LastHistory(); last == nil || result != last.Line {
-				session.HistoryPush(result)
+			if last := session.History.At(-1); result != last {
+				session.History.Push(result)
 			}
 			if rc == ENTER {
 				return result, nil

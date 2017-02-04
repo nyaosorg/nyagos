@@ -9,19 +9,17 @@ type THistory struct {
 }
 
 func (this *THistory) Len() int {
-	return this.Obj.HistoryLen()
+	return this.Obj.History.Len()
 }
 
 func (this *THistory) At(n int) string {
-	return this.Obj.Histories[n].Line
+	return this.Obj.History.At(n)
 }
 
 func (this *THistory) Push(line string) {
-	tmp := readline.NewHistoryLine(line)
-	this.Obj.Histories = append(this.Obj.Histories, tmp)
+	this.Obj.History.Push(line)
 }
 
 func (this *THistory) Replace(line string) {
-	tmp := readline.NewHistoryLine(line)
-	this.Obj.Histories[len(this.Obj.Histories)-1] = tmp
+	this.Obj.History.Replace(line)
 }

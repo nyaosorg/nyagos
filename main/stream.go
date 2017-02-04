@@ -44,7 +44,7 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 }
 
 func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
-	history_count := this.editor.HistoryLen()
+	history_count := this.editor.History.Len()
 	*ctx = context.WithValue(*ctx, "history", this.historyWrapper)
 	var line string
 	var err error
@@ -62,7 +62,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			break
 		}
 	}
-	if this.editor.HistoryLen() > history_count {
+	if this.editor.History.Len() > history_count {
 		fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
 		if err != nil && os.IsNotExist(err) {
 			// print("create ", this.histPath, "\n")
@@ -75,7 +75,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	} else {
-		this.editor.HistoryResetPointer()
+		this.editor.Pointer = this.editor.History.Len()
 	}
 	return line, err
 }

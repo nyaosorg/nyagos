@@ -4,70 +4,47 @@ import (
 	"fmt"
 
 	"../conio"
-	"../text"
 )
 
-type HistoryLine struct {
-	Line string
-	Word []string
+type THistory struct {
+	body []string
 }
 
-func NewHistoryLine(line string) *HistoryLine {
-	return &HistoryLine{Line: line, Word: text.SplitQ(line)}
+func (this *THistory) Len() int {
+	return len(this.body)
 }
 
-func (this *HistoryLine) At(n int) string {
+func (this *THistory) At(n int) string {
 	for n < 0 {
-		n += len(this.Word)
+		n += len(this.body)
 	}
-	return this.Word[n%len(this.Word)]
+	return this.body[n%len(this.body)]
+}
+
+func (this *THistory) Push(line string) {
+	this.body = append(this.body, line)
+}
+
+func (this *THistory) Replace(line string) {
+	if len(this.body) >= 1 {
+		this.body[len(this.body)-1] = line
+	} else {
+		this.body = []string{line}
+	}
 }
 
 type LineEditor struct {
-	Histories []*HistoryLine
-	Pointer   int
-	Prompt    func(*LineEditor) (int, error)
-	Tag       interface{}
+	History THistory
+	Pointer int
+	Prompt  func(*LineEditor) (int, error)
+	Tag     interface{}
 }
 
 func NewLineEditor() *LineEditor {
 	return &LineEditor{
-		Histories: make([]*HistoryLine, 0),
-		Pointer:   0,
-		Prompt:    func(this *LineEditor) (int, error) { fmt.Print("\n> "); return 2, nil },
+		Pointer: 0,
+		Prompt:  func(this *LineEditor) (int, error) { fmt.Print("\n> "); return 2, nil },
 	}
-}
-
-func (this *LineEditor) GetHistoryAt(n int) *HistoryLine {
-	if n < 0 {
-		n = len(this.Histories) + n
-	}
-	if n >= len(this.Histories) {
-		return &HistoryLine{Line: "", Word: []string{}}
-	} else {
-		return this.Histories[n]
-	}
-}
-
-func (this *LineEditor) HistoryLen() int {
-	return len(this.Histories)
-}
-
-func (this *LineEditor) LastHistory() *HistoryLine {
-	if len(this.Histories) <= 0 {
-		return nil
-	} else {
-		return this.Histories[len(this.Histories)-1]
-	}
-}
-
-func (this *LineEditor) HistoryPush(input string) {
-	this.Histories = append(this.Histories, NewHistoryLine(input))
-	this.HistoryResetPointer()
-}
-
-func (this *LineEditor) HistoryResetPointer() {
-	this.Pointer = len(this.Histories)
 }
 
 func (this *LineEditor) SetPromptStr(prompt string) {
@@ -82,12 +59,12 @@ var DefaultEditor *LineEditor
 
 func KeyFuncHistoryUp(this *Buffer) Result {
 	if this.Session.Pointer <= 0 {
-		this.Session.Pointer = this.Session.HistoryLen()
+		this.Session.Pointer = this.Session.History.Len()
 	}
 	this.Session.Pointer -= 1
 	KeyFuncClear(this)
 	if this.Session.Pointer >= 0 {
-		this.InsertString(0, this.Session.Histories[this.Session.Pointer].Line)
+		this.InsertString(0, this.Session.History.At(this.Session.Pointer))
 		this.ViewStart = 0
 		this.Cursor = 0
 		KeyFuncTail(this)
@@ -97,12 +74,12 @@ func KeyFuncHistoryUp(this *Buffer) Result {
 
 func KeyFuncHistoryDown(this *Buffer) Result {
 	this.Session.Pointer += 1
-	if this.Session.Pointer > this.Session.HistoryLen() {
+	if this.Session.Pointer > this.Session.History.Len() {
 		this.Session.Pointer = 0
 	}
 	KeyFuncClear(this)
-	if this.Session.Pointer < this.Session.HistoryLen() {
-		this.InsertString(0, this.Session.Histories[this.Session.Pointer].Line)
+	if this.Session.Pointer < this.Session.History.Len() {
+		this.InsertString(0, this.Session.History.At(this.Session.Pointer))
 		this.ViewStart = 0
 		this.Cursor = 0
 		KeyFuncTail(this)
