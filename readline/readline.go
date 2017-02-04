@@ -201,10 +201,6 @@ func (session *LineEditor) ReadLine(ctx context.Context) (string, error) {
 			stdOut.WriteRune('\n')
 			stdOut.Flush()
 			result := this.String()
-			last := session.History.At(session.History.Len() - 1)
-			if result != "" && result != last {
-				session.History.Push(result)
-			}
 			if rc == ENTER {
 				return result, nil
 			} else {

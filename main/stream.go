@@ -63,6 +63,9 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			break
 		}
 	}
+	if this.history.Len() > 1 || this.history.At(this.history.Len()-1) != line {
+		this.history.Push(line)
+	}
 	if this.editor.History.Len() > history_count {
 		fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
 		if err != nil && os.IsNotExist(err) {

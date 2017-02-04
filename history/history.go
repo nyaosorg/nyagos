@@ -24,7 +24,6 @@ type IHistory interface {
 	Len() int
 	At(int) string
 	Push(string)
-	Replace(string)
 }
 
 func Replace(hisObj IHistory, line string) (string, bool) {
@@ -59,17 +58,17 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 		ch, _, _ = reader.ReadRune()
 		if n := strings.IndexRune("^$:*", ch); n >= 0 {
 			reader.UnreadRune()
-			if history_count >= 2 {
-				line := hisObj.At(history_count - 2)
-				InsertHistory(&buffer, reader, line)
+			if history_count >= 1 {
+				line := hisObj.At(history_count - 1)
+				expandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
 		}
 		if ch == mark { // !!
-			if history_count >= 2 {
-				line := hisObj.At(history_count - 2)
-				InsertHistory(&buffer, reader, line)
+			if history_count >= 1 {
+				line := hisObj.At(history_count - 1)
+				expandMacro(&buffer, reader, line)
 				isReplaced = true
 				continue
 			} else {
@@ -84,7 +83,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 			backno = backno % history_count
 			if 0 <= backno && backno < history_count {
 				line := hisObj.At(backno)
-				InsertHistory(&buffer, reader, line)
+				expandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
@@ -92,13 +91,13 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 		if ch == '-' && reader.Len() > 0 { // !-n
 			var number int
 			if _, err := fmt.Fscan(reader, &number); err == nil {
-				backno := history_count - number - 1
+				backno := history_count - number
 				for backno < 0 {
 					backno += history_count
 				}
 				if 0 <= backno && backno < history_count {
 					line := hisObj.At(backno)
-					InsertHistory(&buffer, reader, line)
+					expandMacro(&buffer, reader, line)
 					isReplaced = true
 				} else {
 					buffer.WriteRune(mark)
@@ -122,7 +121,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 			}
 			seekStr := seekStrBuf.String()
 			found := false
-			for i := history_count - 2; i >= 0; i-- {
+			for i := history_count - 1; i >= 0; i-- {
 				his1 := hisObj.At(i)
 				if strings.Contains(his1, seekStr) {
 					buffer.WriteString(his1)
@@ -153,7 +152,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 		}
 		seekStr := seekStrBuf.String()
 		found := false
-		for i := history_count - 2; i >= 0; i-- {
+		for i := history_count - 1; i >= 0; i-- {
 			his1 := hisObj.At(i)
 			if strings.HasPrefix(his1, seekStr) {
 				buffer.WriteString(his1)
@@ -167,18 +166,10 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 			buffer.WriteRune(ch)
 		}
 	}
-	result_line := buffer.String()
-	if isReplaced {
-		if history_count > 0 {
-			hisObj.Replace(result_line)
-		} else {
-			hisObj.Replace(result_line)
-		}
-	}
-	return result_line, isReplaced
+	return buffer.String(), isReplaced
 }
 
-func InsertHistory(buffer *bytes.Buffer, reader *strings.Reader, line string) {
+func expandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
 		if words := text.SplitQ(line); len(words) >= 2 {
