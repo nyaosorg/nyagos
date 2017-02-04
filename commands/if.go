@@ -68,6 +68,11 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		// println(cmdline)
 		return exec(cmdline)
 	} else {
-		return 0, interpreter.DropAfterStatement
+		gotoeol, ok := ctx.Value("gotoeol").(func())
+		if !ok {
+			return -1, errors.New("if: could not get context.Value(\"gotoeol\")")
+		}
+		gotoeol()
+		return 0, nil
 	}
 }
