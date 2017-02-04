@@ -209,7 +209,7 @@ func IsAlreadyReported(err error) bool {
 }
 
 func (this *Interpreter) Spawnvp() (int, error) {
-	return this.SpawnvpContext(nil)
+	return this.SpawnvpContext(context.Background())
 }
 
 func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
