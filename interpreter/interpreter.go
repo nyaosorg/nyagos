@@ -312,7 +312,7 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 					gotoeol()
 				}
 			})
-
+			ctx = context.WithValue(ctx, "errorlevel", LastErrorLevel)
 			if this.OnClone != nil {
 				if err := this.OnClone(cmd); err != nil {
 					return 255, err

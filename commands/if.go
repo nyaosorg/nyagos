@@ -7,8 +7,6 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
-
-	"../interpreter"
 )
 
 func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
@@ -47,7 +45,11 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	} else if len(args) >= 3 && strings.EqualFold(args[1], "errorlevel") {
 		num, num_err := strconv.Atoi(args[2])
 		if num_err == nil {
-			status = (interpreter.LastErrorLevel <= num)
+			lastErrorLevel, ok := ctx.Value("errorlevel").(int)
+			if !ok {
+				return -1, errors.New("if: could not get context.Value(\"errorlevel\")")
+			}
+			status = (lastErrorLevel <= num)
 		}
 		start += 2
 	}
