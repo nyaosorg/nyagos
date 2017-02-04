@@ -32,8 +32,6 @@ func (this *LineEditor) SetPromptStr(prompt string) {
 	}
 }
 
-var DefaultEditor *LineEditor
-
 func KeyFuncHistoryUp(this *Buffer) Result {
 	if this.HistoryPointer <= 0 {
 		this.HistoryPointer = this.Session.History.Len()

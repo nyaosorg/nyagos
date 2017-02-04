@@ -24,6 +24,8 @@ type CmdStreamConsole struct {
 	histPath string
 }
 
+var default_history *THistory
+
 func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 	history1 := new(THistory)
 	editor := readline.NewLineEditor(history1)
@@ -33,7 +35,7 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 	history.Load(histPath, history1)
 	history.Save(histPath, history1)
 
-	readline.DefaultEditor = editor
+	default_history = history1
 
 	return &CmdStreamConsole{
 		editor:   editor,

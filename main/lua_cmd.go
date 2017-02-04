@@ -29,7 +29,6 @@ import (
 	"../dos"
 	"../interpreter"
 	"../lua"
-	"../readline"
 )
 
 type LuaBinaryChank struct {
@@ -474,7 +473,7 @@ func cmdGlob(L lua.Lua) int {
 }
 
 func cmdGetHistory(this lua.Lua) int {
-	if readline.DefaultEditor == nil {
+	if default_history == nil {
 		return 0
 	}
 	if this.GetType(-1) == lua.LUA_TNUMBER {
@@ -482,9 +481,9 @@ func cmdGetHistory(this lua.Lua) int {
 		if err != nil {
 			return this.Push(nil, err.Error())
 		}
-		this.PushString(readline.DefaultEditor.History.At(val))
+		this.PushString(default_history.At(val))
 	} else {
-		this.PushInteger(lua.Integer(readline.DefaultEditor.History.Len()))
+		this.PushInteger(lua.Integer(default_history.Len()))
 	}
 	return 1
 }
