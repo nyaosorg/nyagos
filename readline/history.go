@@ -10,7 +10,6 @@ type IHistory interface {
 	Len() int
 	At(int) string
 	Push(string)
-	Replace(string)
 }
 
 type LineEditor struct {
