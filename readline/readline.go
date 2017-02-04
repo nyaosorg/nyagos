@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
@@ -132,11 +133,12 @@ func (this *LineEditorAbort) Error() string {
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and nil
 // - CTRL-D typed -> returns "" and LineEditorAbort
-func (session *LineEditor) ReadLine() (string, error) {
+func (session *LineEditor) ReadLine(ctx context.Context) (string, error) {
 	this := Buffer{
 		Buffer:         make([]rune, 20),
 		Session:        session,
 		HistoryPointer: session.History.Len(),
+		Context:        ctx,
 	}
 	this.TermWidth, _ = GetScreenBufferInfo().ViewSize()
 

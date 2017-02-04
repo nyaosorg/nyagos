@@ -28,7 +28,6 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 	history1 := new(THistory)
 	editor := readline.NewLineEditor(history1)
 	editor.Prompt = printPrompt
-	editor.Tag = it
 
 	histPath := filepath.Join(AppDataDir(), "nyagos.history")
 	history.Load(histPath, history1)
@@ -49,7 +48,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 	var line string
 	var err error
 	for {
-		line, err = this.editor.ReadLine()
+		line, err = this.editor.ReadLine(*ctx)
 		if err != nil {
 			return line, err
 		}

@@ -16,7 +16,6 @@ type IHistory interface {
 type LineEditor struct {
 	History IHistory
 	Prompt  func(*LineEditor) (int, error)
-	Tag     interface{}
 }
 
 func NewLineEditor(history IHistory) *LineEditor {

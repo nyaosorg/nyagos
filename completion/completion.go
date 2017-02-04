@@ -10,7 +10,6 @@ import (
 	"unicode"
 
 	"../conio"
-	"../interpreter"
 	"../lua"
 	"../readline"
 	/* dbg "github.com/zetamatta/goutputdebugstring" */)
@@ -58,16 +57,8 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	} else {
 		rv.List, err = listUpCommands(rv.Word)
 	}
-	var L lua.Lua
-	var L_ok bool
 
-	if it, it_ok := this.Session.Tag.(*interpreter.Interpreter); !it_ok {
-		if L, L_ok = this.Session.Tag.(lua.Lua); !L_ok {
-			return &rv, default_delimiter, errors.New("listUpComplete: cast error interpreter.Tag to lua.Lua")
-		}
-	} else {
-		L, L_ok = it.Tag.(lua.Lua)
-	}
+	L, L_ok := this.Context.Value("lua").(lua.Lua)
 	if !L_ok {
 		return &rv, default_delimiter, errors.New("listUpComplete: could not get lua instance")
 	}

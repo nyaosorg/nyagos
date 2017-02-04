@@ -3,6 +3,7 @@ package readline
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"fmt"
 	"strings"
 	"unicode"
@@ -70,6 +71,7 @@ type Buffer struct {
 	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
+	Context        context.Context
 	Session        *LineEditor
 }
 

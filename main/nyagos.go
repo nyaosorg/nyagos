@@ -188,6 +188,7 @@ func main() {
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
 		ctx = context.WithValue(ctx, "readline", command_stream)
+		ctx = context.WithValue(ctx, "lua", L)
 
 		line, err := command_stream.ReadLine(&ctx)
 
