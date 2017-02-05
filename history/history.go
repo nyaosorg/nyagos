@@ -282,7 +282,9 @@ func LoadFromReader(reader io.Reader, hisObj IHistory) {
 			list[lnum] = ""
 		}
 		hash[line] = len(list)
-		list = append(list, line)
+
+		p := strings.Split(line, "\t")
+		list = append(list, p[0])
 	}
 	for _, line := range list {
 		if line != "" {
