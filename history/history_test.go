@@ -22,10 +22,6 @@ func (this *history_t) Push(line string) {
 	this.List = append(this.List, line)
 }
 
-func (this *history_t) Replace(line string) {
-	this.List[len(this.List)-1] = line
-}
-
 func TestReplace(t *testing.T) {
 	testdata := &history_t{
 		List: []string{
@@ -50,34 +46,26 @@ func TestReplace(t *testing.T) {
 	if testdata.Len() != 4 {
 		t.Fail()
 	}
-
-	testdata.Replace("yyyyy")
-	if testdata.At(testdata.Len()-1) != "yyyyy" {
-		t.Fail()
-	}
-	if testdata.Len() != 4 {
-		t.Fail()
-	}
 }
 
-func TestInsertHistory(t *testing.T) {
+func TestExpandMacro(t *testing.T) {
 	var buffer bytes.Buffer
 
-	InsertHistory(&buffer, strings.NewReader("^"), "aaa bbb ccc")
+	ExpandMacro(&buffer, strings.NewReader("^"), "aaa bbb ccc")
 	if buffer.String() != "bbb" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	InsertHistory(&buffer, strings.NewReader("$"), "aaa bbb ccc ddd")
+	ExpandMacro(&buffer, strings.NewReader("$"), "aaa bbb ccc ddd")
 	if buffer.String() != "ddd" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	InsertHistory(&buffer, strings.NewReader(":1"), `aaa "b bb" ccc ddd`)
+	ExpandMacro(&buffer, strings.NewReader(":1"), `aaa "b bb" ccc ddd`)
 	if buffer.String() != `"b bb"` {
 		t.Fail()
 		return

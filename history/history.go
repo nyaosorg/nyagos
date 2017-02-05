@@ -60,7 +60,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 			reader.UnreadRune()
 			if history_count >= 1 {
 				line := hisObj.At(history_count - 1)
-				expandMacro(&buffer, reader, line)
+				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
@@ -68,7 +68,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 		if ch == mark { // !!
 			if history_count >= 1 {
 				line := hisObj.At(history_count - 1)
-				expandMacro(&buffer, reader, line)
+				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
 				continue
 			} else {
@@ -83,7 +83,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 			backno = backno % history_count
 			if 0 <= backno && backno < history_count {
 				line := hisObj.At(backno)
-				expandMacro(&buffer, reader, line)
+				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
@@ -97,7 +97,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 				}
 				if 0 <= backno && backno < history_count {
 					line := hisObj.At(backno)
-					expandMacro(&buffer, reader, line)
+					ExpandMacro(&buffer, reader, line)
 					isReplaced = true
 				} else {
 					buffer.WriteRune(mark)
@@ -169,7 +169,7 @@ func Replace(hisObj IHistory, line string) (string, bool) {
 	return buffer.String(), isReplaced
 }
 
-func expandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
+func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
 		if words := text.SplitQ(line); len(words) >= 2 {

@@ -1,4 +1,4 @@
-package main
+package history
 
 type THistory struct {
 	body []string
@@ -17,12 +17,4 @@ func (this *THistory) At(n int) string {
 
 func (this *THistory) Push(line string) {
 	this.body = append(this.body, line)
-}
-
-func (this *THistory) Replace(line string) {
-	if len(this.body) >= 1 {
-		this.body[len(this.body)-1] = line
-	} else {
-		this.body = []string{line}
-	}
 }

@@ -20,14 +20,14 @@ type ICmdStream interface {
 
 type CmdStreamConsole struct {
 	editor   *readline.LineEditor
-	history  *THistory
+	history  *history.THistory
 	histPath string
 }
 
-var default_history *THistory
+var default_history *history.THistory
 
 func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
-	history1 := new(THistory)
+	history1 := new(history.THistory)
 	editor := readline.NewLineEditor(history1)
 	editor.Prompt = printPrompt
 
