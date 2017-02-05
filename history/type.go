@@ -1,8 +1,11 @@
 package history
 
+import "time"
+
 type Row struct {
-	Text string
-	Dir  string
+	Text  string
+	Dir   string
+	Stamp time.Time
 }
 
 type THistory struct {

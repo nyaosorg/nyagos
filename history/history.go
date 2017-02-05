@@ -233,7 +233,10 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		}
 		for i := start; i < historyObj.Len(); i++ {
 			row := historyObj.rows[i]
-			fmt.Fprintf(cmd.Stdout, "%3d : %-s (%s)\n", i, row.Text, row.Dir)
+			fmt.Fprintf(cmd.Stdout, "%s : %-s (%s)\n",
+				row.Stamp.Format("2006-01-02 15:04:05"),
+				row.Text,
+				row.Dir)
 		}
 	} else {
 		fmt.Fprintln(cmd.Stderr, "history not found (case 2)")

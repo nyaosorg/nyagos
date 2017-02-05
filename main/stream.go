@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"../history"
 	"../interpreter"
@@ -68,7 +69,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 		if err != nil {
 			wd = ""
 		}
-		this.history.PushRow(history.Row{Text: line, Dir: wd})
+		this.history.PushRow(history.Row{Text: line, Dir: wd, Stamp: time.Now()})
 	}
 	if this.editor.History.Len() > history_count {
 		fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
