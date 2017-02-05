@@ -26,7 +26,7 @@ type IHistory interface {
 	Push(string)
 }
 
-func Replace(hisObj IHistory, line string) (string, bool) {
+func (hisObj *THistory) Replace(line string) (string, bool) {
 	var mark rune
 	for _, c := range Mark {
 		mark = c
@@ -225,14 +225,15 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	start := 0
 
 	historyObj_ := ctx.Value("history")
-	if historyObj, ok := historyObj_.(IHistory); ok {
+	if historyObj, ok := historyObj_.(*THistory); ok {
 		if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
 			historyObj.Len() > num {
 
 			start = historyObj.Len() - num
 		}
 		for i := start; i < historyObj.Len(); i++ {
-			fmt.Fprintf(cmd.Stdout, "%3d : %-s\n", i, historyObj.At(i))
+			row := historyObj.rows[i]
+			fmt.Fprintf(cmd.Stdout, "%3d : %-s (%s)\n", i, row.Text, row.Dir)
 		}
 	} else {
 		fmt.Fprintln(cmd.Stderr, "history not found (case 2)")
@@ -242,7 +243,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 const max_histories = 2000
 
-func SaveToWriter(w io.Writer, hisObj IHistory) {
+func (hisObj *THistory) WriteTo(w io.Writer) {
 	list := make([]string, 0, hisObj.Len())
 	hash := make(map[string]int)
 	for i := hisObj.Len() - 1; i >= 0; i-- {
@@ -262,17 +263,17 @@ func SaveToWriter(w io.Writer, hisObj IHistory) {
 	bw.Flush()
 }
 
-func Save(path string, hisObj IHistory) error {
+func (hisObj *THistory) Save(path string) error {
 	fd, err := os.Create(path)
 	if err != nil {
 		return err
 	}
-	SaveToWriter(fd, hisObj)
+	hisObj.WriteTo(fd)
 	fd.Close()
 	return nil
 }
 
-func LoadFromReader(reader io.Reader, hisObj IHistory) {
+func (hisObj *THistory) ReadFrom(reader io.Reader) {
 	sc := bufio.NewScanner(reader)
 	list := make([]string, 0, 2000)
 	hash := make(map[string]int)
@@ -293,12 +294,12 @@ func LoadFromReader(reader io.Reader, hisObj IHistory) {
 	}
 }
 
-func Load(path string, hisObj IHistory) error {
+func (hisObj *THistory) Load(path string) error {
 	fd, err := os.Open(path)
 	if err != nil {
 		return err
 	}
-	LoadFromReader(fd, hisObj)
+	hisObj.ReadFrom(fd)
 	fd.Close()
 	return nil
 }

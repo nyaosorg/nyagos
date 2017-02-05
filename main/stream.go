@@ -32,8 +32,8 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 	editor.Prompt = printPrompt
 
 	histPath := filepath.Join(AppDataDir(), "nyagos.history")
-	history.Load(histPath, history1)
-	history.Save(histPath, history1)
+	history1.Load(histPath)
+	history1.Save(histPath)
 
 	default_history = history1
 
@@ -55,7 +55,7 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			return line, err
 		}
 		var isReplaced bool
-		line, isReplaced = history.Replace(this.history, line)
+		line, isReplaced = this.history.Replace(line)
 		if isReplaced {
 			fmt.Fprintln(os.Stdout, line)
 		}
@@ -64,7 +64,11 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 		}
 	}
 	if this.history.Len() > 1 || this.history.At(this.history.Len()-1) != line {
-		this.history.Push(line)
+		wd, err := os.Getwd()
+		if err != nil {
+			wd = ""
+		}
+		this.history.PushRow(history.Row{Text: line, Dir: wd})
 	}
 	if this.editor.History.Len() > history_count {
 		fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
