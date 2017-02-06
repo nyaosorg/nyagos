@@ -46,7 +46,6 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 }
 
 func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
-	history_count := this.editor.History.Len()
 	*ctx = context.WithValue(*ctx, "history", this.history)
 	var line string
 	var err error
@@ -64,26 +63,25 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 			break
 		}
 	}
-	if this.history.Len() > 1 || this.history.At(this.history.Len()-1) != line {
-		wd, err := os.Getwd()
-		if err != nil {
-			wd = ""
-		}
-		this.history.PushRow(history.Row{Text: line, Dir: wd, Stamp: time.Now()})
+
+	wd, err := os.Getwd()
+	if err != nil {
+		wd = ""
 	}
-	if this.editor.History.Len() > history_count {
-		fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
-		if err != nil && os.IsNotExist(err) {
-			// print("create ", this.histPath, "\n")
-			fd, err = os.Create(this.histPath)
-		}
-		if err == nil {
-			fmt.Fprintln(fd, line)
-			fd.Close()
-		} else {
-			fmt.Fprintln(os.Stderr, err.Error())
-		}
+	row := history.Row{Text: line, Dir: wd, Stamp: time.Now()}
+	this.history.PushRow(row)
+	fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
+	if err != nil && os.IsNotExist(err) {
+		// print("create ", this.histPath, "\n")
+		fd, err = os.Create(this.histPath)
 	}
+	if err == nil {
+		fmt.Fprintln(fd, row.String())
+		fd.Close()
+	} else {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
+
 	return line, err
 }
 

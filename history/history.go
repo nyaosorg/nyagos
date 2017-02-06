@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/mattn/go-isatty"
 
@@ -19,12 +20,6 @@ import (
 var Mark = "!"
 
 var DisableMarks = "\"'"
-
-type IHistory interface {
-	Len() int
-	At(int) string
-	Push(string)
-}
 
 func (hisObj *THistory) Replace(line string) (string, bool) {
 	var mark rune
@@ -246,22 +241,21 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 const max_histories = 2000
 
+func (row *Row) String() string {
+	return fmt.Sprintf("%s\t%s\t%s",
+		row.Text,
+		row.Dir,
+		row.Stamp.Format("2006-01-02 15:04:05"))
+}
+
 func (hisObj *THistory) WriteTo(w io.Writer) {
-	list := make([]string, 0, hisObj.Len())
-	hash := make(map[string]int)
-	for i := hisObj.Len() - 1; i >= 0; i-- {
-		line := hisObj.At(i)
-		if _, ok := hash[line]; !ok {
-			list = append(list, hisObj.At(i))
-			hash[line] = i
-		}
-	}
-	if len(list) > max_histories {
-		list = list[:max_histories]
+	i := 0
+	if len(hisObj.rows) > max_histories {
+		i = len(hisObj.rows) - max_histories
 	}
 	bw := bufio.NewWriter(w)
-	for i := len(list) - 1; i >= 0; i-- {
-		fmt.Fprintln(bw, list[i])
+	for ; i < len(hisObj.rows); i++ {
+		fmt.Fprintln(bw, hisObj.rows[i].String())
 	}
 	bw.Flush()
 }
@@ -278,21 +272,32 @@ func (hisObj *THistory) Save(path string) error {
 
 func (hisObj *THistory) ReadFrom(reader io.Reader) {
 	sc := bufio.NewScanner(reader)
-	list := make([]string, 0, 2000)
+	list := make([][]string, 0, 2000)
 	hash := make(map[string]int)
 	for sc.Scan() {
 		line := sc.Text()
 		if lnum, ok := hash[line]; ok {
-			list[lnum] = ""
+			// delete duplicated record (marking)
+			list[lnum] = nil
 		}
 		hash[line] = len(list)
 
 		p := strings.Split(line, "\t")
-		list = append(list, p[0])
+		list = append(list, p)
 	}
-	for _, line := range list {
-		if line != "" {
-			hisObj.Push(line)
+	for _, p := range list {
+		// push only not duplicated record.
+		if p != nil {
+			var stamp time.Time
+			var dir string
+			if len(p) >= 3 {
+				dir = p[1]
+				stamp, _ = time.Parse("2006-01-02 15:04:05", p[2])
+			}
+			hisObj.PushRow(Row{
+				Text:  p[0],
+				Dir:   dir,
+				Stamp: stamp})
 		}
 	}
 }
