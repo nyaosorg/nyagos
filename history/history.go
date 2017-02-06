@@ -21,7 +21,7 @@ var Mark = "!"
 
 var DisableMarks = "\"'"
 
-func (hisObj *THistory) Replace(line string) (string, bool) {
+func (hisObj *Container) Replace(line string) (string, bool) {
 	var mark rune
 	for _, c := range Mark {
 		mark = c
@@ -220,7 +220,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	start := 0
 
 	historyObj_ := ctx.Value("history")
-	if historyObj, ok := historyObj_.(*THistory); ok {
+	if historyObj, ok := historyObj_.(*Container); ok {
 		if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
 			historyObj.Len() > num {
 
@@ -241,14 +241,14 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 const max_histories = 2000
 
-func (row *Row) String() string {
+func (row *Line) String() string {
 	return fmt.Sprintf("%s\t%s\t%s",
 		row.Text,
 		row.Dir,
 		row.Stamp.Format("2006-01-02 15:04:05"))
 }
 
-func (hisObj *THistory) WriteTo(w io.Writer) {
+func (hisObj *Container) WriteTo(w io.Writer) {
 	i := 0
 	if len(hisObj.rows) > max_histories {
 		i = len(hisObj.rows) - max_histories
@@ -260,7 +260,7 @@ func (hisObj *THistory) WriteTo(w io.Writer) {
 	bw.Flush()
 }
 
-func (hisObj *THistory) Save(path string) error {
+func (hisObj *Container) Save(path string) error {
 	fd, err := os.Create(path)
 	if err != nil {
 		return err
@@ -270,7 +270,7 @@ func (hisObj *THistory) Save(path string) error {
 	return nil
 }
 
-func (hisObj *THistory) ReadFrom(reader io.Reader) {
+func (hisObj *Container) ReadFrom(reader io.Reader) {
 	sc := bufio.NewScanner(reader)
 	list := make([][]string, 0, 2000)
 	hash := make(map[string]int)
@@ -294,7 +294,7 @@ func (hisObj *THistory) ReadFrom(reader io.Reader) {
 				dir = p[1]
 				stamp, _ = time.Parse("2006-01-02 15:04:05", p[2])
 			}
-			hisObj.PushRow(Row{
+			hisObj.PushLine(Line{
 				Text:  p[0],
 				Dir:   dir,
 				Stamp: stamp})
@@ -302,7 +302,7 @@ func (hisObj *THistory) ReadFrom(reader io.Reader) {
 	}
 }
 
-func (hisObj *THistory) Load(path string) error {
+func (hisObj *Container) Load(path string) error {
 	fd, err := os.Open(path)
 	if err != nil {
 		return err

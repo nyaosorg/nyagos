@@ -21,14 +21,14 @@ type ICmdStream interface {
 
 type CmdStreamConsole struct {
 	editor   *readline.LineEditor
-	history  *history.THistory
+	history  *history.Container
 	histPath string
 }
 
-var default_history *history.THistory
+var default_history *history.Container
 
 func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
-	history1 := new(history.THistory)
+	history1 := new(history.Container)
 	editor := readline.NewLineEditor(history1)
 	editor.Prompt = printPrompt
 
@@ -68,8 +68,8 @@ func (this *CmdStreamConsole) ReadLine(ctx *context.Context) (string, error) {
 	if err != nil {
 		wd = ""
 	}
-	row := history.Row{Text: line, Dir: wd, Stamp: time.Now()}
-	this.history.PushRow(row)
+	row := history.Line{Text: line, Dir: wd, Stamp: time.Now()}
+	this.history.PushLine(row)
 	fd, err := os.OpenFile(this.histPath, os.O_APPEND, 0600)
 	if err != nil && os.IsNotExist(err) {
 		// print("create ", this.histPath, "\n")

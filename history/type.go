@@ -2,31 +2,31 @@ package history
 
 import "time"
 
-type Row struct {
+type Line struct {
 	Text  string
 	Dir   string
 	Stamp time.Time
 }
 
-type THistory struct {
-	rows []Row
+type Container struct {
+	rows []Line
 }
 
-func (this *THistory) Len() int {
+func (this *Container) Len() int {
 	return len(this.rows)
 }
 
-func (this *THistory) At(n int) string {
+func (this *Container) At(n int) string {
 	for n < 0 {
 		n += len(this.rows)
 	}
 	return this.rows[n%len(this.rows)].Text
 }
 
-func (this *THistory) Push(line string) {
-	this.rows = append(this.rows, Row{Text: line})
+func (this *Container) Push(line string) {
+	this.rows = append(this.rows, Line{Text: line})
 }
 
-func (this *THistory) PushRow(row Row) {
+func (this *Container) PushLine(row Line) {
 	this.rows = append(this.rows, row)
 }
