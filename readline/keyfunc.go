@@ -219,7 +219,7 @@ func KeyFuncClearBefore(this *Buffer) Result {
 }
 
 func KeyFuncCLS(this *Buffer) Result {
-	Cls()
+	fmt.Fprint(Console, "\x1B[1;1H\x1B[2J")
 	this.RepaintAll()
 	return CONTINUE
 }
