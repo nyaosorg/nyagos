@@ -16,7 +16,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 	foundStr := ""
 	searchStr := ""
 	lastDrawWidth := 0
-	lastFoundPos := this.Session.History.Len() - 1
+	lastFoundPos := this.History.Len() - 1
 	Backspace(this.Cursor - this.ViewStart)
 	for {
 		drawStr := fmt.Sprintf("(i-search)[%s]:%s", searchStr, foundStr)
@@ -35,7 +35,6 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			Backspace(n)
 		}
 		lastDrawWidth = drawWidth
-		stdOut.Flush()
 		shineCursor()
 		charcode := getch.Rune()
 		Backspace(drawWidth)
@@ -87,12 +86,12 @@ func KeyFuncIncSearch(this *Buffer) Result {
 		case rune('r' & 0x1F):
 			for i := lastFoundPos - 1; ; i-- {
 				if i < 0 {
-					i = this.Session.History.Len() - 1
+					i = this.History.Len() - 1
 				}
 				if i == lastFoundPos {
 					break
 				}
-				line := this.Session.History.At(i)
+				line := this.History.At(i)
 				if strings.Contains(line, searchStr) && foundStr != line {
 					foundStr = line
 					lastFoundPos = i
@@ -105,12 +104,12 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			}
 			searchBuf.WriteRune(charcode)
 			searchStr = searchBuf.String()
-			for i := this.Session.History.Len() - 1; ; i-- {
+			for i := this.History.Len() - 1; ; i-- {
 				if i < 0 {
 					foundStr = ""
 					break
 				}
-				line := this.Session.History.At(i)
+				line := this.History.At(i)
 				if strings.Contains(line, searchStr) {
 					foundStr = line
 					lastFoundPos = i

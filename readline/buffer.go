@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"bufio"
 	"bytes"
 	"context"
 	"fmt"
@@ -12,18 +11,16 @@ import (
 	"github.com/mattn/go-colorable"
 )
 
-var stdOut = bufio.NewWriter(colorable.NewColorableStdout())
+var Console = colorable.NewColorableStdout()
 
 var hasCache = map[rune]bool{}
 
 func PutRune(ch rune) {
 	if hasCache[ch] {
-		stdOut.WriteRune(ch)
+		fmt.Fprintf(Console, "%c", ch)
 	} else {
-		stdOut.Flush()
 		pre_x, pre_y := GetLocate()
-		stdOut.WriteRune(ch)
-		stdOut.Flush()
+		fmt.Fprintf(Console, "%c", ch)
 		post_x, post_y := GetLocate()
 		if post_y == pre_y && post_x > pre_x {
 			hasCache[ch] = true
@@ -38,20 +35,20 @@ func PutRunes(ch rune, n int) {
 	}
 	PutRune(ch)
 	for i := 1; i < n; i++ {
-		stdOut.WriteRune(ch)
+		fmt.Fprintf(Console, "%c", ch)
 	}
 }
 
 func Backspace(n int) {
 	if n > 1 {
-		fmt.Fprintf(stdOut, "\x1B[%dC", n)
+		fmt.Fprintf(Console, "\x1B[%dC", n)
 	} else if n == 1 {
-		fmt.Fprint(stdOut, "\b")
+		fmt.Fprint(Console, "\b")
 	}
 }
 
 func Eraseline() {
-	fmt.Fprint(stdOut, "\x1B[0K")
+	fmt.Fprint(Console, "\x1B[0K")
 }
 func shineCursor() {
 	x, y := GetLocate()
@@ -72,7 +69,8 @@ type Buffer struct {
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
 	Context        context.Context
-	Session        *LineEditor
+	History        IHistory
+	Prompt         func() (int, error)
 }
 
 func (this *Buffer) ViewWidth() int {
@@ -204,7 +202,7 @@ func (this *Buffer) RepaintAfterPrompt() {
 }
 
 func (this *Buffer) RepaintAll() {
-	this.TopColumn, _ = this.Session.Prompt(this.Session)
+	this.TopColumn, _ = this.Prompt()
 	this.RepaintAfterPrompt()
 }
 

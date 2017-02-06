@@ -59,7 +59,7 @@ func nyagosPrompt(L lua.Lua) int {
 
 var prompt_hook lua.Pushable = lua.TGoFunction(nyagosPrompt)
 
-func printPrompt(this *readline.LineEditor) (int, error) {
+func printPrompt() (int, error) {
 	L := NewNyagosLua()
 	defer L.Close()
 	L.Push(prompt_hook)

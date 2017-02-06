@@ -20,7 +20,7 @@ type ICmdStream interface {
 }
 
 type CmdStreamConsole struct {
-	editor   *readline.LineEditor
+	editor   *readline.Editor
 	history  *history.Container
 	histPath string
 }
@@ -29,8 +29,7 @@ var default_history *history.Container
 
 func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 	history1 := new(history.Container)
-	editor := readline.NewLineEditor(history1)
-	editor.Prompt = printPrompt
+	editor := readline.Editor{History: history1, Prompt: printPrompt}
 
 	histPath := filepath.Join(AppDataDir(), "nyagos.history")
 	history1.Load(histPath)
@@ -39,7 +38,7 @@ func NewCmdStreamConsole(it *interpreter.Interpreter) *CmdStreamConsole {
 	default_history = history1
 
 	return &CmdStreamConsole{
-		editor:   editor,
+		editor:   &editor,
 		history:  history1,
 		histPath: histPath,
 	}

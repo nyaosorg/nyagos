@@ -124,43 +124,55 @@ func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
 	return BindKeyFunc(keyName, funcValue)
 }
 
+type EmptyHistory struct{}
+
+func (this *EmptyHistory) Len() int      { return 0 }
+func (this *EmptyHistory) At(int) string { return "" }
+
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and nil
 // - CTRL-D typed -> returns "" and io.EOF
-func (session *LineEditor) ReadLine(ctx context.Context) (string, error) {
+func (session *Editor) ReadLine(ctx context.Context) (string, error) {
+	if session.Prompt == nil {
+		session.Prompt = func() (int, error) {
+			fmt.Print("\n> ")
+			return 2, nil
+		}
+	}
+	if session.History == nil {
+		session.History = new(EmptyHistory)
+	}
 	this := Buffer{
 		Buffer:         make([]rune, 20),
-		Session:        session,
 		HistoryPointer: session.History.Len(),
 		Context:        ctx,
+		History:        session.History,
+		Prompt:         session.Prompt,
 	}
 	this.TermWidth, _ = GetScreenBufferInfo().ViewSize()
 
 	var err1 error
-	this.TopColumn, err1 = session.Prompt(session)
+	this.TopColumn, err1 = session.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(stdOut, "%s\n$ ", err1.Error())
+		fmt.Fprintf(Console, "%s\n$ ", err1.Error())
 		this.TopColumn = 2
 	} else if this.TopColumn >= this.TermWidth-3 {
 		// ViewWidth is too narrow to edit.
-		fmt.Fprint(stdOut, "\n")
+		fmt.Fprint(Console, "\n")
 		this.TopColumn = 0
 	}
 	for {
-		stdOut.Flush()
 		shineCursor()
 		e := getch.All()
 		if e.Resize != nil {
 			w := int(e.Resize.Width)
 			if this.TermWidth != w {
 				this.TermWidth = w
-				fmt.Fprintf(stdOut, "\x1B[%dG", this.TopColumn+1)
-				stdOut.Flush()
+				fmt.Fprintf(Console, "\x1B[%dG", this.TopColumn+1)
 				shineCursor()
 				this.RepaintAfterPrompt()
-				stdOut.Flush()
 				shineCursor()
 			}
 			continue
@@ -193,8 +205,7 @@ func (session *LineEditor) ReadLine(ctx context.Context) (string, error) {
 		}
 		rc := f.Call(&this)
 		if rc != CONTINUE {
-			stdOut.WriteRune('\n')
-			stdOut.Flush()
+			fmt.Fprint(Console, "\n")
 			result := this.String()
 			if rc == ENTER {
 				return result, nil
