@@ -164,16 +164,13 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		this.TopColumn = 0
 	}
 	for {
-		shineCursor()
 		e := getch.All()
 		if e.Resize != nil {
 			w := int(e.Resize.Width)
 			if this.TermWidth != w {
 				this.TermWidth = w
 				fmt.Fprintf(Console, "\x1B[%dG", this.TopColumn+1)
-				shineCursor()
 				this.RepaintAfterPrompt()
-				shineCursor()
 			}
 			continue
 		}

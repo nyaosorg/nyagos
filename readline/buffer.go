@@ -50,10 +50,6 @@ func Backspace(n int) {
 func Eraseline() {
 	fmt.Fprint(Console, "\x1B[0K")
 }
-func shineCursor() {
-	x, y := GetLocate()
-	Locate(x, y)
-}
 
 const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
