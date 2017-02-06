@@ -12,7 +12,6 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 	"github.com/zetamatta/go-getch"
 
@@ -21,6 +20,7 @@ import (
 	"../completion"
 	"../conio"
 	"../dos"
+	"../history"
 	"../interpreter"
 	"../lua"
 	"../readline"
@@ -31,7 +31,6 @@ var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 var stamp string
 var commit string
 var version string
-var ansiOut io.Writer
 
 func nyagosPrompt(L lua.Lua) int {
 	title, title_err := L.ToString(2)
@@ -47,7 +46,9 @@ func nyagosPrompt(L lua.Lua) int {
 		template = "[" + err.Error() + "]"
 	}
 	text := Format2Prompt(template)
-	fmt.Fprint(ansiOut, text)
+
+	fmt.Fprint(readline.Console, text)
+
 	text = rxAnsiEscCode.ReplaceAllString(text, "")
 	lfPos := strings.LastIndex(text, "\n")
 	if lfPos >= 0 {
@@ -120,6 +121,8 @@ func AppDataDir() string {
 	return appdatapath_
 }
 
+var default_history *history.Container
+
 func main() {
 	defer when_panic()
 
@@ -146,9 +149,6 @@ func main() {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
-	// ANSI Escape Sequence Support
-	ansiOut = colorable.NewColorableStdout()
-
 	commands.Init()
 	alias.Init()
 
@@ -173,11 +173,11 @@ func main() {
 		return
 	}
 
-	var command_stream ICmdStream
+	var command_reader func(context.Context) (string, error)
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		command_stream = NewUnCmdStream(NewCmdStreamConsole(it))
+		command_reader, default_history = NewCmdStreamConsole()
 	} else {
-		command_stream = NewUnCmdStream(NewCmdStreamFile(os.Stdin))
+		command_reader = NewCmdStreamFile(os.Stdin)
 	}
 
 	sigint := make(chan os.Signal, 1)
@@ -188,8 +188,9 @@ func main() {
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
 		ctx = context.WithValue(ctx, "lua", L)
+		ctx = context.WithValue(ctx, "history", default_history)
 
-		line, err := command_stream.ReadLine(&ctx)
+		line, err := command_reader(ctx)
 
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())

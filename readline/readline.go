@@ -136,7 +136,7 @@ func (this *EmptyHistory) At(int) string { return "" }
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Prompt == nil {
 		session.Prompt = func() (int, error) {
-			fmt.Print("\n> ")
+			fmt.Fprint(Console, "\n> ")
 			return 2, nil
 		}
 	}
