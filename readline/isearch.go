@@ -35,6 +35,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			Backspace(n)
 		}
 		lastDrawWidth = drawWidth
+		shineCursor()
 		charcode := getch.Rune()
 		Backspace(drawWidth)
 		switch charcode {
