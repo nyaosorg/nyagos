@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/dustin/go-humanize"
 	"github.com/zetamatta/go-findfile"
@@ -110,21 +111,22 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	if (flag & O_STRIP_DIR) > 0 {
 		name = filepath.Base(name)
 	}
-	stamp := status.ModTime()
 	if (flag & O_HUMAN) != 0 {
 		fmt.Fprintf(out, " %*s", width, humanize.Comma(status.Size()))
 	} else {
 		fmt.Fprintf(out, " %*d", width, status.Size())
 	}
-	fmt.Fprintf(out, " %04d-%02d-%02d %02d:%02d %s%s%s",
-		stamp.Year(),
-		stamp.Month(),
-		stamp.Day(),
-		stamp.Hour(),
-		stamp.Minute(),
-		prefix,
-		name,
-		postfix)
+	stamp := status.ModTime()
+	onelastyear := time.Now().AddDate(0, -11, 0)
+	if stamp.After(onelastyear) {
+		fmt.Fprint(out, stamp.Format(" _2 Jan 15:04:05 "))
+	} else {
+		fmt.Fprint(out, stamp.Format(" _2 Jan 2006     "))
+	}
+	fmt.Fprint(out, prefix)
+	fmt.Fprint(out, name)
+	fmt.Fprint(out, postfix)
+
 	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		indicator = "@"
 	}
