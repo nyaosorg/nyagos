@@ -235,7 +235,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			}
 			dir = strings.Replace(dir, "\\", "/", -1)
 			fmt.Fprintf(cmd.Stdout, "%s %-s (%s)\n",
-				row.Stamp.Format("02 Jan 15:04:05"),
+				row.Stamp.Format("_2 Jan 15:04:05"),
 				row.Text,
 				dir)
 		}
