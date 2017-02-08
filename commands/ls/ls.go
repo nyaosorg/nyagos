@@ -119,9 +119,9 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	stamp := status.ModTime()
 	onelastyear := time.Now().AddDate(0, -11, 0)
 	if stamp.After(onelastyear) {
-		fmt.Fprint(out, stamp.Format(" _2 Jan 15:04:05 "))
+		fmt.Fprint(out, stamp.Format(" Jan _2 15:04:05 "))
 	} else {
-		fmt.Fprint(out, stamp.Format(" _2 Jan 2006     "))
+		fmt.Fprint(out, stamp.Format(" Jan _2 2006     "))
 	}
 	fmt.Fprint(out, prefix)
 	fmt.Fprint(out, name)
