@@ -226,12 +226,18 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 			start = historyObj.Len() - num
 		}
+		home := os.Getenv("USERPROFILE")
 		for i := start; i < historyObj.Len(); i++ {
 			row := historyObj.rows[i]
-			fmt.Fprintf(cmd.Stdout, "%s : %-s (%s)\n",
-				row.Stamp.Format("2006-01-02 15:04:05"),
+			dir := row.Dir
+			if strings.HasPrefix(strings.ToUpper(dir), strings.ToUpper(home)) {
+				dir = "~" + dir[len(home):]
+			}
+			dir = strings.Replace(dir, "\\", "/", -1)
+			fmt.Fprintf(cmd.Stdout, "%s %-s (%s)\n",
+				row.Stamp.Format("02 Jan 15:04:05"),
 				row.Text,
-				row.Dir)
+				dir)
 		}
 	} else {
 		fmt.Fprintln(cmd.Stderr, "history not found (case 2)")
