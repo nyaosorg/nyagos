@@ -11,6 +11,7 @@ English / [Japanese](release_note_ja.md)
 * Support `if` compatible with command.com's one (`==`,`not`,`errorlevel`,`/I`)
 * New alias macro `$~1` `$~2` ... `$~*`
 * Record current directories and times as history (#112)
+* ls -l: change timestamp format to 'Jan 2 15:04:05' or 'Jan 2 2006'
 
 NYAGOS 4.1.7\_0
 ===============
