@@ -10,7 +10,7 @@
 * アイコンを付けるのに、windres.exe ではなく github.com/josephspurrier/goversioninfo を使うようにした
 * command.com と同程度の `if` をサポート(`==`,`not`,`errorlevel`,`/I`)
 * alias に新マクロを追加 `$~1` `$~2` ... `$~*`
-* カレントディレクトリと時刻もヒストリに記録するようにした (#112)
+* カレントディレクトリ,時刻,PID もヒストリに記録するようにした (#112)
 * ls -l: タイムスタンプのフォーマットを 'Jan 2 15:04:05' or 'Jan 2 2006'へ変更
 
 NYAGOS 4.1.7\_0
