@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -233,7 +234,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			if strings.HasPrefix(strings.ToUpper(dir), strings.ToUpper(home)) {
 				dir = "~" + dir[len(home):]
 			}
-			dir = strings.Replace(dir, "\\", "/", -1)
+			dir = filepath.ToSlash(dir)
 			fmt.Fprintf(cmd.Stdout, "%s [%d] %-s (%s)\n",
 				row.Stamp.Format("Jan _2 15:04:05"),
 				row.Pid,
