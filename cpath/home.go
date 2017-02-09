@@ -1,23 +1,18 @@
 package cpath
 
 import (
-	"os"
+	"os/user"
 	"path/filepath"
 	"strings"
 )
 
-// Get %HOME% || %USERPROFILE%
-func GetHome() string {
-	home := os.Getenv("HOME")
-	if home == "" {
-		home = os.Getenv("USERPROFILE")
-	}
-	return home
-}
-
 // C:\users\name\foo\bar -> ~\foo\bar
 func ReplaceHomeToTilde(wd string) string {
-	home := GetHome()
+	my, err := user.Current()
+	if err != nil {
+		return ""
+	}
+	home := my.HomeDir
 	homeLen := len(home)
 	if len(wd) >= homeLen && strings.EqualFold(home, wd[0:homeLen]) {
 		wd = "~" + wd[homeLen:]

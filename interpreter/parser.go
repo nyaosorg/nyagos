@@ -6,12 +6,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
-
-	"../cpath"
 )
 
 type StatementT struct {
@@ -82,8 +81,8 @@ func string2word(source_ string, removeQuote bool) string {
 			break
 		}
 		if ch == '~' && unicode.IsSpace(lastchar) {
-			if home := cpath.GetHome(); home != "" {
-				buffer.WriteString(home)
+			if my, err := user.Current(); err == nil {
+				buffer.WriteString(my.HomeDir)
 			} else {
 				buffer.WriteRune('~')
 			}

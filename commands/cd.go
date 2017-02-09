@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strconv"
 
-	"../cpath"
 	"../dos"
 )
 
@@ -90,10 +90,9 @@ func cmd_cd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			return cmd_cd_sub(cmd.Args[1])
 		}
 	}
-	home := cpath.GetHome()
-	if home != "" {
+	if my, err := user.Current(); err == nil {
 		push_cd_history()
-		return cmd_cd_sub(home)
+		return cmd_cd_sub(my.HomeDir)
 	}
 	return cmd_pwd(ctx, cmd)
 }

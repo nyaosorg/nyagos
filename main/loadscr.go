@@ -4,12 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/user"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"time"
 
-	"../cpath"
 	"../dos"
 	"../lua"
 )
@@ -107,12 +107,18 @@ func loadScripts(it InterpreterT, L lua.Lua) error {
 	if err := dotNyagos(L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(it, cpath.GetHome())
+	if my, err := user.Current(); err == nil {
+		barNyagos(it, my.HomeDir)
+	}
 	return nil
 }
 
 func dotNyagos(L lua.Lua) error {
-	dot_nyagos := filepath.Join(cpath.GetHome(), ".nyagos")
+	my, err := user.Current()
+	if err != nil {
+		return err
+	}
+	dot_nyagos := filepath.Join(my.HomeDir, ".nyagos")
 	dotStat, dotErr := os.Stat(dot_nyagos)
 	if dotErr != nil {
 		return nil
