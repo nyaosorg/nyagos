@@ -8,7 +8,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"../history"
 	"../readline"
@@ -39,12 +38,7 @@ func NewCmdStreamConsole() (func(context.Context) (string, error), *history.Cont
 				break
 			}
 		}
-
-		wd, err := os.Getwd()
-		if err != nil {
-			wd = ""
-		}
-		row := history.Line{Text: line, Dir: wd, Stamp: time.Now()}
+		row := history.NewHistoryLine(line)
 		history1.PushLine(row)
 		fd, err := os.OpenFile(histPath, os.O_APPEND, 0600)
 		if err != nil && os.IsNotExist(err) {

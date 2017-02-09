@@ -234,8 +234,9 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 				dir = "~" + dir[len(home):]
 			}
 			dir = strings.Replace(dir, "\\", "/", -1)
-			fmt.Fprintf(cmd.Stdout, "%s %-s (%s)\n",
+			fmt.Fprintf(cmd.Stdout, "%s [%d] %-s (%s)\n",
 				row.Stamp.Format("Jan _2 15:04:05"),
+				row.Pid,
 				row.Text,
 				dir)
 		}
@@ -246,13 +247,6 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 }
 
 const max_histories = 2000
-
-func (row *Line) String() string {
-	return fmt.Sprintf("%s\t%s\t%s",
-		row.Text,
-		row.Dir,
-		row.Stamp.Format("2006-01-02 15:04:05"))
-}
 
 func (hisObj *Container) WriteTo(w io.Writer) {
 	i := 0
@@ -296,14 +290,19 @@ func (hisObj *Container) ReadFrom(reader io.Reader) {
 		if p != nil {
 			var stamp time.Time
 			var dir string
+			pid := 0
 			if len(p) >= 3 {
 				dir = p[1]
 				stamp, _ = time.Parse("2006-01-02 15:04:05", p[2])
+				if len(p) >= 4 {
+					pid, _ = strconv.Atoi(p[3])
+				}
 			}
 			hisObj.PushLine(Line{
 				Text:  p[0],
 				Dir:   dir,
-				Stamp: stamp})
+				Stamp: stamp,
+				Pid:   pid})
 		}
 	}
 }
