@@ -7,7 +7,7 @@ import (
 	"unsafe"
 )
 
-var luaDLL = syscall.NewLazyDLL("lua53")
+var luaDLL = syscall.NewLazyDLL("lua53.dll")
 
 type Integer int64
 
