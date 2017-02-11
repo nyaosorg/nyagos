@@ -8,7 +8,6 @@ import (
 	"io"
 	"os"
 	"os/exec"
-	"os/user"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -228,10 +227,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 			start = historyObj.Len() - num
 		}
-		home := ""
-		if my, err := user.Current(); err == nil {
-			home = my.HomeDir
-		}
+		home := os.Getenv("USERPROFILE")
 		for i := start; i < historyObj.Len(); i++ {
 			row := historyObj.rows[i]
 			dir := row.Dir

@@ -2,7 +2,6 @@ package completion
 
 import (
 	"os"
-	"os/user"
 	"regexp"
 	"strings"
 
@@ -38,9 +37,8 @@ func listUpFiles(str string) ([]string, error) {
 	})
 
 	str = rxTilde.ReplaceAllStringFunc(str, func(p string) string {
-
-		if my, err := user.Current(); err == nil {
-			return my.HomeDir + "\\"
+		if home := cpath.GetHome(); home != "" {
+			return home + "\\"
 		} else {
 			return p
 		}
