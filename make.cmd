@@ -43,6 +43,10 @@ call :"%~1"
         for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         @exit /b
 
+:"vet"
+        for /R %%I IN (*.go) do @go vet "%%I"
+        @exit /b
+
 :"status"
         nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
         @exit /b
