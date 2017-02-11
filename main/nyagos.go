@@ -61,7 +61,10 @@ func nyagosPrompt(L lua.Lua) int {
 var prompt_hook lua.Pushable = lua.TGoFunction(nyagosPrompt)
 
 func printPrompt() (int, error) {
-	L := NewNyagosLua()
+	L, err := NewNyagosLua()
+	if err != nil {
+		return 0, err
+	}
 	defer L.Close()
 	L.Push(prompt_hook)
 
@@ -99,7 +102,10 @@ func when_panic() {
 var luaFilter lua.Pushable = lua.TNil{}
 
 func itprCloneHook(this *interpreter.Interpreter) error {
-	LL := NewNyagosLua()
+	LL, err := NewNyagosLua()
+	if err != nil {
+		return err
+	}
 	this.Tag = LL
 	this.OnClone = itprCloneHook
 	this.Closers = append(this.Closers, LL)
@@ -153,7 +159,11 @@ func main() {
 	alias.Init()
 
 	// Lua extension
-	L := NewNyagosLua()
+	L, err := NewNyagosLua()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "nyagos: %s\n", err.Error())
+		return
+	}
 	defer L.Close()
 
 	if !isatty.IsTerminal(os.Stdin.Fd()) || *optionC != "" || *optionF != "" || *optionE != "" {

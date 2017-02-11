@@ -30,9 +30,12 @@ type Lua uintptr
 
 var luaL_newstate = luaDLL.NewProc("luaL_newstate")
 
-func New() Lua {
+func New() (Lua, error) {
+	if err := luaL_newstate.Find(); err != nil {
+		return Lua(0), err
+	}
 	lua, _, _ := luaL_newstate.Call()
-	return Lua(lua)
+	return Lua(lua), nil
 }
 
 func (this Lua) State() uintptr {

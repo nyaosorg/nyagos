@@ -45,7 +45,10 @@ var orgArgHook func(*interpreter.Interpreter, []string) ([]string, error)
 var luaArgsFilter lua.Pushable = lua.TNil{}
 
 func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
-	L := NewNyagosLua()
+	L, err := NewNyagosLua()
+	if err != nil {
+		return nil, err
+	}
 	defer L.Close()
 	L.Push(luaArgsFilter)
 	if !L.IsFunction(-1) {
@@ -86,7 +89,10 @@ var orgOnCommandNotFound func(*interpreter.Interpreter, error) error
 var luaOnCommandNotFound lua.Pushable = lua.TNil{}
 
 func on_command_not_found(inte *interpreter.Interpreter, err error) error {
-	L := NewNyagosLua()
+	L, err := NewNyagosLua()
+	if err != nil {
+		return err
+	}
 	defer L.Close()
 
 	L.Push(luaOnCommandNotFound)
@@ -237,8 +243,11 @@ func setShareTable(L lua.Lua) int {
 
 var hook_setuped = false
 
-func NewNyagosLua() lua.Lua {
-	this := lua.New()
+func NewNyagosLua() (lua.Lua, error) {
+	this, err := lua.New()
+	if err != nil {
+		return this, err
+	}
 	this.OpenLibs()
 
 	this.Push(lua.NewVirtualTable("nyagos", getNyagosTable, setNyagosTable))
@@ -254,7 +263,7 @@ func NewNyagosLua() lua.Lua {
 		interpreter.OnCommandNotFound = on_command_not_found
 		hook_setuped = true
 	}
-	return this
+	return this, nil
 }
 
 var silentmode = false
