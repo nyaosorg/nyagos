@@ -204,6 +204,7 @@ func main() {
 
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
+			cancel()
 			break
 		}
 
@@ -232,7 +233,10 @@ func main() {
 				select {
 				case <-sigint_:
 					cancel_()
+					<-quit
+					return
 				case <-quit:
+					cancel_()
 					return
 				}
 			}
