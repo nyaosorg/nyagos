@@ -23,7 +23,7 @@ These suffix are available.
 
 ### Environment variable
 
-* `~` (tilde) are replaced to `%USERPROFILE%`.
+* `~` (tilde) are replaced to `%HOME%` or `%USERPROFILE%`.
 
 ### Unicode Literal
 

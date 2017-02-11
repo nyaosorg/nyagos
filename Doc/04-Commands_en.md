@@ -5,7 +5,7 @@ These commands have their alias. For example, `ls` => `__ls__`.
 ### `cd DRIVE:DIRECTORY`
 
 Change the current working drive and directory.
-No arguments, move to %USERPROFILE%.
+No arguments, move to %HOME% or %USERPROFILE%.
 
 * `cd -` : move the previous directory.
 * `cd -N` (N:digit) : move the N-previous directory.
