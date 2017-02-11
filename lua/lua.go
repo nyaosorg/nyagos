@@ -11,16 +11,6 @@ var luaDLL = syscall.NewLazyDLL("lua53.dll")
 
 type Integer int64
 
-const LUAINT_PER_UINTPTR = unsafe.Sizeof(Integer(0)) / unsafe.Sizeof(uintptr(0))
-
-func (value Integer) Expand(list []uintptr) []uintptr {
-	for i := uintptr(0); i < LUAINT_PER_UINTPTR; i++ {
-		list = append(list, uintptr(value))
-		value >>= (8 * unsafe.Sizeof(uintptr(1)))
-	}
-	return list
-}
-
 func (value Integer) Push(L Lua) int {
 	L.PushInteger(value)
 	return 1
