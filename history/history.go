@@ -196,7 +196,7 @@ func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 
 func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	if ctx == nil {
-		fmt.Fprintln(cmd.Stderr, "history not found (case1)\n")
+		fmt.Fprintln(cmd.Stderr, "history not found (case1)")
 		return 1, nil
 	}
 	var num int
