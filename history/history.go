@@ -249,7 +249,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 
 const max_histories = 2000
 
-func (hisObj *Container) WriteTo(w io.Writer) {
+func (hisObj *Container) SaveViaWriter(w io.Writer) {
 	i := 0
 	if len(hisObj.rows) > max_histories {
 		i = len(hisObj.rows) - max_histories
@@ -266,12 +266,12 @@ func (hisObj *Container) Save(path string) error {
 	if err != nil {
 		return err
 	}
-	hisObj.WriteTo(fd)
+	hisObj.SaveViaWriter(fd)
 	fd.Close()
 	return nil
 }
 
-func (hisObj *Container) ReadFrom(reader io.Reader) {
+func (hisObj *Container) LoadViaReader(reader io.Reader) {
 	sc := bufio.NewScanner(reader)
 	list := make([][]string, 0, 2000)
 	hash := make(map[string]int)
@@ -313,7 +313,7 @@ func (hisObj *Container) Load(path string) error {
 	if err != nil {
 		return err
 	}
-	hisObj.ReadFrom(fd)
+	hisObj.LoadViaReader(fd)
 	fd.Close()
 	return nil
 }
