@@ -43,17 +43,21 @@ call :"%~1"
         for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
         @exit /b
 
-:"vet"
-        for /R %%I IN (*.go) do @go vet "%%I"
-        @exit /b
-
 :"status"
         nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
         @exit /b
 
+:eachdir
+        powershell "ls -R | ?{ $_ -match '\.go$' } | %%{ [System.IO.Path]::GetDirectoryName($_.FullName)} | Sort-Object | Get-Unique | %%{ Write-Host 'go %~1 on',$_ ;  pushd $_ ; go %~1 ; popd }"
+        exit /b
+
+:"vet"
+        call :eachdir vet
+        exit /b
+
 :"clean"
         for %%I in (nyagos.exe main\nyagos.syso version.now main\bindata.go) do if exist %%I del %%I
-        powershell "ls -R | ?{ $_ -match '\.go$' } | %%{ [System.IO.Path]::GetDirectoryName($_.FullName)} | Sort-Object | Get-Unique | %%{ Write-Host 'go clean on',$_ ;  pushd $_ ; go clean ; popd }"
+        call :eachdir clean
 
 :"sweep"
         for /R %%I in (*~ *.bak) do if exist %%I del %%I
