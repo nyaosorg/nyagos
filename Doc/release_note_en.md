@@ -9,7 +9,7 @@ English / [Japanese](release_note_ja.md)
 * Fix #176 Bug on `gawk "BEGIN{ print substr(""%01"",2) }"`
 * Use github.com/josephspurrier/goversioninfo instead of windres.exe to attach icon
 * Support `if` compatible with command.com's one (`==`,`not`,`errorlevel`,`/I`)
-* New alias macro `$~1` `$~2` ... `$~*`
+* New alias macro `$~1` `$~2` ... `$~*` which remove double quotations.
 * Record current directories, times and process-id as history (#112)
 * ls -l: change timestamp format to 'Jan 2 15:04:05' or 'Jan 2 2006'
 * When lua53.dll is not found, display not a stacktrace but a readable error.

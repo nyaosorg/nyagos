@@ -9,7 +9,7 @@
 * Fix #176 `gawk "BEGIN{ print substr(""%01"",2) }"` がエラーになっていた
 * アイコンを付けるのに、windres.exe ではなく github.com/josephspurrier/goversioninfo を使うようにした
 * command.com と同程度の `if` をサポート(`==`,`not`,`errorlevel`,`/I`)
-* alias に新マクロを追加 `$~1` `$~2` ... `$~*`
+* alias に新マクロを追加 `$~1` `$~2` ... `$~*` (前後の二重引用符を削除する)
 * カレントディレクトリ,時刻,PID もヒストリに記録するようにした (#112)
 * ls -l: タイムスタンプのフォーマットを 'Jan 2 15:04:05' or 'Jan 2 2006'へ変更
 * lua53.dll が無い時、スタックトレースではなくエラーを表示するようにした
