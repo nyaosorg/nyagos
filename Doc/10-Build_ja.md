@@ -1,15 +1,25 @@
+[English](./10-Build_en.md) / Japanese
+
 ビルド方法
 ----------
 
 次のソフトウェアが必要となります。
+github.com 上のモジュールは `make.cmd get` でダウンロード可能です。
 
-* [go 1.6 for windows](http://golang.org)
+* [go 1.7 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
-* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (任意です。無い場合、幾つかの Lua 拡張が動きませんが、nyagos.exe 自体は動作します)
-* http://github.com/mattn/go-runewidth
-* http://github.com/shiena/ansicolor
-* http://github.com/atotto/clipboard
-* http://github.com/mattn/go-isatty
+* https://github.com/atotto/clipboard
+* https://github.com/dustin/go-humanize
+* https://github.com/go-ole/go-ole
+* https://github.com/josephspurrier/goversioninfo
+* https://github.com/jteeuwen/go-bindata
+* https://github.com/mattn/go-colorable
+* https://github.com/mattn/go-isatty
+* https://github.com/mattn/go-runewidth
+* https://github.com/zetamatta/go-ansicfile
+* https://github.com/zetamatta/go-findfile
+* https://github.com/zetamatta/go-getch
+* https://github.com/zetamatta/go-mbcs
 
 `%GOPATH%` にて
 
@@ -19,12 +29,10 @@
 (32bitの場合)
 
     unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
 
 (64bitの場合)
 
     unzip PATH\TO\lua-5.3.2_Win64_bin.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
 
 最後に:
 

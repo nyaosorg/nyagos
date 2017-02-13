@@ -1,15 +1,25 @@
+English / [Japanese](./10-Build_ja.md)
+
 Build
 -----
 
 These sortwares are required.
+Modules on github.com are able to be downloaded with `make.cmd get`.
 
-* [go 1.6 for windows](http://golang.org)
+* [go 1.7 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
-* [NYOLE 0.0.0.5 or later](https://github.com/zetamatta/nyole/releases) (Optionally. Without it, some lua-extensions does not work, but nyagos.exe itself is available.)
-- http://github.com/mattn/go-runewidth
-- http://github.com/shiena/ansicolor
-- http://github.com/atotto/clipboard
-- http://github.com/mattn/go-isatty
+* https://github.com/atotto/clipboard
+* https://github.com/dustin/go-humanize
+* https://github.com/go-ole/go-ole
+* https://github.com/josephspurrier/goversioninfo
+* https://github.com/jteeuwen/go-bindata
+* https://github.com/mattn/go-colorable
+* https://github.com/mattn/go-isatty
+* https://github.com/mattn/go-runewidth
+* https://github.com/zetamatta/go-ansicfile
+* https://github.com/zetamatta/go-findfile
+* https://github.com/zetamatta/go-getch
+* https://github.com/zetamatta/go-mbcs
 
 On `%GOPATH%` folder,
 
@@ -19,12 +29,10 @@ On `%GOPATH%` folder,
 For 32bit ,
 
     unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5.zip nyole.dll
 
 For 64bit ,
 
     unzip PATH\TO\lua-5.3.2_Win64_dllw4_lib.zip lua53.dll
-    unzip PATH\TO\nyole-0.0.0.5_x64.zip nyole.dll
 
 Finally
 
