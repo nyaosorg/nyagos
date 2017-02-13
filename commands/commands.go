@@ -65,6 +65,7 @@ func Init() {
 		"md":      cmd_mkdir,
 		"mkdir":   cmd_mkdir,
 		"move":    cmd_move,
+		"open":    cmd_open,
 		"popd":    cmd_popd,
 		"pushd":   cmd_pushd,
 		"pwd":     cmd_pwd,
