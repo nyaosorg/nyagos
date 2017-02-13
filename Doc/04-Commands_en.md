@@ -1,3 +1,5 @@
+English / [Japanese](./04-Commands_ja.md)
+
 ## Built-in commands
 
 These commands have their alias. For example, `ls` => `__ls__`.
@@ -47,12 +49,14 @@ Print the current woking drive and directory.
 
 * `pwd -N` (N:digit) : print the N-previous directory.
 
-### `set ENV=VAR`
+### `set ENV=VAL`
 
 Set the environment variable the value. When the value has any spaces,
-you should `set "ENV=VAR"`.
+you should `set "ENV=VAL"`.
 
 * `PROMPT` ... The macro strings are compatible with CMD.EXE. Supported ANSI-ESCAPE SEQUENCE.
+* `set ENV^=VAL` is same as `set ENV=VAL;%ENV%` but removes duplicated VAL.
+* `set ENV+=VAL` is same as `set ENV=%ENV%;VAL` but removes duplicated VAL.
 
 ### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r ref_file ] FILENAME(s)`
 
