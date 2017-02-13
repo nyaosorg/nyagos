@@ -51,6 +51,7 @@ func Init() {
 		".":       cmd_source,
 		"alias":   cmd_alias,
 		"cd":      cmd_cd,
+		"clone":   cmd_clone,
 		"cls":     cmd_cls,
 		"copy":    cmd_copy,
 		"del":     cmd_del,
@@ -74,6 +75,8 @@ func Init() {
 		"rmdir":   cmd_rmdir,
 		"set":     cmd_set,
 		"source":  cmd_source,
+		"su":      cmd_su,
+		"sudo":    cmd_sudo,
 		"touch":   cmd_touch,
 		"which":   cmd_which,
 	}
