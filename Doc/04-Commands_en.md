@@ -31,7 +31,7 @@ and calls `ln -s`.
 List the directory. Supported options are below:
 
 * `-l` Long format
-* `-F` Mark `/` after directories' name. `*' after executables' name.
+* `-F` Mark `/` after directories' name. `*` after executables' name.
 * `-o` Enable color
 * `-a` Print all files.
 * `-R` Print Subdirectories recursively.
@@ -80,7 +80,7 @@ These built-in commands are always asking with prompt when files are override or
 
 ### `source BATCHFILENAME`
 
-Execute the batch-file(*.cmd,*.bat) by CMD.exe and
+Execute the batch-file(`*.cmd`,`*.bat`) by CMD.exe and
 import the environment variables and working directory
 which CMD.exe changed.
 
