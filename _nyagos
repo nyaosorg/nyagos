@@ -1,3 +1,6 @@
+# This is a configuration for NYAGOS
+# The syntax is like a batchfile of command.com.
+
 alias "ls=__ls__ -oFh $*"
 alias "ll=__ls__ -lh $*"
 alias "wordpad=""%PROGRAMFILES%\Windows NT\Accessories\wordpad.exe"""
