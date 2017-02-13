@@ -1,3 +1,5 @@
+English / [Japanese](./01-Install_ja.md)
+
 ## Install
 
 The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).

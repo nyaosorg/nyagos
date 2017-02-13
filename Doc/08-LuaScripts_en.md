@@ -1,3 +1,5 @@
+English / [Japanese](./08-LuaScripts_ja.md)
+
 Commands (alias written in Lua)
 ===============================
 

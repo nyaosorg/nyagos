@@ -1,3 +1,5 @@
+English / [Japanese](./06-Substitution_ja.md)
+
 ## Substitution
 
 ### History

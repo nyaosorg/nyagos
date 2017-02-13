@@ -1,3 +1,5 @@
+[English](./09-Uninstall_en.md) / Japanese
+
 アンインストール
 ----------------
 

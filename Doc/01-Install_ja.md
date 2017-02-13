@@ -1,3 +1,5 @@
+[English](01-Install_en.md) / Japanese
+
 インストール
 ------------
 

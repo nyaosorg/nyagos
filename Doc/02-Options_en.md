@@ -1,3 +1,5 @@
+English / [Japanese](./02-Options_ja.md)
+
 ## Option for NYAGOS.EXE
 
 ### `-h`
@@ -23,5 +25,3 @@ Otherwise, read and execute commands on it.
 ### `-e "SCRIPTCODE"`
 
 Execute SCRIPTCODE with Lua interpretor and quit.
-
-

@@ -1,3 +1,5 @@
+[English](./07-LuaFunctions_en.md) / Japanese
+
 ## Lua拡張
 
 nyagos では、EXE の本体の機能はコンパクトとし、便利機能は 

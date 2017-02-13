@@ -1,3 +1,5 @@
+English / [Japanese](./03-Readline_ja.md)
+
 ## Editor
 
 * BackSpace , Ctrl-H : Delete a charactor left of cursor

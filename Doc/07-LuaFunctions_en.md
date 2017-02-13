@@ -1,3 +1,5 @@
+English / [Japanese](./07-LuaFunctions_ja.md)
+
 ## Lua functions extenteded by NYAGOS
 
 ### `nyagos.alias.NAME = "REPLACED-STRING"`

@@ -1,3 +1,5 @@
+English / [Japanese](history_4.0_ja.md)
+
 NYAGOS 4.0.9\_11
 ================
 * Build with go 1.5.2

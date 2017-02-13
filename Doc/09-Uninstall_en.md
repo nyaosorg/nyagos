@@ -1,3 +1,5 @@
+English / [Japanese](./09-Uninstall_ja.md)
+
 Uninstall
 ---------
 

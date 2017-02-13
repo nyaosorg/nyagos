@@ -1,3 +1,5 @@
+[English](./03-Readline_en.md) / Japanese
+
 ## 編集機能
 
 UNIX系シェルに近いキーバインドで、コマンドラインを編集可能です。

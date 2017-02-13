@@ -1,4 +1,6 @@
-﻿Since 4.1
+﻿[English](./since_4.1_en.md) / Japanese
+
+Since 4.1
 =========
 
 NYAGOS 4.0 では、パイプライン等で実行される複数の goroutine から

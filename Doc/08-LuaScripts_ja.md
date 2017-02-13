@@ -1,3 +1,5 @@
+[English](./08-LuaScripts_en.md) / Japanese
+
 コマンド(Lua でエイリアス定義)
 ===============================
 

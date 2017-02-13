@@ -1,3 +1,5 @@
+[English](./history_4.0_en.md) / Japanese
+
 NYAGOS 4.0.9\_11
 ================
 (2015.12.12)

@@ -1,3 +1,5 @@
+[English](./02-Options_en.md) / Japanese
+
 ## 起動オプション
 
 ### `-h`

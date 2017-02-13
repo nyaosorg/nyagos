@@ -1,3 +1,5 @@
+[English](./06-Substitution_en.md) / Japanese
+
 ## コマンドライン置換
 
 ### ヒストリ置換
