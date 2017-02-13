@@ -1,8 +1,14 @@
+English / [Japanese](./05-Startup_ja.md)
+
 ## What is done on the Startup
 
-1. NYAGOS.exe loads and execute nyagos.lua where NYAGOS.exe are put. 
-    NYAGOS.lua is wrritten with the programming language Lua,
-    and it load `.nyagos` on HOME directory(=%USERPROFILE% or %HOME%) 
-    or same directory with nyagos.exe.
-    Users can customize with the .nyagos .
-2. History are recorded on `%APPDATA%\NYAOS_ORG\nyagos.history`
+On startup, NYAGOS.exe loads and execute below.
+
+- `(the directory NYAGOS is put)\.nyagos` ... written in Lua
+- `(the home directory)\.nyagos` ... written in Lua
+- `(the home directory)\_nyagos` ... written in script like a batchfile.
+
+The home directory is the one pointed with %HOME% or %USERPROFILE%.
+`_nyagos` does not support FOR , BLOCKed-If, yet.
+
+History are recorded on `%APPDATA%\NYAOS_ORG\nyagos.history`
