@@ -15,12 +15,6 @@ Execute inline-lua-commands like 'lua.exe -e "..."'.
 
 `cd` cat change the current directory pointed with shortcut-file(`*.lnk`).
 
-`open FILE(s)`
---------------
-(defined in nyagos.d\open.lua)
-
-Open the file with associated application.
-
 `su`
 ----
 (defined in nyagos.d\su.lua)

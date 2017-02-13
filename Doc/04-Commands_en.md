@@ -89,3 +89,7 @@ import the environment variables and working directory
 which CMD.exe changed.
 
 We use . (one-period) as an alias of source.
+
+### `open FILE(s)`
+
+Open the file with associated application.
