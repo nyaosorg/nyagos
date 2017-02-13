@@ -236,6 +236,8 @@ func parse1(text string) ([]*StatementT, error) {
 				term_word()
 				isNextRedirect = false
 			}
+		} else if lastchar == ' ' && ch == '#' {
+			break
 		} else if lastchar == ' ' && ch == ';' {
 			term_line(";")
 		} else if ch == '|' {
