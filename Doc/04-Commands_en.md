@@ -105,3 +105,17 @@ Run another nyagos.exe as Administrator.
 ### `sudo COMMAND ARGS(s)...`
 
 Run COMMAND as Administrator
+
+## Commands implemented by Lua
+
+### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua)
+
+Execute inline-lua-commands like 'lua.exe -e "..."'.
+
+### `cd SHORTCUT.LNK` (nyagos.d\cdlnk.lua)
+
+`cd` cat change the current directory pointed with shortcut-file(`*.lnk`).
+
+### `trash FILE(S)` (nyagos.d\trash.lua)
+
+It throws files into trashbox of Windows.

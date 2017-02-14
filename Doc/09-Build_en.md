@@ -1,10 +1,10 @@
-[English](./10-Build_en.md) / Japanese
+English / [Japanese](./09-Build_ja.md)
 
-ビルド方法
-----------
+Build
+-----
 
-次のソフトウェアが必要となります。
-github.com 上のモジュールは `make.cmd get` でダウンロード可能です。
+These sortwares are required.
+Modules on github.com are able to be downloaded with `make.cmd get`.
 
 * [go 1.7 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
@@ -21,25 +21,23 @@ github.com 上のモジュールは `make.cmd get` でダウンロード可能�
 * https://github.com/zetamatta/go-getch
 * https://github.com/zetamatta/go-mbcs
 
-`%GOPATH%` にて
+On `%GOPATH%` folder,
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
 
-(32bitの場合)
+For 32bit ,
 
     unzip PATH\TO\lua-5.3.2_Win32_bin.zip lua53.dll
 
-(64bitの場合)
+For 64bit ,
 
-    unzip PATH\TO\lua-5.3.2_Win64_bin.zip lua53.dll
+    unzip PATH\TO\lua-5.3.2_Win64_dllw4_lib.zip lua53.dll
 
-最後に:
+Finally
 
     make.cmd get
     make.cmd
     make.cmd install INSTALLDIR
 
-make.cmd の使い方については `make.cmd help` を参照してください。
-
-<!-- vim:set fenc=utf8: -->
+How to use make.cmd is shown with `make.cmd help`

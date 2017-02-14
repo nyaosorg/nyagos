@@ -1,4 +1,4 @@
-[English](./09-Uninstall_en.md) / Japanese
+[English](./08-Uninstall_en.md) / Japanese
 
 アンインストール
 ----------------

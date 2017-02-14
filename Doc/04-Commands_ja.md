@@ -113,4 +113,18 @@ UAC 昇格された NYAGOS を別ウインドウで開きます。
 
 UAC 昇格させて、コマンドを実行します。
 
+## Lua で実装されたコマンド
+
+### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua) 
+
+内蔵Lua で引数の Lua コードを実行します。
+
+### `cd SHORTCUT.LNK` (nyagos.d\cdlnk.lua)
+
+cd のパラメータにショートカット(`*.lnk`)を指定できるようになっています
+
+### `trash FILE(S)` (nyagos.d\trash.lua)
+
+ファイルを Windows のゴミ箱に移動させます。
+
 <!-- set:fenc=utf8: -->

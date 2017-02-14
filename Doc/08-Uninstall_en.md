@@ -1,4 +1,4 @@
-English / [Japanese](./09-Uninstall_ja.md)
+English / [Japanese](./08-Uninstall_ja.md)
 
 Uninstall
 ---------

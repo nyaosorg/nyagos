@@ -31,3 +31,39 @@ These suffix are available.
 
 * `%u+XXXX%` are replaced to Unicode charactor (XXXX is hexadecimal number.)
 
+### Command Substitution (nyagos.d\backquote.lua)
+
+    `COMMAND`
+
+is replaced to what COMMAND print to standard output.
+
+### Brace Expansion (nyagos.d\brace.lua)
+
+    echo a{b,c,d}e
+
+is replaced to
+
+    echo abe ace ade
+
+### Inserting Interpreter-name (nyagos.d\suffix.lua)
+
+- `FOO.pl  ...` is replaced to `perl   FOO.pl ...`
+- `FOO.py  ...` is replaced to `ipy FOO.py ...` , `py FOO.py` or `python FOO.py ...` (inserted the first found interpreter's name)
+- `FOO.rb  ...` is replaced to `ruby   FOO.rb ...`
+- `FOO.lua ...` is replaced to `lua    FOO.lua ...`
+- `FOO.awk ...` is replaced to `awk -f FOO.awk ...`
+- `FOO.js  ...` is replaced to `cscript //nologo FOO.js ...`
+- `FOO.vbs ...` is replaced to `cscript //nologo FOO.vbs ...`
+- `FOO.ps1 ...` is replaced to `powershell -file FOO.ps1 ...`
+
+To append the new associtation between the suffix and interpreter,
+write
+
+    suffix.xxx = "INTERPRETERNAME"
+    suffix.xxx = { "INTERPRETERNAME","OPTION" ... }
+    suffix[".xxx] = "INTERPRETERNAME"
+    suffix[".xxx] = { "INTERPRETERNAME","OPTION" ... }
+    suffix(".xxx","INTERPRETERNAME")
+    suffix(".xxx",{ "INTERPRETERNAME","OPTION" ... })
+
+in `%USERPROFILE%\\.nyagos`

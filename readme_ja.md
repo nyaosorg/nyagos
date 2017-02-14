@@ -43,9 +43,8 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
 5. [起動処理](Doc/05-Startup_ja.md)
 6. [コマンドライン置換](Doc/06-Substitution_ja.md)
 7. [Lua拡張](Doc/07-LuaFunctions_ja.md)
-8. [付属のLuaスクリプト](Doc/08-LuaScripts_ja.md)
-9. [アンインストール](Doc/09-Uninstall_ja.md)
-10. [ビルド方法](Doc/10-Build_ja.md)
+8. [アンインストール](Doc/08-Uninstall_ja.md)
+9. [ビルド方法](Doc/09-Build_ja.md)
 
 ライセンス
 ----------

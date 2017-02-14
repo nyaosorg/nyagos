@@ -45,9 +45,8 @@ Contents
 5. [What is done on the Startup](Doc/05-Startup_en.md)
 6. [Substitution](Doc/06-Substitution_en.md)
 7. [Lua functions extenteded by NYAGOS](Doc/07-LuaFunctions_en.md)
-8. [Bundled Lua scripts](Doc/08-LuaScripts_en.md)
-9. [Uninstall](Doc/09-Uninstall_en.md)
-10. [How To Build](Doc/10-Build_en.md)
+8. [Uninstall](Doc/08-Uninstall_en.md)
+9. [How To Build](Doc/09-Build_en.md)
 
 License
 -------
