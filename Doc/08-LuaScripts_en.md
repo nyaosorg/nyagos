@@ -15,24 +15,6 @@ Execute inline-lua-commands like 'lua.exe -e "..."'.
 
 `cd` cat change the current directory pointed with shortcut-file(`*.lnk`).
 
-`su`
-----
-(defined in nyagos.d\su.lua)
-
-Run another nyagos.exe as Administrator.
-
-`clone`
--------
-(defined in nyagos.d\su.lua)
-
-Run another nyagos.exe on another console window.
-
-`sudo COMMAND`
---------------
-(defined in nyagos.d\su.lua)
-
-Run COMMAND in nyagos.d\su.lua)
-
 `trash FILE(S)`
 ---------------
 (defined in nyagos.d\trash.lua)

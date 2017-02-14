@@ -101,5 +101,16 @@ NYAGOS を終了します。
 
 Windows で関連付けられたアプリケーションでファイルを開きます。
 
+### `clone`
+
+NYAGOS を別ウインドウで開きます。
+
+### `su`
+
+UAC 昇格された NYAGOS を別ウインドウで開きます。
+
+### `su COMMAND ARGS(s)...`
+
+UAC 昇格させて、コマンドを実行します。
 
 <!-- set:fenc=utf8: -->

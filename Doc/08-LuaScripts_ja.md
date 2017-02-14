@@ -15,24 +15,6 @@
 
 cd のパラメータにショートカット(`*.lnk`)を指定できるようになっています
 
-`su`
-----
-(nyagos.d\su.lua にて定義)
-
-UAC 昇格された NYAGOS を別ウインドウで開きます。
-
-`clone`
--------
-(nyagos.d\su.lua に定義)
-
-NYAGOS を別ウインドウで開きます。
-
-`sudo COMMAND`
---------------
-(nyagos.d\su.lua にて定義)
-
-UAC 昇格させて、コマンドを実行します。
-
 `trash FILE(S)`
 ---------------
 (nyagos.d\trash.lua にて定義)

@@ -93,3 +93,15 @@ We use . (one-period) as an alias of source.
 ### `open FILE(s)`
 
 Open the file with associated application.
+
+### `clone`
+
+Run another nyagos.exe on another console window.
+
+### `su`
+
+Run another nyagos.exe as Administrator.
+
+### `sudo COMMAND ARGS(s)...`
+
+Run COMMAND as Administrator
