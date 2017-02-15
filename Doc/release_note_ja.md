@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.1.8\_0
+===============
+(2017.02.15)
+
 * COMMAND.COMバッチ風の新カスタマイズファイルとして `_nyagos` を用意
 * Fix #173 `ls` や内蔵コマンドを Ctrl-C で止められるようになった
 * ls -h のファイルサイズを 1K,2M 等ではなく、カンマ区切りの数値とした

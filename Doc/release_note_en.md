@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.1.8\_0
+===============
+on Feb 15,2017
+
 * Add new customizing file `_nyagos`(command.com-batchlike)
 * Fix #173 could not stop `ls` and built-in commands with Ctrl-C
 * ls -h: display size with COMMA not Kilo,Mega or Giga
