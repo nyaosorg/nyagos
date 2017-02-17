@@ -52,10 +52,17 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 			return c
 		}
 	}, rv.RawWord)
+
+	start := strings.LastIndexAny(rv.Word, ";=") + 1
+
 	if rv.Pos > 0 {
-		rv.List, err = listUpFiles(rv.Word)
+		rv.List, err = listUpFiles(rv.Word[start:])
 	} else {
-		rv.List, err = listUpCommands(rv.Word)
+		rv.List, err = listUpCommands(rv.Word[start:])
+	}
+
+	for i := 0; i < len(rv.List); i++ {
+		rv.List[i] = rv.Word[:start] + rv.List[i]
 	}
 
 	L, L_ok := this.Context.Value("lua").(lua.Lua)
