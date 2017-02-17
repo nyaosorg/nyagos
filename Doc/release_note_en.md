@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix: `open http(s)://...` did not work.
+
 NYAGOS 4.1.8\_0
 ===============
 on Feb 15,2017
