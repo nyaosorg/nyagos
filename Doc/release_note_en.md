@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * Fix: `open http(s)://...` did not work.
+* Support `cd file:///...`
 
 NYAGOS 4.1.8\_0
 ===============
