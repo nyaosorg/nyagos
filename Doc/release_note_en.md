@@ -2,6 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * Fix: `open http(s)://...` did not work.
 * Support `cd file:///...`
+* C-y: if string on clipboard has space, paste it with double-quatations.
 
 NYAGOS 4.1.8\_0
 ===============
