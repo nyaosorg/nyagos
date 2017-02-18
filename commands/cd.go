@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
 
 	"../cpath"
 	"../dos"
@@ -39,6 +40,11 @@ const (
 )
 
 func cmd_cd_sub(dir string) (int, error) {
+	const fileHead = "file:///"
+
+	if strings.HasPrefix(dir, fileHead) {
+		dir = dir[len(fileHead):]
+	}
 	err := dos.Chdir(dir)
 	if err == nil {
 		return 0, nil
