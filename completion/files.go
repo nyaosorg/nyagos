@@ -44,7 +44,7 @@ func listUpFiles(str string) ([]string, error) {
 		}
 	})
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), "\"", "", -1)
-	directory := DirName(str)
+	directory := cpath.DirName(str)
 	wildcard := cpath.Join(directory, "*")
 
 	// Drive letter
