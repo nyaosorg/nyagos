@@ -13,9 +13,9 @@ func isExecutable(path string) bool {
 	return cpath.IsExecutableSuffix(filepath.Ext(path))
 }
 
-func listUpAllExecutableOnPath() []string {
+func listUpAllExecutableOnEnv(envName string) []string {
 	list := make([]string, 0, 100)
-	pathEnv := os.Getenv("PATH")
+	pathEnv := os.Getenv(envName)
 	dirList := filepath.SplitList(pathEnv)
 	for _, dir1 := range dirList {
 		dirHandle, dirErr := os.Open(dir1)
@@ -68,7 +68,8 @@ func removeDup(list []string) []string {
 }
 
 var command_listupper = []func() []string{
-	listUpAllExecutableOnPath,
+	func() []string { return listUpAllExecutableOnEnv("PATH") },
+	func() []string { return listUpAllExecutableOnEnv("NYAGOSPATH") },
 }
 
 func AppendCommandLister(f func() []string) {
