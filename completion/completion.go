@@ -3,14 +3,12 @@ package completion
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
 	"unicode"
 
 	"../conio"
-	"../lua"
 	"../readline"
 	/* dbg "github.com/zetamatta/goutputdebugstring" */)
 
@@ -22,11 +20,9 @@ type CompletionList struct {
 	Pos     int
 }
 
-var Hook lua.Pushable = lua.TNil{}
-
 func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	var err error
-	rv := CompletionList{}
+	rv := new(CompletionList)
 
 	// environment completion.
 	rv.AllLine = this.String()
@@ -35,7 +31,7 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
 		rv.RawWord = rv.AllLine[rv.Pos:]
 		rv.Word = rv.RawWord
-		return &rv, default_delimiter, nil
+		return rv, default_delimiter, nil
 	}
 
 	// filename or commandname completion
@@ -64,56 +60,8 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	for i := 0; i < len(rv.List); i++ {
 		rv.List[i] = rv.Word[:start] + rv.List[i]
 	}
-
-	L, L_ok := this.Context.Value("lua").(lua.Lua)
-	if !L_ok {
-		return &rv, default_delimiter, errors.New("listUpComplete: could not get lua instance")
-	}
-
-	L.Push(Hook)
-	if L.IsFunction(-1) {
-		L.NewTable()
-		L.PushString(rv.RawWord)
-		L.SetField(-2, "rawword")
-		L.Push(rv.Pos + 1)
-		L.SetField(-2, "pos")
-		L.PushString(rv.AllLine)
-		L.SetField(-2, "text")
-		L.PushString(rv.Word)
-		L.SetField(-2, "word")
-		L.NewTable()
-		for key, val := range rv.List {
-			L.Push(1 + key)
-			L.PushString(val)
-			L.SetTable(-3)
-		}
-		L.SetField(-2, "list")
-		if err := L.Call(1, 1); err != nil {
-			fmt.Println(err)
-		}
-		if L.IsTable(-1) {
-			list := make([]string, 0, len(rv.List)+32)
-			wordUpr := strings.ToUpper(rv.Word)
-			for i := 1; true; i++ {
-				L.Push(i)
-				L.GetTable(-2)
-				str, strErr := L.ToString(-1)
-				L.Pop(1)
-				if strErr != nil || str == "" {
-					break
-				}
-				strUpr := strings.ToUpper(str)
-				if strings.HasPrefix(strUpr, wordUpr) {
-					list = append(list, str)
-				}
-			}
-			if len(list) > 0 {
-				rv.List = list
-			}
-		}
-	}
-	L.Pop(1) // remove something not function or result-table
-	return &rv, default_delimiter, err
+	rv, err = luaHook(this, rv)
+	return rv, default_delimiter, err
 }
 
 func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
