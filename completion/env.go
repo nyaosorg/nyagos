@@ -3,8 +3,6 @@ package completion
 import (
 	"os"
 	"strings"
-
-	"../interpreter"
 )
 
 func findLastOpenPercent(this string) int {
@@ -33,21 +31,6 @@ func listUpOsEnv(name string) []string {
 		}
 	}
 	return matches
-}
-
-func listUpDynamicEnv(name string) []string {
-	matches := []string{}
-	for envName, _ := range interpreter.PercentFunc {
-		if strings.HasPrefix(envName, name) {
-			matches = append(matches, "%"+envName+"%")
-		}
-	}
-	return matches
-}
-
-var PercentFuncs = []func(string) []string{
-	listUpOsEnv,
-	listUpDynamicEnv,
 }
 
 func listUpEnv(cmdline string) ([]string, int, error) {

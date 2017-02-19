@@ -67,15 +67,6 @@ func removeDup(list []string) []string {
 	return result
 }
 
-var command_listupper = []func() []string{
-	func() []string { return listUpAllExecutableOnEnv("PATH") },
-	func() []string { return listUpAllExecutableOnEnv("NYAGOSPATH") },
-}
-
-func AppendCommandLister(f func() []string) {
-	command_listupper = append(command_listupper, f)
-}
-
 func listUpCommands(str string) ([]string, error) {
 	list, listErr := listUpCurrentAllExecutable(str)
 	if listErr != nil {

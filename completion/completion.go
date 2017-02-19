@@ -61,7 +61,12 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	for i := 0; i < len(rv.List); i++ {
 		rv.List[i] = rv.Word[:start] + rv.List[i]
 	}
-	rv, err = luaHook(this, rv)
+	for _, f := range HookToList {
+		rv, err = f(this, rv)
+		if err != nil {
+			break
+		}
+	}
 	return rv, default_delimiter, err
 }
 
