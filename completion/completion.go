@@ -5,12 +5,13 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"unicode"
 
 	"../conio"
 	"../readline"
-	/* dbg "github.com/zetamatta/goutputdebugstring" */)
+)
 
 type CompletionList struct {
 	AllLine string
@@ -146,7 +147,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		commonStr += " "
 	}
 	if slashToBackSlash {
-		commonStr = strings.Replace(commonStr, "/", "\\", -1)
+		commonStr = filepath.FromSlash(commonStr)
 	}
 	if comp.RawWord == commonStr {
 		fmt.Print("\n")

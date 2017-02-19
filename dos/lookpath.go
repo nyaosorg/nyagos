@@ -48,7 +48,7 @@ func LookPath(name string, envnames ...string) string {
 	envlist.WriteString(".;")
 	envlist.WriteString(os.Getenv("PATH"))
 	for _, name1 := range envnames {
-		envlist.WriteString(";")
+		envlist.WriteRune(os.PathListSeparator)
 		envlist.WriteString(os.Getenv(name1))
 	}
 	// println(envlist.String())

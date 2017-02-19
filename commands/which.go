@@ -20,7 +20,7 @@ func envToList(first1 string, envs ...string) []string {
 	result := make([]string, 1, 20)
 	result[0] = first1
 	for _, env := range envs {
-		list1 := strings.Split(os.Getenv(env), ";")
+		list1 := filepath.SplitList(os.Getenv(env))
 		result = append(result, list1...)
 	}
 	return result

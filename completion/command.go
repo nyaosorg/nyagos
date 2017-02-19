@@ -16,7 +16,7 @@ func isExecutable(path string) bool {
 func listUpAllExecutableOnPath() []string {
 	list := make([]string, 0, 100)
 	pathEnv := os.Getenv("PATH")
-	dirList := strings.Split(pathEnv, ";")
+	dirList := filepath.SplitList(pathEnv)
 	for _, dir1 := range dirList {
 		dirHandle, dirErr := os.Open(dir1)
 		if dirErr != nil {

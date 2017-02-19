@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	STD_SLASH = "\\"
+	STD_SLASH = string(os.PathSeparator)
 	OPT_SLASH = "/"
 )
 
