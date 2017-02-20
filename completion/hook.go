@@ -35,3 +35,11 @@ func listUpDynamicEnv(name string) []Element {
 	}
 	return matches
 }
+
+func init() {
+	f := readline.KeyGoFuncT{F: KeyFuncCompletion}
+	err := readline.BindKeySymbolFunc(readline.K_CTRL_I, "COMPLETE", &f)
+	if err != nil {
+		panic(err.Error())
+	}
+}

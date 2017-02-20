@@ -149,12 +149,6 @@ func main() {
 
 	getch.DisableCtrlC()
 
-	completion := readline.KeyGoFuncT{F: completion.KeyFuncCompletion}
-
-	if err := readline.BindKeySymbolFunc(readline.K_CTRL_I, "COMPLETE", &completion); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-	}
-
 	commands.Init()
 	alias.Init()
 
