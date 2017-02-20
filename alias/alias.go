@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	"../completion"
 	"../interpreter"
 	"../text"
 )
@@ -112,10 +113,10 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (
 var Table = map[string]Callable{}
 var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 
-func AllNames() []string {
-	names := make([]string, 0, len(Table))
+func AllNames() []completion.Element {
+	names := make([]completion.Element, 0, len(Table))
 	for name1, _ := range Table {
-		names = append(names, name1)
+		names = append(names, completion.Element{name1, name1})
 	}
 	return names
 }

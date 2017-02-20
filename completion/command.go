@@ -13,8 +13,8 @@ func isExecutable(path string) bool {
 	return cpath.IsExecutableSuffix(filepath.Ext(path))
 }
 
-func listUpAllExecutableOnEnv(envName string) []string {
-	list := make([]string, 0, 100)
+func listUpAllExecutableOnEnv(envName string) []Element {
+	list := make([]Element, 0, 100)
 	pathEnv := os.Getenv(envName)
 	dirList := filepath.SplitList(pathEnv)
 	for _, dir1 := range dirList {
@@ -33,51 +33,53 @@ func listUpAllExecutableOnEnv(envName string) []string {
 			}
 			name := file1.Name()
 			if isExecutable(name) {
-				list = append(list, path.Base(name))
+				name_ := path.Base(name)
+				element := Element{InsertStr: name_, ListupStr: name_}
+				list = append(list, element)
 			}
 		}
 	}
 	return list
 }
 
-func listUpCurrentAllExecutable(str string) ([]string, error) {
+func listUpCurrentAllExecutable(str string) ([]Element, error) {
 	listTmp, listErr := listUpFiles(str)
 	if listErr != nil {
 		return nil, listErr
 	}
-	list := make([]string, 0)
-	for _, fname := range listTmp {
-		if strings.HasSuffix(fname, "/") || strings.HasSuffix(fname, "\\") || isExecutable(fname) {
-			list = append(list, fname)
+	list := make([]Element, 0)
+	for _, p := range listTmp {
+		if strings.HasSuffix(p.InsertStr, "/") || strings.HasSuffix(p.InsertStr, "\\") || isExecutable(p.InsertStr) {
+			list = append(list, p)
 		}
 	}
 	return list, nil
 }
 
-func removeDup(list []string) []string {
+func removeDup(list []Element) []Element {
 	found := map[string]bool{}
-	result := make([]string, 0, len(list))
+	result := make([]Element, 0, len(list))
 
 	for _, value := range list {
-		if _, ok := found[value]; !ok {
+		if _, ok := found[value.InsertStr]; !ok {
 			result = append(result, value)
-			found[value] = true
+			found[value.InsertStr] = true
 		}
 	}
 	return result
 }
 
-func listUpCommands(str string) ([]string, error) {
+func listUpCommands(str string) ([]Element, error) {
 	list, listErr := listUpCurrentAllExecutable(str)
 	if listErr != nil {
 		return nil, listErr
 	}
 	strUpr := strings.ToUpper(str)
 	for _, f := range command_listupper {
-		for _, name := range f() {
-			name1Upr := strings.ToUpper(name)
+		for _, element := range f() {
+			name1Upr := strings.ToUpper(element.InsertStr)
 			if strings.HasPrefix(name1Upr, strUpr) {
-				list = append(list, name)
+				list = append(list, element)
 			}
 		}
 	}

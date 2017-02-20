@@ -19,7 +19,7 @@ const (
 var rxEnvPattern = regexp.MustCompile("%[^%]+%")
 var rxTilde = regexp.MustCompile("^~[/\\\\]")
 
-func listUpFiles(str string) ([]string, error) {
+func listUpFiles(str string) ([]Element, error) {
 	orgSlash := STD_SLASH[0]
 	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
 		orgSlash = str[pos]
@@ -54,15 +54,17 @@ func listUpFiles(str string) ([]string, error) {
 		directory = wd[0:2] + directory
 		cutprefix = 2
 	}
-	commons := make([]string, 0)
+	commons := make([]Element, 0)
 	STR := strings.ToUpper(str)
 	fdErr := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
 		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
 			return true
 		}
+		listname := fd.Name()
 		name := cpath.Join(directory, fd.Name())
 		if fd.IsDir() {
 			name += STD_SLASH
+			listname += OPT_SLASH
 		}
 		if cutprefix > 0 {
 			name = name[2:]
@@ -72,7 +74,8 @@ func listUpFiles(str string) ([]string, error) {
 			if orgSlash != STD_SLASH[0] {
 				name = strings.Replace(name, STD_SLASH, OPT_SLASH, -1)
 			}
-			commons = append(commons, name)
+			element := Element{InsertStr: name, ListupStr: listname}
+			commons = append(commons, element)
 		}
 		return true
 	})

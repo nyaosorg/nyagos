@@ -13,9 +13,14 @@ import (
 	"../readline"
 )
 
+type Element struct {
+	InsertStr string
+	ListupStr string
+}
+
 type CompletionList struct {
 	AllLine string
-	List    []string
+	List    []Element
 	RawWord string // have quotation
 	Word    string
 	Pos     int
@@ -59,7 +64,7 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 	}
 
 	for i := 0; i < len(rv.List); i++ {
-		rv.List[i] = rv.Word[:start] + rv.List[i]
+		rv.List[i].InsertStr = rv.Word[:start] + rv.List[i].InsertStr
 	}
 	for _, f := range HookToList {
 		rv, err = f(this, rv)
@@ -68,6 +73,22 @@ func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
 		}
 	}
 	return rv, default_delimiter, err
+}
+
+func toComplete(source []Element) []string {
+	result := make([]string, len(source))
+	for key, val := range source {
+		result[key] = val.InsertStr
+	}
+	return result
+}
+
+func toDisplay(source []Element) []string {
+	result := make([]string, len(source))
+	for key, val := range source {
+		result[key] = val.ListupStr
+	}
+	return result
 }
 
 func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
@@ -81,7 +102,7 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 		fmt.Printf("(warning) %s\n", err.Error())
 		os.Stderr.Sync()
 	}
-	conio.BoxPrint(ctx, comp.List, os.Stdout)
+	conio.BoxPrint(ctx, toDisplay(comp.List), os.Stdout)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
@@ -127,12 +148,13 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		slashToBackSlash = false
 	}
 
-	commonStr := CommonPrefix(comp.List)
+	complete_list := toComplete(comp.List)
+	commonStr := CommonPrefix(complete_list)
 	quotechar := byte(0)
 	if i := strings.IndexAny(comp.Word, readline.Delimiters); i >= 0 {
 		quotechar = comp.Word[i]
 	} else {
-		for _, node := range comp.List {
+		for _, node := range complete_list {
 			if strings.ContainsAny(node, " &") {
 				quotechar = byte(default_delimiter)
 				break
@@ -143,7 +165,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		buffer := make([]byte, 0, 100)
 		buffer = append(buffer, quotechar)
 		buffer = append(buffer, commonStr...)
-		if len(comp.List) == 1 && !endWithRoot(comp.List[0]) {
+		if len(comp.List) == 1 && !endWithRoot(comp.List[0].InsertStr) {
 			buffer = append(buffer, quotechar)
 		}
 		commonStr = string(buffer)
@@ -159,7 +181,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		if err != nil {
 			fmt.Printf("(warning) %s\n", err.Error())
 		}
-		conio.BoxPrint(nil, comp.List, os.Stdout)
+		conio.BoxPrint(nil, toDisplay(comp.List), os.Stdout)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}

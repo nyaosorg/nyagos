@@ -8,6 +8,7 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
+	"../completion"
 	"../dos"
 	"../history"
 )
@@ -38,10 +39,10 @@ func Exec(ctx context.Context, cmd *exec.Cmd) (int, bool, error) {
 	return next, true, err
 }
 
-func AllNames() []string {
-	names := make([]string, 0, len(BuildInCommand))
+func AllNames() []completion.Element {
+	names := make([]completion.Element, 0, len(BuildInCommand))
 	for name1, _ := range BuildInCommand {
-		names = append(names, name1)
+		names = append(names, completion.Element{name1, name1})
 	}
 	return names
 }

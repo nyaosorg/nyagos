@@ -31,7 +31,7 @@ func luaHook(this *readline.Buffer, rv *CompletionList) (*CompletionList, error)
 		L.NewTable()
 		for key, val := range rv.List {
 			L.Push(1 + key)
-			L.PushString(val)
+			L.PushString(val.InsertStr)
 			L.SetTable(-3)
 		}
 		L.SetField(-2, "list")
@@ -39,7 +39,7 @@ func luaHook(this *readline.Buffer, rv *CompletionList) (*CompletionList, error)
 			fmt.Println(err)
 		}
 		if L.IsTable(-1) {
-			list := make([]string, 0, len(rv.List)+32)
+			list := make([]Element, 0, len(rv.List)+32)
 			wordUpr := strings.ToUpper(rv.Word)
 			for i := 1; true; i++ {
 				L.Push(i)
@@ -51,7 +51,7 @@ func luaHook(this *readline.Buffer, rv *CompletionList) (*CompletionList, error)
 				}
 				strUpr := strings.ToUpper(str)
 				if strings.HasPrefix(strUpr, wordUpr) {
-					list = append(list, str)
+					list = append(list, Element{str, str})
 				}
 			}
 			if len(list) > 0 {

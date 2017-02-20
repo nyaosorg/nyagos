@@ -7,12 +7,12 @@ import (
 	"../readline"
 )
 
-var command_listupper = []func() []string{
-	func() []string { return listUpAllExecutableOnEnv("PATH") },
-	func() []string { return listUpAllExecutableOnEnv("NYAGOSPATH") },
+var command_listupper = []func() []Element{
+	func() []Element { return listUpAllExecutableOnEnv("PATH") },
+	func() []Element { return listUpAllExecutableOnEnv("NYAGOSPATH") },
 }
 
-func AppendCommandLister(f func() []string) {
+func AppendCommandLister(f func() []Element) {
 	command_listupper = append(command_listupper, f)
 }
 
@@ -20,16 +20,17 @@ var HookToList = []func(*readline.Buffer, *CompletionList) (*CompletionList, err
 	luaHook,
 }
 
-var PercentFuncs = []func(string) []string{
+var PercentFuncs = []func(string) []Element{
 	listUpOsEnv,
 	listUpDynamicEnv,
 }
 
-func listUpDynamicEnv(name string) []string {
-	matches := []string{}
+func listUpDynamicEnv(name string) []Element {
+	matches := []Element{}
 	for envName, _ := range interpreter.PercentFunc {
 		if strings.HasPrefix(envName, name) {
-			matches = append(matches, "%"+envName+"%")
+			value := "%" + envName + "%"
+			matches = append(matches, Element{value, value})
 		}
 	}
 	return matches

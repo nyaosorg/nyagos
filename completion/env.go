@@ -19,28 +19,30 @@ func findLastOpenPercent(this string) int {
 	return pos
 }
 
-func listUpOsEnv(name string) []string {
-	matches := []string{}
+func listUpOsEnv(name string) []Element {
+	matches := []Element{}
 	for _, envEquation := range os.Environ() {
 		equalPos := strings.IndexRune(envEquation, '=')
 		if equalPos >= 0 {
 			envName := envEquation[:equalPos]
 			if strings.HasPrefix(strings.ToUpper(envName), name) {
-				matches = append(matches, "%"+envName+"%")
+				envValue := "%" + envName + "%"
+				element := Element{InsertStr: envValue, ListupStr: envValue}
+				matches = append(matches, element)
 			}
 		}
 	}
 	return matches
 }
 
-func listUpEnv(cmdline string) ([]string, int, error) {
+func listUpEnv(cmdline string) ([]Element, int, error) {
 	lastPercentPos := findLastOpenPercent(cmdline)
 	if lastPercentPos < 0 {
 		return nil, -1, nil
 	}
 	str := cmdline[lastPercentPos:]
 	name := strings.ToUpper(str[1:])
-	var matches []string
+	var matches []Element
 	for _, f := range PercentFuncs {
 		matches = append(matches, f(name)...)
 	}
