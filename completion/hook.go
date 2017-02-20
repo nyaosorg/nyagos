@@ -16,7 +16,7 @@ func AppendCommandLister(f func() []Element) {
 	command_listupper = append(command_listupper, f)
 }
 
-var HookToList = []func(*readline.Buffer, *CompletionList) (*CompletionList, error){
+var HookToList = []func(*readline.Buffer, *List) (*List, error){
 	luaHook,
 }
 

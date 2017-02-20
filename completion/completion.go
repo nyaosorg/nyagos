@@ -18,7 +18,7 @@ type Element struct {
 	ListupStr string
 }
 
-type CompletionList struct {
+type List struct {
 	AllLine string
 	List    []Element
 	RawWord string // have quotation
@@ -26,9 +26,9 @@ type CompletionList struct {
 	Pos     int
 }
 
-func listUpComplete(this *readline.Buffer) (*CompletionList, rune, error) {
+func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
-	rv := new(CompletionList)
+	rv := new(List)
 
 	// environment completion.
 	rv.AllLine = this.String()

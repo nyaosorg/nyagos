@@ -11,7 +11,7 @@ import (
 
 var Hook lua.Pushable = lua.TNil{}
 
-func luaHook(this *readline.Buffer, rv *CompletionList) (*CompletionList, error) {
+func luaHook(this *readline.Buffer, rv *List) (*List, error) {
 	L, L_ok := this.Context.Value("lua").(lua.Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
