@@ -235,7 +235,8 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 				dir = "~" + dir[len(home):]
 			}
 			dir = filepath.ToSlash(dir)
-			fmt.Fprintf(cmd.Stdout, "%s [%d] %-s (%s)\n",
+			fmt.Fprintf(cmd.Stdout, "%4d  %s [%d] %-s (%s)\n",
+				i,
 				row.Stamp.Format("Jan _2 15:04:05"),
 				row.Pid,
 				row.Text,
