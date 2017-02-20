@@ -162,9 +162,15 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		}
 	}
 	if quotechar != 0 {
-		buffer := make([]byte, 0, 100)
-		buffer = append(buffer, quotechar)
-		buffer = append(buffer, commonStr...)
+		buffer := make([]byte, 0, len(commonStr)+3)
+		if commonStr[:2] == `~\` || commonStr[:2] == `~/` {
+			buffer = append(buffer, commonStr[:2]...)
+			buffer = append(buffer, quotechar)
+			buffer = append(buffer, commonStr[2:]...)
+		} else {
+			buffer = append(buffer, quotechar)
+			buffer = append(buffer, commonStr...)
+		}
 		if len(comp.List) == 1 && !endWithRoot(comp.List[0].InsertStr) {
 			buffer = append(buffer, quotechar)
 		}
