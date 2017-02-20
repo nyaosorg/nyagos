@@ -6,6 +6,10 @@ English / [Japanese](release_note_ja.md)
 * Listing filenames to completion, cut dirname of the fullpath
 * Fix: `history`-command did not display ID to use !-mark
 * Command-name on %NYAGOSPATH% are completed with TAB.
+* Not expand environment variables on filename-completion.
+* Not enclose ~/ & ~\ with double-quotations.
+* `;` and `=`
+* At completion, ignore the string before `;`,`=` (for set command)
 
 NYAGOS 4.1.8\_0
 ===============
