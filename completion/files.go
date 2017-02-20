@@ -19,11 +19,7 @@ const (
 var rxEnvPattern = regexp.MustCompile("%[^%]+%")
 var rxTilde = regexp.MustCompile("^~[/\\\\]")
 
-func listUpFiles(str string) ([]Element, error) {
-	orgSlash := STD_SLASH[0]
-	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
-		orgSlash = str[pos]
-	}
+func replaceEnv(str string) string {
 	str = rxEnvPattern.ReplaceAllStringFunc(str, func(p string) string {
 		if len(p) == 2 {
 			return "%"
@@ -43,9 +39,18 @@ func listUpFiles(str string) ([]Element, error) {
 			return p
 		}
 	})
+
+	return str
+}
+
+func listUpFiles(str string) ([]Element, error) {
+	orgSlash := STD_SLASH[0]
+	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
+		orgSlash = str[pos]
+	}
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), "\"", "", -1)
 	directory := cpath.DirName(str)
-	wildcard := cpath.Join(directory, "*")
+	wildcard := cpath.Join(replaceEnv(directory), "*")
 
 	// Drive letter
 	cutprefix := 0
