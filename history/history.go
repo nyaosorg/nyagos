@@ -248,7 +248,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return 0, nil
 }
 
-const max_histories = 2000
+const max_histories = 1000
 
 func (hisObj *Container) SaveViaWriter(w io.Writer) {
 	i := 0
