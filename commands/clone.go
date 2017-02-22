@@ -27,7 +27,7 @@ func clone_(action string, out io.Writer) (int, error) {
 	if err != nil {
 		return 1, err
 	}
-	err = dos.ShellExecute(action, me, "", wd)
+	err = dos.ShellExecute(action, dos.TruePath(me), "", wd)
 	if err != nil {
 		err2 := dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
 		if err2 != nil {
@@ -51,7 +51,7 @@ func cmd_sudo(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	} else {
 		args = ""
 	}
-	err := dos.ShellExecute("runas", cmd.Args[1], args, getwd_())
+	err := dos.ShellExecute("runas", dos.TruePath(cmd.Args[1]), args, getwd_())
 	if err != nil {
 		return 1, err
 	} else {
