@@ -163,7 +163,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 	}
 	if quotechar != 0 {
 		buffer := make([]byte, 0, len(commonStr)+3)
-		if commonStr[:2] == `~\` || commonStr[:2] == `~/` {
+		if strings.HasPrefix(commonStr, `~\`) || strings.HasPrefix(commonStr, `~/`) {
 			buffer = append(buffer, commonStr[:2]...)
 			buffer = append(buffer, quotechar)
 			buffer = append(buffer, commonStr[2:]...)
