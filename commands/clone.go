@@ -27,7 +27,10 @@ func clone_(action string, out io.Writer) (int, error) {
 	if err != nil {
 		return 1, err
 	}
-	err = dos.ShellExecute(action, dos.TruePath(me), "", wd)
+	err = dos.ShellExecute(action, me, "", wd)
+	if err != nil {
+		err = dos.ShellExecute(action, dos.TruePath(me), "", wd)
+	}
 	if err != nil {
 		err2 := dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
 		if err2 != nil {

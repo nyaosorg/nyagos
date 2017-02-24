@@ -20,8 +20,13 @@ func open1(fname string, out io.Writer) {
 			return
 		}
 	}
-	if err := dos.ShellExecute("open", dos.TruePath(fname), "", ""); err != nil {
-		fmt.Fprintln(out, err.Error())
+	err1 := dos.ShellExecute("open", fname, "", "")
+	if err1 != nil {
+		fmt.Fprintln(out, err1.Error())
+		err2 := dos.ShellExecute("open", dos.TruePath(fname), "", "")
+		if err2 != nil {
+			fmt.Fprintln(out, err2.Error())
+		}
 	}
 }
 
