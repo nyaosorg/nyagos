@@ -3,23 +3,15 @@ package commands
 import (
 	"context"
 	"fmt"
-	"github.com/zetamatta/go-getch"
 	"io"
-	"os"
 	"os/exec"
-	"strings"
+
+	"github.com/zetamatta/go-getch"
 
 	"../dos"
 )
 
 func open1(fname string, out io.Writer) {
-	p := strings.Split(fname, ":")
-	if p[0] != "http" && p[0] != "https" {
-		if _, err := os.Stat(fname); err != nil {
-			fmt.Fprintln(out, err.Error())
-			return
-		}
-	}
 	err1 := dos.ShellExecute("open", fname, "", "")
 	if err1 != nil {
 		fmt.Fprintln(out, err1.Error())
