@@ -9,6 +9,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -307,6 +308,14 @@ func (hisObj *Container) LoadViaReader(reader io.Reader) {
 				Pid:   pid})
 		}
 	}
+	sort.Slice(hisObj.rows, func(i, j int) bool {
+		p := hisObj.rows[i]
+		q := hisObj.rows[j]
+		if p.Stamp != q.Stamp {
+			return p.Stamp.Before(q.Stamp)
+		}
+		return p.Text < q.Text
+	})
 }
 
 func (hisObj *Container) Load(path string) error {
