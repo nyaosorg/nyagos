@@ -3,10 +3,9 @@ package commands
 import (
 	"context"
 	"fmt"
+	"os"
 	"os/exec"
 	"strconv"
-
-	"../cpath"
 )
 
 func cmd_pwd(ctx context.Context, cmd *exec.Cmd) (int, error) {
@@ -20,7 +19,7 @@ func cmd_pwd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			return 0, nil
 		}
 	} else {
-		wd, _ := cpath.Getwd()
+		wd, _ := os.Getwd()
 		fmt.Fprintln(cmd.Stdout, wd)
 	}
 	return 0, nil

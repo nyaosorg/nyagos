@@ -25,7 +25,6 @@ import (
 	"../alias"
 	"../completion"
 	"../conio"
-	"../cpath"
 	"../dos"
 	"../interpreter"
 	"../lua"
@@ -399,7 +398,7 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 }
 
 func cmdGetwd(L lua.Lua) int {
-	wd, err := cpath.Getwd()
+	wd, err := os.Getwd()
 	if err == nil {
 		return L.Push(wd)
 	} else {

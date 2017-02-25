@@ -4,9 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 
-	"../cpath"
 	"../dos"
 )
 
@@ -18,7 +18,7 @@ const (
 )
 
 func cmd_dirs(ctx context.Context, cmd *exec.Cmd) (int, error) {
-	wd, err := cpath.Getwd()
+	wd, err := os.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
 	}
@@ -43,7 +43,7 @@ func cmd_popd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 }
 
 func cmd_pushd(ctx context.Context, cmd *exec.Cmd) (int, error) {
-	wd, err := cpath.Getwd()
+	wd, err := os.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
 	}
