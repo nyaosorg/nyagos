@@ -6,7 +6,7 @@ import (
 	"io"
 	"strings"
 
-	. "../conio"
+	"../conio"
 	"github.com/zetamatta/go-getch"
 )
 
@@ -150,7 +150,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		History:        session.History,
 		Prompt:         session.Prompt,
 	}
-	this.TermWidth, _ = GetScreenBufferInfo().ViewSize()
+	this.TermWidth, _ = conio.GetScreenBufferInfo().ViewSize()
 
 	var err1 error
 	this.TopColumn, err1 = session.Prompt()

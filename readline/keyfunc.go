@@ -8,7 +8,7 @@ import (
 
 	"github.com/atotto/clipboard"
 
-	. "../conio"
+	"../conio"
 )
 
 func KeyFuncPass(this *Buffer) Result {
@@ -43,7 +43,7 @@ func KeyFuncBackword(this *Buffer) Result { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
+		Backspace(conio.GetCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -58,12 +58,12 @@ func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 		PutRune('\a')
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
-		w := GetCharWidth(this.Buffer[this.ViewStart])
+		w := conio.GetCharWidth(this.Buffer[this.ViewStart])
 		for {
 			if this.ViewStart <= 0 {
 				break
 			}
-			w_ := w + GetCharWidth(this.Buffer[this.ViewStart-1])
+			w_ := w + conio.GetCharWidth(this.Buffer[this.ViewStart-1])
 			if w_ >= this.ViewWidth() {
 				break
 			}
@@ -88,7 +88,7 @@ func KeyFuncForward(this *Buffer) Result { // Ctrl-F
 	} else {
 		// Right Scroll
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
+		if conio.GetCharWidth(this.Buffer[this.Cursor]) > conio.GetCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
 		this.ViewStart++
@@ -137,7 +137,7 @@ func KeyFuncInsertSelf(this *Buffer) Result {
 	this.Insert(this.Cursor, []rune{ch})
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := GetCharWidth(ch)
+	w1 := conio.GetCharWidth(ch)
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		Backspace(w)
@@ -275,7 +275,7 @@ func KeyFuncSwapChar(this *Buffer) Result {
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
 		if w >= this.ViewWidth() {
 			// cursor move right and scroll
-			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
+			w_1 := w - conio.GetCharWidth(this.Buffer[this.Cursor])
 			Backspace(w_1)
 			this.ViewStart++
 			for i := this.ViewStart; i <= this.Cursor; i++ {
