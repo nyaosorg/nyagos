@@ -93,7 +93,7 @@ func cmd_cd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			return cmd_cd_sub(directory)
 		} else {
 			push_cd_history()
-			return cmd_cd_sub(cmd.Args[1])
+			return cmd_cd_sub(strings.Join(cmd.Args[1:], " "))
 		}
 	}
 	home := cpath.GetHome()
