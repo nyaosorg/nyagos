@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"os"
 	"path/filepath"
 	"strings"
 	"unicode"
@@ -96,13 +95,11 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if comp == nil {
 		return readline.CONTINUE
 	}
-	fmt.Print("\n")
-	os.Stdout.Sync()
+	fmt.Fprint(readline.Console, "\n")
 	if err != nil {
-		fmt.Printf("(warning) %s\n", err.Error())
-		os.Stderr.Sync()
+		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 	}
-	conio.BoxPrint(ctx, toDisplay(comp.List), os.Stdout)
+	conio.BoxPrint(ctx, toDisplay(comp.List), readline.Console)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
@@ -183,11 +180,11 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		commonStr = filepath.FromSlash(commonStr)
 	}
 	if comp.RawWord == commonStr {
-		fmt.Print("\n")
+		fmt.Fprint(readline.Console, "\n")
 		if err != nil {
-			fmt.Printf("(warning) %s\n", err.Error())
+			fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 		}
-		conio.BoxPrint(nil, toDisplay(comp.List), os.Stdout)
+		conio.BoxPrint(nil, toDisplay(comp.List), readline.Console)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}
