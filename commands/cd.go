@@ -45,6 +45,10 @@ func cmd_cd_sub(dir string) (int, error) {
 	if strings.HasPrefix(dir, fileHead) {
 		dir = dir[len(fileHead):]
 	}
+	if dir_, err := cpath.CorrectCase(dir); err == nil {
+		// println(dir, "->", dir_)
+		dir = dir_
+	}
 	err := dos.Chdir(dir)
 	if err == nil {
 		return 0, nil
