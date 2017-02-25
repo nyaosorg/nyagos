@@ -95,10 +95,13 @@ func cmd_cd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			directory := cd_history[i]
 			push_cd_history()
 			return cmd_cd_sub(directory)
-		} else {
-			push_cd_history()
-			return cmd_cd_sub(strings.Join(cmd.Args[1:], " "))
 		}
+		if strings.EqualFold(cmd.Args[1], "/D") {
+			// ignore /D
+			cmd.Args = cmd.Args[1:]
+		}
+		push_cd_history()
+		return cmd_cd_sub(strings.Join(cmd.Args[1:], " "))
 	}
 	home := cpath.GetHome()
 	if home != "" {
