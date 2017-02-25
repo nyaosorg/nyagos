@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"unsafe"
 
-	"../completion"
 	"../dos"
 	"../history"
 	"../interpreter"
@@ -279,7 +278,7 @@ func init() {
 		"chdir":                lua.TGoFunction(cmdChdir),
 		"commit":               emptyToNil(commit),
 		"commonprefix":         lua.TGoFunction(cmdCommonPrefix),
-		"completion_hook":      lua.Property{&completion.Hook},
+		"completion_hook":      lua.Property{&completionHook},
 		"create_object":        lua.TGoFunction(ole.CreateObject),
 		"default_prompt":       lua.TGoFunction(nyagosPrompt),
 		"env":                  lua.NewVirtualTable("nyagos.env", cmdGetEnv, cmdSetEnv),

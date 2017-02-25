@@ -1,9 +1,6 @@
 package completion
 
 import (
-	"strings"
-
-	"../interpreter"
 	"../readline"
 )
 
@@ -16,25 +13,7 @@ func AppendCommandLister(f func() []Element) {
 	command_listupper = append(command_listupper, f)
 }
 
-var HookToList = []func(*readline.Buffer, *List) (*List, error){
-	luaHook,
-}
-
-var PercentFuncs = []func(string) []Element{
-	listUpOsEnv,
-	listUpDynamicEnv,
-}
-
-func listUpDynamicEnv(name string) []Element {
-	matches := []Element{}
-	for envName, _ := range interpreter.PercentFunc {
-		if strings.HasPrefix(envName, name) {
-			value := "%" + envName + "%"
-			matches = append(matches, Element{value, value})
-		}
-	}
-	return matches
-}
+var HookToList = []func(*readline.Buffer, *List) (*List, error){}
 
 func init() {
 	f := readline.KeyGoFuncT{F: KeyFuncCompletion}

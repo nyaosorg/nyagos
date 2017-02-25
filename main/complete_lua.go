@@ -1,23 +1,24 @@
-package completion
+package main
 
 import (
 	"errors"
 	"fmt"
 	"strings"
 
+	"../completion"
 	"../lua"
 	"../readline"
 )
 
-var Hook lua.Pushable = lua.TNil{}
+var completionHook lua.Pushable = lua.TNil{}
 
-func luaHook(this *readline.Buffer, rv *List) (*List, error) {
+func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion.List, error) {
 	L, L_ok := this.Context.Value("lua").(lua.Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
 	}
 
-	L.Push(Hook)
+	L.Push(completionHook)
 	if L.IsFunction(-1) {
 		L.NewTable()
 		L.PushString(rv.RawWord)
@@ -39,7 +40,7 @@ func luaHook(this *readline.Buffer, rv *List) (*List, error) {
 			fmt.Println(err)
 		}
 		if L.IsTable(-1) {
-			list := make([]Element, 0, len(rv.List)+32)
+			list := make([]completion.Element, 0, len(rv.List)+32)
 			wordUpr := strings.ToUpper(rv.Word)
 			for i := 1; true; i++ {
 				L.Push(i)
@@ -51,7 +52,7 @@ func luaHook(this *readline.Buffer, rv *List) (*List, error) {
 				}
 				strUpr := strings.ToUpper(str)
 				if strings.HasPrefix(strUpr, wordUpr) {
-					list = append(list, Element{str, str})
+					list = append(list, completion.Element{str, str})
 				}
 			}
 			if len(list) > 0 {

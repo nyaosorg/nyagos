@@ -143,6 +143,7 @@ func main() {
 	})
 	completion.AppendCommandLister(commands.AllNames)
 	completion.AppendCommandLister(alias.AllNames)
+	completion.HookToList = append(completion.HookToList, luaHookForComplete)
 
 	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
 	defer dos.CoUninitialize()

@@ -8,7 +8,6 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"../cpath"
-	"../interpreter"
 )
 
 const (
@@ -23,13 +22,14 @@ func replaceEnv(str string) string {
 	str = rxEnvPattern.ReplaceAllStringFunc(str, func(p string) string {
 		if len(p) == 2 {
 			return "%"
-		} else if val := os.Getenv(p[1 : len(p)-1]); val != "" {
-			return val
-		} else if f, ok := interpreter.PercentFunc[p[1:len(p)-1]]; ok {
-			return f()
-		} else {
-			return p
 		}
+		name := p[1 : len(p)-1]
+		for _, env := range PercentVariables {
+			if value := env.Lookup(name); value != "" {
+				return value
+			}
+		}
+		return p
 	})
 
 	str = rxTilde.ReplaceAllStringFunc(str, func(p string) string {
