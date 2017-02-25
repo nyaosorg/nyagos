@@ -8,8 +8,13 @@ English / [Japanese](release_note_ja.md)
 * Command-name on %NYAGOSPATH% are completed with TAB.
 * Not expand environment variables on filename-completion.
 * Not enclose ~/ & ~\ with double-quotations.
-* `;` and `=`
 * At completion, ignore the string before `;`,`=` (for set command)
+* Speedup print working directory on Prompt by not to fix filename case.
+* `cd C:\Program Files` works without double-quotations.(#182)
+* `cd /D` works. ignore /D option for compatibility with CMD.EXE.(#182)
+* Sort `history`'s output by time.
+* Remove file existance check on `open` to `open regedit`
+* `clone`,`su`,`sudo`: ShellExecute with the destinate paths of the symbolic links not to fail on network folders.(#122)
 
 NYAGOS 4.1.8\_0
 ===============
