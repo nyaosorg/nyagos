@@ -16,7 +16,6 @@ const (
 )
 
 var rxEnvPattern = regexp.MustCompile("%[^%]+%")
-var rxTilde = regexp.MustCompile("^~[/\\\\]")
 
 func replaceEnv(str string) string {
 	str = rxEnvPattern.ReplaceAllStringFunc(str, func(p string) string {
@@ -32,14 +31,11 @@ func replaceEnv(str string) string {
 		return p
 	})
 
-	str = rxTilde.ReplaceAllStringFunc(str, func(p string) string {
+	if len(str) >= 2 && str[0] == '~' && os.IsPathSeparator(str[1]) {
 		if home := cpath.GetHome(); home != "" {
-			return home + "\\"
-		} else {
-			return p
+			str = home + str[1:]
 		}
-	})
-
+	}
 	return str
 }
 
@@ -48,7 +44,7 @@ func listUpFiles(str string) ([]Element, error) {
 	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
 		orgSlash = str[pos]
 	}
-	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), "\"", "", -1)
+	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), `"`, "", -1)
 	directory := cpath.DirName(str)
 	wildcard := cpath.Join(replaceEnv(directory), "*")
 

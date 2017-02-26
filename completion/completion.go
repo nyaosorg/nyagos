@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"unicode"
@@ -129,7 +130,7 @@ func CommonPrefix(list []string) string {
 }
 
 func endWithRoot(path string) bool {
-	return strings.HasSuffix(path, "\\") || strings.HasSuffix(path, "/")
+	return len(path) >= 1 && os.IsPathSeparator(path[len(path)-1])
 }
 
 func KeyFuncCompletion(this *readline.Buffer) readline.Result {
@@ -140,7 +141,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 
 	slashToBackSlash := true
 	firstFoundSlashPos := strings.IndexRune(comp.Word, '/')
-	firstFoundBackSlashPos := strings.IndexRune(comp.Word, '\\')
+	firstFoundBackSlashPos := strings.IndexRune(comp.Word, os.PathSeparator)
 	if firstFoundSlashPos >= 0 && (firstFoundBackSlashPos == -1 || firstFoundSlashPos < firstFoundBackSlashPos) {
 		slashToBackSlash = false
 	}
@@ -160,7 +161,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 	}
 	if quotechar != 0 {
 		buffer := make([]byte, 0, len(commonStr)+3)
-		if strings.HasPrefix(commonStr, `~\`) || strings.HasPrefix(commonStr, `~/`) {
+		if len(commonStr) >= 2 && commonStr[0] == '~' && os.IsPathSeparator(commonStr[1]) {
 			buffer = append(buffer, commonStr[:2]...)
 			buffer = append(buffer, quotechar)
 			buffer = append(buffer, commonStr[2:]...)

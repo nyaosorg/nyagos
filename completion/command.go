@@ -49,7 +49,7 @@ func listUpCurrentAllExecutable(str string) ([]Element, error) {
 	}
 	list := make([]Element, 0)
 	for _, p := range listTmp {
-		if strings.HasSuffix(p.InsertStr, "/") || strings.HasSuffix(p.InsertStr, "\\") || isExecutable(p.InsertStr) {
+		if endWithRoot(p.InsertStr) {
 			list = append(list, p)
 		}
 	}
