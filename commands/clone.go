@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"../dos"
@@ -29,7 +30,10 @@ func clone_(action string, out io.Writer) (int, error) {
 	}
 	err = dos.ShellExecute(action, me, "", wd)
 	if err != nil {
-		err = dos.ShellExecute(action, dos.TruePath(me), "", wd)
+		if path, path_err := filepath.EvalSymlinks(me); path_err == nil {
+			me = path
+		}
+		err = dos.ShellExecute(action, me, "", wd)
 	}
 	if err != nil {
 		err2 := dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
@@ -54,7 +58,12 @@ func cmd_sudo(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	} else {
 		args = ""
 	}
-	err := dos.ShellExecute("runas", dos.TruePath(cmd.Args[1]), args, getwd_())
+	var err error
+	var path string
+	if path, err = filepath.EvalSymlinks(cmd.Args[1]); err != nil {
+		path = cmd.Args[1]
+	}
+	err = dos.ShellExecute("runas", path, args, getwd_())
 	if err != nil {
 		return 1, err
 	} else {

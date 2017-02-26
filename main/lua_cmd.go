@@ -519,7 +519,10 @@ func cmdShellExecute(this lua.Lua) int {
 	if dirErr != nil {
 		dir = ""
 	}
-	err := dos.ShellExecute(action, dos.TruePath(path), param, dir)
+	if p, err := filepath.EvalSymlinks(path); err == nil {
+		path = p
+	}
+	err := dos.ShellExecute(action, path, param, dir)
 	if err != nil {
 		return this.Push(nil, err)
 	} else {
