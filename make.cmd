@@ -23,6 +23,7 @@ call :"%~1"
 
 :"debug"
         set "TAGS=-tags=debug"
+        call :"build"
         @exit /b
 
 :"release"
