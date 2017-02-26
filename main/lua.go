@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"unsafe"
 
-	"../dos"
 	"../history"
 	"../interpreter"
 	"../lua"
@@ -167,7 +166,7 @@ func getNyagosTable(L lua.Lua) int {
 	if entry, entry_ok := nyagos_table_member[index]; entry_ok {
 		return L.Push(entry)
 	} else if index == "exe" {
-		if exeName, exeNameErr := dos.GetModuleFileName(); exeNameErr != nil {
+		if exeName, exeNameErr := os.Executable(); exeNameErr != nil {
 			return L.Push(nil, exeNameErr.Error())
 		} else {
 			L.PushString(exeName)

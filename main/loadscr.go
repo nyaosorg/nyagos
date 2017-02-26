@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"../cpath"
-	"../dos"
 	"../lua"
 )
 
@@ -46,7 +45,7 @@ type InterpreterT interface {
 }
 
 func loadScripts(it InterpreterT, L lua.Lua) error {
-	exeName, exeNameErr := dos.GetModuleFileName()
+	exeName, exeNameErr := os.Executable()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
 	}

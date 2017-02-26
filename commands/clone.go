@@ -23,7 +23,7 @@ func clone_(action string, out io.Writer) (int, error) {
 	wd := getwd_()
 	var err error
 	var me string
-	me, err = dos.GetModuleFileName()
+	me, err = os.Executable()
 	if err != nil {
 		return 1, err
 	}
