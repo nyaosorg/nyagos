@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os/exec"
-	"path/filepath"
 
 	"github.com/zetamatta/go-getch"
 
@@ -13,18 +12,14 @@ import (
 )
 
 func open1(fname string, out io.Writer) {
-	err := dos.ShellExecute("open", fname, "", "")
-	if err == nil {
-		return
-	}
-	fmt.Fprintf(out, "%s: %s\n", fname, err.Error())
-
-	if truepath, terr := filepath.EvalSymlinks(fname); terr == nil {
-		fname = truepath
-	}
-	err = dos.ShellExecute("open", fname, "", "")
-	if err != nil {
-		fmt.Fprintf(out, "%s: %s\n", fname, err.Error())
+	err1 := dos.ShellExecute("open", fname, "", "")
+	if err1 != nil {
+		fmt.Fprintf(out, "%s: %s\n", fname, err1.Error())
+		truepath := dos.TruePath(fname)
+		err2 := dos.ShellExecute("open", truepath, "", "")
+		if err2 != nil {
+			fmt.Fprintf(out, "%s: %s\n", truepath, err2.Error())
+		}
 	}
 }
 
