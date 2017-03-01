@@ -125,6 +125,10 @@ func (this *Buffer) ResetViewStart() {
 	for i := 0; i <= this.Cursor; i++ {
 		w += conio.GetCharWidth(this.Buffer[i])
 		for w >= this.ViewWidth() {
+			if this.ViewStart >= len(this.Buffer) {
+				// When standard output is redirected.
+				return
+			}
 			w -= conio.GetCharWidth(this.Buffer[this.ViewStart])
 			this.ViewStart++
 		}
