@@ -15,6 +15,8 @@ English / [Japanese](release_note_ja.md)
 * Sort `history`'s output by time.
 * Remove file existance check on `open` to `open regedit`
 * `clone`,`su`,`sudo`: ShellExecute with the destinate paths of the symbolic links not to fail on network folders.(#122)
+* set: be compatible with CMD.EXE's (set FOO=A B is same FOO="A B")
+* Fix #184 Backquotation does not work in `_nyagos`
 
 NYAGOS 4.1.8\_0
 ===============
