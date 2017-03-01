@@ -129,6 +129,31 @@ func AppDataDir() string {
 
 var default_history *history.Container
 
+func doLuaFilter(L lua.Lua, line string) string {
+	stackPos := L.GetTop()
+	defer L.SetTop(stackPos)
+
+	L.Push(luaFilter)
+	if !L.IsFunction(-1) {
+		return line
+	}
+	L.PushString(line)
+	err := L.Call(1, 1)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return line
+	}
+	if !L.IsString(-1) {
+		return line
+	}
+	line2, err2 := L.ToString(-1)
+	if err2 != nil {
+		fmt.Fprintln(os.Stderr, err2)
+		return line
+	}
+	return line2
+}
+
 func main() {
 	defer when_panic()
 
@@ -202,25 +227,7 @@ func main() {
 			cancel()
 			break
 		}
-
-		stackPos := L.GetTop()
-		L.Push(luaFilter)
-		if L.IsFunction(-1) {
-			L.PushString(line)
-			err := L.Call(1, 1)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
-			} else {
-				if L.IsString(-1) {
-					line, err = L.ToString(-1)
-					if err != nil {
-						fmt.Fprintln(os.Stderr, err)
-					}
-				}
-			}
-		}
-		L.SetTop(stackPos)
-
+		line = doLuaFilter(L, line)
 		signal.Notify(sigint, os.Interrupt)
 
 		go func(sigint_ chan os.Signal, quit_ chan struct{}, cancel_ func()) {
