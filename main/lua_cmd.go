@@ -414,11 +414,11 @@ func cmdWhich(L lua.Lua) int {
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
 	}
-	path, err := exec.LookPath(name)
-	if err == nil {
+	path := dos.LookPath(name, "NYAGOSPATH")
+	if path != "" {
 		return L.Push(path)
 	} else {
-		return L.Push(nil, err)
+		return L.Push(nil, errors.New(name+": Path not found"))
 	}
 }
 
