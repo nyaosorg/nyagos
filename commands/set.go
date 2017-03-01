@@ -39,28 +39,27 @@ func cmd_set(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		}
 		return 0, nil
 	}
-	for _, arg := range cmd.Args[1:] {
-		eqlPos := strings.Index(arg, "=")
-		if eqlPos < 0 {
-			// set NAME
-			fmt.Fprintf(cmd.Stdout, "%s=%s\n", arg, os.Getenv(arg))
-		} else if eqlPos >= 3 && arg[eqlPos-1] == '+' {
-			// set NAME+=VALUE
-			right := arg[eqlPos+1:]
-			left := arg[:eqlPos-1]
-			os.Setenv(left, shrink(os.Getenv(left), right))
-		} else if eqlPos >= 3 && arg[eqlPos-1] == '^' {
-			// set NAME^=VALUE
-			right := arg[eqlPos+1:]
-			left := arg[:eqlPos-1]
-			os.Setenv(left, shrink(right, os.Getenv(left)))
-		} else if eqlPos+1 < len(arg) {
-			// set NAME=VALUE
-			os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
-		} else {
-			// set NAME=
-			os.Unsetenv(arg[:eqlPos])
-		}
+	arg := strings.Join(cmd.Args[1:], " ")
+	eqlPos := strings.Index(arg, "=")
+	if eqlPos < 0 {
+		// set NAME
+		fmt.Fprintf(cmd.Stdout, "%s=%s\n", arg, os.Getenv(arg))
+	} else if eqlPos >= 3 && arg[eqlPos-1] == '+' {
+		// set NAME+=VALUE
+		right := arg[eqlPos+1:]
+		left := arg[:eqlPos-1]
+		os.Setenv(left, shrink(os.Getenv(left), right))
+	} else if eqlPos >= 3 && arg[eqlPos-1] == '^' {
+		// set NAME^=VALUE
+		right := arg[eqlPos+1:]
+		left := arg[:eqlPos-1]
+		os.Setenv(left, shrink(right, os.Getenv(left)))
+	} else if eqlPos+1 < len(arg) {
+		// set NAME=VALUE
+		os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
+	} else {
+		// set NAME=
+		os.Unsetenv(arg[:eqlPos])
 	}
 	return 0, nil
 }
