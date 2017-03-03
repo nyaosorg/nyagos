@@ -11,6 +11,7 @@ import (
 
 	"../cpath"
 	"../lua"
+	. "../ifdbg"
 )
 
 func versionOrStamp() string {
@@ -22,7 +23,7 @@ func versionOrStamp() string {
 }
 
 func loadBundleScript1(L lua.Lua, path string) error {
-	if dbg {
+	if DBG {
 		println("load cached ", path)
 	}
 	bin, err := Asset(path)
@@ -81,7 +82,7 @@ func loadScripts(it InterpreterT, L lua.Lua) error {
 					}
 				} else {
 					path1 := filepath.Join(nyagos_d, name1)
-					if dbg {
+					if DBG {
 						println("load real ", path1)
 					}
 					if err := L.Source(path1); err != nil {
@@ -119,7 +120,7 @@ func dotNyagos(L lua.Lua) error {
 	cachePath := filepath.Join(AppDataDir(), "dotnyagos.luac")
 	cacheStat, cacheErr := os.Stat(cachePath)
 	if cacheErr == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
-		if dbg {
+		if DBG {
 			println("load cached ", cachePath)
 		}
 		if _, err := L.LoadFile(cachePath, "b"); err == nil {
@@ -127,7 +128,7 @@ func dotNyagos(L lua.Lua) error {
 			return nil
 		}
 	}
-	if dbg {
+	if DBG {
 		println("load real ", dot_nyagos)
 	}
 	if _, err := L.LoadFile(dot_nyagos, "bt"); err != nil {

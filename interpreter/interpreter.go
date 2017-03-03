@@ -14,6 +14,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"../dos"
+	. "../ifdbg"
 )
 
 const FLAG_AMP2NEWCONSOLE = false
@@ -154,7 +155,7 @@ func (this *Interpreter) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	if len(this.Args) <= 0 {
 		return 0, nil
 	}
-	if dbg {
+	if DBG {
 		print("spawnvp_noerrmsg('", this.Args[0], "')\n")
 	}
 
@@ -170,7 +171,7 @@ func (this *Interpreter) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 		return 255, OnCommandNotFound(this, os.ErrNotExist)
 	}
 	this.Args[0] = this.Path
-	if dbg {
+	if DBG {
 		print("exec.LookPath(", this.Args[0], ")==", this.Path, "\n")
 	}
 
@@ -215,7 +216,7 @@ func (this *Interpreter) Spawnvp() (int, error) {
 func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg(ctx)
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
-		if dbg {
+		if DBG {
 			val := reflect.ValueOf(err)
 			fmt.Fprintf(this.Stderr, "error-type=%s\n", val.Type())
 		}
@@ -232,7 +233,7 @@ func (this *Interpreter) Interpret(text string) (int, error) {
 }
 
 func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
-	if dbg {
+	if DBG {
 		print("Interpret('", text, "')\n")
 	}
 	if this == nil {
@@ -243,13 +244,13 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
-		if dbg {
+		if DBG {
 			print("Parse Error:", statementsErr.Error(), "\n")
 		}
 		return 0, statementsErr
 	}
 	if argsHook != nil {
-		if dbg {
+		if DBG {
 			print("call argsHook\n")
 		}
 		for _, pipeline := range statements {
@@ -260,7 +261,7 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 				}
 			}
 		}
-		if dbg {
+		if DBG {
 			print("done argsHook\n")
 		}
 	}
@@ -286,7 +287,7 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 		var wg sync.WaitGroup
 		shutdown_immediately := false
 		for i, state := range pipeline {
-			if dbg {
+			if DBG {
 				print(i, ": pipeline loop(", state.Args[0], ")\n")
 			}
 			cmd := new(Interpreter)

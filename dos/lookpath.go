@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	"github.com/zetamatta/go-findfile"
+
+	. "../ifdbg"
 )
 
 func lookPath(dir1, pattern string) (foundpath string) {
@@ -30,7 +32,7 @@ func lookPath(dir1, pattern string) (foundpath string) {
 					}
 					foundpath = filepath.Join(dir1, foundpath)
 					return false
-				} else if dbg {
+				} else if DBG {
 					print(err.Error(), "\n")
 				}
 			}
