@@ -28,19 +28,13 @@ func correct(path string) (string, string, error) {
 
 // correct path's case.
 func CorrectCase(path string) (string, error) {
-	if len(path) <= 3 {
-		return strings.ToUpper(path), nil
-	}
 	dirname, fname, err := correct(path)
 	if err != nil {
 		return path, err
 	}
-	if len(dirname) > 3 {
+	if len(dirname) > 0 {
 		// NOT root directory.
 		dirname, err = CorrectCase(dirname)
-	} else {
-		// root directory.
-		dirname = strings.ToUpper(dirname)
 	}
 	return filepath.Join(dirname, fname), nil
 }
