@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"../cpath"
-	"../lua"
 	. "../ifdbg"
+	"../lua"
 )
 
 func versionOrStamp() string {
