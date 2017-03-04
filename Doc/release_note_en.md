@@ -2,7 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * Fix: `open http(s)://...` did not work.
 * Support `cd file:///...`
-* C-y: if string on clipboard has space, paste it with double-quatations.
+* ALT-y: if string on clipboard has space, paste it with double-quatations.
 * Listing filenames to completion, cut dirname of the fullpath
 * Fix: `history`-command did not display ID to use !-mark
 * Command-name on %NYAGOSPATH% are completed with TAB.
