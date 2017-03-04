@@ -80,6 +80,7 @@ var scanMap = map[uint16]KeyFuncT{
 
 var altMap = map[uint16]KeyFuncT{
 	name2alt[K_ALT_V]: name2func[F_YANK],
+	name2alt[K_ALT_Y]: name2func[F_YANK_WITH_QUOTE],
 }
 
 func normWord(src string) string {

@@ -120,6 +120,7 @@ const (
 	F_UNIX_LINE_DISCARD    = "UNIX_LINE_DISCARD"
 	F_UNIX_WORD_RUBOUT     = "UNIX_WORD_RUBOUT"
 	F_YANK                 = "YANK"
+	F_YANK_WITH_QUOTE      = "YANK_WITH_QUOTE"
 )
 
 var name2char = map[string]rune{
@@ -249,6 +250,7 @@ var name2func = map[string]KeyFuncT{
 	F_UNIX_LINE_DISCARD:    &KeyGoFuncT{KeyFuncClearBefore},
 	F_UNIX_WORD_RUBOUT:     &KeyGoFuncT{KeyFuncWordRubout},
 	F_YANK:                 &KeyGoFuncT{KeyFuncPaste},
+	F_YANK_WITH_QUOTE:      &KeyGoFuncT{KeyFuncPasteQuote},
 	F_SWAPCHAR:             &KeyGoFuncT{KeyFuncSwapChar},
 	F_REPAINT_ON_NEWLINE:   &KeyGoFuncT{KeyFuncRepaintOnNewline},
 }
