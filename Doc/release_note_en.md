@@ -17,6 +17,7 @@ English / [Japanese](release_note_ja.md)
 * `clone`,`su`,`sudo`: ShellExecute with the destinate paths of the symbolic links not to fail on network folders.(#122)
 * set: be compatible with CMD.EXE's (set FOO=A B is same FOO="A B")
 * Fix #184 Backquotation does not work in `_nyagos`
+* `_nyagos`: support `bindkey KEYNAME FUNCNAME`
 
 NYAGOS 4.1.8\_0
 ===============
