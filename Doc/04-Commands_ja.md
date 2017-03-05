@@ -5,6 +5,26 @@
 これらのコマンドはコマンド名とは別にエイリアスを持っています。
 たとえば `ls` は `__ls__` というエイリアスを持っています。
 
+### `bindkey キー名 機能名`
+
+一行入力のキー操作をカスタマイズします。
+
+キー名
+
+        "C_A" "C_B" ... "C_Z" "M_A" "M_B" ... "M_Z"
+        "F1" "F2" ..."F24"
+        "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
+        "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
+        "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
+
+機能名
+
+        "BACKWARD_DELETE_CHAR" "BACKWARD_CHAR" "CLEAR_SCREEN" "DELETE_CHAR"
+        "DELETE_OR_ABORT" "ACCEPT_LINE" "KILL_LINE" "UNIX_LINE_DISCARD"
+        "FORWARD_CHAR" "BEGINNING_OF_LINE" "PASS" "YANK" "KILL_WHOLE_LINE"
+        "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
+        "ISEARCH_BACKWARD" "REPAINT_ON_NEWLINE"
+
 ### `cd ドライブ:ディレクトリ`
 
 現在のカレントドライブ、ディレクトリを変更します。
