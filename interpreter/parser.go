@@ -39,6 +39,22 @@ var PercentFunc = map[string]func() string{
 
 var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
 
+var rxSubstitute = regexp.MustCompile(`^([^\:]+)\:([^\=]+)=(.*)$`)
+
+func ourGetenvSub(name string) (string, bool) {
+	m := rxSubstitute.FindStringSubmatch(name)
+	if m != nil {
+		base, ok := OurGetEnv(m[1])
+		if ok {
+			return strings.Replace(base, m[2], m[3], 1), true
+		} else {
+			return "", false
+		}
+	} else {
+		return OurGetEnv(name)
+	}
+}
+
 func OurGetEnv(name string) (string, bool) {
 	value := os.Getenv(name)
 	if value != "" {
@@ -100,17 +116,12 @@ func string2word(source_ string, removeQuote bool) string {
 					break
 				}
 				if ch == '%' {
-					if value, ok := OurGetEnv(nameBuf.String()); ok {
+					if value, ok := ourGetenvSub(nameBuf.String()); ok {
 						buffer.WriteString(value)
 					} else {
 						buffer.WriteRune('%')
 						source.Seek(-int64(nameBuf.Len()+1), io.SeekCurrent)
 					}
-					break
-				}
-				if ch == '=' {
-					buffer.WriteRune('%')
-					source.Seek(-int64(nameBuf.Len()), io.SeekCurrent)
 					break
 				}
 				nameBuf.WriteRune(ch)
