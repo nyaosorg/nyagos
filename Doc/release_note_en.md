@@ -18,6 +18,7 @@ English / [Japanese](release_note_ja.md)
 * set: be compatible with CMD.EXE's (set FOO=A B is same FOO="A B")
 * Fix #184 Backquotation does not work in `_nyagos`
 * `_nyagos`: support `bindkey KEYNAME FUNCNAME`
+* Support %ENVNAME:FROM=TO% like CMD.EXE
 
 NYAGOS 4.1.8\_0
 ===============

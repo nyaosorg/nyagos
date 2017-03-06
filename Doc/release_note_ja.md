@@ -18,6 +18,7 @@
 * set の動作を CMD.EXE 互換とした(`set FOO=A B` が `set FOO="A B"` と同じ)
 * #184 `_nyagos` 内で逆クォートが効かなかった不具合を修正
 * `_nyagos`: `bindkey KEYNAME FUNCNAME` を実装
+* CMD.EXE と同様の `%環境変数名:被置換文字列=置換文字列%` をサポート
 
 NYAGOS 4.1.8\_0
 ===============
