@@ -19,6 +19,7 @@ English / [Japanese](release_note_ja.md)
 * Fix #184 Backquotation does not work in `_nyagos`
 * `_nyagos`: support `bindkey KEYNAME FUNCNAME`
 * Support %ENVNAME:FROM=TO% like CMD.EXE
+* On incremental search, bind ESCAPE-KEY to quit search-mode.
 
 NYAGOS 4.1.8\_0
 ===============
