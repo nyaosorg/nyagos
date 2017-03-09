@@ -15,10 +15,10 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	not := false
 	start := 1
 
-	option := map[string]bool{}
+	option := map[string]struct{}{}
 
 	for len(args) >= 2 && strings.HasPrefix(args[1], "/") {
-		option[strings.ToLower(args[1])] = true
+		option[strings.ToLower(args[1])] = struct{}{}
 		args = args[1:]
 		start++
 	}

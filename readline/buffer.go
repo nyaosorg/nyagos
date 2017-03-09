@@ -14,17 +14,17 @@ import (
 
 var Console = colorable.NewColorableStdout()
 
-var hasCache = map[rune]bool{}
+var hasCache = map[rune]struct{}{}
 
 func PutRune(ch rune) {
-	if hasCache[ch] {
+	if _, ok := hasCache[ch]; ok {
 		fmt.Fprintf(Console, "%c", ch)
 	} else {
 		pre_x, pre_y := conio.GetLocate()
 		fmt.Fprintf(Console, "%c", ch)
 		post_x, post_y := conio.GetLocate()
 		if post_y == pre_y && post_x > pre_x {
-			hasCache[ch] = true
+			hasCache[ch] = struct{}{}
 			conio.SetCharWidth(ch, post_x-pre_x)
 		}
 	}

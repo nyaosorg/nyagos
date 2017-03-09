@@ -241,7 +241,7 @@ func (this TNil) Push(L Lua) int {
 	return 1
 }
 
-var NG_UPVALUE_NAME = map[string]bool{}
+var NG_UPVALUE_NAME = map[string]struct{}{}
 
 func (this Lua) ToPushable(index int) (Pushable, error) {
 	seek_metatable := false

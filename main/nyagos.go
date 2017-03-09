@@ -158,7 +158,7 @@ func main() {
 	defer when_panic()
 
 	// for issue #155 & #158
-	lua.NG_UPVALUE_NAME["prompter"] = true
+	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
 
 	flag.Parse()
 

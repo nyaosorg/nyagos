@@ -57,13 +57,13 @@ func listUpCurrentAllExecutable(str string) ([]Element, error) {
 }
 
 func removeDup(list []Element) []Element {
-	found := map[string]bool{}
+	found := map[string]struct{}{}
 	result := make([]Element, 0, len(list))
 
 	for _, value := range list {
 		if _, ok := found[value.InsertStr]; !ok {
 			result = append(result, value)
-			found[value.InsertStr] = true
+			found[value.InsertStr] = struct{}{}
 		}
 	}
 	return result
