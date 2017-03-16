@@ -35,9 +35,9 @@ call :"%~1"
 :"build"
         call :"fmt"
         call :"goversioninfo"
-        for /F %%I in ('dir /b /s /aa nyagos.d') do attrib -A "%%I" & if exist main\bindata.go del main\bindata.go
-        if not exist main\bindata.go call :"bindata"
-        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" %TAGS% .\main
+        for /F %%I in ('dir /b /s /aa nyagos.d') do attrib -A "%%I" & if exist mains\bindata.go del mains\bindata.go
+        if not exist mains\bindata.go call :"bindata"
+        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -ldflags "%%V %X_VERSION%" %TAGS%
         @exit /b
 
 :"fmt"
@@ -57,12 +57,11 @@ call :"%~1"
         exit /b
 
 :"clean"
-        for %%I in (nyagos.exe main\nyagos.syso version.now main\bindata.go) do if exist %%I del %%I
+        for %%I in (nyagos.exe nyagos.syso version.now mains\bindata.go) do if exist %%I del %%I
         call :eachdir clean
 
 :"sweep"
         for /R %%I in (*~ *.bak) do if exist %%I del %%I
-        if exist main\main.exe del main\main.exe
         @exit /b
 
 :"get"
@@ -79,7 +78,7 @@ call :"%~1"
 
 :"bindata"
         if not exist go-bindata.exe call :getbindata
-        go-bindata.exe -o "main\bindata.go" "nyagos.d/..."
+        go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
         @exit /b
 
 :getgoversioninfo
@@ -92,8 +91,8 @@ call :"%~1"
 
 :"goversioninfo"
         if not exist goversioninfo.exe call :getgoversioninfo
-        powershell -ExecutionPolicy RemoteSigned -File "%~dp0main\makejson.ps1" > "%~dp0Misc\version.json"
-        goversioninfo.exe -icon main\nyagos.ico -o main\nyagos.syso "%~dp0Misc\version.json"
+        powershell -ExecutionPolicy RemoteSigned -File "%~dp0mains\makejson.ps1" > "%~dp0Misc\version.json"
+        goversioninfo.exe -icon mains\nyagos.ico -o "%~dp0nyagos.syso" "%~dp0Misc\version.json"
         @exit /b
 
 :"const"

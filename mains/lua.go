@@ -1,4 +1,4 @@
-package main
+package mains
 
 import (
 	"fmt"
@@ -275,7 +275,7 @@ func init() {
 		"atou":                 lua.TGoFunction(cmdAtoU),
 		"bindkey":              lua.TGoFunction(cmdBindKey),
 		"chdir":                lua.TGoFunction(cmdChdir),
-		"commit":               emptyToNil(commit),
+		"commit":               emptyToNil(Commit),
 		"commonprefix":         lua.TGoFunction(cmdCommonPrefix),
 		"completion_hook":      lua.Property{&completionHook},
 		"create_object":        lua.TGoFunction(ole.CreateObject),
@@ -311,10 +311,10 @@ func init() {
 		"setrunewidth":         lua.TGoFunction(cmdSetRuneWidth),
 		"shellexecute":         lua.TGoFunction(cmdShellExecute),
 		"silentmode":           &lua.BoolProperty{&silentmode},
-		"stamp":                emptyToNil(stamp),
+		"stamp":                emptyToNil(Stamp),
 		"stat":                 lua.TGoFunction(cmdStat),
 		"utoa":                 lua.TGoFunction(cmdUtoA),
-		"version":              emptyToNil(version),
+		"version":              emptyToNil(Version),
 		"which":                lua.TGoFunction(cmdWhich),
 		"write":                lua.TGoFunction(cmdWrite),
 		"writerr":              lua.TGoFunction(cmdWriteErr),

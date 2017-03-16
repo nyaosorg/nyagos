@@ -1,4 +1,4 @@
-package main
+package mains
 
 import (
 	"context"
@@ -28,9 +28,9 @@ import (
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 
-var stamp string
-var commit string
-var version string
+var Stamp string
+var Commit string
+var Version string
 
 func nyagosPrompt(L lua.Lua) int {
 	title, title_err := L.ToString(2)

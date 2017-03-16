@@ -2,8 +2,11 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"runtime/debug"
+
+	"./mains"
 )
 
 func when_panic() {
@@ -20,13 +23,22 @@ func when_panic() {
 	os.Stdin.Read(dummy[:])
 }
 
+var stamp string
+var commit string
+var version string
+
 func main() {
 	defer when_panic()
 
-	if err := Main(); err != nil {
+	mains.Stamp = stamp
+	mains.Commit = commit
+	mains.Version = version
+
+	if err := mains.Main(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(1)
-	} else {
-		os.Exit(0)
+		if err != io.EOF {
+			os.Exit(1)
+		}
 	}
+	os.Exit(0)
 }

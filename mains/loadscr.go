@@ -1,4 +1,4 @@
-package main
+package mains
 
 import (
 	"bufio"
@@ -15,10 +15,10 @@ import (
 )
 
 func versionOrStamp() string {
-	if version != "" {
-		return version
+	if Version != "" {
+		return Version
 	} else {
-		return "v" + stamp
+		return "v" + Stamp
 	}
 }
 
