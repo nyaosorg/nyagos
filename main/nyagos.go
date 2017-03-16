@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -9,7 +10,6 @@ import (
 	"os/signal"
 	"path/filepath"
 	"regexp"
-	"runtime/debug"
 	"strings"
 
 	"github.com/mattn/go-isatty"
@@ -85,20 +85,6 @@ func printPrompt() (int, error) {
 	}
 }
 
-func when_panic() {
-	err := recover()
-	if err == nil {
-		return
-	}
-	fmt.Fprintln(os.Stderr, "************ Panic Occured. ***********")
-	fmt.Fprintln(os.Stderr, err)
-	debug.PrintStack()
-	fmt.Fprintln(os.Stderr, "*** Please copy these error message ***")
-	fmt.Fprintln(os.Stderr, "*** And hit ENTER key to quit.      ***")
-	var dummy [1]byte
-	os.Stdin.Read(dummy[:])
-}
-
 var luaFilter lua.Pushable = lua.TNil{}
 
 func itprCloneHook(this *interpreter.Interpreter) error {
@@ -154,9 +140,7 @@ func doLuaFilter(L lua.Lua, line string) string {
 	return line2
 }
 
-func main() {
-	defer when_panic()
-
+func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
 
@@ -181,8 +165,7 @@ func main() {
 	// Lua extension
 	L, err := NewNyagosLua()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "nyagos: %s\n", err.Error())
-		return
+		return err
 	}
 	defer L.Close()
 
@@ -200,7 +183,7 @@ func main() {
 	}
 
 	if !optionParse(it, L) {
-		return
+		return errors.New("option parse error")
 	}
 
 	var command_reader func(context.Context) (string, error)
@@ -223,9 +206,8 @@ func main() {
 		line, err := command_reader(ctx)
 
 		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
 			cancel()
-			break
+			return err
 		}
 		line = doLuaFilter(L, line)
 		signal.Notify(sigint, os.Interrupt)
@@ -260,4 +242,5 @@ func main() {
 			}
 		}
 	}
+	return nil
 }
