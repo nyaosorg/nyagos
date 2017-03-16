@@ -37,7 +37,7 @@ call :"%~1"
         call :"goversioninfo"
         for /F %%I in ('dir /b /s /aa nyagos.d') do attrib -A "%%I" & if exist mains\bindata.go del mains\bindata.go
         if not exist mains\bindata.go call :"bindata"
-        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -ldflags "%%V %X_VERSION%" %TAGS%
+        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" %TAGS%
         @exit /b
 
 :"fmt"
