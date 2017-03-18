@@ -14,7 +14,7 @@ nyagos.bindkey("C-o",function(this)
     end
     share.dump_temp_out = list
     nyagos.write("\n")
-    local result=nyagos.eval('dump_temp_out | cho')
+    local result=nyagos.eval('dump_temp_out | box')
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result," ",1,true) then
         result = '"'..result..'"'
@@ -35,14 +35,14 @@ end
 
 nyagos.bindkey("C_R", function(this)
     nyagos.write("\n")
-    local result = nyagos.eval('__dump_history | cho')
+    local result = nyagos.eval('__dump_history | box')
     this:call("REPAINT_ON_NEWLINE")
     return result
 end)
 
 nyagos.bindkey("M_H" , function(this)
     nyagos.write("\n")
-    local result = nyagos.eval('cd --history | cho')
+    local result = nyagos.eval('cd --history | box')
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result,' ') then
         result = '"'..result..'"'
@@ -52,7 +52,7 @@ end)
 
 nyagos.bindkey("M_G" , function(this)
     nyagos.write("\n")
-    local result = nyagos.eval('git log --pretty="format:%h %s" | cho')
+    local result = nyagos.eval('git log --pretty="format:%h %s" | box')
     this:call("REPAINT_ON_NEWLINE")
     return string.match(result,"^%S+") or ""
 end)

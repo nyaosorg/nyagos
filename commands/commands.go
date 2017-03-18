@@ -52,6 +52,7 @@ func Init() {
 		".":       cmd_source,
 		"alias":   cmd_alias,
 		"bindkey": cmd_bindkey,
+		"box":     cmd_box,
 		"cd":      cmd_cd,
 		"clone":   cmd_clone,
 		"cls":     cmd_cls,
