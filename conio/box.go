@@ -14,12 +14,13 @@ import (
 var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 
 func BoxPrint(ctx context.Context, nodes []string, out io.Writer) bool {
-	value, _, _ := boxPrint(ctx, nodes, out)
+	value, _, _ := boxPrint(ctx, nodes, 0, false, out)
 	return value
 }
 
-func boxPrint(ctx context.Context, nodes []string, out io.Writer) (bool, int, int) {
-	width := int(GetScreenBufferInfo().Size.X)
+func boxPrint(ctx context.Context, nodes []string, offset int, paging bool, out io.Writer) (bool, int, int) {
+	csbi := GetScreenBufferInfo()
+	width := int(csbi.Size.X)
 	if width <= 0 || width > 999 {
 		width = 80
 	}
@@ -49,8 +50,17 @@ func boxPrint(ctx context.Context, nodes []string, out io.Writer) (bool, int, in
 			row = 0
 		}
 	}
-	for _, line := range lines {
-		fmt.Fprintln(out, strings.TrimSpace(string(line)))
+	i_end := len(lines)
+	if paging {
+		_, height := csbi.ViewSize()
+		height--
+		if i_end >= offset+height {
+			i_end = offset + height
+		}
+	}
+
+	for i := offset; i < i_end; i++ {
+		fmt.Fprintln(out, string(lines[i]))
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
@@ -74,65 +84,90 @@ const (
 	K_DOWN  = 0x28
 )
 
+func truncate(s string, w int) string {
+	return runewidth.Truncate(strings.TrimSpace(s), w, "")
+}
+
 func BoxChoice(nodes []string, out io.Writer) string {
 	cursor := 0
 	nodes_draw := make([]string, len(nodes))
+	width, height := GetScreenBufferInfo().ViewSize()
+	width--
+	height--
 	for i := 0; i < len(nodes); i++ {
-		nodes_draw[i] = nodes[i]
+		nodes_draw[i] = truncate(nodes[i], width-1)
 	}
 	io.WriteString(out, CURSOR_OFF)
 	defer io.WriteString(out, CURSOR_ON)
+
+	offset := 0
 	for {
-		nodes_draw[cursor] = BOLD_ON + nodes[cursor] + BOLD_OFF
-		status, _, h := boxPrint(nil, nodes_draw, out)
+		nodes_draw[cursor] = BOLD_ON +
+			truncate(nodes[cursor], width-1) + BOLD_OFF
+		status, _, h := boxPrint(nil, nodes_draw, offset, true, out)
 		if !status {
 			return ""
 		}
-		nodes_draw[cursor] = nodes[cursor]
-		e := getch.All()
-		if k := e.Key; k != nil {
-			switch k.Rune {
-			case 'h', ('b' & 0x1F):
-				if cursor-h >= 0 {
-					cursor -= h
+		nodes_draw[cursor] = truncate(nodes[cursor], width-1)
+		last := cursor
+		for last == cursor {
+			e := getch.All()
+			if k := e.Key; k != nil {
+				switch k.Rune {
+				case 'h', ('b' & 0x1F):
+					if cursor-h >= 0 {
+						cursor -= h
+					}
+				case 'l', ('f' & 0x1F):
+					if cursor+h < len(nodes) {
+						cursor += h
+					}
+				case 'j', ('n' & 0x1F), ' ':
+					if cursor+1 < len(nodes) {
+						cursor++
+					}
+				case 'k', ('p' & 0x1F), '\b':
+					if cursor > 0 {
+						cursor--
+					}
+				case '\r', '\n':
+					return nodes[cursor]
+				case '\x1B', ('g' & 0x1F):
+					return ""
 				}
-			case 'l', ('f' & 0x1F):
-				if cursor+h < len(nodes) {
-					cursor += h
-				}
-			case 'j', ('n' & 0x1F), ' ':
-				if cursor+1 < len(nodes) {
-					cursor++
-				}
-			case 'k', ('p' & 0x1F), '\b':
-				if cursor > 0 {
-					cursor--
-				}
-			case '\r', '\n':
-				return nodes[cursor]
-			case '\x1B', ('g' & 0x1F):
-				return ""
-			}
 
-			switch k.Scan {
-			case K_LEFT:
-				if cursor-h >= 0 {
-					cursor -= h
+				switch k.Scan {
+				case K_LEFT:
+					if cursor-h >= 0 {
+						cursor -= h
+					}
+				case K_RIGHT:
+					if cursor+h < len(nodes) {
+						cursor += h
+					}
+				case K_DOWN:
+					if cursor+1 < len(nodes) {
+						cursor++
+					}
+				case K_UP:
+					if cursor > 0 {
+						cursor--
+					}
 				}
-			case K_RIGHT:
-				if cursor+h < len(nodes) {
-					cursor += h
-				}
-			case K_DOWN:
-				if cursor+1 < len(nodes) {
-					cursor++
-				}
-			case K_UP:
-				if cursor > 0 {
-					cursor--
+
+				// x := cursor / h
+				y := cursor % h
+				if y < offset {
+					offset--
+				} else if y >= offset+height {
+					offset++
 				}
 			}
 		}
-		fmt.Fprintf(out, "\x1B[%dA", h)
+		if h < height {
+			fmt.Fprintf(out, "\x1B[%dA", h)
+		} else {
+			fmt.Fprintf(out, "\x1B[%dA", height)
+		}
 	}
 }
