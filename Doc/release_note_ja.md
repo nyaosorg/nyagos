@@ -20,6 +20,7 @@
 * `_nyagos`: `bindkey KEYNAME FUNCNAME` を実装
 * CMD.EXE と同様の `%環境変数名:被置換文字列=置換文字列%` をサポート
 * インクリメンタルサーチで ESCAPE キーを検索モード終了に割り当てた。
+* 補完用の内蔵コマンド box を新設(Ctrl-O:ファイル名補完、Alt-G:Git commit補完)
 
 NYAGOS 4.1.8\_0
 ===============
