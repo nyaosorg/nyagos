@@ -14,16 +14,29 @@ import (
 var ansiCutter = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 
 func BoxPrint(ctx context.Context, nodes []string, out io.Writer) bool {
-	value, _, _ := boxPrint(ctx, nodes, 0, false, out)
+	b := newbox()
+	b.Height = 0
+	value, _, _ := b.boxPrint(ctx, nodes, 0, out)
 	return value
 }
 
-func boxPrint(ctx context.Context, nodes []string, offset int, paging bool, out io.Writer) (bool, int, int) {
-	csbi := GetScreenBufferInfo()
-	width := int(csbi.Size.X)
-	if width <= 0 || width > 999 {
-		width = 80
+type box_t struct {
+	Width  int
+	Height int
+}
+
+func newbox() *box_t {
+	w, h := GetScreenBufferInfo().ViewSize()
+	return &box_t{
+		Width:  w - 1,
+		Height: h - 1,
 	}
+}
+
+func (b *box_t) boxPrint(ctx context.Context,
+	nodes []string,
+	offset int,
+	out io.Writer) (bool, int, int) {
 	maxLen := 1
 	for _, finfo := range nodes {
 		length := runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))
@@ -31,7 +44,7 @@ func boxPrint(ctx context.Context, nodes []string, offset int, paging bool, out 
 			maxLen = length
 		}
 	}
-	nodePerLine := (width - 1) / (maxLen + 1)
+	nodePerLine := (b.Width - 1) / (maxLen + 1)
 	if nodePerLine <= 0 {
 		nodePerLine = 1
 	}
@@ -51,11 +64,9 @@ func boxPrint(ctx context.Context, nodes []string, offset int, paging bool, out 
 		}
 	}
 	i_end := len(lines)
-	if paging {
-		_, height := csbi.ViewSize()
-		height--
-		if i_end >= offset+height {
-			i_end = offset + height
+	if b.Height > 0 {
+		if i_end >= offset+b.Height {
+			i_end = offset + b.Height
 		}
 	}
 
@@ -88,86 +99,109 @@ func truncate(s string, w int) string {
 	return runewidth.Truncate(strings.TrimSpace(s), w, "")
 }
 
-func BoxChoice(nodes []string, out io.Writer) string {
+const (
+	NONE  = 0
+	LEFT  = 1
+	DOWN  = 2
+	UP    = 3
+	RIGHT = 4
+	ENTER = 5
+	LEAVE = 6
+)
+
+func get() int {
+	k := getch.All().Key
+	if k == nil {
+		return NONE
+	}
+	switch k.Rune {
+	case 'h', ('b' & 0x1F):
+		return LEFT
+	case 'l', ('f' & 0x1F):
+		return RIGHT
+	case 'j', ('n' & 0x1F), ' ':
+		return DOWN
+	case 'k', ('p' & 0x1F), '\b':
+		return UP
+	case '\r', '\n':
+		return ENTER
+	case '\x1B', ('g' & 0x1F):
+		return LEAVE
+	}
+
+	switch k.Scan {
+	case K_LEFT:
+		return LEFT
+	case K_RIGHT:
+		return RIGHT
+	case K_DOWN:
+		return DOWN
+	case K_UP:
+		return UP
+	}
+	return NONE
+}
+
+func BoxChoice(sources []string, out io.Writer) string {
 	cursor := 0
-	nodes_draw := make([]string, len(nodes))
-	width, height := GetScreenBufferInfo().ViewSize()
-	width--
-	height--
-	for i := 0; i < len(nodes); i++ {
-		nodes_draw[i] = truncate(nodes[i], width-1)
+	nodes := make([]string, 0, len(sources))
+	draws := make([]string, 0, len(sources))
+	b := newbox()
+	for _, text := range sources {
+		val := truncate(text, b.Width-1)
+		if val != "" {
+			nodes = append(nodes, val)
+			draws = append(draws, val)
+		}
 	}
 	io.WriteString(out, CURSOR_OFF)
 	defer io.WriteString(out, CURSOR_ON)
 
 	offset := 0
 	for {
-		nodes_draw[cursor] = BOLD_ON +
-			truncate(nodes[cursor], width-1) + BOLD_OFF
-		status, _, h := boxPrint(nil, nodes_draw, offset, true, out)
+		draws[cursor] = BOLD_ON + truncate(nodes[cursor], b.Width-1) + BOLD_OFF
+		status, _, h := b.boxPrint(nil, draws, offset, out)
 		if !status {
 			return ""
 		}
-		nodes_draw[cursor] = truncate(nodes[cursor], width-1)
+		draws[cursor] = truncate(nodes[cursor], b.Width-1)
 		last := cursor
 		for last == cursor {
-			e := getch.All()
-			if k := e.Key; k != nil {
-				switch k.Rune {
-				case 'h', ('b' & 0x1F):
-					if cursor-h >= 0 {
-						cursor -= h
-					}
-				case 'l', ('f' & 0x1F):
-					if cursor+h < len(nodes) {
-						cursor += h
-					}
-				case 'j', ('n' & 0x1F), ' ':
-					if cursor+1 < len(nodes) {
-						cursor++
-					}
-				case 'k', ('p' & 0x1F), '\b':
-					if cursor > 0 {
-						cursor--
-					}
-				case '\r', '\n':
-					return nodes[cursor]
-				case '\x1B', ('g' & 0x1F):
-					return ""
+			switch get() {
+			case LEFT:
+				if cursor-h >= 0 {
+					cursor -= h
 				}
+			case RIGHT:
+				if cursor+h < len(nodes) {
+					cursor += h
+				}
+			case DOWN:
+				if cursor+1 < len(nodes) {
+					cursor++
+				}
+			case UP:
+				if cursor > 0 {
+					cursor--
+				}
+			case ENTER:
+				return nodes[cursor]
+			case LEAVE:
+				return ""
+			}
 
-				switch k.Scan {
-				case K_LEFT:
-					if cursor-h >= 0 {
-						cursor -= h
-					}
-				case K_RIGHT:
-					if cursor+h < len(nodes) {
-						cursor += h
-					}
-				case K_DOWN:
-					if cursor+1 < len(nodes) {
-						cursor++
-					}
-				case K_UP:
-					if cursor > 0 {
-						cursor--
-					}
-				}
-
-				// x := cursor / h
-				y := cursor % h
-				if y < offset {
-					offset--
-				} else if y >= offset+height {
-					offset++
-				}
+			// x := cursor / h
+			y := cursor % h
+			if y < offset {
+				offset--
+			} else if y >= offset+b.Height {
+				offset++
 			}
 		}
-		if h < height {
+		if h < b.Height {
 			fmt.Fprintf(out, "\x1B[%dA", h)
 		} else {
-			fmt.Fprintf(out, "\x1B[%dA", height)
+			fmt.Fprintf(out, "\x1B[%dA", b.Height)
 		}
 	}
 }
