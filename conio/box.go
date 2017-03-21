@@ -55,8 +55,10 @@ func (b *box_t) boxPrint(ctx context.Context,
 	for _, finfo := range nodes {
 		lines[row] = append(lines[row], finfo...)
 		w := runewidth.StringWidth(ansiCutter.ReplaceAllString(finfo, ""))
-		for i, iEnd := 0, maxLen+1-w; i < iEnd; i++ {
-			lines[row] = append(lines[row], ' ')
+		if maxLen < b.Width {
+			for i := maxLen + 1; i > w; i-- {
+				lines[row] = append(lines[row], ' ')
+			}
 		}
 		row++
 		if row >= nlines {
