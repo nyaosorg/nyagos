@@ -19,11 +19,6 @@ func GetCharWidth(n rune) int {
 		widthCache[n] = width
 	}
 	return width
-	// if n > 0xFF {
-	//	return 2;
-	//}else{
-	//	return 1;
-	//}
 }
 
 func GetStringWidth(s string) int {
