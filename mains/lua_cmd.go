@@ -11,6 +11,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"unicode"
@@ -464,6 +465,7 @@ func cmdGlob(L lua.Lua) int {
 			result = append(result, list...)
 		}
 	}
+	sort.StringSlice(result).Sort()
 	L.NewTable()
 	for i := 0; i < len(result); i++ {
 		L.PushString(result[i])
