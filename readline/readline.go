@@ -130,6 +130,11 @@ type EmptyHistory struct{}
 func (this *EmptyHistory) Len() int      { return 0 }
 func (this *EmptyHistory) At(int) string { return "" }
 
+const (
+	CURSOR_OFF = "\x1B[?25l"
+	CURSOR_ON  = "\x1B[?25h"
+)
+
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and nil
@@ -164,23 +169,23 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		fmt.Fprint(Console, "\n")
 		this.TopColumn = 0
 	}
+	defer fmt.Fprint(Console, CURSOR_ON)
+
 	for {
-		shineCursor()
-		e := getch.All()
-		if e.Resize != nil {
-			w := int(e.Resize.Width)
-			if this.TermWidth != w {
-				this.TermWidth = w
-				fmt.Fprintf(Console, "\x1B[%dG", this.TopColumn+1)
-				shineCursor()
-				this.RepaintAfterPrompt()
-				shineCursor()
+		var e getch.Event
+		fmt.Fprint(Console, CURSOR_ON)
+		for e.Key == nil {
+			e = getch.All()
+			if e.Resize != nil {
+				w := int(e.Resize.Width)
+				if this.TermWidth != w {
+					this.TermWidth = w
+					fmt.Fprintf(Console, "\x1B[%dG", this.TopColumn+1)
+					this.RepaintAfterPrompt()
+				}
 			}
-			continue
 		}
-		if e.Key == nil {
-			continue
-		}
+		fmt.Fprint(Console, CURSOR_OFF)
 		this.Unicode = e.Key.Rune
 		this.Keycode = e.Key.Scan
 		this.ShiftState = e.Key.Shift

@@ -35,8 +35,9 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			Backspace(n)
 		}
 		lastDrawWidth = drawWidth
-		shineCursor()
+		fmt.Fprint(Console, CURSOR_ON)
 		charcode := getch.Rune()
+		fmt.Fprint(Console, CURSOR_OFF)
 		Backspace(drawWidth)
 		switch charcode {
 		case '\b':
