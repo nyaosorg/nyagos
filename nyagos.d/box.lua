@@ -33,9 +33,21 @@ nyagos.alias.__dump_history = function()
     end
 end
 
-nyagos.bindkey("C_R", function(this)
-    nyagos.write("\n")
-    local result = nyagos.eval('__dump_history | box')
+nyagos.bindkey("C-X", function(this)
+    nyagos.write("\nC-x: [r]:history, [h]:directory, [g]:git revision\n")
+    local ch = nyagos.getkey()
+    local result
+    if ch == string.byte('r') or ch == string.byte('R') or ch == (string.byte('r') & 0x1F) then
+        result = nyagos.eval('__dump_history | box')
+    elseif ch == string.byte('h') or ch == string.byte('H') or ch == (string.byte('h') & 0x1F) then
+        result = nyagos.eval('cd --history | box')
+        if string.find(result,' ') then
+            result = '"'..result..'"'
+        end
+    elseif ch == string.byte('g') or ch == string.byte('G') or ch == (string.byte('g') & 0x1F) then
+        result = nyagos.eval('git log --pretty="format:%h %s" | box')
+        result = string.match(result,"^%S+") or ""
+    end
     this:call("REPAINT_ON_NEWLINE")
     return result
 end)
