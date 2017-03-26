@@ -25,6 +25,7 @@ English / [Japanese](release_note_ja.md)
     * Ctrl-XR , Alt-R : Insert history to select by Cursor (box.lua)
     * Ctrl-XG , Alt-G : Insert Git-revision to select by Cursor (box.lua)
     * Ctrl-XH , Alt-H : Insert `CD`ed directory to select by Cursor (box.lua)
+* Support `lua_e "nyagos.key = function(this) end"`
 
 NYAGOS 4.1.8\_0
 ===============

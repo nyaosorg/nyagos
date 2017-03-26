@@ -105,6 +105,8 @@ It returns the table which includes files matching the wildcard pattern(s).
 It makes parts of path-string join.
 
 ### `nyagos.bindkey("KEYNAME","FUNCNAME")`
+### `nyagos.key["KEYNAME"] = "FUNCNAME"`
+### `nyagos.key.KEYNAME = "FUNCNAME"`
 
 KEYNAME are:
 
@@ -126,6 +128,8 @@ If it succeeded, it returns true only. Failed, it returns nil and error-message.
 Cases are ignores and, the character '-' is same as '\_'.
 
 ### `nyagos.bindkey("KEYNAME",function(this)...end)`
+### `nyagos.key.KEYNAME = function(this)...end`
+### `nyagos.key["KEYNAME"] = function(this)...end`
 
 When the key is pressed, call the function.
 

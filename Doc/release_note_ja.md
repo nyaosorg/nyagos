@@ -25,6 +25,7 @@
     * Ctrl-XR , Alt-R : カーソルで選択したヒストリを挿入する (by box.lua)
     * Ctrl-XG , Alt-G : カーソルで選択したGit Revisionを挿入する(by box.lua)
     * Ctrl-XH , Alt-H : カーソルで選択した過去に移動したディレクトリを挿入する(by box.lua)
+* `lua_e "nyagos.key = function(this) end"` というキーアサインをサポート
 
 NYAGOS 4.1.8\_0
 ===============
