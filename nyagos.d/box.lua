@@ -4,7 +4,7 @@ nyagos.alias.dump_temp_out = function()
     end
 end
 
-nyagos.bindkey("C-o",function(this)
+nyagos.key.C_o = function(this)
     local word,pos = this:lastword()
     word = string.gsub(word,'"','')
     local wildcard = word.."*"
@@ -20,7 +20,7 @@ nyagos.bindkey("C-o",function(this)
         result = '"'..result..'"'
     end
     assert( this:replacefrom(pos,result) )
-end)
+end
 
 nyagos.alias.__dump_history = function()
     local uniq={}
@@ -33,7 +33,7 @@ nyagos.alias.__dump_history = function()
     end
 end
 
-nyagos.bindkey("C-X", function(this)
+nyagos.key.C_x = function(this)
     nyagos.write("\nC-x: [r]:command-history, [h]:cd-history, [g]:git-revision\n")
     local ch = nyagos.getkey()
     local c = string.lower(string.char(ch))
@@ -51,9 +51,9 @@ nyagos.bindkey("C-X", function(this)
     end
     this:call("REPAINT_ON_NEWLINE")
     return result
-end)
+end
 
-nyagos.bindkey("M_R", function(this)
+nyagos.key.M_r = function(this)
     nyagos.write("\n")
     local result = nyagos.eval('__dump_history | box')
     this:call("REPAINT_ON_NEWLINE")
@@ -61,9 +61,9 @@ nyagos.bindkey("M_R", function(this)
         result = '"'..result..'"'
     end
     return result
-end)
+end
 
-nyagos.bindkey("M_H" , function(this)
+nyagos.key.M_h = function(this)
     nyagos.write("\n")
     local result = nyagos.eval('cd --history | box')
     this:call("REPAINT_ON_NEWLINE")
@@ -71,11 +71,11 @@ nyagos.bindkey("M_H" , function(this)
         result = '"'..result..'"'
     end
     return result
-end)
+end
 
-nyagos.bindkey("M_G" , function(this)
+nyagos.key.M_g = function(this)
     nyagos.write("\n")
     local result = nyagos.eval('git log --pretty="format:%h %s" | box')
     this:call("REPAINT_ON_NEWLINE")
     return string.match(result,"^%S+") or ""
-end)
+end
