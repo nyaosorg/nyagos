@@ -273,7 +273,7 @@ func init() {
 		"antihistquot":         lua.StringProperty{&history.DisableMarks},
 		"argsfilter":           lua.Property{&luaArgsFilter},
 		"atou":                 lua.TGoFunction(cmdAtoU),
-		"key":                  lua.NewVirtualTable("nyagos.key", func(lua.Lua) int { return 0 }, cmdBindKey),
+		"key":                  lua.NewVirtualTable("nyagos.key", cmdGetBindKey, cmdBindKey),
 		"bindkey":              lua.TGoFunction(cmdBindKey),
 		"chdir":                lua.TGoFunction(cmdChdir),
 		"commit":               emptyToNil(Commit),

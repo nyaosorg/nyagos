@@ -16,8 +16,8 @@ func AppendCommandLister(f func() []Element) {
 var HookToList = []func(*readline.Buffer, *List) (*List, error){}
 
 func init() {
-	f := readline.KeyGoFuncT{F: KeyFuncCompletion}
-	err := readline.BindKeySymbolFunc(readline.K_CTRL_I, "COMPLETE", &f)
+	f := readline.KeyGoFuncT{Func: KeyFuncCompletion, Name: "COMPLETE"}
+	err := readline.BindKeyFunc(readline.K_CTRL_I, &f)
 	if err != nil {
 		panic(err.Error())
 	}

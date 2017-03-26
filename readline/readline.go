@@ -36,51 +36,56 @@ type KeyFuncT interface {
 }
 
 type KeyGoFuncT struct {
-	F func(buffer *Buffer) Result
+	Func func(buffer *Buffer) Result
+	Name string
 }
 
 func (this *KeyGoFuncT) Call(buffer *Buffer) Result {
-	return this.F(buffer)
+	return this.Func(buffer)
+}
+
+func (this KeyGoFuncT) String() string {
+	return this.Name
 }
 
 var keyMap = map[rune]KeyFuncT{
-	name2char[K_CTRL_A]: name2func[F_BEGINNING_OF_LINE],
-	name2char[K_CTRL_B]: name2func[F_BACKWARD_CHAR],
-	name2char[K_CTRL_C]: name2func[F_INTR],
-	name2char[K_CTRL_D]: name2func[F_DELETE_OR_ABORT],
-	name2char[K_CTRL_E]: name2func[F_END_OF_LINE],
-	name2char[K_CTRL_F]: name2func[F_FORARD_CHAR],
-	name2char[K_CTRL_H]: name2func[F_BACKWARD_DELETE_CHAR],
-	name2char[K_CTRL_K]: name2func[F_KILL_LINE],
-	name2char[K_CTRL_L]: name2func[F_CLEAR_SCREEN],
-	name2char[K_CTRL_M]: name2func[F_ACCEPT_LINE],
-	name2char[K_CTRL_R]: name2func[F_ISEARCH_BACKWARD],
-	name2char[K_CTRL_U]: name2func[F_UNIX_LINE_DISCARD],
-	name2char[K_CTRL_Y]: name2func[F_YANK],
-	name2char[K_DELETE]: name2func[F_DELETE_CHAR],
-	name2char[K_ENTER]:  name2func[F_ACCEPT_LINE],
-	name2char[K_ESCAPE]: name2func[F_KILL_WHOLE_LINE],
-	name2char[K_CTRL_N]: name2func[F_HISTORY_DOWN],
-	name2char[K_CTRL_P]: name2func[F_HISTORY_UP],
-	name2char[K_CTRL_T]: name2func[F_SWAPCHAR],
-	name2char[K_CTRL_W]: name2func[F_UNIX_WORD_RUBOUT],
+	name2char[K_CTRL_A]: name2func(F_BEGINNING_OF_LINE),
+	name2char[K_CTRL_B]: name2func(F_BACKWARD_CHAR),
+	name2char[K_CTRL_C]: name2func(F_INTR),
+	name2char[K_CTRL_D]: name2func(F_DELETE_OR_ABORT),
+	name2char[K_CTRL_E]: name2func(F_END_OF_LINE),
+	name2char[K_CTRL_F]: name2func(F_FORARD_CHAR),
+	name2char[K_CTRL_H]: name2func(F_BACKWARD_DELETE_CHAR),
+	name2char[K_CTRL_K]: name2func(F_KILL_LINE),
+	name2char[K_CTRL_L]: name2func(F_CLEAR_SCREEN),
+	name2char[K_CTRL_M]: name2func(F_ACCEPT_LINE),
+	name2char[K_CTRL_R]: name2func(F_ISEARCH_BACKWARD),
+	name2char[K_CTRL_U]: name2func(F_UNIX_LINE_DISCARD),
+	name2char[K_CTRL_Y]: name2func(F_YANK),
+	name2char[K_DELETE]: name2func(F_DELETE_CHAR),
+	name2char[K_ENTER]:  name2func(F_ACCEPT_LINE),
+	name2char[K_ESCAPE]: name2func(F_KILL_WHOLE_LINE),
+	name2char[K_CTRL_N]: name2func(F_HISTORY_DOWN),
+	name2char[K_CTRL_P]: name2func(F_HISTORY_UP),
+	name2char[K_CTRL_T]: name2func(F_SWAPCHAR),
+	name2char[K_CTRL_W]: name2func(F_UNIX_WORD_RUBOUT),
 }
 
 var scanMap = map[uint16]KeyFuncT{
-	name2scan[K_CTRL]:   name2func[F_PASS],
-	name2scan[K_DELETE]: name2func[F_DELETE_CHAR],
-	name2scan[K_END]:    name2func[F_END_OF_LINE],
-	name2scan[K_HOME]:   name2func[F_BEGINNING_OF_LINE],
-	name2scan[K_LEFT]:   name2func[F_BACKWARD_CHAR],
-	name2scan[K_RIGHT]:  name2func[F_FORARD_CHAR],
-	name2scan[K_SHIFT]:  name2func[F_PASS],
-	name2scan[K_DOWN]:   name2func[F_HISTORY_DOWN],
-	name2scan[K_UP]:     name2func[F_HISTORY_UP],
+	name2scan[K_CTRL]:   name2func(F_PASS),
+	name2scan[K_DELETE]: name2func(F_DELETE_CHAR),
+	name2scan[K_END]:    name2func(F_END_OF_LINE),
+	name2scan[K_HOME]:   name2func(F_BEGINNING_OF_LINE),
+	name2scan[K_LEFT]:   name2func(F_BACKWARD_CHAR),
+	name2scan[K_RIGHT]:  name2func(F_FORARD_CHAR),
+	name2scan[K_SHIFT]:  name2func(F_PASS),
+	name2scan[K_DOWN]:   name2func(F_HISTORY_DOWN),
+	name2scan[K_UP]:     name2func(F_HISTORY_UP),
 }
 
 var altMap = map[uint16]KeyFuncT{
-	name2alt[K_ALT_V]: name2func[F_YANK],
-	name2alt[K_ALT_Y]: name2func[F_YANK_WITH_QUOTE],
+	name2alt[K_ALT_V]: name2func(F_YANK),
+	name2alt[K_ALT_Y]: name2func(F_YANK_WITH_QUOTE),
 }
 
 func normWord(src string) string {
@@ -103,9 +108,22 @@ func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	}
 }
 
+func GetBindKey(keyName string) KeyFuncT {
+	keyName_ := normWord(keyName)
+	if altValue, altOk := name2alt[keyName_]; altOk {
+		return altMap[altValue]
+	} else if charValue, charOk := name2char[keyName_]; charOk {
+		return keyMap[charValue]
+	} else if scanValue, scanOk := name2scan[keyName_]; scanOk {
+		return scanMap[scanValue]
+	} else {
+		return nil
+	}
+}
+
 func GetFunc(funcName string) (KeyFuncT, error) {
-	rc, ok := name2func[normWord(funcName)]
-	if ok {
+	rc := name2func(normWord(funcName))
+	if rc != nil {
 		return rc, nil
 	} else {
 		return nil, fmt.Errorf("%s: not found in the function-list", funcName)
@@ -113,15 +131,10 @@ func GetFunc(funcName string) (KeyFuncT, error) {
 }
 
 func BindKeySymbol(keyName, funcName string) error {
-	funcValue, funcOk := name2func[normWord(funcName)]
-	if !funcOk {
+	funcValue := name2func(normWord(funcName))
+	if funcValue == nil {
 		return fmt.Errorf("%s: no such function.", funcName)
 	}
-	return BindKeyFunc(keyName, funcValue)
-}
-
-func BindKeySymbolFunc(keyName, funcName string, funcValue KeyFuncT) error {
-	name2func[normWord(funcName)] = funcValue
 	return BindKeyFunc(keyName, funcValue)
 }
 
@@ -201,12 +214,12 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			f, ok = keyMap[this.Unicode]
 			if !ok {
 				//f = KeyFuncInsertReport
-				f = &KeyGoFuncT{KeyFuncInsertSelf}
+				f = &KeyGoFuncT{Func: KeyFuncInsertSelf, Name: fmt.Sprintf("%v", this.Unicode)}
 			}
 		} else {
 			f, ok = scanMap[this.Keycode]
 			if !ok {
-				f = &KeyGoFuncT{KeyFuncPass}
+				f = &KeyGoFuncT{Func: KeyFuncPass, Name: ""}
 			}
 		}
 		rc := f.Call(&this)

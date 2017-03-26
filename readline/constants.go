@@ -230,27 +230,38 @@ var name2alt = map[string]uint16{
 	K_ALT_Z: 0x5A,
 }
 
-var name2func = map[string]KeyFuncT{
-	F_ACCEPT_LINE:          &KeyGoFuncT{KeyFuncEnter},
-	F_BACKWARD_CHAR:        &KeyGoFuncT{KeyFuncBackword},
-	F_BACKWARD_DELETE_CHAR: &KeyGoFuncT{KeyFuncBackSpace},
-	F_BEGINNING_OF_LINE:    &KeyGoFuncT{KeyFuncHead},
-	F_CLEAR_SCREEN:         &KeyGoFuncT{KeyFuncCLS},
-	F_DELETE_CHAR:          &KeyGoFuncT{KeyFuncDelete},
-	F_DELETE_OR_ABORT:      &KeyGoFuncT{KeyFuncDeleteOrAbort},
-	F_END_OF_LINE:          &KeyGoFuncT{KeyFuncTail},
-	F_FORARD_CHAR:          &KeyGoFuncT{KeyFuncForward},
-	F_HISTORY_DOWN:         &KeyGoFuncT{KeyFuncHistoryDown},
-	F_HISTORY_UP:           &KeyGoFuncT{KeyFuncHistoryUp},
-	F_INTR:                 &KeyGoFuncT{KeyFuncIntr},
-	F_ISEARCH_BACKWARD:     &KeyGoFuncT{KeyFuncIncSearch},
-	F_KILL_LINE:            &KeyGoFuncT{KeyFuncClearAfter},
-	F_KILL_WHOLE_LINE:      &KeyGoFuncT{KeyFuncClear},
-	F_PASS:                 &KeyGoFuncT{KeyFuncPass},
-	F_UNIX_LINE_DISCARD:    &KeyGoFuncT{KeyFuncClearBefore},
-	F_UNIX_WORD_RUBOUT:     &KeyGoFuncT{KeyFuncWordRubout},
-	F_YANK:                 &KeyGoFuncT{KeyFuncPaste},
-	F_YANK_WITH_QUOTE:      &KeyGoFuncT{KeyFuncPasteQuote},
-	F_SWAPCHAR:             &KeyGoFuncT{KeyFuncSwapChar},
-	F_REPAINT_ON_NEWLINE:   &KeyGoFuncT{KeyFuncRepaintOnNewline},
+var NAME2FUNC = map[string]func(*Buffer) Result{
+	F_ACCEPT_LINE:          KeyFuncEnter,
+	F_BACKWARD_CHAR:        KeyFuncBackword,
+	F_BACKWARD_DELETE_CHAR: KeyFuncBackSpace,
+	F_BEGINNING_OF_LINE:    KeyFuncHead,
+	F_CLEAR_SCREEN:         KeyFuncCLS,
+	F_DELETE_CHAR:          KeyFuncDelete,
+	F_DELETE_OR_ABORT:      KeyFuncDeleteOrAbort,
+	F_END_OF_LINE:          KeyFuncTail,
+	F_FORARD_CHAR:          KeyFuncForward,
+	F_HISTORY_DOWN:         KeyFuncHistoryDown,
+	F_HISTORY_UP:           KeyFuncHistoryUp,
+	F_INTR:                 KeyFuncIntr,
+	F_ISEARCH_BACKWARD:     KeyFuncIncSearch,
+	F_KILL_LINE:            KeyFuncClearAfter,
+	F_KILL_WHOLE_LINE:      KeyFuncClear,
+	F_PASS:                 KeyFuncPass,
+	F_UNIX_LINE_DISCARD:    KeyFuncClearBefore,
+	F_UNIX_WORD_RUBOUT:     KeyFuncWordRubout,
+	F_YANK:                 KeyFuncPaste,
+	F_YANK_WITH_QUOTE:      KeyFuncPasteQuote,
+	F_SWAPCHAR:             KeyFuncSwapChar,
+	F_REPAINT_ON_NEWLINE:   KeyFuncRepaintOnNewline,
+}
+
+func name2func(keyName string) KeyFuncT {
+	if p, ok := NAME2FUNC[keyName]; ok {
+		return &KeyGoFuncT{
+			Func: p,
+			Name: keyName,
+		}
+	} else {
+		return nil
+	}
 }

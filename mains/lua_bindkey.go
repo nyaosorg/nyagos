@@ -138,6 +138,9 @@ func callBoxListing(L lua.Lua) int {
 	return 0
 }
 
+func (this KeyLuaFuncT) String() string {
+	return "(lua function)"
+}
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.LoadBufferX("", this.Chank, "b")
 	pos := -1
@@ -215,4 +218,22 @@ func cmdBindKey(L lua.Lua) int {
 			return L.Push(true)
 		}
 	}
+}
+
+func cmdGetBindKey(L lua.Lua) int {
+	key, keyErr := L.ToString(-1)
+	if keyErr != nil {
+		return L.Push(nil, keyErr)
+	}
+	fnc := readline.GetBindKey(key)
+	if fnc != nil {
+		if stringer, ok := fnc.(fmt.Stringer); ok {
+			if str := stringer.String(); str != "" {
+				L.PushString(str)
+				return 1
+			}
+		}
+	}
+	L.PushNil()
+	return 1
 }
