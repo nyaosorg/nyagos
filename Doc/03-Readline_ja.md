@@ -23,5 +23,9 @@ UNIX系シェルに近いキーバインドで、コマンドラインを編集�
 * Ctrl-C             : 入力内容を破棄
 * Ctrl-R             : インクリメンタルサーチ
 * Ctrl-W             : カーソル上の単語を削除する
+* Ctrl-O             : カーソルで選択したファイル名を挿入する (by box.lua)
+* Ctrl-XR , Alt-R    : カーソルで選択したヒストリを挿入する (by box.lua)
+* Ctrl-XG , Alt-G    : カーソルで選択したGit Revisionを挿入する(by box.lua)
+* Ctrl-XH , Alt-H    : カーソルで選択した過去に移動したディレクトリを挿入する(by box.lua)
 
 <!-- set:fenc=utf8: -->

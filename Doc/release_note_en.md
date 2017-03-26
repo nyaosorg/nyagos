@@ -20,7 +20,11 @@ English / [Japanese](release_note_ja.md)
 * `_nyagos`: support `bindkey KEYNAME FUNCNAME`
 * Support %ENVNAME:FROM=TO% like CMD.EXE
 * On incremental search, bind ESCAPE-KEY to quit search-mode.
-* New built-in command `box` for completion (Ctrl-o file-completion,Alt-G:git commit completion)
+* New completions by new built-in command `box`
+    * Ctrl-O          : Insert filename to select by Cursor (box.lua)
+    * Ctrl-XR , Alt-R : Insert history to select by Cursor (box.lua)
+    * Ctrl-XG , Alt-G : Insert Git-revision to select by Cursor (box.lua)
+    * Ctrl-XH , Alt-H : Insert `CD`ed directory to select by Cursor (box.lua)
 
 NYAGOS 4.1.8\_0
 ===============

@@ -20,7 +20,11 @@
 * `_nyagos`: `bindkey KEYNAME FUNCNAME` を実装
 * CMD.EXE と同様の `%環境変数名:被置換文字列=置換文字列%` をサポート
 * インクリメンタルサーチで ESCAPE キーを検索モード終了に割り当てた。
-* 補完用の内蔵コマンド box を新設(Ctrl-O:ファイル名補完、Alt-G:Git commit補完)
+* カーソル選択型補完(選択用の内蔵コマンド box を新設)
+    * Ctrl-O          : カーソルで選択したファイル名を挿入する (by box.lua)
+    * Ctrl-XR , Alt-R : カーソルで選択したヒストリを挿入する (by box.lua)
+    * Ctrl-XG , Alt-G : カーソルで選択したGit Revisionを挿入する(by box.lua)
+    * Ctrl-XH , Alt-H : カーソルで選択した過去に移動したディレクトリを挿入する(by box.lua)
 
 NYAGOS 4.1.8\_0
 ===============
