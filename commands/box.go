@@ -8,7 +8,8 @@ import (
 	"os/exec"
 	"strings"
 
-	"../conio"
+	"github.com/zetamatta/go-box"
+
 	"../readline"
 )
 
@@ -22,7 +23,7 @@ func cmd_box(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	for i := 0; i < len(list); i++ {
 		list[i] = strings.TrimSpace(list[i])
 	}
-	result := conio.BoxChoice(
+	result := box.Choice(
 		list,
 		readline.Console)
 	fmt.Fprintln(cmd.Stdout, result)

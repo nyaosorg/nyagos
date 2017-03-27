@@ -1,4 +1,4 @@
-package conio
+package readline
 
 import "github.com/mattn/go-runewidth"
 

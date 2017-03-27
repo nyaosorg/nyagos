@@ -7,8 +7,6 @@ import (
 	"unicode"
 
 	"github.com/zetamatta/go-getch"
-
-	"../conio"
 )
 
 func KeyFuncIncSearch(this *Buffer) Result {
@@ -22,7 +20,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 		drawStr := fmt.Sprintf("(i-search)[%s]:%s", searchStr, foundStr)
 		drawWidth := 0
 		for _, ch := range drawStr {
-			w1 := conio.GetCharWidth(ch)
+			w1 := GetCharWidth(ch)
 			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
@@ -61,7 +59,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 			w := 0
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
-				w += conio.GetCharWidth(this.Buffer[i])
+				w += GetCharWidth(this.Buffer[i])
 				PutRune(this.Buffer[i])
 			}
 			bs := 0
@@ -73,7 +71,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 					}
 					break
 				}
-				w1 := conio.GetCharWidth(this.Buffer[i])
+				w1 := GetCharWidth(this.Buffer[i])
 				if w+w1 >= this.ViewWidth() {
 					break
 				}

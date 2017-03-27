@@ -7,9 +7,8 @@ import (
 	"strings"
 	"unicode"
 
-	"../conio"
-
 	"github.com/mattn/go-colorable"
+	"github.com/zetamatta/go-box"
 )
 
 var Console = colorable.NewColorableStdout()
@@ -20,12 +19,12 @@ func PutRune(ch rune) {
 	if _, ok := hasCache[ch]; ok {
 		fmt.Fprintf(Console, "%c", ch)
 	} else {
-		pre_x, pre_y := conio.GetLocate()
+		pre_x, pre_y := box.GetLocate()
 		fmt.Fprintf(Console, "%c", ch)
-		post_x, post_y := conio.GetLocate()
+		post_x, post_y := box.GetLocate()
 		if post_y == pre_y && post_x > pre_x {
 			hasCache[ch] = struct{}{}
-			conio.SetCharWidth(ch, post_x-pre_x)
+			SetCharWidth(ch, post_x-pre_x)
 		}
 	}
 }
@@ -119,13 +118,13 @@ func (this *Buffer) ResetViewStart() {
 	this.ViewStart = 0
 	w := 0
 	for i := 0; i <= this.Cursor; i++ {
-		w += conio.GetCharWidth(this.Buffer[i])
+		w += GetCharWidth(this.Buffer[i])
 		for w >= this.ViewWidth() {
 			if this.ViewStart >= len(this.Buffer) {
 				// When standard output is redirected.
 				return
 			}
-			w -= conio.GetCharWidth(this.Buffer[this.ViewStart])
+			w -= GetCharWidth(this.Buffer[this.ViewStart])
 			this.ViewStart++
 		}
 	}
@@ -146,11 +145,11 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	w := 0
 	for i := this.ViewStart; i < this.Cursor; i++ {
 		PutRune(this.Buffer[i])
-		w += conio.GetCharWidth(this.Buffer[i])
+		w += GetCharWidth(this.Buffer[i])
 	}
 	bs := 0
 	for i := this.Cursor; i < this.Length; i++ {
-		w1 := conio.GetCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		if w+w1 >= this.ViewWidth() {
 			break
 		}
@@ -167,7 +166,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 func (this *Buffer) GetWidthBetween(from int, to int) int {
 	width := 0
 	for i := from; i < to; i++ {
-		width += conio.GetCharWidth(this.Buffer[i])
+		width += GetCharWidth(this.Buffer[i])
 	}
 	return width
 }
@@ -177,7 +176,7 @@ func (this *Buffer) Repaint(pos int, del int) {
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
 	for i := pos; i < this.Length; i++ {
-		w1 := conio.GetCharWidth(this.Buffer[i])
+		w1 := GetCharWidth(this.Buffer[i])
 		if vp+w1 >= this.ViewWidth() {
 			break
 		}

@@ -18,7 +18,6 @@ import (
 	"../alias"
 	"../commands"
 	"../completion"
-	"../conio"
 	"../dos"
 	"../history"
 	"../interpreter"
@@ -58,7 +57,7 @@ func nyagosPrompt(L lua.Lua) int {
 	if lfPos >= 0 {
 		text = text[lfPos+1:]
 	}
-	L.PushInteger(lua.Integer(conio.GetStringWidth(text)))
+	L.PushInteger(lua.Integer(readline.GetStringWidth(text)))
 	return 1
 }
 

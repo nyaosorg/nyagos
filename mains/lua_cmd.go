@@ -19,16 +19,17 @@ import (
 
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
+	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
 	"../alias"
 	"../completion"
-	"../conio"
 	"../dos"
 	"../interpreter"
 	"../lua"
+	"../readline"
 )
 
 type LuaBinaryChank struct {
@@ -499,7 +500,7 @@ func cmdSetRuneWidth(this lua.Lua) int {
 	if widthErr != nil {
 		return this.Push(nil, widthErr)
 	}
-	conio.SetCharWidth(rune(char), width)
+	readline.SetCharWidth(rune(char), width)
 	this.PushBool(true)
 	return 1
 }
@@ -648,7 +649,7 @@ func cmdGetKey(L lua.Lua) int {
 }
 
 func cmdGetViewWidth(L lua.Lua) int {
-	width, height := conio.GetScreenBufferInfo().ViewSize()
+	width, height := box.GetScreenBufferInfo().ViewSize()
 	L.PushInteger(lua.Integer(width))
 	L.PushInteger(lua.Integer(height))
 	return 2
@@ -863,6 +864,6 @@ func cmdNetDriveToUNC(L lua.Lua) int {
 }
 
 func cmdResetCharWidth(L lua.Lua) int {
-	conio.ResetCharWidth()
+	readline.ResetCharWidth()
 	return 0
 }

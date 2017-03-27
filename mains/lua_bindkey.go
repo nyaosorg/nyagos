@@ -7,7 +7,8 @@ import (
 	"strings"
 	"unsafe"
 
-	"../conio"
+	"github.com/zetamatta/go-box"
+
 	"../lua"
 	"../readline"
 	"../text"
@@ -133,7 +134,7 @@ func callBoxListing(L lua.Lua) int {
 		L.Pop(1)
 		list = append(list, str)
 	}
-	conio.BoxPrint(nil, list, os.Stdout)
+	box.Print(nil, list, os.Stdout)
 	this.RepaintAll()
 	return 0
 }

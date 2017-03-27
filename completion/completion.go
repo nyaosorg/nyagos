@@ -9,7 +9,8 @@ import (
 	"strings"
 	"unicode"
 
-	"../conio"
+	"github.com/zetamatta/go-box"
+
 	"../readline"
 )
 
@@ -100,7 +101,7 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if err != nil {
 		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 	}
-	conio.BoxPrint(ctx, toDisplay(comp.List), readline.Console)
+	box.Print(ctx, toDisplay(comp.List), readline.Console)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
@@ -185,7 +186,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		if err != nil {
 			fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 		}
-		conio.BoxPrint(nil, toDisplay(comp.List), readline.Console)
+		box.Print(nil, toDisplay(comp.List), readline.Console)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}

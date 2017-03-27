@@ -13,9 +13,9 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
+	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
 
-	"../../conio"
 	"../../cpath"
 	"../../dos"
 )
@@ -189,7 +189,7 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
-	if !conio.BoxPrint(ctx, nodes_, out) {
+	if !box.Print(ctx, nodes_, out) {
 		return ErrCtrlC
 	}
 	return nil
