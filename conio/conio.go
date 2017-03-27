@@ -30,7 +30,6 @@ type console_screen_buffer_info_t struct {
 }
 
 var getConsoleScreenBufferInfo = kernel32.NewProc("GetConsoleScreenBufferInfo")
-var setConsoleCursorPosition = kernel32.NewProc("SetConsoleCursorPosition")
 
 func GetScreenBufferInfo() *console_screen_buffer_info_t {
 	var csbi console_screen_buffer_info_t
