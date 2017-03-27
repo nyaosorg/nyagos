@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.1.9\_0
+===============
+on Mar 27,2017
+
 * Fix: `open http(s)://...` did not work.
 * Support `cd file:///...`
 * ALT-y: if string on clipboard has space, paste it with double-quatations.
