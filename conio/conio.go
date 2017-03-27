@@ -29,7 +29,6 @@ type console_screen_buffer_info_t struct {
 	MaximumWindowSize coord_t
 }
 
-var setConsoleTitle = kernel32.NewProc("SetConsoleTitleW")
 var getConsoleScreenBufferInfo = kernel32.NewProc("GetConsoleScreenBufferInfo")
 var setConsoleCursorPosition = kernel32.NewProc("SetConsoleCursorPosition")
 
@@ -52,11 +51,4 @@ func (this *console_screen_buffer_info_t) CursorPos() (int, int) {
 
 func GetLocate() (int, int) {
 	return GetScreenBufferInfo().CursorPos()
-}
-
-func SetTitle(title string) {
-	ctitle, err := syscall.UTF16FromString(title)
-	if ctitle != nil && err == nil {
-		setConsoleTitle.Call(uintptr(unsafe.Pointer(&ctitle[0])))
-	}
 }

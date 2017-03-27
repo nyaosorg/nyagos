@@ -32,14 +32,18 @@ var Stamp string
 var Commit string
 var Version string
 
+func setTitle(s string) {
+	fmt.Fprintf(readline.Console, "\x1B]0;%s\007", s)
+}
+
 func nyagosPrompt(L lua.Lua) int {
 	title, title_err := L.ToString(2)
 	if title_err == nil && title != "" {
-		conio.SetTitle(title)
+		setTitle(title)
 	} else if wd, wdErr := os.Getwd(); wdErr == nil {
-		conio.SetTitle("NYAGOS - " + wd)
+		setTitle("NYAGOS - " + wd)
 	} else {
-		conio.SetTitle("NYAGOS")
+		setTitle("NYAGOS")
 	}
 	template, err := L.ToString(1)
 	if err != nil {
