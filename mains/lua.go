@@ -115,14 +115,6 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 	}
 }
 
-func emptyToNil(s string) lua.Pushable {
-	if s == "" {
-		return &lua.TNil{}
-	} else {
-		return lua.TString(s)
-	}
-}
-
 var option_table_member = map[string]IProperty{
 	"glob": &lua.BoolProperty{&interpreter.WildCardExpansionAlways},
 }
@@ -276,7 +268,7 @@ func init() {
 		"key":                  lua.NewVirtualTable("nyagos.key", cmdGetBindKey, cmdBindKey),
 		"bindkey":              lua.TGoFunction(cmdBindKey),
 		"chdir":                lua.TGoFunction(cmdChdir),
-		"commit":               emptyToNil(Commit),
+		"commit":               lua.StringProperty{&Commit},
 		"commonprefix":         lua.TGoFunction(cmdCommonPrefix),
 		"completion_hook":      lua.Property{&completionHook},
 		"create_object":        lua.TGoFunction(ole.CreateObject),
@@ -312,10 +304,10 @@ func init() {
 		"setrunewidth":         lua.TGoFunction(cmdSetRuneWidth),
 		"shellexecute":         lua.TGoFunction(cmdShellExecute),
 		"silentmode":           &lua.BoolProperty{&silentmode},
-		"stamp":                emptyToNil(Stamp),
+		"stamp":                lua.StringProperty{&Stamp},
 		"stat":                 lua.TGoFunction(cmdStat),
 		"utoa":                 lua.TGoFunction(cmdUtoA),
-		"version":              emptyToNil(Version),
+		"version":              lua.StringProperty{&Version},
 		"which":                lua.TGoFunction(cmdWhich),
 		"write":                lua.TGoFunction(cmdWrite),
 		"writerr":              lua.TGoFunction(cmdWriteErr),
