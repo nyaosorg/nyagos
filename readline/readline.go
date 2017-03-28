@@ -145,7 +145,7 @@ func (this *EmptyHistory) At(int) string { return "" }
 
 const (
 	CURSOR_OFF = "\x1B[?25l"
-	CURSOR_ON  = "\x1B[?25h"
+	CURSOR_ON  = "\x1B[?25h\x1B[s\x1B[u"
 )
 
 // Call LineEditor
