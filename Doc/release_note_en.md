@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.1.9\_1
+===============
+on Mar 28,2017
+
 * Fix: sometimes cursor disappears on readline on some environment on 4.1.9\_0.
 * Be able to use the escape sequence `\033]0;(title)\007` to change the title of the command-prompt by the new go-colorable's feature.
 
