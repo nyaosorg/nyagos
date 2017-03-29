@@ -40,9 +40,17 @@ func nyagosPrompt(L lua.Lua) int {
 	if title_err == nil && title != "" {
 		setTitle(title)
 	} else if wd, wdErr := os.Getwd(); wdErr == nil {
-		setTitle("NYAGOS - " + wd)
+		if flag, _ := dos.IsElevated(); flag {
+			setTitle("(Admin) - " + wd)
+		} else {
+			setTitle("NYAGOS - " + wd)
+		}
 	} else {
-		setTitle("NYAGOS")
+		if flag, _ := dos.IsElevated(); flag {
+			setTitle("(Admin)")
+		} else {
+			setTitle("NYAGOS")
+		}
 	}
 	template, err := L.ToString(1)
 	if err != nil {
