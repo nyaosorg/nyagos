@@ -867,3 +867,9 @@ func cmdResetCharWidth(L lua.Lua) int {
 	readline.ResetCharWidth()
 	return 0
 }
+
+func cmdElevated(L lua.Lua) int {
+	flag, _ := dos.IsElevated()
+	L.PushBool(flag)
+	return 1
+}

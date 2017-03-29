@@ -14,7 +14,11 @@ nyagos.prompt = function(this)
         wd = "~" .. wd:sub(home_len+1)
     end
     local title = wd .. " - NYAGOS"
-    return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
+    if nyagos.elevated() then
+        return nyagos.default_prompt('$e[40;31;1m'..this..'$e[37;1m',title)
+    else
+        return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
+    end
 end
 
 -- vim:set ft=lua: --

@@ -273,6 +273,7 @@ func init() {
 		"completion_hook":      lua.Property{&completionHook},
 		"create_object":        lua.TGoFunction(ole.CreateObject),
 		"default_prompt":       lua.TGoFunction(nyagosPrompt),
+		"elevated":             lua.TGoFunction(cmdElevated),
 		"env":                  lua.NewVirtualTable("nyagos.env", cmdGetEnv, cmdSetEnv),
 		"eval":                 lua.TGoFunction(cmdEval),
 		"exec":                 lua.TGoFunction(cmdExec),
