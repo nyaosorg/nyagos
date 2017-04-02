@@ -240,10 +240,16 @@ func NewNyagosLua() (lua.Lua, error) {
 	}
 	this.OpenLibs()
 
-	this.Push(lua.NewVirtualTable("nyagos", getNyagosTable, setNyagosTable))
+	this.Push(&lua.VirtualTable{
+		Name:     "nyagos",
+		Index:    getNyagosTable,
+		NewIndex: setNyagosTable})
 	this.SetGlobal("nyagos")
 
-	this.Push(lua.NewVirtualTable("share", getShareTable, setShareTable))
+	this.Push(&lua.VirtualTable{
+		Name:     "share",
+		Index:    getShareTable,
+		NewIndex: setShareTable})
 	this.SetGlobal("share")
 
 	if !hook_setuped {
@@ -260,21 +266,30 @@ var silentmode = false
 
 func init() {
 	nyagos_table_member = map[string]lua.Pushable{
-		"access":               lua.TGoFunction(cmdAccess),
-		"alias":                lua.NewVirtualTable("nyagos.alias", cmdGetAlias, cmdSetAlias),
-		"antihistquot":         lua.StringProperty{&history.DisableMarks},
-		"argsfilter":           lua.Property{&luaArgsFilter},
-		"atou":                 lua.TGoFunction(cmdAtoU),
-		"key":                  lua.NewVirtualTable("nyagos.key", cmdGetBindKey, cmdBindKey),
-		"bindkey":              lua.TGoFunction(cmdBindKey),
-		"chdir":                lua.TGoFunction(cmdChdir),
-		"commit":               lua.StringProperty{&Commit},
-		"commonprefix":         lua.TGoFunction(cmdCommonPrefix),
-		"completion_hook":      lua.Property{&completionHook},
-		"create_object":        lua.TGoFunction(ole.CreateObject),
-		"default_prompt":       lua.TGoFunction(nyagosPrompt),
-		"elevated":             lua.TGoFunction(cmdElevated),
-		"env":                  lua.NewVirtualTable("nyagos.env", cmdGetEnv, cmdSetEnv),
+		"access": lua.TGoFunction(cmdAccess),
+		"alias": &lua.VirtualTable{
+			Name:     "nyagos.alias",
+			Index:    cmdGetAlias,
+			NewIndex: cmdSetAlias},
+		"antihistquot": lua.StringProperty{&history.DisableMarks},
+		"argsfilter":   lua.Property{&luaArgsFilter},
+		"atou":         lua.TGoFunction(cmdAtoU),
+		"key": &lua.VirtualTable{
+			Name:     "nyagos.key",
+			Index:    cmdGetBindKey,
+			NewIndex: cmdBindKey},
+		"bindkey":         lua.TGoFunction(cmdBindKey),
+		"chdir":           lua.TGoFunction(cmdChdir),
+		"commit":          lua.StringProperty{&Commit},
+		"commonprefix":    lua.TGoFunction(cmdCommonPrefix),
+		"completion_hook": lua.Property{&completionHook},
+		"create_object":   lua.TGoFunction(ole.CreateObject),
+		"default_prompt":  lua.TGoFunction(nyagosPrompt),
+		"elevated":        lua.TGoFunction(cmdElevated),
+		"env": &lua.VirtualTable{
+			Name:     "nyagos.env",
+			Index:    cmdGetEnv,
+			NewIndex: cmdSetEnv},
 		"eval":                 lua.TGoFunction(cmdEval),
 		"exec":                 lua.TGoFunction(cmdExec),
 		"filter":               lua.Property{&luaFilter},
@@ -293,24 +308,27 @@ func init() {
 		"netdrivetounc":        lua.TGoFunction(cmdNetDriveToUNC),
 		"on_command_not_found": lua.Property{&luaOnCommandNotFound},
 		"open":                 lua.TGoFunction(cmdOpenFile),
-		"option":               lua.NewVirtualTable("nyagos.option", getOption, setOption),
-		"pathjoin":             lua.TGoFunction(cmdPathJoin),
-		"prompt":               lua.Property{&prompt_hook},
-		"quotation":            lua.StringProperty{&readline.Delimiters},
-		"raweval":              lua.TGoFunction(cmdRawEval),
-		"rawexec":              lua.TGoFunction(cmdRawExec),
-		"resetcharwidth":       lua.TGoFunction(cmdResetCharWidth),
-		"setalias":             lua.TGoFunction(cmdSetAlias),
-		"setenv":               lua.TGoFunction(cmdSetEnv),
-		"setrunewidth":         lua.TGoFunction(cmdSetRuneWidth),
-		"shellexecute":         lua.TGoFunction(cmdShellExecute),
-		"silentmode":           &lua.BoolProperty{&silentmode},
-		"stamp":                lua.StringProperty{&Stamp},
-		"stat":                 lua.TGoFunction(cmdStat),
-		"utoa":                 lua.TGoFunction(cmdUtoA),
-		"version":              lua.StringProperty{&Version},
-		"which":                lua.TGoFunction(cmdWhich),
-		"write":                lua.TGoFunction(cmdWrite),
-		"writerr":              lua.TGoFunction(cmdWriteErr),
+		"option": &lua.VirtualTable{
+			Name:     "nyagos.option",
+			Index:    getOption,
+			NewIndex: setOption},
+		"pathjoin":       lua.TGoFunction(cmdPathJoin),
+		"prompt":         lua.Property{&prompt_hook},
+		"quotation":      lua.StringProperty{&readline.Delimiters},
+		"raweval":        lua.TGoFunction(cmdRawEval),
+		"rawexec":        lua.TGoFunction(cmdRawExec),
+		"resetcharwidth": lua.TGoFunction(cmdResetCharWidth),
+		"setalias":       lua.TGoFunction(cmdSetAlias),
+		"setenv":         lua.TGoFunction(cmdSetEnv),
+		"setrunewidth":   lua.TGoFunction(cmdSetRuneWidth),
+		"shellexecute":   lua.TGoFunction(cmdShellExecute),
+		"silentmode":     &lua.BoolProperty{&silentmode},
+		"stamp":          lua.StringProperty{&Stamp},
+		"stat":           lua.TGoFunction(cmdStat),
+		"utoa":           lua.TGoFunction(cmdUtoA),
+		"version":        lua.StringProperty{&Version},
+		"which":          lua.TGoFunction(cmdWhich),
+		"write":          lua.TGoFunction(cmdWrite),
+		"writerr":        lua.TGoFunction(cmdWriteErr),
 	}
 }

@@ -67,16 +67,33 @@ func (this MetaOnlyTableT) Push(L Lua) int {
 	return 1
 }
 
-func NewVirtualTable(name string, getter func(Lua) int, setter func(Lua) int) Pushable {
-	return &MetaOnlyTableT{
-		Name: name,
+type VirtualTable struct {
+	Name     string
+	Index    func(Lua) int
+	NewIndex func(Lua) int
+	Call     func(Lua) int
+	Len      func(Lua) int
+}
+
+func (this *VirtualTable) Push(L Lua) int {
+	dict := map[string]Pushable{}
+	if this.Index != nil {
+		dict["__index"] = TGoFunction(this.Index)
+	}
+	if this.NewIndex != nil {
+		dict["__newindex"] = TGoFunction(this.NewIndex)
+	}
+	if this.Call != nil {
+		dict["__call"] = TGoFunction(this.Call)
+	}
+	if this.Len != nil {
+		dict["__len"] = TGoFunction(this.Len)
+	}
+	return L.Push(&MetaOnlyTableT{
+		Name: this.Name,
 		Table: TTable{
-			Dict: map[string]Pushable{
-				"__index":    TGoFunction(getter),
-				"__newindex": TGoFunction(setter),
-				"__call":     TGoFunction(setter),
-			},
+			Dict:  dict,
 			Array: map[int]Pushable{},
 		},
-	}
+	})
 }
