@@ -2,7 +2,6 @@ package mains
 
 import (
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -194,7 +193,7 @@ func Main() error {
 	}
 
 	if !optionParse(it, L) {
-		return errors.New("option parse error")
+		return nil
 	}
 
 	var command_reader func(context.Context) (string, error)
