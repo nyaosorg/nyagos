@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+* Fix #191: `-c` オプションが `option parse error` を表示していた。
+* 昇格していたら true を返す Lua 関数 `nyagos.elevated()`
+* デフォルトのタイトルバーは昇格時に `(admin)` と表示
+
 NYAGOS 4.1.9\_1
 ===============
 (2017.03.28)

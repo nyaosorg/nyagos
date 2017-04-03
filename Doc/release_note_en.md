@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix #191 the option`-c` printed `option parse error`.
+* A new Lua function: `nyagos.elevated()` which returns true on elevated mode.
+* The default title bar prints `(admin)` on elevated mode.
+
 NYAGOS 4.1.9\_1
 ===============
 on Mar 28,2017
