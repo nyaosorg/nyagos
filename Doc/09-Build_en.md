@@ -6,7 +6,7 @@ Build
 These sortwares are required.
 Modules on github.com are able to be downloaded with `make.cmd get`.
 
-* [go 1.7 for windows](http://golang.org)
+* [go 1.8 for windows](http://golang.org)
 * [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * https://github.com/atotto/clipboard
 * https://github.com/dustin/go-humanize
@@ -17,6 +17,7 @@ Modules on github.com are able to be downloaded with `make.cmd get`.
 * https://github.com/mattn/go-isatty
 * https://github.com/mattn/go-runewidth
 * https://github.com/zetamatta/go-ansicfile
+* https://github.com/zetamatta/go-box
 * https://github.com/zetamatta/go-findfile
 * https://github.com/zetamatta/go-getch
 * https://github.com/zetamatta/go-mbcs
