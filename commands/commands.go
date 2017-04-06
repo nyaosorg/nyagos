@@ -60,6 +60,7 @@ func Init() {
 		"del":     cmd_del,
 		"dirs":    cmd_dirs,
 		"echo":    cmd_echo,
+		"env":     cmd_env,
 		"erase":   cmd_del,
 		"exit":    cmd_exit,
 		"history": history.CmdHistory,
