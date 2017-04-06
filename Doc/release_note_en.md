@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Add built-in command `env`
+
 NYAGOS 4.1.9\_2
 ===============
 on Apr 3,2017
