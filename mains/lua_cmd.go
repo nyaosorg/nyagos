@@ -491,6 +491,14 @@ func cmdGetHistory(this lua.Lua) int {
 	return 1
 }
 
+func cmdLenHistory(this lua.Lua) int {
+	if default_history == nil {
+		return 0
+	}
+	this.PushInteger(lua.Integer(default_history.Len()))
+	return 1
+}
+
 func cmdSetRuneWidth(this lua.Lua) int {
 	char, charErr := this.ToInteger(1)
 	if charErr != nil {

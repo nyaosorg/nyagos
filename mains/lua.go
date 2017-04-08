@@ -305,7 +305,8 @@ func init() {
 		"histchar":     lua.StringProperty{&history.Mark},
 		"history": &lua.VirtualTable{
 			Name:  "nyagos.history",
-			Index: cmdGetHistory},
+			Index: cmdGetHistory,
+			Len:   cmdLenHistory},
 		"lines":                lua.TGoFunction(cmdLines),
 		"loadfile":             lua.TGoFunction(cmdLoadFile),
 		"netdrivetounc":        lua.TGoFunction(cmdNetDriveToUNC),
