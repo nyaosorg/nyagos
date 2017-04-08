@@ -175,10 +175,13 @@ You can swap the prompt-function as below.
 `nyagos.default_prompt` is the default prompt function which can
 change the title of the terminal-window with the second parameter.
 
-### `nyagos.gethistory(N)`
+### `nyagos.gethistory(N)` and `nyagos.history[N]`
 
 Get the n-th command-line history. When N < 0, last (-N)-th history.
-With no arguments, get the count of the command-line history.
+
+### `nyagos.gethistory()` and `#nyagos.history`
+
+Get the count of the command-line history.
 
 ### `nyagos.access(PATH,MODE)`
 

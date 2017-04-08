@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * Add built-in command `env`
+* #189 Support `nyagos.history[..]` and `#nyagos.history`
 
 NYAGOS 4.1.9\_2
 ===============

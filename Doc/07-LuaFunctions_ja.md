@@ -199,10 +199,14 @@ suffix というコマンドを作成しています。
 `nyagos.default_prompt` はデフォルトのプロンプト表示関数です。
 第二引数でターミナルのタイトルを変更することができます。
 
-### `nyagos.gethistory(N)`
+### `nyagos.gethistory(N)` もしくは `nyagos.history[N]`
 
 N 番目のヒストリ内容を返します。N が負の時は現在から(-N)個過去の
-ヒストリを返します。引数が無い場合は、ヒストリの総数を返します。
+ヒストリを返します。
+
+### `nyagos.gethistory()` もしくは `#nyagos.history`
+
+ヒストリの総数を返します。
 
 ### `nyagos.access(PATH,MODE)`
 

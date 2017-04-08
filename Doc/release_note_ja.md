@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * 内蔵コマンド `env` の追加
+* ヒストリ参照テーブル `nyagos.history[..]` , `#nyagos.history` 用意
 
 NYAGOS 4.1.9\_2
 ===============
