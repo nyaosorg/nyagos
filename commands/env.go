@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"os"
 	"strings"
 
@@ -33,17 +32,16 @@ func cmd_env(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		backup[key] = os.Getenv(key)
 		os.Setenv(key, val)
 	}
-	rawargs, ok := ctx.Value("rawargs").([]string)
-	if !ok {
-		return 0, errors.New("can not get rawargs")
+
+	var rc int
+	subCmd, err := cmd.Clone()
+	if err == nil {
+		subCmd.Args = args
+		rc, err = subCmd.SpawnvpContext(ctx)
+	} else {
+		rc = -1
 	}
-	cmdline := strings.Join(rawargs[(len(rawargs)-len(args)):], " ")
-	shell, ok := ctx.Value("exec").(func(string) (int, error))
-	if !ok {
-		return 0, errors.New("can not shell")
-	}
-	println("cmdline=" + cmdline)
-	rc, err := shell(cmdline)
+
 	for key, val := range backup {
 		os.Setenv(key, val)
 	}
