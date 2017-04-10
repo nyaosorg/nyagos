@@ -15,7 +15,7 @@ var dbg = false
 
 type Callable interface {
 	String() string
-	Call(ctx context.Context, cmd *interpreter.Interpreter) (int, error)
+	Call(ctx context.Context, cmd *shell.Interpreter) (int, error)
 }
 
 type AliasFunc struct {
@@ -30,7 +30,7 @@ func (this *AliasFunc) String() string {
 	return this.BaseStr
 }
 
-func (this *AliasFunc) Call(ctx context.Context, cmd *interpreter.Interpreter) (next int, err error) {
+func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Interpreter) (next int, err error) {
 	isReplaced := false
 	if dbg {
 		print("AliasFunc.Call('", cmd.Args[0], "')\n")
@@ -138,9 +138,9 @@ func quoteAndJoin(list []string) string {
 	return string(buffer)
 }
 
-var nextHook interpreter.HookT
+var nextHook shell.HookT
 
-func hook(ctx context.Context, cmd *interpreter.Interpreter) (int, bool, error) {
+func hook(ctx context.Context, cmd *shell.Interpreter) (int, bool, error) {
 	if cmd.HookCount > 5 {
 		return nextHook(ctx, cmd)
 	}
@@ -153,5 +153,5 @@ func hook(ctx context.Context, cmd *interpreter.Interpreter) (int, bool, error) 
 }
 
 func Init() {
-	nextHook = interpreter.SetHook(hook)
+	nextHook = shell.SetHook(hook)
 }

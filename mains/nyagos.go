@@ -97,7 +97,7 @@ func printPrompt() (int, error) {
 
 var luaFilter lua.Pushable = lua.TNil{}
 
-func itprCloneHook(this *interpreter.Interpreter) error {
+func itprCloneHook(this *shell.Interpreter) error {
 	LL, err := NewNyagosLua()
 	if err != nil {
 		return err
@@ -156,7 +156,7 @@ func Main() error {
 
 	flag.Parse()
 
-	interpreter.SetHook(func(ctx context.Context, it *interpreter.Interpreter) (int, bool, error) {
+	shell.SetHook(func(ctx context.Context, it *shell.Interpreter) (int, bool, error) {
 		rc, done, err := commands.Exec(ctx, &it.Cmd)
 		return rc, done, err
 	})
@@ -183,7 +183,7 @@ func Main() error {
 		silentmode = true
 	}
 
-	it := interpreter.New()
+	it := shell.New()
 	it.Tag = L
 	it.OnClone = itprCloneHook
 	it.Closers = append(it.Closers, L)
@@ -243,7 +243,7 @@ func Main() error {
 			if err == io.EOF {
 				break
 			}
-			if err1, ok := err.(interpreter.AlreadyReportedError); ok {
+			if err1, ok := err.(shell.AlreadyReportedError); ok {
 				if err1.Err == io.EOF {
 					break
 				}

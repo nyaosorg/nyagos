@@ -15,22 +15,22 @@ import (
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"
 
-func setRegInt(L lua.Lua, it *interpreter.Interpreter) {
+func setRegInt(L lua.Lua, it *shell.Interpreter) {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.PushLightUserData(unsafe.Pointer(it))
 	L.SetField(-2, REGKEY_INTERPRETER)
 	L.Pop(1)
 }
 
-func getRegInt(L lua.Lua) *interpreter.Interpreter {
+func getRegInt(L lua.Lua) *shell.Interpreter {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.GetField(-1, REGKEY_INTERPRETER)
-	rc := (*interpreter.Interpreter)(L.ToUserData(-1))
+	rc := (*shell.Interpreter)(L.ToUserData(-1))
 	L.Pop(2)
 	return rc
 }
 
-func NyagosCallLua(L lua.Lua, it *interpreter.Interpreter, nargs int, nresult int) error {
+func NyagosCallLua(L lua.Lua, it *shell.Interpreter, nargs int, nresult int) error {
 	save := getRegInt(L)
 	setRegInt(L, it)
 	err := L.Call(nargs, nresult)
@@ -38,11 +38,11 @@ func NyagosCallLua(L lua.Lua, it *interpreter.Interpreter, nargs int, nresult in
 	return err
 }
 
-var orgArgHook func(*interpreter.Interpreter, []string) ([]string, error)
+var orgArgHook func(*shell.Interpreter, []string) ([]string, error)
 
 var luaArgsFilter lua.Pushable = lua.TNil{}
 
-func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
+func newArgHook(it *shell.Interpreter, args []string) ([]string, error) {
 	L, err := NewNyagosLua()
 	if err != nil {
 		return nil, err
@@ -82,11 +82,11 @@ func newArgHook(it *interpreter.Interpreter, args []string) ([]string, error) {
 	return orgArgHook(it, newargs)
 }
 
-var orgOnCommandNotFound func(*interpreter.Interpreter, error) error
+var orgOnCommandNotFound func(*shell.Interpreter, error) error
 
 var luaOnCommandNotFound lua.Pushable = lua.TNil{}
 
-func on_command_not_found(inte *interpreter.Interpreter, err error) error {
+func on_command_not_found(inte *shell.Interpreter, err error) error {
 	L, err := NewNyagosLua()
 	if err != nil {
 		return err
@@ -116,7 +116,7 @@ func on_command_not_found(inte *interpreter.Interpreter, err error) error {
 }
 
 var option_table_member = map[string]IProperty{
-	"glob": &lua.BoolProperty{&interpreter.WildCardExpansionAlways},
+	"glob": &lua.BoolProperty{&shell.WildCardExpansionAlways},
 }
 
 func getOption(L lua.Lua) int {
@@ -253,10 +253,10 @@ func NewNyagosLua() (lua.Lua, error) {
 	this.SetGlobal("share")
 
 	if !hook_setuped {
-		orgArgHook = interpreter.SetArgsHook(newArgHook)
+		orgArgHook = shell.SetArgsHook(newArgHook)
 
-		orgOnCommandNotFound = interpreter.OnCommandNotFound
-		interpreter.OnCommandNotFound = on_command_not_found
+		orgOnCommandNotFound = shell.OnCommandNotFound
+		shell.OnCommandNotFound = on_command_not_found
 		hook_setuped = true
 	}
 	return this, nil

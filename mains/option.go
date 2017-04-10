@@ -22,7 +22,7 @@ func setLuaArg(L lua.Lua, arg0 string) {
 	L.SetGlobal("arg")
 }
 
-func optionParse(it *interpreter.Interpreter, L lua.Lua) bool {
+func optionParse(it *shell.Interpreter, L lua.Lua) bool {
 	result := true
 
 	if *optionK != "" {

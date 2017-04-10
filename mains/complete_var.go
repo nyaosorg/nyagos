@@ -9,7 +9,7 @@ type ShellVariable struct {
 }
 
 func (this *ShellVariable) Lookup(name string) string {
-	f, ok := interpreter.PercentFunc[name]
+	f, ok := shell.PercentFunc[name]
 	if ok {
 		return f()
 	} else {
@@ -18,7 +18,7 @@ func (this *ShellVariable) Lookup(name string) string {
 }
 
 func (this *ShellVariable) EachKey(f func(string)) {
-	for name, _ := range interpreter.PercentFunc {
+	for name, _ := range shell.PercentFunc {
 		f(name)
 	}
 }

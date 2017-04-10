@@ -1,4 +1,4 @@
-package interpreter
+package shell
 
 import (
 	"context"

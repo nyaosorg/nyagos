@@ -40,7 +40,7 @@ func (this *LuaBinaryChank) String() string {
 	return "(lua-function)"
 }
 
-func (this *LuaBinaryChank) Call(ctx context.Context, cmd *interpreter.Interpreter) (int, error) {
+func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Interpreter) (int, error) {
 	L, L_ok := cmd.Tag.(lua.Lua)
 	if !L_ok {
 		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
@@ -194,7 +194,7 @@ func cmdGetEnv(L lua.Lua) int {
 	if nameErr != nil {
 		return L.Push(nil)
 	}
-	value, ok := interpreter.OurGetEnv(name)
+	value, ok := shell.OurGetEnv(name)
 	if ok && len(value) > 0 {
 		L.PushString(value)
 	} else {
@@ -222,7 +222,7 @@ func cmdExec(L lua.Lua) int {
 		it := getRegInt(L)
 		if it == nil {
 			println("main/lua_cmd.go: cmdExec: not found interpreter object")
-			it = interpreter.New()
+			it = shell.New()
 			// L := NewNyagosLua()
 			it.Tag = L
 			it.Closers = append(it.Closers, L)
@@ -242,7 +242,7 @@ func cmdExec(L lua.Lua) int {
 		}
 		it := getRegInt(L)
 		if it == nil {
-			it = interpreter.New()
+			it = shell.New()
 			it.Tag = L
 		}
 		errorlevel, err = it.Interpret(statement)
@@ -266,7 +266,7 @@ func cmdEval(L lua.Lua) int {
 		return L.Push(nil, err)
 	}
 	go func(statement string, w *os.File) {
-		it := interpreter.New()
+		it := shell.New()
 		it.Tag = L
 		it.SetStdout(w)
 		it.Interpret(statement)
