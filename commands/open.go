@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"os/exec"
 
 	"github.com/zetamatta/go-getch"
 
 	"../dos"
+	"../shell"
 )
 
 func open1(fname string, out io.Writer) {
@@ -23,7 +23,7 @@ func open1(fname string, out io.Writer) {
 	}
 }
 
-func cmd_open(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_open(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	switch len(cmd.Args) {
 	case 1:
 		open1(".", cmd.Stderr)

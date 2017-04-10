@@ -4,14 +4,15 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"syscall"
 	"unicode"
 
 	"github.com/zetamatta/go-getch"
+
+	"../shell"
 )
 
-func cmd_del(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_del(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	n := len(cmd.Args)
 	if n <= 1 {
 		fmt.Fprintln(cmd.Stderr, "Usage: del   [/q] FILE(S)...")

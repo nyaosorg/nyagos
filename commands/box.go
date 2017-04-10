@@ -5,15 +5,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/zetamatta/go-box"
 
 	"../readline"
+	"../shell"
 )
 
-func cmd_box(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_box(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	data, err := ioutil.ReadAll(cmd.Stdin)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())

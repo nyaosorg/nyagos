@@ -5,10 +5,10 @@ import (
 	"errors"
 	"io"
 	"os"
-	"os/exec"
 	"strings"
 
 	"../dos"
+	"../shell"
 )
 
 func getwd_() string {
@@ -40,7 +40,7 @@ func clone_(action string, out io.Writer) (int, error) {
 	return 0, nil
 }
 
-func cmd_sudo(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_sudo(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) < 2 {
 		return clone_("runas", cmd.Stderr)
 	}
@@ -62,10 +62,10 @@ func cmd_sudo(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	}
 }
 
-func cmd_clone(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_clone(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return clone_("open", cmd.Stderr)
 }
 
-func cmd_su(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_su(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return clone_("runas", cmd.Stderr)
 }

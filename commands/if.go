@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
+
+	"../shell"
 )
 
-func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	// if "xxx" == "yyy"
 	args := cmd.Args
 	not := false

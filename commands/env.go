@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 	"os"
-	"os/exec"
 	"strings"
+
+	"../shell"
 )
 
 func array2hash(args []string) ([]string, map[string]string) {
@@ -22,7 +23,7 @@ func array2hash(args []string) ([]string, map[string]string) {
 	return []string{}, hash
 }
 
-func cmd_env(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_env(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	args, hash := array2hash(cmd.Args[1:])
 	if len(args) <= 0 {
 		return 0, nil

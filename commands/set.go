@@ -5,9 +5,10 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
+
+	"../shell"
 )
 
 func shrink(values ...string) string {
@@ -32,7 +33,7 @@ func shrink(values ...string) string {
 	return buffer.String()
 }
 
-func cmd_set(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_set(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		for _, val := range os.Environ() {
 			fmt.Fprintln(cmd.Stdout, val)

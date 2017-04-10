@@ -157,7 +157,7 @@ func Main() error {
 	flag.Parse()
 
 	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
-		rc, done, err := commands.Exec(ctx, &it.Cmd)
+		rc, done, err := commands.Exec(ctx, it)
 		return rc, done, err
 	})
 	completion.AppendCommandLister(commands.AllNames)

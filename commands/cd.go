@@ -5,12 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 
 	"../cpath"
 	"../dos"
+	"../shell"
 )
 
 var cd_history = make([]string, 0, 100)
@@ -57,7 +57,7 @@ func cmd_cd_sub(dir string) (int, error) {
 	}
 }
 
-func cmd_cd(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_cd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 {
 		if cmd.Args[1] == "-" {
 			if len(cd_history) < 1 {

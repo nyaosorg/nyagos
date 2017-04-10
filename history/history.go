@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -16,6 +15,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
+	"../shell"
 	"../text"
 )
 
@@ -195,7 +195,7 @@ func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	}
 }
 
-func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if ctx == nil {
 		fmt.Fprintln(cmd.Stderr, "history not found (case1)")
 		return 1, nil

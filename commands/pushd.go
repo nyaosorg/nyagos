@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"os/exec"
 
 	"../dos"
+	"../shell"
 )
 
 var dirstack = make([]string, 0, 20)
@@ -17,7 +17,7 @@ const (
 	GETWD_FAIL  = 3
 )
 
-func cmd_dirs(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_dirs(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
@@ -30,7 +30,7 @@ func cmd_dirs(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return 0, nil
 }
 
-func cmd_popd(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_popd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(dirstack) <= 0 {
 		return NO_DIRSTACK, errors.New("popd: directory stack empty.")
 	}
@@ -42,7 +42,7 @@ func cmd_popd(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return cmd_dirs(ctx, cmd)
 }
 
-func cmd_pushd(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_pushd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err

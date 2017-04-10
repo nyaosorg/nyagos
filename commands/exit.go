@@ -3,9 +3,10 @@ package commands
 import (
 	"context"
 	"io"
-	"os/exec"
+
+	"../shell"
 )
 
-func cmd_exit(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_exit(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return 0, io.EOF
 }

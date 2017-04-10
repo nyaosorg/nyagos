@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"os/exec"
 	"regexp"
 	"strings"
 
@@ -11,12 +10,13 @@ import (
 	"../completion"
 	"../dos"
 	"../history"
+	"../shell"
 )
 
-var BuildInCommand map[string]func(context.Context, *exec.Cmd) (int, error)
+var BuildInCommand map[string]func(context.Context, *shell.Cmd) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func Exec(ctx context.Context, cmd *exec.Cmd) (int, bool, error) {
+func Exec(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
@@ -48,7 +48,7 @@ func AllNames() []completion.Element {
 }
 
 func Init() {
-	BuildInCommand = map[string]func(context.Context, *exec.Cmd) (int, error){
+	BuildInCommand = map[string]func(context.Context, *shell.Cmd) (int, error){
 		".":       cmd_source,
 		"alias":   cmd_alias,
 		"bindkey": cmd_bindkey,

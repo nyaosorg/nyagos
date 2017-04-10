@@ -4,11 +4,12 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"strconv"
+
+	"../shell"
 )
 
-func cmd_pwd(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_pwd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 {
 		if i, err := strconv.ParseInt(cmd.Args[1], 10, 0); err == nil && i < 0 {
 			i += int64(len(cd_history))

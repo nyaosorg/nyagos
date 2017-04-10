@@ -13,6 +13,7 @@ import (
 	"github.com/zetamatta/go-mbcs"
 
 	"../dos"
+	"../shell"
 )
 
 func load_envfile(fname string, verbose io.Writer) error {
@@ -114,7 +115,7 @@ func call_batch(batch string, args []string, env string, pwd string, verbose io.
 	return errorlevel, nil
 }
 
-func cmd_source(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	var verbose io.Writer
 	args := make([]string, 0, len(cmd.Args))
 	debug := false

@@ -3,12 +3,12 @@ package commands
 import (
 	"context"
 	"fmt"
-	"os/exec"
 
 	"../readline"
+	"../shell"
 )
 
-func cmd_bindkey(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_bindkey(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) < 3 {
 		fmt.Fprintf(cmd.Stderr, "%[1]s: Usage %[1]s KEYNAME FUNCNAME\n",
 			cmd.Args[0])
