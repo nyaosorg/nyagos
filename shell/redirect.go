@@ -53,7 +53,7 @@ func (this *Redirecter) open() (*os.File, error) {
 	}
 }
 
-func (this *Redirecter) OpenOn(cmd *Interpreter) (*os.File, error) {
+func (this *Redirecter) OpenOn(cmd *Cmd) (*os.File, error) {
 	var fd *os.File
 	var err error
 

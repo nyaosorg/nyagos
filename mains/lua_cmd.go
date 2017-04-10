@@ -40,7 +40,7 @@ func (this *LuaBinaryChank) String() string {
 	return "(lua-function)"
 }
 
-func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Interpreter) (int, error) {
+func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	L, L_ok := cmd.Tag.(lua.Lua)
 	if !L_ok {
 		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")

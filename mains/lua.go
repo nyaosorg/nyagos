@@ -15,22 +15,22 @@ import (
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"
 
-func setRegInt(L lua.Lua, it *shell.Interpreter) {
+func setRegInt(L lua.Lua, it *shell.Cmd) {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.PushLightUserData(unsafe.Pointer(it))
 	L.SetField(-2, REGKEY_INTERPRETER)
 	L.Pop(1)
 }
 
-func getRegInt(L lua.Lua) *shell.Interpreter {
+func getRegInt(L lua.Lua) *shell.Cmd {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.GetField(-1, REGKEY_INTERPRETER)
-	rc := (*shell.Interpreter)(L.ToUserData(-1))
+	rc := (*shell.Cmd)(L.ToUserData(-1))
 	L.Pop(2)
 	return rc
 }
 
-func NyagosCallLua(L lua.Lua, it *shell.Interpreter, nargs int, nresult int) error {
+func NyagosCallLua(L lua.Lua, it *shell.Cmd, nargs int, nresult int) error {
 	save := getRegInt(L)
 	setRegInt(L, it)
 	err := L.Call(nargs, nresult)
@@ -38,11 +38,11 @@ func NyagosCallLua(L lua.Lua, it *shell.Interpreter, nargs int, nresult int) err
 	return err
 }
 
-var orgArgHook func(*shell.Interpreter, []string) ([]string, error)
+var orgArgHook func(*shell.Cmd, []string) ([]string, error)
 
 var luaArgsFilter lua.Pushable = lua.TNil{}
 
-func newArgHook(it *shell.Interpreter, args []string) ([]string, error) {
+func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
 	L, err := NewNyagosLua()
 	if err != nil {
 		return nil, err
@@ -82,11 +82,11 @@ func newArgHook(it *shell.Interpreter, args []string) ([]string, error) {
 	return orgArgHook(it, newargs)
 }
 
-var orgOnCommandNotFound func(*shell.Interpreter, error) error
+var orgOnCommandNotFound func(*shell.Cmd, error) error
 
 var luaOnCommandNotFound lua.Pushable = lua.TNil{}
 
-func on_command_not_found(inte *shell.Interpreter, err error) error {
+func on_command_not_found(inte *shell.Cmd, err error) error {
 	L, err := NewNyagosLua()
 	if err != nil {
 		return err
