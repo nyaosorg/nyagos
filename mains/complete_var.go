@@ -2,7 +2,7 @@ package mains
 
 import (
 	"../completion"
-	"../interpreter"
+	"../shell"
 )
 
 type ShellVariable struct {

@@ -7,10 +7,10 @@ import (
 	"unsafe"
 
 	"../history"
-	"../interpreter"
 	"../lua"
 	ole "../lua/ole"
 	"../readline"
+	"../shell"
 )
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"

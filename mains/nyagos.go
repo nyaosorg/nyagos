@@ -19,9 +19,9 @@ import (
 	"../completion"
 	"../dos"
 	"../history"
-	"../interpreter"
 	"../lua"
 	"../readline"
+	"../shell"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")

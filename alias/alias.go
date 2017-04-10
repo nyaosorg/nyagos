@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"../completion"
-	"../interpreter"
+	"../shell"
 	"../text"
 )
 

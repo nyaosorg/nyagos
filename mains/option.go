@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"../interpreter"
 	"../lua"
+	"../shell"
 )
 
 func setLuaArg(L lua.Lua, arg0 string) {

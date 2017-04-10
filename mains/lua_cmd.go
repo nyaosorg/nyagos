@@ -27,9 +27,9 @@ import (
 	"../alias"
 	"../completion"
 	"../dos"
-	"../interpreter"
 	"../lua"
 	"../readline"
+	"../shell"
 )
 
 type LuaBinaryChank struct {
