@@ -59,17 +59,13 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		status = !status
 	}
 	if status {
-		exec, exec_ok := ctx.Value("exec").(func(string) (int, error))
-		if !exec_ok {
-			return -1, errors.New("if: could not get context.Value(\"exec\")")
+		subCmd, err := cmd.Clone()
+		if err != nil {
+			return 0, err
 		}
-		rawargs, rawargs_ok := ctx.Value("rawargs").([]string)
-		if !rawargs_ok {
-			return -1, errors.New("if: could not get context.Value(\"rawargs\")")
-		}
-		cmdline := strings.Join(rawargs[start:], " ")
-		// println(cmdline)
-		return exec(cmdline)
+		subCmd.Args = cmd.Args[start:]
+		subCmd.RawArgs = cmd.RawArgs[start:]
+		return subCmd.SpawnvpContext(ctx)
 	} else {
 		gotoeol, ok := ctx.Value("gotoeol").(func())
 		if !ok {

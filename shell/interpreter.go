@@ -94,6 +94,8 @@ func (this *Cmd) SetStderr(f *os.File) {
 
 func (this *Cmd) Clone() (*Cmd, error) {
 	rv := new(Cmd)
+	rv.Args = this.Args
+	rv.RawArgs = this.RawArgs
 	rv.Stdio[0] = this.Stdio[0]
 	rv.Stdio[1] = this.Stdio[1]
 	rv.Stdio[2] = this.Stdio[2]
