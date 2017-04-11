@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"io"
 	"os"
 	"strings"
@@ -44,10 +43,7 @@ func cmd_sudo(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) < 2 {
 		return clone_("runas", cmd.Stderr)
 	}
-	rawargs, ok := ctx.Value("rawargs").([]string)
-	if !ok {
-		return 1, errors.New("sudo: could not get context.Value(\"rawargs\")")
-	}
+	rawargs := cmd.RawArgs
 	var args string
 	if len(rawargs) >= 3 {
 		args = strings.Join(rawargs[2:], " ")

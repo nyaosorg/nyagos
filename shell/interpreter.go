@@ -303,12 +303,7 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
 			cmd.OnClone = this.OnClone
 
-			ctx := context.WithValue(ctx_, "rawargs", state.RawArgs)
-			ctx = context.WithValue(ctx, "exec",
-				func(cmdline string) (int, error) {
-					return cmd.InterpretContext(ctx, cmdline)
-				})
-			ctx = context.WithValue(ctx, "gotoeol", func() {
+			ctx := context.WithValue(ctx_, "gotoeol", func() {
 				shutdown_immediately = true
 				gotoeol, ok := ctx_.Value("gotoeol").(func())
 				if ok {
