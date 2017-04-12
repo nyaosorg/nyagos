@@ -2,6 +2,7 @@
 
 * 内蔵コマンド `env` の追加
 * ヒストリ参照テーブル `nyagos.history[..]` , `#nyagos.history` 用意
+* 内蔵コマンドとして `type` を追加
 
 NYAGOS 4.1.9\_2
 ===============
