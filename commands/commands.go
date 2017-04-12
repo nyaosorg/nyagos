@@ -82,6 +82,7 @@ func Init() {
 		"su":      cmd_su,
 		"sudo":    cmd_sudo,
 		"touch":   cmd_touch,
+		"type":    cmd_type,
 		"which":   cmd_which,
 	}
 }
