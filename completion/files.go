@@ -7,7 +7,7 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"../cpath"
+	"../dos"
 )
 
 const (
@@ -32,7 +32,7 @@ func replaceEnv(str string) string {
 	})
 
 	if len(str) >= 2 && str[0] == '~' && os.IsPathSeparator(str[1]) {
-		if home := cpath.GetHome(); home != "" {
+		if home := dos.GetHome(); home != "" {
 			str = home + str[1:]
 		}
 	}
@@ -45,8 +45,8 @@ func listUpFiles(str string) ([]Element, error) {
 		orgSlash = str[pos]
 	}
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), `"`, "", -1)
-	directory := cpath.DirName(str)
-	wildcard := cpath.Join(replaceEnv(directory), "*")
+	directory := DirName(str)
+	wildcard := dos.Join(replaceEnv(directory), "*")
 
 	// Drive letter
 	cutprefix := 0
@@ -62,7 +62,7 @@ func listUpFiles(str string) ([]Element, error) {
 			return true
 		}
 		listname := fd.Name()
-		name := cpath.Join(directory, fd.Name())
+		name := dos.Join(directory, fd.Name())
 		if fd.IsDir() {
 			name += STD_SLASH
 			listname += OPT_SLASH

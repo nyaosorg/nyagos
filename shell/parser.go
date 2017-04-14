@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"../cpath"
+	"../dos"
 )
 
 type StatementT struct {
@@ -98,7 +98,7 @@ func string2word(source_ string, removeQuote bool) string {
 			break
 		}
 		if ch == '~' && unicode.IsSpace(lastchar) {
-			if home := cpath.GetHome(); home != "" {
+			if home := dos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
 				buffer.WriteRune('~')

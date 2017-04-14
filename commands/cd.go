@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"../cpath"
 	"../dos"
 	"../shell"
 )
@@ -45,7 +44,7 @@ func cmd_cd_sub(dir string) (int, error) {
 	if strings.HasPrefix(dir, fileHead) {
 		dir = dir[len(fileHead):]
 	}
-	if dir_, err := cpath.CorrectCase(dir); err == nil {
+	if dir_, err := CorrectCase(dir); err == nil {
 		// println(dir, "->", dir_)
 		dir = dir_
 	}
@@ -103,7 +102,7 @@ func cmd_cd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		push_cd_history()
 		return cmd_cd_sub(strings.Join(cmd.Args[1:], " "))
 	}
-	home := cpath.GetHome()
+	home := dos.GetHome()
 	if home != "" {
 		push_cd_history()
 		return cmd_cd_sub(home)

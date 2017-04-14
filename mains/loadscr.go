@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"../cpath"
+	"../dos"
 	. "../ifdbg"
 	"../lua"
 )
@@ -107,12 +107,12 @@ func loadScripts(it InterpreterT, L lua.Lua) error {
 	if err := dotNyagos(L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(it, cpath.GetHome(), L)
+	barNyagos(it, dos.GetHome(), L)
 	return nil
 }
 
 func dotNyagos(L lua.Lua) error {
-	dot_nyagos := filepath.Join(cpath.GetHome(), ".nyagos")
+	dot_nyagos := filepath.Join(dos.GetHome(), ".nyagos")
 	dotStat, dotErr := os.Stat(dot_nyagos)
 	if dotErr != nil {
 		return nil
