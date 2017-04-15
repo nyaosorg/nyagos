@@ -70,12 +70,7 @@ func nyagosPrompt(L lua.Lua) int {
 
 var prompt_hook lua.Pushable = lua.TGoFunction(nyagosPrompt)
 
-func printPrompt() (int, error) {
-	L, err := NewNyagosLua()
-	if err != nil {
-		return 0, err
-	}
-	defer L.Close()
+func printPrompt(L lua.Lua) (int, error) {
 	L.Push(prompt_hook)
 
 	if !L.IsFunction(-1) {
@@ -198,7 +193,8 @@ func Main() error {
 
 	var command_reader func(context.Context) (string, error)
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		command_reader, default_history = NewCmdStreamConsole()
+		command_reader, default_history = NewCmdStreamConsole(
+			func() (int, error) { return printPrompt(L) })
 	} else {
 		command_reader = NewCmdStreamFile(os.Stdin)
 	}

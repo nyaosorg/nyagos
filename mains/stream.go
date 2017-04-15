@@ -13,9 +13,9 @@ import (
 	"../readline"
 )
 
-func NewCmdStreamConsole() (func(context.Context) (string, error), *history.Container) {
+func NewCmdStreamConsole(doPrompt func() (int, error)) (func(context.Context) (string, error), *history.Container) {
 	history1 := new(history.Container)
-	editor := readline.Editor{History: history1, Prompt: printPrompt}
+	editor := readline.Editor{History: history1, Prompt: doPrompt}
 
 	histPath := filepath.Join(AppDataDir(), "nyagos.history")
 	history1.Load(histPath)
