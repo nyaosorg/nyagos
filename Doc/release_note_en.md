@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * #189 Support `nyagos.history[..]` and `#nyagos.history`
 * Make `type` as built-in command.
 * To print prompt, use the same Lua instance loading ~/.nyagos
+* Fix the problem that C-o could not complete filenames which has ` ` and `~`.
 
 NYAGOS 4.1.9\_2
 ===============
