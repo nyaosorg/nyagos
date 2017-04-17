@@ -17,7 +17,11 @@ nyagos.key.C_o = function(this)
     local result=nyagos.eval('dump_temp_out | box')
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result," ",1,true) then
-        result = '"'..result..'"'
+        if string.find(result,"^~[\\/]") then
+            result = '~"'..string.sub(result,2)..'"'
+        else
+            result = '"'..result..'"'
+        end
     end
     assert( this:replacefrom(pos,result) )
 end
