@@ -2,6 +2,7 @@ package lua
 
 import (
 	"fmt"
+	"reflect"
 	"syscall"
 	"unsafe"
 )
@@ -136,8 +137,49 @@ func (this Lua) Push(values ...interface{}) int {
 		case Pushable:
 			t.Push(this)
 		default:
-			panic(fmt.Sprintf("lua.Lua.Push(%T): value is not supported type", t))
+			if !this.PushReflect(value) {
+				panic(fmt.Sprintf(
+					"lua.Lua.Push(%T): value is not supported type", t))
+			}
 		}
 	}
 	return len(values)
+}
+
+func (this Lua) PushReflect(value interface{}) bool {
+	return this.pushReflect(reflect.ValueOf(value))
+}
+
+func (this Lua) pushReflect(value reflect.Value) bool {
+	switch value.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
+		reflect.Int64, reflect.Uint, reflect.Uint16, reflect.Uint32,
+		reflect.Uint64, reflect.Uintptr:
+		this.PushInteger(Integer(value.Int()))
+	case reflect.Bool:
+		this.PushBool(value.Bool())
+	case reflect.String:
+		this.PushString(value.String())
+	case reflect.Interface:
+		this.Push(value.Interface())
+	case reflect.Slice, reflect.Array:
+		this.NewTable()
+		for i, end := 0, value.Len(); i < end; i++ {
+			val := value.Index(i)
+			this.PushInteger(Integer(i + 1))
+			this.pushReflect(val)
+			this.SetTable(-3)
+		}
+	case reflect.Map:
+		this.NewTable()
+		for _, key := range value.MapKeys() {
+			this.pushReflect(key)
+			val := value.MapIndex(key)
+			this.pushReflect(val)
+			this.SetTable(-3)
+		}
+	default:
+		return false
+	}
+	return true
 }
