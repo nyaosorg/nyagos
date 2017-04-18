@@ -20,15 +20,12 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 
 	L.Push(completionHook)
 	if L.IsFunction(-1) {
-		L.NewTable()
-		L.PushString(rv.RawWord)
-		L.SetField(-2, "rawword")
-		L.Push(rv.Pos + 1)
-		L.SetField(-2, "pos")
-		L.PushString(rv.AllLine)
-		L.SetField(-2, "text")
-		L.PushString(rv.Word)
-		L.SetField(-2, "word")
+		L.Push(map[string]interface{}{
+			"rawword": rv.RawWord,
+			"pos":     rv.Pos + 1,
+			"text":    rv.AllLine,
+			"word":    rv.Word,
+		})
 		L.NewTable()
 		for key, val := range rv.List {
 			L.Push(1 + key)
