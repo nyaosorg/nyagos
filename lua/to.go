@@ -2,6 +2,7 @@ package lua
 
 import (
 	"errors"
+	"fmt"
 	"unsafe"
 )
 
@@ -303,4 +304,42 @@ func (this Lua) ToPushable(index int) (Pushable, error) {
 		result = &MetaTableOwner{Body: result, Meta: metatable}
 	}
 	return result, nil
+}
+
+func (this Lua) ToInterface(index int) (interface{}, error) {
+	t := this.GetType(index)
+	switch t {
+	case LUA_TBOOLEAN:
+		return this.ToBool(index), nil
+	case LUA_TNIL:
+		return nil, nil
+	case LUA_TSTRING:
+		return this.ToString(index)
+	case LUA_TNUMBER:
+		intValue, err := this.ToInteger(index)
+		if err != nil {
+			return nil, err
+		}
+		return intValue, nil
+	case LUA_TTABLE:
+		table := map[interface{}]interface{}{}
+		index1 := index
+		this.PushNil()
+		if index1 < 0 {
+			index1--
+		}
+		for this.Next(index1) != 0 {
+			key, err := this.ToInterface(-2)
+			if err == nil {
+				val, err := this.ToInterface(-1)
+				if err == nil {
+					table[key] = val
+				}
+			}
+			this.Pop(1)
+		}
+		return table, nil
+	default:
+		return nil, fmt.Errorf("Not support Lua type %v", t)
+	}
 }
