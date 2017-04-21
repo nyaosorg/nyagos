@@ -191,10 +191,12 @@ func Main() error {
 		return nil
 	}
 
-	var command_reader func(context.Context) (string, error)
+	var command_reader ICmdStream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		command_reader, default_history = NewCmdStreamConsole(
+		stream1 := NewCmdStreamConsole(
 			func() (int, error) { return printPrompt(L) })
+		command_reader = stream1
+		default_history = stream1.History
 	} else {
 		command_reader = NewCmdStreamFile(os.Stdin)
 	}
@@ -209,7 +211,7 @@ func Main() error {
 		ctx = context.WithValue(ctx, "lua", L)
 		ctx = context.WithValue(ctx, "history", default_history)
 
-		line, err := command_reader(ctx)
+		line, err := command_reader.ReadLine(ctx)
 
 		if err != nil {
 			cancel()
