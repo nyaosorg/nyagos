@@ -51,6 +51,7 @@ func Init() {
 	BuildInCommand = map[string]func(context.Context, *shell.Cmd) (int, error){
 		".":       cmd_source,
 		"alias":   cmd_alias,
+		"attrib":  cmd_attrib,
 		"bindkey": cmd_bindkey,
 		"box":     cmd_box,
 		"cd":      cmd_cd,
