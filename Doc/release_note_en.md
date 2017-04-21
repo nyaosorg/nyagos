@@ -5,7 +5,8 @@ English / [Japanese](release_note_ja.md)
 * Make `type` as built-in command.
 * To print prompt, use the same Lua instance loading ~/.nyagos
 * Fix the problem that C-o could not complete filenames which has ` ` and `~`.
-* Make `clip` as built-in command which read/write both UTF8/MBCS
+* Make `clip` as built-in command which read/write both UTF8/MBCS (#202)
+* Support `del /f`: delete even if it is a readonly file. (#198)
 
 NYAGOS 4.1.9\_2
 ===============
