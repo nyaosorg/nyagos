@@ -54,6 +54,7 @@ func Init() {
 		"bindkey": cmd_bindkey,
 		"box":     cmd_box,
 		"cd":      cmd_cd,
+		"clip":    cmd_clip,
 		"clone":   cmd_clone,
 		"cls":     cmd_cls,
 		"copy":    cmd_copy,
