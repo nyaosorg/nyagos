@@ -8,6 +8,7 @@
 * UTF8 / MBCS 両方を読み込める内蔵コマンド `clip` を実装 (#202)
 * READONLY属性のファイルも消す `del /f`オプション追加 (#198)
 * `attrib` コマンドを内蔵コマンドとして実装 (#199)
+* `nyagos.alias.grep = "findstr.exe"`
 
 NYAGOS 4.1.9\_2
 ===============

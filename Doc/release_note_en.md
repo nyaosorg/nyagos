@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * Make `clip` as built-in command which read/write both UTF8/MBCS (#202)
 * Support `del /f`: delete even if it is a readonly file. (#198)
 * Add `attrib` as built-in command. (#199)
+* `nyagos.alias.grep = "findstr.exe"`
 
 NYAGOS 4.1.9\_2
 ===============
