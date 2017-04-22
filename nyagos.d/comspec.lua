@@ -7,3 +7,5 @@ for _,name in pairs{
 } do
     nyagos.alias[name] = "%COMSPEC% /c "..name.." $*"
 end
+
+nyagos.alias.grep = "findstr.exe"
