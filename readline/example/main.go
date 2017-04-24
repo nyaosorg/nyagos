@@ -11,8 +11,8 @@ import (
 
 func main() {
 	readline1 := readline.Editor{
-		Default:"AHAHA",
-		Cursor:3,
+		Default: "AHAHA",
+		Cursor:  3,
 	}
 	text, err := readline1.ReadLine(context.Background())
 	if err != nil {

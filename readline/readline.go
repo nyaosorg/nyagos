@@ -183,7 +183,10 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	defer fmt.Fprint(Console, CURSOR_ON)
 
-	this.InsertString(0,session.Default)
+	this.InsertString(0, session.Default)
+	if this.Cursor > this.Length {
+		this.Cursor = this.Length
+	}
 	this.RepaintAfterPrompt()
 
 	for {
