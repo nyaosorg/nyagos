@@ -5,12 +5,15 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/zetamatta/nyagos/readline"
-	//"../../readline"
+	// "github.com/zetamatta/nyagos/readline"
+	"../../readline"
 )
 
 func main() {
-	readline1 := readline.Editor{}
+	readline1 := readline.Editor{
+		Default:"AHAHA",
+		Cursor:3,
+	}
 	text, err := readline1.ReadLine(context.Background())
 	if err != nil {
 		fmt.Printf("ERR=%s\n", err.Error())

@@ -8,6 +8,8 @@ type IHistory interface {
 type Editor struct {
 	History IHistory
 	Prompt  func() (int, error)
+	Default string
+	Cursor  int
 }
 
 func KeyFuncHistoryUp(this *Buffer) Result {
