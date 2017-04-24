@@ -264,6 +264,27 @@ func NewNyagosLua() (lua.Lua, error) {
 
 var silentmode = false
 
+func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
+	return func(L lua.Lua) int {
+		end := L.GetTop()
+		var param []interface{}
+		if end > 0 {
+			param = make([]interface{}, 0, end-1)
+			for i := 1; i <= end; i++ {
+				value, _ := L.ToInterface(i)
+				param = append(param, value)
+			}
+		} else {
+			param = []interface{}{}
+		}
+		result := f(param)
+		for _, value := range result {
+			L.PushReflect(value)
+		}
+		return len(result)
+	}
+}
+
 func init() {
 	nyagos_table_member = map[string]lua.Pushable{
 		"access": lua.TGoFunction(cmdAccess),
@@ -279,13 +300,13 @@ func init() {
 			Index:    cmdGetBindKey,
 			NewIndex: cmdBindKey},
 		"bindkey":         lua.TGoFunction(cmdBindKey),
-		"chdir":           lua.TGoFunction(cmdChdir),
+		"chdir":           lua.TGoFunction(lua2cmd(cmdChdir)),
 		"commit":          lua.StringProperty{&Commit},
 		"commonprefix":    lua.TGoFunction(cmdCommonPrefix),
 		"completion_hook": lua.Property{&completionHook},
 		"create_object":   lua.TGoFunction(ole.CreateObject),
 		"default_prompt":  lua.TGoFunction(nyagosPrompt),
-		"elevated":        lua.TGoFunction(cmdElevated),
+		"elevated":        lua.TGoFunction(lua2cmd(cmdElevated)),
 		"env": &lua.VirtualTable{
 			Name:     "nyagos.env",
 			Index:    cmdGetEnv,

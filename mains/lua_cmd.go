@@ -853,15 +853,6 @@ func cmdLines(L lua.Lua) int {
 	return 2
 }
 
-func cmdChdir(L lua.Lua) int {
-	path, path_err := L.ToString(1)
-	if path_err != nil {
-		return L.Push(nil, path_err.Error())
-	}
-	dos.Chdir(path)
-	return L.Push(true)
-}
-
 func cmdNetDriveToUNC(L lua.Lua) int {
 	path, path_err := L.ToString(1)
 	if path_err != nil {
@@ -874,10 +865,4 @@ func cmdNetDriveToUNC(L lua.Lua) int {
 func cmdResetCharWidth(L lua.Lua) int {
 	readline.ResetCharWidth()
 	return 0
-}
-
-func cmdElevated(L lua.Lua) int {
-	flag, _ := dos.IsElevated()
-	L.PushBool(flag)
-	return 1
 }
