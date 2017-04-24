@@ -11,6 +11,9 @@ type Editor struct {
 }
 
 func KeyFuncHistoryUp(this *Buffer) Result {
+	if this.History.Len() <= 0 {
+		return CONTINUE
+	}
 	if this.HistoryPointer <= 0 {
 		this.HistoryPointer = this.History.Len()
 	}
@@ -26,6 +29,9 @@ func KeyFuncHistoryUp(this *Buffer) Result {
 }
 
 func KeyFuncHistoryDown(this *Buffer) Result {
+	if this.History.Len() <= 0 {
+		return CONTINUE
+	}
 	this.HistoryPointer += 1
 	if this.HistoryPointer > this.History.Len() {
 		this.HistoryPointer = 0
