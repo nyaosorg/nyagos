@@ -46,7 +46,7 @@ func ourGetenvSub(name string) (string, bool) {
 	if m != nil {
 		base, ok := OurGetEnv(m[1])
 		if ok {
-			return strings.Replace(base, m[2], m[3], 1), true
+			return strings.Replace(base, m[2], m[3], -1), true
 		} else {
 			return "", false
 		}
