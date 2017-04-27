@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"strings"
 
@@ -25,6 +26,9 @@ func array2hash(args []string) ([]string, map[string]string) {
 func cmd_env(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	args, hash := array2hash(cmd.Args[1:])
 	if len(args) <= 0 {
+		for _, val := range os.Environ() {
+			fmt.Fprintln(cmd.Stdout, val)
+		}
 		return 0, nil
 	}
 	backup := map[string]string{}
