@@ -9,6 +9,7 @@ English / [Japanese](release_note_ja.md)
 * Support `del /f`: delete even if it is a readonly file. (#198)
 * Add `attrib` as built-in command. (#199)
 * `nyagos.alias.grep = "findstr.exe"`
+* Fix `\` in `%USERPROFILE:\=/%` were replaced once only
 
 NYAGOS 4.1.9\_2
 ===============

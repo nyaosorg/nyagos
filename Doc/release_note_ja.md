@@ -9,6 +9,7 @@
 * READONLY属性のファイルも消す `del /f`オプション追加 (#198)
 * `attrib` コマンドを内蔵コマンドとして実装 (#199)
 * `nyagos.alias.grep = "findstr.exe"`
+* `%USERPROFILE:\=/%` で `\` が一度しか置換されていない不具合を修正
 
 NYAGOS 4.1.9\_2
 ===============
