@@ -10,6 +10,8 @@ English / [Japanese](release_note_ja.md)
 * Add `attrib` as built-in command. (#199)
 * `nyagos.alias.grep = "findstr.exe"`
 * Fix `\` in `%USERPROFILE:\=/%` were replaced once only
+* Fix Ctrl-O (filename-completion) causes panic. (#204)
+* New lua-function: `nyagos.box()`
 
 NYAGOS 4.1.9\_2
 ===============

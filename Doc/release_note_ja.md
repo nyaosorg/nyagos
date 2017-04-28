@@ -10,6 +10,8 @@
 * `attrib` コマンドを内蔵コマンドとして実装 (#199)
 * `nyagos.alias.grep = "findstr.exe"`
 * `%USERPROFILE:\=/%` で `\` が一度しか置換されていない不具合を修正
+* Ctrl-O のファイル名選択がパニックを起こす不具合を修正(#204)
+* Lua関数 `nyagos.box()` を追加
 
 NYAGOS 4.1.9\_2
 ===============
