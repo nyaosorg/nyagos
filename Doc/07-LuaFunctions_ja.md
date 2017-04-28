@@ -213,6 +213,10 @@ N 番目のヒストリ内容を返します。N が負の時は現在から(-N)
 PATH で示されるファイルがアクセス可能かどうかを boolean 値で返します。
 C言語の access 関数と同じです。
 
+### `RESULT = nyagos.box({ CHOICES... })
+
+ユーザがカーソルキーなどで選択した結果を得ます
+
 ### `nyagos.completion_hook = function(c) ... end`
 
 補完のフックです。関数を代入してください。
