@@ -4,7 +4,10 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/zetamatta/go-box"
+
 	"../dos"
+	"../readline"
 )
 
 func cstr(value interface{}) (string, bool) {
@@ -34,4 +37,18 @@ func cmdChdir(args []interface{}) []interface{} {
 		}
 	}
 	return []interface{}{nil, errors.New("directory is required")}
+}
+
+func cmdBox(args []interface{}) []interface{} {
+	t, ok := args[0].(map[interface{}]interface{})
+	if !ok {
+		return []interface{}{nil, "Not a table"}
+	}
+	sources := make([]string, 0, len(t))
+	for _, v := range t {
+		if str, ok := cstr(v); ok {
+			sources = append(sources, str)
+		}
+	}
+	return []interface{}{box.Choice(sources, readline.Console)}
 }

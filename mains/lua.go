@@ -300,6 +300,7 @@ func init() {
 			Index:    cmdGetBindKey,
 			NewIndex: cmdBindKey},
 		"bindkey":         lua.TGoFunction(cmdBindKey),
+		"box":             lua.TGoFunction(lua2cmd(cmdBox)),
 		"chdir":           lua.TGoFunction(lua2cmd(cmdChdir)),
 		"commit":          lua.StringProperty{&Commit},
 		"commonprefix":    lua.TGoFunction(cmdCommonPrefix),
