@@ -19,15 +19,17 @@ nyagos.key.C_o = function(this)
     assert( this:replacefrom(pos,result) )
 end
 
-nyagos.alias.__dump_history = function()
+share.__dump_history = function()
     local uniq={}
+    local result={}
     for i=nyagos.gethistory()-1,1,-1 do
         local line = nyagos.gethistory(i)
         if line ~= "" and not uniq[line] then
-            nyagos.write(line,"\n")
+            result[ #result+1 ] = line
             uniq[line] = true
         end
     end
+    return result
 end
 
 nyagos.key.C_x = function(this)
@@ -36,7 +38,7 @@ nyagos.key.C_x = function(this)
     local c = string.lower(string.char(ch))
     local result
     if c == 'r' or ch == (string.byte('r') & 0x1F) then
-        result = nyagos.eval('__dump_history | box')
+        result = nyagos.box(share.__dump_history())
     elseif ch == 'h' or ch == (string.byte('h') & 0x1F) then
         result = nyagos.eval('cd --history | box')
         if string.find(result,' ') then
@@ -52,7 +54,7 @@ end
 
 nyagos.key.M_r = function(this)
     nyagos.write("\n")
-    local result = nyagos.eval('__dump_history | box')
+    local result = nyagos.box(share.__dump_history())
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result,' ') then
         result = '"'..result..'"'
