@@ -1,9 +1,3 @@
-nyagos.alias.dump_temp_out = function()
-    for _,val in ipairs(share.dump_temp_out) do
-        nyagos.write(val,"\n")
-    end
-end
-
 nyagos.key.C_o = function(this)
     local word,pos = this:lastword()
     word = string.gsub(word,'"','')
@@ -12,9 +6,8 @@ nyagos.key.C_o = function(this)
     if #list == 1 and list[1] == wildcard then
         return
     end
-    share.dump_temp_out = list
     nyagos.write("\n")
-    local result=nyagos.eval('dump_temp_out | box')
+    local result=nyagos.box(list)
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result," ",1,true) then
         if string.find(result,"^~[\\/]") then
