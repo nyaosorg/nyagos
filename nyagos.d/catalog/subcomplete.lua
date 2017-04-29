@@ -59,6 +59,19 @@ if next(share.maincmds) then
         if not cmdname then
             return nil
         end
+        --[[
+          2nd command completion like :git bisect go[od]
+          user define-able
+
+          local subcommands={"good", "bad"}
+          local maincmds=share.maincmds
+          maincmds["git bisect"] = subcommands
+          share.maincmds = maincmds
+        --]]
+        local cmd2nd = string.match(c.text,"^%S+%s+%S+")
+        if share.maincmds[cmd2nd] then
+          cmdname = cmd2nd
+        end
         local subcmds = share.maincmds[cmdname]
         if not subcmds then
             return nil
