@@ -72,9 +72,16 @@ if next(share.maincmds) then
         if share.maincmds[cmd2nd] then
           cmdname = cmd2nd
         end
-        local subcmds = share.maincmds[cmdname]
-        if not subcmds then
+        local subcmds = {}
+        local subcmdData = share.maincmds[cmdname]
+        if not subcmdData then
             return nil
+        end
+        local subcmdType = type(subcmdData)
+        if "table" == subcmdType then
+          subcmds = subcmdData
+        elseif "function" == subcmdType then
+          subcmds = subcmdData()
         end
         for i=1,#subcmds do
             table.insert(c.list,subcmds[i])
