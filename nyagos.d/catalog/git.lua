@@ -28,8 +28,10 @@ gitsubcommands["reset"]=branchdetect
 gitsubcommands["merge"]=branchdetect
 gitsubcommands["rebase"]=branchdetect
 
-share.git.subcommand=gitsubcommands
-share.git.branch = branchdetect
+local gitvar=share.git
+gitvar.subcommand=gitsubcommands
+gitvar.branch=branchdetect
+share.git=gitvar
 
 if share.maincmds then
   if share.maincmds["git"] then
