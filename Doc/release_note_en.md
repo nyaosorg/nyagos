@@ -12,6 +12,8 @@ English / [Japanese](release_note_ja.md)
 * Fix `\` in `%USERPROFILE:\=/%` were replaced once only
 * Fix Ctrl-O (filename-completion) causes panic. (#204)
 * New lua-function: `nyagos.box()`
+* `share.XXX.YYY = ZZZ` works as we expect.(#210)
+     * We does not have to write `local t = share.XXX ; t.YYY = ZZZ ; share.XXX = t` now.
 
 NYAGOS 4.1.9\_2
 ===============

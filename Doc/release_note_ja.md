@@ -12,6 +12,8 @@
 * `%USERPROFILE:\=/%` で `\` が一度しか置換されていない不具合を修正
 * Ctrl-O のファイル名選択がパニックを起こす不具合を修正(#204)
 * Lua関数 `nyagos.box()` を追加
+* `share.XXX.YYY = ZZZ` が期待どおり動くようになった(#210)
+     * もう`local t = share.XXX ; t.YYY = ZZZ ; share.XXX = t`と書く必要はない
 
 NYAGOS 4.1.9\_2
 ===============
