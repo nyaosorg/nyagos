@@ -204,6 +204,7 @@ func setNyagosTable(L lua.Lua) int {
 }
 
 var share_table = map[string]lua.Pushable{}
+var share_table_generation = map[string]int{}
 
 func setMemberOfShareTable(L lua.Lua) int {
 	// table exists at [-3]
@@ -216,7 +217,6 @@ func setMemberOfShareTable(L lua.Lua) int {
 		return L.Push(nil, err)
 	}
 	L.RawSet(-3) // pop 2
-
 	L.GetMetaTable(-1)
 	L.GetField(-1, "..")
 	parentkey, err := L.ToString(-1)
@@ -224,7 +224,15 @@ func setMemberOfShareTable(L lua.Lua) int {
 		println(err.Error())
 		return L.Push(nil, err)
 	}
-	L.Pop(2) // drop string and metatable
+	L.Pop(1) // drop string
+	L.GetField(-1, "age")
+	age, err := L.ToInteger(-1)
+	L.Pop(2) // drop integer and metatable
+
+	if err != nil || age != share_table_generation[parentkey] {
+		// println("old variable")
+		return 0
+	}
 
 	table1, ok := share_table[parentkey]
 	if !ok {
@@ -267,6 +275,8 @@ func getShareTable(L lua.Lua) int {
 			L.SetField(-2, "__newindex")
 			L.PushString(key)
 			L.SetField(-2, "..")
+			L.PushInteger(lua.Integer(share_table_generation[key]))
+			L.SetField(-2, "age")
 			L.SetMetaTable(-2)
 		}
 		return 1
@@ -288,6 +298,7 @@ func setShareTable(L lua.Lua) int {
 		return L.Push(nil, valErr)
 	}
 	share_table[key] = value
+	share_table_generation[key]++
 	return 1
 }
 
