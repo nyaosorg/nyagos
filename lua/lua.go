@@ -54,12 +54,14 @@ func (this Lua) Source(fname string) error {
 
 var lua_settable = luaDLL.NewProc("lua_settable")
 
+// t[k] = v , t: given index, k: top of stack , v: value just below the top (pop 2 and push 0 element)
 func (this Lua) SetTable(index int) {
 	lua_settable.Call(this.State(), uintptr(index))
 }
 
 var lua_gettable = luaDLL.NewProc("lua_gettable")
 
+// get t[k], t: given by index, k: stack top (pop 1 and push 1)
 func (this Lua) GetTable(index int) {
 	lua_gettable.Call(this.State(), uintptr(index))
 }
@@ -100,6 +102,20 @@ var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
 func (this Lua) NewUserData(size uintptr) unsafe.Pointer {
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
 	return unsafe.Pointer(area)
+}
+
+var lua_rawset = luaDLL.NewProc("lua_rawset")
+
+// without calling __newindex, t[k] = v , t: given index, k: top of stack , v: value just below the top (pop 2 and push 0 element)
+func (this Lua) RawSet(index int) {
+	lua_rawset.Call(this.State(), uintptr(index))
+}
+
+var lua_rawget = luaDLL.NewProc("lua_rawget")
+
+// Without __index, get t[k], t: given by index, k: stack top (pop 1 and push 1)
+func (this Lua) RawGet(index int) {
+	lua_rawget.Call(this.State(), uintptr(index))
 }
 
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")
