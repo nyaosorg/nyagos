@@ -3,6 +3,7 @@ package mains
 import (
 	"fmt"
 	"os"
+	"reflect"
 	"runtime"
 	"unsafe"
 
@@ -204,13 +205,72 @@ func setNyagosTable(L lua.Lua) int {
 
 var share_table = map[string]lua.Pushable{}
 
+func setMemberOfShareTable(L lua.Lua) int {
+	// table exists at [-3]
+	key, err := L.ToPushable(-2)
+	if err != nil {
+		return L.Push(nil, err)
+	}
+	val, err := L.ToPushable(-1)
+	if err != nil {
+		return L.Push(nil, err)
+	}
+	L.RawSet(-3) // pop 2
+
+	L.GetMetaTable(-1)
+	L.GetField(-1, "..")
+	parentkey, err := L.ToString(-1)
+	if err != nil {
+		println(err.Error())
+		return L.Push(nil, err)
+	}
+	L.Pop(2) // drop string and metatable
+
+	table1, ok := share_table[parentkey]
+	if !ok {
+		err := fmt.Errorf("%s: not found in share_table()", parentkey)
+		println(err.Error())
+		return L.Push(nil, err.Error())
+	}
+	if t, ok := table1.(*lua.MetaTableOwner); ok {
+		table1 = t.Body
+	}
+	table2, ok := table1.(*lua.TTable)
+	if !ok {
+		err := fmt.Errorf("%s: not table in share_table()", parentkey)
+		type1 := reflect.TypeOf(table1)
+		println(type1.String())
+		println(err.Error())
+		return L.Push(nil, err.Error())
+	}
+	switch t := key.(type) {
+	case lua.TString:
+		table2.Dict[string(t)] = val
+	case lua.TRawString:
+		table2.Dict[string(t)] = val
+	case lua.Integer:
+		table2.Array[int(t)] = val
+	}
+	return 0
+}
+
 func getShareTable(L lua.Lua) int {
 	key, keyErr := L.ToString(-1)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
 	}
 	if value, ok := share_table[key]; ok {
-		return L.Push(value)
+		L.Push(value)
+		if L.IsTable(-1) {
+			L.NewTable()
+			L.PushGoFunction(setMemberOfShareTable)
+			L.SetField(-2, "__newindex")
+			L.PushString(key)
+			L.SetField(-2, "..")
+			L.SetMetaTable(-2)
+		}
+		return 1
+
 	} else {
 		L.PushNil()
 		return 1
