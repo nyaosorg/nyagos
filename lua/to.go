@@ -193,37 +193,57 @@ func (this TTable) Push(L Lua) int {
 	return this.PushWithoutNewTable(L)
 }
 
-func (this Lua) ToTable(index int) (*TTable, error) {
-	top := this.GetTop()
-	defer this.SetTop(top)
-	table := make(map[string]Pushable)
-	array := make(map[int]Pushable)
-	this.PushNil()
+func (this Lua) ForInDo(index int, proc func(Lua) error) error {
+	this.PushNil() // set first key as nil
 	if index < 0 {
 		index--
 	}
 	for this.Next(index) != 0 {
-		key, keyErr := this.ToPushable(-2)
-		if keyErr == nil {
-			val, valErr := this.ToPushable(-1)
-			if valErr != nil {
-				return nil, valErr
-			} else {
-				switch t := key.(type) {
-				case TString:
-					table[string(t)] = val
-				case TRawString:
-					table[string(t)] = val
-				case Integer:
-					array[int(t)] = val
-				case nil:
-					table[""] = val
-				}
-			}
-		}
+		// Next push KEY and VAL
+		err := proc(this)
+		/* removes 'value'; keeps 'key' for next iteration */
 		this.Pop(1)
+		if err != nil {
+			this.Pop(1)
+			return err
+		}
+		/*
+			While traversing a table, do not call lua_tolstring
+			directly on a key, unless you know that the key is
+			actually a string. Recall that lua_tolstring may
+			change the value at the given index; this confuses
+			the next call to lua_next.
+		*/
 	}
-	return &TTable{Dict: table, Array: array}, nil
+	return nil
+}
+
+func (this Lua) ToTable(index int) (*TTable, error) {
+	table := make(map[string]Pushable)
+	array := make(map[int]Pushable)
+
+	err := this.ForInDo(index, func(this Lua) error {
+		key, err := this.ToPushable(-2)
+		if err != nil {
+			return err
+		}
+		val, err := this.ToPushable(-1)
+		if err != nil {
+			return err
+		}
+		switch t := key.(type) {
+		case TString:
+			table[string(t)] = val
+		case TRawString:
+			table[string(t)] = val
+		case Integer:
+			array[int(t)] = val
+		case nil:
+			table[""] = val
+		}
+		return nil
+	})
+	return &TTable{Dict: table, Array: array}, err
 }
 
 type TBool struct {
@@ -323,22 +343,19 @@ func (this Lua) ToInterface(index int) (interface{}, error) {
 		return intValue, nil
 	case LUA_TTABLE:
 		table := map[interface{}]interface{}{}
-		index1 := index
-		this.PushNil()
-		if index1 < 0 {
-			index1--
-		}
-		for this.Next(index1) != 0 {
+		err := this.ForInDo(index, func(this Lua) error {
 			key, err := this.ToInterface(-2)
-			if err == nil {
-				val, err := this.ToInterface(-1)
-				if err == nil {
-					table[key] = val
-				}
+			if err != nil {
+				return err
 			}
-			this.Pop(1)
-		}
-		return table, nil
+			val, err := this.ToInterface(-1)
+			if err != nil {
+				return err
+			}
+			table[key] = val
+			return nil
+		})
+		return table, err
 	default:
 		return nil, fmt.Errorf("Not support Lua type %v", t)
 	}
