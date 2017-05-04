@@ -11,7 +11,7 @@ func (L Lua) CloneTo(newL Lua) error {
 		if err != nil {
 			return err
 		}
-		println("KEY=", key)
+		//println("KEY=", key)
 
 		// If new instance has already the member, pass it.
 		newL.GetGlobal(key)
@@ -19,12 +19,12 @@ func (L Lua) CloneTo(newL Lua) error {
 		if !newL.IsNil(-1) {
 			return nil
 		}
-		println("not found and copy")
+		//println("not found and copy")
 		val, err := src.ToPushable(-1)
 		if err != nil {
 			return err
 		}
-		println("push to new instance")
+		//println("push to new instance")
 		val.Push(newL)
 		newL.SetGlobal(key)
 		return nil
