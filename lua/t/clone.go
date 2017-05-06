@@ -23,9 +23,14 @@ func main() {
 
 	println("Setup first instance: done")
 
-	N, err := L.Clone()
+	n, err := L.Clone()
 	if err != nil {
 		println(err)
+		return
+	}
+	N, ok := n.(lua.Lua)
+	if !ok {
+		println("Cast fail interface{} to lua.Lua")
 		return
 	}
 	println("Cloning done")

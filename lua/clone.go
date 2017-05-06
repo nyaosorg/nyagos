@@ -32,7 +32,7 @@ func (L Lua) CloneTo(newL Lua) error {
 	return err
 }
 
-func (L Lua) Clone() (Lua, error) {
+func (L Lua) Clone() (interface{}, error) {
 	newL, err := New()
 	if err != nil {
 		return Lua(0), err
