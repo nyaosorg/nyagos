@@ -95,7 +95,7 @@ func (this Lua) PushCFunction(fn uintptr) {
 	lua_pushcclosure.Call(this.State(), fn, 0)
 }
 
-type Pushable interface {
+type Object interface {
 	Push(Lua) int
 }
 
@@ -134,7 +134,7 @@ func (this Lua) Push(values ...interface{}) int {
 			}
 		case unsafe.Pointer:
 			this.PushLightUserData(t)
-		case Pushable:
+		case Object:
 			t.Push(this)
 		default:
 			if !this.PushReflect(value) {

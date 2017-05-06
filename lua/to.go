@@ -140,7 +140,7 @@ func (this Lua) RawLen(index int) uintptr {
 }
 
 type MetaTableOwner struct {
-	Body Pushable
+	Body Object
 	Meta *TTable
 }
 
@@ -170,8 +170,8 @@ func (this *MetaTableOwner) Push(L Lua) int {
 }
 
 type TTable struct {
-	Dict  map[string]Pushable
-	Array map[int]Pushable
+	Dict  map[string]Object
+	Array map[int]Object
 }
 
 func (this TTable) PushWithoutNewTable(L Lua) int {
@@ -219,15 +219,15 @@ func (this Lua) ForInDo(index int, proc func(Lua) error) error {
 }
 
 func (this Lua) ToTable(index int) (*TTable, error) {
-	table := make(map[string]Pushable)
-	array := make(map[int]Pushable)
+	table := make(map[string]Object)
+	array := make(map[int]Object)
 
 	err := this.ForInDo(index, func(this Lua) error {
-		key, err := this.ToPushable(-2)
+		key, err := this.ToObject(-2)
 		if err != nil {
 			return err
 		}
-		val, err := this.ToPushable(-1)
+		val, err := this.ToObject(-1)
 		if err != nil {
 			return err
 		}
@@ -264,10 +264,10 @@ func (this TNil) Push(L Lua) int {
 
 var NG_UPVALUE_NAME = map[string]struct{}{}
 
-func (this Lua) ToPushable(index int) (Pushable, error) {
+func (this Lua) ToObject(index int) (Object, error) {
 	seek_metatable := false
 	var err error = nil
-	var result Pushable
+	var result Object
 	switch this.GetType(index) {
 	case LUA_TBOOLEAN:
 		result = TBool{this.ToBool(index)}

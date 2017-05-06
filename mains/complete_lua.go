@@ -10,7 +10,7 @@ import (
 	"../readline"
 )
 
-var completionHook lua.Pushable = lua.TNil{}
+var completionHook lua.Object = lua.TNil{}
 
 func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion.List, error) {
 	L, L_ok := this.Context.Value("lua").(lua.Lua)

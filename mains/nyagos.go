@@ -69,7 +69,7 @@ func nyagosPrompt(L lua.Lua) int {
 	return 1
 }
 
-var prompt_hook lua.Pushable = lua.TGoFunction(nyagosPrompt)
+var prompt_hook lua.Object = lua.TGoFunction(nyagosPrompt)
 
 func printPrompt(L lua.Lua) (int, error) {
 	L.Push(prompt_hook)
@@ -91,7 +91,7 @@ func printPrompt(L lua.Lua) (int, error) {
 	}
 }
 
-var luaFilter lua.Pushable = lua.TNil{}
+var luaFilter lua.Object = lua.TNil{}
 
 var optionK = flag.String("k", "", "like `cmd /k`")
 var optionC = flag.String("c", "", "like `cmd /c`")

@@ -161,7 +161,7 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 
 	this.L.Push(
 		lua.TTable{
-			Dict: map[string]lua.Pushable{
+			Dict: map[string]lua.Object{
 				"pos":         lua.Integer(pos),
 				"text":        lua.TString(text.String()),
 				"buffer":      lua.TLightUserData{Data: unsafe.Pointer(buffer)},
@@ -172,7 +172,7 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 				"firstword":   lua.TGoFunction(callFirstWord),
 				"boxprint":    lua.TGoFunction(callBoxListing),
 			},
-			Array: map[int]lua.Pushable{},
+			Array: map[int]lua.Object{},
 		})
 	if err := this.L.Call(1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)

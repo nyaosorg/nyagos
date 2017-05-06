@@ -20,7 +20,7 @@ func (L Lua) CloneTo(newL Lua) error {
 			return nil
 		}
 		//println("not found and copy")
-		val, err := src.ToPushable(-1)
+		val, err := src.ToObject(-1)
 		if err != nil {
 			return err
 		}

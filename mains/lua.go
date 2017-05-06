@@ -42,7 +42,7 @@ func NyagosCallLua(L lua.Lua, it *shell.Cmd, nargs int, nresult int) error {
 
 var orgArgHook func(*shell.Cmd, []string) ([]string, error)
 
-var luaArgsFilter lua.Pushable = lua.TNil{}
+var luaArgsFilter lua.Object = lua.TNil{}
 
 func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
 	L, ok := it.Tag.(lua.Lua)
@@ -85,7 +85,7 @@ func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
 
 var orgOnCommandNotFound func(*shell.Cmd, error) error
 
-var luaOnCommandNotFound lua.Pushable = lua.TNil{}
+var luaOnCommandNotFound lua.Object = lua.TNil{}
 
 func on_command_not_found(inte *shell.Cmd, err error) error {
 	L, ok := inte.Tag.(lua.Lua)
@@ -148,7 +148,7 @@ func setOption(L lua.Lua) int {
 	}
 }
 
-var nyagos_table_member map[string]lua.Pushable
+var nyagos_table_member map[string]lua.Object
 
 func getNyagosTable(L lua.Lua) int {
 	index, index_err := L.ToString(2)
@@ -189,7 +189,7 @@ func setNyagosTable(L lua.Lua) int {
 				return L.Push(true)
 			}
 		} else {
-			value, value_err := L.ToPushable(3)
+			value, value_err := L.ToObject(3)
 			if value_err != nil {
 				return L.Push(nil, value_err)
 			}
@@ -202,16 +202,16 @@ func setNyagosTable(L lua.Lua) int {
 	}
 }
 
-var share_table = map[string]lua.Pushable{}
+var share_table = map[string]lua.Object{}
 var share_table_generation = map[string]int{}
 
 func setMemberOfShareTable(L lua.Lua) int {
 	// table exists at [-3]
-	key, err := L.ToPushable(-2)
+	key, err := L.ToObject(-2)
 	if err != nil {
 		return L.Push(nil, err)
 	}
-	val, err := L.ToPushable(-1)
+	val, err := L.ToObject(-1)
 	if err != nil {
 		return L.Push(nil, err)
 	}
@@ -291,7 +291,7 @@ func setShareTable(L lua.Lua) int {
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
 	}
-	value, valErr := L.ToPushable(-1)
+	value, valErr := L.ToObject(-1)
 	if valErr != nil {
 		fmt.Fprintf(os.Stderr, "%s: %s\n", key, valErr.Error())
 		return L.Push(nil, valErr)
@@ -356,7 +356,7 @@ func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 }
 
 func init() {
-	nyagos_table_member = map[string]lua.Pushable{
+	nyagos_table_member = map[string]lua.Object{
 		"access": lua.TGoFunction(cmdAccess),
 		"alias": &lua.VirtualTable{
 			Name:     "nyagos.alias",
