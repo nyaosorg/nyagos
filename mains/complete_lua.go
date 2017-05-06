@@ -13,7 +13,7 @@ import (
 var completionHook lua.Object = lua.TNil{}
 
 func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion.List, error) {
-	L, L_ok := this.Context.Value("lua").(lua.Lua)
+	L, L_ok := this.Context.Value(lua.NoInstance).(lua.Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
 	}

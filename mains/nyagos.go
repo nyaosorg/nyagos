@@ -222,11 +222,10 @@ func Main() error {
 	quit := make(chan struct{}, 1)
 	defer close(quit)
 
+	ctx, cancel := context.WithCancel(context.Background())
+	ctx = context.WithValue(ctx, lua.NoInstance, L)
+	ctx = context.WithValue(ctx, "history", default_history)
 	for {
-		ctx, cancel := context.WithCancel(context.Background())
-		ctx = context.WithValue(ctx, "lua", L)
-		ctx = context.WithValue(ctx, "history", default_history)
-
 		line, err := command_reader.ReadLine(ctx)
 
 		if err != nil {
