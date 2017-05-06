@@ -295,16 +295,13 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			if DBG {
 				print(i, ": pipeline loop(", state.Args[0], ")\n")
 			}
-			cmd := new(Cmd)
+			cmd, err := this.Clone()
+			if err != nil {
+				return 255, err
+			}
 			cmd.PipeSeq[0] = pipeSeq
 			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
-			cmd.Tag = this.Tag
-			cmd.HookCount = this.HookCount
-			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
-			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
-			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
-			cmd.OnClone = this.OnClone
 
 			ctx := context.WithValue(ctx_, "gotoeol", func() {
 				shutdown_immediately = true
