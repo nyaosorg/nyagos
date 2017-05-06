@@ -1,6 +1,7 @@
 package mains
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"reflect"
@@ -44,11 +45,10 @@ var orgArgHook func(*shell.Cmd, []string) ([]string, error)
 var luaArgsFilter lua.Pushable = lua.TNil{}
 
 func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
-	L, err := NewLua()
-	if err != nil {
-		return nil, err
+	L, ok := it.Tag.(lua.Lua)
+	if !ok {
+		return nil, errors.New("Could not get lua instance(newArgHook)")
 	}
-	defer L.Close()
 	L.Push(luaArgsFilter)
 	if !L.IsFunction(-1) {
 		return orgArgHook(it, args)
@@ -88,11 +88,10 @@ var orgOnCommandNotFound func(*shell.Cmd, error) error
 var luaOnCommandNotFound lua.Pushable = lua.TNil{}
 
 func on_command_not_found(inte *shell.Cmd, err error) error {
-	L, err := NewLua()
-	if err != nil {
-		return err
+	L, ok := inte.Tag.(lua.Lua)
+	if !ok {
+		return errors.New("Could get lua instance(on_command_not_found)")
 	}
-	defer L.Close()
 
 	L.Push(luaOnCommandNotFound)
 	if !L.IsFunction(-1) {

@@ -2,6 +2,7 @@ package mains
 
 import (
 	"context"
+	"errors"
 	"flag"
 	"fmt"
 	"io"
@@ -92,17 +93,6 @@ func printPrompt(L lua.Lua) (int, error) {
 
 var luaFilter lua.Pushable = lua.TNil{}
 
-func itprCloneHook(this *shell.Cmd) error {
-	LL, err := NewLua()
-	if err != nil {
-		return err
-	}
-	this.Tag = LL
-	this.OnClone = itprCloneHook
-	this.Closers = append(this.Closers, LL)
-	return nil
-}
-
 var optionK = flag.String("k", "", "like `cmd /k`")
 var optionC = flag.String("c", "", "like `cmd /c`")
 var optionF = flag.String("f", "", "run lua script")
@@ -145,6 +135,32 @@ func doLuaFilter(L lua.Lua, line string) string {
 	return line2
 }
 
+func onFork(cmd *shell.Cmd) error {
+	L, ok := cmd.Tag.(lua.Lua)
+	if !ok {
+		return errors.New("could not get lua instance")
+	}
+	newL, err := NewLua()
+	if err != nil {
+		return err
+	}
+	err = L.CloneTo(newL)
+	if err != nil {
+		return err
+	}
+	cmd.Tag = newL
+	return nil
+}
+
+func offFork(cmd *shell.Cmd) error {
+	L, ok := cmd.Tag.(lua.Lua)
+	if !ok {
+		return errors.New("could not get lua instance")
+	}
+	L.Close()
+	return nil
+}
+
 func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
@@ -180,8 +196,8 @@ func Main() error {
 
 	it := shell.New()
 	it.Tag = L
-	it.OnClone = itprCloneHook
-	it.Closers = append(it.Closers, L)
+	it.OnFork = onFork
+	it.OffFork = offFork
 
 	if err := loadScripts(it, L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())

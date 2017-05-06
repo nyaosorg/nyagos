@@ -223,10 +223,7 @@ func cmdExec(L lua.Lua) int {
 		if it == nil {
 			println("main/lua_cmd.go: cmdExec: not found interpreter object")
 			it = shell.New()
-			// L := NewNyagosLua()
 			it.Tag = L
-			it.Closers = append(it.Closers, L)
-			it.OnClone = itprCloneHook
 		} else {
 			it, err = it.Clone()
 			if err != nil {
