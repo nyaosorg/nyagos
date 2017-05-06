@@ -18,6 +18,10 @@ func (value Integer) Push(L Lua) int {
 
 type Lua uintptr
 
+const (
+	NoInstance Lua = 0
+)
+
 var luaL_newstate = luaDLL.NewProc("luaL_newstate")
 
 func New() (Lua, error) {
