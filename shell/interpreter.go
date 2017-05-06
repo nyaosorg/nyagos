@@ -49,6 +49,8 @@ type Cmd struct {
 	IsBackGround bool
 	RawArgs      []string
 
+	OnFork  func(*Cmd) error
+	OffFork func(*Cmd) error
 	OnClone func(*Cmd) error
 	Closers []io.Closer
 }
@@ -75,7 +77,6 @@ func New() *Cmd {
 	this.Stderr = os.Stderr
 	this.PipeSeq[0] = pipeSeq
 	this.PipeSeq[1] = 0
-	this.Tag = nil
 	return &this
 }
 
@@ -107,6 +108,8 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv.PipeSeq = this.PipeSeq
 	rv.Closers = nil
 	rv.OnClone = this.OnClone
+	rv.OnFork = this.OnFork
+	rv.OffFork = this.OffFork
 	if this.OnClone != nil {
 		if err := this.OnClone(rv); err != nil {
 			return nil, err
@@ -370,7 +373,20 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 					} else {
 						defer wg.Done()
 					}
+					if cmd1.OnFork != nil {
+						if err := cmd1.OnFork(cmd1); err != nil {
+							fmt.Fprintln(cmd1.Stderr, err.Error())
+							goto exit
+						}
+					}
 					cmd1.SpawnvpContext(ctx)
+					if cmd1.OffFork != nil {
+						if err := cmd1.OffFork(cmd1); err != nil {
+							fmt.Fprintln(cmd1.Stderr, err.Error())
+							goto exit
+						}
+					}
+				exit:
 					cmd1.Close()
 				}(cmd)
 			}
