@@ -303,7 +303,6 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 					gotoeol()
 				}
 			})
-			ctx = context.WithValue(ctx, "errorlevel", LastErrorLevel)
 
 			if pipeIn != nil {
 				cmd.SetStdin(pipeIn)
