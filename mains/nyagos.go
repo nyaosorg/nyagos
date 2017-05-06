@@ -224,7 +224,7 @@ func Main() error {
 
 	ctx, cancel := context.WithCancel(context.Background())
 	ctx = context.WithValue(ctx, lua.NoInstance, L)
-	ctx = context.WithValue(ctx, "history", default_history)
+	ctx = context.WithValue(ctx, history.NoInstance, default_history)
 	for {
 		line, err := command_reader.ReadLine(ctx)
 
