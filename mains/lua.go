@@ -44,7 +44,7 @@ var orgArgHook func(*shell.Cmd, []string) ([]string, error)
 var luaArgsFilter lua.Pushable = lua.TNil{}
 
 func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
-	L, err := NewNyagosLua()
+	L, err := NewLua()
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ var orgOnCommandNotFound func(*shell.Cmd, error) error
 var luaOnCommandNotFound lua.Pushable = lua.TNil{}
 
 func on_command_not_found(inte *shell.Cmd, err error) error {
-	L, err := NewNyagosLua()
+	L, err := NewLua()
 	if err != nil {
 		return err
 	}
@@ -304,7 +304,7 @@ func setShareTable(L lua.Lua) int {
 
 var hook_setuped = false
 
-func NewNyagosLua() (lua.Lua, error) {
+func NewLua() (lua.Lua, error) {
 	this, err := lua.New()
 	if err != nil {
 		return this, err

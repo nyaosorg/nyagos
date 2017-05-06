@@ -93,7 +93,7 @@ func printPrompt(L lua.Lua) (int, error) {
 var luaFilter lua.Pushable = lua.TNil{}
 
 func itprCloneHook(this *shell.Cmd) error {
-	LL, err := NewNyagosLua()
+	LL, err := NewLua()
 	if err != nil {
 		return err
 	}
@@ -168,7 +168,7 @@ func Main() error {
 	alias.Init()
 
 	// Lua extension
-	L, err := NewNyagosLua()
+	L, err := NewLua()
 	if err != nil {
 		return err
 	}
