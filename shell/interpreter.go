@@ -51,7 +51,6 @@ type Cmd struct {
 
 	OnFork  func(*Cmd) error
 	OffFork func(*Cmd) error
-	OnClone func(*Cmd) error
 	Closers []io.Closer
 }
 
@@ -107,14 +106,8 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv.Tag = this.Tag
 	rv.PipeSeq = this.PipeSeq
 	rv.Closers = nil
-	rv.OnClone = this.OnClone
 	rv.OnFork = this.OnFork
 	rv.OffFork = this.OffFork
-	if this.OnClone != nil {
-		if err := this.OnClone(rv); err != nil {
-			return nil, err
-		}
-	}
 	return rv, nil
 }
 
@@ -311,11 +304,6 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 				}
 			})
 			ctx = context.WithValue(ctx, "errorlevel", LastErrorLevel)
-			if this.OnClone != nil {
-				if err := this.OnClone(cmd); err != nil {
-					return 255, err
-				}
-			}
 
 			if pipeIn != nil {
 				cmd.SetStdin(pipeIn)
