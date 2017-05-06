@@ -63,7 +63,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		subCmd.RawArgs = cmd.RawArgs[start:]
 		return subCmd.SpawnvpContext(ctx)
 	} else {
-		gotoeol, ok := ctx.Value("gotoeol").(func())
+		gotoeol, ok := ctx.Value(shell.GotoEol).(func())
 		if !ok {
 			return -1, errors.New("if: could not get context.Value(\"gotoeol\")")
 		}

@@ -230,6 +230,10 @@ func (this *Cmd) Interpret(text string) (int, error) {
 	return this.InterpretContext(context.Background(), text)
 }
 
+type gotoEol struct{}
+
+var GotoEol = gotoEol{}
+
 func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
 	if DBG {
 		print("Interpret('", text, "')\n")
@@ -296,9 +300,9 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
 
-			ctx := context.WithValue(ctx_, "gotoeol", func() {
+			ctx := context.WithValue(ctx_, GotoEol, func() {
 				shutdown_immediately = true
-				gotoeol, ok := ctx_.Value("gotoeol").(func())
+				gotoeol, ok := ctx_.Value(GotoEol).(func())
 				if ok {
 					gotoeol()
 				}
