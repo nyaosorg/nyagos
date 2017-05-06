@@ -8,7 +8,6 @@ import (
 
 	"../completion"
 	"../shell"
-	"../text"
 )
 
 var dbg = false
@@ -94,7 +93,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 		print("done cmd.Clone\n")
 	}
 
-	arg1 := text.QuotedFirstWord(cmdline)
+	arg1 := shell.QuotedFirstWord(cmdline)
 	if strings.EqualFold(arg1, cmd.Args[0]) {
 		it.HookCount = 100
 	} else {

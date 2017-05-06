@@ -11,7 +11,7 @@ import (
 
 	"../lua"
 	"../readline"
-	"../text"
+	"../shell"
 )
 
 type KeyLuaFuncT struct {
@@ -106,7 +106,7 @@ func callFirstWord(L lua.Lua) int {
 	if this == nil {
 		return stack_count
 	}
-	word := text.QuotedFirstWord(this.String())
+	word := shell.QuotedFirstWord(this.String())
 	return L.Push(word, 0)
 }
 
