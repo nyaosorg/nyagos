@@ -24,8 +24,7 @@ const OBJECT_T = "OLE_OBJECT"
 const METHOD_T = "OLE_METHOD"
 
 func (this capsule_t) Push(L lua.Lua) int {
-	p := (*capsule_t)(L.NewUserData(unsafe.Sizeof(this)))
-	p.Data = this.Data
+	L.NewUserDataFrom(unsafe.Pointer(&this), unsafe.Sizeof(this))
 	L.NewMetaTable(OBJECT_T)
 	L.PushGoFunction(gc)
 	L.SetField(-2, "__gc")
@@ -193,9 +192,10 @@ func index(L lua.Lua) int {
 	case "_get":
 		return L.Push(get, nil)
 	default:
-		var method1 *method_t
-		method1 = (*method_t)(L.NewUserData(unsafe.Sizeof(*method1)))
-		method1.Name = name
+		from := method_t{
+			Name: name,
+		}
+		L.NewUserDataFrom(unsafe.Pointer(&from), unsafe.Sizeof(from))
 		L.NewMetaTable(METHOD_T)
 		L.PushGoFunction(call2)
 		L.SetField(-2, "__call")

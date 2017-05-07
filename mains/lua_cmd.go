@@ -805,13 +805,14 @@ func cmdLines(L lua.Lua) int {
 	top := L.GetTop()
 	if top < 1 || L.IsNil(1) {
 		L.Push(cmdLinesCallback)
-		var userdata *iolines_t
-		userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
 		cmd := getRegInt(L)
-		userdata.Fd = cmd.Stdio[0]
-		userdata.Reader = bufio.NewReader(cmd.Stdio[0])
-		userdata.HasToClose = false
-		userdata.Marks = []string{"l"}
+		userdata := iolines_t{
+			Fd:         cmd.Stdio[0],
+			Reader:     bufio.NewReader(cmd.Stdio[0]),
+			HasToClose: false,
+			Marks:      []string{"l"},
+		}
+		L.NewUserDataFrom(unsafe.Pointer(&userdata), unsafe.Sizeof(userdata))
 		return 2
 	}
 	path, path_err := L.ToString(1)
@@ -836,12 +837,13 @@ func cmdLines(L lua.Lua) int {
 		return L.Push(nil, fd_err.Error())
 	}
 	L.Push(cmdLinesCallback)
-	var userdata *iolines_t
-	userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
-	userdata.Fd = fd
-	userdata.Reader = bufio.NewReader(fd)
-	userdata.Marks = marks
-	userdata.HasToClose = true
+	userdata := iolines_t{
+		Fd:         fd,
+		Reader:     bufio.NewReader(fd),
+		Marks:      marks,
+		HasToClose: true,
+	}
+	L.NewUserDataFrom(unsafe.Pointer(&userdata), unsafe.Sizeof(userdata))
 	L.NewTable()
 	L.Push(iolines_t_gc)
 	L.SetField(-2, "__gc")

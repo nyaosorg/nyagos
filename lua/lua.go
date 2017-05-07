@@ -103,9 +103,14 @@ func (this Lua) Pop(n uint) {
 
 var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
 
-func (this Lua) NewUserData(size uintptr) unsafe.Pointer {
+func (this Lua) NewUserData(size uintptr) uintptr {
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
-	return unsafe.Pointer(area)
+	return area
+}
+
+func (this Lua) NewUserDataFrom(p unsafe.Pointer, size uintptr) {
+	area, _, _ := lua_newuserdata.Call(this.State(), size)
+	copyMemory(area, uintptr(p), size)
 }
 
 var lua_rawset = luaDLL.NewProc("lua_rawset")
