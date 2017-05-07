@@ -2,7 +2,6 @@ package goluaole
 
 import (
 	"errors"
-	"unsafe"
 
 	lua "../../lua"
 
@@ -24,7 +23,7 @@ const OBJECT_T = "OLE_OBJECT"
 const METHOD_T = "OLE_METHOD"
 
 func (this capsule_t) Push(L lua.Lua) int {
-	L.NewUserDataFrom(unsafe.Pointer(&this), unsafe.Sizeof(this))
+	L.PushUserData(&this)
 	L.NewMetaTable(OBJECT_T)
 	L.PushGoFunction(gc)
 	L.SetField(-2, "__gc")
@@ -192,10 +191,7 @@ func index(L lua.Lua) int {
 	case "_get":
 		return L.Push(get, nil)
 	default:
-		from := method_t{
-			Name: name,
-		}
-		L.NewUserDataFrom(unsafe.Pointer(&from), unsafe.Sizeof(from))
+		L.PushUserData(&method_t{Name: name})
 		L.NewMetaTable(METHOD_T)
 		L.PushGoFunction(call2)
 		L.SetField(-2, "__call")

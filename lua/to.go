@@ -117,9 +117,7 @@ func (this TLightUserData) Push(L Lua) int {
 type TFullUserData []byte
 
 func (this TFullUserData) Push(L Lua) int {
-	size := len([]byte(this))
-	p := L.NewUserData(uintptr(size))
-	copyMemory(p, uintptr(unsafe.Pointer(&this[0])), uintptr(size))
+	L.NewUserDataFrom(unsafe.Pointer(&this[0]), uintptr(len([]byte(this))))
 	return 1
 }
 

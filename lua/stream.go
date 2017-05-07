@@ -2,7 +2,6 @@ package lua
 
 import (
 	"syscall"
-	"unsafe"
 
 	"github.com/zetamatta/go-ansicfile"
 )
@@ -13,11 +12,10 @@ type stream_t struct {
 }
 
 func (this Lua) pushStream(fd ansicfile.FilePtr, closer func(Lua) int) {
-	from := stream_t{
+	this.PushUserData(&stream_t{
 		FilePtr: fd,
 		Closer:  syscall.NewCallbackCDecl(closer),
-	}
-	this.NewUserDataFrom(unsafe.Pointer(&from), unsafe.Sizeof(from))
+	})
 	this.GetField(LUA_REGISTRYINDEX, LUA_FILEHANDLE) // metatable
 	this.SetMetaTable(-2)
 }
