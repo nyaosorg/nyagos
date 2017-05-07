@@ -3,6 +3,7 @@ package lua
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"syscall"
 	"unsafe"
 )
@@ -111,6 +112,13 @@ func (this Lua) NewUserData(size uintptr) uintptr {
 func (this Lua) NewUserDataFrom(p unsafe.Pointer, size uintptr) {
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
 	copyMemory(area, uintptr(p), size)
+}
+
+func (this Lua) PushUserData(p interface{}) {
+	value := reflect.ValueOf(p)
+	size := value.Type().Elem().Size()
+	area, _, _ := lua_newuserdata.Call(this.State(), size)
+	copyMemory(area, value.Pointer(), size)
 }
 
 var lua_rawset = luaDLL.NewProc("lua_rawset")
