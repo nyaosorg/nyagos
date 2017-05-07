@@ -21,14 +21,5 @@ func CGoStringN(p, length uintptr) string {
 }
 
 func CGoStringZ(p uintptr) string {
-	result := make([]byte, 0)
-	for {
-		c := *(*byte)(unsafe.Pointer(p))
-		if c == 0 {
-			break
-		}
-		result = append(result, c)
-		p++
-	}
-	return string(result)
+	return CGoStringN(p, strLen(p))
 }
