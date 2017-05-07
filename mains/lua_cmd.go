@@ -15,7 +15,6 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
-	"unsafe"
 
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
@@ -715,7 +714,9 @@ func (this *iolines_t) Ok() bool {
 }
 
 func iolines_t_gc(L lua.Lua) int {
-	userdata := (*iolines_t)(L.ToUserData(1))
+	userdata := iolines_t{}
+	sync := L.ToUserDataTo(1, &userdata)
+	defer sync()
 	// print("iolines_t_gc: gc\n")
 	if !userdata.Ok() {
 		// print("iolines_t_gc: nil\n")
@@ -726,7 +727,10 @@ func iolines_t_gc(L lua.Lua) int {
 }
 
 func cmdLinesCallback(L lua.Lua) int {
-	userdata := (*iolines_t)(L.ToUserData(1))
+	userdata := iolines_t{}
+	sync := L.ToUserDataTo(1, &userdata)
+	defer sync()
+
 	if !userdata.Ok() {
 		// print("cmdLinesCallback: nil\n")
 		return L.Push(nil)
@@ -806,13 +810,12 @@ func cmdLines(L lua.Lua) int {
 	if top < 1 || L.IsNil(1) {
 		L.Push(cmdLinesCallback)
 		cmd := getRegInt(L)
-		userdata := iolines_t{
+		L.PushUserData(&iolines_t{
 			Fd:         cmd.Stdio[0],
 			Reader:     bufio.NewReader(cmd.Stdio[0]),
 			HasToClose: false,
 			Marks:      []string{"l"},
-		}
-		L.NewUserDataFrom(unsafe.Pointer(&userdata), unsafe.Sizeof(userdata))
+		})
 		return 2
 	}
 	path, path_err := L.ToString(1)
@@ -843,7 +846,7 @@ func cmdLines(L lua.Lua) int {
 		Marks:      marks,
 		HasToClose: true,
 	}
-	L.NewUserDataFrom(unsafe.Pointer(&userdata), unsafe.Sizeof(userdata))
+	L.PushUserData(&userdata)
 	L.NewTable()
 	L.Push(iolines_t_gc)
 	L.SetField(-2, "__gc")
