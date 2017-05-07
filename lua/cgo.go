@@ -9,10 +9,7 @@ func CGoBytes(p, length uintptr) []byte {
 		return []byte{}
 	}
 	buffer := make([]byte, length)
-	for i := uintptr(0); i < length; i++ {
-		buffer[i] = *(*byte)(unsafe.Pointer(p))
-		p++
-	}
+	copyMemory(uintptr(unsafe.Pointer(&buffer[0])), p, length)
 	return buffer
 }
 
