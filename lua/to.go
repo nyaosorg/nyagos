@@ -3,6 +3,7 @@ package lua
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"unsafe"
 )
 
@@ -57,6 +58,17 @@ var lua_touserdata = luaDLL.NewProc("lua_touserdata")
 func (this Lua) ToUserData(index int) unsafe.Pointer {
 	rv, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
 	return unsafe.Pointer(rv)
+}
+
+func (this Lua) ToUserDataTo(index int, p interface{}) func() {
+	value := reflect.ValueOf(p)
+	size := value.Type().Elem().Size()
+	src, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
+	dst := value.Pointer()
+	copyMemory(dst, src, size)
+	return func() {
+		copyMemory(src, dst, size)
+	}
 }
 
 var lua_toboolean = luaDLL.NewProc("lua_toboolean")

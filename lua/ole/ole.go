@@ -34,7 +34,9 @@ func (this capsule_t) Push(L lua.Lua) int {
 }
 
 func gc(L lua.Lua) int {
-	p := (*capsule_t)(L.ToUserData(1))
+	p := capsule_t{}
+	sync := L.ToUserDataTo(1, &p)
+	defer sync()
 	if p.Data != nil {
 		p.Data.Release()
 		p.Data = nil
