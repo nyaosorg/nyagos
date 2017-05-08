@@ -53,6 +53,14 @@ var ErrCtrlC = errors.New("C-c")
 
 func (this fileInfoT) Name() string { return this.name }
 
+func putFlag(value, flag uint32, c string, out io.Writer) {
+	if (value & flag) != 0 {
+		io.WriteString(out, c)
+	} else {
+		io.WriteString(out, "-")
+	}
+}
+
 func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Writer) {
 	indicator := " "
 	prefix := ""
@@ -76,11 +84,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	name := status.Name()
 	attr := findfile.GetFileAttributes(status)
 
-	if (perm & 4) > 0 {
-		io.WriteString(out, "r")
-	} else {
-		io.WriteString(out, "-")
-	}
+	putFlag(uint32(perm), 4, "r", out)
 	if (perm & 2) > 0 {
 		io.WriteString(out, "w")
 	} else {
@@ -102,6 +106,10 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	} else {
 		io.WriteString(out, "-")
 	}
+	putFlag(attr, dos.FILE_ATTRIBUTE_ARCHIVE, "a", out)
+	putFlag(attr, dos.FILE_ATTRIBUTE_SYSTEM, "s", out)
+	putFlag(attr, dos.FILE_ATTRIBUTE_HIDDEN, "h", out)
+
 	if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
 		(flag&O_COLOR) != 0 {
 		prefix = ANSI_HIDDEN
