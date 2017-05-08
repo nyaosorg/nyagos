@@ -304,12 +304,11 @@ func (this Lua) NewThread() Lua {
 }
 
 func callback_writer(L, p, sz, ud uintptr) uintptr {
-	var buffer []byte
-	copyMemory(uintptr(unsafe.Pointer(&buffer)), ud, unsafe.Sizeof(buffer))
-	tmp := make([]byte, sz)
-	copyMemory(uintptr(unsafe.Pointer(&tmp[0])), p, sz)
-	buffer = append(buffer, tmp...)
-	copyMemory(ud, uintptr(unsafe.Pointer(&buffer)), unsafe.Sizeof(buffer))
+	buffer := (*[]byte)(unsafe.Pointer(ud))
+	for i := uintptr(0); i < sz; i++ {
+		*buffer = append(*buffer, *(*byte)(unsafe.Pointer(p)))
+		p++
+	}
 	return 0
 }
 
