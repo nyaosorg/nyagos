@@ -1,8 +1,6 @@
 package goluaole
 
 import (
-	"errors"
-
 	lua "../../lua"
 
 	ole "github.com/go-ole/go-ole"
@@ -55,14 +53,10 @@ func lua2interface(L lua.Lua, index int) (interface{}, error) {
 		num, num_err := L.ToInteger(index)
 		return num, num_err
 	case lua.LUA_TUSERDATA:
-		data, data_err := L.TestUData(index, OBJECT_T)
-		if data_err != nil {
-			return nil, data_err
+		var val capsule_t
+		if _, err := L.TestUDataTo(index, OBJECT_T, &val); err != nil {
+			return nil, err
 		}
-		if data == nil {
-			return nil, errors.New("Not A OLE-Object")
-		}
-		val := (*capsule_t)(data)
 		return val.Data, nil
 	case lua.LUA_TBOOLEAN:
 		return L.ToBool(index), nil
@@ -83,37 +77,34 @@ func lua2interfaceS(L lua.Lua, start, end int) ([]interface{}, error) {
 
 // this:_call("METHODNAME",params...)
 func call1(L lua.Lua) int {
-	p, p_err := (L.TestUData(1, OBJECT_T))
-	if p_err != nil {
-		return L.Push(nil, p_err)
-	}
-	if p == nil {
-		return L.Push(nil, "OLEOBJECT._call: the receiver is null")
+	var p capsule_t
+	if _, err := L.TestUDataTo(1, OBJECT_T, &p); err != nil {
+		return L.Push(nil, err)
 	}
 	name, name_err := L.ToString(2)
 	if name_err != nil {
 		return L.Push(nil, name_err)
 	}
-	return call_common(L, ((*capsule_t)(p)).Data, name)
+	return call_common(L, p.Data, name)
 }
 
 // this:METHODNAME(params...)
 func call2(L lua.Lua) int {
-	m, m_err := L.TestUData(1, METHOD_T)
-	if m_err != nil {
-		return L.Push(nil, m_err)
+	var m method_t
+	if _, err := L.TestUDataTo(1, METHOD_T, &m); err != nil {
+		return L.Push(nil, err)
 	}
-	if m == nil || ((*method_t)(m)).Name == "" {
+	if m.Name == "" {
 		return L.Push(nil, "OLEOBJECT(): the method is null")
 	}
-	p, p_err := L.TestUData(2, OBJECT_T)
-	if p_err != nil {
-		return L.Push(nil, p_err)
+	var p capsule_t
+	if _, err := L.TestUDataTo(2, OBJECT_T, &p); err != nil {
+		return L.Push(nil, err)
 	}
-	if p == nil || ((*capsule_t)(p)).Data == nil {
+	if p.Data == nil {
 		return L.Push(nil, "OLEOBJECT(): the receiver is null")
 	}
-	return call_common(L, ((*capsule_t)(p)).Data, ((*method_t)(m)).Name)
+	return call_common(L, p.Data, m.Name)
 }
 
 func call_common(L lua.Lua, com1 *ole.IDispatch, name string) int {
@@ -134,12 +125,9 @@ func call_common(L lua.Lua, com1 *ole.IDispatch, name string) int {
 }
 
 func set(L lua.Lua) int {
-	p, p_err := (L.TestUData(1, OBJECT_T))
-	if p_err != nil {
-		return L.Push(nil, p_err)
-	}
-	if p == nil {
-		return L.Push(nil, "OLEOBJECT._set: the receiver is null")
+	var p capsule_t
+	if _, err := L.TestUDataTo(1, OBJECT_T, &p); err != nil {
+		return L.Push(nil, err)
 	}
 	name, name_err := L.ToString(2)
 	if name_err != nil {
@@ -149,17 +137,14 @@ func set(L lua.Lua) int {
 	if key_err != nil {
 		return L.Push(nil, key_err)
 	}
-	oleutil.PutProperty(((*capsule_t)(p)).Data, name, key...)
+	oleutil.PutProperty(p.Data, name, key...)
 	return L.Push(true, nil)
 }
 
 func get(L lua.Lua) int {
-	p, p_err := L.TestUData(1, OBJECT_T)
-	if p_err != nil {
-		return L.Push(nil, p_err)
-	}
-	if p == nil {
-		return L.Push(nil, "OLEOBJECT._set: the receiver is null")
+	var p capsule_t
+	if _, err := L.TestUDataTo(1, OBJECT_T, &p); err != nil {
+		return L.Push(nil, err)
 	}
 	name, name_err := L.ToString(2)
 	if name_err != nil {
@@ -169,7 +154,7 @@ func get(L lua.Lua) int {
 	if key_err != nil {
 		return L.Push(nil, key_err)
 	}
-	result, result_err := oleutil.GetProperty(((*capsule_t)(p)).Data, name, key...)
+	result, result_err := oleutil.GetProperty(p.Data, name, key...)
 	if result_err != nil {
 		return L.Push(nil, result_err)
 	}

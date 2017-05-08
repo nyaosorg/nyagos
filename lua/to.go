@@ -60,11 +60,15 @@ func (this Lua) ToUserData(index int) unsafe.Pointer {
 	return unsafe.Pointer(rv)
 }
 
-func (this Lua) ToUserDataTo(index int, p interface{}) func() {
+func PtrAndSize(p interface{}) (uintptr, uintptr) {
 	value := reflect.ValueOf(p)
 	size := value.Type().Elem().Size()
+	return value.Pointer(), size
+}
+
+func (this Lua) ToUserDataTo(index int, p interface{}) func() {
 	src, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
-	dst := value.Pointer()
+	dst, size := PtrAndSize(p)
 	copyMemory(dst, src, size)
 	return func() {
 		copyMemory(src, dst, size)
