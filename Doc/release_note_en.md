@@ -13,6 +13,7 @@ English / [Japanese](release_note_ja.md)
 * Fix Ctrl-O (filename-completion) causes panic. (#204)
 * New lua-function: `nyagos.box()`
 * Change the timing of making new instance, and the scope of copying (#210,#208)
+* `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
 
 NYAGOS 4.1.9\_2
 ===============

@@ -41,6 +41,11 @@ assigned on .nyagos but `share[]`. You can use share[] as you like.
 Only the member of the table `share[]` are shared on all Lua-instances 
 of nyagos.
 
+### `nyagos.completion_hidden = (bool)`
+
+If it is set true, on filename completion, hidden files are also included
+completion list.
+
 ### `nyagos.env.NAME`
 
 It is linked to the the environment variable, which are able 
