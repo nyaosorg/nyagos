@@ -15,6 +15,8 @@ const (
 	OPT_SLASH = "/"
 )
 
+var IncludeHidden = false
+
 var rxEnvPattern = regexp.MustCompile("%[^%]+%")
 
 func replaceEnv(str string) string {
@@ -58,7 +60,10 @@ func listUpFiles(str string) ([]Element, error) {
 	commons := make([]Element, 0)
 	STR := strings.ToUpper(str)
 	fdErr := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
-		if fd.Name() == "." || fd.Name() == ".." || fd.IsHidden() {
+		if fd.Name() == "." || fd.Name() == ".." {
+			return true
+		}
+		if !IncludeHidden && fd.IsHidden() {
 			return true
 		}
 		listname := fd.Name()
