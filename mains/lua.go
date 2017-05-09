@@ -8,6 +8,7 @@ import (
 	"runtime"
 	"unsafe"
 
+	"../completion"
 	"../history"
 	"../lua"
 	ole "../lua/ole"
@@ -369,15 +370,16 @@ func init() {
 			Name:     "nyagos.key",
 			Index:    cmdGetBindKey,
 			NewIndex: cmdBindKey},
-		"bindkey":         lua.TGoFunction(cmdBindKey),
-		"box":             lua.TGoFunction(lua2cmd(cmdBox)),
-		"chdir":           lua.TGoFunction(lua2cmd(cmdChdir)),
-		"commit":          lua.StringProperty{&Commit},
-		"commonprefix":    lua.TGoFunction(cmdCommonPrefix),
-		"completion_hook": lua.Property{&completionHook},
-		"create_object":   lua.TGoFunction(ole.CreateObject),
-		"default_prompt":  lua.TGoFunction(nyagosPrompt),
-		"elevated":        lua.TGoFunction(lua2cmd(cmdElevated)),
+		"bindkey":           lua.TGoFunction(cmdBindKey),
+		"box":               lua.TGoFunction(lua2cmd(cmdBox)),
+		"chdir":             lua.TGoFunction(lua2cmd(cmdChdir)),
+		"commit":            lua.StringProperty{&Commit},
+		"commonprefix":      lua.TGoFunction(cmdCommonPrefix),
+		"completion_hook":   lua.Property{&completionHook},
+		"completion_hidden": lua.BoolProperty{&completion.IncludeHidden},
+		"create_object":     lua.TGoFunction(ole.CreateObject),
+		"default_prompt":    lua.TGoFunction(nyagosPrompt),
+		"elevated":          lua.TGoFunction(lua2cmd(cmdElevated)),
 		"env": &lua.VirtualTable{
 			Name:     "nyagos.env",
 			Index:    cmdGetEnv,
