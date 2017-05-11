@@ -97,6 +97,7 @@ var optionK = flag.String("k", "", "like `cmd /k`")
 var optionC = flag.String("c", "", "like `cmd /c`")
 var optionF = flag.String("f", "", "run lua script")
 var optionE = flag.String("e", "", "run inline-lua-code")
+var optionB = flag.String("b", "", "run code encoded base64")
 
 var appdatapath_ string
 
@@ -190,7 +191,7 @@ func Main() error {
 	}
 	defer L.Close()
 
-	if !isatty.IsTerminal(os.Stdin.Fd()) || *optionC != "" || *optionF != "" || *optionE != "" {
+	if !isatty.IsTerminal(os.Stdin.Fd()) || *optionC != "" || *optionF != "" || *optionE != "" || *optionB != "" {
 		silentmode = true
 	}
 

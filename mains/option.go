@@ -2,6 +2,7 @@ package mains
 
 import (
 	"bufio"
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"os"
@@ -30,6 +31,17 @@ func optionParse(it *shell.Cmd, L lua.Lua) bool {
 	}
 	if *optionC != "" {
 		it.Interpret(*optionC)
+		result = false
+	}
+	if *optionB != "" {
+		data, err := base64.StdEncoding.DecodeString(*optionB)
+		if err != nil {
+			fmt.Fprintln(it.Stderr, err)
+			return false
+		} else {
+			text := string(data)
+			it.Interpret(text)
+		}
 		result = false
 	}
 	if *optionF != "" {
