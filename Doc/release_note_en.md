@@ -14,6 +14,7 @@ English / [Japanese](release_note_ja.md)
 * New lua-function: `nyagos.box()`
 * Change the timing of making new instance, and the scope of copying (#210,#208)
 * `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
+* Support `-b BASE64edCOMMANDSTRING` as startup option (#200)
 
 NYAGOS 4.1.9\_2
 ===============
