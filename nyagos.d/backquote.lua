@@ -1,12 +1,7 @@
-share.org_backquote_filter = nyagos.filter
-nyagos.filter = function(cmdline)
-    if nyagos.org_backquote_filter then
-        local cmdline_ = share.org_backquote_filter(cmdline)
-        if cmdline_ then
-            cmdline = cmdline_
-        end
-    end
-    return string.gsub(cmdline,'`([^`]*)`',function(m)
+backquote = {
+    org = nyagos.filter,
+    replace = function(m)
+        m = string.sub(m,2,string.len(m)-1)
         local r = nyagos.eval(m)
         if not r then
             return false
@@ -16,5 +11,17 @@ nyagos.filter = function(cmdline)
             return string.format('%%u+%04X%%',string.byte(m,1,1))
         end)
         return string.gsub(r,'%s+$','')
-    end)
+    end
+}
+
+nyagos.filter = function(cmdline)
+    if backquote.org then
+        local cmdline_ = backquote.org(cmdline)
+        if cmdline_ then
+            cmdline = cmdline_
+        end
+    end
+    cmdline = cmdline:gsub('`[^`]*`',backquote.replace)
+    cmdline = cmdline:gsub('%$(%b())',backquote.replace)
+    return cmdline
 end
