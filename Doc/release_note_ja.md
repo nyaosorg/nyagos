@@ -1,5 +1,11 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.1.9\_3
+===============
+(4017.05.13)
+
+* Fix #217: .nyagos でのバッチ実行時に `main/lua_cmd.go: cmdExec: not found interpreter object` と表示される
+
 NYAGOS 4.1.9\_2
 ===============
 (2017.04.03)
