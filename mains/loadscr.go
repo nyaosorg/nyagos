@@ -12,6 +12,7 @@ import (
 	"../dos"
 	. "../ifdbg"
 	"../lua"
+	"../shell"
 )
 
 func versionOrStamp() string {
@@ -22,7 +23,7 @@ func versionOrStamp() string {
 	}
 }
 
-func loadBundleScript1(L lua.Lua, path string) error {
+func loadBundleScript1(it *shell.Cmd, L lua.Lua, path string) error {
 	if DBG {
 		println("load cached ", path)
 	}
@@ -34,7 +35,7 @@ func loadBundleScript1(L lua.Lua, path string) error {
 	if err != nil {
 		return err
 	}
-	err = L.Call(0, 0)
+	err = NyagosCallLua(L, it, 0, 0)
 	if err != nil {
 		return err
 	}
@@ -45,7 +46,7 @@ type InterpreterT interface {
 	Interpret(string) (int, error)
 }
 
-func loadScripts(it InterpreterT, L lua.Lua) error {
+func loadScripts(it *shell.Cmd, L lua.Lua) error {
 	exeName, exeNameErr := os.Executable()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
@@ -77,7 +78,7 @@ func loadScripts(it InterpreterT, L lua.Lua) error {
 				relpath := "nyagos.d/" + name1
 				asset1, assetErr := AssetInfo(relpath)
 				if assetErr == nil && asset1.Size() == finfo1.Size() && !asset1.ModTime().Truncate(time.Second).Before(finfo1.ModTime().Truncate(time.Second)) {
-					if err := loadBundleScript1(L, relpath); err != nil {
+					if err := loadBundleScript1(it, L, relpath); err != nil {
 						fmt.Fprintf(os.Stderr, "cached %s: %s\n", relpath, err)
 					}
 				} else {
@@ -98,20 +99,20 @@ func loadScripts(it InterpreterT, L lua.Lua) error {
 				continue
 			}
 			relpath := "nyagos.d/" + name1
-			if err1 := loadBundleScript1(L, relpath); err1 != nil {
+			if err1 := loadBundleScript1(it, L, relpath); err1 != nil {
 				fmt.Fprintf(os.Stderr, "bundled %s: %s\n", relpath, err1.Error())
 			}
 		}
 	}
 	barNyagos(it, exeFolder, L)
-	if err := dotNyagos(L); err != nil {
+	if err := dotNyagos(it, L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 	barNyagos(it, dos.GetHome(), L)
 	return nil
 }
 
-func dotNyagos(L lua.Lua) error {
+func dotNyagos(it *shell.Cmd, L lua.Lua) error {
 	dot_nyagos := filepath.Join(dos.GetHome(), ".nyagos")
 	dotStat, dotErr := os.Stat(dot_nyagos)
 	if dotErr != nil {
@@ -124,7 +125,7 @@ func dotNyagos(L lua.Lua) error {
 			println("load cached ", cachePath)
 		}
 		if _, err := L.LoadFile(cachePath, "b"); err == nil {
-			L.Call(0, 0)
+			NyagosCallLua(L, it, 0, 0)
 			return nil
 		}
 	}
@@ -135,7 +136,7 @@ func dotNyagos(L lua.Lua) error {
 		return err
 	}
 	chank := L.Dump()
-	if err := L.Call(0, 0); err != nil {
+	if err := NyagosCallLua(L, it, 0, 0); err != nil {
 		return err
 	}
 	w, w_err := os.Create(cachePath)
