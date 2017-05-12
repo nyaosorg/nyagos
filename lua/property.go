@@ -1,7 +1,7 @@
 package lua
 
 type Property struct {
-	Pointer *Pushable
+	Pointer *Object
 }
 
 func (this Property) Push(L Lua) int {
@@ -9,7 +9,7 @@ func (this Property) Push(L Lua) int {
 }
 
 func (this Property) Set(L Lua, index int) error {
-	value, err := L.ToPushable(index)
+	value, err := L.ToObject(index)
 	if err == nil {
 		*this.Pointer = value
 	}
@@ -76,7 +76,7 @@ type VirtualTable struct {
 }
 
 func (this *VirtualTable) Push(L Lua) int {
-	dict := map[string]Pushable{}
+	dict := map[string]Object{}
 	if this.Index != nil {
 		dict["__index"] = TGoFunction(this.Index)
 	}
@@ -93,7 +93,7 @@ func (this *VirtualTable) Push(L Lua) int {
 		Name: this.Name,
 		Table: TTable{
 			Dict:  dict,
-			Array: map[int]Pushable{},
+			Array: map[int]Object{},
 		},
 	})
 }

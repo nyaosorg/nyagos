@@ -2,13 +2,14 @@ package mains
 
 import (
 	"bufio"
+	"encoding/base64"
 	"flag"
 	"fmt"
 	"os"
 	"strings"
 
-	"../interpreter"
 	"../lua"
+	"../shell"
 )
 
 func setLuaArg(L lua.Lua, arg0 string) {
@@ -22,7 +23,7 @@ func setLuaArg(L lua.Lua, arg0 string) {
 	L.SetGlobal("arg")
 }
 
-func optionParse(it *interpreter.Interpreter, L lua.Lua) bool {
+func optionParse(it *shell.Cmd, L lua.Lua) bool {
 	result := true
 
 	if *optionK != "" {
@@ -30,6 +31,17 @@ func optionParse(it *interpreter.Interpreter, L lua.Lua) bool {
 	}
 	if *optionC != "" {
 		it.Interpret(*optionC)
+		result = false
+	}
+	if *optionB != "" {
+		data, err := base64.StdEncoding.DecodeString(*optionB)
+		if err != nil {
+			fmt.Fprintln(it.Stderr, err)
+			return false
+		} else {
+			text := string(data)
+			it.Interpret(text)
+		}
 		result = false
 	}
 	if *optionF != "" {

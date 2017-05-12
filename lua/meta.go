@@ -1,6 +1,7 @@
 package lua
 
 import (
+	"errors"
 	"syscall"
 	"unsafe"
 )
@@ -18,12 +19,30 @@ func (this Lua) NewMetaTable(tname string) (uintptr, error) {
 
 var luaL_testudata = luaDLL.NewProc("luaL_testudata")
 
-func (this Lua) TestUData(index int, tname string) (unsafe.Pointer, error) {
+func (this Lua) testUData(index int, tname string) (uintptr, error) {
 	// print("TestUData(", index, ",'", tname, "')\n")
 	tname_ptr, tname_err := syscall.BytePtrFromString(tname)
 	if tname_err != nil {
-		return nil, tname_err
+		return 0, tname_err
 	}
 	rv, _, _ := luaL_testudata.Call(this.State(), uintptr(index), uintptr(unsafe.Pointer(tname_ptr)))
-	return unsafe.Pointer(rv), nil
+	return rv, nil
+}
+
+var ErrTestUData = errors.New("Failed to TestUData")
+var noOperation = func() {}
+
+func (this Lua) TestUDataTo(index int, tname string, p interface{}) (func(), error) {
+	src, err := this.testUData(index, tname)
+	if err != nil {
+		return noOperation, err
+	}
+	if src == 0 {
+		return noOperation, ErrTestUData
+	}
+	dst, siz := PtrAndSize(p)
+	copyMemory(dst, src, siz)
+	return func() {
+		copyMemory(src, dst, siz)
+	}, nil
 }

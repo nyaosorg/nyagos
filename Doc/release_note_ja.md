@@ -1,5 +1,21 @@
 [English](release_note_en.md) / Japanese
 
+* 内蔵コマンド `env` の追加
+* ヒストリ参照テーブル `nyagos.history[..]` , `#nyagos.history` 用意
+* 内蔵コマンドとして `type` を追加
+* ~/.nyagos をロードした Lua インスタンスでプロンプトを表示するようにした
+* C-o が空白と ~ を含むファイル名を補完できなかった不具合を修正
+* UTF8 / MBCS 両方を読み込める内蔵コマンド `clip` を実装 (#202)
+* READONLY属性のファイルも消す `del /f`オプション追加 (#198)
+* `attrib` コマンドを内蔵コマンドとして実装 (#199)
+* `nyagos.alias.grep = "findstr.exe"`
+* `%USERPROFILE:\=/%` で `\` が一度しか置換されていない不具合を修正
+* Ctrl-O のファイル名選択がパニックを起こす不具合を修正(#204)
+* Lua関数 `nyagos.box()` を追加
+* Luaインスタンスを作成するタイミングとコピーする範囲を変更した(#210,#208)
+* `nyagos.completion_hidden`: true の時、隠しファイルも補完候補に入れる
+* 起動オプションに「-b (base64化されたコマンド文字列)」を追加した
+
 NYAGOS 4.1.9\_3
 ===============
 (4017.05.13)

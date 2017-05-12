@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 
 	"../alias"
 	"../dos"
+	"../shell"
 )
 
 const (
@@ -26,7 +26,7 @@ func envToList(first1 string, envs ...string) []string {
 	return result
 }
 
-func cmd_which(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_which(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	all := false
 	var pathList []string
 	var extList []string

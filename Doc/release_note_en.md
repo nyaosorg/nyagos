@@ -1,5 +1,21 @@
 English / [Japanese](release_note_ja.md)
 
+* Add built-in command `env`
+* #189 Support `nyagos.history[..]` and `#nyagos.history`
+* Make `type` as built-in command.
+* To print prompt, use the same Lua instance loading ~/.nyagos
+* Fix the problem that C-o could not complete filenames which has ` ` and `~`.
+* Make `clip` as built-in command which read/write both UTF8/MBCS (#202)
+* Support `del /f`: delete even if it is a readonly file. (#198)
+* Add `attrib` as built-in command. (#199)
+* `nyagos.alias.grep = "findstr.exe"`
+* Fix `\` in `%USERPROFILE:\=/%` were replaced once only
+* Fix Ctrl-O (filename-completion) causes panic. (#204)
+* New lua-function: `nyagos.box()`
+* Change the timing of making new instance, and the scope of copying (#210,#208)
+* `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
+* Support `-b BASE64edCOMMANDSTRING` as startup option (#200)
+
 NYAGOS 4.1.9\_3
 ===============
 on Feb 13.2017

@@ -15,7 +15,6 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
-	"unsafe"
 
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
@@ -27,9 +26,9 @@ import (
 	"../alias"
 	"../completion"
 	"../dos"
-	"../interpreter"
 	"../lua"
 	"../readline"
+	"../shell"
 )
 
 type LuaBinaryChank struct {
@@ -40,7 +39,7 @@ func (this *LuaBinaryChank) String() string {
 	return "(lua-function)"
 }
 
-func (this *LuaBinaryChank) Call(ctx context.Context, cmd *interpreter.Interpreter) (int, error) {
+func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	L, L_ok := cmd.Tag.(lua.Lua)
 	if !L_ok {
 		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
@@ -194,7 +193,7 @@ func cmdGetEnv(L lua.Lua) int {
 	if nameErr != nil {
 		return L.Push(nil)
 	}
-	value, ok := interpreter.OurGetEnv(name)
+	value, ok := shell.OurGetEnv(name)
 	if ok && len(value) > 0 {
 		L.PushString(value)
 	} else {
@@ -222,11 +221,8 @@ func cmdExec(L lua.Lua) int {
 		it := getRegInt(L)
 		if it == nil {
 			println("main/lua_cmd.go: cmdExec: not found interpreter object")
-			it = interpreter.New()
-			// L := NewNyagosLua()
+			it = shell.New()
 			it.Tag = L
-			it.Closers = append(it.Closers, L)
-			it.OnClone = itprCloneHook
 		} else {
 			it, err = it.Clone()
 			if err != nil {
@@ -242,7 +238,7 @@ func cmdExec(L lua.Lua) int {
 		}
 		it := getRegInt(L)
 		if it == nil {
-			it = interpreter.New()
+			it = shell.New()
 			it.Tag = L
 		}
 		errorlevel, err = it.Interpret(statement)
@@ -266,7 +262,7 @@ func cmdEval(L lua.Lua) int {
 		return L.Push(nil, err)
 	}
 	go func(statement string, w *os.File) {
-		it := interpreter.New()
+		it := shell.New()
 		it.Tag = L
 		it.SetStdout(w)
 		it.Interpret(statement)
@@ -491,6 +487,14 @@ func cmdGetHistory(this lua.Lua) int {
 	return 1
 }
 
+func cmdLenHistory(this lua.Lua) int {
+	if default_history == nil {
+		return 0
+	}
+	this.PushInteger(lua.Integer(default_history.Len()))
+	return 1
+}
+
 func cmdSetRuneWidth(this lua.Lua) int {
 	char, charErr := this.ToInteger(1)
 	if charErr != nil {
@@ -710,7 +714,9 @@ func (this *iolines_t) Ok() bool {
 }
 
 func iolines_t_gc(L lua.Lua) int {
-	userdata := (*iolines_t)(L.ToUserData(1))
+	userdata := iolines_t{}
+	sync := L.ToUserDataTo(1, &userdata)
+	defer sync()
 	// print("iolines_t_gc: gc\n")
 	if !userdata.Ok() {
 		// print("iolines_t_gc: nil\n")
@@ -721,7 +727,10 @@ func iolines_t_gc(L lua.Lua) int {
 }
 
 func cmdLinesCallback(L lua.Lua) int {
-	userdata := (*iolines_t)(L.ToUserData(1))
+	userdata := iolines_t{}
+	sync := L.ToUserDataTo(1, &userdata)
+	defer sync()
+
 	if !userdata.Ok() {
 		// print("cmdLinesCallback: nil\n")
 		return L.Push(nil)
@@ -800,13 +809,13 @@ func cmdLines(L lua.Lua) int {
 	top := L.GetTop()
 	if top < 1 || L.IsNil(1) {
 		L.Push(cmdLinesCallback)
-		var userdata *iolines_t
-		userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
 		cmd := getRegInt(L)
-		userdata.Fd = cmd.Stdio[0]
-		userdata.Reader = bufio.NewReader(cmd.Stdio[0])
-		userdata.HasToClose = false
-		userdata.Marks = []string{"l"}
+		L.PushUserData(&iolines_t{
+			Fd:         cmd.Stdio[0],
+			Reader:     bufio.NewReader(cmd.Stdio[0]),
+			HasToClose: false,
+			Marks:      []string{"l"},
+		})
 		return 2
 	}
 	path, path_err := L.ToString(1)
@@ -831,27 +840,19 @@ func cmdLines(L lua.Lua) int {
 		return L.Push(nil, fd_err.Error())
 	}
 	L.Push(cmdLinesCallback)
-	var userdata *iolines_t
-	userdata = (*iolines_t)(L.NewUserData(unsafe.Sizeof(*userdata)))
-	userdata.Fd = fd
-	userdata.Reader = bufio.NewReader(fd)
-	userdata.Marks = marks
-	userdata.HasToClose = true
+	userdata := iolines_t{
+		Fd:         fd,
+		Reader:     bufio.NewReader(fd),
+		Marks:      marks,
+		HasToClose: true,
+	}
+	L.PushUserData(&userdata)
 	L.NewTable()
 	L.Push(iolines_t_gc)
 	L.SetField(-2, "__gc")
 	L.SetMetaTable(-2)
 	// print("cmdLines: end\n")
 	return 2
-}
-
-func cmdChdir(L lua.Lua) int {
-	path, path_err := L.ToString(1)
-	if path_err != nil {
-		return L.Push(nil, path_err.Error())
-	}
-	dos.Chdir(path)
-	return L.Push(true)
 }
 
 func cmdNetDriveToUNC(L lua.Lua) int {
@@ -866,10 +867,4 @@ func cmdNetDriveToUNC(L lua.Lua) int {
 func cmdResetCharWidth(L lua.Lua) int {
 	readline.ResetCharWidth()
 	return 0
-}
-
-func cmdElevated(L lua.Lua) int {
-	flag, _ := dos.IsElevated()
-	L.PushBool(flag)
-	return 1
 }

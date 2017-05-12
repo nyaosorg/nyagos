@@ -3,6 +3,7 @@ package lua
 import (
 	"errors"
 	"fmt"
+	"reflect"
 	"syscall"
 	"unsafe"
 )
@@ -17,6 +18,10 @@ func (value Integer) Push(L Lua) int {
 }
 
 type Lua uintptr
+
+const (
+	NoInstance Lua = 0
+)
 
 var luaL_newstate = luaDLL.NewProc("luaL_newstate")
 
@@ -54,12 +59,14 @@ func (this Lua) Source(fname string) error {
 
 var lua_settable = luaDLL.NewProc("lua_settable")
 
+// t[k] = v , t: given index, k: top of stack , v: value just below the top (pop 2 and push 0 element)
 func (this Lua) SetTable(index int) {
 	lua_settable.Call(this.State(), uintptr(index))
 }
 
 var lua_gettable = luaDLL.NewProc("lua_gettable")
 
+// get t[k], t: given by index, k: stack top (pop 1 and push 1)
 func (this Lua) GetTable(index int) {
 	lua_gettable.Call(this.State(), uintptr(index))
 }
@@ -97,9 +104,35 @@ func (this Lua) Pop(n uint) {
 
 var lua_newuserdata = luaDLL.NewProc("lua_newuserdata")
 
-func (this Lua) NewUserData(size uintptr) unsafe.Pointer {
+func (this Lua) NewUserData(size uintptr) uintptr {
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
-	return unsafe.Pointer(area)
+	return area
+}
+
+func (this Lua) NewUserDataFrom(p unsafe.Pointer, size uintptr) {
+	area, _, _ := lua_newuserdata.Call(this.State(), size)
+	copyMemory(area, uintptr(p), size)
+}
+
+func (this Lua) PushUserData(p interface{}) {
+	value := reflect.ValueOf(p)
+	size := value.Type().Elem().Size()
+	area, _, _ := lua_newuserdata.Call(this.State(), size)
+	copyMemory(area, value.Pointer(), size)
+}
+
+var lua_rawset = luaDLL.NewProc("lua_rawset")
+
+// without calling __newindex, t[k] = v , t: given index, k: top of stack , v: value just below the top (pop 2 and push 0 element)
+func (this Lua) RawSet(index int) {
+	lua_rawset.Call(this.State(), uintptr(index))
+}
+
+var lua_rawget = luaDLL.NewProc("lua_rawget")
+
+// Without __index, get t[k], t: given by index, k: stack top (pop 1 and push 1)
+func (this Lua) RawGet(index int) {
+	lua_rawget.Call(this.State(), uintptr(index))
 }
 
 var lua_rawseti = luaDLL.NewProc("lua_rawseti")

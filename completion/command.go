@@ -6,11 +6,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"../cpath"
+	"../dos"
 )
 
 func isExecutable(path string) bool {
-	return cpath.IsExecutableSuffix(filepath.Ext(path))
+	return dos.IsExecutableSuffix(filepath.Ext(path))
 }
 
 func listUpAllExecutableOnEnv(envName string) []Element {

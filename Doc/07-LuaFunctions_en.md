@@ -41,6 +41,11 @@ assigned on .nyagos but `share[]`. You can use share[] as you like.
 Only the member of the table `share[]` are shared on all Lua-instances 
 of nyagos.
 
+### `nyagos.completion_hidden = (bool)`
+
+If it is set true, on filename completion, hidden files are also included
+completion list.
+
 ### `nyagos.env.NAME`
 
 It is linked to the the environment variable, which are able 
@@ -175,15 +180,22 @@ You can swap the prompt-function as below.
 `nyagos.default_prompt` is the default prompt function which can
 change the title of the terminal-window with the second parameter.
 
-### `nyagos.gethistory(N)`
+### `nyagos.gethistory(N)` and `nyagos.history[N]`
 
 Get the n-th command-line history. When N < 0, last (-N)-th history.
-With no arguments, get the count of the command-line history.
+
+### `nyagos.gethistory()` and `#nyagos.history`
+
+Get the count of the command-line history.
 
 ### `nyagos.access(PATH,MODE)`
 
 Returns the boolean value whether the PATH can be access with MODE.
 It equals the access function of the programming language C.
+
+### `RESULT = nyagos.box({ CHOICES... })
+
+Returns the choice which user select with cursor-keys
 
 ### `nyagos.completion_hook = function(c) ... end`
 

@@ -163,11 +163,10 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		session.History = new(EmptyHistory)
 	}
 	this := Buffer{
+		Editor:         session,
 		Buffer:         make([]rune, 20),
 		HistoryPointer: session.History.Len(),
 		Context:        ctx,
-		History:        session.History,
-		Prompt:         session.Prompt,
 	}
 	this.TermWidth, _ = box.GetScreenBufferInfo().ViewSize()
 
@@ -183,6 +182,12 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		this.TopColumn = 0
 	}
 	defer fmt.Fprint(Console, CURSOR_ON)
+
+	this.InsertString(0, session.Default)
+	if this.Cursor > this.Length {
+		this.Cursor = this.Length
+	}
+	this.RepaintAfterPrompt()
 
 	for {
 		var e getch.Event

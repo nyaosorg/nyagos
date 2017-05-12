@@ -1,4 +1,4 @@
-package interpreter
+package shell
 
 import (
 	"context"
@@ -40,7 +40,7 @@ func (this CommandNotFound) Error() string {
 	return this.Stringer()
 }
 
-type Interpreter struct {
+type Cmd struct {
 	exec.Cmd
 	Stdio        [3]*os.File
 	HookCount    int
@@ -49,15 +49,16 @@ type Interpreter struct {
 	IsBackGround bool
 	RawArgs      []string
 
-	OnClone func(*Interpreter) error
+	OnFork  func(*Cmd) error
+	OffFork func(*Cmd) error
 	Closers []io.Closer
 }
 
-func (this *Interpreter) GetRawArgs() []string {
+func (this *Cmd) GetRawArgs() []string {
 	return this.RawArgs
 }
 
-func (this *Interpreter) Close() {
+func (this *Cmd) Close() {
 	if this.Closers != nil {
 		for _, c := range this.Closers {
 			c.Close()
@@ -66,8 +67,8 @@ func (this *Interpreter) Close() {
 	}
 }
 
-func New() *Interpreter {
-	this := Interpreter{
+func New() *Cmd {
+	this := Cmd{
 		Stdio: [3]*os.File{os.Stdin, os.Stdout, os.Stderr},
 	}
 	this.Stdin = os.Stdin
@@ -75,25 +76,26 @@ func New() *Interpreter {
 	this.Stderr = os.Stderr
 	this.PipeSeq[0] = pipeSeq
 	this.PipeSeq[1] = 0
-	this.Tag = nil
 	return &this
 }
 
-func (this *Interpreter) SetStdin(f *os.File) {
+func (this *Cmd) SetStdin(f *os.File) {
 	this.Stdio[0] = f
 	this.Stdin = f
 }
-func (this *Interpreter) SetStdout(f *os.File) {
+func (this *Cmd) SetStdout(f *os.File) {
 	this.Stdio[1] = f
 	this.Stdout = f
 }
-func (this *Interpreter) SetStderr(f *os.File) {
+func (this *Cmd) SetStderr(f *os.File) {
 	this.Stdio[2] = f
 	this.Stderr = f
 }
 
-func (this *Interpreter) Clone() (*Interpreter, error) {
-	rv := new(Interpreter)
+func (this *Cmd) Clone() (*Cmd, error) {
+	rv := new(Cmd)
+	rv.Args = this.Args
+	rv.RawArgs = this.RawArgs
 	rv.Stdio[0] = this.Stdio[0]
 	rv.Stdio[1] = this.Stdio[1]
 	rv.Stdio[2] = this.Stdio[2]
@@ -104,18 +106,14 @@ func (this *Interpreter) Clone() (*Interpreter, error) {
 	rv.Tag = this.Tag
 	rv.PipeSeq = this.PipeSeq
 	rv.Closers = nil
-	rv.OnClone = this.OnClone
-	if this.OnClone != nil {
-		if err := this.OnClone(rv); err != nil {
-			return nil, err
-		}
-	}
+	rv.OnFork = this.OnFork
+	rv.OffFork = this.OffFork
 	return rv, nil
 }
 
-type ArgsHookT func(it *Interpreter, args []string) ([]string, error)
+type ArgsHookT func(it *Cmd, args []string) ([]string, error)
 
-var argsHook = func(it *Interpreter, args []string) ([]string, error) {
+var argsHook = func(it *Cmd, args []string) ([]string, error) {
 	return args, nil
 }
 
@@ -124,9 +122,9 @@ func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
 	return
 }
 
-type HookT func(context.Context, *Interpreter) (int, bool, error)
+type HookT func(context.Context, *Cmd) (int, bool, error)
 
-var hook = func(context.Context, *Interpreter) (int, bool, error) {
+var hook = func(context.Context, *Cmd) (int, bool, error) {
 	return 0, false, nil
 }
 
@@ -135,7 +133,7 @@ func SetHook(hook_ HookT) (rv HookT) {
 	return
 }
 
-var OnCommandNotFound = func(this *Interpreter, err error) error {
+var OnCommandNotFound = func(this *Cmd, err error) error {
 	err = &CommandNotFound{this.Args[0], err}
 	return err
 }
@@ -150,7 +148,7 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
-func (this *Interpreter) spawnvp_noerrmsg(ctx context.Context) (int, error) {
+func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	// command is empty.
 	if len(this.Args) <= 0 {
 		return 0, nil
@@ -209,11 +207,11 @@ func IsAlreadyReported(err error) bool {
 	return ok
 }
 
-func (this *Interpreter) Spawnvp() (int, error) {
+func (this *Cmd) Spawnvp() (int, error) {
 	return this.SpawnvpContext(context.Background())
 }
 
-func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
+func (this *Cmd) SpawnvpContext(ctx context.Context) (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg(ctx)
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if DBG {
@@ -228,11 +226,15 @@ func (this *Interpreter) SpawnvpContext(ctx context.Context) (int, error) {
 
 var pipeSeq uint = 0
 
-func (this *Interpreter) Interpret(text string) (int, error) {
+func (this *Cmd) Interpret(text string) (int, error) {
 	return this.InterpretContext(context.Background(), text)
 }
 
-func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
+type gotoEol struct{}
+
+var GotoEol = gotoEol{}
+
+func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
 	if DBG {
 		print("Interpret('", text, "')\n")
 	}
@@ -290,35 +292,21 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 			if DBG {
 				print(i, ": pipeline loop(", state.Args[0], ")\n")
 			}
-			cmd := new(Interpreter)
+			cmd, err := this.Clone()
+			if err != nil {
+				return 255, err
+			}
 			cmd.PipeSeq[0] = pipeSeq
 			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
-			cmd.Tag = this.Tag
-			cmd.HookCount = this.HookCount
-			cmd.SetStdin(nvl(this.Stdio[0], os.Stdin))
-			cmd.SetStdout(nvl(this.Stdio[1], os.Stdout))
-			cmd.SetStderr(nvl(this.Stdio[2], os.Stderr))
-			cmd.OnClone = this.OnClone
 
-			ctx := context.WithValue(ctx_, "rawargs", state.RawArgs)
-			ctx = context.WithValue(ctx, "exec",
-				func(cmdline string) (int, error) {
-					return cmd.InterpretContext(ctx, cmdline)
-				})
-			ctx = context.WithValue(ctx, "gotoeol", func() {
+			ctx := context.WithValue(ctx_, GotoEol, func() {
 				shutdown_immediately = true
-				gotoeol, ok := ctx_.Value("gotoeol").(func())
+				gotoeol, ok := ctx_.Value(GotoEol).(func())
 				if ok {
 					gotoeol()
 				}
 			})
-			ctx = context.WithValue(ctx, "errorlevel", LastErrorLevel)
-			if this.OnClone != nil {
-				if err := this.OnClone(cmd); err != nil {
-					return 255, err
-				}
-			}
 
 			if pipeIn != nil {
 				cmd.SetStdin(pipeIn)
@@ -360,7 +348,7 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 				if !isBackGround {
 					wg.Add(1)
 				}
-				go func(cmd1 *Interpreter) {
+				go func(cmd1 *Cmd) {
 					if isBackGround {
 						if FLAG_AMP2NEWCONSOLE {
 							if len(pipeline) == 1 {
@@ -373,7 +361,20 @@ func (this *Interpreter) InterpretContext(ctx_ context.Context, text string) (er
 					} else {
 						defer wg.Done()
 					}
+					if cmd1.OnFork != nil {
+						if err := cmd1.OnFork(cmd1); err != nil {
+							fmt.Fprintln(cmd1.Stderr, err.Error())
+							goto exit
+						}
+					}
 					cmd1.SpawnvpContext(ctx)
+					if cmd1.OffFork != nil {
+						if err := cmd1.OffFork(cmd1); err != nil {
+							fmt.Fprintln(cmd1.Stderr, err.Error())
+							goto exit
+						}
+					}
+				exit:
 					cmd1.Close()
 				}(cmd)
 			}

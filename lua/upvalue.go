@@ -18,7 +18,7 @@ type UpValue struct {
 	Name  string
 	Index int
 	Type  int
-	Value Pushable
+	Value Object
 }
 
 func (this Lua) GetUpValue(funcindex, n int) (string, bool) {
@@ -37,7 +37,7 @@ func (this Lua) GetUpValues(funcindex int) []UpValue {
 		if !ok {
 			break
 		}
-		var value1 Pushable
+		var value1 Object
 		typeN := this.GetType(-1)
 		switch typeN {
 		case LUA_TSTRING:

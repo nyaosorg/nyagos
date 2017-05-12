@@ -40,3 +40,25 @@ func TestPushInteger(t *testing.T) {
 		t.Logf("PushInteger succeeded '%s' == '%s'", str, expected)
 	}
 }
+
+func TestPushReflect(t *testing.T) {
+	L, err := New()
+	if err != nil {
+		t.Fatal("New() failed for" + err.Error())
+		return
+	}
+	L.OpenLibs()
+	defer L.Close()
+	L.PushReflect(map[string]string{
+		"ahaha": "ihihi",
+		"1":     "2",
+		"3":     "4",
+	})
+	L.SetGlobal("tmp")
+	L.LoadString("for key,val in pairs(tmp) do print(key,val) end")
+	err = L.Call(0, 0)
+	if err != nil {
+		t.Fatal("Call() failed for " + err.Error())
+		return
+	}
+}

@@ -3,6 +3,6 @@
 --    and see result of completion.
 
 nyagos.completion_hook = function(c)
-    c.list[ #c.list ] = c.rawword.."(".. c.pos .. ")"
+    c.list[ #c.list+1 ] = c.rawword.."(".. c.pos .. ")"
     return c.list
 end

@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"os/exec"
 	"regexp"
 	"strings"
 
@@ -11,12 +10,13 @@ import (
 	"../completion"
 	"../dos"
 	"../history"
+	"../shell"
 )
 
-var BuildInCommand map[string]func(context.Context, *exec.Cmd) (int, error)
+var BuildInCommand map[string]func(context.Context, *shell.Cmd) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func Exec(ctx context.Context, cmd *exec.Cmd) (int, bool, error) {
+func Exec(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
 	name := strings.ToLower(cmd.Args[0])
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
@@ -48,18 +48,21 @@ func AllNames() []completion.Element {
 }
 
 func Init() {
-	BuildInCommand = map[string]func(context.Context, *exec.Cmd) (int, error){
+	BuildInCommand = map[string]func(context.Context, *shell.Cmd) (int, error){
 		".":       cmd_source,
 		"alias":   cmd_alias,
+		"attrib":  cmd_attrib,
 		"bindkey": cmd_bindkey,
 		"box":     cmd_box,
 		"cd":      cmd_cd,
+		"clip":    cmd_clip,
 		"clone":   cmd_clone,
 		"cls":     cmd_cls,
 		"copy":    cmd_copy,
 		"del":     cmd_del,
 		"dirs":    cmd_dirs,
 		"echo":    cmd_echo,
+		"env":     cmd_env,
 		"erase":   cmd_del,
 		"exit":    cmd_exit,
 		"history": history.CmdHistory,
@@ -81,6 +84,7 @@ func Init() {
 		"su":      cmd_su,
 		"sudo":    cmd_sudo,
 		"touch":   cmd_touch,
+		"type":    cmd_type,
 		"which":   cmd_which,
 	}
 }

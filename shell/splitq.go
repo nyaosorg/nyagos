@@ -1,4 +1,4 @@
-package text
+package shell
 
 import (
 	"bytes"

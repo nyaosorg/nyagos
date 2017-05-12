@@ -9,10 +9,11 @@ import (
 	"strings"
 	"time"
 
-	"../cpath"
+	"../dos"
 	. "../ifdbg"
 	"../interpreter"
 	"../lua"
+	"../shell"
 )
 
 func versionOrStamp() string {
@@ -23,7 +24,7 @@ func versionOrStamp() string {
 	}
 }
 
-func loadBundleScript1(it *interpreter.Interpreter, L lua.Lua, path string) error {
+func loadBundleScript1(it *shell.Cmd, L lua.Lua, path string) error {
 	if DBG {
 		println("load cached ", path)
 	}
@@ -46,7 +47,7 @@ type InterpreterT interface {
 	Interpret(string) (int, error)
 }
 
-func loadScripts(it *interpreter.Interpreter, L lua.Lua) error {
+func loadScripts(it *shell.Cmd, L lua.Lua) error {
 	exeName, exeNameErr := os.Executable()
 	if exeNameErr != nil {
 		fmt.Fprintln(os.Stderr, exeNameErr)
@@ -108,12 +109,12 @@ func loadScripts(it *interpreter.Interpreter, L lua.Lua) error {
 	if err := dotNyagos(it, L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(it, cpath.GetHome(), L)
+	barNyagos(it, dos.GetHome(), L)
 	return nil
 }
 
-func dotNyagos(it *interpreter.Interpreter, L lua.Lua) error {
-	dot_nyagos := filepath.Join(cpath.GetHome(), ".nyagos")
+func dotNyagos(it *shell.Cmd, L lua.Lua) error {
+	dot_nyagos := filepath.Join(dos.GetHome(), ".nyagos")
 	dotStat, dotErr := os.Stat(dot_nyagos)
 	if dotErr != nil {
 		return nil

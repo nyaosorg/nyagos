@@ -16,7 +16,6 @@ import (
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
 
-	"../../cpath"
 	"../../dos"
 )
 
@@ -54,6 +53,14 @@ var ErrCtrlC = errors.New("C-c")
 
 func (this fileInfoT) Name() string { return this.name }
 
+func putFlag(value, flag uint32, c string, out io.Writer) {
+	if (value & flag) != 0 {
+		io.WriteString(out, c)
+	} else {
+		io.WriteString(out, "-")
+	}
+}
+
 func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Writer) {
 	indicator := " "
 	prefix := ""
@@ -77,11 +84,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	name := status.Name()
 	attr := findfile.GetFileAttributes(status)
 
-	if (perm & 4) > 0 {
-		io.WriteString(out, "r")
-	} else {
-		io.WriteString(out, "-")
-	}
+	putFlag(uint32(perm), 4, "r", out)
 	if (perm & 2) > 0 {
 		io.WriteString(out, "w")
 	} else {
@@ -93,7 +96,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if cpath.IsExecutableSuffix(filepath.Ext(name)) {
+	} else if dos.IsExecutableSuffix(filepath.Ext(name)) {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -103,6 +106,10 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	} else {
 		io.WriteString(out, "-")
 	}
+	putFlag(attr, dos.FILE_ATTRIBUTE_ARCHIVE, "a", out)
+	putFlag(attr, dos.FILE_ATTRIBUTE_SYSTEM, "s", out)
+	putFlag(attr, dos.FILE_ATTRIBUTE_HIDDEN, "h", out)
+
 	if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
 		(flag&O_COLOR) != 0 {
 		prefix = ANSI_HIDDEN
@@ -134,7 +141,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		io.WriteString(out, indicator)
 	}
 	if indicator == "@" {
-		path := cpath.Join(folder, name)
+		path := dos.Join(folder, name)
 		link_to, err := os.Readlink(path)
 		if err == nil {
 			fmt.Fprintf(out, " -> %s", link_to)
@@ -168,7 +175,7 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 				postfix = ANSI_END
 			}
 		}
-		if !val.IsDir() && cpath.IsExecutableSuffix(filepath.Ext(val.Name())) {
+		if !val.IsDir() && dos.IsExecutableSuffix(filepath.Ext(val.Name())) {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
@@ -297,7 +304,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	if folder == "" {
 		wildcard = "*"
 	} else {
-		wildcard = cpath.Join(folder, "*")
+		wildcard = dos.Join(folder, "*")
 	}
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
 		if (flag & O_ALL) == 0 {
@@ -331,7 +338,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
-			f1fullpath := cpath.Join(folder, f1)
+			f1fullpath := dos.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
 			if err := lsFolder(ctx, f1fullpath, flag, out); err != nil {
 				return err

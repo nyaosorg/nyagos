@@ -4,14 +4,14 @@ import (
 	"context"
 	"io"
 	"os"
-	"os/exec"
 
 	"github.com/mattn/go-colorable"
 
+	"../shell"
 	"./ls"
 )
 
-func cmd_ls(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_ls(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	var out io.Writer
 	if cmd.Stdout == os.Stdout {
 		out = colorable.NewColorableStdout()

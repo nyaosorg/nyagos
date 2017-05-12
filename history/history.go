@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"sort"
 	"strconv"
@@ -16,7 +15,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"../text"
+	"../shell"
 )
 
 var Mark = "!"
@@ -169,22 +168,22 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
-		if words := text.SplitQ(line); len(words) >= 2 {
+		if words := shell.SplitQ(line); len(words) >= 2 {
 			buffer.WriteString(words[1])
 		}
 	} else if siz > 0 && ch == '$' {
-		if words := text.SplitQ(line); len(words) >= 2 {
+		if words := shell.SplitQ(line); len(words) >= 2 {
 			buffer.WriteString(words[len(words)-1])
 		}
 	} else if siz > 0 && ch == '*' {
-		if words := text.SplitQ(line); len(words) >= 2 {
+		if words := shell.SplitQ(line); len(words) >= 2 {
 			buffer.WriteString(strings.Join(words[1:], " "))
 		}
 	} else if siz > 0 && ch == ':' {
 		var n int
 		if _, err := fmt.Fscan(reader, &n); err != nil {
 			buffer.WriteRune(':')
-		} else if words := text.SplitQ(line); n < len(words) {
+		} else if words := shell.SplitQ(line); n < len(words) {
 			buffer.WriteString(words[n])
 		}
 	} else {
@@ -195,7 +194,7 @@ func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	}
 }
 
-func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if ctx == nil {
 		fmt.Fprintln(cmd.Stderr, "history not found (case1)")
 		return 1, nil
@@ -221,7 +220,7 @@ func CmdHistory(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	}
 	start := 0
 
-	historyObj_ := ctx.Value("history")
+	historyObj_ := ctx.Value(NoInstance)
 	if historyObj, ok := historyObj_.(*Container); ok {
 		if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
 			historyObj.Len() > num {

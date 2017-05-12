@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
+
+	"../shell"
 )
 
-func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	// if "xxx" == "yyy"
 	args := cmd.Args
 	not := false
@@ -45,11 +46,7 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	} else if len(args) >= 3 && strings.EqualFold(args[1], "errorlevel") {
 		num, num_err := strconv.Atoi(args[2])
 		if num_err == nil {
-			lastErrorLevel, ok := ctx.Value("errorlevel").(int)
-			if !ok {
-				return -1, errors.New("if: could not get context.Value(\"errorlevel\")")
-			}
-			status = (lastErrorLevel <= num)
+			status = (shell.LastErrorLevel >= num)
 		}
 		start += 2
 	}
@@ -58,19 +55,15 @@ func cmd_if(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		status = !status
 	}
 	if status {
-		exec, exec_ok := ctx.Value("exec").(func(string) (int, error))
-		if !exec_ok {
-			return -1, errors.New("if: could not get context.Value(\"exec\")")
+		subCmd, err := cmd.Clone()
+		if err != nil {
+			return 0, err
 		}
-		rawargs, rawargs_ok := ctx.Value("rawargs").([]string)
-		if !rawargs_ok {
-			return -1, errors.New("if: could not get context.Value(\"rawargs\")")
-		}
-		cmdline := strings.Join(rawargs[start:], " ")
-		// println(cmdline)
-		return exec(cmdline)
+		subCmd.Args = cmd.Args[start:]
+		subCmd.RawArgs = cmd.RawArgs[start:]
+		return subCmd.SpawnvpContext(ctx)
 	} else {
-		gotoeol, ok := ctx.Value("gotoeol").(func())
+		gotoeol, ok := ctx.Value(shell.GotoEol).(func())
 		if !ok {
 			return -1, errors.New("if: could not get context.Value(\"gotoeol\")")
 		}

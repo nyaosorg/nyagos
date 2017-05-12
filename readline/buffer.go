@@ -54,9 +54,9 @@ func Eraseline() {
 const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
+	*Editor
 	Buffer         []rune
 	Length         int
-	Cursor         int
 	Unicode        rune
 	Keycode        uint16
 	ShiftState     uint32
@@ -65,8 +65,6 @@ type Buffer struct {
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
 	Context        context.Context
-	History        IHistory
-	Prompt         func() (int, error)
 }
 
 func (this *Buffer) ViewWidth() int {

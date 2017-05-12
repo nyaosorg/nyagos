@@ -1,4 +1,4 @@
-package cpath
+package dos
 
 import (
 	"fmt"

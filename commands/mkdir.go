@@ -4,15 +4,14 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"syscall"
 
 	"github.com/zetamatta/go-getch"
 
-	"../dos"
+	"../shell"
 )
 
-func cmd_mkdir(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_mkdir(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: mkdir [/p] DIRECTORIES...")
 		return 0, nil
@@ -33,7 +32,7 @@ func cmd_mkdir(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	return errorcount, nil
 }
 
-func cmd_rmdir(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_rmdir(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) <= 1 {
 		fmt.Println("Usage: rmdir [/s] [/q] DIRECTORIES...")
 		return 0, nil
@@ -82,10 +81,7 @@ func cmd_rmdir(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			if !quiet {
 				fmt.Fprintln(cmd.Stdout)
 			}
-			err = dos.Truncate(arg1, func(path string, err error) bool {
-				fmt.Fprintf(cmd.Stderr, "%s -> %s\n", path, err)
-				return true
-			}, cmd.Stdout)
+			err = os.RemoveAll(arg1)
 		} else {
 			err = syscall.Rmdir(arg1)
 		}

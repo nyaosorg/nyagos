@@ -17,6 +17,8 @@ type Container struct {
 	rows []Line
 }
 
+var NoInstance = &Container{}
+
 func (this *Container) Len() int {
 	return len(this.rows)
 }

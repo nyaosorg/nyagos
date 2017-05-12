@@ -14,6 +14,10 @@ Execute `COMMAND` and quit.
 
 Execute `COMMAND` and continue the command-line.
 
+### `-b "BASE64edCOMMAND"`
+
+Decode and execute the command which is encoded with Base64.
+
 ### `-f FILE ARG1 ARG2 ...`
 
 If FILE's suffix is .lua, execute Lua-code on it.

@@ -4,14 +4,24 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"syscall"
 	"unicode"
 
 	"github.com/zetamatta/go-getch"
+
+	"../dos"
+	"../shell"
 )
 
-func cmd_del(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func attrib_plus_r(path string) error {
+	perm, err := dos.GetFileAttributes(path)
+	if err != nil {
+		return err
+	}
+	return dos.SetFileAttributes(path, perm&^dos.FILE_ATTRIBUTE_READONLY)
+}
+
+func cmd_del(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	n := len(cmd.Args)
 	if n <= 1 {
 		fmt.Fprintln(cmd.Stderr, "Usage: del   [/q] FILE(S)...")
@@ -19,6 +29,7 @@ func cmd_del(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		return 0, nil
 	}
 	all := false
+	force := false
 	errorcount := 0
 	i := 1
 	for _, arg1 := range cmd.Args[1:] {
@@ -31,6 +42,11 @@ func cmd_del(ctx context.Context, cmd *exec.Cmd) (int, error) {
 		}
 		if arg1 == "/q" {
 			all = true
+			n--
+			continue
+		}
+		if arg1 == "/f" {
+			force = true
 			n--
 			continue
 		}
@@ -71,6 +87,11 @@ func cmd_del(ctx context.Context, cmd *exec.Cmd) (int, error) {
 			}
 		}
 		err = syscall.Unlink(path)
+		if err != nil && force {
+			if err1 := attrib_plus_r(path); err1 == nil {
+				err = syscall.Unlink(path)
+			}
+		}
 		if err != nil {
 			fmt.Printf("-> %s\n", err)
 			errorcount++

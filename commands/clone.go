@@ -2,13 +2,12 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"io"
 	"os"
-	"os/exec"
 	"strings"
 
 	"../dos"
+	"../shell"
 )
 
 func getwd_() string {
@@ -40,14 +39,11 @@ func clone_(action string, out io.Writer) (int, error) {
 	return 0, nil
 }
 
-func cmd_sudo(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_sudo(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) < 2 {
 		return clone_("runas", cmd.Stderr)
 	}
-	rawargs, ok := ctx.Value("rawargs").([]string)
-	if !ok {
-		return 1, errors.New("sudo: could not get context.Value(\"rawargs\")")
-	}
+	rawargs := cmd.RawArgs
 	var args string
 	if len(rawargs) >= 3 {
 		args = strings.Join(rawargs[2:], " ")
@@ -62,10 +58,10 @@ func cmd_sudo(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	}
 }
 
-func cmd_clone(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_clone(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return clone_("open", cmd.Stderr)
 }
 
-func cmd_su(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_su(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return clone_("runas", cmd.Stderr)
 }

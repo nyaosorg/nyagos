@@ -10,53 +10,47 @@ import (
 	"../readline"
 )
 
-var completionHook lua.Pushable = lua.TNil{}
+var completionHook lua.Object = lua.TNil{}
 
 func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion.List, error) {
-	L, L_ok := this.Context.Value("lua").(lua.Lua)
+	L, L_ok := this.Context.Value(lua.NoInstance).(lua.Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
 	}
 
 	L.Push(completionHook)
 	if L.IsFunction(-1) {
-		L.NewTable()
-		L.PushString(rv.RawWord)
-		L.SetField(-2, "rawword")
-		L.Push(rv.Pos + 1)
-		L.SetField(-2, "pos")
-		L.PushString(rv.AllLine)
-		L.SetField(-2, "text")
-		L.PushString(rv.Word)
-		L.SetField(-2, "word")
-		L.NewTable()
-		for key, val := range rv.List {
-			L.Push(1 + key)
-			L.PushString(val.InsertStr)
-			L.SetTable(-3)
+		list := make([]string, len(rv.List))
+		for i, v := range rv.List {
+			list[i] = v.InsertStr
 		}
-		L.SetField(-2, "list")
+		L.Push(map[string]interface{}{
+			"rawword": rv.RawWord,
+			"pos":     rv.Pos + 1,
+			"text":    rv.AllLine,
+			"word":    rv.Word,
+			"list":    list,
+		})
 		if err := L.Call(1, 1); err != nil {
 			fmt.Println(err)
 		}
-		if L.IsTable(-1) {
-			list := make([]completion.Element, 0, len(rv.List)+32)
-			wordUpr := strings.ToUpper(rv.Word)
-			for i := 1; true; i++ {
-				L.Push(i)
-				L.GetTable(-2)
-				str, strErr := L.ToString(-1)
-				L.Pop(1)
-				if strErr != nil || str == "" {
-					break
+		result, err := L.ToInterface(-1)
+		if err == nil {
+			if t, ok := result.(map[interface{}]interface{}); ok {
+				list := make([]completion.Element, 0, len(rv.List)+32)
+				wordUpr := strings.ToUpper(rv.Word)
+				for _, v := range t {
+					str, ok := v.(string)
+					if ok {
+						strUpr := strings.ToUpper(str)
+						if strings.HasPrefix(strUpr, wordUpr) {
+							list = append(list, completion.Element{str, str})
+						}
+					}
 				}
-				strUpr := strings.ToUpper(str)
-				if strings.HasPrefix(strUpr, wordUpr) {
-					list = append(list, completion.Element{str, str})
+				if len(list) > 0 {
+					rv.List = list
 				}
-			}
-			if len(list) > 0 {
-				rv.List = list
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package interpreter
+package shell
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"../cpath"
+	"../dos"
 )
 
 type StatementT struct {
@@ -46,7 +46,7 @@ func ourGetenvSub(name string) (string, bool) {
 	if m != nil {
 		base, ok := OurGetEnv(m[1])
 		if ok {
-			return strings.Replace(base, m[2], m[3], 1), true
+			return strings.Replace(base, m[2], m[3], -1), true
 		} else {
 			return "", false
 		}
@@ -98,7 +98,7 @@ func string2word(source_ string, removeQuote bool) string {
 			break
 		}
 		if ch == '~' && unicode.IsSpace(lastchar) {
-			if home := cpath.GetHome(); home != "" {
+			if home := dos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
 				buffer.WriteRune('~')

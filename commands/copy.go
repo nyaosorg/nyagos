@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"regexp"
 	"unicode"
@@ -12,15 +11,16 @@ import (
 	"github.com/zetamatta/go-getch"
 
 	"../dos"
+	"../shell"
 )
 
 type copymove_t struct {
-	*exec.Cmd
+	*shell.Cmd
 	Action  func(src, dst string) error
 	IsDirOk bool
 }
 
-func cmd_copy(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_copy(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return copymove_t{
 		Cmd: cmd,
 		Action: func(src, dst string) error {
@@ -29,7 +29,7 @@ func cmd_copy(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	}.Run(ctx)
 }
 
-func cmd_move(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_move(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	return copymove_t{
 		Cmd:     cmd,
 		Action:  dos.Move,
@@ -37,7 +37,7 @@ func cmd_move(ctx context.Context, cmd *exec.Cmd) (int, error) {
 	}.Run(ctx)
 }
 
-func cmd_ln(ctx context.Context, cmd *exec.Cmd) (int, error) {
+func cmd_ln(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) >= 2 && cmd.Args[1] == "-s" {
 		args := make([]string, 0, len(cmd.Args)-1)
 		args = append(args, cmd.Args[0])
