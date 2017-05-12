@@ -16,6 +16,12 @@
 * `nyagos.completion_hidden`: true の時、隠しファイルも補完候補に入れる
 * 起動オプションに「-b (base64化されたコマンド文字列)」を追加した
 
+NYAGOS 4.1.9\_3
+===============
+(4017.05.13)
+
+* Fix #217: .nyagos でのバッチ実行時に `main/lua_cmd.go: cmdExec: not found interpreter object` と表示される
+
 NYAGOS 4.1.9\_2
 ===============
 (2017.04.03)

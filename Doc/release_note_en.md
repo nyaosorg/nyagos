@@ -16,6 +16,12 @@ English / [Japanese](release_note_ja.md)
 * `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
 * Support `-b BASE64edCOMMANDSTRING` as startup option (#200)
 
+NYAGOS 4.1.9\_3
+===============
+on Feb 13.2017
+
+* Fix #214: warned as `main/lua_cmd.go: cmdExec: not found interpreter object`
+
 NYAGOS 4.1.9\_2
 ===============
 on Apr 3,2017
