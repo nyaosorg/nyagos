@@ -11,6 +11,7 @@ import (
 
 	"../dos"
 	. "../ifdbg"
+	"../interpreter"
 	"../lua"
 	"../shell"
 )
