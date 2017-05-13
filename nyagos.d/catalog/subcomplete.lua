@@ -1,5 +1,6 @@
 share.maincmds = {}
 
+-- git
 local githelp=io.popen("git help -a 2>nul","r")
 if githelp then
     local gitcmds={}
@@ -14,9 +15,12 @@ if githelp then
     if #gitcmds > 1 then
         local maincmds = share.maincmds
         maincmds["git"] = gitcmds
+        maincmds["git.exe"] = gitcmds
         share.maincmds = maincmds
     end
 end
+
+-- Subversion
 local svnhelp=io.popen("svn help 2>nul","r")
 if svnhelp then
     local svncmds={}
@@ -30,10 +34,12 @@ if svnhelp then
     if #svncmds > 1 then
         local maincmds = share.maincmds
         maincmds["svn"] = svncmds
+        maincmds["svn.exe"] = svncmds
         share.maincmds = maincmds
     end
 end
 
+-- Mercurial
 local hghelp=io.popen("hg debugcomplete 2>nul","r")
 if hghelp then
     local hgcmds={}
@@ -46,8 +52,37 @@ if hghelp then
     if #hgcmds > 1 then
         local maincmds=share.maincmds
         maincmds["hg"] = hgcmds
+        maincmds["hg.exe"] = hgcmds
         share.maincmds = maincmds
     end
+end
+
+-- Rclone
+local rclonehelp=io.popen("rclone --help 2>nul","r")
+if rclonehelp then
+  local rclonecmds={}
+  local startflag = false
+  for line in rclonehelp:lines() do
+      if string.match(line,"Available Commands:") then
+        startflag = true
+      end
+      if string.match(line,"Flags:") then
+        break
+      end
+      if startflag then
+        local m=string.match(line,"^%s+([a-z]+)")
+        if m then
+            rclonecmds[ #rclonecmds+1 ] = m
+        end
+      end
+  end
+  rclonehelp:close()
+  if #rclonecmds > 1 then
+      local maincmds=share.maincmds
+      maincmds["rclone"] = rclonecmds
+      maincmds["rclone.exe"] = rclonecmds
+      share.maincmds = maincmds
+  end
 end
 
 if next(share.maincmds) then
