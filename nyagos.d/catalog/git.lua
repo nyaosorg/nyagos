@@ -12,7 +12,7 @@ end
 
 --setup current branch string
 local currentbranch = function()
-  return nyagos.eval('git rev-parse --abbrev-ref HEAD')
+  return nyagos.eval('git rev-parse --abbrev-ref HEAD 2> nul')
 end
 
 -- subcommands
