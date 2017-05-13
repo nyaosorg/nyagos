@@ -348,6 +348,12 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 				if !isBackGround {
 					wg.Add(1)
 				}
+				if cmd.OnFork != nil {
+					if err := cmd.OnFork(cmd); err != nil {
+						fmt.Fprintln(cmd.Stderr, err.Error())
+						return -1, err
+					}
+				}
 				go func(cmd1 *Cmd) {
 					if isBackGround {
 						if FLAG_AMP2NEWCONSOLE {
@@ -360,12 +366,6 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 						}
 					} else {
 						defer wg.Done()
-					}
-					if cmd1.OnFork != nil {
-						if err := cmd1.OnFork(cmd1); err != nil {
-							fmt.Fprintln(cmd1.Stderr, err.Error())
-							goto exit
-						}
 					}
 					cmd1.SpawnvpContext(ctx)
 					if cmd1.OffFork != nil {
