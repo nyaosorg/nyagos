@@ -27,6 +27,30 @@ Programming Language GO and Lua.
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
   * Support to call COM(OLE)
 
+Easy setup
+----------
+
+    mkdir PATH\TO\INSTALLDIR
+    cd PATH\TO\INSTALLDIR
+    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
+    makeicon.cmd
+
+To customize
+
+    notepad %USERPROFILE%\_nyagos
+
+and write below for example.
+
+    set "GOPATH=%USERPROFILE%\go"
+    set "PATH^=c:\usr\bin"
+    alias "grep=findstr $*"
+    suffix "awk=gawk -f"
+
+- `set A^=B` equals `set A=B;%A%`
+- `set A+=B` equals `set A=%A%;B`
+- In the statement `alias`, you can use macros like `$1`,`$2`...`$*`
+- If you define `suffix` above, `foo.awk xxx yyy` will be replaced to `gawk -f foo.awk xxx yyy`
+
 Contents
 --------
 
