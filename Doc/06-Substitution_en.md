@@ -34,6 +34,8 @@ These suffix are available.
 ### Command Substitution (nyagos.d\backquote.lua)
 
     `COMMAND`
+  OR
+    $(COMMAND)
 
 is replaced to what COMMAND print to standard output.
 
