@@ -34,6 +34,8 @@
 ### コマンド出力置換 (nyagos.d\backquote.lua)
 
     `COMMAND`
+  もしくは
+    $(COMMAND)
 
 を、COMMAND の標準出力の内容に置換します。
 
