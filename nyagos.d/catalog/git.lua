@@ -1,8 +1,5 @@
 share.git = {}
 
--- setup command available function
--- fixme
-
 -- setup local branch listup
 local branchlist = function()
   local gitbranches = {}
@@ -15,9 +12,7 @@ end
 
 --setup current branch string
 local currentbranch = function()
-  local current = ''
-  current = nyagos.eval('git rev-parse --abbrev-ref HEAD')
-  return current
+  return nyagos.eval('git rev-parse --abbrev-ref HEAD')
 end
 
 -- subcommands
