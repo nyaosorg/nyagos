@@ -1,13 +1,23 @@
 share.git = {}
 
--- setup branch detector
-local branchdetect = function()
+-- setup command available function
+-- fixme
+
+-- setup local branch listup
+local branchlist = function()
   local gitbranches = {}
   local gitbranch_tmp = nyagos.eval('git for-each-ref  --format="%(refname:short)" refs/heads/ 2> nul')
   for line in gitbranch_tmp:gmatch('[^\n]+') do
     table.insert(gitbranches,line)
   end
   return gitbranches
+end
+
+--setup current branch string
+local currentbranch = function()
+  local current = ''
+  current = nyagos.eval('git rev-parse --abbrev-ref HEAD')
+  return current
 end
 
 -- subcommands
@@ -23,14 +33,15 @@ gitsubcommands["svn"]={"init", "fetch", "clone", "rebase", "dcommit", "log", "fi
 gitsubcommands["worktree"]={"add", "list", "lock", "prune", "unlock"}
 
 -- branch
-gitsubcommands["checkout"]=branchdetect
-gitsubcommands["reset"]=branchdetect
-gitsubcommands["merge"]=branchdetect
-gitsubcommands["rebase"]=branchdetect
+gitsubcommands["checkout"]=branchlist
+gitsubcommands["reset"]=branchlist
+gitsubcommands["merge"]=branchlist
+gitsubcommands["rebase"]=branchlist
 
 local gitvar=share.git
 gitvar.subcommand=gitsubcommands
-gitvar.branch=branchdetect
+gitvar.branch=branchlist
+gitvar.currentbranch=currentbranch
 share.git=gitvar
 
 if share.maincmds then
