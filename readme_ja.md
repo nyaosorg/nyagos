@@ -25,6 +25,31 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
   * コードページ文字列とUTF8とのコンバート関数
   * COM サポート
 
+簡単な導入方法
+--------------
+
+    mkdir PATH\TO\INSTALLDIR
+    cd PATH\TO\INSTALLDIR
+    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
+    makeicon.cmd
+
+カスタマイズするには
+
+    notepad %USERPROFILE%\_nyagos
+
+たとえば下記のように記載してください。
+
+    set "GOPATH=%USERPROFILE%\go"
+    set "PATH^=c:\usr\bin"
+    alias "grep=findstr $*"
+    suffix "awk=gawk -f"
+
+- `set A^=B` は `set A=B;%A%` と同じです
+- `set A+=B` は `set A=%A%;B` と同じです
+- `alias`文では、`$1`,`$2`...`$*` といった引数マクロが使えます
+- 上のように`suffix`を定義すると、`foo.awk xxx yyy`は`gawk -f foo.awk xxx yyy`に置換されます
+
+
 目次
 ----
 
