@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"reflect"
+	"strings"
 	"sync"
 	"syscall"
 
@@ -148,6 +149,24 @@ func nvl(a *os.File, b *os.File) *os.File {
 	}
 }
 
+func makeCmdline(args, rawargs []string) string {
+	buffer := make([]byte, 0, 1024)
+	for i, s := range args {
+		if i > 0 {
+			buffer = append(buffer, ' ')
+		}
+		if rawargs[i][0] == '"' || strings.ContainsAny(s, " &|<>\t\"") {
+			buffer = append(buffer, '"')
+			qs := strings.Replace(s, `"`, `\"`, -1)
+			buffer = append(buffer, qs...)
+			buffer = append(buffer, '"')
+		} else {
+			buffer = append(buffer, s...)
+		}
+	}
+	return string(buffer)
+}
+
 func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	// command is empty.
 	if len(this.Args) <= 0 {
@@ -184,6 +203,15 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 			return 0, err
 		}
 	}
+
+	if this.SysProcAttr == nil {
+		this.SysProcAttr = new(syscall.SysProcAttr)
+	}
+	cmdline := makeCmdline(this.Args, this.RawArgs)
+	if DBG {
+		println(cmdline)
+	}
+	this.SysProcAttr.CmdLine = cmdline
 	err = this.Run()
 
 	errorlevel, errorlevelOk := dos.GetErrorLevel(&this.Cmd)
