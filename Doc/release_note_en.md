@@ -16,6 +16,7 @@ English / [Japanese](release_note_ja.md)
 * `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
 * Support `-b BASE64edCOMMANDSTRING` as startup option (#200)
 * Support `$(  )` format to quote command-output by backquote.lua
+* Never cut double-quotations of parameters which users wrote for FIND.EXE and so on #218,#222
 
 NYAGOS 4.1.9\_3
 ===============
