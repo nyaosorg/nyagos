@@ -6,6 +6,9 @@ nyagos.argsfilter = function(args)
       args = args_
     end
   end
+  if nyagos.which(args[0]) then
+    return
+  end
   local stat = nyagos.stat(args[0])
   if not stat or not stat.isdir then
     return
