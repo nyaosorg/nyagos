@@ -32,7 +32,7 @@ function set(equation)
     set_(nyagos.setenv,equation,expand)
 end
 function alias(equation)
-    set_(nyagos.alias,equation,function(x) return x end)
+    set_(nyagos.setalias,equation,function(x) return x end)
 end
 function addpath(...)
     for _,dir in pairs{...} do
