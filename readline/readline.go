@@ -108,6 +108,10 @@ func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	}
 }
 
+func BindKeyClosure(name string, f func(*Buffer) Result) error {
+	return BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
+}
+
 func GetBindKey(keyName string) KeyFuncT {
 	keyName_ := normWord(keyName)
 	if altValue, altOk := name2alt[keyName_]; altOk {
