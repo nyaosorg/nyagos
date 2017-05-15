@@ -155,7 +155,7 @@ func makeCmdline(args, rawargs []string) string {
 		if i > 0 {
 			buffer = append(buffer, ' ')
 		}
-		if rawargs[i][0] == '"' || strings.ContainsAny(s, " &|<>\t\"") {
+		if (len(rawargs) > i && len(rawargs[i]) > 0 && rawargs[i][0] == '"') || strings.ContainsAny(s, " &|<>\t\"") {
 			buffer = append(buffer, '"')
 			qs := strings.Replace(s, `"`, `\"`, -1)
 			buffer = append(buffer, qs...)
