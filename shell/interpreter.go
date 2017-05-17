@@ -262,7 +262,7 @@ type gotoEol struct{}
 
 var GotoEol = gotoEol{}
 
-func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel int, err error) {
+func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel int, finalerr error) {
 	if DBG {
 		print("Interpret('", text, "')\n")
 	}
@@ -270,7 +270,7 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 		return 255, errors.New("Fatal Error: Interpret: instance is nil")
 	}
 	errorlevel = 0
-	err = nil
+	finalerr = nil
 
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
@@ -285,6 +285,7 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 		}
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
+				var err error
 				state.Args, err = argsHook(this, state.Args)
 				if err != nil {
 					return 255, err
@@ -368,7 +369,7 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				// foreground execution.
-				errorlevel, err = cmd.SpawnvpContext(ctx)
+				errorlevel, finalerr = cmd.SpawnvpContext(ctx)
 				LastErrorLevel = errorlevel
 				cmd.Close()
 			} else {
