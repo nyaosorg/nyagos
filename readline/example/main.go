@@ -17,7 +17,7 @@ func main() {
 
 	enter_status := 0
 	readline.BindKeyClosure(readline.K_CTRL_P,
-		 func(r *readline.Buffer) readline.Result {
+		func(r *readline.Buffer) readline.Result {
 			enter_status = -1
 			return readline.ENTER
 		})
