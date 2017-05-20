@@ -160,15 +160,15 @@ func offFork(cmd *shell.Cmd) error {
 	return nil
 }
 
-type ReadLineT struct {
-	shell.ReadLiner
+type MainStream struct {
+	shell.Stream
 	L lua.Lua
 }
 
-func (this *ReadLineT) ReadLine(ctx context.Context) (context.Context, string, error) {
+func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
 	ctx = context.WithValue(ctx, lua.NoInstance, this.L)
 	ctx = context.WithValue(ctx, history.NoInstance, default_history)
-	ctx, line, err := this.ReadLiner.ReadLine(ctx)
+	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
 	}
@@ -221,20 +221,20 @@ func Main() error {
 		return nil
 	}
 
-	var command_reader ICmdStream
+	backupHistory := default_history
+	defer func() {
+		default_history = backupHistory
+	}()
+
+	var stream1 shell.Stream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		stream1 := NewCmdStreamConsole(
+		constream := NewCmdStreamConsole(
 			func() (int, error) { return printPrompt(L) })
-		command_reader = stream1
-		default_history = stream1.History
+		stream1 = constream
+		default_history = constream.History
 	} else {
-		command_reader = NewCmdStreamFile(os.Stdin)
+		stream1 = NewCmdStreamFile(os.Stdin)
 	}
 
-	sigint := make(chan os.Signal, 1)
-	defer close(sigint)
-	quit := make(chan struct{}, 1)
-	defer close(quit)
-
-	return it.Loop(&ReadLineT{command_reader, L})
+	return it.Loop(&MainStream{stream1, L})
 }

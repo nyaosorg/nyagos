@@ -8,11 +8,13 @@ import (
 	"os/signal"
 )
 
-type ReadLiner interface {
+type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
+	GetPos() int
+	SetPos(int) error
 }
 
-func (it *Cmd) Loop(readline1 ReadLiner) error {
+func (it *Cmd) Loop(stream Stream) error {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
 	quit := make(chan struct{}, 1)
@@ -20,7 +22,7 @@ func (it *Cmd) Loop(readline1 ReadLiner) error {
 
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
-		ctx, line, err := readline1.ReadLine(ctx)
+		ctx, line, err := stream.ReadLine(ctx)
 
 		if err != nil {
 			cancel()

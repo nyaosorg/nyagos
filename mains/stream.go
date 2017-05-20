@@ -14,12 +14,6 @@ import (
 	"../readline"
 )
 
-type ICmdStream interface {
-	ReadLine(context.Context) (context.Context, string, error)
-	GetPos() int
-	SetPos(int) error
-}
-
 type CmdSeeker struct {
 	PlainHistory []string
 	Pointer      int
