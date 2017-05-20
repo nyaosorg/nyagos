@@ -42,8 +42,11 @@ func (this CommandNotFound) Error() string {
 }
 
 type Cmd struct {
-	exec.Cmd
 	Stdio        [3]*os.File
+	Stdout       io.Writer
+	Stderr       io.Writer
+	Stdin        io.Reader
+	Args         []string
 	HookCount    int
 	Tag          interface{}
 	PipeSeq      [2]uint
@@ -183,38 +186,44 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 
 	// command not found hook
 	var err error
-	this.Path = dos.LookPath(this.Args[0], "NYAGOSPATH")
-	if this.Path == "" {
+	path1 := dos.LookPath(this.Args[0], "NYAGOSPATH")
+	if path1 == "" {
 		return 255, OnCommandNotFound(this, os.ErrNotExist)
 	}
-	this.Args[0] = this.Path
+	this.Args[0] = path1
+
 	if DBG {
-		print("exec.LookPath(", this.Args[0], ")==", this.Path, "\n")
+		print("exec.LookPath(", this.Args[0], ")==", path1, "\n")
 	}
 
 	if WildCardExpansionAlways {
 		this.Args = findfile.Globs(this.Args)
 	}
 
+	cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
+	cmd1.Stdin = this.Stdio[0]
+	cmd1.Stdout = this.Stdio[1]
+	cmd1.Stderr = this.Stdio[2]
+
 	// executable-file
 	if FLAG_AMP2NEWCONSOLE {
-		if this.SysProcAttr != nil && (this.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
-			err = this.Start()
+		if cmd1.SysProcAttr != nil && (cmd1.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
+			err = cmd1.Start()
 			return 0, err
 		}
 	}
 
-	if this.SysProcAttr == nil {
-		this.SysProcAttr = new(syscall.SysProcAttr)
+	if cmd1.SysProcAttr == nil {
+		cmd1.SysProcAttr = new(syscall.SysProcAttr)
 	}
-	cmdline := makeCmdline(this.Args, this.RawArgs)
+	cmdline := makeCmdline(cmd1.Args, this.RawArgs)
 	if DBG {
 		println(cmdline)
 	}
-	this.SysProcAttr.CmdLine = cmdline
-	err = this.Run()
+	cmd1.SysProcAttr.CmdLine = cmdline
+	err = cmd1.Run()
 
-	errorlevel, errorlevelOk := dos.GetErrorLevel(&this.Cmd)
+	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
 	if errorlevelOk {
 		return errorlevel, err
 	} else {
@@ -384,16 +393,7 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 					}
 				}
 				go func(cmd1 *Cmd) {
-					if isBackGround {
-						if FLAG_AMP2NEWCONSOLE {
-							if len(pipeline) == 1 {
-								cmd1.SysProcAttr = &syscall.SysProcAttr{
-									CreationFlags: CREATE_NEW_CONSOLE |
-										CREATE_NEW_PROCESS_GROUP,
-								}
-							}
-						}
-					} else {
+					if !isBackGround {
 						defer wg.Done()
 					}
 					cmd1.SpawnvpContext(ctx)
