@@ -81,16 +81,6 @@ func New() *Cmd {
 	return &this
 }
 
-func (this *Cmd) SetStdin(f *os.File) {
-	this.Stdin = f
-}
-func (this *Cmd) SetStdout(f *os.File) {
-	this.Stdout = f
-}
-func (this *Cmd) SetStderr(f *os.File) {
-	this.Stderr = f
-}
-
 func (this *Cmd) Clone() (*Cmd, error) {
 	rv := new(Cmd)
 	rv.Args = this.Args
@@ -339,7 +329,7 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			})
 
 			if pipeIn != nil {
-				cmd.SetStdin(pipeIn)
+				cmd.Stdin = pipeIn
 				cmd.Closers = append(cmd.Closers, pipeIn)
 				pipeIn = nil
 			}
@@ -347,9 +337,9 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			if state.Term[0] == '|' {
 				var pipeOut *os.File
 				pipeIn, pipeOut, err = os.Pipe()
-				cmd.SetStdout(pipeOut)
+				cmd.Stdout = pipeOut
 				if state.Term == "|&" {
-					cmd.SetStderr(pipeOut)
+					cmd.Stderr = pipeOut
 				}
 				cmd.Closers = append(cmd.Closers, pipeOut)
 			}

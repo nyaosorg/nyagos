@@ -264,7 +264,7 @@ func cmdEval(L lua.Lua) int {
 	go func(statement string, w *os.File) {
 		it := shell.New()
 		it.Tag = L
-		it.SetStdout(w)
+		it.Stdout = w
 		it.Interpret(statement)
 		w.Close()
 	}(statement, w)

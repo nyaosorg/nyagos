@@ -72,11 +72,11 @@ func (this *Redirecter) OpenOn(cmd *Cmd) (*os.File, error) {
 	}
 	switch this.FileNo() {
 	case 0:
-		cmd.SetStdin(fd)
+		cmd.Stdin = fd
 	case 1:
-		cmd.SetStdout(fd)
+		cmd.Stdout = fd
 	case 2:
-		cmd.SetStderr(fd)
+		cmd.Stderr = fd
 	default:
 		panic("Assertion failed: Redirecter.OpenAs: this.no not in (0,1,2)")
 	}
