@@ -5,9 +5,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io"
 	"os"
-	"os/signal"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -162,6 +160,21 @@ func offFork(cmd *shell.Cmd) error {
 	return nil
 }
 
+type ReadLineT struct {
+	shell.ReadLiner
+	L lua.Lua
+}
+
+func (this *ReadLineT) ReadLine(ctx context.Context) (context.Context, string, error) {
+	ctx = context.WithValue(ctx, lua.NoInstance, this.L)
+	ctx = context.WithValue(ctx, history.NoInstance, default_history)
+	ctx, line, err := this.ReadLiner.ReadLine(ctx)
+	if err != nil {
+		return ctx, "", err
+	}
+	return ctx, doLuaFilter(this.L, line), nil
+}
+
 func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
@@ -223,48 +236,5 @@ func Main() error {
 	quit := make(chan struct{}, 1)
 	defer close(quit)
 
-	for {
-		ctx, cancel := context.WithCancel(context.Background())
-		ctx = context.WithValue(ctx, lua.NoInstance, L)
-		ctx = context.WithValue(ctx, history.NoInstance, default_history)
-		line, err := command_reader.ReadLine(ctx)
-
-		if err != nil {
-			cancel()
-			return err
-		}
-		line = doLuaFilter(L, line)
-		signal.Notify(sigint, os.Interrupt)
-
-		go func(sigint_ chan os.Signal, quit_ chan struct{}, cancel_ func()) {
-			for {
-				select {
-				case <-sigint_:
-					cancel_()
-					<-quit
-					return
-				case <-quit:
-					cancel_()
-					return
-				}
-			}
-		}(sigint, quit, cancel)
-		_, err = it.InterpretContext(ctx, line)
-		signal.Stop(sigint)
-		quit <- struct{}{}
-
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			if err1, ok := err.(shell.AlreadyReportedError); ok {
-				if err1.Err == io.EOF {
-					break
-				}
-			} else {
-				fmt.Fprintln(os.Stderr, err)
-			}
-		}
-	}
-	return nil
+	return it.Loop(&ReadLineT{command_reader, L})
 }

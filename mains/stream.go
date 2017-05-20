@@ -15,7 +15,7 @@ import (
 )
 
 type ICmdStream interface {
-	ReadLine(context.Context) (string, error)
+	ReadLine(context.Context) (context.Context, string, error)
 	GetPos() int
 	SetPos(int) error
 }
@@ -66,11 +66,11 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	return this
 }
 
-func (this *CmdStreamConsole) ReadLine(ctx context.Context) (string, error) {
+func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
 	if this.Pointer >= 0 {
 		if this.Pointer < len(this.PlainHistory) {
 			this.Pointer++
-			return this.PlainHistory[this.Pointer-1], nil
+			return ctx, this.PlainHistory[this.Pointer-1], nil
 		}
 		this.Pointer = -1
 	}
@@ -79,7 +79,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (string, error) {
 	for {
 		line, err = this.Editor.ReadLine(ctx)
 		if err != nil {
-			return line, err
+			return ctx, line, err
 		}
 		var isReplaced bool
 		line, isReplaced = this.History.Replace(line)
@@ -103,7 +103,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (string, error) {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 	this.PlainHistory = append(this.PlainHistory, line)
-	return line, err
+	return ctx, line, err
 }
 
 type CmdStreamFile struct {
@@ -121,22 +121,22 @@ func NewCmdStreamFile(r io.Reader) *CmdStreamFile {
 	}
 }
 
-func (this *CmdStreamFile) ReadLine(context.Context) (string, error) {
+func (this *CmdStreamFile) ReadLine(ctx context.Context) (context.Context, string, error) {
 	if this.Pointer >= 0 {
 		if this.Pointer < len(this.PlainHistory) {
 			this.Pointer++
-			return this.PlainHistory[this.Pointer-1], nil
+			return ctx, this.PlainHistory[this.Pointer-1], nil
 		}
 		this.Pointer = -1
 	}
 	if !this.Scanner.Scan() {
 		if err := this.Scanner.Err(); err != nil {
-			return "", err
+			return ctx, "", err
 		} else {
-			return "", io.EOF
+			return ctx, "", io.EOF
 		}
 	}
 	text := strings.TrimRight(this.Scanner.Text(), "\r\n")
 	this.PlainHistory = append(this.PlainHistory, text)
-	return text, nil
+	return ctx, text, nil
 }
