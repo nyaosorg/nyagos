@@ -45,7 +45,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
 	}
 
-	if f := cmd.Stdio[1]; f != os.Stdout && f != os.Stderr {
+	if f := cmd.Stdout; f != os.Stdout && f != os.Stderr {
 		L.GetGlobal("io")        // +1
 		L.GetField(-1, "output") // +1 (get function pointer)
 		if err := L.PushFileWriter(f); err != nil {
@@ -55,7 +55,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		L.Call(1, 0)
 		L.Pop(1) // remove io-table
 	}
-	if f := cmd.Stdio[0]; f != os.Stdin {
+	if f := cmd.Stdin; f != os.Stdin {
 		L.GetGlobal("io")       // +1
 		L.GetField(-1, "input") // +1 (get function pointer)
 		if err := L.PushFileReader(f); err != nil {
@@ -811,8 +811,8 @@ func cmdLines(L lua.Lua) int {
 		L.Push(cmdLinesCallback)
 		cmd := getRegInt(L)
 		L.PushUserData(&iolines_t{
-			Fd:         cmd.Stdio[0],
-			Reader:     bufio.NewReader(cmd.Stdio[0]),
+			Fd:         cmd.Stdin,
+			Reader:     bufio.NewReader(cmd.Stdin),
 			HasToClose: false,
 			Marks:      []string{"l"},
 		})

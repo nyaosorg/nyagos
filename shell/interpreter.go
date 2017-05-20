@@ -42,10 +42,9 @@ func (this CommandNotFound) Error() string {
 }
 
 type Cmd struct {
-	Stdio        [3]*os.File
-	Stdout       io.Writer
-	Stderr       io.Writer
-	Stdin        io.Reader
+	Stdout       *os.File
+	Stderr       *os.File
+	Stdin        *os.File
 	Args         []string
 	HookCount    int
 	Tag          interface{}
@@ -73,26 +72,22 @@ func (this *Cmd) Close() {
 
 func New() *Cmd {
 	this := Cmd{
-		Stdio: [3]*os.File{os.Stdin, os.Stdout, os.Stderr},
+		Stdin:  os.Stdin,
+		Stdout: os.Stdout,
+		Stderr: os.Stderr,
 	}
-	this.Stdin = os.Stdin
-	this.Stdout = os.Stdout
-	this.Stderr = os.Stderr
 	this.PipeSeq[0] = pipeSeq
 	this.PipeSeq[1] = 0
 	return &this
 }
 
 func (this *Cmd) SetStdin(f *os.File) {
-	this.Stdio[0] = f
 	this.Stdin = f
 }
 func (this *Cmd) SetStdout(f *os.File) {
-	this.Stdio[1] = f
 	this.Stdout = f
 }
 func (this *Cmd) SetStderr(f *os.File) {
-	this.Stdio[2] = f
 	this.Stderr = f
 }
 
@@ -100,9 +95,6 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv := new(Cmd)
 	rv.Args = this.Args
 	rv.RawArgs = this.RawArgs
-	rv.Stdio[0] = this.Stdio[0]
-	rv.Stdio[1] = this.Stdio[1]
-	rv.Stdio[2] = this.Stdio[2]
 	rv.Stdin = this.Stdin
 	rv.Stdout = this.Stdout
 	rv.Stderr = this.Stderr
@@ -201,9 +193,9 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	}
 
 	cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
-	cmd1.Stdin = this.Stdio[0]
-	cmd1.Stdout = this.Stdio[1]
-	cmd1.Stderr = this.Stdio[2]
+	cmd1.Stdin = this.Stdin
+	cmd1.Stdout = this.Stdout
+	cmd1.Stderr = this.Stderr
 
 	// executable-file
 	if FLAG_AMP2NEWCONSOLE {

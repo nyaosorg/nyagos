@@ -58,8 +58,12 @@ func (this *Redirecter) OpenOn(cmd *Cmd) (*os.File, error) {
 	var err error
 
 	switch this.dupFrom {
-	case 0, 1, 2:
-		fd = cmd.Stdio[this.dupFrom]
+	case 0:
+		fd = cmd.Stdin
+	case 1:
+		fd = cmd.Stdout
+	case 2:
+		fd = cmd.Stderr
 	default:
 		fd, err = this.open()
 		if err != nil {

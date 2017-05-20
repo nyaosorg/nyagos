@@ -222,8 +222,7 @@ func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 
 	historyObj_ := ctx.Value(NoInstance)
 	if historyObj, ok := historyObj_.(*Container); ok {
-		if f, ok := cmd.Stdout.(*os.File); (!ok || isatty.IsTerminal(f.Fd())) &&
-			historyObj.Len() > num {
+		if isatty.IsTerminal(cmd.Stdout.Fd()) && historyObj.Len() > num {
 
 			start = historyObj.Len() - num
 		}
