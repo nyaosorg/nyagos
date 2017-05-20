@@ -18,8 +18,6 @@ import (
 	. "../ifdbg"
 )
 
-const FLAG_AMP2NEWCONSOLE = false
-
 var WildCardExpansionAlways = false
 
 type CommandNotFound struct {
@@ -186,14 +184,6 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	cmd1.Stdin = this.Stdin
 	cmd1.Stdout = this.Stdout
 	cmd1.Stderr = this.Stderr
-
-	// executable-file
-	if FLAG_AMP2NEWCONSOLE {
-		if cmd1.SysProcAttr != nil && (cmd1.SysProcAttr.CreationFlags&CREATE_NEW_CONSOLE) != 0 {
-			err = cmd1.Start()
-			return 0, err
-		}
-	}
 
 	if cmd1.SysProcAttr == nil {
 		cmd1.SysProcAttr = new(syscall.SysProcAttr)
