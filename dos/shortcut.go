@@ -10,15 +10,18 @@ func ReadShortcut(path string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
+	defer agent.Release()
 	agentDis, err := agent.QueryInterface(ole.IID_IDispatch)
 	if err != nil {
 		return "", "", err
 	}
+	agentDis.Release()
 	shortcut, err := oleutil.CallMethod(agentDis, "CreateShortCut", path)
 	if err != nil {
 		return "", "", err
 	}
 	shortcutDis := shortcut.ToIDispatch()
+	defer shortcutDis.Release()
 	targetPath, err := oleutil.GetProperty(shortcutDis, "TargetPath")
 	if err != nil {
 		return "", "", err
