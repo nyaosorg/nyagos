@@ -15,7 +15,7 @@ func ReadShortcut(path string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	agentDis.Release()
+	defer agentDis.Release()
 	shortcut, err := oleutil.CallMethod(agentDis, "CreateShortCut", path)
 	if err != nil {
 		return "", "", err
