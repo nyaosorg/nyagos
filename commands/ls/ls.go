@@ -147,6 +147,13 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 			fmt.Fprintf(out, " -> %s", link_to)
 		}
 	}
+	if strings.HasSuffix(name, ".lnk") {
+		path := dos.Join(folder, name)
+		shortcut, _, err := dos.ReadShortcut(path)
+		if err == nil && shortcut != "" {
+			fmt.Fprintf(out, " -> %s", shortcut)
+		}
+	}
 	io.WriteString(out, "\n")
 }
 
