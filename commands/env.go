@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func array2hash(args []string) ([]string, map[string]string) {

@@ -6,7 +6,7 @@ import (
 	"os"
 	"runtime/debug"
 
-	"./mains"
+	"github.com/zetamatta/nyagos/mains"
 )
 
 func when_panic() {

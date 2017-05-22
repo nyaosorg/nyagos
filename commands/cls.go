@@ -6,7 +6,7 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_cls(ctx context.Context, cmd *shell.Cmd) (int, error) {

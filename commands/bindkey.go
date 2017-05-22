@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"../readline"
-	"../shell"
+	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_bindkey(ctx context.Context, cmd *shell.Cmd) (int, error) {

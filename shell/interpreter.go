@@ -14,8 +14,8 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"../dos"
-	. "../ifdbg"
+	"github.com/zetamatta/nyagos/dos"
+	. "github.com/zetamatta/nyagos/ifdbg"
 )
 
 var WildCardExpansionAlways = false

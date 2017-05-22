@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"../dos"
+	"github.com/zetamatta/nyagos/dos"
 )
 
 func isExecutable(path string) bool {

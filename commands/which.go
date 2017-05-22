@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"../alias"
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/alias"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 const (

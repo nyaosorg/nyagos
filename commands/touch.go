@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"time"
 
-	"../shell"
-	"./timecheck"
+	"github.com/zetamatta/nyagos/commands/timecheck"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var timePattern = regexp.MustCompile(

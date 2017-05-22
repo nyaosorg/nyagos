@@ -1,7 +1,7 @@
 package completion
 
 import (
-	"../readline"
+	"github.com/zetamatta/nyagos/readline"
 )
 
 var command_listupper = []func() []Element{

@@ -1,8 +1,8 @@
 package mains
 
 import (
-	"../completion"
-	"../shell"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 type ShellVariable struct {

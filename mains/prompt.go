@@ -8,7 +8,7 @@ import (
 	"time"
 	"unicode"
 
-	"../dos"
+	"github.com/zetamatta/nyagos/dos"
 )
 
 func Format2Prompt(format string) string {

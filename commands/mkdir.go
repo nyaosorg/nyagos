@@ -8,7 +8,7 @@ import (
 
 	"github.com/zetamatta/go-getch"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_mkdir(ctx context.Context, cmd *shell.Cmd) (int, error) {

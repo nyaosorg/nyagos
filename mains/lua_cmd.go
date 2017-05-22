@@ -23,12 +23,12 @@ import (
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
-	"../alias"
-	"../completion"
-	"../dos"
-	"../lua"
-	"../readline"
-	"../shell"
+	"github.com/zetamatta/nyagos/alias"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 type LuaBinaryChank struct {

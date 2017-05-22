@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {

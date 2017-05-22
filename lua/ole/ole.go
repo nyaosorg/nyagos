@@ -1,7 +1,7 @@
 package goluaole
 
 import (
-	lua "../../lua"
+	lua "github.com/zetamatta/nyagos/lua"
 
 	ole "github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"

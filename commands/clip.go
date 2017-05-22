@@ -8,7 +8,7 @@ import (
 	"github.com/atotto/clipboard"
 	"github.com/zetamatta/go-mbcs"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_clip(ctx context.Context, cmd *shell.Cmd) (int, error) {

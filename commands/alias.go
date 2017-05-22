@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"../alias"
-	"../shell"
+	"github.com/zetamatta/nyagos/alias"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_alias(ctx context.Context, cmd *shell.Cmd) (int, error) {

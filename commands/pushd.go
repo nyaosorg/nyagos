@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var dirstack = make([]string, 0, 20)

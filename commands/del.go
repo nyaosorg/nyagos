@@ -9,8 +9,8 @@ import (
 
 	"github.com/zetamatta/go-getch"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func attrib_plus_r(path string) error {

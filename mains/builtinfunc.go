@@ -6,8 +6,8 @@ import (
 
 	"github.com/zetamatta/go-box"
 
-	"../dos"
-	"../readline"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/readline"
 )
 
 func cstr(value interface{}) (string, bool) {

@@ -7,7 +7,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_echo(ctx context.Context, cmd *shell.Cmd) (int, error) {

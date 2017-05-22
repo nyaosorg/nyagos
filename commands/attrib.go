@@ -8,8 +8,8 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func getbit(c byte) uint32 {

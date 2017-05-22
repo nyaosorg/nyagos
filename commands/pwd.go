@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_pwd(ctx context.Context, cmd *shell.Cmd) (int, error) {

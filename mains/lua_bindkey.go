@@ -9,9 +9,9 @@ import (
 
 	"github.com/zetamatta/go-box"
 
-	"../lua"
-	"../readline"
-	"../shell"
+	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 type KeyLuaFuncT struct {

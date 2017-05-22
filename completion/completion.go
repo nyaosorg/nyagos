@@ -11,7 +11,7 @@ import (
 
 	"github.com/zetamatta/go-box"
 
-	"../readline"
+	"github.com/zetamatta/nyagos/readline"
 )
 
 type Element struct {

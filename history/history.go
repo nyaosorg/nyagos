@@ -15,7 +15,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var Mark = "!"

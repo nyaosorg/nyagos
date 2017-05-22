@@ -10,8 +10,8 @@ import (
 
 	"github.com/zetamatta/go-getch"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 type copymove_t struct {

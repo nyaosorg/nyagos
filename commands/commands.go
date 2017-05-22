@@ -7,10 +7,10 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"../completion"
-	"../dos"
-	"../history"
-	"../shell"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var BuildInCommand map[string]func(context.Context, *shell.Cmd) (int, error)

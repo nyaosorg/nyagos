@@ -7,7 +7,7 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"../dos"
+	"github.com/zetamatta/nyagos/dos"
 )
 
 const (

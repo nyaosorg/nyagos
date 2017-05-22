@@ -13,14 +13,14 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/zetamatta/go-getch"
 
-	"../alias"
-	"../commands"
-	"../completion"
-	"../dos"
-	"../history"
-	"../lua"
-	"../readline"
-	"../shell"
+	"github.com/zetamatta/nyagos/alias"
+	"github.com/zetamatta/nyagos/commands"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")

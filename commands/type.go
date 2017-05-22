@@ -11,7 +11,7 @@ import (
 
 	"github.com/zetamatta/go-mbcs"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cat(r io.Reader, w io.Writer) {

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func getwd_() string {

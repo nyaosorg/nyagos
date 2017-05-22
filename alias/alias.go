@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"../completion"
-	"../shell"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var dbg = false

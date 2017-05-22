@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"../completion"
-	"../lua"
-	"../readline"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/readline"
 )
 
 var completionHook lua.Object = lua.TNil{}

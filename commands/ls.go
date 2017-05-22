@@ -7,8 +7,8 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"../shell"
-	"./ls"
+	"github.com/zetamatta/nyagos/commands/ls"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func cmd_ls(ctx context.Context, cmd *shell.Cmd) (int, error) {

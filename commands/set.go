@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"../shell"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func shrink(values ...string) string {

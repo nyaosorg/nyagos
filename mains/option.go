@@ -8,8 +8,8 @@ import (
 	"os"
 	"strings"
 
-	"../lua"
-	"../shell"
+	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func setLuaArg(L lua.Lua, arg0 string) {

@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var cd_history = make([]string, 0, 100)

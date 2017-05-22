@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"../dos"
-	. "../ifdbg"
-	"../lua"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	. "github.com/zetamatta/nyagos/ifdbg"
+	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func versionOrStamp() string {

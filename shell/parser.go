@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"../dos"
+	"github.com/zetamatta/nyagos/dos"
 )
 
 type StatementT struct {

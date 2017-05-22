@@ -12,8 +12,8 @@ import (
 
 	"github.com/zetamatta/go-mbcs"
 
-	"../dos"
-	"../shell"
+	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func load_envfile(fname string, verbose io.Writer) error {

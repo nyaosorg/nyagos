@@ -8,12 +8,12 @@ import (
 	"runtime"
 	"unsafe"
 
-	"../completion"
-	"../history"
-	"../lua"
-	ole "../lua/ole"
-	"../readline"
-	"../shell"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/lua"
+	ole "github.com/zetamatta/nyagos/lua/ole"
+	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"

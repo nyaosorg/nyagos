@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"../history"
-	"../readline"
+	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/readline"
 )
 
 type CmdSeeker struct {
