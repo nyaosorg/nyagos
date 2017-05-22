@@ -18,7 +18,8 @@ English / [Japanese](release_note_ja.md)
 * Support `$(  )` format to quote command-output by backquote.lua
 * Never cut double-quotations of parameters which users wrote for FIND.EXE and so on #218,#222
 * `ls -l`: Show shortcut's target and working directory.
-* Fix: typing `regedit.exe` causes the error `The requested operation requires elevation`. Now UAC elevation dialog is shown. #227
+* Fix: Executing commands requiring elevation causes the error `The requested operation requires elevation`. Now UAC elevation dialog is shown. #227
+* Rewrote `cd/push SHORTCUT.lnk` from Lua(nyagos.d/cdlnk.lua) to Golang-native
 
 NYAGOS 4.1.9\_3
 ===============
