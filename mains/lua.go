@@ -335,18 +335,18 @@ func NewLua() (lua.Lua, error) {
 
 var silentmode = false
 
-func lua2cmd(f func([]Any) []Any) func(lua.Lua) int {
+func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 	return func(L lua.Lua) int {
 		end := L.GetTop()
-		var param []Any
+		var param []interface{}
 		if end > 0 {
-			param = make([]Any, 0, end-1)
+			param = make([]interface{}, 0, end-1)
 			for i := 1; i <= end; i++ {
 				value, _ := L.ToInterface(i)
 				param = append(param, value)
 			}
 		} else {
-			param = []Any{}
+			param = []interface{}{}
 		}
 		result := f(param)
 		for _, value := range result {

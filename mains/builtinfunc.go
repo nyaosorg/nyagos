@@ -10,9 +10,7 @@ import (
 	"../readline"
 )
 
-type Any interface{}
-
-func cstr(value Any) (string, bool) {
+func cstr(value interface{}) (string, bool) {
 	if s, ok := value.(string); ok {
 		return s, true
 	}
@@ -25,26 +23,26 @@ func cstr(value Any) (string, bool) {
 	return "", false
 }
 
-func cmdElevated([]Any) []Any {
+func cmdElevated([]interface{}) []interface{} {
 	flag, _ := dos.IsElevated()
-	return []Any{flag}
+	return []interface{}{flag}
 }
 
-func cmdChdir(args []Any) []Any {
+func cmdChdir(args []interface{}) []interface{} {
 	if len(args) >= 1 {
 		path, ok := cstr(args[0])
 		if ok {
 			dos.Chdir(path)
-			return []Any{true}
+			return []interface{}{true}
 		}
 	}
-	return []Any{nil, errors.New("directory is required")}
+	return []interface{}{nil, errors.New("directory is required")}
 }
 
-func cmdBox(args []Any) []Any {
-	t, ok := args[0].(map[Any]Any)
+func cmdBox(args []interface{}) []interface{} {
+	t, ok := args[0].(map[interface{}]interface{})
 	if !ok {
-		return []Any{nil, "Not a table"}
+		return []interface{}{nil, "Not a table"}
 	}
 	sources := make([]string, 0, len(t))
 	for _, v := range t {
@@ -52,5 +50,5 @@ func cmdBox(args []Any) []Any {
 			sources = append(sources, str)
 		}
 	}
-	return []Any{box.Choice(sources, readline.Console)}
+	return []interface{}{box.Choice(sources, readline.Console)}
 }
