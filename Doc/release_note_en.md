@@ -20,6 +20,7 @@ English / [Japanese](release_note_ja.md)
 * `ls -l`: Show shortcut's target and working directory.
 * Fix: Executing commands requiring elevation causes the error `The requested operation requires elevation`. Now UAC elevation dialog is shown. #227
 * Rewrote `cd/push SHORTCUT.lnk` from Lua(nyagos.d/cdlnk.lua) to Golang-native
+* Fix: `ll` was aliased to non-colored version on default `_nyagos`
 
 NYAGOS 4.1.9\_3
 ===============
