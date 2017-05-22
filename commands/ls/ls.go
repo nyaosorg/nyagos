@@ -149,9 +149,12 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	if strings.HasSuffix(name, ".lnk") {
 		path := dos.Join(folder, name)
-		shortcut, _, err := dos.ReadShortcut(path)
+		shortcut, workdir, err := dos.ReadShortcut(path)
 		if err == nil && shortcut != "" {
 			fmt.Fprintf(out, " -> %s", shortcut)
+			if workdir != "" {
+				fmt.Fprintf(out, " (%s)", workdir)
+			}
 		}
 	}
 	io.WriteString(out, "\n")
