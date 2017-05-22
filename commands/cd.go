@@ -44,6 +44,12 @@ func cmd_cd_sub(dir string) (int, error) {
 	if strings.HasPrefix(dir, fileHead) {
 		dir = dir[len(fileHead):]
 	}
+	if strings.HasSuffix(strings.ToLower(dir), ".lnk") {
+		newdir, _, err := dos.ReadShortcut(dir)
+		if err == nil && newdir != "" {
+			dir = newdir
+		}
+	}
 	if dir_, err := CorrectCase(dir); err == nil {
 		// println(dir, "->", dir_)
 		dir = dir_

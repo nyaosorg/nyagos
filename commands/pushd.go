@@ -49,7 +49,7 @@ func cmd_pushd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	}
 	if len(cmd.Args) >= 2 {
 		dirstack = append(dirstack, wd)
-		err := dos.Chdir(cmd.Args[1])
+		_, err := cmd_cd_sub(cmd.Args[1])
 		if err != nil {
 			return CHDIR_FAIL, err
 		}
