@@ -39,6 +39,11 @@ func (this CommandNotFound) Error() string {
 	return this.Stringer()
 }
 
+func isElevationRequired(err error) bool {
+	e, ok := err.(*os.PathError)
+	return ok && e.Err == syscall.Errno(0x2e4)
+}
+
 type Cmd struct {
 	Stdout       *os.File
 	Stderr       *os.File
@@ -194,7 +199,17 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	}
 	cmd1.SysProcAttr.CmdLine = cmdline
 	err = cmd1.Run()
-
+	if isElevationRequired(err) {
+		cmdline := ""
+		if len(cmd1.Args) >= 2 {
+			cmdline = makeCmdline(cmd1.Args[1:], this.RawArgs[1:])
+		}
+		if DBG {
+			println("ShellExecute:Path=" + cmd1.Args[0])
+			println("Args=" + cmdline)
+		}
+		err = dos.ShellExecute("open", cmd1.Args[0], cmdline, "")
+	}
 	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
 	if errorlevelOk {
 		return errorlevel, err
