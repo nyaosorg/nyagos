@@ -65,7 +65,9 @@ call :"%~1" %2 %3 %4 %5 %6
         @exit /b
 
 :"get"
+        pushd "%~dp0\mains"
         go get -v
+        popd
         @exit /b
 
 :getbindata
