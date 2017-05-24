@@ -11,7 +11,7 @@ if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOA
 if "%GOPATH%" == "" set "GOPATH=%USERPROFILE%\go"
 for /F "delims=; tokens=1" %%I in ("%GOPATH%") do set "GOPATH1ST=%%I"
 
-call :"%~1"
+call :"%~1" %2 %3 %4 %5 %6
 @popd
 @endlocal
 @exit /b
@@ -105,7 +105,7 @@ call :"%~1"
         @exit /b
 
 :"install"
-        if not "%2" == "" set "INSTALLDIR=%2" & echo @set "INSTALLDIR=%2" > "%~dp0Misc\version.cmd"
+        if not "%1" == "" set "INSTALLDIR=%1" & echo @set "INSTALLDIR=%~1" > "%~dp0Misc\version.cmd"
         if "%INSTALLDIR%" == "" (
             echo Please %0.cmd install PATH\TO\BIN, once
             @exit /b
