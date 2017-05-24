@@ -68,6 +68,7 @@ func Init() {
 		"history": history.CmdHistory,
 		"if":      cmd_if,
 		"ln":      cmd_ln,
+		"lnk":     cmd_lnk,
 		"ls":      cmd_ls,
 		"md":      cmd_mkdir,
 		"mkdir":   cmd_mkdir,
