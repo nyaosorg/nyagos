@@ -65,7 +65,7 @@ call :"%~1" %2 %3 %4 %5 %6
         @exit /b
 
 :"get"
-        go get -v
+        powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ ($_ -replace '\s*//.*$','').Split()[-1] } | ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/' ) } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
         @exit /b
 
 :getbindata
