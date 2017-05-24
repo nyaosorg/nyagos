@@ -17,12 +17,12 @@ branches:
 init:
   - git config --global core.autocrlf true
 
-clone_folder: C:\Users\appveyor\nyagos
+clone_folder: C:\Users\appveyor\go\src\github.com\zetamatta\nyagos
 
 environment:
   global:
     dest_dir: bin
-    gopath: C:\gopath
+    gopath: C:\Users\appveyor\go
     go_shortv: 16
     lua_ver: 5.3.2
     lua_shortv: 53
