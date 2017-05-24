@@ -63,7 +63,7 @@ func cmd_which(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		} else {
 			path := dos.LookPath(name, "NYAGOSPATH")
 			if path == "" {
-				return WHICH_NOT_FOUND, os.ErrNotExist
+				return WHICH_NOT_FOUND, fmt.Errorf("which %s: not found", name)
 			}
 			fmt.Fprintln(cmd.Stdout, filepath.Clean(path))
 		}
