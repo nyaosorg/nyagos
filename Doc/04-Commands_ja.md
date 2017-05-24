@@ -55,6 +55,10 @@ NYAGOS を終了します。
 `nyagos.d\lns.lua` で定義されるエイリアス lns は UAC 昇格と
 `ln -s` を実行します。
 
+### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
+
+ショートカットを作成します
+
 ### `ls [-オプション] …`
 
 ディレクトリの一覧を表示します。

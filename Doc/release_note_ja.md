@@ -22,6 +22,7 @@
 * Lua(nyagos.d/cdlnk.lua)製の `cd/push ショートカット.lnk` を Go で書き直した
 * デフォルトの`_nyagos`で`ll`がカラーでない`ls`に別名定義されていた点を修正
 * `FOO.123.EXE` が `FOO` とタイプした時でも実行されてしまう不具合を修正 #229
+* ショートカット作成コマンド lnk を内蔵(`lnk FILENAME SHORTCUT WORKING-DIRECTORY`)
 
 NYAGOS 4.1.9\_3
 ===============

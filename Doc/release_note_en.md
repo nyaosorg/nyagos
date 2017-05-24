@@ -22,6 +22,7 @@ English / [Japanese](release_note_ja.md)
 * Rewrote `cd/push SHORTCUT.lnk` from Lua(nyagos.d/cdlnk.lua) to Golang-native
 * Fix: `ll` was aliased to non-colored version on default `_nyagos`
 * Fix: executed `FOO.123.EXE` even when `FOO` was typed #229
+* Add command to make shortcut(`lnk FILENAME SHORTCUT WORKING-DIRECTORY`)
 
 NYAGOS 4.1.9\_3
 ===============

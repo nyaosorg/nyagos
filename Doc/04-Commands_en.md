@@ -52,6 +52,10 @@ Make hardlink or symbolic-link.
 The alias 'lns' defined on `nyagos.d\lns.lua` shows UAC-dialog
 and calls `ln -s`.
 
+### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
+
+Make shortcut.
+
 ### `ls -OPTION FILES`
 
 List the directory. Supported options are below:
