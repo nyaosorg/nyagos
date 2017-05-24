@@ -11,15 +11,21 @@ import (
 	. "github.com/zetamatta/nyagos/ifdbg"
 )
 
-func lookPath(dir1, pattern string) (foundpath string) {
+func lookPath(dir1, patternBase string) (foundpath string) {
+	pattern := patternBase + ".*"
 	pathExtList := filepath.SplitList(os.Getenv("PATHEXT"))
+	names := make([]string, len(pathExtList)+1)
+	basename := filepath.Base(patternBase)
+	names[0] = basename
+	for i, ext1 := range pathExtList {
+		names[i+1] = basename + ext1
+	}
 	findfile.Walk(pattern, func(f *findfile.FileInfo) bool {
 		if f.IsDir() {
 			return true
 		}
-		suffix_ := filepath.Ext(f.Name())
-		for _, suffix1 := range pathExtList {
-			if strings.EqualFold(suffix_, suffix1) {
+		for _, name1 := range names {
+			if strings.EqualFold(f.Name(), name1) {
 				foundpath = filepath.Join(dir1, f.Name())
 				if !f.IsReparsePoint() {
 					return false
@@ -44,7 +50,7 @@ func lookPath(dir1, pattern string) (foundpath string) {
 
 func LookPath(name string, envnames ...string) string {
 	if strings.ContainsAny(name, "\\/:") {
-		return lookPath(filepath.Dir(name), name+".*")
+		return lookPath(filepath.Dir(name), name)
 	}
 	var envlist bytes.Buffer
 	envlist.WriteRune('.')
@@ -59,7 +65,7 @@ func LookPath(name string, envnames ...string) string {
 
 	for _, dir1 := range pathDirList {
 		// println("lookPath:" + dir1)
-		if path := lookPath(dir1, filepath.Join(dir1, name+".*")); path != "" {
+		if path := lookPath(dir1, filepath.Join(dir1, name)); path != "" {
 			// println("Found:" + path)
 			return path
 		}
