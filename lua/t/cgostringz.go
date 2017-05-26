@@ -1,8 +1,9 @@
 package main
 
 import (
-	lua ".."
 	"unsafe"
+
+	"github.com/zetamatta/nyagos/lua"
 )
 
 func main() {

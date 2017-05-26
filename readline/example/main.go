@@ -5,8 +5,7 @@ package main
 import (
 	"context"
 	"fmt"
-	// "github.com/zetamatta/nyagos/readline"
-	"../../readline"
+	"github.com/zetamatta/nyagos/readline"
 )
 
 func main() {

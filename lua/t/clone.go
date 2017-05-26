@@ -1,7 +1,7 @@
 package main
 
 import (
-	".."
+	"github.com/zetamatta/nyagos/lua"
 )
 
 func main() {

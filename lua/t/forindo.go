@@ -1,8 +1,9 @@
 package main
 
 import (
-	".."
 	"fmt"
+
+	"github.com/zetamatta/nyagos/lua"
 )
 
 func main() {

@@ -3,7 +3,7 @@ package main
 import (
 	"path/filepath"
 
-	".."
+	"github.com/zetamatta/nyagos/dos"
 )
 
 func main() {
