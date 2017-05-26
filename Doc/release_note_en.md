@@ -1,32 +1,46 @@
 English / [Japanese](release_note_ja.md)
 
+Unreleased changes
+==================
+
+* **Improved the restriction that the Lua-variables not in `share[]` are not shared in all Lua-instances.(#210,#208)**
+    * Do not create a new lua instance except when background thread begins to run.
+    * Copy global variables all including ones not in `share[]` from the Lua-instance in the forwaground thread to the new instance for the new background thread.
+    * To print prompt, use the same Lua instance loading ~/.nyagos
+
+New feature
+-----------
+* `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
 * Add built-in command `env`
 * #189 Support `nyagos.history[..]` and `#nyagos.history`
 * Make `type` as built-in command.
-* To print prompt, use the same Lua instance loading ~/.nyagos
-* Fix the problem that C-o could not complete filenames which has ` ` and `~`.
 * Make `clip` as built-in command which read/write both UTF8/MBCS (#202)
 * Support `del /f`: delete even if it is a readonly file. (#198)
-* Add `attrib` as built-in command. (#199)
-* `nyagos.alias.grep = "findstr.exe"`
-* Fix `\` in `%USERPROFILE:\=/%` were replaced once only
-* Fix Ctrl-O (filename-completion) causes panic. (#204)
-* New lua-function: `nyagos.box()`
-* Change the timing of making new instance, and the scope of copying (#210,#208)
-* `nyagos.completion_hidden`: If it is set true, hidden filenames are also completed.
-* Support `-b BASE64edCOMMANDSTRING` as startup option (#200)
-* Support `$(  )` format to quote command-output by backquote.lua
-* Never cut double-quotations of parameters which users wrote for FIND.EXE and so on #218,#222
-* `ls -l`: Show shortcut's target and working directory.
-* Fix: Executing commands requiring elevation causes the error `The requested operation requires elevation`. Now UAC elevation dialog is shown. #227
-* Rewrote `cd/push SHORTCUT.lnk` from Lua(nyagos.d/cdlnk.lua) to Golang-native
-* Fix: `ll` was aliased to non-colored version on default `_nyagos`
-* Fix: executed `FOO.123.EXE` even when `FOO` was typed #229
 * Add command to make shortcut(`lnk FILENAME SHORTCUT WORKING-DIRECTORY`)
+* Add `attrib` as built-in command. (#199)
+* Support `$(  )` format to quote command-output by backquote.lua
+* `ls -l`: Show shortcut's target and working directory.
+* New lua-function: `nyagos.box()`
+
+Trivial fix
+-----------
+* Support `-b BASE64edCOMMANDSTRING` as startup option (#200)
+* Rewrote `cd/push SHORTCUT.lnk` from Lua(nyagos.d/cdlnk.lua) to Golang-native
+* `nyagos.alias.grep = "findstr.exe"`
+
+Bugfix
+------
+* Fix `\` in `%USERPROFILE:\=/%` were replaced once only
+* Fix: `ll` was aliased to non-colored version on default `_nyagos`
+* Fix the problem that C-o could not complete filenames which has ` ` and `~`.
+* Fix Ctrl-O (filename-completion) causes panic. (#204)
+* Never cut double-quotations of parameters which users wrote for FIND.EXE and so on #218,#222
+* Fix: Executing commands requiring elevation causes the error `The requested operation requires elevation`. Now UAC elevation dialog is shown. #227
+* Fix: executed `FOO.123.EXE` even when `FOO` was typed #229
 
 NYAGOS 4.1.9\_3
 ===============
-on May 13.2017
+on May 13,2017
 
 * Fix #214: warned as `main/lua_cmd.go: cmdExec: not found interpreter object`
 
