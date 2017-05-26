@@ -185,7 +185,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 		this.Args = findfile.Globs(this.Args)
 	}
 
-	cmd1 := exec.CommandContext(ctx, this.Args[0], this.Args[1:]...)
+	cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
 	cmd1.Stdin = this.Stdin
 	cmd1.Stdout = this.Stdout
 	cmd1.Stderr = this.Stderr
