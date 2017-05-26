@@ -26,7 +26,7 @@ English / [Japanese](release_note_ja.md)
 
 NYAGOS 4.1.9\_3
 ===============
-on Feb 13.2017
+on May 13.2017
 
 * Fix #214: warned as `main/lua_cmd.go: cmdExec: not found interpreter object`
 
