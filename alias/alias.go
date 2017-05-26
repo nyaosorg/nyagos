@@ -115,7 +115,7 @@ var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 func AllNames() []completion.Element {
 	names := make([]completion.Element, 0, len(Table))
 	for name1, _ := range Table {
-		names = append(names, completion.Element{name1, name1})
+		names = append(names, completion.Element{InsertStr: name1, ListupStr: name1})
 	}
 	return names
 }

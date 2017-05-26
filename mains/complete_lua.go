@@ -44,7 +44,7 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 					if ok {
 						strUpr := strings.ToUpper(str)
 						if strings.HasPrefix(strUpr, wordUpr) {
-							list = append(list, completion.Element{str, str})
+							list = append(list, completion.Element{InsertStr: str, ListupStr: str})
 						}
 					}
 				}
