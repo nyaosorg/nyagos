@@ -1,7 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
-Unreleased changes
-==================
+NYAGOS 4.2.0\_0
+===============
+on May 29,2017
 
 * **Improved the restriction that the Lua-variables not in `share[]` are not shared in all Lua-instances.(#210,#208)**
     * Do not create a new lua instance except when background thread begins to run.
