@@ -34,6 +34,8 @@ No arguments, move to %HOME% or %USERPROFILE%.
 * `cd -h` , `cd ?` : listing directories stayed.
 * `cd --history` : listing directories stayed all with no decoration
 
+### `chmod ooo FILE(s)`
+
 ### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
 
 While COMMAND is executed, change environment variables.

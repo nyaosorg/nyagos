@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+Unreleased changes
+==================
+* Implemented `chmod`. (#199)
+
 NYAGOS 4.2.0\_0
 ===============
 on May 29,2017

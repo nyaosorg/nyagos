@@ -37,6 +37,8 @@ CMD.EXE と違い、ドライブも同時に変更します。
 * `cd -h` , `cd ?` : 過去いたディレクトリを表示します
 * `cd --history` : 過去いたディレクトリを全て装飾なしで表示します
 
+### `chmod ooo FILE(s)`
+
 ### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
 
 COMMAND が実行されている間だけ、環境変数の値を変更します。
