@@ -16,3 +16,28 @@ nyagos.filter = function(cmdline)
         end
     end)
 end
+
+share.org_dollar_complete = nyagos.completion_hook
+nyagos.completion_hook = function(c)
+    local text = string.gsub(c.word,"$(%w+)",function(m)
+        return nyagos.env[m]
+    end)
+    if text == c.word then
+        if share.org_dollar_complete then
+            return share.org_dollar_complete(c)
+        else
+            return nil
+        end
+    end
+    local pattern = text.."*"
+    local result = nyagos.glob(pattern)
+    if #result < 1 or (#result == 1 and result[1] == pattern )then
+        return nil
+    end
+    for i =1,#result do
+        if string.len(result[i]) >= string.len(text)+1 then
+            result[i] = c.word .. string.sub(result[i],string.len(text)+1)
+        end
+    end
+    return result
+end
