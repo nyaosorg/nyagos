@@ -58,6 +58,7 @@ func Init() {
 		"clip":    cmd_clip,
 		"clone":   cmd_clone,
 		"cls":     cmd_cls,
+		"chmod":   cmd_chmod,
 		"copy":    cmd_copy,
 		"del":     cmd_del,
 		"dirs":    cmd_dirs,
