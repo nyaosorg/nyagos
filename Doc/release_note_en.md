@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 Unreleased changes
 ==================
 * Implemented `chmod`. (#199)
+* nyagos.d/catalog/dollar.lua: support completion $TEMP\xxxx format. (#228)
 
 NYAGOS 4.2.0\_0
 ===============
