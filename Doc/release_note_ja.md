@@ -4,6 +4,7 @@
 ========================
 * `chmod` を実装した (#199)
 * nyagos.d/catalog/dollar.lua: $TEMP\xxxx 形式のファイル名補完をサポート(#228)
+* nyagos.d/catalog/ezoe.lua: 復活
 
 NYAGOS 4.2.0\_0
 ===============

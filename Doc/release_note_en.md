@@ -4,6 +4,7 @@ Unreleased changes
 ==================
 * Implemented `chmod`. (#199)
 * nyagos.d/catalog/dollar.lua: support completion $TEMP\xxxx format. (#228)
+* nyagos.d/catalog/ezoe.lua: revival
 
 NYAGOS 4.2.0\_0
 ===============
