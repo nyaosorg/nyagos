@@ -101,7 +101,7 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"package"
         for /F %%I in ('nyagos -e "print(nyagos.version or (string.gsub(nyagos.stamp,[[/]],[[]])))"') do set VERSION=%%I
-        zip -9 "nyagos-%VERSION%-%GOARCH%.zip" nyagos.exe lua53.dll nyagos.lua .nyagos makeicon.cmd nyagos.d\*.lua nyagos.d\catalog\*.lua license.txt readme_ja.md readme.md Doc\*.md
+        zip -9 "nyagos-%VERSION%-%GOARCH%.zip" nyagos.exe lua53.dll nyagos.lua .nyagos _nyagos makeicon.cmd nyagos.d\*.lua nyagos.d\catalog\*.lua license.txt readme_ja.md readme.md Doc\*.md
         @exit /b
 
 :"install"
