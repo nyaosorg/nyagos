@@ -1,7 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
-Unreleased changes
+NYAGOS 4.2.0\_1
 ==================
+on Jun 06,2017
+
 * Fix: sample of `_nyagos` was forgotten to bundle into the package. (#230)
 * Implemented `chmod`. (#199)
 * nyagos.d/catalog/dollar.lua: support completion $TEMP\xxxx format. (#228)

@@ -1,7 +1,9 @@
 [English](release_note_en.md) / Japanese
 
-リリースされていない変更
+NYAGOS 4.2.0\_1
 ========================
+(2017.06.06)
+
 * Fix: `_nyagos` のサンプルをパッケージに同梱するのを忘れていた (#230)
 * `chmod` を実装した (#199)
 * nyagos.d/catalog/dollar.lua: $TEMP\xxxx 形式のファイル名補完をサポート(#228)
