@@ -2,6 +2,7 @@
 
 リリースされていない変更
 ========================
+* Fix: `_nyagos` のサンプルをパッケージに同梱するのを忘れていた (#230)
 * `chmod` を実装した (#199)
 * nyagos.d/catalog/dollar.lua: $TEMP\xxxx 形式のファイル名補完をサポート(#228)
 * nyagos.d/catalog/ezoe.lua: 復活
