@@ -109,6 +109,8 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
 * [DeaR](https://github.com/DeaR)
 * [gracix](https://github.com/gracix)
 * [orz--](https://github.com/orz--)
+* [zkangaroo](https://github.com/zkangaroo)
+* [maskedw](https://github.com/maskedw)
 
 開発者
 ------
