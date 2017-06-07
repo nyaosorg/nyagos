@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+Unreleased Change
+=================
+* Fix the problem that `lnk . ~` failed.
+
 NYAGOS 4.2.0\_1
 ==================
 on Jun 06,2017
