@@ -33,7 +33,7 @@ func makeShortcut(s, t, d string, out io.Writer) error {
 	stat1, err := os.Stat(t_)
 	if err == nil && stat1 != nil {
 		if stat1.IsDir() {
-			t_ = filepath.Join(t_, filepath.Base(s))
+			t_ = filepath.Join(t_, filepath.Base(s_))
 		} else {
 			return fmt.Errorf("%s: file already exists", t)
 		}
