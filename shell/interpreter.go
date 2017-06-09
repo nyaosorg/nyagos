@@ -208,7 +208,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 			println("ShellExecute:Path=" + cmd1.Args[0])
 			println("Args=" + cmdline)
 		}
-		err = dos.ShellExecute("open", cmd1.Args[0], cmdline, "")
+		err = dos.ShellExecute("open", dos.TruePath(cmd1.Args[0]), cmdline, "")
 	}
 	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
 	if errorlevelOk {
