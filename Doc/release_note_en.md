@@ -4,6 +4,7 @@ Unreleased Change
 =================
 * Fix the problem that `lnk . ~` failed.
 * Fix the problem executables on the folder symbolic-linked to network one and to be elevated are unable to be called. (ShellExecute with physical path)
+* Fix: readline: isearch: BACKSPACE-KEY did not redraw a found commandline
 
 NYAGOS 4.2.0\_1
 ==================
