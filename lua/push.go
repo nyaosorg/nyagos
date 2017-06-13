@@ -35,7 +35,7 @@ func (this Lua) PushInteger(value Integer) {
 var lua_pushlstring = luaDLL.NewProc("lua_pushlstring")
 
 func (this Lua) PushBytes(data []byte) {
-	if data != nil {
+	if data != nil && len(data) >= 1 {
 		lua_pushlstring.Call(this.State(),
 			uintptr(unsafe.Pointer(&data[0])),
 			uintptr(len(data)))
