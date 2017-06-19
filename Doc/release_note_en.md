@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 Unreleased Changes
 ==================
 * Fix: panic occurs when `box` Enter & Ctrl-C pressed.
+* Fix: panic occurs when `lua_e "nyagos.box({})"`
 
 NYAGOS 4.2.0\_2
 ===============
