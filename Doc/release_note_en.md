@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+Unreleased Changes
+==================
+* Fix: panic occurs when `box` Enter & Ctrl-C pressed.
+
 NYAGOS 4.2.0\_2
 ===============
 on Jun 16,2017
