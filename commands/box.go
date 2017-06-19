@@ -20,12 +20,8 @@ func cmd_box(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return 1, err
 	}
 	list := strings.Split(string(data), "\n")
-	switch len(list) {
-	case 0:
-		return 0, nil
-	case 1:
-		fmt.Fprintln(cmd.Stdout, strings.TrimSpace(list[0]))
-		return 0, nil
+	if len(list) == 0 {
+		return 1, nil
 	}
 	for i := 0; i < len(list); i++ {
 		list[i] = strings.TrimSpace(list[i])
