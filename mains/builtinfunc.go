@@ -44,6 +44,9 @@ func cmdBox(args []interface{}) []interface{} {
 	if !ok {
 		return []interface{}{nil, "Not a table"}
 	}
+	if len(t) == 0 {
+		return []interface{}{}
+	}
 	sources := make([]string, 0, len(t))
 	for _, v := range t {
 		if str, ok := cstr(v); ok {

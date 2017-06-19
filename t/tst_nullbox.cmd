@@ -1,0 +1,1 @@
+nyagos -e "nyagos.box({})"
