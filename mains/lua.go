@@ -403,7 +403,7 @@ func init() {
 			Len:   cmdLenHistory},
 		"lines":                lua.TGoFunction(cmdLines),
 		"loadfile":             lua.TGoFunction(cmdLoadFile),
-		"netdrivetounc":        lua.TGoFunction(cmdNetDriveToUNC),
+		"netdrivetounc":        lua.TGoFunction(lua2cmd(cmdNetDriveToUNC)),
 		"on_command_not_found": lua.Property{Pointer: &luaOnCommandNotFound},
 		"open":                 lua.TGoFunction(cmdOpenFile),
 		"option": &lua.VirtualTable{
@@ -415,7 +415,7 @@ func init() {
 		"quotation":      lua.StringProperty{Pointer: &readline.Delimiters},
 		"raweval":        lua.TGoFunction(cmdRawEval),
 		"rawexec":        lua.TGoFunction(cmdRawExec),
-		"resetcharwidth": lua.TGoFunction(cmdResetCharWidth),
+		"resetcharwidth": lua.TGoFunction(lua2cmd(cmdResetCharWidth)),
 		"setalias":       lua.TGoFunction(cmdSetAlias),
 		"setenv":         lua.TGoFunction(cmdSetEnv),
 		"setrunewidth":   lua.TGoFunction(cmdSetRuneWidth),

@@ -55,3 +55,20 @@ func cmdBox(args []interface{}) []interface{} {
 	}
 	return []interface{}{box.Choice(sources, readline.Console)}
 }
+
+func cmdResetCharWidth(args []interface{}) []interface{} {
+	readline.ResetCharWidth()
+	return []interface{}{}
+}
+
+func cmdNetDriveToUNC(args []interface{}) []interface{} {
+	if len(args) < 1 {
+		return []interface{}{}
+	}
+	path, ok := args[0].(string)
+	if !ok {
+		return []interface{}{path}
+	}
+	unc := dos.NetDriveToUNC(path)
+	return []interface{}{unc}
+}

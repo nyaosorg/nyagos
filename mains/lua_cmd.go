@@ -854,17 +854,3 @@ func cmdLines(L lua.Lua) int {
 	// print("cmdLines: end\n")
 	return 2
 }
-
-func cmdNetDriveToUNC(L lua.Lua) int {
-	path, path_err := L.ToString(1)
-	if path_err != nil {
-		return L.Push(path)
-	}
-	unc := dos.NetDriveToUNC(path)
-	return L.Push(unc)
-}
-
-func cmdResetCharWidth(L lua.Lua) int {
-	readline.ResetCharWidth()
-	return 0
-}
