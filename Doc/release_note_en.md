@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Remove built-in command `sudo`
+
 Unreleased Changes
 ==================
 * Fix: panic occurs when `box` Enter & Ctrl-C pressed.
