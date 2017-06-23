@@ -132,10 +132,6 @@ Run another nyagos.exe on another console window.
 
 Run another nyagos.exe as Administrator.
 
-### `sudo COMMAND ARGS(s)...`
-
-Run COMMAND as Administrator
-
 ## Commands implemented by Lua
 
 ### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua)

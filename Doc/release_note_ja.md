@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* 内蔵コマンドの sudo を削除
+
 未公開の変更
 ============
 * Fix: `box` Enter & Ctrl-C でパニックが発生する不具合を修正
