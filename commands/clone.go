@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 	"os"
-	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/shell"
@@ -37,25 +36,6 @@ func clone_(action string, out io.Writer) (int, error) {
 		}
 	}
 	return 0, nil
-}
-
-func cmd_sudo(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	if len(cmd.Args) < 2 {
-		return clone_("runas", cmd.Stderr)
-	}
-	rawargs := cmd.RawArgs
-	var args string
-	if len(rawargs) >= 3 {
-		args = strings.Join(rawargs[2:], " ")
-	} else {
-		args = ""
-	}
-	err := dos.ShellExecute("runas", dos.TruePath(cmd.Args[1]), args, getwd_())
-	if err != nil {
-		return 1, err
-	} else {
-		return 0, nil
-	}
 }
 
 func cmd_clone(ctx context.Context, cmd *shell.Cmd) (int, error) {
