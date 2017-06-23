@@ -4,6 +4,7 @@ Unreleased Changes
 ==================
 * Fix: panic occurs when `box` Enter & Ctrl-C pressed.
 * Fix: panic occurs when `lua_e "nyagos.box({})"`
+* Fix: box: cursor disappear at scrolling (go-box's fix)
 
 NYAGOS 4.2.0\_2
 ===============
