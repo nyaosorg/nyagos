@@ -156,8 +156,7 @@ func offFork(cmd *shell.Cmd) error {
 	if !ok {
 		return errors.New("could not get lua instance")
 	}
-	L.Close()
-	return nil
+	return L.Close()
 }
 
 type MainStream struct {

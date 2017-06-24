@@ -102,7 +102,9 @@ func call_batch(batch string, args []string, env string, pwd string, verbose io.
 	fmt.Fprintf(writer, "@cd > \"%s\"\n", pwd)
 	fmt.Fprintf(writer, "@exit /b \"%%ERRORLEVEL_%%\"\n")
 	writer.Flush()
-	fd.Close()
+	if err := fd.Close(); err != nil {
+		return 1, err
+	}
 
 	cmd2 := exec.Cmd{Path: params[0], Args: params}
 	if err := cmd2.Run(); err != nil {

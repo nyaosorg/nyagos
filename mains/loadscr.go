@@ -139,13 +139,15 @@ func dotNyagos(it *shell.Cmd, L lua.Lua) error {
 	if err := NyagosCallLua(L, it, 0, 0); err != nil {
 		return err
 	}
-	w, w_err := os.Create(cachePath)
-	if w_err != nil {
-		return w_err
+	w, err := os.Create(cachePath)
+	if err != nil {
+		return err
 	}
-	w.Write(chank)
-	w.Close()
-	return nil
+	if _, err := w.Write(chank); err != nil {
+		w.Close()
+		return err
+	}
+	return w.Close()
 }
 
 func barNyagos(it InterpreterT, folder string, L lua.Lua) {
