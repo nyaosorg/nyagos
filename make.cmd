@@ -92,8 +92,24 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"goversioninfo"
         if not exist goversioninfo.exe call :getgoversioninfo
-        powershell -ExecutionPolicy RemoteSigned -File "%~dp0mains\makejson.ps1" > "%~dp0Misc\version.json"
-        goversioninfo.exe -icon mains\nyagos.ico -o "%~dp0nyagos.syso" "%~dp0Misc\version.json"
+        set MAJOR=1
+        set MINOR=2
+        set PATCH=3
+        set BUILD=4
+        goversioninfo.exe ^
+            -file-version="%MAJOR%.%MINOR%.%PATCH%_%BUILD%" ^
+            -product-version="%MAJOR%.%MINOR%.%PATCH%_%BUILD%" ^
+            -icon=mains\nyagos.ico ^
+            -ver-major=%MAJOR% ^
+            -ver-minor=%MINOR% ^
+            -ver-build=%BUILD% ^
+            -ver-patch=%PATCH% ^
+            -product-ver-major=%MAJOR% ^
+            -product-ver-minor=%MINOR% ^
+            -product-ver-build=%BUILD% ^
+            -product-ver-patch=%PATCH% ^
+            -o nyagos.syso ^
+            versioninfo.json 
         @exit /b
 
 :"const"
