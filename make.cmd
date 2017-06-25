@@ -46,6 +46,7 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"status"
         nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
+        powershell -ExecutionPolicy RemoteSigned -File showver.ps1 nyagos.exe
         @exit /b
 
 :eachdir
@@ -132,6 +133,7 @@ call :"%~1" %2 %3 %4 %5 %6
 :"icon"
         makeicon.cmd
         @exit /b
+
 
 :"help"
         echo Usage for make.cmd
