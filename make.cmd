@@ -5,6 +5,11 @@
 
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
+set MAJOR=-1
+set MINOR=-1
+set BUILD=-1
+set PATCH=-1
+
 if exist goarch.txt for /F %%I in (goarch.txt) do set "GOARCH=%%I"
 if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOARCH=%%I"
 
@@ -28,6 +33,14 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"release"
         for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
+        for /F "delims=. tokens=1,2,3" %%I in ("%VERSION%") do (
+            set "MAJOR=%%I"
+            set "MINOR=%%J"
+            for /F "delims=_ tokens=1,2" %%M in ("%%K") do (
+                set "PATCH=%%M"
+                set "BUILD=%%N"
+            )
+        )
         set "X_VERSION=-X main.version=%VERSION%"
         call :"build"
         @exit /b
@@ -92,13 +105,9 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"goversioninfo"
         if not exist goversioninfo.exe call :getgoversioninfo
-        set MAJOR=1
-        set MINOR=2
-        set PATCH=3
-        set BUILD=4
         goversioninfo.exe ^
-            -file-version="%MAJOR%.%MINOR%.%PATCH%_%BUILD%" ^
-            -product-version="%MAJOR%.%MINOR%.%PATCH%_%BUILD%" ^
+            -file-version="%VERSION%" ^
+            -product-version="%VERSION%" ^
             -icon=mains\nyagos.ico ^
             -ver-major=%MAJOR% ^
             -ver-minor=%MINOR% ^
