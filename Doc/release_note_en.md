@@ -8,6 +8,7 @@ Unreleased Changes
 * Fix: panic occurs when `lua_e "nyagos.box({})"`
 * Fix: box: cursor disappear at scrolling (go-box's fix)
 * `box`: decrease flickering (go-box's fix)
+* Fix: #235 .nyagos on the same directory with nyaos.exe wasn't read on startup.
 
 NYAGOS 4.2.0\_2
 ===============

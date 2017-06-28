@@ -95,7 +95,11 @@ func cmd_touch(ctx context.Context, this *shell.Cmd) (int, error) {
 				fd, err = os.Create(arg1)
 			}
 			if err == nil {
-				fd.Close()
+				if err = fd.Close(); err != nil {
+					fmt.Fprintln(this.Stderr, err.Error())
+					errcnt++
+					continue
+				}
 				os.Chtimes(arg1, stamp, stamp)
 			} else {
 				fmt.Fprintln(this.Stderr, err.Error())

@@ -3,6 +3,7 @@ package mains
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -104,6 +105,9 @@ func loadScripts(it *shell.Cmd, L lua.Lua) error {
 			}
 		}
 	}
+	if _, err := runLua(it, L, filepath.Join(exeFolder, ".nyagos")); err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	}
 	barNyagos(it, exeFolder, L)
 	if err := dotNyagos(it, L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
@@ -112,40 +116,44 @@ func loadScripts(it *shell.Cmd, L lua.Lua) error {
 	return nil
 }
 
-func dotNyagos(it *shell.Cmd, L lua.Lua) error {
-	dot_nyagos := filepath.Join(dos.GetHome(), ".nyagos")
-	dotStat, dotErr := os.Stat(dot_nyagos)
-	if dotErr != nil {
-		return nil
-	}
-	cachePath := filepath.Join(AppDataDir(), "dotnyagos.luac")
-	cacheStat, cacheErr := os.Stat(cachePath)
-	if cacheErr == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
-		if DBG {
-			println("load cached ", cachePath)
-		}
-		if _, err := L.LoadFile(cachePath, "b"); err == nil {
-			NyagosCallLua(L, it, 0, 0)
-			return nil
+func runLua(it *shell.Cmd, L lua.Lua, fname string) ([]byte, error) {
+	_, err := os.Stat(fname)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// println("pass " + fname + " (not exists)")
+			return []byte{}, nil
+		} else {
+			return nil, err
 		}
 	}
-	if DBG {
-		println("load real ", dot_nyagos)
-	}
-	if _, err := L.LoadFile(dot_nyagos, "bt"); err != nil {
-		return err
+	if _, err := L.LoadFile(fname, "bt"); err != nil {
+		return nil, err
 	}
 	chank := L.Dump()
 	if err := NyagosCallLua(L, it, 0, 0); err != nil {
+		return nil, err
+	}
+	// println("Run: " + fname)
+	return chank, nil
+}
+
+func dotNyagos(it *shell.Cmd, L lua.Lua) error {
+	dot_nyagos := filepath.Join(dos.GetHome(), ".nyagos")
+	dotStat, err := os.Stat(dot_nyagos)
+	if err != nil {
+		return nil
+	}
+	cachePath := filepath.Join(AppDataDir(), "dotnyagos.luac")
+	cacheStat, err := os.Stat(cachePath)
+	if err == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
+		_, err = runLua(it, L, cachePath)
 		return err
 	}
-	w, w_err := os.Create(cachePath)
-	if w_err != nil {
-		return w_err
+	chank, err := runLua(it, L, dot_nyagos)
+	if err != nil {
+		return err
 	}
-	w.Write(chank)
-	w.Close()
-	return nil
+	return ioutil.WriteFile(cachePath, chank, os.FileMode(0644))
 }
 
 func barNyagos(it InterpreterT, folder string, L lua.Lua) {

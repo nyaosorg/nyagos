@@ -267,8 +267,7 @@ func (hisObj *Container) Save(path string) error {
 		return err
 	}
 	hisObj.SaveViaWriter(fd)
-	fd.Close()
-	return nil
+	return fd.Close()
 }
 
 func (hisObj *Container) LoadViaReader(reader io.Reader) {
@@ -322,6 +321,5 @@ func (hisObj *Container) Load(path string) error {
 		return err
 	}
 	hisObj.LoadViaReader(fd)
-	fd.Close()
-	return nil
+	return fd.Close()
 }

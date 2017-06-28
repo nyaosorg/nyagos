@@ -29,6 +29,7 @@ func cmd_box(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	result := box.Choice(
 		list,
 		readline.Console)
+	fmt.Fprintln(readline.Console)
 	fmt.Fprintln(cmd.Stdout, result)
 	return 0, nil
 }
