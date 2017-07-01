@@ -73,6 +73,7 @@ func Init() {
 		"ls":      cmd_ls,
 		"md":      cmd_mkdir,
 		"mkdir":   cmd_mkdir,
+		"more":    cmd_more,
 		"move":    cmd_move,
 		"open":    cmd_open,
 		"popd":    cmd_popd,
