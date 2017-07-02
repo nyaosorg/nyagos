@@ -73,6 +73,10 @@ List the directory. Supported options are below:
 * `-h` With -l, print sizes in human readable format (e.g., 1K 234M 2G)
 * `-S` Sort by file size
 
+### `more`
+
+Support both UTF8 and ANSI-text (auto detected)
+
 ### `pwd`
 
 Print the current woking drive and directory.

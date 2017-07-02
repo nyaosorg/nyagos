@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * 内蔵コマンドの sudo を削除
+* 内蔵コマンド more を追加(カラー & utf8 サポート)
 
 未公開の変更
 ============

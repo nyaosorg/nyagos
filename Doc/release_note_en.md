@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * Remove built-in command `sudo`
+* Add built-in command `more` (support color and unicode)
 
 Unreleased Changes
 ==================
