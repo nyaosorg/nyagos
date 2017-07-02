@@ -115,6 +115,7 @@ const (
 	F_KILL_LINE            = "KILL_LINE"
 	F_KILL_WHOLE_LINE      = "KILL_WHOLE_LINE"
 	F_PASS                 = "PASS"
+	F_QUOTED_INSERT        = "QUOTED_INSERT"
 	F_REPAINT_ON_NEWLINE   = "REPAINT_ON_NEWLINE"
 	F_SWAPCHAR             = "SWAPCHAR"
 	F_UNIX_LINE_DISCARD    = "UNIX_LINE_DISCARD"
@@ -247,6 +248,7 @@ var NAME2FUNC = map[string]func(*Buffer) Result{
 	F_KILL_LINE:            KeyFuncClearAfter,
 	F_KILL_WHOLE_LINE:      KeyFuncClear,
 	F_PASS:                 KeyFuncPass,
+	F_QUOTED_INSERT:        KeyFuncQuotedInsert,
 	F_UNIX_LINE_DISCARD:    KeyFuncClearBefore,
 	F_UNIX_WORD_RUBOUT:     KeyFuncWordRubout,
 	F_YANK:                 KeyFuncPaste,

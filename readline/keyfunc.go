@@ -7,6 +7,7 @@ import (
 	"unicode"
 
 	"github.com/atotto/clipboard"
+	"github.com/zetamatta/go-getch"
 )
 
 func KeyFuncPass(this *Buffer) Result {
@@ -223,6 +224,18 @@ func KeyFuncRepaintOnNewline(this *Buffer) Result {
 	fmt.Fprint(Console, "\n")
 	this.RepaintAll()
 	return CONTINUE
+}
+
+func KeyFuncQuotedInsert(this *Buffer) Result {
+	fmt.Fprint(Console, CURSOR_ON)
+	defer fmt.Fprint(Console, CURSOR_OFF)
+	for {
+		e := getch.All()
+		if e.Key != nil {
+			this.Unicode = e.Key.Rune
+			return KeyFuncInsertSelf(this)
+		}
+	}
 }
 
 func KeyFuncPaste(this *Buffer) Result {
