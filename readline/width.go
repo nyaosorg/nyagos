@@ -13,6 +13,9 @@ func SetCharWidth(c rune, width int) {
 }
 
 func GetCharWidth(n rune) int {
+	if n < ' ' {
+		return 2
+	}
 	width, ok := widthCache[n]
 	if !ok {
 		width = runewidth.RuneWidth(n)
