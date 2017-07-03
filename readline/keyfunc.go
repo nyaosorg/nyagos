@@ -243,9 +243,6 @@ func KeyFuncPaste(this *Buffer) Result {
 	if err != nil {
 		return CONTINUE
 	}
-	text = strings.Replace(text, "\n", " ", -1)
-	text = strings.Replace(text, "\r", "", -1)
-	text = strings.Replace(text, "\t", " ", -1)
 	this.InsertAndRepaint(text)
 	return CONTINUE
 }
@@ -255,9 +252,6 @@ func KeyFuncPasteQuote(this *Buffer) Result {
 	if err != nil {
 		return CONTINUE
 	}
-	text = strings.Replace(text, "\n", " ", -1)
-	text = strings.Replace(text, "\r", "", -1)
-	text = strings.Replace(text, "\t", " ", -1)
 	if strings.IndexRune(text, ' ') >= 0 &&
 		!strings.HasPrefix(text, `"`) {
 		text = `"` + strings.Replace(text, `"`, `""`, -1) + `"`
