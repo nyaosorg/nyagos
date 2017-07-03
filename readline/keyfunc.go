@@ -231,7 +231,7 @@ func KeyFuncQuotedInsert(this *Buffer) Result {
 	defer fmt.Fprint(Console, CURSOR_OFF)
 	for {
 		e := getch.All()
-		if e.Key != nil {
+		if e.Key != nil && e.Key.Rune != 0 {
 			this.Unicode = e.Key.Rune
 			return KeyFuncInsertSelf(this)
 		}
