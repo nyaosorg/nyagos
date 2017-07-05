@@ -154,7 +154,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		quotechar = comp.Word[i]
 	} else {
 		for _, node := range complete_list {
-			if strings.ContainsAny(node, " &") {
+			if strings.ContainsAny(node, " &!") {
 				quotechar = byte(default_delimiter)
 				break
 			}

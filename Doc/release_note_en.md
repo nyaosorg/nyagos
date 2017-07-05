@@ -7,6 +7,8 @@ Unreleased Changes
 * Fix: box: cursor disappear at scrolling (go-box's fix)
 * `box`: decrease flickering (go-box's fix)
 * Fix: #235 .nyagos on the same directory with nyaos.exe wasn't read on startup.
+* completion: enclose with "" when ! mark is found.
+* Fix: `suffix ps1` => ?:-1: attempt to concatenate a table value
 
 NYAGOS 4.2.0\_2
 ===============

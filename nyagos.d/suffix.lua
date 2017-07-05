@@ -78,7 +78,13 @@ nyagos.alias.suffix = function(args)
             end
             share._setsuffix(left,args)
         else
-            print(args[i].."="..(share._suffixes[args[i]] or ""))
+            local val = share._suffixes[args[i]]
+            if not val then
+                val = ""
+            elseif type(val) == "table" then
+                val = table.concat(val," ")
+            end
+            print(args[i].."="..val)
         end
     end
 end
