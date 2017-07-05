@@ -8,6 +8,7 @@
 * `box` コマンドでのチラツキを軽減した(go-boxライブラリの修正)
 * Fix: #235 実行ファイルと同じフォルダーの .nyagos が読み込まれていなかった
 * 補完で、! マークがある時、"" で囲むようにした。
+* Fix: `suffix ps1` が `?:-1: attempt to concatenate a table value` となる不具合を修正
 
 NYAGOS 4.2.0\_2
 ===============
