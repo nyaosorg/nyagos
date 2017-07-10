@@ -82,6 +82,8 @@ Support both UTF8 and ANSI-text (auto detected)
 Print the current woking drive and directory.
 
 * `pwd -N` (N:digit) : print the N-previous directory.
+* `pwd -L` : use PWD from environment, even if it contains symlinks.
+* `pwd -P` : avoid symlinks. (default)
 
 ### `set ENV=VAL`
 
