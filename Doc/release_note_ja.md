@@ -1,7 +1,9 @@
 [English](release_note_en.md) / Japanese
 
-未公開の変更
-============
+NYAGOS 4.2.0\_3
+===============
+(2017.07.13)
+
 * Fix: `box` Enter & Ctrl-C でパニックが発生する不具合を修正
 * Fix: `lua_e "nyagos.box({})"` でパニックが発生する不具合を修正
 * Fix: `box` でスクロールの際、カーソルが消える不具合を修正(go-boxライブラリの不具合修正)
