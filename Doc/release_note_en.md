@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * Add built-in command `more` (support color and unicode)
 * readline: support C-q,C-v (`QUOTED_INSERT`)
 * pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)
+* Output `nyagos.dump` if panic occurs.
 
 NYAGOS 4.2.0\_3
 ==================
