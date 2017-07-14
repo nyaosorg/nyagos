@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+Unreleased Changes
+==================
+* Fix: error's line number was not displayed when .nyagos has an error.
+
 NYAGOS 4.2.0\_3
 ==================
 on Jul 13,2017
