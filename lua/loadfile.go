@@ -52,6 +52,8 @@ func (this Lua) LoadFile(path string, mode string) (int, error) {
 
 	if rc == LUA_OK {
 		return 0, nil
+	} else if msg, err := this.ToString(-1); err == nil {
+		return int(rc), errors.New(msg)
 	} else if rc == LUA_ERRSYNTAX {
 		return LUA_ERRSYNTAX, errors.New("lua_load: LUA_ERRSYNTAX")
 	} else if rc == LUA_ERRMEM {
