@@ -5,6 +5,7 @@ Unreleased Changes
 * Fix: error's line number was not displayed when .nyagos has an error.
 * Fix: .nyagos cache errors when executable architecture (amd64 or 386) changes previous'run
 * Fix: `ls | more` outputs ESC[0K. (fixed by go-box)
+* (internal) follow the change in go-colorable's ESC[nC & D's behaviour ( https://github.com/mattn/go-colorable/commit/3fa8c76f , thanks to @tyochiai )
 
 NYAGOS 4.2.0\_3
 ==================

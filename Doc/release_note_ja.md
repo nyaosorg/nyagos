@@ -5,6 +5,7 @@
 * .nyagos にエラーがあった時のエラー行番号が表示されない問題を修正
 * 前回実行時とEXEファイルのアーキテクチャ(amd64 or 386)が変わった時、.nyagos のキャッシュがエラーになる不具合を修正
 * Fix: `ls | more` で ESC[0K が表示されていた
+* (内部) go-colorable の ESC[nC と D の挙動変更に追随 ( https://github.com/mattn/go-colorable/commit/3fa8c76f , 感謝 > @tyochiai )
 
 NYAGOS 4.2.0\_3
 ===============
