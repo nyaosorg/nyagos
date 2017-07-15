@@ -48,7 +48,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) bool {
 		if strings.HasSuffix(strings.ToLower(*optionF), ".lua") {
 			// lua script
 			setLuaArg(L, *optionF)
-			err := L.Source(*optionF)
+			_, err := runLua(it, L, *optionF)
 			if err != nil {
 				fmt.Fprintln(os.Stderr, err)
 			}

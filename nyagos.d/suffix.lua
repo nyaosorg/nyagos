@@ -36,16 +36,16 @@ nyagos.argsfilter = function(args)
             args = args_
         end
     end
-    local path=nyagos.which(args[0])
-    if not path then
-        return
-    end
-    local m = string.match(path,"%.(%w+)$")
+    local m = string.match(args[0],"%.(%w+)$")
     if not m then
         return
     end
     local cmdline = share._suffixes[ string.lower(m) ]
     if not cmdline then
+        return
+    end
+    local path=nyagos.which(args[0])
+    if not path then
         return
     end
     local newargs={}

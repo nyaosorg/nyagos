@@ -26,6 +26,7 @@ NYAGOS 4.2.0\_3
 * Fix: `suffix ps1` が `?:-1: attempt to concatenate a table value` となる不具合を修正
 * Fix: デフォルトの`_nyagos` の `suffix "lua=nyagos"` に `.exe -f` を付加した
 * nyagos.d のスクリプトが nyagos.exe 以外で実行された時、エラーにするようにした
+* Fix #237: nyagos.d フォルダーで suffix とタイプした時に nyagos.exe が無限増殖する現象を修正するため、タイプされたコマンド名に拡張子が含まれない時にインタプリタ名を挿入させないようにした。
 
 NYAGOS 4.2.0\_2
 ===============
