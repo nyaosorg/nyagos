@@ -1,7 +1,23 @@
 English / [Japanese](release_note_ja.md)
 
+* Remove built-in command `sudo`
+* Add built-in command `more` (support color and unicode)
+* readline: support C-q,C-v (`QUOTED_INSERT`)
+* pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)
+* Output `nyagos.dump` if panic occurs.
+
 Unreleased Changes
 ==================
+* Fix: error's line number was not displayed when .nyagos has an error.
+* Fix: .nyagos cache errors when executable architecture (amd64 or 386) changes previous'run
+* Fix: `ls | more` outputs ESC[0K. (fixed by go-box)
+* (internal) follow the change in go-colorable's ESC[nC & D's behaviour ( https://github.com/mattn/go-colorable/commit/3fa8c76f , thanks to @tyochiai )
+* Fix: on default `_nyagos`, `suffix "lua=nyagos"` was wrong. Added `.exe -f`
+
+NYAGOS 4.2.0\_3
+==================
+on Jul 13,2017
+
 * Fix: panic occurs when `box` Enter & Ctrl-C pressed.
 * Fix: panic occurs when `lua_e "nyagos.box({})"`
 * Fix: box: cursor disappear at scrolling (go-box's fix)

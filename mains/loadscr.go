@@ -143,7 +143,7 @@ func dotNyagos(it *shell.Cmd, L lua.Lua) error {
 	if err != nil {
 		return nil
 	}
-	cachePath := filepath.Join(AppDataDir(), "dotnyagos.luac")
+	cachePath := filepath.Join(AppDataDir(), runtime.GOARCH+".nyagos.luac")
 	cacheStat, err := os.Stat(cachePath)
 	if err == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
 		_, err = runLua(it, L, cachePath)

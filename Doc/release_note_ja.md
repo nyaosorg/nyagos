@@ -1,7 +1,22 @@
 [English](release_note_en.md) / Japanese
 
+* 内蔵コマンドの sudo を削除
+* 内蔵コマンド more を追加(カラー & utf8 サポート)
+* 一行入力で `C-q`,`C-v` をサポート(`QUOTED_INSERT`)
+* 内蔵コマンド pwd に -P(全てのリンクをたどる) ,-L(環境からPWDを得る) を追加
+* パニックが発生した時、nyagos.dump を出力するようにした
+
 未公開の変更
 ============
+* .nyagos にエラーがあった時のエラー行番号が表示されない問題を修正
+* 前回実行時とEXEファイルのアーキテクチャ(amd64 or 386)が変わった時、.nyagos のキャッシュがエラーになる不具合を修正
+* Fix: `ls | more` で ESC[0K が表示されていた
+* (内部) go-colorable の ESC[nC と D の挙動変更に追随 ( https://github.com/mattn/go-colorable/commit/3fa8c76f , 感謝 > @tyochiai )
+
+NYAGOS 4.2.0\_3
+===============
+(2017.07.13)
+
 * Fix: `box` Enter & Ctrl-C でパニックが発生する不具合を修正
 * Fix: `lua_e "nyagos.box({})"` でパニックが発生する不具合を修正
 * Fix: `box` でスクロールの際、カーソルが消える不具合を修正(go-boxライブラリの不具合修正)
@@ -9,6 +24,7 @@
 * Fix: #235 実行ファイルと同じフォルダーの .nyagos が読み込まれていなかった
 * 補完で、! マークがある時、"" で囲むようにした。
 * Fix: `suffix ps1` が `?:-1: attempt to concatenate a table value` となる不具合を修正
+* Fix: デフォルトの`_nyagos` の `suffix "lua=nyagos"` に `.exe -f` を付加した
 
 NYAGOS 4.2.0\_2
 ===============

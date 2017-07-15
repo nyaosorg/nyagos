@@ -112,6 +112,7 @@ Acknowledgement
 * [orz--](https://github.com/orz--)
 * [zkangaroo](https://github.com/zkangaroo)
 * [maskedw](https://github.com/maskedw)
+* [tyochiai](https://github.com/tyochiai)
 
 Author
 ------
