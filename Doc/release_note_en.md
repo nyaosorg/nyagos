@@ -8,6 +8,7 @@ Unreleased Changes
 * (internal) follow the change in go-colorable's ESC[nC & D's behaviour ( https://github.com/mattn/go-colorable/commit/3fa8c76f , thanks to @tyochiai )
 * Fix: on default `_nyagos`, `suffix "lua=nyagos"` was wrong. Added `.exe -f`
 * Error if scripts on nyagos.d are executed by not nyagos.exe
+* Do not insert interpreter-name when user-typed-command-name does not have a suffix to fix #237 that `cd nyagos.d` and `suffix` -> new nyagos.exe processes start infinitely.
 
 NYAGOS 4.2.0\_3
 ==================
