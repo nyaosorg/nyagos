@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 share.org_brace_filter = nyagos.filter
 nyagos.filter = function(cmdline)
     if share.org_brace_filter then

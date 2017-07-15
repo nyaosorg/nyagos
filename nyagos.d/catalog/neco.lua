@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 nyagos.alias.neco_temp_out = function()
     for _,val in ipairs(share.neco_temp_out) do
         nyagos.write(val,"\n")

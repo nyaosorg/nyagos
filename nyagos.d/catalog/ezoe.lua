@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 nyagos.on_command_not_found = function(args)
     nyagos.writerr(args[0]..": コマンドではない。\n")
     return true

@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 function use(name)
     local catalog_d = string.gsub(nyagos.exe,"%.[eE][xX][eE]$",".d\\catalog")
     name = string.gsub(name,"%.lua$","") .. ".lua"

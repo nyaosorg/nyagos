@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 -- ~\nyagos.ini から、エイリアスや環境変数を読み込むスクリプト
 
 --[[

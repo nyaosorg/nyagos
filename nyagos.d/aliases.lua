@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 nyagos.alias.lua_e=function(args)
     if #args >= 1 then
         assert(load(args[1]))() 

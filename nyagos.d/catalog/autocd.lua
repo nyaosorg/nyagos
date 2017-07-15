@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 share.org_autocd_argsfilter = nyagos.argsfilter
 nyagos.argsfilter = function(args)
   if share.org_autocd_argsfilter then
