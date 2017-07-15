@@ -43,7 +43,7 @@ func PutRunes(ch rune, n int) {
 
 func Backspace(n int) {
 	if n > 1 {
-		fmt.Fprintf(Console, "\x1B[%dC", n)
+		fmt.Fprintf(Console, "\x1B[%dD", n)
 	} else if n == 1 {
 		fmt.Fprint(Console, "\b")
 	}
