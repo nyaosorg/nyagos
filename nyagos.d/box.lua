@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 nyagos.key.C_o = function(this)
     local word,pos = this:lastword()
     word = string.gsub(word,'"','')

@@ -1,3 +1,7 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
 local function expand(text)
     local result,_ = string.gsub(text,"%%([%w_%(%)]+)%%",function(w)
         return nyagos.getenv(w)

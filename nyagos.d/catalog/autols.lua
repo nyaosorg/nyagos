@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 share._autols = function(func, cmd, args)
   local status, err
   if func then

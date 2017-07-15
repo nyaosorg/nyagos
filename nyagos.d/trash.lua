@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 nyagos.alias.trash = function(args)
     if #args <= 0 then
         nyagos.writerr("Move files or directories to Windows Trashbox\n")

@@ -1,3 +1,8 @@
+if not nyagos then
+    print("This is a script for nyagos not lua.exe")
+    os.exit()
+end
+
 nyagos.alias.start = function(args)
     -- Remove title-parameter --
     if not args[1] then

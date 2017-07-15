@@ -25,6 +25,7 @@ NYAGOS 4.2.0\_3
 * 補完で、! マークがある時、"" で囲むようにした。
 * Fix: `suffix ps1` が `?:-1: attempt to concatenate a table value` となる不具合を修正
 * Fix: デフォルトの`_nyagos` の `suffix "lua=nyagos"` に `.exe -f` を付加した
+* nyagos.d のスクリプトが nyagos.exe 以外で実行された時、エラーにするようにした
 
 NYAGOS 4.2.0\_2
 ===============
