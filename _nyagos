@@ -7,7 +7,7 @@ alias "wordpad=""%PROGRAMFILES%\Windows NT\Accessories\wordpad.exe"""
 
 suffix "awk=gawk -f"
 suffix "js=cscript //nologo"
-suffix "lua=nyagos"
+suffix "lua=nyagos.exe -f"
 suffix "pl=perl"
 suffix "ps1=powershell -ExecutionPolicy RemoteSigned -file"
 suffix "rb=ruby"
