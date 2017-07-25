@@ -12,7 +12,7 @@ nyagos.key.C_o = function(this)
         return
     end
     nyagos.write("\n")
-    local result=nyagos.box(list)
+    local result=nyagos.box(list) or word
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result," ",1,true) then
         if string.find(result,"^~[\\/]") then
