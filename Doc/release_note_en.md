@@ -9,6 +9,7 @@ Unreleased Changes
 * Fix: on default `_nyagos`, `suffix "lua=nyagos"` was wrong. Added `.exe -f`
 * Error if scripts on nyagos.d are executed by not nyagos.exe
 * Do not insert interpreter-name when user-typed-command-name does not have a suffix to fix #237 that `cd nyagos.d` and `suffix` -> new nyagos.exe processes start infinitely.
+* Fix #240: on empty dir, C-o -> bad argument # 1 to 'find' (string expected, got nil)
 
 NYAGOS 4.2.0\_3
 ==================
