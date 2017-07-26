@@ -9,7 +9,7 @@
 * デフォルトと `_nyagos` で `suffix "lua=nyagos"` は間違っていた。「`.exe -f`」を追記した。
 * nyagos.d ディレクトリのスクリプトが、lua.exe など nyagos.exe 以外で実行された場合、エラーにするようにした。
 * nyagos.d ディレクトリで `suffix` とタイプすると、無限に nyagos.exe プロセスが起動する問題 #237 を修正するために、ユーザがタイプしたコマンド名に拡張子が含まれていない場合は、インタプリタ名の挿入をしないようにした。
-* Fix #24: 空のディレクトリで C-o を押下すると「`bad argument # 1 to 'find' (string expected, got nil)`」と表示されていた
+* Fix #240: 空のディレクトリで C-o を押下すると「`bad argument # 1 to 'find' (string expected, got nil)`」と表示されていた
 
 NYAGOS 4.2.0\_3
 ===============
@@ -22,9 +22,6 @@ NYAGOS 4.2.0\_3
 * Fix: #235 実行ファイルと同じフォルダーの .nyagos が読み込まれていなかった
 * 補完で、! マークがある時、"" で囲むようにした。
 * Fix: `suffix ps1` が `?:-1: attempt to concatenate a table value` となる不具合を修正
-* Fix: デフォルトの`_nyagos` の `suffix "lua=nyagos"` に `.exe -f` を付加した
-* nyagos.d のスクリプトが nyagos.exe 以外で実行された時、エラーにするようにした
-* Fix #237: nyagos.d フォルダーで suffix とタイプした時に nyagos.exe が無限増殖する現象を修正するため、タイプされたコマンド名に拡張子が含まれない時にインタプリタ名を挿入させないようにした。
 
 NYAGOS 4.2.0\_2
 ===============
