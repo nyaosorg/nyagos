@@ -6,16 +6,18 @@ English / [Japanese](release_note_ja.md)
 * pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)
 * Output `nyagos.dump` if panic occurs.
 
-Unreleased Changes
-==================
-* Fix: error's line number was not displayed when .nyagos has an error.
-* Fix: .nyagos cache errors when executable architecture (amd64 or 386) changes previous'run
-* Fix: `ls | more` outputs ESC[0K. (fixed by go-box)
-* (internal) follow the change in go-colorable's ESC[nC & D's behaviour ( https://github.com/mattn/go-colorable/commit/3fa8c76f , thanks to @tyochiai )
+NYAGOS 4.2.0\_4
+===============
+on Jul.29,2017
+
+* Fix: error's line number was not displayed when `.nyagos` has an error.
+* Fix: `.nyagos` cache errors when executable architecture (amd64 or 386) changes previous'run
+* Fix: `ls | more` outputs `ESC[0K`. (fixed by go-box)
+* (internal) follow the change in go-colorable's `ESC[%dC` & `ESC[%dD`'s behaviour ( https://github.com/mattn/go-colorable/commit/3fa8c76f , thanks to @tyochiai )
 * Fix: on default `_nyagos`, `suffix "lua=nyagos"` was wrong. Added `.exe -f`
-* Error if scripts on nyagos.d are executed by not nyagos.exe
+* Error if scripts on `nyagos.d` are executed by not nyagos.exe
 * Do not insert interpreter-name when user-typed-command-name does not have a suffix to fix #237 that `cd nyagos.d` and `suffix` -> new nyagos.exe processes start infinitely.
-* Fix #240: on empty dir, C-o -> bad argument # 1 to 'find' (string expected, got nil)
+* Fix #240: on empty dir, C-o -> `bad argument # 1 to 'find' (string expected, got nil)`
 
 NYAGOS 4.2.0\_3
 ==================

@@ -6,15 +6,17 @@
 * 内蔵コマンド pwd に -P(全てのリンクをたどる) ,-L(環境からPWDを得る) を追加
 * パニックが発生した時、nyagos.dump を出力するようにした
 
-未公開の変更
-============
-* .nyagos にエラーがあった時のエラー行番号が表示されない問題を修正
-* 前回実行時とEXEファイルのアーキテクチャ(amd64 or 386)が変わった時、.nyagos のキャッシュがエラーになる不具合を修正
-* Fix: `ls | more` で ESC[0K が表示されていた
-* (内部) go-colorable の ESC[nC と D の挙動変更に追随 ( https://github.com/mattn/go-colorable/commit/3fa8c76f , 感謝 > @tyochiai )
+NYAGOS 4.2.0\_4
+===============
+(2017.07.29)
+
+* `.nyagos` にエラーがあった時のエラー行番号が表示されない問題を修正
+* 前回実行時とEXEファイルのアーキテクチャ(amd64 or 386)が変わった時、`.nyagos` のキャッシュがエラーになる不具合を修正
+* Fix: `ls | more` で `ESC[0K` が表示されていた
+* (内部) go-colorable の `ESC[%dC` と `ESC[%dD` の挙動変更に追随 ( https://github.com/mattn/go-colorable/commit/3fa8c76f , 感謝 > @tyochiai )
 * デフォルトと `_nyagos` で `suffix "lua=nyagos"` は間違っていた。「`.exe -f`」を追記した。
-* nyagos.d ディレクトリのスクリプトが、lua.exe など nyagos.exe 以外で実行された場合、エラーにするようにした。
-* nyagos.d ディレクトリで `suffix` とタイプすると、無限に nyagos.exe プロセスが起動する問題 #237 を修正するために、ユーザがタイプしたコマンド名に拡張子が含まれていない場合は、インタプリタ名の挿入をしないようにした。
+* `nyagos.d` ディレクトリのスクリプトが、lua.exe など nyagos.exe 以外で実行された場合、エラーにするようにした。
+* `nyagos.d` ディレクトリで `suffix` とタイプすると、無限に nyagos.exe プロセスが起動する問題 #237 を修正するために、ユーザがタイプしたコマンド名に拡張子が含まれていない場合は、インタプリタ名の挿入をしないようにした。
 * Fix #240: 空のディレクトリで C-o を押下すると「`bad argument # 1 to 'find' (string expected, got nil)`」と表示されていた
 
 NYAGOS 4.2.0\_3
