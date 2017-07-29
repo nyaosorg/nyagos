@@ -1,7 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
 NYAGOS 4.2.0\_4
-==================
+===============
+on Jul.29,2017
+
 * Fix: error's line number was not displayed when `.nyagos` has an error.
 * Fix: `.nyagos` cache errors when executable architecture (amd64 or 386) changes previous'run
 * Fix: `ls | more` outputs `ESC[0K`. (fixed by go-box)
