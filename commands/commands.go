@@ -62,7 +62,7 @@ func Init() {
 		"copy":    cmd_copy,
 		"del":     cmd_del,
 		"dirs":    cmd_dirs,
-		"du":      cmd_du,
+		"__du__":  cmd_du,
 		"echo":    cmd_echo,
 		"env":     cmd_env,
 		"erase":   cmd_del,
