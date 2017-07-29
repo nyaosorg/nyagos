@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * readline: support C-q,C-v (`QUOTED_INSERT`)
 * pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)
 * Output `nyagos.dump` if panic occurs.
+* `__du__` : implemented the prototype of du
 
 NYAGOS 4.2.0\_4
 ===============
