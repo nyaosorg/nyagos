@@ -1,12 +1,5 @@
 [English](release_note_en.md) / Japanese
 
-* 内蔵コマンドの sudo を削除
-* 内蔵コマンド more を追加(カラー & utf8 サポート)
-* 一行入力で `C-q`,`C-v` をサポート(`QUOTED_INSERT`)
-* 内蔵コマンド pwd に -P(全てのリンクをたどる) ,-L(環境からPWDを得る) を追加
-* パニックが発生した時、nyagos.dump を出力するようにした
-* `__du__`: du 試作品を実装
-
 NYAGOS 4.2.0\_4
 ===============
 (2017.07.29)
