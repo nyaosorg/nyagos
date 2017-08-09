@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix: Building on Windows7, the version information was not written into the property of the executable because the script to make JSON for goversioninfo required the method ConvertTo-JSON of PowerShell 3.0 but Windows 7 does not support it.
+
 NYAGOS 4.2.0\_4
 ===============
 on Jul.29,2017
