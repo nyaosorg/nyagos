@@ -854,3 +854,27 @@ func cmdLines(L lua.Lua) int {
 	// print("cmdLines: end\n")
 	return 2
 }
+
+func cmdBox(L lua.Lua) int {
+	if !L.IsTable(1) {
+		return L.Push(nil, "Not a table")
+	}
+
+	L.Len(1)
+	n, _ := L.ToInteger(-1)
+	L.Pop(1)
+	if n <= 0 {
+		return 0
+	}
+	sources := make([]string, 0, n)
+	for i := 0; i < n; i++ {
+		L.RawGetI(-1, lua.Integer(i+1))
+		str, err := L.ToString(-1)
+		if err == nil && str != "" {
+			sources = append(sources, str)
+		}
+		L.Pop(1)
+	}
+	result := box.Choice(sources, readline.Console)
+	return L.Push(result)
+}
