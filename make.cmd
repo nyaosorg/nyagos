@@ -96,7 +96,7 @@ call :"%~1" %2 %3 %4 %5 %6
         @exit /b
 
 :getgoversioninfo
-        go get "github.com/josephspurrier/goversioninfo"
+        go get -u "github.com/josephspurrier/goversioninfo"
         pushd "%GOPATH1ST%\src\github.com\josephspurrier\goversioninfo\cmd\goversioninfo"
         go build
         copy goversioninfo.exe "%~dp0\."
