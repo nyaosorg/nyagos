@@ -8,6 +8,7 @@ import (
 
 	"github.com/zetamatta/go-getch"
 
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -81,7 +82,10 @@ func cmd_rmdir(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			if !quiet {
 				fmt.Fprintln(cmd.Stdout)
 			}
-			err = os.RemoveAll(arg1)
+			err = dos.Truncate(arg1, func(path string, err error) bool {
+				fmt.Fprintf(cmd.Stderr, "%s -> %s\n", path, err)
+				return true
+			}, cmd.Stdout)
 		} else {
 			err = syscall.Rmdir(arg1)
 		}
