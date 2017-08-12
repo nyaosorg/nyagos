@@ -8,3 +8,4 @@ Changes from master to second branch
 * pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)
 * Output `nyagos.dump` if panic occurs.
 * `__du__` : implemented the prototype of du
+* `rmdir` prints the progress as before.
