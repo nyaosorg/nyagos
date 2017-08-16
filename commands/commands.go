@@ -63,6 +63,7 @@ func Init() {
 		"del":     cmd_del,
 		"dirs":    cmd_dirs,
 		"__du__":  cmd_du,
+		"__df__":  cmd_df,
 		"echo":    cmd_echo,
 		"env":     cmd_env,
 		"erase":   cmd_del,
