@@ -9,3 +9,4 @@ Changes from master to second branch
 * Output `nyagos.dump` if panic occurs.
 * `__du__` : implemented the prototype of du
 * `rmdir` prints the progress as before.
+* `__df__` : implemented the prototype of df
