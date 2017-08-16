@@ -115,6 +115,8 @@ Report which file is executed.
 ### `pushd [DIR]`
 ### `popd`
 ### `dirs`
+### `__df__`
+### `__du__`
 
 These built-in commands are always asking with prompt when files are override or removed.
 
