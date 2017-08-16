@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.0\_5
+===============
+(2017.08.16)
+
 * Windows7 でのビルドで、バージョン情報が実行ファイルのプロパティーに記入されない問題があり、修正した。原因は goversioninfo 向けの JSON を作るスクリプトが PowerShell 3.0 の ConvertTo-JSON メソッドを必要としていたが、Windows 7 はサポートしていなかった。
 * nyagos.box(LIST)関数が LIST の順番を無視していた
 
