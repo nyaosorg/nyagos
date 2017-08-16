@@ -16,11 +16,27 @@ func df(rootPathName string, w io.Writer) error {
 	if err != nil {
 		return fmt.Errorf("%s: %s", rootPathName, err)
 	}
-	fmt.Fprintf(w, "%s %20s %20s %20s\n",
+	fmt.Fprintf(w, "%s %20s %20s %20s",
 		rootPathName,
 		humanize.Comma(int64(free)),
 		humanize.Comma(int64(total)),
 		humanize.Comma(int64(totalFree)))
+	t, err := dos.GetDriveType(rootPathName)
+	if err == nil {
+		switch t {
+		case dos.DRIVE_REMOVABLE:
+			fmt.Fprint(w, " [REMOVABLE]")
+		case dos.DRIVE_FIXED:
+			fmt.Fprint(w, " [FIXED]")
+		case dos.DRIVE_REMOTE:
+			fmt.Fprint(w, " [REMOTE]")
+		case dos.DRIVE_CDROM:
+			fmt.Fprint(w, " [CDROM]")
+		case dos.DRIVE_RAMDISK:
+			fmt.Fprint(w, " [RAMDISK]")
+		}
+	}
+	fmt.Fprintln(w)
 	return nil
 }
 
