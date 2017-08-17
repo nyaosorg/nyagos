@@ -113,6 +113,7 @@ Acknowledgement
 * [zkangaroo](https://github.com/zkangaroo)
 * [maskedw](https://github.com/maskedw)
 * [tyochiai](https://github.com/tyochiai)
+* [masamitsu-murase](https://github.com/masamitsu-murase)
 
 Author
 ------

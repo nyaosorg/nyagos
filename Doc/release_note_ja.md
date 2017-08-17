@@ -1,5 +1,8 @@
 [English](release_note_en.md) / Japanese
 
+* #241 `completion_hook` で戻るリストの順番が反映されていなかった問題を修正 (Thx @masamitsu-murase)
+* #242,#243 readline のキーに Alt+Backspace と Alt+"/" を追加 (Thx @masamitsu-murase)
+
 NYAGOS 4.2.0\_5
 ===============
 (2017.08.16)
