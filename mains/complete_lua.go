@@ -39,12 +39,14 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 			if t, ok := result.(map[interface{}]interface{}); ok {
 				list := make([]completion.Element, 0, len(rv.List)+32)
 				wordUpr := strings.ToUpper(rv.Word)
-				for _, v := range t {
-					str, ok := v.(string)
-					if ok {
-						strUpr := strings.ToUpper(str)
-						if strings.HasPrefix(strUpr, wordUpr) {
-							list = append(list, completion.Element{InsertStr: str, ListupStr: str})
+				for i := 0; i < len(t); i++ {
+					if v, ok := t[i+1]; ok {
+						str, ok := v.(string)
+						if ok {
+							strUpr := strings.ToUpper(str)
+							if strings.HasPrefix(strUpr, wordUpr) {
+								list = append(list, completion.Element{InsertStr: str, ListupStr: str})
+							}
 						}
 					}
 				}
