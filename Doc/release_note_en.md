@@ -1,5 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
+* #241 Respect the item order in the list returned from `completion_hook` (Thx @masamitsu-murase)
+* #242,#243 Support key combination for Alt+Backspace and Alt+"/". (Thx @masamitsu-murase)
+
 NYAGOS 4.2.0\_5
 ===============
 on Aug.16,2017
