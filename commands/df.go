@@ -15,12 +15,14 @@ func df(rootPathName string, w io.Writer) (err error) {
 	fmt.Fprint(w, rootPathName)
 	free, total, totalFree, err1 := dos.GetDiskFreeSpace(rootPathName)
 	if err1 != nil {
+		fmt.Fprintf(w, " %20s %20s %20s     ", "", "", "")
 		err = fmt.Errorf("%s: %s", rootPathName, err1)
 	} else {
-		fmt.Fprintf(w, " %20s %20s %20s",
+		fmt.Fprintf(w, " %20s %20s %20s %3d%%",
 			humanize.Comma(int64(free)),
 			humanize.Comma(int64(total)),
-			humanize.Comma(int64(totalFree)))
+			humanize.Comma(int64(totalFree)),
+			100*(total-free)/total)
 	}
 	t, err1 := dos.GetDriveType(rootPathName)
 	if err1 != nil {
@@ -52,10 +54,10 @@ func cmd_df(_ context.Context, cmd *shell.Cmd) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	fmt.Fprintf(cmd.Stdout, "   %20s %20s %20s\n",
-		"FreeBytesAvailable",
-		"TotalNumberOfBytes",
-		"TotalNumberOfFreeBytes")
+	fmt.Fprintf(cmd.Stdout, "   %20s %20s %20s Use%%\n",
+		"Available",
+		"TotalNumber",
+		"TotalNumberOfFree")
 
 	count := 0
 	for _, arg1 := range cmd.Args[1:] {
