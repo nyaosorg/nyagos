@@ -82,6 +82,7 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"get"
         powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ ($_ -replace '\s*//.*$','').Split()[-1] } | ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/' ) } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
+        go get -u golang.org/x/sys/windows
         @exit /b
 
 :getbindata
