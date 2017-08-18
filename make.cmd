@@ -55,6 +55,7 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"fmt"
         for /F %%I IN ('dir /s /b /aa *.go') do ( ( if "%%~nxI" == "syscall.go" pushd "%%~dpI" & go generate -x & popd ) & go fmt "%%I" & attrib -A "%%I")
+        for /F %%I in ('dir /s /b syscall.go') do if not exist "%%~dpI\zsyscall.go" ( pushd "%%~dpI" & go generate -x & popd )
         @exit /b
 
 :"status"
@@ -71,7 +72,8 @@ call :"%~1" %2 %3 %4 %5 %6
         exit /b
 
 :"clean"
-        for %%I in (nyagos.exe nyagos.syso version.now mains\bindata.go) do if exist %%I del %%I
+        for %%I in (nyagos.exe nyagos.syso version.now mains\bindata.go goversioninfo.exe go-bindata.exe) do if exist %%I del %%I
+        for /R %%I in (zsyscall.go) do if exist "%%I" del "%%I"
         call :eachdir clean
 
 :"sweep"
