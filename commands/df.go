@@ -11,18 +11,25 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-func df(rootPathName string, w io.Writer) error {
-	free, total, totalFree, err := dos.GetDiskFreeSpace(rootPathName)
-	if err != nil {
-		return fmt.Errorf("%s: %s", rootPathName, err)
+func df(rootPathName string, w io.Writer) (err error) {
+	fmt.Fprint(w, rootPathName)
+	free, total, totalFree, err1 := dos.GetDiskFreeSpace(rootPathName)
+	if err1 != nil {
+		err = fmt.Errorf("%s: %s", rootPathName, err1)
+	} else {
+		fmt.Fprintf(w, " %20s %20s %20s",
+			humanize.Comma(int64(free)),
+			humanize.Comma(int64(total)),
+			humanize.Comma(int64(totalFree)))
 	}
-	fmt.Fprintf(w, "%s %20s %20s %20s",
-		rootPathName,
-		humanize.Comma(int64(free)),
-		humanize.Comma(int64(total)),
-		humanize.Comma(int64(totalFree)))
-	t, err := dos.GetDriveType(rootPathName)
-	if err == nil {
+	t, err1 := dos.GetDriveType(rootPathName)
+	if err1 != nil {
+		if err != nil {
+			err = fmt.Errorf("%s,%s", err, err1)
+		} else {
+			err = fmt.Errorf("%s: %s", rootPathName, err1)
+		}
+	} else {
 		switch t {
 		case dos.DRIVE_REMOVABLE:
 			fmt.Fprint(w, " [REMOVABLE]")
@@ -37,7 +44,7 @@ func df(rootPathName string, w io.Writer) error {
 		}
 	}
 	fmt.Fprintln(w)
-	return nil
+	return
 }
 
 func cmd_df(_ context.Context, cmd *shell.Cmd) (int, error) {
