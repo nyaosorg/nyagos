@@ -54,7 +54,7 @@ call :"%~1" %2 %3 %4 %5 %6
         @exit /b
 
 :"fmt"
-        for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
+        for /F %%I IN ('dir /s /b /aa *.go') do ( ( if "%%~nxI" == "syscall.go" pushd "%%~dpI" & go generate -x & popd ) & go fmt "%%I" & attrib -A "%%I")
         @exit /b
 
 :"status"
