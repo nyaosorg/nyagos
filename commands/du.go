@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -9,7 +10,9 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-func du_(path string, output func(string, int64), blocksize int64) (int64, error) {
+var ErrCtrlC = errors.New("^C")
+
+func du_(path string, output func(string, int64) error, blocksize int64) (int64, error) {
 	fd, err := os.Open(path)
 	if err != nil {
 		return 0, err
@@ -45,20 +48,39 @@ func du_(path string, output func(string, int64), blocksize int64) (int64, error
 		if err != nil {
 			return diskuse, err
 		}
-		output(fullpath, diskuse1)
+		if err1 := output(fullpath, diskuse1); err1 != nil {
+			return diskuse, err1
+		}
 		diskuse += diskuse1
 	}
 	return diskuse, nil
 }
 
-func cmd_du(_ context.Context, cmd *shell.Cmd) (int, error) {
-	output := func(name string, size int64) {
+func cmd_du(ctx context.Context, cmd *shell.Cmd) (int, error) {
+	output := func(name string, size int64) error {
 		fmt.Fprintf(cmd.Stdout, "%d\t%s\n", size/1024, name)
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return ErrCtrlC
+			default:
+			}
+		}
+		return nil
 	}
 	count := 0
 	for _, arg1 := range cmd.Args[1:] {
 		if arg1 == "-s" {
-			output = func(_ string, _ int64) {}
+			output = func(_ string, _ int64) error {
+				if ctx != nil {
+					select {
+					case <-ctx.Done():
+						return ErrCtrlC
+					default:
+					}
+				}
+				return nil
+			}
 			continue
 		}
 		size, err := du_(arg1, output, 4096)
