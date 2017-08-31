@@ -7,6 +7,7 @@ import (
 	"unicode"
 
 	"github.com/atotto/clipboard"
+	"github.com/zetamatta/go-getch"
 )
 
 func KeyFuncPass(this *Buffer) Result {
@@ -53,7 +54,7 @@ func KeyFuncTail(this *Buffer) Result { // Ctrl-E
 			PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
-		PutRune('\a')
+		fmt.Fprint(Console, "\a")
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
@@ -129,9 +130,6 @@ func KeyFuncDeleteOrAbort(this *Buffer) Result { // Ctrl-D
 
 func KeyFuncInsertSelf(this *Buffer) Result {
 	ch := this.Unicode
-	if ch < 0x20 {
-		return CONTINUE
-	}
 	this.Insert(this.Cursor, []rune{ch})
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
@@ -223,9 +221,21 @@ func KeyFuncCLS(this *Buffer) Result {
 }
 
 func KeyFuncRepaintOnNewline(this *Buffer) Result {
-	PutRune('\n')
+	fmt.Fprint(Console, "\n")
 	this.RepaintAll()
 	return CONTINUE
+}
+
+func KeyFuncQuotedInsert(this *Buffer) Result {
+	fmt.Fprint(Console, CURSOR_ON)
+	defer fmt.Fprint(Console, CURSOR_OFF)
+	for {
+		e := getch.All()
+		if e.Key != nil && e.Key.Rune != 0 {
+			this.Unicode = e.Key.Rune
+			return KeyFuncInsertSelf(this)
+		}
+	}
 }
 
 func KeyFuncPaste(this *Buffer) Result {
@@ -233,9 +243,6 @@ func KeyFuncPaste(this *Buffer) Result {
 	if err != nil {
 		return CONTINUE
 	}
-	text = strings.Replace(text, "\n", " ", -1)
-	text = strings.Replace(text, "\r", "", -1)
-	text = strings.Replace(text, "\t", " ", -1)
 	this.InsertAndRepaint(text)
 	return CONTINUE
 }
@@ -245,9 +252,6 @@ func KeyFuncPasteQuote(this *Buffer) Result {
 	if err != nil {
 		return CONTINUE
 	}
-	text = strings.Replace(text, "\n", " ", -1)
-	text = strings.Replace(text, "\r", "", -1)
-	text = strings.Replace(text, "\t", " ", -1)
 	if strings.IndexRune(text, ' ') >= 0 &&
 		!strings.HasPrefix(text, `"`) {
 		text = `"` + strings.Replace(text, `"`, `""`, -1) + `"`

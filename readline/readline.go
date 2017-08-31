@@ -67,7 +67,9 @@ var keyMap = map[rune]KeyFuncT{
 	name2char[K_ESCAPE]: name2func(F_KILL_WHOLE_LINE),
 	name2char[K_CTRL_N]: name2func(F_HISTORY_DOWN),
 	name2char[K_CTRL_P]: name2func(F_HISTORY_UP),
+	name2char[K_CTRL_Q]: name2func(F_QUOTED_INSERT),
 	name2char[K_CTRL_T]: name2func(F_SWAPCHAR),
+	name2char[K_CTRL_V]: name2func(F_QUOTED_INSERT),
 	name2char[K_CTRL_W]: name2func(F_UNIX_WORD_RUBOUT),
 }
 

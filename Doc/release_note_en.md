@@ -1,7 +1,19 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.1\_0
+===============
+on Aug.31,2017
+
 * #241 Respect the item order in the list returned from `completion_hook` (Thx @masamitsu-murase)
 * #242,#243 Support key combination for Alt+Backspace and Alt+"/". (Thx @masamitsu-murase)
+* Remove built-in command `sudo`
+* Add built-in command `more` (support color and unicode)
+* readline: support C-q,C-v (`QUOTED_INSERT`)
+* pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)
+* Output `nyagos.dump` if panic occurs.
+* `diskused`: new command like du
+* `rmdir` prints the progress as before.
+* `diskfree`: new command like df
 
 NYAGOS 4.2.0\_5
 ===============

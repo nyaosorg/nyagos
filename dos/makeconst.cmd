@@ -24,6 +24,13 @@ go-importconst dos ^
     COINIT_APARTMENTTHREADED:uintptr ^
     COINIT_MULTITHREADED:uintptr ^
     COINIT_DISABLE_OLE1DDE:uintptr ^
-    COINIT_SPEED_OVER_MEMORY:uintptr
+    COINIT_SPEED_OVER_MEMORY:uintptr ^
+    DRIVE_UNKNOWN ^
+    DRIVE_NO_ROOT_DIR ^
+    DRIVE_REMOVABLE ^
+    DRIVE_FIXED ^
+    DRIVE_REMOTE ^
+    DRIVE_CDROM ^
+    DRIVE_RAMDISK
 @echo off
 rem go-importconst -> https://github.com/zetamatta/go-importconst

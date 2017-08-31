@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"runtime/debug"
 
@@ -14,11 +16,17 @@ func when_panic() {
 	if err == nil {
 		return
 	}
-	fmt.Fprintln(os.Stderr, "************ Panic Occured. ***********")
-	fmt.Fprintln(os.Stderr, err)
-	debug.PrintStack()
-	fmt.Fprintln(os.Stderr, "*** Please copy these error message ***")
-	fmt.Fprintln(os.Stderr, "*** And hit ENTER key to quit.      ***")
+	var dump bytes.Buffer
+	w := io.MultiWriter(os.Stderr, &dump)
+
+	fmt.Fprintln(w, "************ Panic Occured. ***********")
+	fmt.Fprintln(w, err)
+	w.Write(debug.Stack())
+	fmt.Fprintln(w, "*** Please copy these error message ***")
+	fmt.Fprintln(w, "*** And hit ENTER key to quit.      ***")
+
+	ioutil.WriteFile("nyagos.dump", dump.Bytes(), 0666)
+
 	var dummy [1]byte
 	os.Stdin.Read(dummy[:])
 }

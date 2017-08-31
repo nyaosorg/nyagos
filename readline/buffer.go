@@ -16,7 +16,9 @@ var Console = colorable.NewColorableStdout()
 var hasCache = map[rune]struct{}{}
 
 func PutRune(ch rune) {
-	if _, ok := hasCache[ch]; ok {
+	if ch < ' ' {
+		fmt.Fprintf(Console, "^%c", 'A'+(ch-1))
+	} else if _, ok := hasCache[ch]; ok {
 		fmt.Fprintf(Console, "%c", ch)
 	} else {
 		pre_x, pre_y := box.GetLocate()

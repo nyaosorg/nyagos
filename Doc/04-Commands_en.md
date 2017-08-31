@@ -73,11 +73,17 @@ List the directory. Supported options are below:
 * `-h` With -l, print sizes in human readable format (e.g., 1K 234M 2G)
 * `-S` Sort by file size
 
+### `more`
+
+Support both UTF8 and ANSI-text (auto detected)
+
 ### `pwd`
 
 Print the current woking drive and directory.
 
 * `pwd -N` (N:digit) : print the N-previous directory.
+* `pwd -L` : use PWD from environment, even if it contains symlinks.
+* `pwd -P` : avoid symlinks. (default)
 
 ### `set ENV=VAL`
 
@@ -109,6 +115,8 @@ Report which file is executed.
 ### `pushd [DIR]`
 ### `popd`
 ### `dirs`
+### `diskfree`
+### `diskused`
 
 These built-in commands are always asking with prompt when files are override or removed.
 
@@ -131,10 +139,6 @@ Run another nyagos.exe on another console window.
 ### `su`
 
 Run another nyagos.exe as Administrator.
-
-### `sudo COMMAND ARGS(s)...`
-
-Run COMMAND as Administrator
 
 ## Commands implemented by Lua
 

@@ -5,6 +5,11 @@
 
 if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
 
+set MAJOR=-1
+set MINOR=-1
+set BUILD=-1
+set PATCH=-1
+
 if exist goarch.txt for /F %%I in (goarch.txt) do set "GOARCH=%%I"
 if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOARCH=%%I"
 
@@ -28,6 +33,14 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"release"
         for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
+        for /F "delims=. tokens=1,2,3" %%I in ("%VERSION%") do (
+            set "MAJOR=%%I"
+            set "MINOR=%%J"
+            for /F "delims=_ tokens=1,2" %%M in ("%%K") do (
+                set "PATCH=%%M"
+                set "BUILD=%%N"
+            )
+        )
         set "X_VERSION=-X main.version=%VERSION%"
         call :"build"
         @exit /b
@@ -41,7 +54,8 @@ call :"%~1" %2 %3 %4 %5 %6
         @exit /b
 
 :"fmt"
-        for /F %%I IN ('dir /s /b /aa *.go') do go fmt "%%I" & attrib -A "%%I"
+        for /F %%I IN ('dir /s /b /aa *.go') do ( ( if "%%~nxI" == "syscall.go" pushd "%%~dpI" & go generate -x & popd ) & go fmt "%%I" & attrib -A "%%I")
+        for /F %%I in ('dir /s /b syscall.go') do if not exist "%%~dpI\zsyscall.go" ( pushd "%%~dpI" & go generate -x & popd )
         @exit /b
 
 :"status"
@@ -58,7 +72,8 @@ call :"%~1" %2 %3 %4 %5 %6
         exit /b
 
 :"clean"
-        for %%I in (nyagos.exe nyagos.syso version.now mains\bindata.go) do if exist %%I del %%I
+        for %%I in (nyagos.exe nyagos.syso version.now mains\bindata.go goversioninfo.exe go-bindata.exe) do if exist %%I del %%I
+        for /R %%I in (zsyscall.go) do if exist "%%I" del "%%I"
         call :eachdir clean
 
 :"sweep"
@@ -67,6 +82,7 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"get"
         powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ ($_ -replace '\s*//.*$','').Split()[-1] } | ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/' ) } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
+        go get -u golang.org/x/sys/windows
         @exit /b
 
 :getbindata
@@ -83,7 +99,7 @@ call :"%~1" %2 %3 %4 %5 %6
         @exit /b
 
 :getgoversioninfo
-        go get "github.com/josephspurrier/goversioninfo"
+        go get -u "github.com/josephspurrier/goversioninfo"
         pushd "%GOPATH1ST%\src\github.com\josephspurrier\goversioninfo\cmd\goversioninfo"
         go build
         copy goversioninfo.exe "%~dp0\."
@@ -92,8 +108,20 @@ call :"%~1" %2 %3 %4 %5 %6
 
 :"goversioninfo"
         if not exist goversioninfo.exe call :getgoversioninfo
-        powershell -ExecutionPolicy RemoteSigned -File "%~dp0mains\makejson.ps1" > "%~dp0Misc\version.json"
-        goversioninfo.exe -icon mains\nyagos.ico -o "%~dp0nyagos.syso" "%~dp0Misc\version.json"
+        goversioninfo.exe ^
+            -file-version="%VERSION%" ^
+            -product-version="%VERSION%" ^
+            -icon=mains\nyagos.ico ^
+            -ver-major=%MAJOR% ^
+            -ver-minor=%MINOR% ^
+            -ver-build=%BUILD% ^
+            -ver-patch=%PATCH% ^
+            -product-ver-major=%MAJOR% ^
+            -product-ver-minor=%MINOR% ^
+            -product-ver-build=%BUILD% ^
+            -product-ver-patch=%PATCH% ^
+            -o nyagos.syso ^
+            versioninfo.json 
         @exit /b
 
 :"const"
