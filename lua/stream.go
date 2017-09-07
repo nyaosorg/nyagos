@@ -12,7 +12,7 @@ type stream_t struct {
 }
 
 func (this Lua) pushStream(fd ansicfile.FilePtr, closer func(Lua) int) {
-	this.PushUserData(&stream_t{
+	this.PushRawUserData(&stream_t{
 		FilePtr: fd,
 		Closer:  syscall.NewCallbackCDecl(closer),
 	})
@@ -22,7 +22,7 @@ func (this Lua) pushStream(fd ansicfile.FilePtr, closer func(Lua) int) {
 
 func closer(this Lua) int {
 	userdata := stream_t{}
-	this.ToUserDataTo(1, &userdata)
+	this.ToRawUserDataTo(1, &userdata)
 	userdata.FilePtr.Close()
 	// print("stream_closed\n")
 	return 0

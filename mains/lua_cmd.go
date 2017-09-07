@@ -714,6 +714,7 @@ func (this *iolines_t) Ok() bool {
 }
 
 func iolines_t_gc(L lua.Lua) int {
+	defer L.DeleteUserDataAnchor(1)
 	userdata := iolines_t{}
 	sync := L.ToUserDataTo(1, &userdata)
 	defer sync()
@@ -816,6 +817,10 @@ func cmdLines(L lua.Lua) int {
 			HasToClose: false,
 			Marks:      []string{"l"},
 		})
+		L.NewTable()
+		L.Push(iolines_t_gc)
+		L.SetField(-2, "__gc")
+		L.SetMetaTable(-2)
 		return 2
 	}
 	path, path_err := L.ToString(1)

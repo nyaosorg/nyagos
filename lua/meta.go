@@ -40,9 +40,5 @@ func (this Lua) TestUDataTo(index int, tname string, p interface{}) (func(), err
 	if src == 0 {
 		return noOperation, ErrTestUData
 	}
-	dst, siz := PtrAndSize(p)
-	copyMemory(dst, src, siz)
-	return func() {
-		copyMemory(src, dst, siz)
-	}, nil
+	return this.ToUserDataTo(index, p), nil
 }
