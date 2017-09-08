@@ -165,4 +165,8 @@ cd のパラメータにショートカット(`*.lnk`)を指定できるよう�
 
 ファイルを Windows のゴミ箱に移動させます。
 
+### `wildcard COMMAND ARG(s)...` (nyagos.d\aliased.lua)
+
+ARG(s) に含まれるワイルドカードを展開して、COMMAND を実行します。
+
 <!-- set:fenc=utf8: -->

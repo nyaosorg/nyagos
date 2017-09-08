@@ -153,3 +153,7 @@ Execute inline-lua-commands like 'lua.exe -e "..."'.
 ### `trash FILE(S)` (nyagos.d\trash.lua)
 
 It throws files into trashbox of Windows.
+
+### `wildcard COMMAND ARG(s)...` (nyagos.d\aliased.lua)
+
+Expand the wildcard included ARG(s) and call COMMAND.

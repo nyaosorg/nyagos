@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* wildcard: 新内蔵Luaコマンド:続く外部コマンドの引数のワイルドカードを展開する(例:`expand cmd /c echo *`)
+
 NYAGOS 4.2.1\_0
 ===============
 (2017.08.31)
