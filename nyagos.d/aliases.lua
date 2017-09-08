@@ -53,3 +53,16 @@ nyagos.alias.chcp = function(args)
     nyagos.resetcharwidth()
     nyagos.rawexec(args[0],table.unpack(args))
 end
+
+-- wildcard expand for external commands
+nyagos.alias.wildcard = function(args)
+    local newargs = {}
+    for i=1,#args do
+        local tmp = nyagos.glob(args[i])
+        for j=1,#tmp do
+            newargs[ #newargs+1] = tmp[j]
+        end
+    end
+    -- for i=1,#newargs do print(newargs[i]) end
+    nyagos.exec( newargs )
+end
