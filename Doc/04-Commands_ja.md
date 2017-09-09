@@ -36,6 +36,7 @@ CMD.EXE と違い、ドライブも同時に変更します。
 * `cd -N` : N 回前のディレクトリへ移動します
 * `cd -h` , `cd ?` : 過去いたディレクトリを表示します
 * `cd --history` : 過去いたディレクトリを全て装飾なしで表示します
+* `cd shortcut.lnk` : ショートカットの差すディレクトリへ移動します
 
 ### `chmod ooo FILE(s)`
 
@@ -156,10 +157,6 @@ UAC 昇格させて、コマンドを実行します。
 ### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua) 
 
 内蔵Lua で引数の Lua コードを実行します。
-
-### `cd SHORTCUT.LNK` (nyagos.d\cdlnk.lua)
-
-cd のパラメータにショートカット(`*.lnk`)を指定できるようになっています
 
 ### `trash FILE(S)` (nyagos.d\trash.lua)
 

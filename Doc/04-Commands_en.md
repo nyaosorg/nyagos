@@ -33,6 +33,7 @@ No arguments, move to %HOME% or %USERPROFILE%.
 * `cd -N` (N:digit) : move the N-previous directory.
 * `cd -h` , `cd ?` : listing directories stayed.
 * `cd --history` : listing directories stayed all with no decoration
+* `cd shortcut.lnk` : move the target directory pointed shortcut.lnk
 
 ### `chmod ooo FILE(s)`
 
@@ -145,10 +146,6 @@ Run another nyagos.exe as Administrator.
 ### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua)
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
-
-### `cd SHORTCUT.LNK` (nyagos.d\cdlnk.lua)
-
-`cd` cat change the current directory pointed with shortcut-file(`*.lnk`).
 
 ### `trash FILE(S)` (nyagos.d\trash.lua)
 
