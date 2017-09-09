@@ -66,3 +66,33 @@ nyagos.alias.wildcard = function(args)
     -- for i=1,#newargs do print(newargs[i]) end
     nyagos.exec( newargs )
 end
+
+-- print the absolute path
+function nyagos.alias.abspath(args)
+    local cwd = nyagos.getwd()
+    for i = 1,#args do
+        local path1 = nyagos.pathjoin(cwd,args[i])
+        nyagos.write(path1)
+        nyagos.write("\n")
+    end
+end
+
+-- chompf - cut last CRLF of the files and output them to STDOUT
+function nyagos.alias.chompf(args)
+    local lf=""
+    if #args <= 0 then
+        for line in nyagos.lines() do
+            nyagos.write(lf)
+            nyagos.write(line)
+            lf = "\n"
+        end
+    else
+        for i=1,#args do
+            for line in nyagos.lines(args[i]) do
+                nyagos.write(lf)
+                nyagos.write(line)
+                lf = "\n"
+            end
+        end
+    end
+end
