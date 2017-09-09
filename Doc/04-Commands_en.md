@@ -143,7 +143,15 @@ Run another nyagos.exe as Administrator.
 
 ## Commands implemented by Lua
 
-### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua)
+### `abspath ARG(s)...` (nyagos.d\aliases.lua)
+
+Print the absolute path of ARGs which are written in the relative path.
+
+### `chompf FILE(s)` (nyagos.d\aliases.lua)
+
+Output the contents of FILE(s) to STDOUT without the last CRLF before EOF.
+
+### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua)
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
 

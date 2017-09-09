@@ -1,7 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
-* wildcard: the new built-in lua command which expands the following external command's arguments' wildcards.(for example: `expand cmd /c echo *`)
-* Append the builtin lua-command reference: `lua_f`,`kill` and `killall`.
+* Append the new command commands by Lua: `abspath`,`chompf` and `wildcard`
+* Append the forgotten builtin lua-commands reference: `lua_f`,`kill` and `killall`.
 
 NYAGOS 4.2.1\_0
 ===============

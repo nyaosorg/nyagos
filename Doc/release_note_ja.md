@@ -1,7 +1,7 @@
 [English](release_note_en.md) / Japanese
 
-* wildcard: 新内蔵Luaコマンド:続く外部コマンドの引数のワイルドカードを展開する(例:`expand cmd /c echo *`)
-* 内蔵Luaコマンドのリファレンスを追記: `lua_f` , `kill` , `killall`
+* 新Lua製コマンド(`abspath`,`chompf`,`wildcard`)を追加
+* 漏れていたLua製コマンドのリファレンスを追記: `lua_f` , `kill` , `killall`
 
 NYAGOS 4.2.1\_0
 ===============
