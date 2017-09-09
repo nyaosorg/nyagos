@@ -147,15 +147,15 @@ Run another nyagos.exe as Administrator.
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
 
-### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliased.lua)
+### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
 
 Execute lua-script.
 
-### `kill [-f] PID(s)` (nyagos.d\aliased.lua)
+### `kill [-f] PID(s)` (nyagos.d\aliases.lua)
 
 alias for `taskkill [/f] /pid PID`.
 
-### `killall [-f] IMAGE` (nyagos.d\aliased.lua)
+### `killall [-f] IMAGE` (nyagos.d\aliases.lua)
 
 alias for `taskkill /f /im IMAGE`
 
@@ -163,6 +163,6 @@ alias for `taskkill /f /im IMAGE`
 
 It throws files into trashbox of Windows.
 
-### `wildcard COMMAND ARG(s)...` (nyagos.d\aliased.lua)
+### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
 
 Expand the wildcard included ARG(s) and call COMMAND.

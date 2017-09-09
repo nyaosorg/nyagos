@@ -154,19 +154,19 @@ UAC 昇格させて、コマンドを実行します。
 
 ## Lua で実装されたコマンド
 
-### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliased.lua) 
+### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua) 
 
 内蔵Lua で引数の Lua コードを実行します。
 
-### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliased.lua)
+### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
 
 内蔵Lua で Lua スクリプトを実行します。
 
-### `kill [-f] PID(s)` (nyagos.d\aliased.lua)
+### `kill [-f] PID(s)` (nyagos.d\aliases.lua)
 
 `taskkill [/f] /pid PID` のエイリアスです。
 
-### `killall [-f] IMAGE` (nyagos.d\aliased.lua)
+### `killall [-f] IMAGE` (nyagos.d\aliases.lua)
 
 `taskkill /f /im IMAGE` のエイリアスです。
 
@@ -174,7 +174,7 @@ UAC 昇格させて、コマンドを実行します。
 
 ファイルを Windows のゴミ箱に移動させます。
 
-### `wildcard COMMAND ARG(s)...` (nyagos.d\aliased.lua)
+### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
 
 ARG(s) に含まれるワイルドカードを展開して、COMMAND を実行します。
 
