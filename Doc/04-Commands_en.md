@@ -147,6 +147,18 @@ Run another nyagos.exe as Administrator.
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
 
+### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliased.lua)
+
+Execute lua-script.
+
+### `kill [-f] PID(s)` (nyagos.d\aliased.lua)
+
+alias for `taskkill [/f] /pid PID`.
+
+### `killall [-f] IMAGE` (nyagos.d\aliased.lua)
+
+alias for `taskkill /f /im IMAGE`
+
 ### `trash FILE(S)` (nyagos.d\trash.lua)
 
 It throws files into trashbox of Windows.

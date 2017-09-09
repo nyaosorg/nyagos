@@ -158,6 +158,18 @@ UAC 昇格させて、コマンドを実行します。
 
 内蔵Lua で引数の Lua コードを実行します。
 
+### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliased.lua)
+
+内蔵Lua で Lua スクリプトを実行します。
+
+### `kill [-f] PID(s)` (nyagos.d\aliased.lua)
+
+`taskkill [/f] /pid PID` のエイリアスです。
+
+### `killall [-f] IMAGE` (nyagos.d\aliased.lua)
+
+`taskkill /f /im IMAGE` のエイリアスです。
+
 ### `trash FILE(S)` (nyagos.d\trash.lua)
 
 ファイルを Windows のゴミ箱に移動させます。
