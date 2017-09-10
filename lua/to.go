@@ -317,10 +317,7 @@ func (this Lua) ToObject(index int) (Object, error) {
 		result, err = this.ToTable(index)
 		seek_metatable = true
 	case LUA_TUSERDATA:
-		size := this.RawLen(index)
-		ptr := this.ToUserData(index)
-		result = TFullUserData(CGoBytes(uintptr(ptr), uintptr(size)))
-		seek_metatable = true
+		return nil, errors.New("lua.ToSomeThing: LUA_TUSRDATA is not supported.")
 	default:
 		return nil, errors.New("lua.ToSomeThing: Not supported type found.")
 	}
