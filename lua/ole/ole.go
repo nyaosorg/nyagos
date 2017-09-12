@@ -32,6 +32,7 @@ func (this capsule_t) Push(L lua.Lua) int {
 }
 
 func gc(L lua.Lua) int {
+	defer L.DeleteUserDataAnchor(1)
 	p := capsule_t{}
 	sync := L.ToUserDataTo(1, &p)
 	defer sync()
@@ -182,6 +183,7 @@ func index(L lua.Lua) int {
 		L.NewMetaTable(METHOD_T)
 		L.PushGoFunction(call2)
 		L.SetField(-2, "__call")
+		L.SetGcFunctionForUserData(-2, -1)
 		L.SetMetaTable(-2)
 		return 1
 	}

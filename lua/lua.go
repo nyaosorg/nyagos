@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"sync"
 	"syscall"
 	"unsafe"
 )
@@ -23,6 +24,9 @@ const (
 	NoInstance Lua = 0
 )
 
+var userdataAnchor = make(map[Lua]map[uintptr]interface{})
+var userdateAnchorMutex = sync.RWMutex{}
+
 var luaL_newstate = luaDLL.NewProc("luaL_newstate")
 
 func New() (Lua, error) {
@@ -30,6 +34,9 @@ func New() (Lua, error) {
 		return Lua(0), err
 	}
 	lua, _, _ := luaL_newstate.Call()
+	userdateAnchorMutex.Lock()
+	userdataAnchor[Lua(lua)] = make(map[uintptr]interface{})
+	userdateAnchorMutex.Unlock()
 	return Lua(lua), nil
 }
 
@@ -47,6 +54,9 @@ var lua_close = luaDLL.NewProc("lua_close")
 
 func (this Lua) Close() error {
 	lua_close.Call(this.State())
+	userdateAnchorMutex.Lock()
+	delete(userdataAnchor, this)
+	userdateAnchorMutex.Unlock()
 	return nil
 }
 
@@ -114,11 +124,57 @@ func (this Lua) NewUserDataFrom(p unsafe.Pointer, size uintptr) {
 	copyMemory(area, uintptr(p), size)
 }
 
-func (this Lua) PushUserData(p interface{}) {
+func (this Lua) PushRawUserData(p interface{}) {
 	value := reflect.ValueOf(p)
 	size := value.Type().Elem().Size()
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
 	copyMemory(area, value.Pointer(), size)
+}
+
+func (this Lua) PushUserData(p interface{}) {
+	value := reflect.ValueOf(p)
+	typ := value.Elem().Type()
+	anchordata := reflect.New(typ)
+	anchordata.Elem().Set(value.Elem())
+
+	address := anchordata.Pointer()
+	area, _, _ := lua_newuserdata.Call(this.State(), unsafe.Sizeof(address))
+	*(*uintptr)(unsafe.Pointer(area)) = address
+
+	userdateAnchorMutex.RLock()
+	anchor := userdataAnchor[this]
+	userdateAnchorMutex.RUnlock()
+	anchor[address] = anchordata.Interface()
+}
+
+func defaultGc(L Lua) int {
+	L.DeleteUserDataAnchor(1)
+	return 0
+}
+
+func (this Lua) SetGcFunctionForUserData(userdata_index int, table_index int) {
+	var address uintptr
+	if this.RawLen(userdata_index) != unsafe.Sizeof(address) {
+		panic("index does not point to Go userdata.")
+	}
+
+	this.PushGoFunction(defaultGc)
+	this.SetField(table_index-1, "__gc")
+}
+
+func (this Lua) DeleteUserDataAnchor(index int) {
+	var address uintptr
+	if this.RawLen(index) != unsafe.Sizeof(address) {
+		return
+	}
+
+	userdateAnchorMutex.RLock()
+	anchor := userdataAnchor[this]
+	userdateAnchorMutex.RUnlock()
+
+	area := uintptr(this.ToUserData(index))
+	address = *(*uintptr)(unsafe.Pointer(area))
+	delete(anchor, address)
 }
 
 var lua_rawset = luaDLL.NewProc("lua_rawset")

@@ -67,6 +67,30 @@ func PtrAndSize(p interface{}) (uintptr, uintptr) {
 }
 
 func (this Lua) ToUserDataTo(index int, p interface{}) func() {
+	var address uintptr
+	if this.RawLen(index) != unsafe.Sizeof(address) {
+		return func() {}
+	}
+
+	src, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
+
+	userdateAnchorMutex.RLock()
+	anchor := userdataAnchor[this]
+	userdateAnchorMutex.RUnlock()
+
+	address = *(*uintptr)(unsafe.Pointer(src))
+	anchordata, ok := anchor[address]
+	if !ok {
+		return func() {}
+	}
+
+	reflect.ValueOf(p).Elem().Set(reflect.ValueOf(anchordata).Elem())
+	return func() {
+		reflect.ValueOf(anchordata).Elem().Set(reflect.ValueOf(p).Elem())
+	}
+}
+
+func (this Lua) ToRawUserDataTo(index int, p interface{}) func() {
 	src, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
 	dst, size := PtrAndSize(p)
 	copyMemory(dst, src, size)
