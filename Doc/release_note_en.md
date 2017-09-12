@@ -2,6 +2,11 @@ English / [Japanese](release_note_ja.md)
 
 * Append the new command commands by Lua: `abspath`,`chompf` and `wildcard`
 * Append the forgotten builtin lua-commands reference: `lua_f`,`kill` and `killall`.
+* #246 Reject conversion from userdata to Object. (Thx @masamitsu-murase)
+    - To assign userdata(Lua) to `share[]` is forbidden
+    - The global userdata(Lua) are not cloned on the forked Lua instance for the background goroutine to make pipelines.
+* #247 Fixed the problem that Go's Garbage collector releases data refered by Lua and crashes (Thx @masamitsu-murase)
+
 
 NYAGOS 4.2.1\_0
 ===============
