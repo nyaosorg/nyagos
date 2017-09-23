@@ -1,7 +1,7 @@
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
 
-Function Get-GoArch{
+function Get-GoArch{
     if( Test-Path "goarch.txt" ){
         Get-Content "goarch.txt"
     }else{
@@ -9,15 +9,15 @@ Function Get-GoArch{
     }
 }
 
-Function EachGoDir{
+function EachGoDir{
     Get-ChildItem . -Recurse |
     ?{ $_.Extension -eq '.go' } |
-    %{ [System.IO.Path]::GetDirectoryName($_.FullName)} |
+    %{ Split-Path $_.FullName -Parent } |
     Sort-Object |
     Get-Unique
 }
 
-Function Get-Imports {
+function Get-Imports {
     Get-ChildItem . -Recurse |
     ?{ $_.Extension -eq '.go' } |
     %{ Get-Content $_.FullName  } |
@@ -77,7 +77,7 @@ function Get-Go1stPath {
     $gopath.Split(";")[0]
 }
 
-function Go-VersionInfo($version) {
+function Make-SysO($version) {
     Download-Exe "github.com/josephspurrier/goversioninfo" "goversioninfo.exe" "cmd\goversioninfo"
     if( -not ($version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$") ){
         $version = "0.0.0_0"
@@ -105,18 +105,18 @@ function Show-Version($fname) {
         Write-Output $fname
         $v = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($fname)
         if( $v ){
-            Write-Output(("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
+            Write-Output ("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
                 $v.FileVersion,
                 $v.FileMajorPart,
                 $v.FileMinorPart,
                 $v.FileBuildPart,
-                $v.FilePrivatePart))
-            Write-Output(("  ProductVersion: `"{0}`" ({1},{2},{3},{4})" -f
+                $v.FilePrivatePart)
+            Write-Output ("  ProductVersion: `"{0}`" ({1},{2},{3},{4})" -f
                 $v.ProductVersion,
                 $v.ProductMajorPart,
                 $v.ProductMinorPart,
                 $v.ProductBuildPart,
-                $v.ProductPrivatePart))
+                $v.ProductPrivatePart)
         }
         $data = [System.IO.File]::ReadAllBytes($fname)
         $md5 = New-Object System.Security.Cryptography.MD5CryptoServiceProvider
@@ -152,7 +152,7 @@ function Build($version,$tags) {
     Write-Verbose -Message ("Build as version='{0}' tags='{1}'" -f $version,$tags)
     Go-Fmt
 
-    Go-VersionInfo $version
+    Make-SysO $version
 
     Get-ChildItem ".\nyagos.d" -Recurse |
     ?{ Is-Modified($_.FullName) } |
