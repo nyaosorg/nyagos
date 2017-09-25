@@ -203,6 +203,7 @@ This is the Hook for completion. It should be assigned a function.
 The argument `c` is the table which has these members.
 
     c.list[1] .. c.list[#c.list] - command/filename completion result
+    c.shownlist[1] .. c.shownlist[#c.shownlist] - text for list-up (Option)
     c.word - original word without double-quotations.
     c.rawword - original word which may has double-quotations.
     c.pos - position word exists.

@@ -4,6 +4,7 @@
 * 漏れていたLua製コマンドのリファレンスを追記: `lua_f` , `kill` , `killall`
 * #246 クラッシュ回避のため、Lua の userdata を `share[]` に代入したり、Lua インスタンスの fork 時にコピーしないようにした (Thx @masamitsu-murase)
 * #247 Go の Garbage Collector が Lua で参照中のデータを開放してクラッシュする問題を修正した (Thx @masamitsu-murase)
+* #248 補完用フックで、補完文字列とは別にリストアップ用の表示テキストを指定できるようになった。(Thx @masamitsu-murase)
 
 NYAGOS 4.2.1\_0
 ===============
