@@ -22,23 +22,16 @@ function Get-Imports {
     ?{ $_.Extension -eq '.go' } |
     %{ Get-Content $_.FullName  } |
     %{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
-    ?{ $_ -match 'github.com/' } |
-    ?{ -not ($_ -match '/nyagos/') } |
+    ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/') } |
     %{ $_ -replace '"','' } |
     Sort-Object |
     Get-Unique
 }
 
-function Is-Modified($path){
-    ([System.IO.File]::GetAttributes($path) -band
-        [System.IO.FileAttributes]::Archive) -eq
-        [System.IO.FileAttributes]::Archive
-}
-
 function Get-Modified {
-    Get-ChildItem . -Recurse -Name |
-    ?{ $_ -like "*.go" } |
-    ?{ Is-Modified($_) }
+    Get-ChildItem . -Recurse |
+    ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
+    %{ $_.FullName }
 }
 
 function Set-NoModified($path) {
@@ -51,7 +44,7 @@ function Go-Fmt{
     Get-Modified | %{
         Write-Verbose -Message "$ go fmt $_"
         go fmt -n $_
-        Set-NoModified($_)
+        attrib -a $_
     }
     Get-ChildItem . -Recurse | ?{ $_.Name -eq "syscall.go" } | %{
         $dir = (Split-Path $_.FullName -Parent)
@@ -78,7 +71,7 @@ function Get-Go1stPath {
 }
 
 function Make-SysO($version) {
-    Download-Exe "github.com/josephspurrier/goversioninfo" "goversioninfo.exe" "cmd\goversioninfo"
+    Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
     if( -not ($version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$") ){
         $version = "0.0.0_0"
     }
@@ -127,7 +120,7 @@ function Show-Version($fname) {
     }
 }
 
-function Download-Exe($url,$exename,$builddir){
+function Download-Exe($url,$exename){
     if( Test-Path $exename ){
         Write-Verbose -Message ("Found {0}" -f $exename)
         return
@@ -136,9 +129,6 @@ function Download-Exe($url,$exename,$builddir){
     Write-Verbose -Message ("$ go get " + $url)
     go get $url
     $workdir = (Join-Path (Join-Path (Get-Go1stPath) "src") $url)
-    if( $builddir -ne $null -and $builddir -ne "" ){
-        $workdir = (Join-Path $workdir $builddir)
-    }
     $cwd = (Get-Location)
     Set-Location $workdir
     Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
@@ -155,10 +145,10 @@ function Build($version,$tags) {
     Make-SysO $version
 
     Get-ChildItem ".\nyagos.d" -Recurse |
-    ?{ Is-Modified($_.FullName) } |
+    ?{ $_.Mode -like "?a*" } |
     %{
         Write-Verbose -Message ("found {0} modified" -f $_.FullName)
-        Set-NoModified($_.FullName)
+        attrib -a ($_.FullName)
         if( Test-Path "mains\bindata.go" ){
             Write-Verbose -Message "$ del mains\bindata.go"
             Remove-Item "mains\bindata.go"
@@ -166,7 +156,7 @@ function Build($version,$tags) {
     }
 
     if( -not (Test-Path "mains\bindata.go") ){
-        Download-Exe "github.com/jteeuwen/go-bindata" "go-bindata.exe" "go-bindata"
+        Download-Exe "github.com/jteeuwen/go-bindata/go-bindata" "go-bindata.exe"
         Write-Verbose -Message "$ go-bindata.exe"
         .\go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
     }
@@ -222,11 +212,23 @@ switch( $args[0] ){
     }
     "sweep" {
     }
-    "bindata" {
-    }
-    "goversioninfo" {
-    }
     "const" {
+        $importconst = (Join-Path (Get-Location).Path "go-importconst.exe")
+        if( -not (Test-Path $importconst) ){
+            Download-Exe "github.com/zetamatta/go-importconst" `
+                         "go-importconst.exe"
+        }
+        Get-ChildItem . -Recurse |
+        ?{ $_.Name -eq "makeconst.cmd" } |
+        %{
+            $private:savePath = $env:path
+            $env:path = (@() + (Get-Location).Path + ($env:path -split ";")) -join ";"
+            Write-Verbose ("PATH=" + $env:path)
+            pushd (Split-Path $_.FullName -Parent)
+            cmd /c ($_.FullName)
+            popd
+            $env:path = $savePath
+        }
     }
     "package" {
     }
