@@ -19,43 +19,56 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 	}
 
 	L.Push(completionHook)
-	if L.IsFunction(-1) {
-		list := make([]string, len(rv.List))
-		for i, v := range rv.List {
-			list[i] = v.InsertStr
-		}
-		L.Push(map[string]interface{}{
-			"rawword": rv.RawWord,
-			"pos":     rv.Pos + 1,
-			"text":    rv.AllLine,
-			"word":    rv.Word,
-			"list":    list,
-		})
-		if err := L.Call(1, 1); err != nil {
-			fmt.Println(err)
-		}
-		result, err := L.ToInterface(-1)
-		if err == nil {
-			if t, ok := result.(map[interface{}]interface{}); ok {
-				list := make([]completion.Element, 0, len(rv.List)+32)
-				wordUpr := strings.ToUpper(rv.Word)
-				for i := 0; i < len(t); i++ {
-					if v, ok := t[i+1]; ok {
-						str, ok := v.(string)
-						if ok {
-							strUpr := strings.ToUpper(str)
-							if strings.HasPrefix(strUpr, wordUpr) {
-								list = append(list, completion.Element{InsertStr: str, ListupStr: str})
-							}
+	if !L.IsFunction(-1) {
+		L.Pop(1)
+		return rv, nil
+	}
+
+	list := make([]string, len(rv.List))
+	shownlist := make([]string, len(rv.List))
+	for i, v := range rv.List {
+		list[i] = v.InsertStr
+		shownlist[i] = v.ListupStr
+	}
+	L.Push(map[string]interface{}{
+		"rawword":   rv.RawWord,
+		"pos":       rv.Pos + 1,
+		"text":      rv.AllLine,
+		"word":      rv.Word,
+		"list":      list,
+		"shownlist": shownlist,
+	})
+	if err := L.Call(1, 2); err != nil {
+		fmt.Println(err)
+		return rv, nil
+	}
+	if insertStrList, err := L.ToInterface(-2); err == nil {
+		if t, ok := insertStrList.(map[interface{}]interface{}); ok {
+			listupStrT := t
+			if listupStrList, err := L.ToInterface(-1); err == nil {
+				if t, ok := listupStrList.(map[interface{}]interface{}); ok {
+					listupStrT = t
+				}
+			}
+			list := make([]completion.Element, 0, len(rv.List)+32)
+			wordUpr := strings.ToUpper(rv.Word)
+			for i := 0; i < len(t); i++ {
+				if str, ok := t[i+1].(string); ok {
+					strUpr := strings.ToUpper(str)
+					if strings.HasPrefix(strUpr, wordUpr) {
+						listupStr, ok := listupStrT[i+1].(string)
+						if !ok {
+							listupStr = str
 						}
+						list = append(list, completion.Element{InsertStr: str, ListupStr: listupStr})
 					}
 				}
-				if len(list) > 0 {
-					rv.List = list
-				}
+			}
+			if len(list) > 0 {
+				rv.List = list
 			}
 		}
 	}
-	L.Pop(1) // remove something not function or result-table
+	L.Pop(2) // remove 2 results.
 	return rv, nil
 }
