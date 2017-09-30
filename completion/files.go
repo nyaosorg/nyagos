@@ -43,6 +43,9 @@ func replaceEnv(str string) string {
 
 func listUpFiles(str string) ([]Element, error) {
 	orgSlash := STD_SLASH[0]
+	if !UseBackSlash {
+		orgSlash = OPT_SLASH[0]
+	}
 	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
 		orgSlash = str[pos]
 	}

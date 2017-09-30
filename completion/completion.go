@@ -27,6 +27,8 @@ type List struct {
 	Pos     int
 }
 
+var UseBackSlash = true
+
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
 	rv := new(List)
@@ -140,11 +142,17 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		return readline.CONTINUE
 	}
 
-	slashToBackSlash := true
+	slashToBackSlash := UseBackSlash
 	firstFoundSlashPos := strings.IndexRune(comp.Word, '/')
 	firstFoundBackSlashPos := strings.IndexRune(comp.Word, os.PathSeparator)
-	if firstFoundSlashPos >= 0 && (firstFoundBackSlashPos == -1 || firstFoundSlashPos < firstFoundBackSlashPos) {
-		slashToBackSlash = false
+	if UseBackSlash {
+		if firstFoundSlashPos >= 0 && (firstFoundBackSlashPos == -1 || firstFoundSlashPos < firstFoundBackSlashPos) {
+			slashToBackSlash = false
+		}
+	} else {
+		if firstFoundBackSlashPos >= 0 && (firstFoundSlashPos == -1 || firstFoundBackSlashPos < firstFoundSlashPos) {
+			slashToBackSlash = true
+		}
 	}
 
 	complete_list := toComplete(comp.List)
