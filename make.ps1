@@ -52,7 +52,7 @@ function Go-Fmt{
         if( -not (Test-Path $dst) ){
             Write-Verbose -Message ( `
                 "Found {0} but not found $dst" `
-                -f $_.Fullname,$dst )
+                -f $_.FullName,$dst )
             pushd $dir
             Write-Verbose -Message ("$ go generate on " + $dir)
             go generate
@@ -172,6 +172,24 @@ function Build($version,$tags) {
     go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
 }
 
+function Check-Case {
+    $dic = @{}
+    Get-Content "make.ps1" | %{
+        if( $_ -match "\w+(\.\w+)" ){
+            $private:m = $matches[0]
+            if( $dic.Contains( $m ) ){
+                $private:v = $dic[$m]
+                if( $v -cne $m ){
+                    Write-Output ("{0},{1}" -f $m,$v)
+                }
+            }else{
+                $dic.Add($m,$m)
+            }
+        }
+        [void]0
+    }
+}
+
 switch( $args[0] ){
     "" {
         Build (git describe --tags) ""
@@ -245,5 +263,8 @@ switch( $args[0] ){
     }
     "fmt" {
         Go-Fmt
+    }
+    "check-case" {
+        Check-Case
     }
 }
