@@ -133,7 +133,7 @@ function Download-Exe($url,$exename){
     Set-Location $workdir
     Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
     go build
-    Write-Verbose -message ("$ copy {0} {1}" -f $exename,$cwd)
+    Write-Verbose -Message ("$ copy {0} {1}" -f $exename,$cwd)
     Copy-Item $exename $cwd
     Set-Location $cwd
 }
@@ -170,24 +170,6 @@ function Build($version,$tags) {
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose -Message "$ go build"
     go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
-}
-
-function Check-Case {
-    $dic = @{}
-    Get-Content "make.ps1" | %{
-        if( $_ -match "\w+(\.\w+)" ){
-            $private:m = $matches[0]
-            if( $dic.Contains( $m ) ){
-                $private:v = $dic[$m]
-                if( $v -cne $m ){
-                    Write-Output ("{0},{1}" -f $m,$v)
-                }
-            }else{
-                $dic.Add($m,$m)
-            }
-        }
-        [void]0
-    }
 }
 
 switch( $args[0] ){
@@ -255,6 +237,23 @@ switch( $args[0] ){
         }
     }
     "package" {
+        nyagos -e "print(nyagos.version or nyagos.stamp)" |
+            %{ $version = ($_ -replace "/","") } # get the last line only.
+        $private:zipname = ("nyagos-{0}-{1}.zip" -f $version,(Get-GoArch))
+        Write-Verbose ("$ zip -9 " + $zipname + " ....")
+        zip -9 $zipname `
+            nyagos.exe `
+            lua53.dll `
+            nyagos.lua `
+            .nyagos `
+            _nyagos `
+            makeicon.cmd `
+            nyagos.d\*.lua `
+            nyagos.d\catalog\*.lua `
+            LICENSE `
+            readme_ja.md `
+            readme.md `
+            Doc\*.md
     }
     "install" {
     }
@@ -265,6 +264,31 @@ switch( $args[0] ){
         Go-Fmt
     }
     "check-case" {
-        Check-Case
+        $private:dic = @{}
+        $private:regex = [regex]"\w+(\-\w+)?"
+        $private:done = @{}
+        $private:fname = if( $args[1] -ne $null -and $args[1] -ne "" ){
+            $args[1] 
+        }else{
+            "make.ps1"
+        }
+        Get-Content $fname | %{
+            $regex.Matches( $_ ) | %{
+                $private:one = $_.Value
+                $private:key = $one.ToUpper()
+                if( $dic.ContainsKey( $key ) ){
+                    $private:other = $dic[$key]
+                    if( $other -cne $one ){
+                        $private:output = ("{0},{1}" -f $one,$other)
+                        if( -not $done.ContainsKey($output) ){
+                            Write-Output $output
+                            $done[ $output ] = $true
+                        }
+                    }
+                }else{
+                    $dic.Add($key,$one)
+                }
+            }
+        }
     }
 }
