@@ -138,24 +138,30 @@ function Download-Exe($url,$exename){
     Set-Location $cwd
 }
 
+function Newer-Than($folder,$target){
+    if( -not (Test-Path $target) ){
+        Write-Verbose ("{0} not found." -f $target)
+        return $true
+    }
+    $stamp = (Get-ItemProperty $target).LastWriteTime
+
+    Get-ChildItem $folder -Recurse | %{
+        if( $_.LastWriteTime -gt $stamp ){
+            Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
+            return $true
+        }
+    }
+    return $false
+}
+
+
 function Build($version,$tags) {
     Write-Verbose -Message ("Build as version='{0}' tags='{1}'" -f $version,$tags)
     Go-Fmt
 
     Make-SysO $version
 
-    Get-ChildItem ".\nyagos.d" -Recurse |
-    ?{ $_.Mode -like "?a*" } |
-    %{
-        Write-Verbose -Message ("found {0} modified" -f $_.FullName)
-        attrib -a ($_.FullName)
-        if( Test-Path "mains\bindata.go" ){
-            Write-Verbose -Message "$ del mains\bindata.go"
-            Remove-Item "mains\bindata.go"
-        }
-    }
-
-    if( -not (Test-Path "mains\bindata.go") ){
+    if( Newer-Than "nyagos.d" "mains\bindata.go" ){
         Download-Exe "github.com/jteeuwen/go-bindata/go-bindata" "go-bindata.exe"
         Write-Verbose -Message "$ go-bindata.exe"
         .\go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
