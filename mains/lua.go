@@ -375,6 +375,7 @@ func init() {
 		"chdir":             lua.TGoFunction(lua2cmd(cmdChdir)),
 		"commit":            lua.StringProperty{Pointer: &Commit},
 		"commonprefix":      lua.TGoFunction(cmdCommonPrefix),
+		"completion_slash":  lua.BoolProperty{Pointer: &completion.UseSlash},
 		"completion_hook":   lua.Property{Pointer: &completionHook},
 		"completion_hidden": lua.BoolProperty{Pointer: &completion.IncludeHidden},
 		"create_object":     lua.TGoFunction(ole.CreateObject),
