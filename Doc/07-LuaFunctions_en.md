@@ -193,7 +193,7 @@ Get the count of the command-line history.
 Returns the boolean value whether the PATH can be access with MODE.
 It equals the access function of the programming language C.
 
-### `RESULT = nyagos.box({ CHOICES... })
+### `RESULT = nyagos.box({ CHOICES... })`
 
 Returns the choice which user select with cursor-keys
 
