@@ -12,7 +12,7 @@ function Ask-Copy($src,$dst){
     if( Test-Path $fname ){
         if( "Yes" -ne [System.Windows.Forms.MessageBox]::Show(
             'Override "{0}" by default ?' -f $fname,
-            "NYAGOS Install", "YesNo","Question") ){
+            "NYAGOS Install", "YesNo","Question","button2") ){
             return
         }
     }
