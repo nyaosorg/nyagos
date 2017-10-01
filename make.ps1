@@ -1,6 +1,24 @@
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
 
+function Do-Copy($src,$dst){
+    Write-Verbose ('$ copy "{0}" "{1}"' -f $src,$dst)
+    Copy-Item $src $dst
+}
+
+Add-Type -Assembly System.Windows.Forms
+function Ask-Copy($src,$dst){
+    $fname = (Join-Path $dst (Split-Path $src -Leaf))
+    if( Test-Path $fname ){
+        if( "Yes" -ne [System.Windows.Forms.MessageBox]::Show(
+            'Override "{0}" by default ?' -f $fname,
+            "NYAGOS Install", "YesNo","Question") ){
+            return
+        }
+    }
+    Do-Copy $src $dst
+}
+
 function Get-GoArch{
     if( Test-Path "goarch.txt" ){
         Get-Content "goarch.txt"
@@ -133,8 +151,7 @@ function Download-Exe($url,$exename){
     Set-Location $workdir
     Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
     go build
-    Write-Verbose -Message ("$ copy {0} {1}" -f $exename,$cwd)
-    Copy-Item $exename $cwd
+    Do-Copy $exename $cwd
     Set-Location $cwd
 }
 
@@ -256,6 +273,39 @@ switch( $args[0] ){
             Doc\*.md
     }
     "install" {
+        $installDir = $args[1]
+        if( $installDir -eq $null -or $installDir -eq "" ){
+            $installDir = (
+                Select-String 'INSTALLDIR=([^\)"]+)' Misc\version.cmd |
+                %{ $_.Matches.Groups[1].Value }
+            )
+            if( $installDir -eq $null -or $installDir -eq "" ){
+                Write-Warning -Message "Usage: make.ps1 install INSTALLDIR"
+                exit
+            }
+            if( -not (Test-Path $installDir) ){
+                Write-Warning -Message ("{0} not found." -f $installDir)
+                exit
+            }
+            Write-Verbose -Message ("installDir="+$installDir)
+        }
+        Write-Output ('@set "INSTALLDIR={0}"' -f $installDir) |
+            Out-File "Misc\version.cmd" -Encoding Default
+
+        robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
+        if( -not (Test-Path (Join-Path $installDir "lua53.dll") ) ){
+            Do-Copy lua53.dll $installDir
+        }
+        Do-Copy nyagos.lua $installDir
+        Ask-Copy "_nyagos" $installDir
+        try{
+            Do-Copy nyagos.exe $installDir
+        }catch{
+            taskkill /F /im nyagos.exe
+            Do-Copy nyagos.exe $installDir
+            # [void]([System.Windows.Forms.MessageBox]::Show("Done"))
+            timeout /T 3
+        }
     }
     "get" {
         Get-Imports | %{ Write-Output $_ ; go get -u $_ }
