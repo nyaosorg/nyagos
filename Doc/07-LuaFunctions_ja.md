@@ -232,6 +232,11 @@ C言語の access 関数と同じです。
 `nyagos.completion_hook` は更新した候補リストのテーブルか nil を
 戻り値としてください。nil は、更新しない c.list と等価です。
 
+### `nyagos.completion_slash = true OR false`
+
+true の時、ファイル名補完はデフォルトのパス区切り文字に / を使い、
+false の時 \ が使われます。
+
 ### `nyagos.on_command_not_found = function(args) ... end`
 
 定義されていると、コマンドが見付からなかった時に呼び出されます。

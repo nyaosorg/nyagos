@@ -212,6 +212,11 @@ The argument `c` is the table which has these members.
 `nyagos.completion_hook` should return updated list(table) or `nil`.
 Returning nil equals to returning c.list with no change.
 
+### `nyagos.completion_slash = true OR false`
+
+When it is assigned true, filename-completion uses a slash as the 
+path-seperator as default. Otherwise it uses backslash.
+
 ### `nyagos.on_command_not_found = function(args) ... end`
 
 It is called when the command which user typed is not found.
