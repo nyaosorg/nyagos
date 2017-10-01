@@ -109,7 +109,7 @@ const (
 	F_DELETE_CHAR          = "DELETE_CHAR"
 	F_DELETE_OR_ABORT      = "DELETE_OR_ABORT"
 	F_END_OF_LINE          = "END_OF_LINE"
-	F_FORARD_CHAR          = "FORWARD_CHAR"
+	F_FORWARD_CHAR         = "FORWARD_CHAR"
 	F_HISTORY_DOWN         = "HISTORY_DOWN"
 	F_HISTORY_UP           = "HISTORY_UP"
 	F_INTR                 = "INTR"
@@ -244,7 +244,7 @@ var NAME2FUNC = map[string]func(*Buffer) Result{
 	F_DELETE_CHAR:          KeyFuncDelete,
 	F_DELETE_OR_ABORT:      KeyFuncDeleteOrAbort,
 	F_END_OF_LINE:          KeyFuncTail,
-	F_FORARD_CHAR:          KeyFuncForward,
+	F_FORWARD_CHAR:         KeyFuncForward,
 	F_HISTORY_DOWN:         KeyFuncHistoryDown,
 	F_HISTORY_UP:           KeyFuncHistoryUp,
 	F_INTR:                 KeyFuncIntr,
