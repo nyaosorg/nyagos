@@ -308,7 +308,10 @@ switch( $args[0] ){
         }
     }
     "get" {
-        Get-Imports | %{ Write-Output $_ ; go get -u $_ }
+        Get-Imports | ForEach-Object `
+            -Process { $_ } `
+            -End { "golang.org/x/sys/windows" } |
+            %{ Write-Output $_ ; go get -u $_ }
     }
     "fmt" {
         Go-Fmt
