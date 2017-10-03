@@ -27,7 +27,7 @@ function Get-GoArch{
     }
 }
 
-function EachGoDir{
+function ForEach-GoDir{
     Get-ChildItem . -Recurse |
     ?{ $_.Extension -eq '.go' } |
     %{ Split-Path $_.FullName -Parent } |
@@ -226,7 +226,7 @@ switch( $args[0] ){
             Remove-Item $_.FullName
         }
 
-        EachGoDir | %{
+        ForEach-GoDir | %{
             Write-Verbose -Message ("$ go clean on " + $_)
             pushd $_
             go clean
