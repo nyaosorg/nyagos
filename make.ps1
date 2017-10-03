@@ -46,23 +46,14 @@ function Get-Imports {
     Get-Unique
 }
 
-function Get-Modified {
+function Go-Fmt{
     Get-ChildItem . -Recurse |
     ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
-    %{ $_.FullName }
-}
-
-function Set-NoModified($path) {
-    $attr = [System.IO.File]::GetAttributes($path)
-    [System.IO.File]::SetAttributes($path,
-        $attr -band -bnot [System.IO.FileAttributes]::Archive)
-}
-
-function Go-Fmt{
-    Get-Modified | %{
-        Write-Verbose -Message "$ go fmt $_"
-        go fmt -n $_
-        attrib -a $_
+    %{
+        $fname = $_.FullName
+        Write-Verbose -Message "$ go fmt $fname"
+        go fmt $fname
+        attrib -a $fname
     }
     Get-ChildItem . -Recurse | ?{ $_.Name -eq "syscall.go" } | %{
         $dir = (Split-Path $_.FullName -Parent)
@@ -321,7 +312,7 @@ switch( $args[0] ){
         $private:regex = [regex]"\w+(\-\w+)?"
         $private:done = @{}
         $private:fname = if( $args[1] -ne $null -and $args[1] -ne "" ){
-            $args[1] 
+            $args[1]
         }else{
             "make.ps1"
         }
