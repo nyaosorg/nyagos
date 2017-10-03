@@ -345,3 +345,6 @@ switch( $args[0] ){
         }
     }
 }
+if( Test-Path Variable:LastExitCode ){
+    exit $LastExitCode
+}
