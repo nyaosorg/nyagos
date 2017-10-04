@@ -284,6 +284,10 @@ switch( $args[0] ){
             Out-File "Misc\version.cmd" -Encoding Default
 
         robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
+        Write-Verbose ("ERRORLEVEL=" + $LastExitCode)
+        if( $LastExitCode -lt 8 ){
+            Remove-Item Variable:LastExitCode
+        }
         if( -not (Test-Path (Join-Path $installDir "lua53.dll") ) ){
             Do-Copy lua53.dll $installDir
         }
