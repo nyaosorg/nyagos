@@ -6,6 +6,11 @@ function Do-Copy($src,$dst){
     Copy-Item $src $dst
 }
 
+function Do-Remove($file){
+    Write-Verbose ('$ del "{0}"' -f $file)
+    Remove-Item $file
+}
+
 Add-Type -Assembly System.Windows.Forms
 function Ask-Copy($src,$dst){
     $fname = (Join-Path $dst (Split-Path $src -Leaf))
@@ -225,6 +230,9 @@ switch( $args[0] ){
         }
     }
     "sweep" {
+        Get-ChildItem .  -Recurse |
+        ?{ $_.Name -like "*~" -or $_.Name -like "*.bak" } |
+        %{ Do-Remove $_.FullName }
     }
     "const" {
         $importconst = (Join-Path (Get-Location).Path "go-importconst.exe")
