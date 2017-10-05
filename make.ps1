@@ -21,10 +21,12 @@ function Ask-Copy($src,$dst){
 
 function Get-GoArch{
     if( Test-Path "goarch.txt" ){
-        Get-Content "goarch.txt"
+        $arch = (Get-Content "goarch.txt")
     }else{
-        go version | %{ $_.Split()[-1].Split("/")[-1] }
+        $arch = (go version | %{ $_.Split()[-1].Split("/")[-1] } )
     }
+    Write-Verbose ("Found GOARCH="+$arch)
+    return $arch
 }
 
 function ForEach-GoDir{
@@ -166,6 +168,8 @@ function Newer-Than($folder,$target){
 function Build($version,$tags) {
     Write-Verbose -Message ("Build as version='{0}' tags='{1}'" -f $version,$tags)
     Go-Fmt
+    $saveGOARCH = $env:GOARCH
+    $env:GOARCH = (Get-GoArch)
 
     Make-SysO $version
 
@@ -178,6 +182,8 @@ function Build($version,$tags) {
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose -Message "$ go build"
     go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
+
+    $env:GOARCH = $saveGOARCH
 }
 
 switch( $args[0] ){
