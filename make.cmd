@@ -101,12 +101,12 @@ function Make-SysO($version) {
         "-icon=mains\nyagos.ico" `
         ("-ver-major=" + $v[0]) `
         ("-ver-minor=" + $v[1]) `
-        ("-ver-build=" + $v[2]) `
-        ("-ver-patch=" + $v[3]) `
+        ("-ver-patch=" + $v[2]) `
+        ("-ver-build=" + $v[3]) `
         ("-product-ver-major=" + $v[0]) `
         ("-product-ver-minor=" + $v[1]) `
-        ("-product-ver-build=" + $v[2]) `
-        ("-product-ver-patch=" + $v[3]) `
+        ("-product-ver-patch=" + $v[2]) `
+        ("-product-ver-build=" + $v[3]) `
         "-o" nyagos.syso `
         versioninfo.json
 }
