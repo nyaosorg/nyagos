@@ -327,7 +327,7 @@ switch( $args[0] ){
         }
     }
     "package" {
-        nyagos -e "print(nyagos.version or nyagos.stamp)" |
+        .\nyagos -e "print(nyagos.version or nyagos.stamp)" |
             %{ $version = ($_ -replace "/","") } # get the last line only.
         $private:zipname = ("nyagos-{0}-{1}.zip" -f $version,(Get-GoArch))
         Write-Verbose ("$ zip -9 " + $zipname + " ....")
