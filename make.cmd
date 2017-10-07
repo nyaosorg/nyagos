@@ -271,6 +271,12 @@ switch( $args[0] ){
         Show-Version ".\nyagos.exe"
     }
     "vet" {
+        ForEach-GoDir | %{
+            pushd $_
+            Write-Verbose ("$ go vet on " + $_)
+            go vet
+            popd
+        }
     }
     "clean" {
         foreach( $p in @(`
