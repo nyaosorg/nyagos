@@ -394,7 +394,7 @@ switch( $args[0] ){
         $private:fname = if( $args[1] -ne $null -and $args[1] -ne "" ){
             $args[1]
         }else{
-            "make.ps1"
+            "make.cmd"
         }
         Get-Content $fname | %{
             $regex.Matches( $_ ) | %{
