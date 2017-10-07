@@ -242,18 +242,18 @@ switch( $args[0] ){
     }
     "const" {
         $importconst = (Join-Path (Get-Location).Path "go-importconst.exe")
-        if( -not (Test-Path $importconst) ){
-            Download-Exe "github.com/zetamatta/go-importconst" `
-                         "go-importconst.exe"
-        }
+        Download-Exe "github.com/zetamatta/go-importconst" "go-importconst.exe"
         Get-ChildItem . -Recurse |
         ?{ $_.Name -eq "makeconst.cmd" } |
         %{
             $private:savePath = $env:path
             $env:path = (@() + (Get-Location).Path + ($env:path -split ";")) -join ";"
-            Write-Verbose ("PATH=" + $env:path)
-            pushd (Split-Path $_.FullName -Parent)
-            cmd /c ($_.FullName)
+            Write-Verbose ("(temporary) PATH=" + $env:path)
+            $private:cwd = (Split-Path $_.FullName -Parent)
+            pushd $cwd
+            Write-Verbose ("$ chdir " + $cwd)
+            Write-Verbose ("$ " + $_.Name)
+            & $_.FullName
             popd
             $env:path = $savePath
         }
