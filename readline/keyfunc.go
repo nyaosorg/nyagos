@@ -10,10 +10,6 @@ import (
 	"github.com/zetamatta/go-getch"
 )
 
-func KeyFuncPass(this *Buffer) Result {
-	return CONTINUE
-}
-
 func KeyFuncEnter(this *Buffer) Result { // Ctrl-M
 	return ENTER
 }
