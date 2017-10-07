@@ -1,181 +1,361 @@
-@setlocal
-@set PROMPT=$$$S
+@set "args=%*"
+@powershell "iex((@('')*3+(cat '%~f0'|select -skip 3))-join[char]10)"
+@exit /b %ERRORLEVEL%
 
-@pushd "%~dp0"
+Set-PSDebug -strict
+$VerbosePreference = "Continue"
 
-if exist "%~dp0Misc\version.cmd" call "%~dp0Misc\version.cmd"
+function Do-Copy($src,$dst){
+    Write-Verbose ('$ copy "{0}" "{1}"' -f $src,$dst)
+    Copy-Item $src $dst
+}
 
-set MAJOR=-1
-set MINOR=-1
-set BUILD=-1
-set PATCH=-1
+function Do-Remove($file){
+    Write-Verbose ('$ del "{0}"' -f $file)
+    Remove-Item $file
+}
 
-if exist goarch.txt for /F %%I in (goarch.txt) do set "GOARCH=%%I"
-if "%GOARCH%" == "" for /F "delims=/ tokens=2" %%I in ('go version') do set "GOARCH=%%I"
+Add-Type -Assembly System.Windows.Forms
+function Ask-Copy($src,$dst){
+    $fname = (Join-Path $dst (Split-Path $src -Leaf))
+    if( Test-Path $fname ){
+        if( "Yes" -ne [System.Windows.Forms.MessageBox]::Show(
+            'Override "{0}" by default ?' -f $fname,
+            "NYAGOS Install", "YesNo","Question","button2") ){
+            return
+        }
+    }
+    Do-Copy $src $dst
+}
 
-if "%GOPATH%" == "" set "GOPATH=%USERPROFILE%\go"
-for /F "delims=; tokens=1" %%I in ("%GOPATH%") do set "GOPATH1ST=%%I"
+function Get-GoArch{
+    if( Test-Path "goarch.txt" ){
+        Get-Content "goarch.txt"
+    }else{
+        go version | %{ $_.Split()[-1].Split("/")[-1] }
+    }
+}
 
-call :"%~1" %2 %3 %4 %5 %6
-@popd
-@endlocal
-@exit /b
+function ForEach-GoDir{
+    Get-ChildItem . -Recurse |
+    ?{ $_.Extension -eq '.go' } |
+    %{ Split-Path $_.FullName -Parent } |
+    Sort-Object |
+    Get-Unique
+}
 
-:""
-        for /F %%I in ('git describe --tags') do set "X_VERSION=-X main.version=%%I"
-        call :"build"
-        @exit /b 0
+function Get-Imports {
+    Get-ChildItem . -Recurse |
+    ?{ $_.Extension -eq '.go' } |
+    %{ Get-Content $_.FullName  } |
+    %{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
+    ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/') } |
+    %{ $_ -replace '"','' } |
+    Sort-Object |
+    Get-Unique
+}
 
-:"debug"
-        set "TAGS=-tags=debug"
-        call :"build"
-        @exit /b
+function Go-Fmt{
+    Get-ChildItem . -Recurse |
+    ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
+    %{
+        $fname = $_.FullName
+        Write-Verbose -Message "$ go fmt $fname"
+        go fmt $fname
+        attrib -a $fname
+    }
+    Get-ChildItem . -Recurse | ?{ $_.Name -eq "syscall.go" } | %{
+        $dir = (Split-Path $_.FullName -Parent)
+        $dst = (Join-Path $dir "zsyscall.go")
+        if( -not (Test-Path $dst) ){
+            Write-Verbose -Message ( `
+                "Found {0} but not found $dst" `
+                -f $_.FullName,$dst )
+            pushd $dir
+            Write-Verbose -Message ("$ go generate on " + $dir)
+            go generate
+            popd
+        }
+    }
+}
 
-:"release"
-        for /F %%I in (%~dp0Misc\version.txt) do set "VERSION=%%I"
-        for /F "delims=. tokens=1,2,3" %%I in ("%VERSION%") do (
-            set "MAJOR=%%I"
-            set "MINOR=%%J"
-            for /F "delims=_ tokens=1,2" %%M in ("%%K") do (
-                set "PATCH=%%M"
-                set "BUILD=%%N"
+function Get-Go1stPath {
+    if( $env:gopath -ne $null -and $env:gopath -ne "" ){
+        $gopath = $env:gopath
+    }else{
+        $gopath = (Join-Path $env:userprofile "go")
+    }
+    $gopath.Split(";")[0]
+}
+
+function Make-SysO($version) {
+    Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
+    if( -not ($version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$") ){
+        $version = "0.0.0_0"
+    }
+    $v = $version.Split("[\._]")
+
+    .\goversioninfo.exe `
+        "-file-version=$version" `
+        "-product-version=$version" `
+        "-icon=mains\nyagos.ico" `
+        ("-ver-major=" + $v[0]) `
+        ("-ver-minor=" + $v[1]) `
+        ("-ver-build=" + $v[2]) `
+        ("-ver-patch=" + $v[3]) `
+        ("-product-ver-major=" + $v[0]) `
+        ("-product-ver-minor=" + $v[1]) `
+        ("-product-ver-build=" + $v[2]) `
+        ("-product-ver-patch=" + $v[3]) `
+        "-o" nyagos.syso `
+        versioninfo.json
+}
+
+function Show-Version($fname) {
+    if( Test-Path $fname ){
+        Write-Output $fname
+        $v = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($fname)
+        if( $v ){
+            Write-Output ("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
+                $v.FileVersion,
+                $v.FileMajorPart,
+                $v.FileMinorPart,
+                $v.FileBuildPart,
+                $v.FilePrivatePart)
+            Write-Output ("  ProductVersion: `"{0}`" ({1},{2},{3},{4})" -f
+                $v.ProductVersion,
+                $v.ProductMajorPart,
+                $v.ProductMinorPart,
+                $v.ProductBuildPart,
+                $v.ProductPrivatePart)
+        }
+        $data = [System.IO.File]::ReadAllBytes($fname)
+        $md5 = New-Object System.Security.Cryptography.MD5CryptoServiceProvider
+        $bs = $md5.ComputeHash($data)
+        Write-Output ("  md5sum: {0}" -f [System.BitConverter]::ToString($bs).ToLower().Replace("-",""))
+    }else{
+        Write-Error ("{0} not found" -f $fname)
+    }
+}
+
+function Download-Exe($url,$exename){
+    if( Test-Path $exename ){
+        Write-Verbose -Message ("Found {0}" -f $exename)
+        return
+    }
+    Write-Verbose -Message ("{0} not found." -f $exename)
+    Write-Verbose -Message ("$ go get " + $url)
+    go get $url
+    $workdir = (Join-Path (Join-Path (Get-Go1stPath) "src") $url)
+    $cwd = (Get-Location)
+    Set-Location $workdir
+    Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
+    go build
+    Do-Copy $exename $cwd
+    Set-Location $cwd
+}
+
+function Newer-Than($folder,$target){
+    if( -not (Test-Path $target) ){
+        Write-Verbose ("{0} not found." -f $target)
+        return $true
+    }
+    $stamp = (Get-ItemProperty $target).LastWriteTime
+
+    Get-ChildItem $folder -Recurse | %{
+        if( $_.LastWriteTime -gt $stamp ){
+            Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
+            return $true
+        }
+    }
+    return $false
+}
+
+
+function Build($version,$tags) {
+    Write-Verbose -Message ("Build as version='{0}' tags='{1}'" -f $version,$tags)
+    Go-Fmt
+
+    Make-SysO $version
+
+    if( Newer-Than "nyagos.d" "mains\bindata.go" ){
+        Download-Exe "github.com/jteeuwen/go-bindata/go-bindata" "go-bindata.exe"
+        Write-Verbose -Message "$ go-bindata.exe"
+        .\go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
+    }
+
+    $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
+    Write-Verbose -Message "$ go build"
+    go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
+}
+
+$args = $env:args -split " "
+
+switch( $args[0] ){
+    "" {
+        Build (git describe --tags) ""
+    }
+    "debug" {
+        Build "" "-tags=debug"
+    }
+    "release" {
+        Build (Get-Content Misc\version.txt) ""
+    }
+    "status" {
+        Show-Version ".\nyagos.exe"
+    }
+    "vet" {
+    }
+    "clean" {
+        foreach( $p in @(`
+            "nyagos.exe",`
+            "nyagos.syso",`
+            "version.now",`
+            "mains\bindata.go",`
+            "goversioninfo.exe",`
+            "go-bindata.exe" ) )
+        {
+            if( Test-Path $p ){
+                Write-Verbose -Message ("Remove " + $p)
+                Remove-Item $p
+            }
+        }
+        Write-Verbose "Search zsyscall.go"
+        Get-ChildItem "." -Recurse |
+        ?{ $_.Name -eq "zsyscall.go" } |
+        %{
+            Write-Verbose -Message ("Remove " + $_.FullName)
+            Remove-Item $_.FullName
+        }
+
+        ForEach-GoDir | %{
+            Write-Verbose -Message ("$ go clean on " + $_)
+            pushd $_
+            go clean
+            popd
+        }
+    }
+    "sweep" {
+        Get-ChildItem .  -Recurse |
+        ?{ $_.Name -like "*~" -or $_.Name -like "*.bak" } |
+        %{ Do-Remove $_.FullName }
+    }
+    "const" {
+        $importconst = (Join-Path (Get-Location).Path "go-importconst.exe")
+        if( -not (Test-Path $importconst) ){
+            Download-Exe "github.com/zetamatta/go-importconst" `
+                         "go-importconst.exe"
+        }
+        Get-ChildItem . -Recurse |
+        ?{ $_.Name -eq "makeconst.cmd" } |
+        %{
+            $private:savePath = $env:path
+            $env:path = (@() + (Get-Location).Path + ($env:path -split ";")) -join ";"
+            Write-Verbose ("PATH=" + $env:path)
+            pushd (Split-Path $_.FullName -Parent)
+            cmd /c ($_.FullName)
+            popd
+            $env:path = $savePath
+        }
+    }
+    "package" {
+        nyagos -e "print(nyagos.version or nyagos.stamp)" |
+            %{ $version = ($_ -replace "/","") } # get the last line only.
+        $private:zipname = ("nyagos-{0}-{1}.zip" -f $version,(Get-GoArch))
+        Write-Verbose ("$ zip -9 " + $zipname + " ....")
+        zip -9 $zipname `
+            nyagos.exe `
+            lua53.dll `
+            nyagos.lua `
+            .nyagos `
+            _nyagos `
+            makeicon.cmd `
+            nyagos.d\*.lua `
+            nyagos.d\catalog\*.lua `
+            LICENSE `
+            readme_ja.md `
+            readme.md `
+            Doc\*.md
+    }
+    "install" {
+        $installDir = $args[1]
+        if( $installDir -eq $null -or $installDir -eq "" ){
+            $installDir = (
+                Select-String 'INSTALLDIR=([^\)"]+)' Misc\version.cmd |
+                %{ $_.Matches.Groups[1].Value }
             )
-        )
-        set "X_VERSION=-X main.version=%VERSION%"
-        call :"build"
-        @exit /b
+            if( $installDir -eq $null -or $installDir -eq "" ){
+                Write-Warning -Message "Usage: make.ps1 install INSTALLDIR"
+                exit
+            }
+            if( -not (Test-Path $installDir) ){
+                Write-Warning -Message ("{0} not found." -f $installDir)
+                exit
+            }
+            Write-Verbose -Message ("installDir="+$installDir)
+        }
+        Write-Output ('@set "INSTALLDIR={0}"' -f $installDir) |
+            Out-File "Misc\version.cmd" -Encoding Default
 
-:"build"
-        call :"fmt"
-        call :"goversioninfo"
-        for /F %%I in ('dir /b /s /aa nyagos.d') do attrib -A "%%I" & if exist mains\bindata.go del mains\bindata.go
-        if not exist mains\bindata.go call :"bindata"
-        for /F "delims=" %%V in ('git log -1 --date^=short --pretty^=format:"-X main.stamp=%%ad -X main.commit=%%H"') do go build -o nyagos.exe -ldflags "%%V %X_VERSION%" %TAGS%
-        @exit /b
+        robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
+        Write-Verbose ("ERRORLEVEL=" + $LastExitCode)
+        if( $LastExitCode -lt 8 ){
+            Remove-Item Variable:LastExitCode
+        }
+        if( -not (Test-Path (Join-Path $installDir "lua53.dll") ) ){
+            Do-Copy lua53.dll $installDir
+        }
+        Do-Copy nyagos.lua $installDir
+        Ask-Copy "_nyagos" $installDir
+        try{
+            Do-Copy nyagos.exe $installDir
+        }catch{
+            taskkill /F /im nyagos.exe
+            Do-Copy nyagos.exe $installDir
+            # [void]([System.Windows.Forms.MessageBox]::Show("Done"))
+            timeout /T 3
+        }
+    }
+    "get" {
+        Get-Imports | ForEach-Object `
+            -Process { $_ } `
+            -End { "golang.org/x/sys/windows" } |
+            %{ Write-Output $_ ; go get -u $_ }
+    }
+    "fmt" {
+        Go-Fmt
+    }
+    "check-case" {
+        $private:dic = @{}
+        $private:regex = [regex]"\w+(\-\w+)?"
+        $private:done = @{}
+        $private:fname = if( $args[1] -ne $null -and $args[1] -ne "" ){
+            $args[1]
+        }else{
+            "make.ps1"
+        }
+        Get-Content $fname | %{
+            $regex.Matches( $_ ) | %{
+                $private:one = $_.Value
+                $private:key = $one.ToUpper()
+                if( $dic.ContainsKey( $key ) ){
+                    $private:other = $dic[$key]
+                    if( $other -cne $one ){
+                        $private:output = ("{0},{1}" -f $one,$other)
+                        if( -not $done.ContainsKey($output) ){
+                            Write-Output $output
+                            $done[ $output ] = $true
+                        }
+                    }
+                }else{
+                    $dic.Add($key,$one)
+                }
+            }
+        }
+    }
+}
+if( Test-Path Variable:LastExitCode ){
+    exit $LastExitCode
+}
 
-:"fmt"
-        for /F %%I IN ('dir /s /b /aa *.go') do ( ( if "%%~nxI" == "syscall.go" pushd "%%~dpI" & go generate -x & popd ) & go fmt "%%I" & attrib -A "%%I")
-        for /F %%I in ('dir /s /b syscall.go') do if not exist "%%~dpI\zsyscall.go" ( pushd "%%~dpI" & go generate -x & popd )
-        @exit /b
-
-:"status"
-        nyagos -e "print(nyagos.version or 'Snapshot on '..nyagos.stamp)"
-        powershell -ExecutionPolicy RemoteSigned -File showver.ps1 nyagos.exe
-        @exit /b
-
-:eachdir
-        powershell "ls -R | ?{ $_ -match '\.go$' } | %%{ [System.IO.Path]::GetDirectoryName($_.FullName)} | Sort-Object | Get-Unique | %%{ Write-Host 'go %~1 on',$_ ;  pushd $_ ; go %~1 ; popd }"
-        exit /b
-
-:"vet"
-        call :eachdir vet
-        exit /b
-
-:"clean"
-        for %%I in (nyagos.exe nyagos.syso version.now mains\bindata.go goversioninfo.exe go-bindata.exe) do if exist %%I del %%I
-        for /R %%I in (zsyscall.go) do if exist "%%I" del "%%I"
-        call :eachdir clean
-
-:"sweep"
-        for /R %%I in (*~ *.bak) do if exist %%I del %%I
-        @exit /b
-
-:"get"
-        powershell "Get-ChildItem . -Recurse | ?{ $_.Extension -eq '.go' } | %%{  Get-Content $_.FullName | %%{ ($_ -replace '\s*//.*$','').Split()[-1] } | ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/' ) } } | Sort-Object | Get-Unique | %%{ Write-Host $_ ; go get -u $_ }"
-        go get -u golang.org/x/sys/windows
-        @exit /b
-
-:getbindata
-        go get "github.com/jteeuwen/go-bindata"
-        pushd "%GOPATH1ST%\src\github.com\jteeuwen\go-bindata\go-bindata"
-        go build
-        copy go-bindata.exe "%~dp0\."
-        popd
-        @exit /b
-
-:"bindata"
-        if not exist go-bindata.exe call :getbindata
-        go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
-        @exit /b
-
-:getgoversioninfo
-        go get -u "github.com/josephspurrier/goversioninfo"
-        pushd "%GOPATH1ST%\src\github.com\josephspurrier\goversioninfo\cmd\goversioninfo"
-        go build
-        copy goversioninfo.exe "%~dp0\."
-        popd
-        @exit /b
-
-:"goversioninfo"
-        if not exist goversioninfo.exe call :getgoversioninfo
-        goversioninfo.exe ^
-            -file-version="%VERSION%" ^
-            -product-version="%VERSION%" ^
-            -icon=mains\nyagos.ico ^
-            -ver-major=%MAJOR% ^
-            -ver-minor=%MINOR% ^
-            -ver-build=%BUILD% ^
-            -ver-patch=%PATCH% ^
-            -product-ver-major=%MAJOR% ^
-            -product-ver-minor=%MINOR% ^
-            -product-ver-build=%BUILD% ^
-            -product-ver-patch=%PATCH% ^
-            -o nyagos.syso ^
-            versioninfo.json 
-        @exit /b
-
-:"const"
-        for /F %%I in ('dir /b /s makeconst.cmd') do pushd %%~dpI & call %%I & popd
-        @exit /b
-
-:"package"
-        for /F %%I in ('nyagos -e "print(nyagos.version or (string.gsub(nyagos.stamp,[[/]],[[]])))"') do set VERSION=%%I
-        zip -9 "nyagos-%VERSION%-%GOARCH%.zip" nyagos.exe lua53.dll nyagos.lua .nyagos _nyagos makeicon.cmd nyagos.d\*.lua nyagos.d\catalog\*.lua license readme_ja.md readme.md Doc\*.md
-        @exit /b
-
-:"install"
-        if not "%1" == "" set "INSTALLDIR=%1" & echo @set "INSTALLDIR=%~1" > "%~dp0Misc\version.cmd"
-        if "%INSTALLDIR%" == "" (
-            echo Please %0.cmd install PATH\TO\BIN, once
-            @exit /b
-        )
-        if not exist "%INSTALLDIR%" (
-            echo Please %0.cmd install EXIST\PATH\TO\BIN,  once
-            @exit /b
-        )
-
-        robocopy nyagos.d "%INSTALLDIR%\nyagos.d" /E
-        if not exist "%INSTALLDIR%\lua53.dll" copy lua53.dll "%INSTALLDIR%\."
-        copy nyagos.lua "%INSTALLDIR%\."
-        copy /-Y _nyagos "%INSTALLDIR%\."
-        copy nyagos.exe "%INSTALLDIR%\."
-        if errorlevel 1 (start "" "%~dpfx0" install_ & @exit /b)
-        @exit /b
-
-:"install_"
-        taskkill /F /im nyagos.exe
-        copy nyagos.exe "%INSTALLDIR%\."
-        timeout /T 3
-        @exit %ERRORLEVEL%
-
-:"icon"
-        makeicon.cmd
-        @exit /b
-
-
-:"help"
-        echo Usage for make.cmd
-        echo  %0          : Equals to '%0 build'
-        echo  %0 build    : Build nyagos.exe as snapshot (ignore version.txt)
-        echo  %0 release  : Build nyagos.exe as release  (see version.txt)
-        echo  %0 fmt      : Format all source files with 'go fmt'
-        echo  %0 clean    : Delete nyagos.exe and nyagos.syso
-        echo  %0 package  : Make the package zip-file
-        echo  %0 get      : Do 'go get' for each github library
-        echo  %0 upgrade  : Do 'git pull' for each github library
-        echo  %0 help     : Print help
-        echo  %0 install INSTALLDIR 
-        echo     : Copy binaries to INSTALLDIR
-        echo  %0 install  
-        echo     : Copy binaries to last INSTALLDIR
-        @exit /b
+# vim:set ft=ps1:
