@@ -189,6 +189,72 @@ function Build($version,$tags) {
     go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
 }
 
+function Make-CSource($package,$names){
+    Write-Output '#include <stdio.h>'
+    Write-Output '#include <windows.h>'
+    Write-Output ''
+
+    $const = @()
+    foreach( $p in $names ){
+        if( $p -like '"*"' ){
+            Write-Output ('#include '+$p)
+            continue
+        }
+        $name1,$type,$fmt = ($p -split ":")
+        if( $fmt -ne $null -and $fmt -ne "" ){
+            Write-Output `
+                ('#define MAKECONST_{0}(n) printf("const " #n "={1}\n",n)' `
+                    -f $name1,$fmt)
+        }elseif( $type -eq $null -or $type -eq "" ){
+            Write-Output `
+                ('#define MAKECONST_{0}(n) printf("const " #n "=%d\n",n)' `
+                -f $name1)
+        }else{
+            Write-Output `
+                ('#define MAKECONST_{0}(n) printf("const " #n "={1}(%d)\n",n)' `
+                -f $name1,$type)
+        }
+        $const = $const + $name1
+    }
+
+    Write-Output 'int main()'
+    Write-Output '{'
+    Write-Output ('    printf("package {0}\n\n");' -f $package )
+
+    foreach($name1 in $const){
+        Write-Output ('    MAKECONST_{0}({0});' -f $name1)
+    }
+    Write-Output '    return 0;'
+    Write-Output '}'
+}
+
+function Make-ConstGo($package,$names){
+    Make-CSource $package $names |
+        Out-File "makeconst.c" -Encoding Default
+
+    Write-Verbose -Message '$ gcc makeconst.c'
+    gcc "makeconst.c"
+
+    if( -not (Test-Path "a.exe") ){
+        Write-Error -Message "a.exe not found"
+        return
+    }
+    Write-Verbose -Message '$ .\a.exe > const.go'
+    & ".\a.exe" | Out-File const.go -Encoding default
+    Write-Verbose -Message '$ go fmt const.go'
+    go fmt const.go
+
+    if( Test-Path "makeconst.o" ){
+        Remove-Item "makeconst.o"
+    }
+    if( Test-Path "makeconst.c" ){
+        Remove-Item "makeconst.c"
+    }
+    if( Test-Path "a.exe" ){
+        Remove-Item "a.exe"
+    }
+}
+
 $args = $env:args -split " "
 
 switch( $args[0] ){
@@ -241,21 +307,17 @@ switch( $args[0] ){
         %{ Do-Remove $_.FullName }
     }
     "const" {
-        $importconst = (Join-Path (Get-Location).Path "go-importconst.exe")
-        Download-Exe "github.com/zetamatta/go-importconst" "go-importconst.exe"
         Get-ChildItem . -Recurse |
-        ?{ $_.Name -eq "makeconst.cmd" } |
+        ?{ $_.Name -eq "makeconst.txt" } |
         %{
-            $private:savePath = $env:path
-            $env:path = (@() + (Get-Location).Path + ($env:path -split ";")) -join ";"
-            Write-Verbose ("(temporary) PATH=" + $env:path)
+            $private:const = (Get-Content $_.FullName)
             $private:cwd = (Split-Path $_.FullName -Parent)
             pushd $cwd
             Write-Verbose ("$ chdir " + $cwd)
-            Write-Verbose ("$ " + $_.Name)
-            & $_.FullName
+            $private:pkg = (Split-Path $cwd -Leaf)
+            Write-Verbose ("for package " + $pkg)
+            Make-ConstGo $pkg $const
             popd
-            $env:path = $savePath
         }
     }
     "package" {
