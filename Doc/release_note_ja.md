@@ -6,6 +6,7 @@
 * #247 Go の Garbage Collector が Lua で参照中のデータを開放してクラッシュする問題を修正した (Thx @masamitsu-murase)
 * #248 補完用フックで、補完文字列とは別にリストアップ用の表示テキストを指定できるようになった。(Thx @masamitsu-murase)
 * #249 `nyagos.completion_slash` を追加。これが true の時、ファイル名補完はデフォルトでパス区切り文字に / を使う(Thx @masamitsu-murase)
+* PowerShell で記述したあたらしいビルドスクリプト(make.cmd) を用意
 
 NYAGOS 4.2.1\_0
 ===============

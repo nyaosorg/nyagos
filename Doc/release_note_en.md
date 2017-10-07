@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * #247 Fixed the problem that Go's Garbage collector releases data refered by Lua and crashes (Thx @masamitsu-murase)
 * #248 Completion hook can specify displayed-titles which differ from completed-strings.(Thx @masamitsu-murase)
 * #249 Add `nyagos.completion_slash` option. When it is true, filename-completion uses a slash as the path-seperator as default. (Thx @masamitsu-murase)
+* New building script(make.cmd) written in PowerShell
 
 NYAGOS 4.2.1\_0
 ===============
