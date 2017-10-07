@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.2\_0
+===============
+on Oct.8,2017
+
 * Append the new command commands by Lua: `abspath`,`chompf` and `wildcard`
 * Append the forgotten builtin lua-commands reference: `lua_f`,`kill` and `killall`.
 * #246 Reject conversion from userdata to Object. (Thx @masamitsu-murase)

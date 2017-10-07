@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.2\_0
+===============
+(2017.10.08)
+
 * 新Lua製コマンド(`abspath`,`chompf`,`wildcard`)を追加
 * 漏れていたLua製コマンドのリファレンスを追記: `lua_f` , `kill` , `killall`
 * #246 クラッシュ回避のため、Lua の userdata を `share[]` に代入したり、Lua インスタンスの fork 時にコピーしないようにした (Thx @masamitsu-murase)
