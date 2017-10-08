@@ -1,6 +1,7 @@
 package completion
 
 import (
+	"context"
 	"os"
 	"path"
 	"path/filepath"
@@ -42,8 +43,8 @@ func listUpAllExecutableOnEnv(envName string) []Element {
 	return list
 }
 
-func listUpCurrentAllExecutable(str string) ([]Element, error) {
-	listTmp, listErr := listUpFiles(str)
+func listUpCurrentAllExecutable(ctx context.Context, str string) ([]Element, error) {
+	listTmp, listErr := listUpFiles(ctx, str)
 	if listErr != nil {
 		return nil, listErr
 	}
@@ -69,8 +70,8 @@ func removeDup(list []Element) []Element {
 	return result
 }
 
-func listUpCommands(str string) ([]Element, error) {
-	list, listErr := listUpCurrentAllExecutable(str)
+func listUpCommands(ctx context.Context, str string) ([]Element, error) {
+	list, listErr := listUpCurrentAllExecutable(ctx, str)
 	if listErr != nil {
 		return nil, listErr
 	}

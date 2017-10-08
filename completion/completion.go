@@ -2,7 +2,6 @@ package completion
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -61,9 +60,9 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
 
 	if rv.Pos > 0 {
-		rv.List, err = listUpFiles(rv.Word[start:])
+		rv.List, err = listUpFiles(this.Context, rv.Word[start:])
 	} else {
-		rv.List, err = listUpCommands(rv.Word[start:])
+		rv.List, err = listUpCommands(this.Context, rv.Word[start:])
 	}
 
 	for i := 0; i < len(rv.List); i++ {
@@ -94,7 +93,7 @@ func toDisplay(source []Element) []string {
 	return result
 }
 
-func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
+func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 	comp, _, err := listUpComplete(this)
 	if comp == nil {
 		return readline.CONTINUE
@@ -103,7 +102,7 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if err != nil {
 		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 	}
-	box.Print(ctx, toDisplay(comp.List), readline.Console)
+	box.Print(this.Context, toDisplay(comp.List), readline.Console)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
