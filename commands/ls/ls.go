@@ -51,6 +51,17 @@ const (
 
 var ErrCtrlC = errors.New("C-c")
 
+func isCancel(ctx context.Context) bool {
+	if ctx != nil {
+		select {
+		case <-ctx.Done():
+			return true
+		default:
+		}
+	}
+	return false
+}
+
 func (this fileInfoT) Name() string { return this.name }
 
 func putFlag(value, flag uint32, c string, out io.Writer) {
@@ -234,13 +245,8 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 	}
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				return ErrCtrlC
-			default:
-
-			}
+		if isCancel(ctx) {
+			return ErrCtrlC
 		}
 	}
 	return nil
@@ -249,13 +255,8 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
 		fmt.Fprintln(out, f.Name())
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				return ErrCtrlC
-			default:
-
-			}
+		if isCancel(ctx) {
+			return ErrCtrlC
 		}
 	}
 	return nil
@@ -316,7 +317,12 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	} else {
 		wildcard = dos.Join(folder, "*")
 	}
+	canceled := false
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
+		if isCancel(ctx) {
+			canceled = true
+			return false
+		}
 		if (flag & O_ALL) == 0 {
 			if strings.HasPrefix(f.Name(), ".") {
 				return true
@@ -333,6 +339,9 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 		}
 		return true
 	})
+	if canceled {
+		return ErrCtrlC
+	}
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	var err error
@@ -348,6 +357,9 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
+			if isCancel(ctx) {
+				return ErrCtrlC
+			}
 			f1fullpath := dos.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
 			if err := lsFolder(ctx, f1fullpath, flag, out); err != nil {
@@ -368,6 +380,9 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 	printCount := 0
 	files := make([]os.FileInfo, 0)
 	for _, name := range paths {
+		if isCancel(ctx) {
+			return ErrCtrlC
+		}
 		var nameStat string
 		if rxDriveOnly.MatchString(name) {
 			nameStat = name + "."
