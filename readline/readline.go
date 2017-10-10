@@ -41,6 +41,9 @@ type KeyGoFuncT struct {
 }
 
 func (this *KeyGoFuncT) Call(buffer *Buffer) Result {
+	if this.Func == nil {
+		return CONTINUE
+	}
 	return this.Func(buffer)
 }
 
@@ -195,9 +198,13 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this.RepaintAfterPrompt()
 
+	cursor_on := false
 	for {
 		var e getch.Event
-		fmt.Fprint(Console, CURSOR_ON)
+		if !cursor_on {
+			fmt.Fprint(Console, CURSOR_ON)
+			cursor_on = true
+		}
 		for e.Key == nil {
 			e = getch.All()
 			if e.Resize != nil {
@@ -209,7 +216,6 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 				}
 			}
 		}
-		fmt.Fprint(Console, CURSOR_OFF)
 		this.Unicode = e.Key.Rune
 		this.Keycode = e.Key.Scan
 		this.ShiftState = e.Key.Shift
@@ -230,8 +236,12 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		} else {
 			f, ok = scanMap[this.Keycode]
 			if !ok {
-				f = &KeyGoFuncT{Func: KeyFuncPass, Name: ""}
+				f = &KeyGoFuncT{Func: nil, Name: ""}
 			}
+		}
+		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
+			fmt.Fprint(Console, CURSOR_OFF)
+			cursor_on = false
 		}
 		rc := f.Call(&this)
 		if rc != CONTINUE {

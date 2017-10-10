@@ -251,7 +251,7 @@ var NAME2FUNC = map[string]func(*Buffer) Result{
 	F_ISEARCH_BACKWARD:     KeyFuncIncSearch,
 	F_KILL_LINE:            KeyFuncClearAfter,
 	F_KILL_WHOLE_LINE:      KeyFuncClear,
-	F_PASS:                 KeyFuncPass,
+	F_PASS:                 nil,
 	F_QUOTED_INSERT:        KeyFuncQuotedInsert,
 	F_UNIX_LINE_DISCARD:    KeyFuncClearBefore,
 	F_UNIX_WORD_RUBOUT:     KeyFuncWordRubout,
