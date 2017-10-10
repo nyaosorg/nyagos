@@ -1,5 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
+* #250 Fix the crash in the built-in command `bindkey` without parameters. (Thx @masamitsu-murase)
+* #252 Fix the problem that Shift/Ctrl keys typing cancels the screen-scroll. (Skip the output CURSOR-OFF/ON sequences at Shift/Ctrl keys typed) (Thx @masamitsu-murase)
+
 NYAGOS 4.2.2\_0
 ===============
 on Oct.8,2017
