@@ -90,6 +90,7 @@ Acknowledgement
 * [maskedw](https://github.com/maskedw)
 * [tyochiai](https://github.com/tyochiai)
 * [masamitsu-murase](https://github.com/masamitsu-murase)
+* [hazychill](https://github.com/hazychill)
 
 Author
 ------
