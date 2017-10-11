@@ -88,6 +88,7 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
 * [maskedw](https://github.com/maskedw)
 * [tyochiai](https://github.com/tyochiai)
 * [masamitsu-murase](https://github.com/masamitsu-murase)
+* [hazychill](https://github.com/hazychill)
 
 開発者
 ------
