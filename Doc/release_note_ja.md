@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.2\_1
+===============
+(2017.10.11)
+
 * #250 引数なしの `bindkey` でクラッシュする不具合を修正 (Thx @masamitsu-murase)
 * #252 Shift/Ctrl キーのタイプで、画面のスクロールがキャンセルされてしまう問題を修正 ( Shift/Ctrl キーのタイプでカーソルOFF/ONの出力を省くようにした ) (Thx @masamitsu-murase)
 * #253 `nyagos-4.2.2_0-386` が make.cmd の不具合で 64bitでビルドされていた (Thx @hazychill)

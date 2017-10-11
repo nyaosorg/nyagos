@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.2\_1
+===============
+on Oct.11,2017
+
 * #250 Fix the crash in the built-in command `bindkey` without parameters. (Thx @masamitsu-murase)
 * #252 Fix the problem that Shift/Ctrl keys typing cancels the screen-scroll. (Skip the output CURSOR-OFF/ON sequences at Shift/Ctrl keys typed) (Thx @masamitsu-murase)
 * #253 Fix `nyagos-4.2.2_0-386` was built as a 64bit executable by make.cmd's bug (Thx @hazychill)
