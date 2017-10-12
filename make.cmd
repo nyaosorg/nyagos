@@ -118,6 +118,12 @@ function Show-Version($fname) {
         Write-Output $fname
         $v = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($fname)
         if( $v ){
+            $bits = (Get-Bits $fname)
+            if( $bits -ne $null ){
+                Write-Output ("  {0} bits architecture" -f $bits)
+            }else{
+                Write-Output "  Architecture is unknown."
+            }
             Write-Output ("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
                 $v.FileVersion,
                 $v.FileMajorPart,
@@ -258,6 +264,24 @@ function Make-ConstGo($package,$names){
     if( Test-Path "a.exe" ){
         Remove-Item "a.exe"
     }
+}
+
+function Byte2DWord($a,$b,$c,$d){
+    return ($a+256*($b+256*($c+256*$d)))
+}
+
+function Get-Bits($path){
+    $bin = [System.IO.File]::ReadAllBytes($path)
+    $addr = (Byte2DWord $bin[60] $bin[61] $bin[62] $bin[63])
+    if( $bin[$addr] -eq 0x50 -and $bin[$addr+1] -eq 0x45 ){
+        if( $bin[$addr+4] -eq 0x4C -and $bin[$addr+5 ] -eq 0x01 ){
+            return 32
+        }
+        if( $bin[$addr+4] -eq 0x64 -and $bin[$addr+5] -eq 0x86 ){
+            return 64
+        }
+    }
+    return $null
 }
 
 $args = $env:args -split " "
