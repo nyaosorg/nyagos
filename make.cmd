@@ -355,7 +355,7 @@ switch( $args[0] ){
         if( $installDir -eq $null -or $installDir -eq "" ){
             $installDir = (
                 Select-String 'INSTALLDIR=([^\)"]+)' Misc\version.cmd |
-                %{ $_.Matches.Groups[1].Value }
+                %{ $_.Matches[0].Groups[1].Value }
             )
             if( $installDir -eq $null -or $installDir -eq "" ){
                 Write-Warning -Message "Usage: make.ps1 install INSTALLDIR"
