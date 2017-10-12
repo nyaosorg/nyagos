@@ -114,36 +114,36 @@ function Make-SysO($version) {
 }
 
 function Show-Version($fname) {
-    if( Test-Path $fname ){
-        Write-Output $fname
-        $v = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($fname)
-        if( $v ){
-            $bits = (Get-Bits $fname)
-            if( $bits -ne $null ){
-                Write-Output ("  {0} bits architecture" -f $bits)
-            }else{
-                Write-Output "  Architecture is unknown."
-            }
-            Write-Output ("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
-                $v.FileVersion,
-                $v.FileMajorPart,
-                $v.FileMinorPart,
-                $v.FileBuildPart,
-                $v.FilePrivatePart)
-            Write-Output ("  ProductVersion: `"{0}`" ({1},{2},{3},{4})" -f
-                $v.ProductVersion,
-                $v.ProductMajorPart,
-                $v.ProductMinorPart,
-                $v.ProductBuildPart,
-                $v.ProductPrivatePart)
-        }
-        $data = [System.IO.File]::ReadAllBytes($fname)
-        $md5 = New-Object System.Security.Cryptography.MD5CryptoServiceProvider
-        $bs = $md5.ComputeHash($data)
-        Write-Output ("  md5sum: {0}" -f [System.BitConverter]::ToString($bs).ToLower().Replace("-",""))
-    }else{
+    if( -not (Test-Path $fname) ){
         Write-Error ("{0} not found" -f $fname)
+        return
     }
+    Write-Output $fname
+    $data = [System.IO.File]::ReadAllBytes($fname)
+    $bits = switch( (Get-Architecture $data) ){
+        32 { "32bit or AnyCPU" }
+        64 { "64bit" }
+        $null { "unknown"}
+    }
+    Write-Output ("  Architecture:   {0}" -f $bits)
+    $v = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($fname)
+    if( $v ){
+        Write-Output ("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
+            $v.FileVersion,
+            $v.FileMajorPart,
+            $v.FileMinorPart,
+            $v.FileBuildPart,
+            $v.FilePrivatePart)
+        Write-Output ("  ProductVersion: `"{0}`" ({1},{2},{3},{4})" -f
+            $v.ProductVersion,
+            $v.ProductMajorPart,
+            $v.ProductMinorPart,
+            $v.ProductBuildPart,
+            $v.ProductPrivatePart)
+    }
+    $md5 = New-Object System.Security.Cryptography.MD5CryptoServiceProvider
+    $bs = $md5.ComputeHash($data)
+    Write-Output ("  md5sum:         {0}" -f ([System.BitConverter]::ToString($bs).ToLower() -replace "-",""))
 }
 
 function Download-Exe($url,$exename){
@@ -270,8 +270,7 @@ function Byte2DWord($a,$b,$c,$d){
     return ($a+256*($b+256*($c+256*$d)))
 }
 
-function Get-Bits($path){
-    $bin = [System.IO.File]::ReadAllBytes($path)
+function Get-Architecture($bin){
     $addr = (Byte2DWord $bin[60] $bin[61] $bin[62] $bin[63])
     if( $bin[$addr] -eq 0x50 -and $bin[$addr+1] -eq 0x45 ){
         if( $bin[$addr+4] -eq 0x4C -and $bin[$addr+5 ] -eq 0x01 ){
