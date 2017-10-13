@@ -51,7 +51,7 @@ function Get-Imports {
     ?{ $_.Extension -eq '.go' } |
     %{ Get-Content $_.FullName  } |
     %{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
-    ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/') } |
+    ?{ $_ -match 'github.com/' -and $_ -notmatch '/nyagos/' } |
     %{ $_ -replace '"','' } |
     Sort-Object |
     Get-Unique
@@ -92,7 +92,7 @@ function Get-Go1stPath {
 
 function Make-SysO($version) {
     Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
-    if( -not ($version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$") ){
+    if( $version -notmatch "^\d+[\._]\d+[\._]\d+[\._]\d+$" ){
         $version = "0.0.0_0"
     }
     $v = $version.Split("[\._]")
