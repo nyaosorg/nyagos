@@ -92,10 +92,15 @@ function Get-Go1stPath {
 
 function Make-SysO($version) {
     Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
-    if( $version -notmatch "^\d+[\._]\d+[\._]\d+[\._]\d+$" ){
-        $version = "0.0.0_0"
+    if( $version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$" ){
+        $v = $version.Split("[\._]")
+    }else{
+        $v = @(0,0,0,0)
+        if( $version -eq $null -or $version -eq "" ){
+            $version = "0.0.0_0"
+        }
     }
-    $v = $version.Split("[\._]")
+    Write-Host "version=$version"
 
     .\goversioninfo.exe `
         "-file-version=$version" `
