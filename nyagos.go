@@ -6,6 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"runtime/debug"
 
 	"github.com/zetamatta/nyagos/mains"
@@ -37,6 +38,11 @@ var version string
 
 func main() {
 	defer when_panic()
+
+	if len(os.Args) >= 2 && os.Args[1] == "--show-version-only" {
+		fmt.Printf("%s-%s\n", version, runtime.GOARCH)
+		os.Exit(0)
+	}
 
 	mains.Stamp = stamp
 	mains.Commit = commit
