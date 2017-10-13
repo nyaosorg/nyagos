@@ -1,4 +1,4 @@
-@set "args=%*"
+@set args=%*
 @powershell "iex((@('')*3+(cat '%~f0'|select -skip 3))-join[char]10)"
 @exit /b %ERRORLEVEL%
 
@@ -283,7 +283,22 @@ function Get-Architecture($bin){
     return $null
 }
 
-$args = $env:args -split " "
+function Split-LikeShell($s){
+    $rx = [regex]'"[^"]*"'
+    while( $true ){
+        $m = $rx.Match($s)
+        if( -not $m.Success ){
+            break
+        }
+        $left = $s.SubString(0,$m.Index)
+        $right = $s.SubString($m.Index+$m.Length)
+        $mid = (($m.Value -replace " ",[char]1) -replace '"','')
+        $s = $left + $mid + $right
+    }
+    ($s -split " ") | ForEach-Object{ $_ -replace [char]1," " }
+}
+
+$args = @( Split-LikeShell $env:args )
 
 switch( $args[0] ){
     "" {
