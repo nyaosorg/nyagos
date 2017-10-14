@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf8"?>
+<make>
+    <const>
+        <!-- `make.cmd const` creates const.go from this data. 
+             It requires gcc.exe.
+          -->
+        <package>dos</package>
+        <include>&lt;stdio.h&gt;</include>
+        <include>&lt;windows.h&gt;</include>
+        <li><nm>FILE_ATTRIBUTE_NORMAL</nm></li>
+        <li><nm>FILE_ATTRIBUTE_REPARSE_POINT</nm></li>
+        <li><nm>FILE_ATTRIBUTE_HIDDEN</nm></li>
+        <li><nm>FILE_ATTRIBUTE_READONLY</nm></li>
+        <li><nm>FILE_ATTRIBUTE_SYSTEM</nm></li>
+        <li><nm>FILE_ATTRIBUTE_ARCHIVE</nm></li>
+        <li><nm>CP_THREAD_ACP</nm></li>
+        <li><nm>MOVEFILE_REPLACE_EXISTING</nm></li>
+        <li><nm>MOVEFILE_COPY_ALLOWED</nm></li>
+        <li><nm>MOVEFILE_WRITE_THROUGH</nm></li>
+        <li><nm>SW_HIDE</nm></li>
+        <li><nm>SW_MAXIMIZE</nm></li>
+        <li><nm>SW_MINIMIZE</nm></li>
+        <li><nm>SW_RESTORE</nm></li>
+        <li><nm>SW_SHOW</nm></li>
+        <li><nm>SW_SHOWDEFAULT</nm></li>
+        <li><nm>SW_SHOWMAXIMIZED</nm></li>
+        <li><nm>SW_SHOWMINIMIZED</nm></li>
+        <li><nm>SW_SHOWMINNOACTIVE</nm></li>
+        <li><nm>SW_SHOWNA</nm></li>
+        <li><nm>SW_SHOWNOACTIVATE</nm></li>
+        <li><nm>SW_SHOWNORMAL</nm></li>
+        <li><nm>COINIT_APARTMENTTHREADED</nm><type>uintptr</type></li>
+        <li><nm>COINIT_MULTITHREADED</nm><type>uintptr</type></li>
+        <li><nm>COINIT_DISABLE_OLE1DDE</nm><type>uintptr</type></li>
+        <li><nm>COINIT_SPEED_OVER_MEMORY</nm><type>uintptr</type></li>
+        <li><nm>DRIVE_UNKNOWN</nm></li>
+        <li><nm>DRIVE_NO_ROOT_DIR</nm></li>
+        <li><nm>DRIVE_REMOVABLE</nm></li>
+        <li><nm>DRIVE_FIXED</nm></li>
+        <li><nm>DRIVE_REMOTE</nm></li>
+        <li><nm>DRIVE_CDROM</nm></li>
+        <li><nm>DRIVE_RAMDISK</nm></li>
+    </const>
+</make>

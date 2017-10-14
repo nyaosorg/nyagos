@@ -205,47 +205,40 @@ function Build($version,$tags) {
     $env:GOARCH = $saveGOARCH
 }
 
-function Make-CSource($package,$names){
-    Write-Output '#include <stdio.h>'
-    Write-Output '#include <windows.h>'
-    Write-Output ''
+function Make-CSource($xml){
+    $const = $xml.make.const
+    $package = $const.package
 
-    $const = @()
-    foreach( $p in $names ){
-        if( $p -like '"*"' ){
-            Write-Output ('#include '+$p)
-            continue
-        }
-        $name1,$type,$fmt = ($p -split ":")
-        if( $fmt -ne $null -and $fmt -ne "" ){
-            Write-Output `
-                ('#define MAKECONST_{0}(n) printf("const " #n "={1}\n",n)' `
-                    -f $name1,$fmt)
-        }elseif( $type -eq $null -or $type -eq "" ){
-            Write-Output `
-                ('#define MAKECONST_{0}(n) printf("const " #n "=%d\n",n)' `
-                -f $name1)
-        }else{
-            Write-Output `
-                ('#define MAKECONST_{0}(n) printf("const " #n "={1}(%d)\n",n)' `
-                -f $name1,$type)
-        }
-        $const = $const + $name1
+    foreach( $h in $const.include ){
+        Write-Output ('#include '+$h)
     }
-
+    Write-Output '#define X(x) #x'
+    Write-Output ''
     Write-Output 'int main()'
     Write-Output '{'
     Write-Output ('    printf("package {0}\n\n");' -f $package )
 
-    foreach($name1 in $const){
-        Write-Output ('    MAKECONST_{0}({0});' -f $name1)
+    foreach( $p in $const.li ){
+        $name1 = $p.nm
+        $type  = $p.type
+        $fmt   = $p.fmt
+        if( $fmt ){
+            Write-Output ('     printf("const " X({0}) "={1}\n",{0});' `
+                -f $name1,$fmt)
+        }elseif( $type ){
+            Write-Output ('     printf("const " X({0}) "={1}(%d)\n",{0});' `
+                -f $name1,$type)
+        }else{
+            Write-Output ('     printf("const " X({0}) "=%d\n",{0});' `
+                -f $name1)
+        }
     }
     Write-Output '    return 0;'
     Write-Output '}'
 }
 
-function Make-ConstGo($package,$names){
-    Make-CSource $package $names |
+function Make-ConstGo($makexml){
+    Make-CSource $makexml |
         Out-File "makeconst.c" -Encoding Default
 
     Write-Verbose -Message '$ gcc makeconst.c'
@@ -362,15 +355,15 @@ switch( $args[0] ){
     }
     "const" {
         Get-ChildItem . -Recurse |
-        ?{ $_.Name -eq "makeconst.txt" } |
+        ?{ $_.Name -eq "make.xml" } |
         %{
-            $private:const = (Get-Content $_.FullName)
+            $makexml = [xml](Get-Content $_.FullName)
             $private:cwd = (Split-Path $_.FullName -Parent)
             pushd $cwd
             Write-Verbose ("$ chdir " + $cwd)
             $private:pkg = (Split-Path $cwd -Leaf)
             Write-Verbose ("for package " + $pkg)
-            Make-ConstGo $pkg $const
+            Make-ConstGo $makexml
             popd
         }
     }
