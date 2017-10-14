@@ -39,6 +39,30 @@
         <li><nm>DRIVE_FIXED</nm></li>
         <li><nm>DRIVE_REMOTE</nm></li>
         <li><nm>DRIVE_CDROM</nm></li>
-        <li><nm>DRIVE_RAMDISK</nm></li>
+        <li><nm>DRIVE_RAMDISK</nm>/nm></li>
+        <!-- https://msdn.microsoft.com/ja-jp/library/cc447078.aspx -->
+        <!-- dwScope -->
+        <li><nm>RESOURCE_CONNECTED</nm></li>
+        <li><nm>RESOURCE_CONTEXT</nm></li>
+        <li><nm>RESOURCE_GLOBALNET</nm></li>
+        <li><nm>RESOURCE_REMEMBERED</nm></li>
+        <!-- dwType -->
+        <li><nm>RESOURCETYPE_ANY</nm></li>
+        <li><nm>RESOURCETYPE_DISK</nm></li>
+        <li><nm>RESOURCETYPE_PRINT</nm></li>
+        <li><nm>RESOURCEDISPLAYTYPE_NETWORK</nm></li>
+        <!-- dwUsage -->
+        <li><nm>RESOURCEUSAGE_CONNECTABLE</nm></li>
+        <li><nm>RESOURCEUSAGE_CONTAINER</nm></li>
+        <li><nm>RESOURCEUSAGE_ATTACHED</nm></li>
+        <li><nm>RESOURCEUSAGE_ALL</nm></li>
+        <!-- return value -->
+        <li><nm>NO_ERROR</nm></li>
+        <li><nm>ERROR_NOT_CONTAINER</nm></li>
+        <li><nm>ERROR_INVALID_PARAMETER</nm></li>
+        <li><nm>ERROR_NO_NETWORK</nm></li>
+        <li><nm>ERROR_EXTENDED_ERROR</nm></li>
+        <li><nm>ERROR_NO_MORE_ITEMS</nm></li>
+        <li><nm>ERROR_MORE_DATA</nm></li>
     </const>
 </make>
