@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf8"?>
 <make>
+    <generate>
+        <!-- `make generate` checks TARGET and SOURCE's timestamps.
+             `make clean` removes files listed on TARGET.
+         -->
+        <li><target>zsyscall.go</target>
+            <source>syscall.go</source></li>
+    </generate>
     <const>
-        <!-- `make.cmd const` creates const.go from this data. 
+        <!-- `make.cmd const` creates const.go from this data.
              It requires gcc.exe.
           -->
         <package>dos</package>

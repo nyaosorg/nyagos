@@ -6,13 +6,15 @@ Set-PSDebug -strict
 $VerbosePreference = "Continue"
 
 function Do-Copy($src,$dst){
-    Write-Verbose ('$ copy "{0}" "{1}"' -f $src,$dst)
+    Write-Verbose "$ copy '$src' '$dst'"
     Copy-Item $src $dst
 }
 
 function Do-Remove($file){
-    Write-Verbose ('$ del "{0}"' -f $file)
-    Remove-Item $file
+    if( Test-Path $file ){
+        Write-Verbose "$ del '$file'"
+        Remove-Item $file
+    }
 }
 
 Add-Type -Assembly System.Windows.Forms
@@ -40,21 +42,45 @@ function Get-GoArch{
 
 function ForEach-GoDir{
     Get-ChildItem . -Recurse |
-    ?{ $_.Extension -eq '.go' } |
-    %{ Split-Path $_.FullName -Parent } |
+    Where-Object{ $_.Extension -eq '.go' } |
+    ForEach-Object{ Split-Path $_.FullName -Parent } |
     Sort-Object |
     Get-Unique
 }
 
 function Get-Imports {
     Get-ChildItem . -Recurse |
-    ?{ $_.Extension -eq '.go' } |
-    %{ Get-Content $_.FullName  } |
-    %{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
-    ?{ $_ -match 'github.com/' -and $_ -notmatch '/nyagos/' } |
+    Where-Object{ $_.Extension -eq '.go' } |
+    ForEach-Object{ Get-Content $_.FullName  } |
+    ForEach-Object{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
+    ?{ ($_ -match 'github.com/' -and $_ -notmatch '/nyagos/') `
+        -or $_ -match 'golang.org/' } |
     %{ $_ -replace '"','' } |
     Sort-Object |
     Get-Unique
+}
+
+function Go-Generate{
+    Get-ChildItem "." -Recurse |
+    Where-Object{ $_.Name -eq "make.xml" } |
+    ForEach-Object{
+        $dir = (Split-Path $_.FullName -Parent)
+        pushd $dir
+        $xml = [xml](Get-Content $_.FullName)
+        :allloop foreach( $li in $xml.make.generate.li ){
+            foreach( $target in $li.target ){
+                foreach( $source in $li.source ){
+                    if( Newer-Than $source $target ){
+                        Write-Verbose ("$ go generate for {0}" -f
+                            (Join-Path $dir $target) )
+                        go generate
+                        break allloop
+                    }
+                }
+            }
+        }
+        popd
+    }
 }
 
 function Go-Fmt{
@@ -65,19 +91,6 @@ function Go-Fmt{
         Write-Verbose -Message "$ go fmt $fname"
         go fmt $fname
         attrib -a $fname
-    }
-    Get-ChildItem . -Recurse | ?{ $_.Name -eq "syscall.go" } | %{
-        $dir = (Split-Path $_.FullName -Parent)
-        $dst = (Join-Path $dir "zsyscall.go")
-        if( -not (Test-Path $dst) ){
-            Write-Verbose -Message ( `
-                "Found {0} but not found $dst" `
-                -f $_.FullName,$dst )
-            pushd $dir
-            Write-Verbose -Message ("$ go generate on " + $dir)
-            go generate
-            popd
-        }
     }
 }
 
@@ -100,7 +113,7 @@ function Make-SysO($version) {
             $version = "0.0.0_0"
         }
     }
-    Write-Host "version=$version"
+    Write-Verbose "version=$version"
 
     .\goversioninfo.exe `
         "-file-version=$version" `
@@ -168,25 +181,32 @@ function Download-Exe($url,$exename){
     Set-Location $cwd
 }
 
-function Newer-Than($folder,$target){
+function Newer-Than($source,$target){
     if( -not (Test-Path $target) ){
         Write-Verbose ("{0} not found." -f $target)
         return $true
     }
     $stamp = (Get-ItemProperty $target).LastWriteTime
 
-    Get-ChildItem $folder -Recurse | %{
-        if( $_.LastWriteTime -gt $stamp ){
-            Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
-            return $true
+    $prop = (Get-ItemProperty $source)
+    if( $prop.Mode -like 'd*' ){
+        Get-ChildItem $source -Recurse | %{
+            if( $_.LastWriteTime -gt $stamp ){
+                Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
+                return $true
+            }
         }
+        return $false
+    }else{
+        return $prop.LastWriteTime -gt $stamp
     }
-    return $false
 }
 
 
 function Build($version,$tags) {
-    Write-Verbose -Message ("Build as version='{0}' tags='{1}'" -f $version,$tags)
+    Write-Verbose "Build as version='$version' tags='$tags'"
+
+    Go-Generate
     Go-Fmt
     $saveGOARCH = $env:GOARCH
     $env:GOARCH = (Get-GoArch)
@@ -210,7 +230,7 @@ function Make-CSource($xml){
     $package = $const.package
 
     foreach( $h in $const.include ){
-        Write-Output ('#include '+$h)
+        Write-Output "#include $h"
     }
     Write-Output '#define X(x) #x'
     Write-Output ''
@@ -253,15 +273,9 @@ function Make-ConstGo($makexml){
     Write-Verbose -Message '$ go fmt const.go'
     go fmt const.go
 
-    if( Test-Path "makeconst.o" ){
-        Remove-Item "makeconst.o"
-    }
-    if( Test-Path "makeconst.c" ){
-        Remove-Item "makeconst.c"
-    }
-    if( Test-Path "a.exe" ){
-        Remove-Item "a.exe"
-    }
+    Do-Remove "makeconst.o"
+    Do-Remove "makeconst.c"
+    Do-Remove "a.exe"
 }
 
 function Byte2DWord($a,$b,$c,$d){
@@ -312,9 +326,9 @@ switch( $args[0] ){
         Show-Version ".\nyagos.exe"
     }
     "vet" {
-        ForEach-GoDir | %{
+        ForEach-GoDir | ForEach-Object{
             pushd $_
-            Write-Verbose ("$ go vet on " + $_)
+            Write-Verbose "$ go vet on $_"
             go vet
             popd
         }
@@ -329,20 +343,26 @@ switch( $args[0] ){
             "go-bindata.exe" ) )
         {
             if( Test-Path $p ){
-                Write-Verbose -Message ("Remove " + $p)
-                Remove-Item $p
+                Do-Remove $p
             }
         }
-        Write-Verbose "Search zsyscall.go"
         Get-ChildItem "." -Recurse |
-        ?{ $_.Name -eq "zsyscall.go" } |
-        %{
-            Write-Verbose -Message ("Remove " + $_.FullName)
-            Remove-Item $_.FullName
+        Where-Object { $_.Name -eq "make.xml" } |
+        ForEach-Object {
+            $dir = (Split-Path $_.FullName -Parent)
+            $xml = [xml](Get-Content $_.FullName)
+            foreach($li in $xml.make.generate.li){
+                foreach($target in $xml.make.generate.li.target){
+                    $path = (Join-Path $dir $target)
+                    if( Test-Path $path ){
+                        Do-Remove $path
+                    }
+                }
+            }
         }
 
         ForEach-GoDir | %{
-            Write-Verbose -Message ("$ go clean on " + $_)
+            Write-Verbose "$ go clean on $_"
             pushd $_
             go clean
             popd
@@ -360,16 +380,16 @@ switch( $args[0] ){
             $makexml = [xml](Get-Content $_.FullName)
             $private:cwd = (Split-Path $_.FullName -Parent)
             pushd $cwd
-            Write-Verbose ("$ chdir " + $cwd)
+            Write-Verbose "$ chdir $cwd"
             $private:pkg = (Split-Path $cwd -Leaf)
-            Write-Verbose ("for package " + $pkg)
+            Write-Verbose "for package $pkg"
             Make-ConstGo $makexml
             popd
         }
     }
     "package" {
         $zipname = ("nyagos-{0}.zip" -f (.\nyagos.exe --show-version-only))
-        Write-Verbose ("$ zip -9 " + $zipname + " ....")
+        Write-Verbose "$ zip -9 $zipname ...."
         zip -9 $zipname `
             nyagos.exe `
             lua53.dll `
@@ -389,19 +409,19 @@ switch( $args[0] ){
         if( $installDir -eq $null -or $installDir -eq "" ){
             $installDir = (
                 Select-String 'INSTALLDIR=([^\)"]+)' Misc\version.cmd |
-                %{ $_.Matches[0].Groups[1].Value }
+                ForEach-Object{ $_.Matches[0].Groups[1].Value }
             )
-            if( $installDir -eq $null -or $installDir -eq "" ){
-                Write-Warning -Message "Usage: make.ps1 install INSTALLDIR"
+            if( -not $installDir ){
+                Write-Warning "Usage: make.ps1 install INSTALLDIR"
                 exit
             }
             if( -not (Test-Path $installDir) ){
-                Write-Warning -Message ("{0} not found." -f $installDir)
+                Write-Warning "$installDir not found."
                 exit
             }
-            Write-Verbose -Message ("installDir="+$installDir)
+            Write-Verbose "installDir=$installDir"
         }
-        Write-Output ('@set "INSTALLDIR={0}"' -f $installDir) |
+        Write-Output "@set `"INSTALLDIR=$installDir`"" |
             Out-File "Misc\version.cmd" -Encoding Default
 
         robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
@@ -423,11 +443,12 @@ switch( $args[0] ){
             timeout /T 3
         }
     }
+    "generate" {
+        Go-Generate
+    }
     "get" {
-        Get-Imports | ForEach-Object `
-            -Process { $_ } `
-            -End { "golang.org/x/sys/windows" } |
-            %{ Write-Output $_ ; go get -u $_ }
+        Go-Generate
+        Get-Imports | ForEach-Object{ Write-Output $_ ; go get -u $_ }
     }
     "fmt" {
         Go-Fmt
@@ -448,7 +469,7 @@ switch( $args[0] ){
                 if( $dic.ContainsKey( $key ) ){
                     $private:other = $dic[$key]
                     if( $other -cne $one ){
-                        $private:output = ("{0},{1}" -f $one,$other)
+                        $private:output = "$one,$other"
                         if( -not $done.ContainsKey($output) ){
                             Write-Output $output
                             $done[ $output ] = $true
@@ -459,6 +480,9 @@ switch( $args[0] ){
                 }
             }
         }
+    }
+    default {
+        Write-Warning ("{0} not supported." -f $args[0])
     }
 }
 if( Test-Path Variable:LastExitCode ){
