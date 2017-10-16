@@ -69,8 +69,10 @@ function Go-Generate{
         $xml = [xml](Get-Content $_.FullName)
         :allloop foreach( $li in $xml.make.generate.li ){
             foreach( $target in $li.target ){
+                if( -not $target ){ continue }
                 foreach( $source in $li.source ){
-                    if( Newer-Than $source $target ){
+                    if( -not $source ){ continue }
+                    if( (Newer-Than $source $target) ){
                         Write-Verbose ("$ go generate for {0}" -f
                             (Join-Path $dir $target) )
                         go generate
@@ -182,6 +184,15 @@ function Download-Exe($url,$exename){
 }
 
 function Newer-Than($source,$target){
+    if( -not $target ){
+        Write-Warning ('Newer-Than: $target is null')
+        if( $source ){
+            Write-Verbose ('Newer-Than: $source={0}' -f $source)
+        }else{
+            Write-Warning 'Newer-Than: $source is null'
+        }
+        return
+    }
     if( -not (Test-Path $target) ){
         Write-Verbose ("{0} not found." -f $target)
         return $true
@@ -352,7 +363,9 @@ switch( $args[0] ){
             $dir = (Split-Path $_.FullName -Parent)
             $xml = [xml](Get-Content $_.FullName)
             foreach($li in $xml.make.generate.li){
+                if( -not $li ){ continue }
                 foreach($target in $xml.make.generate.li.target){
+                    if( -not $target ){ continue }
                     $path = (Join-Path $dir $target)
                     if( Test-Path $path ){
                         Do-Remove $path
