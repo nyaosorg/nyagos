@@ -17,6 +17,24 @@ function Do-Remove($file){
     }
 }
 
+function Make-Dir($folder){
+    if( -not (Test-Path $folder) ){
+        Write-Verbose "$ mkdir '$folder'"
+        New-Item $folder -type directory | Out-Null
+    }
+}
+
+function Make-Hardlink($src,$dst){
+    if( Test-Path $dst ){
+        Do-Remove $dst
+    }
+    Write-Verbose "$ mklink /H '$dst' '$src'"
+    New-Item -Itemtype hardlink `
+        -Path (Split-Path $dst -Parent) `
+        -Name (Split-Path $dst -Leaf) `
+        -Value $src | Out-Null
+}
+
 Add-Type -Assembly System.Windows.Forms
 function Ask-Copy($src,$dst){
     $fname = (Join-Path $dst (Split-Path $src -Leaf))
@@ -33,6 +51,8 @@ function Ask-Copy($src,$dst){
 function Get-GoArch{
     if( Test-Path "goarch.txt" ){
         $arch = (Get-Content "goarch.txt")
+    }elseif( (Test-Path env:GOARCH) -and $env:GOARCH ){
+        $arch = $env:GOARCH
     }else{
         $arch = (go version | %{ $_.Split()[-1].Split("/")[-1] } )
     }
@@ -222,6 +242,11 @@ function Build($version,$tags) {
     $saveGOARCH = $env:GOARCH
     $env:GOARCH = (Get-GoArch)
 
+    Make-Dir "Bin"
+    $binDir = (Join-Path "Bin" $env:GOARCH)
+    Make-Dir $binDir
+    $target = (Join-Path $binDir "nyagos.exe")
+
     Make-SysO $version
 
     if( Newer-Than "nyagos.d" "mains\bindata.go" ){
@@ -231,8 +256,9 @@ function Build($version,$tags) {
     }
 
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
-    Write-Verbose -Message "$ go build"
-    go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
+    Write-Verbose -Message "$ go build -o '$target'"
+    go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
+    Make-Hardlink $target ".\nyagos.exe"
     $env:GOARCH = $saveGOARCH
 }
 
@@ -333,6 +359,18 @@ switch( $args[0] ){
     "release" {
         Build (Get-Content Misc\version.txt) ""
     }
+    "386" {
+        $private:save = $env:GOARCH
+        $env:GOARCH = "386"
+        Build (Get-Content Misc\version.txt) ""
+        $env:GOARCH = $save
+    }
+    "amd64" {
+        $private:save = $env:GOARCH
+        $env:GOARCH = "amd64"
+        Build (Get-Content Misc\version.txt) ""
+        $env:GOARCH = $save
+    }
     "status" {
         Show-Version ".\nyagos.exe"
     }
@@ -346,6 +384,8 @@ switch( $args[0] ){
     }
     "clean" {
         foreach( $p in @(`
+            "Bin\amd64\nyagos.exe",`
+            "Bin\386\nyagos.exe",`
             "nyagos.exe",`
             "nyagos.syso",`
             "version.now",`
@@ -353,9 +393,7 @@ switch( $args[0] ){
             "goversioninfo.exe",`
             "go-bindata.exe" ) )
         {
-            if( Test-Path $p ){
-                Do-Remove $p
-            }
+            Do-Remove $p
         }
         Get-ChildItem "." -Recurse |
         Where-Object { $_.Name -eq "make.xml" } |
