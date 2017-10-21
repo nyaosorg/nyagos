@@ -332,6 +332,27 @@ function Get-Architecture($bin){
     return $null
 }
 
+function Download-File($url){
+    $fname = (Split-Path $url -Leaf)
+    if( $fname -like "download*" ){
+        $fname = (Split-Path (Split-Path $url -Parent) -Leaf)
+    }
+    $client = New-Object System.Net.WebClient
+    Write-Verbose "$ wget '$url' -> '$fname'"
+    $client.DownloadFile($url,$fname)
+    return $fname
+}
+
+function Get-Lua($url,$arch){
+    $zip = (Download-File $url)
+    unzip -o $zip include\*
+    $folder = (Join-Path "Bin" $arch)
+    Make-Dir "Bin"
+    Make-Dir $folder
+    unzip -o $zip lua53.dll -d $folder
+    Do-Copy (Join-Path $folder lua53.dll) .
+}
+
 function Split-LikeShell($s){
     $rx = [regex]'"[^"]*"'
     while( $true ){
@@ -531,6 +552,12 @@ switch( $args[0] ){
                 }
             }
         }
+    }
+    "get-lua64" {
+        Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" "amd64"
+    }
+    "get-lua32" {
+        Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" "386"
     }
     default {
         Write-Warning ("{0} not supported." -f $args[0])
