@@ -353,6 +353,14 @@ function Get-Lua($url,$arch){
     Do-Copy (Join-Path $folder lua53.dll) .
 }
 
+function Get-Lua64{
+    Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" "amd64"
+}
+
+function Get-Lua32{
+    Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" "386"
+}
+
 function Split-LikeShell($s){
     $rx = [regex]'"[^"]*"'
     while( $true ){
@@ -554,10 +562,42 @@ switch( $args[0] ){
         }
     }
     "get-lua64" {
-        Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" "amd64"
+        Get-Lua64
     }
     "get-lua32" {
-        Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" "386"
+        Get-Lua32
+    }
+    "get-lua" {
+        if( (Get-GoArch) -eq "amd64" ){
+            Get-Lua64
+        }else{
+            Get-Lua32
+        }
+    }
+    "help" {
+        Write-Output @'
+make            build as snapshot version  (default)
+make debug      build as debug version     (tagged as `debug`)
+make release    build as release version.
+make 386        build for 32bit processor as release version.
+make amd64      build for 64bit processor as release version.
+make status     show version information 
+make vet        do `go vet` on each folder.
+make clean      remove all work files.
+make sweep      remove *.bak and *.~
+make const      make `const.go`. gcc is required.
+make package    make `nyagos-(VERSION)-(ARCH).zip`
+make install [FOLDER]
+                copy executables to FOLDER
+make install    copy executables to the last folder.
+make generate   execute `go generate` on the folder it required.
+make fmt        `go fmt`
+make check-case [FILE]
+make get-lua    download Lua 5.3 for current architecture.
+make get-lua64  download Lua 5.3 64-bit runtime.
+make get-lua32  download Lua 5.3 32-bit runtime.
+make help       show this.
+'@
     }
     default {
         Write-Warning ("{0} not supported." -f $args[0])
