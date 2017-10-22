@@ -3,6 +3,8 @@
 @exit /b %ERRORLEVEL%
 
 set CMD "Cmd" -option constant
+set LUA64URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" -option constant
+set LUA32URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" -option constant
 
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
@@ -355,14 +357,6 @@ function Get-Lua($url,$arch){
     Do-Copy (Join-Path $folder lua53.dll) .
 }
 
-function Get-Lua64{
-    Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" "amd64"
-}
-
-function Get-Lua32{
-    Get-Lua "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" "386"
-}
-
 function Split-LikeShell($s){
     $rx = [regex]'"[^"]*"'
     while( $true ){
@@ -564,16 +558,16 @@ switch( $args[0] ){
         }
     }
     "get-lua64" {
-        Get-Lua64
+        Get-Lua $LUA64URL "amd64"
     }
     "get-lua32" {
-        Get-Lua32
+        Get-Lua $LUA32URL "386"
     }
     "get-lua" {
         if( (Get-GoArch) -eq "amd64" ){
-            Get-Lua64
+            Get-Lua $LUA64URL "amd64"
         }else{
-            Get-Lua32
+            Get-Lua $LUA32URL "386"
         }
     }
     "help" {
