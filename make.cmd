@@ -2,6 +2,8 @@
 @powershell "iex((@('')*3+(cat '%~f0'|select -skip 3))-join[char]10)"
 @exit /b %ERRORLEVEL%
 
+set CMD "Cmd" -option constant
+
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
 
@@ -242,8 +244,8 @@ function Build($version,$tags) {
     $saveGOARCH = $env:GOARCH
     $env:GOARCH = (Get-GoArch)
 
-    Make-Dir "Bin"
-    $binDir = (Join-Path "Bin" $env:GOARCH)
+    Make-Dir $CMD
+    $binDir = (Join-Path $CMD $env:GOARCH)
     Make-Dir $binDir
     $target = (Join-Path $binDir "nyagos.exe")
 
@@ -346,8 +348,8 @@ function Download-File($url){
 function Get-Lua($url,$arch){
     $zip = (Download-File $url)
     unzip -o $zip include\*
-    $folder = (Join-Path "Bin" $arch)
-    Make-Dir "Bin"
+    $folder = (Join-Path $CMD $arch)
+    Make-Dir $CMD
     Make-Dir $folder
     unzip -o $zip lua53.dll -d $folder
     Do-Copy (Join-Path $folder lua53.dll) .
@@ -413,8 +415,8 @@ switch( $args[0] ){
     }
     "clean" {
         foreach( $p in @(`
-            "Bin\amd64\nyagos.exe",`
-            "Bin\386\nyagos.exe",`
+            (Join-Path $CMD "amd64\nyagos.exe"),`
+            (Join-Path $CMD "386\nyagos.exe"),`
             "nyagos.exe",`
             "nyagos.syso",`
             "version.now",`
