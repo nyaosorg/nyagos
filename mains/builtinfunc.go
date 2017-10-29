@@ -4,6 +4,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/zetamatta/go-box"
+
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/readline"
 )
@@ -35,6 +37,23 @@ func cmdChdir(args []interface{}) []interface{} {
 		}
 	}
 	return []interface{}{nil, errors.New("directory is required")}
+}
+
+func cmdBox(args []interface{}) []interface{} {
+	t, ok := args[0].(map[interface{}]interface{})
+	if !ok {
+		return []interface{}{nil, "Not a table"}
+	}
+	if len(t) == 0 {
+		return []interface{}{}
+	}
+	sources := make([]string, 0, len(t))
+	for _, v := range t {
+		if str, ok := cstr(v); ok {
+			sources = append(sources, str)
+		}
+	}
+	return []interface{}{box.Choice(sources, readline.Console)}
 }
 
 func cmdResetCharWidth(args []interface{}) []interface{} {
