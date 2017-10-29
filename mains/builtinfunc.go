@@ -10,67 +10,51 @@ import (
 	"github.com/zetamatta/nyagos/readline"
 )
 
-func cstr(value interface{}) (string, bool) {
-	if s, ok := value.(string); ok {
-		return s, true
-	}
-	if s, ok := value.(fmt.Stringer); ok {
-		return s.String(), true
-	}
-	if s, ok := value.(int); ok {
-		return fmt.Sprintf("%d", s), true
-	}
-	return "", false
-}
+type any_t = interface{}
 
-func cmdElevated([]interface{}) []interface{} {
+func cmdElevated([]any_t) []any_t {
 	flag, _ := dos.IsElevated()
-	return []interface{}{flag}
+	return []any_t{flag}
 }
 
-func cmdChdir(args []interface{}) []interface{} {
+func cmdChdir(args []any_t) []any_t {
 	if len(args) >= 1 {
-		path, ok := cstr(args[0])
-		if ok {
-			dos.Chdir(path)
-			return []interface{}{true}
-		}
+		dos.Chdir(fmt.Sprint(args[0]))
+		return []any_t{true}
 	}
-	return []interface{}{nil, errors.New("directory is required")}
+	return []any_t{nil, errors.New("directory is required")}
 }
 
-func cmdBox(args []interface{}) []interface{} {
-	t, ok := args[0].(map[interface{}]interface{})
+func cmdBox(args []any_t) []any_t {
+	t, ok := args[0].(map[any_t]any_t)
 	if !ok {
-		return []interface{}{nil, "Not a table"}
+		return []any_t{nil, "Not a table"}
 	}
 	if len(t) == 0 {
-		return []interface{}{}
+		return []any_t{}
 	}
 	sources := make([]string, 0, len(t))
 	for i, i_ := 1, len(t); i <= i_; i++ {
 		if val, ok := t[i]; ok {
-			if str, ok := cstr(val); ok {
-				sources = append(sources, str)
-			}
+			sources = append(sources, fmt.Sprint(val))
 		}
 	}
-	return []interface{}{box.Choice(sources, readline.Console)}
+	return []any_t{box.Choice(sources, readline.Console)}
 }
 
-func cmdResetCharWidth(args []interface{}) []interface{} {
+func cmdResetCharWidth(args []any_t) []any_t {
 	readline.ResetCharWidth()
-	return []interface{}{}
+	return []any_t{}
 }
 
-func cmdNetDriveToUNC(args []interface{}) []interface{} {
+func cmdNetDriveToUNC(args []any_t) []any_t {
 	if len(args) < 1 {
-		return []interface{}{}
+		return []any_t{}
 	}
 	path, ok := args[0].(string)
 	if !ok {
-		return []interface{}{path}
+		return []any_t{path}
 	}
 	unc := dos.NetDriveToUNC(path)
-	return []interface{}{unc}
+	return []any_t{unc}
 }
