@@ -420,7 +420,7 @@ func init() {
 		"setalias":       lua.TGoFunction(cmdSetAlias),
 		"setenv":         lua.TGoFunction(cmdSetEnv),
 		"setrunewidth":   lua.TGoFunction(cmdSetRuneWidth),
-		"shellexecute":   lua.TGoFunction(cmdShellExecute),
+		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
 		"silentmode":     &lua.BoolProperty{Pointer: &silentmode},
 		"stamp":          lua.StringProperty{Pointer: &Stamp},
 		"stat":           lua.TGoFunction(cmdStat),

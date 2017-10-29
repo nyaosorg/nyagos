@@ -509,31 +509,6 @@ func cmdSetRuneWidth(this lua.Lua) int {
 	return 1
 }
 
-func cmdShellExecute(this lua.Lua) int {
-	action, actionErr := this.ToString(1)
-	if actionErr != nil {
-		return this.Push(nil, actionErr)
-	}
-	path, pathErr := this.ToString(2)
-	if pathErr != nil {
-		return this.Push(nil, pathErr)
-	}
-	param, paramErr := this.ToString(3)
-	if paramErr != nil {
-		param = ""
-	}
-	dir, dirErr := this.ToString(4)
-	if dirErr != nil {
-		dir = ""
-	}
-	err := dos.ShellExecute(action, dos.TruePath(path), param, dir)
-	if err != nil {
-		return this.Push(nil, err)
-	} else {
-		return this.Push(true)
-	}
-}
-
 func cmdStat(L lua.Lua) int {
 	path, pathErr := L.ToString(1)
 	if pathErr != nil {

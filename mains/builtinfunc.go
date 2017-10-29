@@ -7,10 +7,25 @@ import (
 	"github.com/zetamatta/go-box"
 
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/readline"
 )
 
 type any_t = interface{}
+
+func toStr(arr []any_t, n int) string {
+	if n < len(arr) {
+		if ifdbg.DBG {
+			println(fmt.Sprint(arr[n]))
+		}
+		return fmt.Sprint(arr[n])
+	} else {
+		if ifdbg.DBG {
+			println("''")
+		}
+		return ""
+	}
+}
 
 func cmdElevated([]any_t) []any_t {
 	flag, _ := dos.IsElevated()
@@ -57,4 +72,17 @@ func cmdNetDriveToUNC(args []any_t) []any_t {
 	}
 	unc := dos.NetDriveToUNC(path)
 	return []any_t{unc}
+}
+
+func cmdShellExecute(args []any_t) []any_t {
+	err := dos.ShellExecute(
+		toStr(args, 0),
+		dos.TruePath(toStr(args, 1)),
+		toStr(args, 2),
+		toStr(args, 3))
+	if err != nil {
+		return []any_t{nil, err}
+	} else {
+		return []any_t{true}
+	}
 }
