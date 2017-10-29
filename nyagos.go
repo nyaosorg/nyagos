@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"runtime/debug"
 
+	. "github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/mains"
 )
 
@@ -51,8 +52,16 @@ func main() {
 	if err := mains.Main(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		if err != io.EOF {
+			if DBG {
+				var dummy [1]byte
+				os.Stdin.Read(dummy[:])
+			}
 			os.Exit(1)
 		}
+	}
+	if DBG {
+		var dummy [1]byte
+		os.Stdin.Read(dummy[:])
 	}
 	os.Exit(0)
 }
