@@ -120,3 +120,37 @@ func cmdPathJoin(args []any_t) []any_t {
 	}
 	return []any_t{path}
 }
+
+func cmdAccess(args []any_t) []any_t {
+	if len(args) < 2 {
+		return []any_t{nil, "nyagos.access requilres two arguments"}
+	}
+	path := fmt.Sprint(args[0])
+	mode, mode_ok := args[1].(int)
+	if !mode_ok {
+		return []any_t{nil, "mode value must be interger"}
+	}
+	if ifdbg.DBG {
+		fmt.Fprintf(os.Stderr, "given mode==%o\n", mode)
+	}
+	fi, err := os.Stat(path)
+
+	var result bool
+	if err != nil || fi == nil {
+		result = false
+	} else {
+		if ifdbg.DBG {
+			fmt.Fprintf(os.Stderr, "file mode==%o\n", fi.Mode().Perm())
+		}
+		switch {
+		case mode == 0:
+			result = true
+		case (mode & 1) != 0: // X_OK
+		case (mode & 2) != 0: // W_OK
+			result = ((fi.Mode().Perm() & 0200) != 0)
+		case (mode & 4) != 0: // R_OK
+			result = ((fi.Mode().Perm() & 0400) != 0)
+		}
+	}
+	return []any_t{result}
+}

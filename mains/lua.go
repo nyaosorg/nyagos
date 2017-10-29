@@ -358,7 +358,7 @@ func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 
 func init() {
 	nyagos_table_member = map[string]lua.Object{
-		"access": lua.TGoFunction(cmdAccess),
+		"access": lua.TGoFunction(lua2cmd(cmdAccess)),
 		"alias": &lua.VirtualTable{
 			Name:     "nyagos.alias",
 			Index:    cmdGetAlias,
