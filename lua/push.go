@@ -152,10 +152,11 @@ func (this Lua) PushReflect(value interface{}) bool {
 
 func (this Lua) pushReflect(value reflect.Value) bool {
 	switch value.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32,
-		reflect.Int64, reflect.Uint, reflect.Uint16, reflect.Uint32,
-		reflect.Uint64, reflect.Uintptr:
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		this.PushInteger(Integer(value.Int()))
+	case reflect.Uint, reflect.Uint16, reflect.Uint32,
+		reflect.Uint64, reflect.Uintptr:
+		this.PushInteger(Integer(value.Uint()))
 	case reflect.Bool:
 		this.PushBool(value.Bool())
 	case reflect.String:
