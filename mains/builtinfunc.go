@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-getch"
 
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/ifdbg"
@@ -95,4 +96,14 @@ func cmdGetwd(args []any_t) []any_t {
 	} else {
 		return []any_t{nil, err}
 	}
+}
+
+func cmdGetKey(args []any_t) []any_t {
+	keycode, scancode, shiftstatus := getch.Full()
+	return []any_t{keycode, scancode, shiftstatus}
+}
+
+func cmdGetViewWidth(args []any_t) []any_t {
+	width, height := box.GetScreenBufferInfo().ViewSize()
+	return []any_t{width, height}
 }

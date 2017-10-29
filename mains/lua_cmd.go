@@ -18,9 +18,7 @@ import (
 
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
-	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
-	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
 	"github.com/zetamatta/nyagos/alias"
@@ -608,21 +606,6 @@ func cmdCommonPrefix(L lua.Lua) int {
 	}
 	L.PushString(completion.CommonPrefix(list))
 	return 1
-}
-
-func cmdGetKey(L lua.Lua) int {
-	keycode, scancode, shiftstatus := getch.Full()
-	L.PushInteger(lua.Integer(keycode))
-	L.PushInteger(lua.Integer(scancode))
-	L.PushInteger(lua.Integer(shiftstatus))
-	return 3
-}
-
-func cmdGetViewWidth(L lua.Lua) int {
-	width, height := box.GetScreenBufferInfo().ViewSize()
-	L.PushInteger(lua.Integer(width))
-	L.PushInteger(lua.Integer(height))
-	return 2
 }
 
 func cmdOpenFile(L lua.Lua) int {
