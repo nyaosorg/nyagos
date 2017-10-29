@@ -3,6 +3,7 @@ package mains
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/zetamatta/go-box"
 
@@ -84,5 +85,14 @@ func cmdShellExecute(args []any_t) []any_t {
 		return []any_t{nil, err}
 	} else {
 		return []any_t{true}
+	}
+}
+
+func cmdGetwd(args []any_t) []any_t {
+	wd, err := os.Getwd()
+	if err == nil {
+		return []any_t{wd}
+	} else {
+		return []any_t{nil, err}
 	}
 }

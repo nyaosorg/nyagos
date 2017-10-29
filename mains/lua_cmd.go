@@ -395,15 +395,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	return L.Push(true)
 }
 
-func cmdGetwd(L lua.Lua) int {
-	wd, err := os.Getwd()
-	if err == nil {
-		return L.Push(wd)
-	} else {
-		return L.Push(nil, err)
-	}
-}
-
 func cmdWhich(L lua.Lua) int {
 	if L.GetType(-1) != lua.LUA_TSTRING {
 		return 0

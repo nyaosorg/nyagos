@@ -393,7 +393,7 @@ func init() {
 		"gethistory":   lua.TGoFunction(cmdGetHistory),
 		"getkey":       lua.TGoFunction(cmdGetKey),
 		"getviewwidth": lua.TGoFunction(cmdGetViewWidth),
-		"getwd":        lua.TGoFunction(cmdGetwd),
+		"getwd":        lua.TGoFunction(lua2cmd(cmdGetwd)),
 		"glob":         lua.TGoFunction(cmdGlob),
 		"goarch":       lua.TString(runtime.GOARCH),
 		"goversion":    lua.TString(runtime.Version()),
