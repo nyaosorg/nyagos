@@ -574,21 +574,6 @@ func cmdAccess(L lua.Lua) int {
 	return 1
 }
 
-func cmdPathJoin(L lua.Lua) int {
-	path, pathErr := L.ToString(1)
-	if pathErr != nil {
-		return L.Push(nil, pathErr)
-	}
-	for i, i_ := 2, L.GetTop(); i <= i_; i++ {
-		pathI, pathIErr := L.ToString(i)
-		if pathIErr != nil {
-			return L.Push(nil, pathErr)
-		}
-		path = filepath.Join(path, pathI)
-	}
-	return L.Push(path, nil)
-}
-
 func cmdCommonPrefix(L lua.Lua) int {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		return 0

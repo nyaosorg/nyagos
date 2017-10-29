@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-getch"
@@ -106,4 +107,16 @@ func cmdGetKey(args []any_t) []any_t {
 func cmdGetViewWidth(args []any_t) []any_t {
 	width, height := box.GetScreenBufferInfo().ViewSize()
 	return []any_t{width, height}
+}
+
+func cmdPathJoin(args []any_t) []any_t {
+	if len(args) < 0 {
+		return []any_t{""}
+	}
+	path := fmt.Sprint(args[0])
+	for i, i_ := 1, len(args); i < i_; i++ {
+		sub := fmt.Sprint(args[i])
+		path = filepath.Join(path, sub)
+	}
+	return []any_t{path}
 }

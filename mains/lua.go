@@ -411,7 +411,7 @@ func init() {
 			Name:     "nyagos.option",
 			Index:    getOption,
 			NewIndex: setOption},
-		"pathjoin":       lua.TGoFunction(cmdPathJoin),
+		"pathjoin":       lua.TGoFunction(lua2cmd(cmdPathJoin)),
 		"prompt":         lua.Property{Pointer: &prompt_hook},
 		"quotation":      lua.StringProperty{Pointer: &readline.Delimiters},
 		"raweval":        lua.TGoFunction(cmdRawEval),
