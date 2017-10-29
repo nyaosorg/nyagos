@@ -48,9 +48,11 @@ func cmdBox(args []interface{}) []interface{} {
 		return []interface{}{}
 	}
 	sources := make([]string, 0, len(t))
-	for _, v := range t {
-		if str, ok := cstr(v); ok {
-			sources = append(sources, str)
+	for i, i_ := 1, len(t); i <= i_; i++ {
+		if val, ok := t[i]; ok {
+			if str, ok := cstr(val); ok {
+				sources = append(sources, str)
+			}
 		}
 	}
 	return []interface{}{box.Choice(sources, readline.Console)}
