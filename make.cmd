@@ -28,17 +28,6 @@ function Make-Dir($folder){
     }
 }
 
-function Make-Hardlink($src,$dst){
-    if( Test-Path $dst ){
-        Do-Remove $dst
-    }
-    Write-Verbose "$ mklink /H '$dst' '$src'"
-    New-Item -Itemtype hardlink `
-        -Path (Split-Path $dst -Parent) `
-        -Name (Split-Path $dst -Leaf) `
-        -Value $src | Out-Null
-}
-
 Add-Type -Assembly System.Windows.Forms
 function Ask-Copy($src,$dst){
     $fname = (Join-Path $dst (Split-Path $src -Leaf))
@@ -262,7 +251,7 @@ function Build($version,$tags) {
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose -Message "$ go build -o '$target'"
     go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
-    Make-Hardlink $target ".\nyagos.exe"
+    Do-Copy $target ".\nyagos.exe"
     $env:GOARCH = $saveGOARCH
 }
 
