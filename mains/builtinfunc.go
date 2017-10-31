@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-getch"
 
 	"github.com/zetamatta/nyagos/dos"
@@ -153,4 +154,44 @@ func cmdAccess(args []any_t) []any_t {
 		}
 	}
 	return []any_t{result}
+}
+
+func cmdStat(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, errors.New("fee arguments")}
+	}
+	path := toStr(args, 0)
+	var stat os.FileInfo
+	var path_ string
+	if len(path) > 0 && path[len(path)-1] == '\\' {
+		path_ = filepath.Join(path, ".")
+	} else {
+		path_ = path
+	}
+	statErr := findfile.Walk(path_, func(f *findfile.FileInfo) bool {
+		stat = f
+		return false
+	})
+	if statErr != nil {
+		return []any_t{nil, statErr}
+	}
+	if stat == nil {
+		return []any_t{nil, fmt.Errorf("%s: failed to stat", path)}
+	}
+	t := stat.ModTime()
+	return []any_t{
+		map[string]any_t{
+			"name":  stat.Name(),
+			"size":  stat.Size(),
+			"isdir": stat.IsDir(),
+			"mtime": map[string]any_t{
+				"year":   t.Year(),
+				"month":  t.Month(),
+				"day":    t.Day(),
+				"hour":   t.Hour(),
+				"minute": t.Minute(),
+				"second": t.Second(),
+			},
+		},
+	}
 }

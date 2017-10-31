@@ -423,7 +423,7 @@ func init() {
 		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
 		"silentmode":     &lua.BoolProperty{Pointer: &silentmode},
 		"stamp":          lua.StringProperty{Pointer: &Stamp},
-		"stat":           lua.TGoFunction(cmdStat),
+		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
 		"utoa":           lua.TGoFunction(cmdUtoA),
 		"version":        lua.StringProperty{Pointer: &Version},
 		"which":          lua.TGoFunction(cmdWhich),

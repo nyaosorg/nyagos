@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"sort"
 	"strconv"
 	"strings"
@@ -495,53 +494,6 @@ func cmdSetRuneWidth(this lua.Lua) int {
 	}
 	readline.SetCharWidth(rune(char), width)
 	this.PushBool(true)
-	return 1
-}
-
-func cmdStat(L lua.Lua) int {
-	path, pathErr := L.ToString(1)
-	if pathErr != nil {
-		return L.Push(nil, pathErr)
-	}
-	var stat os.FileInfo
-	var path_ string
-	if len(path) > 0 && path[len(path)-1] == '\\' {
-		path_ = filepath.Join(path, ".")
-	} else {
-		path_ = path
-	}
-	statErr := findfile.Walk(path_, func(f *findfile.FileInfo) bool {
-		stat = f
-		return false
-	})
-	if statErr != nil {
-		return L.Push(nil, statErr)
-	}
-	if stat == nil {
-		return L.Push(nil, fmt.Errorf("%s: failed to stat", path))
-	}
-	L.NewTable()
-	L.PushString(stat.Name())
-	L.SetField(-2, "name")
-	L.PushInteger(lua.Integer(stat.Size()))
-	L.SetField(-2, "size")
-	L.PushBool(stat.IsDir())
-	L.SetField(-2, "isdir")
-	t := stat.ModTime()
-	L.NewTable()
-	L.PushInteger(lua.Integer(t.Year()))
-	L.SetField(-2, "year")
-	L.PushInteger(lua.Integer(t.Month()))
-	L.SetField(-2, "month")
-	L.PushInteger(lua.Integer(t.Day()))
-	L.SetField(-2, "day")
-	L.PushInteger(lua.Integer(t.Hour()))
-	L.SetField(-2, "hour")
-	L.PushInteger(lua.Integer(t.Minute()))
-	L.SetField(-2, "minute")
-	L.PushInteger(lua.Integer(t.Second()))
-	L.SetField(-2, "second")
-	L.SetField(-2, "mtime")
 	return 1
 }
 
