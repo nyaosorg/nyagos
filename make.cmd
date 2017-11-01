@@ -99,14 +99,23 @@ function Go-Generate{
 }
 
 function Go-Fmt{
+    $status = $true
     Get-ChildItem . -Recurse |
     ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
     %{
         $fname = $_.FullName
         Write-Verbose -Message "$ go fmt $fname"
         go fmt $fname
-        attrib -a $fname
+        if( $LastExitCode -ne 0 ){
+            $status = $false
+        }else{
+            attrib -a $fname
+        }
     }
+    if( -not $status ){
+        Write-Warning "Some of 'go fmt' failed."
+    }
+    return $status
 }
 
 function Get-Go1stPath {
@@ -231,7 +240,9 @@ function Build($version,$tags) {
     Write-Verbose "Build as version='$version' tags='$tags'"
 
     Go-Generate
-    Go-Fmt
+    if( -not (Go-Fmt) ){
+        return
+    }
     $saveGOARCH = $env:GOARCH
     $env:GOARCH = (Get-GoArch)
 
