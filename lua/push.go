@@ -147,6 +147,9 @@ func (this Lua) Push(values ...interface{}) int {
 }
 
 func (this Lua) PushReflect(value interface{}) bool {
+	if value == nil {
+		this.PushNil()
+	}
 	return this.pushReflect(reflect.ValueOf(value))
 }
 
