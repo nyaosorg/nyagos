@@ -13,6 +13,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 type any_t = interface{}
@@ -193,5 +194,32 @@ func cmdStat(args []any_t) []any_t {
 				"second": t.Second(),
 			},
 		},
+	}
+}
+
+func cmdSetEnv(args []any_t) []any_t {
+	if len(args) < 2 {
+		return []any_t{nil, "too few arguments"}
+	}
+	name := fmt.Sprint(args[len(args)-2])
+	value := fmt.Sprint(args[len(args)-1])
+	if len(value) > 0 {
+		os.Setenv(name, value)
+	} else {
+		os.Unsetenv(name)
+	}
+	return []any_t{true}
+}
+
+func cmdGetEnv(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, "too few arguments"}
+	}
+	name := fmt.Sprint(args[len(args)-1])
+	value, ok := shell.OurGetEnv(name)
+	if ok && len(value) > 0 {
+		return []any_t{value}
+	} else {
+		return []any_t{nil}
 	}
 }

@@ -168,37 +168,6 @@ func cmdGetAlias(L lua.Lua) int {
 	return 1
 }
 
-func cmdSetEnv(L lua.Lua) int {
-	name, nameErr := L.ToString(-2)
-	if nameErr != nil {
-		return L.Push(nil, nameErr)
-	}
-	value, valueErr := L.ToString(-1)
-	if valueErr != nil {
-		return L.Push(nil, valueErr)
-	}
-	if len(value) > 0 {
-		os.Setenv(name, value)
-	} else {
-		os.Unsetenv(name)
-	}
-	return L.Push(true)
-}
-
-func cmdGetEnv(L lua.Lua) int {
-	name, nameErr := L.ToString(-1)
-	if nameErr != nil {
-		return L.Push(nil)
-	}
-	value, ok := shell.OurGetEnv(name)
-	if ok && len(value) > 0 {
-		L.PushString(value)
-	} else {
-		L.PushNil()
-	}
-	return 1
-}
-
 func cmdExec(L lua.Lua) int {
 	errorlevel := 0
 	var err error
