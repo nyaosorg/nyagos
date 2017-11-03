@@ -9,6 +9,7 @@ import (
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-getch"
+	"github.com/zetamatta/go-mbcs"
 
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/ifdbg"
@@ -221,5 +222,20 @@ func cmdGetEnv(args []any_t) []any_t {
 		return []any_t{value}
 	} else {
 		return []any_t{nil}
+	}
+}
+
+func cmdAtoU(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, "too few arguments"}
+	}
+	if s, ok := args[0].(string); ok {
+		if val, err := mbcs.AtoU([]byte(s)); err == nil {
+			return []any_t{val}
+		} else {
+			return []any_t{nil, err}
+		}
+	} else {
+		return []any_t{fmt.Sprint(args[0])}
 	}
 }

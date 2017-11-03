@@ -377,16 +377,6 @@ func cmdWhich(L lua.Lua) int {
 	}
 }
 
-func cmdAtoU(L lua.Lua) int {
-	str, err := mbcs.AtoU(L.ToBytes(1))
-	if err == nil {
-		L.PushString(str)
-		return 1
-	} else {
-		return 0
-	}
-}
-
 func cmdUtoA(L lua.Lua) int {
 	utf8, utf8err := L.ToString(1)
 	if utf8err != nil {

@@ -365,7 +365,7 @@ func init() {
 			NewIndex: cmdSetAlias},
 		"antihistquot": lua.StringProperty{Pointer: &history.DisableMarks},
 		"argsfilter":   lua.Property{Pointer: &luaArgsFilter},
-		"atou":         lua.TGoFunction(cmdAtoU),
+		"atou":         lua.TGoFunction(lua2cmd(cmdAtoU)),
 		"key": &lua.VirtualTable{
 			Name:     "nyagos.key",
 			Index:    cmdGetBindKey,
