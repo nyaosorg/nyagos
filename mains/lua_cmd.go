@@ -18,7 +18,6 @@ import (
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
 	"github.com/zetamatta/go-findfile"
-	"github.com/zetamatta/go-mbcs"
 
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/completion"
@@ -375,24 +374,6 @@ func cmdWhich(L lua.Lua) int {
 	} else {
 		return L.Push(nil, errors.New(name+": Path not found"))
 	}
-}
-
-func cmdUtoA(L lua.Lua) int {
-	utf8, utf8err := L.ToString(1)
-	if utf8err != nil {
-		return L.Push(nil, utf8err)
-	}
-	str, err := mbcs.UtoA(utf8)
-	if err != nil {
-		return L.Push(nil, err)
-	}
-	if len(str) >= 1 {
-		L.PushBytes(str[:len(str)-1])
-	} else {
-		L.PushString("")
-	}
-	L.PushNil()
-	return 2
 }
 
 func cmdGlob(L lua.Lua) int {

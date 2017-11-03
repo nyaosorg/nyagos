@@ -424,7 +424,7 @@ func init() {
 		"silentmode":     &lua.BoolProperty{Pointer: &silentmode},
 		"stamp":          lua.StringProperty{Pointer: &Stamp},
 		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
-		"utoa":           lua.TGoFunction(cmdUtoA),
+		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
 		"version":        lua.StringProperty{Pointer: &Version},
 		"which":          lua.TGoFunction(cmdWhich),
 		"write":          lua.TGoFunction(cmdWrite),

@@ -239,3 +239,19 @@ func cmdAtoU(args []any_t) []any_t {
 		return []any_t{fmt.Sprint(args[0])}
 	}
 }
+
+func cmdUtoA(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, "too few arguments"}
+	}
+	utf8 := fmt.Sprint(args[0])
+	bin, err := mbcs.UtoA(utf8)
+	if err != nil {
+		return []any_t{nil, err}
+	}
+	if len(bin) >= 1 {
+		return []any_t{string(bin[:len(bin)-1]), nil}
+	} else {
+		return []any_t{"", nil}
+	}
+}
