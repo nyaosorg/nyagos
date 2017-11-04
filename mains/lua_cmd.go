@@ -211,12 +211,6 @@ func cmdExec(L lua.Lua) int {
 	return L.Push(int(errorlevel), err)
 }
 
-type emptyWriter struct{}
-
-func (e *emptyWriter) Write(b []byte) (int, error) {
-	return len(b), nil
-}
-
 func cmdEval(L lua.Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
