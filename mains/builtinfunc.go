@@ -250,7 +250,8 @@ func cmdUtoA(args []any_t) []any_t {
 		return []any_t{nil, err}
 	}
 	if len(bin) >= 1 {
-		return []any_t{string(bin[:len(bin)-1]), nil}
+		// trim the last zero byte from SJIS string
+		return []any_t{bin[:len(bin)-1], nil}
 	} else {
 		return []any_t{"", nil}
 	}
