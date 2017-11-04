@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
@@ -272,4 +273,19 @@ func cmdWhich(args []any_t) []any_t {
 	} else {
 		return []any_t{nil, name + ": Path not found"}
 	}
+}
+
+func cmdGlob(args []any_t) []any_t {
+	result := make([]string, 0)
+	for _, arg1 := range args {
+		wildcard := fmt.Sprint(arg1)
+		list, err := findfile.Glob(wildcard)
+		if list == nil || err != nil {
+			result = append(result, wildcard)
+		} else {
+			result = append(result, list...)
+		}
+	}
+	sort.StringSlice(result).Sort()
+	return []any_t{result}
 }

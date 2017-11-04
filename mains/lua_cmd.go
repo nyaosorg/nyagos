@@ -10,14 +10,12 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"sort"
 	"strconv"
 	"strings"
 	"unicode"
 
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
-	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/completion"
@@ -352,29 +350,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 		fmt.Fprint(out, str)
 	}
 	return L.Push(true)
-}
-
-func cmdGlob(L lua.Lua) int {
-	result := make([]string, 0)
-	for i := 1; ; i++ {
-		wildcard, wildcardErr := L.ToString(i)
-		if wildcard == "" || wildcardErr != nil {
-			break
-		}
-		list, err := findfile.Glob(wildcard)
-		if list == nil || err != nil {
-			result = append(result, wildcard)
-		} else {
-			result = append(result, list...)
-		}
-	}
-	sort.StringSlice(result).Sort()
-	L.NewTable()
-	for i := 0; i < len(result); i++ {
-		L.PushString(result[i])
-		L.RawSetI(-2, lua.Integer(i+1))
-	}
-	return 1
 }
 
 func cmdGetHistory(this lua.Lua) int {
