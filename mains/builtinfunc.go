@@ -1,7 +1,6 @@
 package mains
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -18,6 +17,8 @@ import (
 )
 
 type any_t = interface{}
+
+const TooFewArguments = "Too few arguments"
 
 func toStr(arr []any_t, n int) string {
 	if n < len(arr) {
@@ -43,12 +44,12 @@ func cmdChdir(args []any_t) []any_t {
 		dos.Chdir(fmt.Sprint(args[0]))
 		return []any_t{true}
 	}
-	return []any_t{nil, errors.New("directory is required")}
+	return []any_t{nil, "directory is required"}
 }
 
 func cmdBox(args []any_t) []any_t {
 	if len(args) < 1 {
-		return []any_t{nil, "Too Few Arguments"}
+		return []any_t{nil, TooFewArguments}
 	}
 	t, ok := args[0].(map[any_t]any_t)
 	if !ok {
@@ -163,9 +164,9 @@ func cmdAccess(args []any_t) []any_t {
 
 func cmdStat(args []any_t) []any_t {
 	if len(args) < 1 {
-		return []any_t{nil, errors.New("fee arguments")}
+		return []any_t{nil, TooFewArguments}
 	}
-	path := toStr(args, 0)
+	path := fmt.Sprint(args[0])
 	var stat os.FileInfo
 	var path_ string
 	if len(path) > 0 && path[len(path)-1] == '\\' {
@@ -203,7 +204,7 @@ func cmdStat(args []any_t) []any_t {
 
 func cmdSetEnv(args []any_t) []any_t {
 	if len(args) < 2 {
-		return []any_t{nil, "too few arguments"}
+		return []any_t{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[len(args)-2])
 	value := fmt.Sprint(args[len(args)-1])
@@ -217,7 +218,7 @@ func cmdSetEnv(args []any_t) []any_t {
 
 func cmdGetEnv(args []any_t) []any_t {
 	if len(args) < 1 {
-		return []any_t{nil, "too few arguments"}
+		return []any_t{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[len(args)-1])
 	value, ok := shell.OurGetEnv(name)
@@ -230,7 +231,7 @@ func cmdGetEnv(args []any_t) []any_t {
 
 func cmdAtoU(args []any_t) []any_t {
 	if len(args) < 1 {
-		return []any_t{nil, "too few arguments"}
+		return []any_t{nil, TooFewArguments}
 	}
 	if s, ok := args[0].(string); ok {
 		if val, err := mbcs.AtoU([]byte(s)); err == nil {
@@ -245,7 +246,7 @@ func cmdAtoU(args []any_t) []any_t {
 
 func cmdUtoA(args []any_t) []any_t {
 	if len(args) < 1 {
-		return []any_t{nil, "too few arguments"}
+		return []any_t{nil, TooFewArguments}
 	}
 	utf8 := fmt.Sprint(args[0])
 	bin, err := mbcs.UtoA(utf8)
