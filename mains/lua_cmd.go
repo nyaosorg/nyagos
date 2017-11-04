@@ -352,30 +352,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	return L.Push(true)
 }
 
-func cmdGetHistory(this lua.Lua) int {
-	if default_history == nil {
-		return 0
-	}
-	if this.GetType(-1) == lua.LUA_TNUMBER {
-		val, err := this.ToInteger(-1)
-		if err != nil {
-			return this.Push(nil, err.Error())
-		}
-		this.PushString(default_history.At(val))
-	} else {
-		this.PushInteger(lua.Integer(default_history.Len()))
-	}
-	return 1
-}
-
-func cmdLenHistory(this lua.Lua) int {
-	if default_history == nil {
-		return 0
-	}
-	this.PushInteger(lua.Integer(default_history.Len()))
-	return 1
-}
-
 func cmdSetRuneWidth(this lua.Lua) int {
 	char, charErr := this.ToInteger(1)
 	if charErr != nil {

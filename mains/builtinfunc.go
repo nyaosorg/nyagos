@@ -289,3 +289,22 @@ func cmdGlob(args []any_t) []any_t {
 	sort.StringSlice(result).Sort()
 	return []any_t{result}
 }
+
+func cmdGetHistory(args []any_t) []any_t {
+	if default_history == nil {
+		return []any_t{}
+	}
+	if len(args) >= 1 {
+		if n, ok := args[len(args)-1].(int); ok {
+			return []any_t{default_history.At(n)}
+		}
+	}
+	return []any_t{default_history.Len()}
+}
+
+func cmdLenHistory(args []any_t) []any_t {
+	if default_history == nil {
+		return []any_t{}
+	}
+	return []any_t{default_history.Len()}
+}
