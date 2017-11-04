@@ -354,22 +354,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	return L.Push(true)
 }
 
-func cmdWhich(L lua.Lua) int {
-	if L.GetType(-1) != lua.LUA_TSTRING {
-		return 0
-	}
-	name, nameErr := L.ToString(-1)
-	if nameErr != nil {
-		return L.Push(nil, nameErr)
-	}
-	path := dos.LookPath(name, "NYAGOSPATH")
-	if path != "" {
-		return L.Push(path)
-	} else {
-		return L.Push(nil, errors.New(name+": Path not found"))
-	}
-}
-
 func cmdGlob(L lua.Lua) int {
 	result := make([]string, 0)
 	for i := 1; ; i++ {

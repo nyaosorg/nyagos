@@ -426,7 +426,7 @@ func init() {
 		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
 		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
 		"version":        lua.StringProperty{Pointer: &Version},
-		"which":          lua.TGoFunction(cmdWhich),
+		"which":          lua.TGoFunction(lua2cmd(cmdWhich)),
 		"write":          lua.TGoFunction(cmdWrite),
 		"writerr":        lua.TGoFunction(cmdWriteErr),
 	}

@@ -260,3 +260,16 @@ func cmdUtoA(args []any_t) []any_t {
 		return []any_t{"", nil}
 	}
 }
+
+func cmdWhich(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, TooFewArguments}
+	}
+	name := fmt.Sprint(args[0])
+	path := dos.LookPath(name, "NYAGOSPATH")
+	if path != "" {
+		return []any_t{path}
+	} else {
+		return []any_t{nil, name + ": Path not found"}
+	}
+}
