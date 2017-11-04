@@ -47,6 +47,9 @@ func cmdChdir(args []any_t) []any_t {
 }
 
 func cmdBox(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, "Too Few Arguments"}
+	}
 	t, ok := args[0].(map[any_t]any_t)
 	if !ok {
 		return []any_t{nil, "Not a table"}
