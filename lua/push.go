@@ -167,12 +167,21 @@ func (this Lua) pushReflect(value reflect.Value) bool {
 	case reflect.Interface:
 		this.Push(value.Interface())
 	case reflect.Slice, reflect.Array:
-		this.NewTable()
-		for i, end := 0, value.Len(); i < end; i++ {
-			val := value.Index(i)
-			this.PushInteger(Integer(i + 1))
-			this.pushReflect(val)
-			this.SetTable(-3)
+		elem := value.Type().Elem()
+		if elem.Kind() == reflect.Uint8 {
+			buffer := make([]byte, 0, value.Len())
+			for i, end := 0, value.Len(); i < end; i++ {
+				buffer = append(buffer, byte(value.Index(i).Uint()))
+			}
+			this.PushBytes(buffer)
+		} else {
+			this.NewTable()
+			for i, end := 0, value.Len(); i < end; i++ {
+				val := value.Index(i)
+				this.PushInteger(Integer(i + 1))
+				this.pushReflect(val)
+				this.SetTable(-3)
+			}
 		}
 	case reflect.Map:
 		this.NewTable()
