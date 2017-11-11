@@ -209,7 +209,7 @@ func cmdSetEnv(args []any_t) []any_t {
 	}
 	name := fmt.Sprint(args[len(args)-2])
 	value := fmt.Sprint(args[len(args)-1])
-	if len(value) > 0 {
+	if args[len(args)-1] != nil && len(value) > 0 {
 		os.Setenv(name, value)
 	} else {
 		os.Unsetenv(name)
