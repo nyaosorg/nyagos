@@ -387,6 +387,12 @@ switch( $args[0] ){
     "386" {
         $private:save = $env:GOARCH
         $env:GOARCH = "386"
+        Build "" ""
+        $env:GOARCH = $save
+    }
+    "386release" {
+        $private:save = $env:GOARCH
+        $env:GOARCH = "386"
         Build (Get-Content Misc\version.txt) ""
         $env:GOARCH = $save
     }
