@@ -253,12 +253,6 @@ function Build($version,$tags) {
 
     Make-SysO $version
 
-    if( Newer-Than "nyagos.d" "mains\bindata.go" ){
-        Download-Exe "github.com/jteeuwen/go-bindata/go-bindata" "go-bindata.exe"
-        Write-Verbose -Message "$ go-bindata.exe"
-        .\go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
-    }
-
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose -Message "$ go build -o '$target'"
     go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
@@ -420,9 +414,7 @@ switch( $args[0] ){
             "nyagos.exe",`
             "nyagos.syso",`
             "version.now",`
-            "mains\bindata.go",`
-            "goversioninfo.exe",`
-            "go-bindata.exe" ) )
+            "goversioninfo.exe") )
         {
             Do-Remove $p
         }

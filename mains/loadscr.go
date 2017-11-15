@@ -8,7 +8,6 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
-	"time"
 
 	"github.com/zetamatta/nyagos/dos"
 	. "github.com/zetamatta/nyagos/ifdbg"
@@ -22,25 +21,6 @@ func versionOrStamp() string {
 	} else {
 		return "v" + Stamp
 	}
-}
-
-func loadBundleScript1(it *shell.Cmd, L lua.Lua, path string) error {
-	if DBG {
-		println("load cached ", path)
-	}
-	bin, err := Asset(path)
-	if err != nil {
-		return err
-	}
-	err = L.LoadBufferX(path, bin, "t")
-	if err != nil {
-		return err
-	}
-	err = NyagosCallLua(L, it, 0, 0)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 type InterpreterT interface {
@@ -76,32 +56,13 @@ func loadScripts(it *shell.Cmd, L lua.Lua) error {
 				if !strings.HasSuffix(strings.ToLower(name1), ".lua") {
 					continue
 				}
-				relpath := "nyagos.d/" + name1
-				asset1, assetErr := AssetInfo(relpath)
-				if assetErr == nil && asset1.Size() == finfo1.Size() && !asset1.ModTime().Truncate(time.Second).Before(finfo1.ModTime().Truncate(time.Second)) {
-					if err := loadBundleScript1(it, L, relpath); err != nil {
-						fmt.Fprintf(os.Stderr, "cached %s: %s\n", relpath, err)
-					}
-				} else {
-					path1 := filepath.Join(nyagos_d, name1)
-					if DBG {
-						println("load real ", path1)
-					}
-					if err := L.Source(path1); err != nil {
-						fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
-					}
+				path1 := filepath.Join(nyagos_d, name1)
+				if DBG {
+					println("load real ", path1)
 				}
-			}
-		}
-	} else if assertdir, err := AssetDir("nyagos.d"); err == nil {
-		// nyagos.d/ not found.
-		for _, name1 := range assertdir {
-			if !strings.HasSuffix(strings.ToLower(name1), ".lua") {
-				continue
-			}
-			relpath := "nyagos.d/" + name1
-			if err1 := loadBundleScript1(it, L, relpath); err1 != nil {
-				fmt.Fprintf(os.Stderr, "bundled %s: %s\n", relpath, err1.Error())
+				if err := L.Source(path1); err != nil {
+					fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
+				}
 			}
 		}
 	}
