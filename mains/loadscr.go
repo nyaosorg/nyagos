@@ -69,11 +69,14 @@ func loadScripts(it *shell.Cmd, L lua.Lua) error {
 	if _, err := runLua(it, L, filepath.Join(exeFolder, ".nyagos")); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(it, exeFolder, L)
+	filter := func(text string) string {
+		return doLuaFilter(L, text)
+	}
+	barNyagos(it, exeFolder, filter)
 	if err := dotNyagos(it, L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(it, dos.GetHome(), L)
+	barNyagos(it, dos.GetHome(), filter)
 	return nil
 }
 
@@ -117,7 +120,7 @@ func dotNyagos(it *shell.Cmd, L lua.Lua) error {
 	return ioutil.WriteFile(cachePath, chank, os.FileMode(0644))
 }
 
-func barNyagos(it InterpreterT, folder string, L lua.Lua) {
+func barNyagos(it InterpreterT, folder string, filter func(string) string) {
 	bar_nyagos := filepath.Join(folder, "_nyagos")
 	fd, fd_err := os.Open(bar_nyagos)
 	if fd_err != nil {
@@ -126,9 +129,7 @@ func barNyagos(it InterpreterT, folder string, L lua.Lua) {
 	defer fd.Close()
 	scanner := bufio.NewScanner(fd)
 	for scanner.Scan() {
-		text := scanner.Text()
-		text = doLuaFilter(L, text)
-		_, err := it.Interpret(text)
+		_, err := it.Interpret(filter(scanner.Text()))
 		if err != nil {
 			fmt.Fprint(os.Stderr, err.Error())
 		}
