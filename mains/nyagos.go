@@ -212,7 +212,14 @@ func Main() error {
 	it.OnFork = onFork
 	it.OffFork = offFork
 
-	if err := loadScripts(it, L); err != nil {
+	langEngine := func(fname string) ([]byte, error) {
+		return runLua(it, L, fname)
+	}
+	shellEngine := func(line string) error {
+		_, err := it.Interpret(doLuaFilter(L, line))
+		return err
+	}
+	if err := loadScripts(shellEngine, langEngine); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
