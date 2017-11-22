@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* #255 `start` command search the executable via %PATH%
+
 NYAGOS 4.2.2\_1
 ===============
 on Oct.11,2017

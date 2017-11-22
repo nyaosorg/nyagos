@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* #255 `start` コマンドでコマンドを %PATH% から探すようにした
+
 NYAGOS 4.2.2\_1
 ===============
 (2017.10.11)
