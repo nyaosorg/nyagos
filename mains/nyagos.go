@@ -3,8 +3,8 @@ package mains
 import (
 	"context"
 	"errors"
-	"flag"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -91,12 +91,6 @@ func printPrompt(L lua.Lua) (int, error) {
 
 var luaFilter lua.Object = lua.TNil{}
 
-var optionK = flag.String("k", "", "like `cmd /k`")
-var optionC = flag.String("c", "", "like `cmd /c`")
-var optionF = flag.String("f", "", "run lua script")
-var optionE = flag.String("e", "", "run inline-lua-code")
-var optionB = flag.String("b", "", "run code encoded base64")
-
 var appdatapath_ string
 
 func AppDataDir() string {
@@ -178,8 +172,6 @@ func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
 
-	flag.Parse()
-
 	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
 		rc, done, err := commands.Exec(ctx, it)
 		return rc, done, err
@@ -203,10 +195,6 @@ func Main() error {
 	}
 	defer L.Close()
 
-	if !isatty.IsTerminal(os.Stdin.Fd()) || *optionC != "" || *optionF != "" || *optionE != "" || *optionB != "" {
-		silentmode = true
-	}
-
 	it := shell.New()
 	it.Tag = L
 	it.OnFork = onFork
@@ -219,12 +207,27 @@ func Main() error {
 		_, err := it.Interpret(doLuaFilter(L, line))
 		return err
 	}
+	script, err := optionParse(it, L)
+	if err != nil {
+		return err
+	}
+
+	if !isatty.IsTerminal(os.Stdin.Fd()) || script != nil {
+		silentmode = true
+	}
+
 	if err := loadScripts(shellEngine, langEngine); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 
-	if !optionParse(it, L) {
-		return nil
+	if script != nil {
+		if err := script(); err != nil {
+			if err != io.EOF {
+				return err
+			} else {
+				return nil
+			}
+		}
 	}
 
 	backupHistory := default_history
