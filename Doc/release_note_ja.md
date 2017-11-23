@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * #255 `start` コマンドでコマンドを %PATH% から探すようにした
+* #254 `nyagos -f SCRIPT -xxxx` の -xxxx が SCRIPT のオプションではなく、nyagos のオプションとして扱われていた問題を修正
 
 NYAGOS 4.2.2\_1
 ===============

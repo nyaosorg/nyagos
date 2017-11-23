@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * #255 `start` command search the executable via %PATH%
+* #254 Fix: -xxxx of `nyagos -f SCRIPT -xxxx` was treated as not SCRIPT's option but nyagos' option.
 
 NYAGOS 4.2.2\_1
 ===============
