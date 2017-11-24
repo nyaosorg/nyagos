@@ -31,6 +31,8 @@ function Ask-Copy($src,$dst){
 function Get-GoArch{
     if( Test-Path "goarch.txt" ){
         $arch = (Get-Content "goarch.txt")
+    }elseif( Test-Path "env:GOARCH" ){
+        return $env:GOARCH
     }else{
         $arch = (go version | %{ $_.Split()[-1].Split("/")[-1] } )
     }
