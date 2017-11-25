@@ -2,6 +2,7 @@ package lua
 
 import (
 	"fmt"
+	"os"
 	"reflect"
 	"syscall"
 	"unsafe"
@@ -10,12 +11,18 @@ import (
 var lua_pushnil = luaDLL.NewProc("lua_pushnil")
 
 func (this Lua) PushNil() {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushNil()\n", this)
+	}
 	lua_pushnil.Call(this.State())
 }
 
 var lua_pushboolean = luaDLL.NewProc("lua_pushboolean")
 
 func (this Lua) PushBool(value bool) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushBool(%v)\n", this, value)
+	}
 	if value {
 		lua_pushboolean.Call(this.State(), 1)
 	} else {
@@ -26,6 +33,9 @@ func (this Lua) PushBool(value bool) {
 var lua_pushinteger = luaDLL.NewProc("lua_pushinteger")
 
 func (this Lua) PushInteger(value Integer) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushInteger(%v)\n", this, value)
+	}
 	params := make([]uintptr, 0, 4)
 	params = append(params, this.State())
 	params = value.Expand(params)
@@ -35,6 +45,9 @@ func (this Lua) PushInteger(value Integer) {
 var lua_pushlstring = luaDLL.NewProc("lua_pushlstring")
 
 func (this Lua) PushBytes(data []byte) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushBytes(len=%v)\n", this, len(data))
+	}
 	if data != nil && len(data) >= 1 {
 		lua_pushlstring.Call(this.State(),
 			uintptr(unsafe.Pointer(&data[0])),
@@ -50,6 +63,9 @@ func (this Lua) PushBytes(data []byte) {
 var lua_pushstring = luaDLL.NewProc("lua_pushstring")
 
 func (this Lua) PushString(str string) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushString(%v)\n", this, str)
+	}
 	// BytePtrFromString can not use the string which contains NUL
 	array := make([]byte, len(str)+1)
 	copy(array, str)
@@ -61,22 +77,34 @@ func (this Lua) PushString(str string) {
 var lua_pushlightuserdata = luaDLL.NewProc("lua_pushlightuserdata")
 
 func (this Lua) PushLightUserData(p unsafe.Pointer) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushLightUserData(%v)", this, p)
+	}
 	lua_pushlightuserdata.Call(this.State(), uintptr(p))
 }
 
 var lua_pushvalue = luaDLL.NewProc("lua_pushvalue")
 
 func (this Lua) PushValue(index int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushValue(%v)\n", this, index)
+	}
 	lua_pushvalue.Call(this.State(), uintptr(index))
 }
 
 var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
 
 func (this Lua) PushGoClosure(fn func(Lua) int, n uintptr) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushGoClosure(%v,%v)\n", this, fn, n)
+	}
 	lua_pushcclosure.Call(this.State(), syscall.NewCallbackCDecl(fn), n)
 }
 
 func (this Lua) PushGoFunction(fn func(Lua) int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushGoFunction(%v)\n", this, fn)
+	}
 	this.PushGoClosure(fn, 0)
 }
 
@@ -87,11 +115,17 @@ func UpValueIndex(i int) int {
 type TGoFunction func(Lua) int
 
 func (this TGoFunction) Push(L Lua) int {
+	if trace {
+		fmt.Fprintf(os.Stderr, "lua.TGoFunction(%v).Push(%v)\n", this, L)
+	}
 	L.PushGoFunction(this)
 	return 1
 }
 
 func (this Lua) PushCFunction(fn uintptr) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "lua(%v).PushCFunction(%v)\n", this, fn)
+	}
 	lua_pushcclosure.Call(this.State(), fn, 0)
 }
 
@@ -100,6 +134,9 @@ type Object interface {
 }
 
 func (this Lua) Push(values ...interface{}) int {
+	if trace {
+		fmt.Fprintf(os.Stderr, "lua(%v).Push(%v...)\n", this, values)
+	}
 	for _, value := range values {
 		if value == nil {
 			this.PushNil()
@@ -147,6 +184,9 @@ func (this Lua) Push(values ...interface{}) int {
 }
 
 func (this Lua) PushReflect(value interface{}) bool {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushReflect(%v)\n", this, value)
+	}
 	if value == nil {
 		this.PushNil()
 	}

@@ -3,17 +3,23 @@ package lua
 import (
 	"errors"
 	"fmt"
+	"os"
 	"reflect"
 	"sync"
 	"syscall"
 	"unsafe"
 )
 
+const trace = false
+
 var luaDLL = syscall.NewLazyDLL("lua53.dll")
 
 type Integer int64
 
 func (value Integer) Push(L Lua) int {
+	if trace {
+		fmt.Fprintf(os.Stderr, "lua.Integer(%v).Push()\n", value)
+	}
 	L.PushInteger(value)
 	return 1
 }
@@ -34,6 +40,9 @@ func New() (Lua, error) {
 		return Lua(0), err
 	}
 	lua, _, _ := luaL_newstate.Call()
+	if trace {
+		fmt.Fprintf(os.Stderr, "lua.New()=%v\n", lua)
+	}
 	userdateAnchorMutex.Lock()
 	userdataAnchor[Lua(lua)] = make(map[uintptr]interface{})
 	userdateAnchorMutex.Unlock()
@@ -47,12 +56,18 @@ func (this Lua) State() uintptr {
 var luaL_openlibs = luaDLL.NewProc("luaL_openlibs")
 
 func (this Lua) OpenLibs() {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).OpenLibs()\n", this)
+	}
 	luaL_openlibs.Call(this.State())
 }
 
 var lua_close = luaDLL.NewProc("lua_close")
 
 func (this Lua) Close() error {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).Close()\n", this)
+	}
 	lua_close.Call(this.State())
 	userdateAnchorMutex.Lock()
 	delete(userdataAnchor, this)
@@ -61,6 +76,9 @@ func (this Lua) Close() error {
 }
 
 func (this Lua) Source(fname string) error {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).Source(%v)\n", this, fname)
+	}
 	if _, err := this.LoadFile(fname, "bt"); err != nil {
 		return err
 	}
@@ -71,6 +89,9 @@ var lua_settable = luaDLL.NewProc("lua_settable")
 
 // t[k] = v , t: given index, k: top of stack , v: value just below the top (pop 2 and push 0 element)
 func (this Lua) SetTable(index int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).SetTable(%v)\n", this, index)
+	}
 	lua_settable.Call(this.State(), uintptr(index))
 }
 
@@ -78,18 +99,27 @@ var lua_gettable = luaDLL.NewProc("lua_gettable")
 
 // get t[k], t: given by index, k: stack top (pop 1 and push 1)
 func (this Lua) GetTable(index int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).GetTable(%v)\n", this, index)
+	}
 	lua_gettable.Call(this.State(), uintptr(index))
 }
 
 var lua_setmetatable = luaDLL.NewProc("lua_setmetatable")
 
 func (this Lua) SetMetaTable(index int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).SetMetaTable(%v)\n", this, index)
+	}
 	lua_setmetatable.Call(this.State(), uintptr(index))
 }
 
 var lua_getmetatable = luaDLL.NewProc("lua_getmetatable")
 
 func (this Lua) GetMetaTable(index int) bool {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).GetMetaTable(%v)\n", this, index)
+	}
 	rc, _, _ := lua_getmetatable.Call(this.State(), uintptr(index))
 	return rc != 0
 	// true: has a metatable / false: has no metatables.
@@ -99,16 +129,25 @@ var lua_gettop = luaDLL.NewProc("lua_gettop")
 
 func (this Lua) GetTop() int {
 	rv, _, _ := lua_gettop.Call(this.State())
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).GetTop()==%v\n", this, rv)
+	}
 	return int(rv)
 }
 
 var lua_settop = luaDLL.NewProc("lua_settop")
 
 func (this Lua) SetTop(index int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).SetTop(%v)\n", this, index)
+	}
 	lua_settop.Call(this.State(), uintptr(index))
 }
 
 func (this Lua) Pop(n uint) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).Pop(%v)\n", this, n)
+	}
 	this.SetTop(-int(n) - 1)
 }
 
@@ -120,11 +159,17 @@ func (this Lua) NewUserData(size uintptr) uintptr {
 }
 
 func (this Lua) NewUserDataFrom(p unsafe.Pointer, size uintptr) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).NewUserDataFrom(%v,%v)\n", this, p, size)
+	}
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
 	copyMemory(area, uintptr(p), size)
 }
 
 func (this Lua) PushRawUserData(p interface{}) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushRawUserData(%v)\n", this, p)
+	}
 	value := reflect.ValueOf(p)
 	size := value.Type().Elem().Size()
 	area, _, _ := lua_newuserdata.Call(this.State(), size)
@@ -132,6 +177,9 @@ func (this Lua) PushRawUserData(p interface{}) {
 }
 
 func (this Lua) PushUserData(p interface{}) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushUserData(%v)\n", this, p)
+	}
 	value := reflect.ValueOf(p)
 	typ := value.Elem().Type()
 	anchordata := reflect.New(typ)
@@ -148,11 +196,18 @@ func (this Lua) PushUserData(p interface{}) {
 }
 
 func defaultGc(L Lua) int {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua.defaultGc(%v)\n", L)
+	}
 	L.DeleteUserDataAnchor(1)
 	return 0
 }
 
 func (this Lua) SetGcFunctionForUserData(userdata_index int, table_index int) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).SetGcFunctionForUserData(%v,%v)\n",
+			userdata_index, table_index)
+	}
 	var address uintptr
 	if this.RawLen(userdata_index) != unsafe.Sizeof(address) {
 		panic("index does not point to Go userdata.")
@@ -235,6 +290,9 @@ func (this Lua) Replace(index int) {
 var lua_setglobal = luaDLL.NewProc("lua_setglobal")
 
 func (this Lua) SetGlobal(str string) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).SetGlobal(%v)\n", this, str)
+	}
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -245,6 +303,9 @@ func (this Lua) SetGlobal(str string) {
 var lua_setfield = luaDLL.NewProc("lua_setfield")
 
 func (this Lua) SetField(index int, str string) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).SetField(%v,%v)\n", this, index, str)
+	}
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -265,6 +326,9 @@ func (this Lua) GetField(index int, str string) {
 var lua_getglobal = luaDLL.NewProc("lua_getglobal")
 
 func (this Lua) GetGlobal(str string) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).GetGlobal(%v)\n", this, str)
+	}
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
@@ -303,6 +367,9 @@ func (this Lua) LoadFileAnsi(fname string) error {
 var luaL_loadstring = luaDLL.NewProc("luaL_loadstring")
 
 func (this Lua) LoadString(code string) error {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).LoadString(%v)\n", this, code)
+	}
 	codePtr, err := syscall.BytePtrFromString(code)
 	if err != nil {
 		return err
