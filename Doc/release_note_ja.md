@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.2\_2
+===============
+(2017.11.26)
+
 * #255 `start` コマンドでコマンドを %PATH% から探すようにした
 * #254 `nyagos -f SCRIPT -xxxx` の -xxxx が SCRIPT のオプションではなく、nyagos のオプションとして扱われていた問題を修正
 * コマンドラインフィルターが設定されていない時に Lua のスタックがオーバーフローしてクラッシュする不具合を修正
