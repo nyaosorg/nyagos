@@ -54,20 +54,62 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if not {
 		status = !status
 	}
-	if status {
-		subCmd, err := cmd.Clone()
-		if err != nil {
-			return 0, err
+
+	if len(args) > 0 {
+		if status {
+			subCmd, err := cmd.Clone()
+			if err != nil {
+				return 0, err
+			}
+			subCmd.Args = cmd.Args[start:]
+			subCmd.RawArgs = cmd.RawArgs[start:]
+			return subCmd.SpawnvpContext(ctx)
 		}
-		subCmd.Args = cmd.Args[start:]
-		subCmd.RawArgs = cmd.RawArgs[start:]
-		return subCmd.SpawnvpContext(ctx)
 	} else {
-		gotoeol, ok := ctx.Value(shell.GotoEol).(func())
+		stream, ok := ctx.Value("stream").(shell.Stream)
 		if !ok {
-			return -1, errors.New("if: could not get context.Value(\"gotoeol\")")
+			return 1, errors.New("not found stream")
 		}
-		gotoeol()
-		return 0, nil
+		thenBuffer := BufStream{}
+		elseBuffer := BufStream{}
+		elsePart := false
+
+		save_prompt := os.Getenv("PROMPT")
+		os.Setenv("PROMPT", "if>")
+		nest := 1
+		for {
+			_, line, err := stream.ReadLine(ctx)
+			if err != nil {
+				break
+			}
+			args := shell.SplitQ(line)
+			if strings.EqualFold(args[0], "if") {
+				nest++
+			} else if strings.EqualFold(args[0], "fi") {
+				nest--
+				if nest == 0 {
+					break
+				}
+			} else if strings.EqualFold(args[0], "else") {
+				if nest == 1 {
+					elsePart = true
+					os.Setenv("PROMPT", "else>")
+					continue
+				}
+			}
+			if elsePart {
+				elseBuffer.Add(line)
+			} else {
+				thenBuffer.Add(line)
+			}
+		}
+		os.Setenv("PROMPT", save_prompt)
+
+		if status {
+			cmd.Loop(&thenBuffer)
+		} else {
+			cmd.Loop(&elseBuffer)
+		}
 	}
+	return 0, nil
 }
