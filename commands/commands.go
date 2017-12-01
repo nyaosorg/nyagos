@@ -68,6 +68,7 @@ func Init() {
 		"env":      cmd_env,
 		"erase":    cmd_del,
 		"exit":     cmd_exit,
+		"foreach":  cmd_foreach,
 		"history":  history.CmdHistory,
 		"if":       cmd_if,
 		"ln":       cmd_ln,

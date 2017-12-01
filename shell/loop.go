@@ -22,6 +22,7 @@ func (it *Cmd) Loop(stream Stream) error {
 
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
+		ctx = context.WithValue(ctx, "stream", stream)
 		ctx, line, err := stream.ReadLine(ctx)
 
 		if err != nil {
