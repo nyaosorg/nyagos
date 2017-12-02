@@ -83,14 +83,15 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 				break
 			}
 			args := shell.SplitQ(line)
-			if strings.EqualFold(args[0], "if") {
+			name := strings.ToLower(args[0])
+			if _, ok := start_list[name]; ok {
 				nest++
-			} else if strings.EqualFold(args[0], "fi") {
+			} else if name == "end" {
 				nest--
 				if nest == 0 {
 					break
 				}
-			} else if strings.EqualFold(args[0], "else") {
+			} else if name == "else" {
 				if nest == 1 {
 					elsePart = true
 					os.Setenv("PROMPT", "else>")

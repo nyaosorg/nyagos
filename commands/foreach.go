@@ -9,6 +9,11 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
+var start_list = map[string]bool{
+	"foreach": true,
+	"if":      true,
+}
+
 func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	stream, ok := ctx.Value("stream").(shell.Stream)
 
@@ -26,9 +31,12 @@ func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			break
 		}
 		args := shell.SplitQ(line)
-		if strings.EqualFold(args[0], "foreach") {
+
+		name := strings.ToLower(args[0])
+
+		if _, ok := start_list[name]; ok {
 			nest++
-		} else if strings.EqualFold(args[0], "end") {
+		} else if name == "end" {
 			nest--
 			if nest == 0 {
 				break
