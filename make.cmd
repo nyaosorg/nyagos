@@ -256,7 +256,9 @@ function Build($version,$tags) {
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose -Message "$ go build -o '$target'"
     go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
-    Do-Copy $target ".\nyagos.exe"
+    if( $LastExitCode -eq 0 ){
+        Do-Copy $target ".\nyagos.exe"
+    }
     $env:GOARCH = $saveGOARCH
 }
 
