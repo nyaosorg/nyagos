@@ -78,7 +78,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		os.Setenv("PROMPT", "if>")
 		nest := 1
 		for {
-			_, line, err := stream.ReadLine(ctx)
+			_, line, err := cmd.ReadCommand(ctx, stream)
 			if err != nil {
 				break
 			}

@@ -44,7 +44,12 @@ func isElevationRequired(err error) bool {
 	return ok && e.Err == syscall.Errno(0x2e4)
 }
 
+type Session struct {
+	Unreadline []string
+}
+
 type Cmd struct {
+	*Session
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
@@ -81,6 +86,7 @@ func New() *Cmd {
 	}
 	this.PipeSeq[0] = pipeSeq
 	this.PipeSeq[1] = 0
+	this.Session = &Session{}
 	return &this
 }
 
@@ -97,6 +103,11 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv.Closers = nil
 	rv.OnFork = this.OnFork
 	rv.OffFork = this.OffFork
+	if this.Session != nil {
+		rv.Session = this.Session
+	} else {
+		rv.Session = &Session{}
+	}
 	return rv, nil
 }
 

@@ -14,6 +14,33 @@ type Stream interface {
 	SetPos(int) error
 }
 
+func (it *Cmd) ReadCommand(ctx context.Context, stream Stream) (context.Context, string, error) {
+	var line string
+	var err error
+
+	if it.Unreadline != nil && len(it.Unreadline) > 0 {
+		line = it.Unreadline[0]
+		if len(it.Unreadline) >= 2 {
+			it.Unreadline = it.Unreadline[1:]
+		} else {
+			it.Unreadline = nil
+		}
+	} else {
+		ctx, line, err = stream.ReadLine(ctx)
+		if err != nil {
+			return ctx, line, err
+		}
+		texts := SplitToStatement(line)
+		line = texts[0]
+		if len(texts) >= 2 {
+			it.Unreadline = texts[1:]
+		} else {
+			it.Unreadline = nil
+		}
+	}
+	return ctx, line, nil
+}
+
 func (it *Cmd) Loop(stream Stream) error {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
@@ -23,8 +50,8 @@ func (it *Cmd) Loop(stream Stream) error {
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
 		ctx = context.WithValue(ctx, "stream", stream)
-		ctx, line, err := stream.ReadLine(ctx)
 
+		ctx, line, err := it.ReadCommand(ctx, stream)
 		if err != nil {
 			cancel()
 			return err
