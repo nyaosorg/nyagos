@@ -52,9 +52,40 @@ UTF8 と ANSI テキストの双方をサポートします。(自動判別)
 
 NYAGOS を終了します。
 
+### foreach
+
+`foreach` *VAR* *VAL1* *VAL2* ...
+    STATEMENTS
+`end`
+
 ### `history [件数]`
 
 ヒストリ内容を表示します。件数を省略すると、最近の10件が表示されます。
+
+### if
+
+#### inline-if
+
+`if` *COND* *THEN-STATEMENT*
+
+#### block-if
+
+`if` *COND*
+   *THEN-BLOCK*
+`else`
+   *ELSE-BLOCK*
+`end`
+
+*COND* is:
+
+* `not` *COND*
+* `/i` *COND*
+* *LEFT* `==` *RIGHT*
+* `EXIST` *filename*
+* `ERRORLEVEL` *n*
+
+* if *COND* is true, execute *THEN-BLOCK* or *THEN-STATEMENT*
+* if *COND* is false, execute *ELSE-BLOCK* or nothing.
 
 ### `ln [-s] SRC DST`
 

@@ -45,9 +45,41 @@ While COMMAND is executed, change environment variables.
 
 Quit NYAGOS.exe.
 
+### foreach
+
+`foreach` *VAR* *VAL1* *VAL2* ...
+    STATEMENTS
+`end`
+
 ### `history [N]`
 
 Display the history. No arguments, the last ten are displayed.
+
+### if
+
+#### inline-if
+
+`if` *COND* *THEN-STATEMENT*
+
+#### block-if
+
+`if` *COND*
+   *THEN-BLOCK*
+`else`
+   *ELSE-BLOCK*
+`end`
+
+*COND* is:
+
+* `not` *COND*
+* `/i` *COND*
+* *LEFT* `==` *RIGHT*
+* `EXIST` *filename*
+* `ERRORLEVEL` *n*
+
+* if *COND* is true, execute *THEN-BLOCK* or *THEN-STATEMENT*
+* if *COND* is false, execute *ELSE-BLOCK* or nothing.
+
 
 ### `ln [-s] SRC DST`
 
