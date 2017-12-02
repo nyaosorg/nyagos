@@ -4,11 +4,14 @@ import (
 	"context"
 	"errors"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/zetamatta/nyagos/shell"
 )
+
+var rxElse = regexp.MustCompile(`(?i)^\s*else`)
 
 func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	// if "xxx" == "yyy"
@@ -95,7 +98,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 				if nest == 1 {
 					elsePart = true
 					os.Setenv("PROMPT", "else>")
-					continue
+					line = rxElse.ReplaceAllString(line, "")
 				}
 			}
 			if elsePart {
