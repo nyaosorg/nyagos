@@ -90,7 +90,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			name := strings.ToLower(args[0])
 			if _, ok := start_list[name]; ok {
 				nest++
-			} else if name == "end" {
+			} else if name == "end" || name == "endif" {
 				nest--
 				if nest == 0 {
 					break
