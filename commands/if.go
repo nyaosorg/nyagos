@@ -16,6 +16,7 @@ var rxElse = regexp.MustCompile(`(?i)^\s*else`)
 func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	// if "xxx" == "yyy"
 	args := cmd.Args
+	rawargs := cmd.RawArgs
 	not := false
 	start := 1
 
@@ -24,12 +25,14 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	for len(args) >= 2 && strings.HasPrefix(args[1], "/") {
 		option[strings.ToLower(args[1])] = struct{}{}
 		args = args[1:]
+		rawargs = rawargs[1:]
 		start++
 	}
 
 	if len(args) >= 2 && strings.EqualFold(args[1], "not") {
 		not = true
 		args = args[1:]
+		rawargs = rawargs[1:]
 		start++
 	}
 	status := false
@@ -40,11 +43,13 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			status = (args[1] == args[3])
 		}
 		args = args[4:]
+		rawargs = rawargs[4:]
 		start += 3
 	} else if len(args) >= 3 && strings.EqualFold(args[1], "exist") {
 		_, err := os.Stat(args[2])
 		status = (err == nil)
 		args = args[3:]
+		rawargs = rawargs[3:]
 		start += 2
 	} else if len(args) >= 3 && strings.EqualFold(args[1], "errorlevel") {
 		num, num_err := strconv.Atoi(args[2])
@@ -52,6 +57,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			status = (shell.LastErrorLevel >= num)
 		}
 		args = args[2:]
+		rawargs = rawargs[2:]
 		start += 2
 	}
 
@@ -59,62 +65,77 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		status = !status
 	}
 
-	if len(args) > 0 {
-		if status {
-			subCmd, err := cmd.Clone()
-			if err != nil {
-				return 0, err
-			}
-			subCmd.Args = cmd.Args[start:]
-			subCmd.RawArgs = cmd.RawArgs[start:]
-			return subCmd.SpawnvpContext(ctx)
-		}
-	} else {
-		stream, ok := ctx.Value("stream").(shell.Stream)
-		if !ok {
-			return 1, errors.New("not found stream")
-		}
-		thenBuffer := BufStream{}
-		elseBuffer := BufStream{}
-		elsePart := false
+	thenBuffer := BufStream{}
 
-		save_prompt := os.Getenv("PROMPT")
-		os.Setenv("PROMPT", "if>")
-		nest := 1
-		for {
-			_, line, err := cmd.ReadCommand(ctx, stream)
-			if err != nil {
+	if len(args) > 0 {
+		if args[0] == "then" {
+			// inline and block `then`
+			if len(args) > 1 {
+				thenBuffer.Add(strings.Join(rawargs[1:], " "))
+			}
+			// continue
+		} else {
+			// inline `then`
+			if status {
+				subCmd, err := cmd.Clone()
+				if err != nil {
+					return 0, err
+				}
+				subCmd.Args = cmd.Args[start:]
+				subCmd.RawArgs = cmd.RawArgs[start:]
+				return subCmd.SpawnvpContext(ctx)
+			} else {
+				return 0, nil
+			}
+		}
+	}
+
+	// block `then` / `else`
+
+	stream, ok := ctx.Value("stream").(shell.Stream)
+	if !ok {
+		return 1, errors.New("not found stream")
+	}
+
+	elseBuffer := BufStream{}
+	elsePart := false
+
+	save_prompt := os.Getenv("PROMPT")
+	os.Setenv("PROMPT", "if>")
+	nest := 1
+	for {
+		_, line, err := cmd.ReadCommand(ctx, stream)
+		if err != nil {
+			break
+		}
+		args := shell.SplitQ(line)
+		name := strings.ToLower(args[0])
+		if _, ok := start_list[name]; ok {
+			nest++
+		} else if name == "end" || name == "endif" {
+			nest--
+			if nest == 0 {
 				break
 			}
-			args := shell.SplitQ(line)
-			name := strings.ToLower(args[0])
-			if _, ok := start_list[name]; ok {
-				nest++
-			} else if name == "end" || name == "endif" {
-				nest--
-				if nest == 0 {
-					break
-				}
-			} else if name == "else" {
-				if nest == 1 {
-					elsePart = true
-					os.Setenv("PROMPT", "else>")
-					line = rxElse.ReplaceAllString(line, "")
-				}
-			}
-			if elsePart {
-				elseBuffer.Add(line)
-			} else {
-				thenBuffer.Add(line)
+		} else if name == "else" {
+			if nest == 1 {
+				elsePart = true
+				os.Setenv("PROMPT", "else>")
+				line = rxElse.ReplaceAllString(line, "")
 			}
 		}
-		os.Setenv("PROMPT", save_prompt)
-
-		if status {
-			cmd.Loop(&thenBuffer)
+		if elsePart {
+			elseBuffer.Add(line)
 		} else {
-			cmd.Loop(&elseBuffer)
+			thenBuffer.Add(line)
 		}
+	}
+	os.Setenv("PROMPT", save_prompt)
+
+	if status {
+		cmd.Loop(&thenBuffer)
+	} else {
+		cmd.Loop(&elseBuffer)
 	}
 	return 0, nil
 }
