@@ -203,10 +203,21 @@ func Main() error {
 	langEngine := func(fname string) ([]byte, error) {
 		return runLua(it, L, fname)
 	}
-	shellEngine := func(line string) error {
-		_, err := it.Interpret(doLuaFilter(L, line))
-		return err
+	shellEngine := func(fname string) error {
+		fd, err := os.Open(fname)
+		if err != nil {
+			return err
+		}
+		stream1 := NewCmdStreamFile(fd)
+		_, err = it.Loop(stream1)
+		fd.Close()
+		if err == io.EOF {
+			return nil
+		} else {
+			return err
+		}
 	}
+
 	script, err := optionParse(it, L)
 	if err != nil {
 		return err

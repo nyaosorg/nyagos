@@ -1,7 +1,6 @@
 package mains
 
 import (
-	"bufio"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -117,16 +116,13 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 
 func barNyagos(shellEngine func(string) error, folder string) {
 	bar_nyagos := filepath.Join(folder, "_nyagos")
-	fd, fd_err := os.Open(bar_nyagos)
-	if fd_err != nil {
+	fd, err := os.Open(bar_nyagos)
+	if err != nil {
 		return
 	}
-	defer fd.Close()
-	scanner := bufio.NewScanner(fd)
-	for scanner.Scan() {
-		err := shellEngine(scanner.Text())
-		if err != nil {
-			fmt.Fprint(os.Stderr, err.Error())
-		}
+	err = shellEngine(bar_nyagos)
+	if err != nil {
+		fmt.Fprint(os.Stderr, err.Error())
 	}
+	fd.Close()
 }
