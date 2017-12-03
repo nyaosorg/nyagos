@@ -41,11 +41,13 @@ func (it *Cmd) ReadCommand(ctx context.Context, stream Stream) (context.Context,
 	return ctx, line, nil
 }
 
-func (it *Cmd) Loop(stream Stream) error {
+func (it *Cmd) Loop(stream Stream) (int, error) {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
 	quit := make(chan struct{}, 1)
 	defer close(quit)
+
+	var rc int
 
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
@@ -54,7 +56,11 @@ func (it *Cmd) Loop(stream Stream) error {
 		ctx, line, err := it.ReadCommand(ctx, stream)
 		if err != nil {
 			cancel()
-			return err
+			if err == io.EOF {
+				return 0, err
+			} else {
+				return 1, err
+			}
 		}
 		signal.Notify(sigint, os.Interrupt)
 
@@ -71,7 +77,7 @@ func (it *Cmd) Loop(stream Stream) error {
 				}
 			}
 		}(sigint, quit, cancel)
-		_, err = it.InterpretContext(ctx, line)
+		rc, err = it.InterpretContext(ctx, line)
 		signal.Stop(sigint)
 		quit <- struct{}{}
 
@@ -88,5 +94,5 @@ func (it *Cmd) Loop(stream Stream) error {
 			}
 		}
 	}
-	return nil
+	return rc, nil
 }

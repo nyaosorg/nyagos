@@ -1,4 +1,4 @@
-package commands
+package shell
 
 import (
 	"context"
@@ -29,4 +29,16 @@ func (this *BufStream) SetPos(n int) error {
 
 func (this *BufStream) Add(line string) {
 	this.line = append(this.line, line)
+}
+
+func (this *Cmd) Eval(c context.Context, line string) (errorlevel int, err error) {
+	bufStream := BufStream{}
+	bufStream.Add(line)
+
+	rc, err := this.Loop(&bufStream)
+	if err == nil || err == io.EOF {
+		return rc, nil
+	} else {
+		return rc, err
+	}
 }

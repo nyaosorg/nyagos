@@ -245,5 +245,7 @@ func Main() error {
 		stream1 = NewCmdStreamFile(os.Stdin)
 	}
 
-	return it.Loop(&MainStream{stream1, L})
+	_, err = it.Loop(&MainStream{stream1, L})
+
+	return err
 }

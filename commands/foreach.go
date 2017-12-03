@@ -21,7 +21,7 @@ func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return 1, errors.New("Not found stream")
 	}
 
-	bufstream := BufStream{}
+	bufstream := shell.BufStream{}
 	save_prompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "foreach>")
 	nest := 1

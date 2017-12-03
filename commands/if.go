@@ -65,7 +65,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		status = !status
 	}
 
-	thenBuffer := BufStream{}
+	thenBuffer := shell.BufStream{}
 
 	if len(args) > 0 {
 		if args[0] == "then" {
@@ -97,7 +97,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return 1, errors.New("not found stream")
 	}
 
-	elseBuffer := BufStream{}
+	elseBuffer := shell.BufStream{}
 	elsePart := false
 
 	save_prompt := os.Getenv("PROMPT")
