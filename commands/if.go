@@ -109,6 +109,9 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			break
 		}
 		args := shell.SplitQ(line)
+		if len(args) <= 0 {
+			continue
+		}
 		name := strings.ToLower(args[0])
 		if _, ok := start_list[name]; ok {
 			nest++

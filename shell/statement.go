@@ -11,11 +11,9 @@ func SplitToStatement(line string) []string {
 	lastc := ' '
 
 	done := func() {
-		if buffer.Len() > 0 {
-			result = append(result, buffer.String())
-			// println("[" + buffer.String() + "]")
-			buffer.Reset()
-		}
+		result = append(result, buffer.String())
+		// println("[" + buffer.String() + "]")
+		buffer.Reset()
 	}
 
 	for _, c := range line {
