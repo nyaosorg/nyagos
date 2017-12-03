@@ -63,11 +63,14 @@ Display the history. No arguments, the last ten are displayed.
 
 #### block-if
 
-`if` *COND*
+`if` *COND* [`then`]
    *THEN-BLOCK*
 `else`
    *ELSE-BLOCK*
 `end`
+
+* `endif` can be used as the alias of `end` for compatibility to nyaos-3000
+* `then` can be ommited.
 
 *COND* is:
 

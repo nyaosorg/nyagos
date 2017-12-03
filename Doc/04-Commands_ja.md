@@ -70,11 +70,14 @@ NYAGOS を終了します。
 
 #### block-if
 
-`if` *COND*
+`if` *COND* [`then`]
    *THEN-BLOCK*
 `else`
    *ELSE-BLOCK*
 `end`
+
+* `endif` は `end` の別名として使用可能です(nyaos-3000 との互換性のため)
+* `then` は省略可能です
 
 *COND* is:
 
