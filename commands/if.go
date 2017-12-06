@@ -3,6 +3,7 @@ package commands
 import (
 	"context"
 	"errors"
+	"io"
 	"os"
 	"regexp"
 	"strconv"
@@ -102,10 +103,14 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 
 	save_prompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "if>")
+	defer os.Setenv("PROMPT", save_prompt)
 	nest := 1
 	for {
 		_, line, err := cmd.ReadCommand(ctx, stream)
 		if err != nil {
+			if err != io.EOF {
+				return -1, err
+			}
 			break
 		}
 		args := shell.SplitQ(line)
@@ -133,7 +138,6 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			thenBuffer.Add(line)
 		}
 	}
-	os.Setenv("PROMPT", save_prompt)
 
 	if status {
 		cmd.Loop(&thenBuffer)

@@ -3,6 +3,7 @@ package commands
 import (
 	"context"
 	"errors"
+	"io"
 	"os"
 	"strings"
 
@@ -24,10 +25,14 @@ func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	bufstream := shell.BufStream{}
 	save_prompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "foreach>")
+	defer os.Setenv("PROMPT", save_prompt)
 	nest := 1
 	for {
 		_, line, err := cmd.ReadCommand(ctx, stream)
 		if err != nil {
+			if err != io.EOF {
+				return -1, err
+			}
 			break
 		}
 		args := shell.SplitQ(line)
@@ -47,7 +52,6 @@ func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if len(cmd.Args) < 2 {
 		return 0, nil
 	}
-	os.Setenv("PROMPT", save_prompt)
 
 	name := cmd.Args[1]
 	save := os.Getenv(name)
