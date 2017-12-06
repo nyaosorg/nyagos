@@ -18,7 +18,7 @@ func KeyFuncIntr(this *Buffer) Result { // Ctrl-C
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
-	return ENTER
+	return INTR
 }
 
 func KeyFuncHead(this *Buffer) Result { // Ctrl-A

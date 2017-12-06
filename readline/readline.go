@@ -2,6 +2,7 @@ package readline
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -16,6 +17,7 @@ const (
 	CONTINUE Result = iota
 	ENTER    Result = iota
 	ABORT    Result = iota
+	INTR     Result = iota
 )
 
 func (this Result) String() string {
@@ -26,6 +28,8 @@ func (this Result) String() string {
 		return "ENTER"
 	case ABORT:
 		return "ABORT"
+	case INTR:
+		return "INTR"
 	default:
 		return "ERROR"
 	}
@@ -157,9 +161,11 @@ const (
 	CURSOR_ON  = "\x1B[?25h\x1B[s\x1B[u"
 )
 
+var CtrlC = errors.New("^C")
+
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
-// - CTRL-C typed -> returns "" and nil
+// - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Prompt == nil {
@@ -249,6 +255,8 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			result := this.String()
 			if rc == ENTER {
 				return result, nil
+			} else if rc == INTR {
+				return result, CtrlC
 			} else {
 				return result, io.EOF
 			}
