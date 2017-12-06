@@ -514,7 +514,12 @@ switch( $args[0] ){
             Do-Copy nyagos.exe $installDir
         }catch{
             taskkill /F /im nyagos.exe
-            Do-Copy nyagos.exe $installDir
+            try{
+                Do-Copy nyagos.exe $installDir
+            }catch{
+                Write-Host "Could not update installed nyagos.exe"
+                Write-Host "Some processes holds nyagos.exe now"
+            }
             # [void]([System.Windows.Forms.MessageBox]::Show("Done"))
             timeout /T 3
         }
