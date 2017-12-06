@@ -256,7 +256,13 @@ func Main() error {
 		stream1 = NewCmdStreamFile(os.Stdin)
 	}
 
-	_, err = it.Loop(&MainStream{stream1, L})
-
-	return err
+	for {
+		_, err = it.Loop(&MainStream{stream1, L})
+		if err == io.EOF {
+			return err
+		}
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
 }
