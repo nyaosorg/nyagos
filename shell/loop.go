@@ -14,29 +14,39 @@ type Stream interface {
 	SetPos(int) error
 }
 
+func (this *session) push(lines []string) {
+	if lines != nil && len(lines) >= 1 {
+		this.unreadline = append(this.unreadline, lines...)
+	}
+}
+
+func (this *session) pop() (string, bool) {
+	if this.unreadline == nil || len(this.unreadline) <= 0 {
+		return "", false
+	}
+	line := this.unreadline[0]
+	if len(this.unreadline) >= 2 {
+		this.unreadline = this.unreadline[1:]
+	} else {
+		this.unreadline = nil
+	}
+	return line, true
+}
+
 func (it *Cmd) ReadCommand(ctx context.Context, stream Stream) (context.Context, string, error) {
 	var line string
 	var err error
 
-	if it.Unreadline != nil && len(it.Unreadline) > 0 {
-		line = it.Unreadline[0]
-		if len(it.Unreadline) >= 2 {
-			it.Unreadline = it.Unreadline[1:]
-		} else {
-			it.Unreadline = nil
-		}
-	} else {
+	line, ok := it.pop()
+	if !ok {
 		ctx, line, err = stream.ReadLine(ctx)
 		if err != nil {
 			return ctx, line, err
 		}
+
 		texts := SplitToStatement(line)
 		line = texts[0]
-		if len(texts) >= 2 {
-			it.Unreadline = texts[1:]
-		} else {
-			it.Unreadline = nil
-		}
+		it.push(texts[1:])
 	}
 	return ctx, line, nil
 }
