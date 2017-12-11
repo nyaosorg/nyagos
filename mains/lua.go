@@ -52,6 +52,7 @@ func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
 	}
 	L.Push(luaArgsFilter)
 	if !L.IsFunction(-1) {
+		L.Pop(1)
 		return orgArgHook(it, args)
 	}
 	L.NewTable()

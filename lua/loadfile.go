@@ -26,6 +26,9 @@ func callback_reader(this uintptr, fd *os.File, size *uintptr) *byte {
 }
 
 func (this Lua) LoadFile(path string, mode string) (int, error) {
+	if trace {
+		fmt.Fprintf(os.Stderr, "Lua(%v).LoadFile(%v,%v)\n", this, path, mode)
+	}
 	fd, err := os.OpenFile(path, os.O_RDONLY, 0666)
 	if err != nil {
 		return 0, err

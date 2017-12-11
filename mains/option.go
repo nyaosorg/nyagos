@@ -3,8 +3,9 @@ package mains
 import (
 	"bufio"
 	"encoding/base64"
-	"flag"
+	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -12,73 +13,97 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-func setLuaArg(L lua.Lua, arg0 string) {
+func setLuaArg(L lua.Lua, args []string) {
 	L.NewTable()
-	L.PushString(arg0)
-	L.RawSetI(-2, 0)
-	for i, arg1 := range flag.Args() {
+	for i, arg1 := range args {
 		L.PushString(arg1)
-		L.RawSetI(-2, lua.Integer(i+1))
+		L.RawSetI(-2, lua.Integer(i))
 	}
 	L.SetGlobal("arg")
 }
 
-func optionParse(it *shell.Cmd, L lua.Lua) bool {
-	result := true
-
-	if *optionK != "" {
-		it.Interpret(*optionK)
-	}
-	if *optionC != "" {
-		it.Interpret(*optionC)
-		result = false
-	}
-	if *optionB != "" {
-		data, err := base64.StdEncoding.DecodeString(*optionB)
-		if err != nil {
-			fmt.Fprintln(it.Stderr, err)
-			return false
-		} else {
+func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
+	args := os.Args[1:]
+	for i := 0; i < len(args); i++ {
+		arg1 := args[i]
+		if arg1 == "-k" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("-k: requires parameters")
+			}
+			return func() error {
+				it.Interpret(args[i])
+				return nil
+			}, nil
+		} else if arg1 == "-c" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("-c: requires parameters")
+			}
+			return func() error {
+				it.Interpret(args[i])
+				return io.EOF
+			}, nil
+		} else if arg1 == "-b" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("-b: requires parameters")
+			}
+			data, err := base64.StdEncoding.DecodeString(args[i])
+			if err != nil {
+				return nil, err
+			}
 			text := string(data)
-			it.Interpret(text)
-		}
-		result = false
-	}
-	if *optionF != "" {
-		if strings.HasSuffix(strings.ToLower(*optionF), ".lua") {
-			// lua script
-			setLuaArg(L, *optionF)
-			_, err := runLua(it, L, *optionF)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
+			return func() error {
+				it.Interpret(text)
+				return io.EOF
+			}, nil
+		} else if arg1 == "-f" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("-f: requires parameters")
 			}
-		} else {
-			// command script
-			fd, fd_err := os.Open(*optionF)
-			if fd_err != nil {
-				fmt.Fprintf(os.Stderr, "%s: %s\n", *optionF, fd_err.Error())
+			if strings.HasSuffix(strings.ToLower(args[i]), ".lua") {
+				// lua script
+				return func() error {
+					setLuaArg(L, args[i:])
+					_, err := runLua(it, L, args[i])
+					if err != nil {
+						return err
+					} else {
+						return io.EOF
+					}
+				}, nil
 			} else {
-				scanner := bufio.NewScanner(fd)
-				for scanner.Scan() {
-					it.Interpret(scanner.Text())
+				return func() error {
+					// command script
+					fd, fd_err := os.Open(args[i])
+					if fd_err != nil {
+						return fmt.Errorf("%s: %s\n", args[i], fd_err.Error())
+					}
+					scanner := bufio.NewScanner(fd)
+					for scanner.Scan() {
+						it.Interpret(scanner.Text())
+					}
+					fd.Close()
+					return io.EOF
+				}, nil
+			}
+		} else if arg1 == "-e" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("-e: requires parameters")
+			}
+			return func() error {
+				err := L.LoadString(args[i])
+				if err != nil {
+					return err
 				}
-				fd.Close()
-			}
+				setLuaArg(L, args[i:])
+				L.Call(0, 0)
+				return io.EOF
+			}, nil
 		}
-		result = false
 	}
-	if *optionE != "" {
-		err := L.LoadString(*optionE)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
-		} else {
-			setLuaArg(L, *optionE)
-			L.Call(0, 0)
-			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
-			}
-		}
-		result = false
-	}
-	return result
+	return nil, nil
 }

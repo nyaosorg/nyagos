@@ -1,5 +1,13 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.2\_2
+===============
+on Nov.26,2017
+
+* #255 `start` command search the executable via %PATH%
+* #254 Fix: -xxxx of `nyagos -f SCRIPT -xxxx` was treated as not SCRIPT's option but nyagos' option.
+* Fix: Lua-stack overflow when arguments filter is not set
+
 NYAGOS 4.2.2\_1
 ===============
 on Oct.11,2017

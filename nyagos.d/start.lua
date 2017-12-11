@@ -29,7 +29,7 @@ nyagos.alias.start = function(args)
         print('start ["title"] [/D directory] PROGNAME ARGS...')
         return
     end
-    local progname = args[1]
+    local progname = ((nyagos.which(args[1])) or args[1])
     local param = ""
     if #args >= 2 then
         param = table.concat(args.rawargs," ",2)
