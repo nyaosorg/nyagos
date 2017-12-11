@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* 起動スクリプトのロードを抑制する --norc オプションを追加
+
 NYAGOS 4.2.2\_2
 ===============
 (2017.11.26)
