@@ -22,6 +22,8 @@ func setLuaArg(L lua.Lua, args []string) {
 	L.SetGlobal("arg")
 }
 
+var optionNorc = false
+
 func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 	args := os.Args[1:]
 	for i := 0; i < len(args); i++ {
@@ -103,6 +105,8 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 				L.Call(0, 0)
 				return io.EOF
 			}, nil
+		} else if arg1 == "--norc" {
+			optionNorc = true
 		}
 	}
 	return nil, nil

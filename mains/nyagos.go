@@ -209,8 +209,10 @@ func Main() error {
 		silentmode = true
 	}
 
-	if err := loadScripts(it, L); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+	if !optionNorc {
+		if err := loadScripts(it, L); err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+		}
 	}
 
 	if script != nil {
