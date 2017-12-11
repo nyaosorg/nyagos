@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* option --norc : not to load startup-scripts.
+
 NYAGOS 4.2.2\_2
 ===============
 on Nov.26,2017

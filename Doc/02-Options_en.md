@@ -29,3 +29,7 @@ Otherwise, read and execute commands on it.
 ### `-e "SCRIPTCODE"`
 
 Execute SCRIPTCODE with Lua interpretor and quit.
+
+### `--norc`
+
+Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*`.
