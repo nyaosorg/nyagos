@@ -31,16 +31,13 @@ type List struct {
 var UseSlash = false
 
 var rxQuoted = regexp.MustCompile(`"[^"]*"`)
+var rxNonSpace = regexp.MustCompile(`[^ ]+`)
 
-func SplitLikeShell(line string) []string {
+func SplitLikeShell(line string) [][]int {
 	line = rxQuoted.ReplaceAllStringFunc(line, func(str string) string {
 		return strings.Replace(str, " ", "\001", -1)
 	})
-	fields := strings.Split(line, " ")
-	for i := 0; i < len(fields); i++ {
-		fields[i] = strings.Replace(fields[i], "\001", " ", -1)
-	}
-	return fields
+	return rxNonSpace.FindAllStringIndex(line, -1)
 }
 
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
@@ -49,7 +46,10 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 
 	// environment completion.
 	rv.AllLine = this.String()
-	rv.Field = SplitLikeShell(rv.AllLine)
+	indexes := SplitLikeShell(rv.AllLine)
+	for _, p := range indexes {
+		rv.Field = append(rv.Field, rv.AllLine[p[0]:p[1]])
+	}
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
 	default_delimiter := rune(readline.Delimiters[0])
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {

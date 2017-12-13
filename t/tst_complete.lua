@@ -8,6 +8,5 @@ nyagos.completion_hook = function(c)
         c.list[ #c.list+1 ] = "update"
         c.list[ #c.list+1 ] = "ls"
     end
-    c.list[ #c.list+1 ] = c.rawword.."(".. c.pos .. ")"
     return c.list
 end
