@@ -208,6 +208,7 @@ The argument `c` is the table which has these members.
     c.rawword - original word which may has double-quotations.
     c.pos - position word exists.
     c.text - all command-line text.
+    c.field - array of the text splited c.text with space.
 
 `nyagos.completion_hook` should return updated list(table) or `nil`.
 Returning nil equals to returning c.list with no change.

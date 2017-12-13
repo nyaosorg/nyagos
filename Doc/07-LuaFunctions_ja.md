@@ -228,6 +228,7 @@ C言語の access 関数と同じです。
     c.rawword - 補完元の単語(二重引用符を含む場合がある)
     c.pos - 補完元の単語の始まる位置(0起点)
     c.text - コマンドラインの全文字列
+    c.field - c.text の空白で分割した文字列の配列
 
 `nyagos.completion_hook` は更新した候補リストのテーブルか nil を
 戻り値としてください。nil は、更新しない c.list と等価です。

@@ -1,2 +1,3 @@
 - #132 foreach 文とブロック if 文をサポート
 - オプション --lua-file
+- `complete_hook(c)` の パラメータ c に項目 field を追加: c.text を空白で分割したもの
