@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"unicode"
 
 	"github.com/zetamatta/go-box"
 
 	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 type Element struct {
@@ -30,23 +30,13 @@ type List struct {
 
 var UseSlash = false
 
-var rxQuoted = regexp.MustCompile(`"[^"]*"`)
-var rxNonSpace = regexp.MustCompile(`[^ ]+`)
-
-func SplitLikeShell(line string) [][]int {
-	line = rxQuoted.ReplaceAllStringFunc(line, func(str string) string {
-		return strings.Replace(str, " ", "\001", -1)
-	})
-	return rxNonSpace.FindAllStringIndex(line, -1)
-}
-
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
 	rv := new(List)
 
 	// environment completion.
 	rv.AllLine = this.String()
-	indexes := SplitLikeShell(rv.AllLine)
+	indexes := texts.SplitLikeShell(rv.AllLine)
 	for _, p := range indexes {
 		rv.Field = append(rv.Field, rv.AllLine[p[0]:p[1]])
 	}
