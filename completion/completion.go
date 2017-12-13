@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"unicode"
 
@@ -24,9 +25,23 @@ type List struct {
 	RawWord string // have quotation
 	Word    string
 	Pos     int
+	Field   []string
 }
 
 var UseSlash = false
+
+var rxQuoted = regexp.MustCompile(`"[^"]*"`)
+
+func SplitLikeShell(line string) []string {
+	line = rxQuoted.ReplaceAllStringFunc(line, func(str string) string {
+		return strings.Replace(str, " ", "\001", -1)
+	})
+	fields := strings.Split(line, " ")
+	for i := 0; i < len(fields); i++ {
+		fields[i] = strings.Replace(fields[i], "\001", " ", -1)
+	}
+	return fields
+}
 
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
@@ -34,6 +49,7 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 
 	// environment completion.
 	rv.AllLine = this.String()
+	rv.Field = SplitLikeShell(rv.AllLine)
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
 	default_delimiter := rune(readline.Delimiters[0])
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
