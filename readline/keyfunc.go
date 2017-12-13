@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 	"unicode"
@@ -152,11 +151,7 @@ func KeyFuncInsertReport(this *Buffer) Result {
 }
 
 func KeyFuncClearAfter(this *Buffer) Result {
-	var killbuf bytes.Buffer
-	for j := this.Cursor; j < this.Length; j++ {
-		killbuf.WriteRune(this.Buffer[j])
-	}
-	clipboard.WriteAll(killbuf.String())
+	clipboard.WriteAll(this.SubString(this.Cursor, this.Length))
 
 	Eraseline()
 	this.Length = this.Cursor
@@ -179,11 +174,7 @@ func KeyFuncWordRubout(this *Buffer) Result {
 		this.Cursor--
 	}
 	i := this.CurrentWordTop()
-	var killbuf bytes.Buffer
-	for j := i; j < org_cursor; j++ {
-		killbuf.WriteRune(this.Buffer[j])
-	}
-	clipboard.WriteAll(killbuf.String())
+	clipboard.WriteAll(this.SubString(i, org_cursor))
 	keta := this.Delete(i, org_cursor-i)
 	if i >= this.ViewStart {
 		Backspace(keta)
@@ -197,11 +188,7 @@ func KeyFuncWordRubout(this *Buffer) Result {
 
 func KeyFuncClearBefore(this *Buffer) Result {
 	keta := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	var killbuf bytes.Buffer
-	for i := 0; i < this.Cursor; i++ {
-		killbuf.WriteRune(this.Buffer[i])
-	}
-	clipboard.WriteAll(killbuf.String())
+	clipboard.WriteAll(this.SubString(0, this.Cursor))
 	this.Delete(0, this.Cursor)
 	Backspace(keta)
 	this.Cursor = 0

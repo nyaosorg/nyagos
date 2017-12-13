@@ -206,12 +206,16 @@ func (this *Buffer) RepaintAll() {
 	this.RepaintAfterPrompt()
 }
 
-func (this Buffer) String() string {
+func (this *Buffer) SubString(start, end int) string {
 	var result bytes.Buffer
-	for i := 0; i < this.Length; i++ {
+	for i := start; i < end; i++ {
 		result.WriteRune(this.Buffer[i])
 	}
 	return result.String()
+}
+
+func (this Buffer) String() string {
+	return this.SubString(0, this.Length)
 }
 
 var Delimiters = "\"'"
@@ -241,10 +245,6 @@ func (this *Buffer) CurrentWordTop() (wordTop int) {
 }
 
 func (this *Buffer) CurrentWord() (string, int) {
-	var buffer bytes.Buffer
 	start := this.CurrentWordTop()
-	for i := start; i < this.Cursor; i++ {
-		buffer.WriteRune(this.Buffer[i])
-	}
-	return buffer.String(), start
+	return this.SubString(start, this.Cursor), start
 }
