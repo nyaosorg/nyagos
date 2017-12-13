@@ -30,15 +30,25 @@ type List struct {
 
 var UseSlash = false
 
+func isTop(s string, indexes [][]int) bool {
+	if len(indexes) <= 1 {
+		return true
+	}
+	prev := s[indexes[len(indexes)-2][0]:indexes[len(indexes)-2][1]]
+	return prev == ";" || prev == "|" || prev == "&"
+}
+
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
 	rv := new(List)
 
 	// environment completion.
 	rv.AllLine = this.String()
-	indexes := texts.SplitLikeShell(rv.AllLine)
+
+	leftStr := this.SubString(0, this.Cursor)
+	indexes := texts.SplitLikeShell(leftStr)
 	for _, p := range indexes {
-		rv.Field = append(rv.Field, rv.AllLine[p[0]:p[1]])
+		rv.Field = append(rv.Field, leftStr[p[0]:p[1]])
 	}
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
 	default_delimiter := rune(readline.Delimiters[0])
@@ -65,10 +75,10 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
 
-	if rv.Pos > 0 {
-		rv.List, err = listUpFiles(this.Context, rv.Word[start:])
-	} else {
+	if isTop(leftStr, indexes) {
 		rv.List, err = listUpCommands(this.Context, rv.Word[start:])
+	} else {
+		rv.List, err = listUpFiles(this.Context, rv.Word[start:])
 	}
 
 	for i := 0; i < len(rv.List); i++ {
