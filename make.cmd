@@ -495,7 +495,6 @@ switch( $args[0] ){
         if( -not (Test-Path (Join-Path $installDir "lua53.dll") ) ){
             Do-Copy lua53.dll $installDir
         }
-        Do-Copy nyagos.lua $installDir
         Ask-Copy "_nyagos" $installDir
         try{
             Do-Copy nyagos.exe $installDir
