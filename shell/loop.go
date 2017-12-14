@@ -93,11 +93,11 @@ func (it *Cmd) Loop(stream Stream) (int, error) {
 
 		if err != nil {
 			if err == io.EOF {
-				break
+				return rc, err
 			}
 			if err1, ok := err.(AlreadyReportedError); ok {
 				if err1.Err == io.EOF {
-					break
+					return rc, err
 				}
 			} else {
 				fmt.Fprintln(os.Stderr, err)
