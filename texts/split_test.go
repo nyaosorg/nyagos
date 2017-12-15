@@ -5,7 +5,7 @@ import (
 )
 
 func TestSplitLikeShell(t *testing.T) {
-	s := `1 2 "3  4 5" 6 7`
+	s := `1 2 "3 \" 4 5" 6 7`
 	indexes := SplitLikeShell(s)
 	if len(indexes) < 5 {
 		t.Fatal("len error")
@@ -15,7 +15,7 @@ func TestSplitLikeShell(t *testing.T) {
 	for _, p := range indexes {
 		field = append(field, s[p[0]:p[1]])
 	}
-	if field[2] != `"3  4 5"` {
+	if field[2] != `"3 \" 4 5"` {
 		t.Fatal("quote err:" + field[2])
 		return
 	}
