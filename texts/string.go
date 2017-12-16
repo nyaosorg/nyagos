@@ -1,4 +1,4 @@
-package shell
+package texts
 
 import (
 	"bytes"
@@ -44,7 +44,7 @@ func quotedWordCutter(reader *strings.Reader) (string, bool) {
 }
 
 // Split s with SPACES not enclosing with double-quotations.
-func SplitQ(line string) []string {
+func SplitLikeShellString(line string) []string {
 	args := make([]string, 0, 10)
 	reader := strings.NewReader(line)
 	for reader.Len() > 0 {
@@ -56,7 +56,7 @@ func SplitQ(line string) []string {
 	return args
 }
 
-func QuotedFirstWord(line string) string {
+func FirstWord(line string) string {
 	reader := strings.NewReader(line)
 	str, _ := quotedWordCutter(reader)
 	return str

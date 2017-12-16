@@ -11,7 +11,7 @@ import (
 
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/readline"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 type KeyLuaFuncT struct {
@@ -106,7 +106,7 @@ func callFirstWord(L lua.Lua) int {
 	if this == nil {
 		return stack_count
 	}
-	word := shell.QuotedFirstWord(this.String())
+	word := texts.FirstWord(this.String())
 	return L.Push(word, 0)
 }
 

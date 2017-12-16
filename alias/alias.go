@@ -8,6 +8,7 @@ import (
 
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 var dbg = false
@@ -93,7 +94,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 		print("done cmd.Clone\n")
 	}
 
-	arg1 := shell.QuotedFirstWord(cmdline)
+	arg1 := texts.FirstWord(cmdline)
 	if strings.EqualFold(arg1, cmd.Args[0]) {
 		it.HookCount = 100
 	} else {

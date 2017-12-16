@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 var rxElse = regexp.MustCompile(`(?i)^\s*else`)
@@ -113,7 +114,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			}
 			break
 		}
-		args := shell.SplitQ(line)
+		args := texts.SplitLikeShellString(line)
 		if len(args) <= 0 {
 			continue
 		}

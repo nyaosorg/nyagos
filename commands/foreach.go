@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 var start_list = map[string]bool{
@@ -35,10 +36,7 @@ func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			}
 			break
 		}
-		args := shell.SplitQ(line)
-
-		name := strings.ToLower(args[0])
-
+		name := strings.ToLower(texts.FirstWord(line))
 		if _, ok := start_list[name]; ok {
 			nest++
 		} else if name == "end" {
