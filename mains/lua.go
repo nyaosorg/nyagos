@@ -324,6 +324,9 @@ func NewLua() (lua.Lua, error) {
 		NewIndex: setShareTable})
 	this.SetGlobal("share")
 
+	this.PushGoFunction(cmdPrint)
+	this.SetGlobal("print")
+
 	if !hook_setuped {
 		orgArgHook = shell.SetArgsHook(newArgHook)
 

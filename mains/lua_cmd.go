@@ -315,13 +315,24 @@ func cmdRawEval(L lua.Lua) int {
 	}
 }
 
-func cmdWrite(L lua.Lua) int {
-	var out io.Writer = os.Stdout
+func getStdout(L lua.Lua) io.Writer {
 	cmd := getRegInt(L)
 	if cmd != nil && cmd.Stdout != nil {
-		out = cmd.Stdout
+		return cmd.Stdout
+	} else {
+		return os.Stdout
 	}
-	return cmdWriteSub(L, out)
+}
+
+func cmdWrite(L lua.Lua) int {
+	return cmdWriteSub(L, getStdout(L))
+}
+
+func cmdPrint(L lua.Lua) int {
+	out := getStdout(L)
+	rc := cmdWrite(L)
+	fmt.Fprintln(out)
+	return rc
 }
 
 func cmdWriteErr(L lua.Lua) int {
