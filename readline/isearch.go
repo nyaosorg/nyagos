@@ -113,6 +113,22 @@ func KeyFuncIncSearch(this *Buffer) Result {
 					break
 				}
 			}
+		case rune('s' & 0x1F):
+			for i := lastFoundPos + 1; ; i++ {
+				if i >= this.History.Len() {
+					i = 0
+					break
+				}
+				if i == lastFoundPos {
+					break
+				}
+				line := this.History.At(i)
+				if strings.Contains(line, searchStr) && foundStr != line {
+					foundStr = line
+					lastFoundPos = i
+					break
+				}
+			}
 		default:
 			if unicode.IsControl(charcode) {
 				break
