@@ -4,3 +4,4 @@
 * Enable command-name completion even if it is after `|` , `&` , `;`
 * #245 `print` of lua supports redirect.
 * On incremental search, support Ctrl-S for backward search.
+* Fix #258 Environment variable expanding does not work after backslash
