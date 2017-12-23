@@ -106,7 +106,10 @@ func string2word(source_ string, removeQuote bool) string {
 			lastchar = '~'
 			continue
 		}
-		if ch == '%' && quoteNow != '\'' && yenCount%2 == 0 {
+		if ch == '%' && quoteNow != '\'' {
+			for ; yenCount > 0; yenCount-- {
+				buffer.WriteRune('\\')
+			}
 			var nameBuf bytes.Buffer
 			for {
 				ch, _, err = source.ReadRune()
