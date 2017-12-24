@@ -5,3 +5,5 @@
 * #245 `print` of lua supports redirect.
 * On incremental search, support Ctrl-S for backward search.
 * Fix #258 Environment variable expanding does not work after backslash
+* Add lua-function nyagos.msgbox(MESSAGE,TITLE)
+* Add the member `c.left` to `nyagos.completion_hook(c)` which is string before cursor.

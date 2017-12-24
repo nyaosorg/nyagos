@@ -5,3 +5,5 @@
 - #245 Lua の print がリダイレクトに対応
 * インクリメンタルサーチ中に Ctrl-S で逆方向サーチできるようにした
 * #248 バックスラッシュ直後の環境変数展開が機能しない不具合を修正
+* lua関数 `nyagos.msgbox(MESSAGE,TITLE)` を追加
+* `nyagos.completion_hook(c)`にカーソル前の文字列を保持するメンバー `c.left` を追加
