@@ -26,6 +26,7 @@ type List struct {
 	Word    string
 	Pos     int
 	Field   []string
+	Left    string
 }
 
 var UseSlash = false
@@ -40,15 +41,16 @@ func isTop(s string, indexes [][]int) bool {
 
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
-	rv := new(List)
+	rv := &List{
+		AllLine: this.String(),
+		Left:    this.SubString(0, this.Cursor),
+	}
 
 	// environment completion.
-	rv.AllLine = this.String()
 
-	leftStr := this.SubString(0, this.Cursor)
-	indexes := texts.SplitLikeShell(leftStr)
+	indexes := texts.SplitLikeShell(rv.Left)
 	for _, p := range indexes {
-		rv.Field = append(rv.Field, leftStr[p[0]:p[1]])
+		rv.Field = append(rv.Field, rv.Left[p[0]:p[1]])
 	}
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
 	default_delimiter := rune(readline.Delimiters[0])
@@ -75,7 +77,7 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
 
-	if isTop(leftStr, indexes) {
+	if isTop(rv.Left, indexes) {
 		rv.List, err = listUpCommands(this.Context, rv.Word[start:])
 	} else {
 		rv.List, err = listUpFiles(this.Context, rv.Word[start:])

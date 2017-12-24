@@ -8,5 +8,6 @@ nyagos.completion_hook = function(c)
         c.list[ #c.list+1 ] = "update"
         c.list[ #c.list+1 ] = "ls"
     end
+    nyagos.msgbox("leftStr="..c.left)
     return c.list
 end
