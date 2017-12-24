@@ -408,6 +408,7 @@ func init() {
 			Len:   lua2cmd(cmdLenHistory)},
 		"lines":                lua.TGoFunction(cmdLines),
 		"loadfile":             lua.TGoFunction(cmdLoadFile),
+		"msgbox":               lua.TGoFunction(lua2cmd(cmdMsgBox)),
 		"netdrivetounc":        lua.TGoFunction(lua2cmd(cmdNetDriveToUNC)),
 		"on_command_not_found": lua.Property{Pointer: &luaOnCommandNotFound},
 		"open":                 lua.TGoFunction(cmdOpenFile),

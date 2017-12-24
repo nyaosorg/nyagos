@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/mattn/msgbox"
+
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-getch"
@@ -307,4 +309,17 @@ func cmdLenHistory(args []any_t) []any_t {
 		return []any_t{}
 	}
 	return []any_t{default_history.Len()}
+}
+
+func cmdMsgBox(args []any_t) []any_t {
+	var message string
+	title := "nyagos"
+	if len(args) >= 1 {
+		message = fmt.Sprint(args[0])
+	}
+	if len(args) >= 2 {
+		title = fmt.Sprint(args[1])
+	}
+	msgbox.Show(0, message, title, msgbox.OK)
+	return []any_t{}
 }
