@@ -357,6 +357,28 @@ function Get-Lua($url,$arch){
     Do-Copy (Join-Path $folder lua53.dll) .
 }
 
+function Make-Packege($arch){
+    $zipname = ("nyagos-{0}.zip" -f (& cmd\$arch\nyagos.exe --show-version-only))
+    Write-Verbose "$ zip -9 $zipname ...."
+    if( Test-Path $zipname ){
+        Do-Remove $zipname
+    }
+    zip -9j $zipname `
+        "cmd\$arch\nyagos.exe" `
+        "cmd\$arch\lua53.dll" `
+        .nyagos `
+        _nyagos `
+        makeicon.cmd `
+        LICENSE `
+        readme_ja.md `
+        readme.md
+
+    zip -9 $zipname `
+        nyagos.d\*.lua `
+        nyagos.d\catalog\*.lua `
+        Doc\*.md
+}
+
 switch( $args[0] ){
     "" {
         Build (git describe --tags) ""
@@ -450,22 +472,14 @@ switch( $args[0] ){
             popd
         }
     }
+    "386package" {
+        Make-Packege "386"
+    }
+    "amd64package" {
+        Make-Packege "amd64"
+    }
     "package" {
-        $zipname = ("nyagos-{0}.zip" -f (.\nyagos.exe --show-version-only))
-        Write-Verbose "$ zip -9 $zipname ...."
-        zip -9 $zipname `
-            nyagos.exe `
-            lua53.dll `
-            nyagos.lua `
-            .nyagos `
-            _nyagos `
-            makeicon.cmd `
-            nyagos.d\*.lua `
-            nyagos.d\catalog\*.lua `
-            LICENSE `
-            readme_ja.md `
-            readme.md `
-            Doc\*.md
+        Make-Package (Get-GoArch)
     }
     "install" {
         $installDir = $args[1]
