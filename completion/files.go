@@ -1,6 +1,8 @@
 package completion
 
 import (
+	"context"
+	"errors"
 	"os"
 	"regexp"
 	"strings"
@@ -9,6 +11,8 @@ import (
 
 	"github.com/zetamatta/nyagos/dos"
 )
+
+var ErrCtrlC = errors.New("C-c")
 
 const (
 	STD_SLASH = string(os.PathSeparator)
@@ -41,7 +45,7 @@ func replaceEnv(str string) string {
 	return str
 }
 
-func listUpFiles(str string) ([]Element, error) {
+func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 	orgSlash := STD_SLASH[0]
 	if UseSlash {
 		orgSlash = OPT_SLASH[0]
@@ -62,7 +66,16 @@ func listUpFiles(str string) ([]Element, error) {
 	}
 	commons := make([]Element, 0)
 	STR := strings.ToUpper(str)
+	canceled := false
 	fdErr := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				canceled = true
+				return false
+			default:
+			}
+		}
 		if fd.Name() == "." || fd.Name() == ".." {
 			return true
 		}
@@ -88,5 +101,8 @@ func listUpFiles(str string) ([]Element, error) {
 		}
 		return true
 	})
+	if canceled {
+		return commons, ErrCtrlC
+	}
 	return commons, fdErr
 }

@@ -2,7 +2,6 @@ package completion
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -12,6 +11,7 @@ import (
 	"github.com/zetamatta/go-box"
 
 	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 type Element struct {
@@ -25,16 +25,33 @@ type List struct {
 	RawWord string // have quotation
 	Word    string
 	Pos     int
+	Field   []string
+	Left    string
 }
 
 var UseSlash = false
 
+func isTop(s string, indexes [][]int) bool {
+	if len(indexes) <= 1 {
+		return true
+	}
+	prev := s[indexes[len(indexes)-2][0]:indexes[len(indexes)-2][1]]
+	return prev == ";" || prev == "|" || prev == "&"
+}
+
 func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	var err error
-	rv := new(List)
+	rv := &List{
+		AllLine: this.String(),
+		Left:    this.SubString(0, this.Cursor),
+	}
 
 	// environment completion.
-	rv.AllLine = this.String()
+
+	indexes := texts.SplitLikeShell(rv.Left)
+	for _, p := range indexes {
+		rv.Field = append(rv.Field, rv.Left[p[0]:p[1]])
+	}
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
 	default_delimiter := rune(readline.Delimiters[0])
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
@@ -60,10 +77,10 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
 
-	if rv.Pos > 0 {
-		rv.List, err = listUpFiles(rv.Word[start:])
+	if isTop(rv.Left, indexes) {
+		rv.List, err = listUpCommands(this.Context, rv.Word[start:])
 	} else {
-		rv.List, err = listUpCommands(rv.Word[start:])
+		rv.List, err = listUpFiles(this.Context, rv.Word[start:])
 	}
 
 	for i := 0; i < len(rv.List); i++ {
@@ -94,7 +111,7 @@ func toDisplay(source []Element) []string {
 	return result
 }
 
-func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
+func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 	comp, _, err := listUpComplete(this)
 	if comp == nil {
 		return readline.CONTINUE
@@ -103,7 +120,7 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if err != nil {
 		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 	}
-	box.Print(ctx, toDisplay(comp.List), readline.Console)
+	box.Print(this.Context, toDisplay(comp.List), readline.Console)
 	this.RepaintAll()
 	return readline.CONTINUE
 }

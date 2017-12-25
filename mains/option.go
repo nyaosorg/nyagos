@@ -107,6 +107,20 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 			}, nil
 		} else if arg1 == "--norc" {
 			optionNorc = true
+		} else if arg1 == "--lua-file" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("--lua-file: requires parameters")
+			}
+			return func() error {
+				setLuaArg(L, args[i:])
+				_, err := runLua(it, L, args[i])
+				if err != nil {
+					return err
+				} else {
+					return io.EOF
+				}
+			}, nil
 		}
 	}
 	return nil, nil

@@ -208,6 +208,8 @@ The argument `c` is the table which has these members.
     c.rawword - original word which may has double-quotations.
     c.pos - position word exists.
     c.text - all command-line text.
+    c.field - array of the text splited c.text with space.
+    c.left - string before cursor
 
 `nyagos.completion_hook` should return updated list(table) or `nil`.
 Returning nil equals to returning c.list with no change.
@@ -293,6 +295,10 @@ Go-version string to build nyagos.exe
 
 The string compilation architecture of nyagos.exe.
 (for example, "386" or "amd64" )
+
+### `nyagos.msgbox(MESSAGE,TITLE)`
+
+Show message-box
 
 ### `nyagos.exe`
 

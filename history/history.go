@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/mattn/go-isatty"
-
 	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 var Mark = "!"
@@ -168,22 +168,22 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == '^' {
-		if words := shell.SplitQ(line); len(words) >= 2 {
+		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(words[1])
 		}
 	} else if siz > 0 && ch == '$' {
-		if words := shell.SplitQ(line); len(words) >= 2 {
+		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(words[len(words)-1])
 		}
 	} else if siz > 0 && ch == '*' {
-		if words := shell.SplitQ(line); len(words) >= 2 {
+		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(strings.Join(words[1:], " "))
 		}
 	} else if siz > 0 && ch == ':' {
 		var n int
 		if _, err := fmt.Fscan(reader, &n); err != nil {
 			buffer.WriteRune(':')
-		} else if words := shell.SplitQ(line); n < len(words) {
+		} else if words := texts.SplitLikeShellString(line); n < len(words) {
 			buffer.WriteString(words[n])
 		}
 	} else {

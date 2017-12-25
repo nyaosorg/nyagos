@@ -10,18 +10,12 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
-	"sort"
 	"strconv"
 	"strings"
 	"unicode"
 
 	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
-	"github.com/zetamatta/go-box"
-	"github.com/zetamatta/go-findfile"
-	"github.com/zetamatta/go-getch"
-	"github.com/zetamatta/go-mbcs"
 
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/completion"
@@ -171,37 +165,6 @@ func cmdGetAlias(L lua.Lua) int {
 	return 1
 }
 
-func cmdSetEnv(L lua.Lua) int {
-	name, nameErr := L.ToString(-2)
-	if nameErr != nil {
-		return L.Push(nil, nameErr)
-	}
-	value, valueErr := L.ToString(-1)
-	if valueErr != nil {
-		return L.Push(nil, valueErr)
-	}
-	if len(value) > 0 {
-		os.Setenv(name, value)
-	} else {
-		os.Unsetenv(name)
-	}
-	return L.Push(true)
-}
-
-func cmdGetEnv(L lua.Lua) int {
-	name, nameErr := L.ToString(-1)
-	if nameErr != nil {
-		return L.Push(nil)
-	}
-	value, ok := shell.OurGetEnv(name)
-	if ok && len(value) > 0 {
-		L.PushString(value)
-	} else {
-		L.PushNil()
-	}
-	return 1
-}
-
 func cmdExec(L lua.Lua) int {
 	errorlevel := 0
 	var err error
@@ -244,12 +207,6 @@ func cmdExec(L lua.Lua) int {
 		errorlevel, err = it.Interpret(statement)
 	}
 	return L.Push(int(errorlevel), err)
-}
-
-type emptyWriter struct{}
-
-func (e *emptyWriter) Write(b []byte) (int, error) {
-	return len(b), nil
 }
 
 func cmdEval(L lua.Lua) int {
@@ -358,13 +315,24 @@ func cmdRawEval(L lua.Lua) int {
 	}
 }
 
-func cmdWrite(L lua.Lua) int {
-	var out io.Writer = os.Stdout
+func getStdout(L lua.Lua) io.Writer {
 	cmd := getRegInt(L)
 	if cmd != nil && cmd.Stdout != nil {
-		out = cmd.Stdout
+		return cmd.Stdout
+	} else {
+		return os.Stdout
 	}
-	return cmdWriteSub(L, out)
+}
+
+func cmdWrite(L lua.Lua) int {
+	return cmdWriteSub(L, getStdout(L))
+}
+
+func cmdPrint(L lua.Lua) int {
+	out := getStdout(L)
+	rc := cmdWrite(L)
+	fmt.Fprintln(out)
+	return rc
 }
 
 func cmdWriteErr(L lua.Lua) int {
@@ -395,106 +363,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	return L.Push(true)
 }
 
-func cmdGetwd(L lua.Lua) int {
-	wd, err := os.Getwd()
-	if err == nil {
-		return L.Push(wd)
-	} else {
-		return L.Push(nil, err)
-	}
-}
-
-func cmdWhich(L lua.Lua) int {
-	if L.GetType(-1) != lua.LUA_TSTRING {
-		return 0
-	}
-	name, nameErr := L.ToString(-1)
-	if nameErr != nil {
-		return L.Push(nil, nameErr)
-	}
-	path := dos.LookPath(name, "NYAGOSPATH")
-	if path != "" {
-		return L.Push(path)
-	} else {
-		return L.Push(nil, errors.New(name+": Path not found"))
-	}
-}
-
-func cmdAtoU(L lua.Lua) int {
-	str, err := mbcs.AtoU(L.ToBytes(1))
-	if err == nil {
-		L.PushString(str)
-		return 1
-	} else {
-		return 0
-	}
-}
-
-func cmdUtoA(L lua.Lua) int {
-	utf8, utf8err := L.ToString(1)
-	if utf8err != nil {
-		return L.Push(nil, utf8err)
-	}
-	str, err := mbcs.UtoA(utf8)
-	if err != nil {
-		return L.Push(nil, err)
-	}
-	if len(str) >= 1 {
-		L.PushBytes(str[:len(str)-1])
-	} else {
-		L.PushString("")
-	}
-	L.PushNil()
-	return 2
-}
-
-func cmdGlob(L lua.Lua) int {
-	result := make([]string, 0)
-	for i := 1; ; i++ {
-		wildcard, wildcardErr := L.ToString(i)
-		if wildcard == "" || wildcardErr != nil {
-			break
-		}
-		list, err := findfile.Glob(wildcard)
-		if list == nil || err != nil {
-			result = append(result, wildcard)
-		} else {
-			result = append(result, list...)
-		}
-	}
-	sort.StringSlice(result).Sort()
-	L.NewTable()
-	for i := 0; i < len(result); i++ {
-		L.PushString(result[i])
-		L.RawSetI(-2, lua.Integer(i+1))
-	}
-	return 1
-}
-
-func cmdGetHistory(this lua.Lua) int {
-	if default_history == nil {
-		return 0
-	}
-	if this.GetType(-1) == lua.LUA_TNUMBER {
-		val, err := this.ToInteger(-1)
-		if err != nil {
-			return this.Push(nil, err.Error())
-		}
-		this.PushString(default_history.At(val))
-	} else {
-		this.PushInteger(lua.Integer(default_history.Len()))
-	}
-	return 1
-}
-
-func cmdLenHistory(this lua.Lua) int {
-	if default_history == nil {
-		return 0
-	}
-	this.PushInteger(lua.Integer(default_history.Len()))
-	return 1
-}
-
 func cmdSetRuneWidth(this lua.Lua) int {
 	char, charErr := this.ToInteger(1)
 	if charErr != nil {
@@ -507,122 +375,6 @@ func cmdSetRuneWidth(this lua.Lua) int {
 	readline.SetCharWidth(rune(char), width)
 	this.PushBool(true)
 	return 1
-}
-
-func cmdShellExecute(this lua.Lua) int {
-	action, actionErr := this.ToString(1)
-	if actionErr != nil {
-		return this.Push(nil, actionErr)
-	}
-	path, pathErr := this.ToString(2)
-	if pathErr != nil {
-		return this.Push(nil, pathErr)
-	}
-	param, paramErr := this.ToString(3)
-	if paramErr != nil {
-		param = ""
-	}
-	dir, dirErr := this.ToString(4)
-	if dirErr != nil {
-		dir = ""
-	}
-	err := dos.ShellExecute(action, dos.TruePath(path), param, dir)
-	if err != nil {
-		return this.Push(nil, err)
-	} else {
-		return this.Push(true)
-	}
-}
-
-func cmdStat(L lua.Lua) int {
-	path, pathErr := L.ToString(1)
-	if pathErr != nil {
-		return L.Push(nil, pathErr)
-	}
-	var stat os.FileInfo
-	var path_ string
-	if len(path) > 0 && path[len(path)-1] == '\\' {
-		path_ = filepath.Join(path, ".")
-	} else {
-		path_ = path
-	}
-	statErr := findfile.Walk(path_, func(f *findfile.FileInfo) bool {
-		stat = f
-		return false
-	})
-	if statErr != nil {
-		return L.Push(nil, statErr)
-	}
-	if stat == nil {
-		return L.Push(nil, fmt.Errorf("%s: failed to stat", path))
-	}
-	L.NewTable()
-	L.PushString(stat.Name())
-	L.SetField(-2, "name")
-	L.PushInteger(lua.Integer(stat.Size()))
-	L.SetField(-2, "size")
-	L.PushBool(stat.IsDir())
-	L.SetField(-2, "isdir")
-	t := stat.ModTime()
-	L.NewTable()
-	L.PushInteger(lua.Integer(t.Year()))
-	L.SetField(-2, "year")
-	L.PushInteger(lua.Integer(t.Month()))
-	L.SetField(-2, "month")
-	L.PushInteger(lua.Integer(t.Day()))
-	L.SetField(-2, "day")
-	L.PushInteger(lua.Integer(t.Hour()))
-	L.SetField(-2, "hour")
-	L.PushInteger(lua.Integer(t.Minute()))
-	L.SetField(-2, "minute")
-	L.PushInteger(lua.Integer(t.Second()))
-	L.SetField(-2, "second")
-	L.SetField(-2, "mtime")
-	return 1
-}
-
-func cmdAccess(L lua.Lua) int {
-	path, pathErr := L.ToString(1)
-	if pathErr != nil {
-		return L.Push(nil, pathErr)
-	}
-	mode, modeErr := L.ToInteger(2)
-	if modeErr != nil {
-		return L.Push(nil, modeErr)
-	}
-	fi, err := os.Stat(path)
-
-	var result bool
-	if err != nil || fi == nil {
-		result = false
-	} else {
-		switch {
-		case mode == 0:
-			result = true
-		case mode&1 != 0: // X_OK
-		case mode&2 != 0: // W_OK
-			result = fi.Mode().Perm()&0200 != 0
-		case mode&4 != 0: // R_OK
-			result = fi.Mode().Perm()&0400 != 0
-		}
-	}
-	L.PushBool(result)
-	return 1
-}
-
-func cmdPathJoin(L lua.Lua) int {
-	path, pathErr := L.ToString(1)
-	if pathErr != nil {
-		return L.Push(nil, pathErr)
-	}
-	for i, i_ := 2, L.GetTop(); i <= i_; i++ {
-		pathI, pathIErr := L.ToString(i)
-		if pathIErr != nil {
-			return L.Push(nil, pathErr)
-		}
-		path = filepath.Join(path, pathI)
-	}
-	return L.Push(path, nil)
 }
 
 func cmdCommonPrefix(L lua.Lua) int {
@@ -642,21 +394,6 @@ func cmdCommonPrefix(L lua.Lua) int {
 	}
 	L.PushString(completion.CommonPrefix(list))
 	return 1
-}
-
-func cmdGetKey(L lua.Lua) int {
-	keycode, scancode, shiftstatus := getch.Full()
-	L.PushInteger(lua.Integer(keycode))
-	L.PushInteger(lua.Integer(scancode))
-	L.PushInteger(lua.Integer(shiftstatus))
-	return 3
-}
-
-func cmdGetViewWidth(L lua.Lua) int {
-	width, height := box.GetScreenBufferInfo().ViewSize()
-	L.PushInteger(lua.Integer(width))
-	L.PushInteger(lua.Integer(height))
-	return 2
 }
 
 func cmdOpenFile(L lua.Lua) int {
@@ -858,28 +595,4 @@ func cmdLines(L lua.Lua) int {
 	L.SetMetaTable(-2)
 	// print("cmdLines: end\n")
 	return 2
-}
-
-func cmdBox(L lua.Lua) int {
-	if !L.IsTable(1) {
-		return L.Push(nil, "Not a table")
-	}
-
-	L.Len(1)
-	n, _ := L.ToInteger(-1)
-	L.Pop(1)
-	if n <= 0 {
-		return 0
-	}
-	sources := make([]string, 0, n)
-	for i := 0; i < n; i++ {
-		L.RawGetI(-1, lua.Integer(i+1))
-		str, err := L.ToString(-1)
-		if err == nil && str != "" {
-			sources = append(sources, str)
-		}
-		L.Pop(1)
-	}
-	result := box.Choice(sources, readline.Console)
-	return L.Push(result)
 }

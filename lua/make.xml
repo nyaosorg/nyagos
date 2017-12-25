@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf8"?>
+<make>
+    <const>
+        <!-- `make.cmd const` creates const.go from this data.
+             It requires gcc.exe.
+          -->
+        <package>lua</package>
+        <include>&lt;stdio.h&gt;</include>
+        <include>&quot;../include/lua.h&quot;</include>
+        <include>&quot;../include/lualib.h&quot;</include>
+        <include>&quot;../include/lauxlib.h&quot;</include>
+        <li><nm>LUA_REGISTRYINDEX</nm></li>
+        <li><nm>LUA_TBOOLEAN</nm></li>
+        <li><nm>LUA_TFUNCTION</nm></li>
+        <li><nm>LUA_TLIGHTUSERDATA</nm></li>
+        <li><nm>LUA_TNIL</nm></li>
+        <li><nm>LUA_TNUMBER</nm></li>
+        <li><nm>LUA_TSTRING</nm></li>
+        <li><nm>LUA_TTABLE</nm></li>
+        <li><nm>LUA_TTHREAD</nm></li>
+        <li><nm>LUA_TUSERDATA</nm></li>
+        <li><nm>LUA_FILEHANDLE</nm><fmt>\&quot;%s\&quot;</fmt></li>
+        <li><nm>LUA_OK</nm></li>
+        <li><nm>LUA_ERRSYNTAX</nm></li>
+        <li><nm>LUA_ERRMEM</nm></li>
+        <li><nm>LUA_ERRGCMM</nm></li>
+    </const>
+</make>

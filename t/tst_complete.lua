@@ -3,6 +3,11 @@
 --    and see result of completion.
 
 nyagos.completion_hook = function(c)
-    c.list[ #c.list+1 ] = c.rawword.."(".. c.pos .. ")"
+    if c.field[1] == "svn" then
+        c.list[ #c.list+1 ] = "commit"
+        c.list[ #c.list+1 ] = "update"
+        c.list[ #c.list+1 ] = "ls"
+    end
+    nyagos.msgbox("leftStr="..c.left)
     return c.list
 end

@@ -44,7 +44,12 @@ func isElevationRequired(err error) bool {
 	return ok && e.Err == syscall.Errno(0x2e4)
 }
 
+type session struct {
+	unreadline []string
+}
+
 type Cmd struct {
+	*session
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
@@ -81,6 +86,7 @@ func New() *Cmd {
 	}
 	this.PipeSeq[0] = pipeSeq
 	this.PipeSeq[1] = 0
+	this.session = &session{}
 	return &this
 }
 
@@ -97,6 +103,11 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv.Closers = nil
 	rv.OnFork = this.OnFork
 	rv.OffFork = this.OffFork
+	if this.session != nil {
+		rv.session = this.session
+	} else {
+		rv.session = &session{}
+	}
 	return rv, nil
 }
 
@@ -254,11 +265,7 @@ func (this *Cmd) Interpret(text string) (int, error) {
 	return this.InterpretContext(context.Background(), text)
 }
 
-type gotoEol struct{}
-
-var GotoEol = gotoEol{}
-
-func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel int, finalerr error) {
+func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel int, finalerr error) {
 	if DBG {
 		print("Interpret('", text, "')\n")
 	}
@@ -324,14 +331,6 @@ func (this *Cmd) InterpretContext(ctx_ context.Context, text string) (errorlevel
 			cmd.PipeSeq[0] = pipeSeq
 			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
-
-			ctx := context.WithValue(ctx_, GotoEol, func() {
-				shutdown_immediately = true
-				gotoeol, ok := ctx_.Value(GotoEol).(func())
-				if ok {
-					gotoeol()
-				}
-			})
 
 			if pipeIn != nil {
 				cmd.Stdin = pipeIn

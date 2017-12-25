@@ -25,6 +25,9 @@ If FILE's suffix is .lua, execute Lua-code on it.
 
 Otherwise, read and execute commands on it.
 
+### `--lua-file FILE ARG1 ARG2 ...`
+
+Execute FILE as Lua Script.
 
 ### `-e "SCRIPTCODE"`
 

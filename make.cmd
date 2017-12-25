@@ -1,18 +1,35 @@
-@set "args=%*"
+@set args=%*
 @powershell "iex((@('')*3+(cat '%~f0'|select -skip 3))-join[char]10)"
 @exit /b %ERRORLEVEL%
+
+$args = @( ([regex]'"([^"]*)"').Replace($env:args,{
+        $args[0].Groups[1] -replace " ",[char]1
+    }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
+
+set CMD "Cmd" -option constant
+set LUA64URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" -option constant
+set LUA32URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" -option constant
 
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
 
 function Do-Copy($src,$dst){
-    Write-Verbose ('$ copy "{0}" "{1}"' -f $src,$dst)
+    Write-Verbose "$ copy '$src' '$dst'"
     Copy-Item $src $dst
 }
 
 function Do-Remove($file){
-    Write-Verbose ('$ del "{0}"' -f $file)
-    Remove-Item $file
+    if( Test-Path $file ){
+        Write-Verbose "$ del '$file'"
+        Remove-Item $file
+    }
+}
+
+function Make-Dir($folder){
+    if( -not (Test-Path $folder) ){
+        Write-Verbose "$ mkdir '$folder'"
+        New-Item $folder -type directory | Out-Null
+    }
 }
 
 Add-Type -Assembly System.Windows.Forms
@@ -31,8 +48,8 @@ function Ask-Copy($src,$dst){
 function Get-GoArch{
     if( Test-Path "goarch.txt" ){
         $arch = (Get-Content "goarch.txt")
-    }elseif( Test-Path "env:GOARCH" ){
-        return $env:GOARCH
+    }elseif( (Test-Path env:GOARCH) -and $env:GOARCH ){
+        $arch = $env:GOARCH
     }else{
         $arch = (go version | %{ $_.Split()[-1].Split("/")[-1] } )
     }
@@ -42,45 +59,67 @@ function Get-GoArch{
 
 function ForEach-GoDir{
     Get-ChildItem . -Recurse |
-    ?{ $_.Extension -eq '.go' } |
-    %{ Split-Path $_.FullName -Parent } |
+    Where-Object{ $_.Extension -eq '.go' } |
+    ForEach-Object{ Split-Path $_.FullName -Parent } |
     Sort-Object |
     Get-Unique
 }
 
 function Get-Imports {
     Get-ChildItem . -Recurse |
-    ?{ $_.Extension -eq '.go' } |
-    %{ Get-Content $_.FullName  } |
-    %{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
-    ?{ $_ -match 'github.com/' -and -not ($_ -match '/nyagos/') } |
+    Where-Object{ $_.Extension -eq '.go' } |
+    ForEach-Object{ Get-Content $_.FullName  } |
+    ForEach-Object{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
+    ?{ ($_ -match 'github.com/' -and $_ -notmatch '/nyagos/') `
+        -or $_ -match 'golang.org/' } |
     %{ $_ -replace '"','' } |
     Sort-Object |
     Get-Unique
 }
 
+function Go-Generate{
+    Get-ChildItem "." -Recurse |
+    Where-Object{ $_.Name -eq "make.xml" } |
+    ForEach-Object{
+        $dir = (Split-Path $_.FullName -Parent)
+        pushd $dir
+        $xml = [xml](Get-Content $_.FullName)
+        :allloop foreach( $li in $xml.make.generate.li ){
+            foreach( $target in $li.target ){
+                if( -not $target ){ continue }
+                foreach( $source in $li.source ){
+                    if( -not $source ){ continue }
+                    if( (Newer-Than $source $target) ){
+                        Write-Verbose ("$ go generate for {0}" -f
+                            (Join-Path $dir $target) )
+                        go generate
+                        break allloop
+                    }
+                }
+            }
+        }
+        popd
+    }
+}
+
 function Go-Fmt{
+    $status = $true
     Get-ChildItem . -Recurse |
     ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
     %{
         $fname = $_.FullName
         Write-Verbose -Message "$ go fmt $fname"
         go fmt $fname
-        attrib -a $fname
-    }
-    Get-ChildItem . -Recurse | ?{ $_.Name -eq "syscall.go" } | %{
-        $dir = (Split-Path $_.FullName -Parent)
-        $dst = (Join-Path $dir "zsyscall.go")
-        if( -not (Test-Path $dst) ){
-            Write-Verbose -Message ( `
-                "Found {0} but not found $dst" `
-                -f $_.FullName,$dst )
-            pushd $dir
-            Write-Verbose -Message ("$ go generate on " + $dir)
-            go generate
-            popd
+        if( $LastExitCode -ne 0 ){
+            $status = $false
+        }else{
+            attrib -a $fname
         }
     }
+    if( -not $status ){
+        Write-Warning "Some of 'go fmt' failed."
+    }
+    return $status
 }
 
 function Get-Go1stPath {
@@ -94,10 +133,15 @@ function Get-Go1stPath {
 
 function Make-SysO($version) {
     Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
-    if( -not ($version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$") ){
-        $version = "0.0.0_0"
+    if( $version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$" ){
+        $v = $version.Split("[\._]")
+    }else{
+        $v = @(0,0,0,0)
+        if( $version -eq $null -or $version -eq "" ){
+            $version = "0.0.0_0"
+        }
     }
-    $v = $version.Split("[\._]")
+    Write-Verbose "version=$version"
 
     .\goversioninfo.exe `
         "-file-version=$version" `
@@ -165,84 +209,97 @@ function Download-Exe($url,$exename){
     Set-Location $cwd
 }
 
-function Newer-Than($folder,$target){
+function Newer-Than($source,$target){
+    if( -not $target ){
+        Write-Warning ('Newer-Than: $target is null')
+        if( $source ){
+            Write-Verbose ('Newer-Than: $source={0}' -f $source)
+        }else{
+            Write-Warning 'Newer-Than: $source is null'
+        }
+        return
+    }
     if( -not (Test-Path $target) ){
         Write-Verbose ("{0} not found." -f $target)
         return $true
     }
     $stamp = (Get-ItemProperty $target).LastWriteTime
 
-    Get-ChildItem $folder -Recurse | %{
-        if( $_.LastWriteTime -gt $stamp ){
-            Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
-            return $true
+    $prop = (Get-ItemProperty $source)
+    if( $prop.Mode -like 'd*' ){
+        Get-ChildItem $source -Recurse | %{
+            if( $_.LastWriteTime -gt $stamp ){
+                Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
+                return $true
+            }
         }
+        return $false
+    }else{
+        return $prop.LastWriteTime -gt $stamp
     }
-    return $false
 }
 
 
 function Build($version,$tags) {
-    Write-Verbose -Message ("Build as version='{0}' tags='{1}'" -f $version,$tags)
-    Go-Fmt
+    Write-Verbose "Build as version='$version' tags='$tags'"
+
+    Go-Generate
+    if( -not (Go-Fmt) ){
+        return
+    }
     $saveGOARCH = $env:GOARCH
     $env:GOARCH = (Get-GoArch)
 
+    Make-Dir $CMD
+    $binDir = (Join-Path $CMD $env:GOARCH)
+    Make-Dir $binDir
+    $target = (Join-Path $binDir "nyagos.exe")
+
     Make-SysO $version
 
-    if( Newer-Than "nyagos.d" "mains\bindata.go" ){
-        Download-Exe "github.com/jteeuwen/go-bindata/go-bindata" "go-bindata.exe"
-        Write-Verbose -Message "$ go-bindata.exe"
-        .\go-bindata.exe -pkg "mains" -o "mains\bindata.go" "nyagos.d/..."
-    }
-
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
-    Write-Verbose -Message "$ go build"
-    go build "-o" nyagos.exe -ldflags "$ldflags -X main.version=$version" $tags
+    Write-Verbose -Message "$ go build -o '$target'"
+    go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
+    if( $LastExitCode -eq 0 ){
+        Do-Copy $target ".\nyagos.exe"
+    }
     $env:GOARCH = $saveGOARCH
 }
 
-function Make-CSource($package,$names){
-    Write-Output '#include <stdio.h>'
-    Write-Output '#include <windows.h>'
-    Write-Output ''
+function Make-CSource($xml){
+    $const = $xml.make.const
+    $package = $const.package
 
-    $const = @()
-    foreach( $p in $names ){
-        if( $p -like '"*"' ){
-            Write-Output ('#include '+$p)
-            continue
-        }
-        $name1,$type,$fmt = ($p -split ":")
-        if( $fmt -ne $null -and $fmt -ne "" ){
-            Write-Output `
-                ('#define MAKECONST_{0}(n) printf("const " #n "={1}\n",n)' `
-                    -f $name1,$fmt)
-        }elseif( $type -eq $null -or $type -eq "" ){
-            Write-Output `
-                ('#define MAKECONST_{0}(n) printf("const " #n "=%d\n",n)' `
-                -f $name1)
-        }else{
-            Write-Output `
-                ('#define MAKECONST_{0}(n) printf("const " #n "={1}(%d)\n",n)' `
-                -f $name1,$type)
-        }
-        $const = $const + $name1
+    foreach( $h in $const.include ){
+        Write-Output "#include $h"
     }
-
+    Write-Output '#define X(x) #x'
+    Write-Output ''
     Write-Output 'int main()'
     Write-Output '{'
     Write-Output ('    printf("package {0}\n\n");' -f $package )
 
-    foreach($name1 in $const){
-        Write-Output ('    MAKECONST_{0}({0});' -f $name1)
+    foreach( $p in $const.li ){
+        $name1 = $p.nm
+        $type  = $p.type
+        $fmt   = $p.fmt
+        if( $fmt ){
+            Write-Output ('     printf("const " X({0}) "={1}\n",{0});' `
+                -f $name1,$fmt)
+        }elseif( $type ){
+            Write-Output ('     printf("const " X({0}) "={1}(%d)\n",{0});' `
+                -f $name1,$type)
+        }else{
+            Write-Output ('     printf("const " X({0}) "=%d\n",{0});' `
+                -f $name1)
+        }
     }
     Write-Output '    return 0;'
     Write-Output '}'
 }
 
-function Make-ConstGo($package,$names){
-    Make-CSource $package $names |
+function Make-ConstGo($makexml){
+    Make-CSource $makexml |
         Out-File "makeconst.c" -Encoding Default
 
     Write-Verbose -Message '$ gcc makeconst.c'
@@ -257,15 +314,9 @@ function Make-ConstGo($package,$names){
     Write-Verbose -Message '$ go fmt const.go'
     go fmt const.go
 
-    if( Test-Path "makeconst.o" ){
-        Remove-Item "makeconst.o"
-    }
-    if( Test-Path "makeconst.c" ){
-        Remove-Item "makeconst.c"
-    }
-    if( Test-Path "a.exe" ){
-        Remove-Item "a.exe"
-    }
+    Do-Remove "makeconst.o"
+    Do-Remove "makeconst.c"
+    Do-Remove "a.exe"
 }
 
 function Byte2DWord($a,$b,$c,$d){
@@ -285,7 +336,26 @@ function Get-Architecture($bin){
     return $null
 }
 
-$args = $env:args -split " "
+function Download-File($url){
+    $fname = (Split-Path $url -Leaf)
+    if( $fname -like "download*" ){
+        $fname = (Split-Path (Split-Path $url -Parent) -Leaf)
+    }
+    $client = New-Object System.Net.WebClient
+    Write-Verbose "$ wget '$url' -> '$fname'"
+    $client.DownloadFile($url,$fname)
+    return $fname
+}
+
+function Get-Lua($url,$arch){
+    $zip = (Download-File $url)
+    unzip -o $zip include\*
+    $folder = (Join-Path $CMD $arch)
+    Make-Dir $CMD
+    Make-Dir $folder
+    unzip -o $zip lua53.dll -d $folder
+    Do-Copy (Join-Path $folder lua53.dll) .
+}
 
 switch( $args[0] ){
     "" {
@@ -297,41 +367,65 @@ switch( $args[0] ){
     "release" {
         Build (Get-Content Misc\version.txt) ""
     }
+    "386" {
+        $private:save = $env:GOARCH
+        $env:GOARCH = "386"
+        Build "" ""
+        $env:GOARCH = $save
+    }
+    "386release" {
+        $private:save = $env:GOARCH
+        $env:GOARCH = "386"
+        Build (Get-Content Misc\version.txt) ""
+        $env:GOARCH = $save
+    }
+    "amd64" {
+        $private:save = $env:GOARCH
+        $env:GOARCH = "amd64"
+        Build (Get-Content Misc\version.txt) ""
+        $env:GOARCH = $save
+    }
     "status" {
         Show-Version ".\nyagos.exe"
     }
     "vet" {
-        ForEach-GoDir | %{
+        ForEach-GoDir | ForEach-Object{
             pushd $_
-            Write-Verbose ("$ go vet on " + $_)
+            Write-Verbose "$ go vet on $_"
             go vet
             popd
         }
     }
     "clean" {
         foreach( $p in @(`
+            (Join-Path $CMD "amd64\nyagos.exe"),`
+            (Join-Path $CMD "386\nyagos.exe"),`
             "nyagos.exe",`
             "nyagos.syso",`
             "version.now",`
-            "mains\bindata.go",`
-            "goversioninfo.exe",`
-            "go-bindata.exe" ) )
+            "goversioninfo.exe") )
         {
-            if( Test-Path $p ){
-                Write-Verbose -Message ("Remove " + $p)
-                Remove-Item $p
-            }
+            Do-Remove $p
         }
-        Write-Verbose "Search zsyscall.go"
         Get-ChildItem "." -Recurse |
-        ?{ $_.Name -eq "zsyscall.go" } |
-        %{
-            Write-Verbose -Message ("Remove " + $_.FullName)
-            Remove-Item $_.FullName
+        Where-Object { $_.Name -eq "make.xml" } |
+        ForEach-Object {
+            $dir = (Split-Path $_.FullName -Parent)
+            $xml = [xml](Get-Content $_.FullName)
+            foreach($li in $xml.make.generate.li){
+                if( -not $li ){ continue }
+                foreach($target in $xml.make.generate.li.target){
+                    if( -not $target ){ continue }
+                    $path = (Join-Path $dir $target)
+                    if( Test-Path $path ){
+                        Do-Remove $path
+                    }
+                }
+            }
         }
 
         ForEach-GoDir | %{
-            Write-Verbose -Message ("$ go clean on " + $_)
+            Write-Verbose "$ go clean on $_"
             pushd $_
             go clean
             popd
@@ -344,23 +438,21 @@ switch( $args[0] ){
     }
     "const" {
         Get-ChildItem . -Recurse |
-        ?{ $_.Name -eq "makeconst.txt" } |
+        ?{ $_.Name -eq "make.xml" } |
         %{
-            $private:const = (Get-Content $_.FullName)
+            $makexml = [xml](Get-Content $_.FullName)
             $private:cwd = (Split-Path $_.FullName -Parent)
             pushd $cwd
-            Write-Verbose ("$ chdir " + $cwd)
+            Write-Verbose "$ chdir $cwd"
             $private:pkg = (Split-Path $cwd -Leaf)
-            Write-Verbose ("for package " + $pkg)
-            Make-ConstGo $pkg $const
+            Write-Verbose "for package $pkg"
+            Make-ConstGo $makexml
             popd
         }
     }
     "package" {
-        .\nyagos -e "print(nyagos.version or nyagos.stamp)" |
-            %{ $version = ($_ -replace "/","") } # get the last line only.
-        $private:zipname = ("nyagos-{0}-{1}.zip" -f $version,(Get-GoArch))
-        Write-Verbose ("$ zip -9 " + $zipname + " ....")
+        $zipname = ("nyagos-{0}.zip" -f (.\nyagos.exe --show-version-only))
+        Write-Verbose "$ zip -9 $zipname ...."
         zip -9 $zipname `
             nyagos.exe `
             lua53.dll `
@@ -380,19 +472,19 @@ switch( $args[0] ){
         if( $installDir -eq $null -or $installDir -eq "" ){
             $installDir = (
                 Select-String 'INSTALLDIR=([^\)"]+)' Misc\version.cmd |
-                %{ $_.Matches[0].Groups[1].Value }
+                ForEach-Object{ $_.Matches[0].Groups[1].Value }
             )
-            if( $installDir -eq $null -or $installDir -eq "" ){
-                Write-Warning -Message "Usage: make.ps1 install INSTALLDIR"
+            if( -not $installDir ){
+                Write-Warning "Usage: make.ps1 install INSTALLDIR"
                 exit
             }
             if( -not (Test-Path $installDir) ){
-                Write-Warning -Message ("{0} not found." -f $installDir)
+                Write-Warning "$installDir not found."
                 exit
             }
-            Write-Verbose -Message ("installDir="+$installDir)
+            Write-Verbose "installDir=$installDir"
         }
-        Write-Output ('@set "INSTALLDIR={0}"' -f $installDir) |
+        Write-Output "@set `"INSTALLDIR=$installDir`"" |
             Out-File "Misc\version.cmd" -Encoding Default
 
         robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
@@ -403,22 +495,27 @@ switch( $args[0] ){
         if( -not (Test-Path (Join-Path $installDir "lua53.dll") ) ){
             Do-Copy lua53.dll $installDir
         }
-        Do-Copy nyagos.lua $installDir
         Ask-Copy "_nyagos" $installDir
         try{
             Do-Copy nyagos.exe $installDir
         }catch{
             taskkill /F /im nyagos.exe
-            Do-Copy nyagos.exe $installDir
+            try{
+                Do-Copy nyagos.exe $installDir
+            }catch{
+                Write-Host "Could not update installed nyagos.exe"
+                Write-Host "Some processes holds nyagos.exe now"
+            }
             # [void]([System.Windows.Forms.MessageBox]::Show("Done"))
             timeout /T 3
         }
     }
+    "generate" {
+        Go-Generate
+    }
     "get" {
-        Get-Imports | ForEach-Object `
-            -Process { $_ } `
-            -End { "golang.org/x/sys/windows" } |
-            %{ Write-Output $_ ; go get -u $_ }
+        Go-Generate
+        Get-Imports | ForEach-Object{ Write-Output $_ ; go get -u $_ }
     }
     "fmt" {
         Go-Fmt
@@ -439,7 +536,7 @@ switch( $args[0] ){
                 if( $dic.ContainsKey( $key ) ){
                     $private:other = $dic[$key]
                     if( $other -cne $one ){
-                        $private:output = ("{0},{1}" -f $one,$other)
+                        $private:output = "$one,$other"
                         if( -not $done.ContainsKey($output) ){
                             Write-Output $output
                             $done[ $output ] = $true
@@ -450,6 +547,47 @@ switch( $args[0] ){
                 }
             }
         }
+    }
+    "get-lua64" {
+        Get-Lua $LUA64URL "amd64"
+    }
+    "get-lua32" {
+        Get-Lua $LUA32URL "386"
+    }
+    "get-lua" {
+        if( (Get-GoArch) -eq "amd64" ){
+            Get-Lua $LUA64URL "amd64"
+        }else{
+            Get-Lua $LUA32URL "386"
+        }
+    }
+    "help" {
+        Write-Output @'
+make            build as snapshot version  (default)
+make debug      build as debug version     (tagged as `debug`)
+make release    build as release version.
+make 386        build for 32bit processor as release version.
+make amd64      build for 64bit processor as release version.
+make status     show version information 
+make vet        do `go vet` on each folder.
+make clean      remove all work files.
+make sweep      remove *.bak and *.~
+make const      make `const.go`. gcc is required.
+make package    make `nyagos-(VERSION)-(ARCH).zip`
+make install [FOLDER]
+                copy executables to FOLDER
+make install    copy executables to the last folder.
+make generate   execute `go generate` on the folder it required.
+make fmt        `go fmt`
+make check-case [FILE]
+make get-lua    download Lua 5.3 for current architecture.
+make get-lua64  download Lua 5.3 64-bit runtime.
+make get-lua32  download Lua 5.3 32-bit runtime.
+make help       show this.
+'@
+    }
+    default {
+        Write-Warning ("{0} not supported." -f $args[0])
     }
 }
 if( Test-Path Variable:LastExitCode ){

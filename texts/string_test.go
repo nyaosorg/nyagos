@@ -1,28 +1,28 @@
-package shell
+package texts
 
 import (
 	"fmt"
 	"testing"
 )
 
-func TestQuotedFirstWord(t *testing.T) {
-	fmt.Println("--- splitq ---")
+func TestFirstWord(t *testing.T) {
+	fmt.Println("--- FirstWord ---")
 
-	if value := QuotedFirstWord("aaaa bbbb cccc"); value != "aaaa" {
+	if value := FirstWord("aaaa bbbb cccc"); value != "aaaa" {
 		t.Error("Case-1: failed")
 	} else {
 		fmt.Println(value)
 	}
-	if value := QuotedFirstWord("\"12 34\" bbb"); value != "\"12 34\"" {
+	if value := FirstWord("\"12 34\" bbb"); value != "\"12 34\"" {
 		t.Error("Case-2: failed")
 	} else {
 		fmt.Println(value)
 	}
 }
 
-func TestSplitQ(t *testing.T) {
-	fmt.Println("*** Test SplitQ() ***")
-	values := SplitQ("\"a b\" bbb ccc \"1 2 3\" 'a  b' c")
+func TestSplitLikeShellString(t *testing.T) {
+	fmt.Println("*** Test SplitLikeShellString() ***")
+	values := SplitLikeShellString("\"a b\" bbb ccc \"1 2 3\" 'a  b' c")
 	for key, val := range values {
 		fmt.Printf("[%d]=\"%s\"\n", key, val)
 	}

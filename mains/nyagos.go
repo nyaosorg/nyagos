@@ -200,6 +200,24 @@ func Main() error {
 	it.OnFork = onFork
 	it.OffFork = offFork
 
+	langEngine := func(fname string) ([]byte, error) {
+		return runLua(it, L, fname)
+	}
+	shellEngine := func(fname string) error {
+		fd, err := os.Open(fname)
+		if err != nil {
+			return err
+		}
+		stream1 := NewCmdStreamFile(fd)
+		_, err = it.Loop(stream1)
+		fd.Close()
+		if err == io.EOF {
+			return nil
+		} else {
+			return err
+		}
+	}
+
 	script, err := optionParse(it, L)
 	if err != nil {
 		return err
@@ -210,7 +228,7 @@ func Main() error {
 	}
 
 	if !optionNorc {
-		if err := loadScripts(it, L); err != nil {
+		if err := loadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}
@@ -240,5 +258,13 @@ func Main() error {
 		stream1 = NewCmdStreamFile(os.Stdin)
 	}
 
-	return it.Loop(&MainStream{stream1, L})
+	for {
+		_, err = it.Loop(&MainStream{stream1, L})
+		if err == io.EOF {
+			return err
+		}
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
 }

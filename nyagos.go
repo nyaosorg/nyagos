@@ -6,8 +6,10 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"runtime"
 	"runtime/debug"
 
+	. "github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/mains"
 )
 
@@ -38,6 +40,11 @@ var version string
 func main() {
 	defer when_panic()
 
+	if len(os.Args) >= 2 && os.Args[1] == "--show-version-only" {
+		fmt.Printf("%s-%s\n", version, runtime.GOARCH)
+		os.Exit(0)
+	}
+
 	mains.Stamp = stamp
 	mains.Commit = commit
 	mains.Version = version
@@ -45,8 +52,16 @@ func main() {
 	if err := mains.Main(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		if err != io.EOF {
+			if DBG {
+				var dummy [1]byte
+				os.Stdin.Read(dummy[:])
+			}
 			os.Exit(1)
 		}
+	}
+	if DBG {
+		var dummy [1]byte
+		os.Stdin.Read(dummy[:])
 	}
 	os.Exit(0)
 }

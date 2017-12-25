@@ -37,6 +37,8 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 		"word":      rv.Word,
 		"list":      list,
 		"shownlist": shownlist,
+		"field":     rv.Field,
+		"left":      rv.Left,
 	})
 	if err := L.Call(1, 2); err != nil {
 		fmt.Println(err)
