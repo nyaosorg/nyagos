@@ -6,14 +6,15 @@ on Dec.25,2017
 
 * option --norc : not to load startup-scripts.
 * #132 Support foreach and block-if
-* Add option --lua-file
-* Add member `field` to the parameter of `complete_hook(c)` which is array c.text splited with space.
+* Add option --lua-file which loads and runs Lua-Script even if the suffix of the filename is not .lua .
+* Add members  to the parameter `c` of `nyagos.complete_hook(c)`
+    * `c.field` : array split all commandline string with space.
+    * `c.left` : string before cursor.
 * Enable command-name completion even if it is after `|` , `&` , `;`
 * #245 `print` of lua supports redirect.
 * On incremental search, support Ctrl-S for backward search.
 * Fix #258 Environment variable expanding does not work after backslash
 * Add lua-function nyagos.msgbox(MESSAGE,TITLE)
-* Add the member `c.left` to `nyagos.completion_hook(c)` which is string before cursor.
 
 NYAGOS 4.2.2\_2
 ===============

@@ -6,14 +6,15 @@ NYAGOS 4.2.3\_0
 
 * 起動スクリプトのロードを抑制する --norc オプションを追加
 * #132 foreach 文とブロック if 文をサポート
-* オプション --lua-file
-* `complete_hook(c)` の パラメータ c に項目 field を追加: c.text を空白で分割したもの
+* 拡張子が .lua でない場合でも Lua スクリプトとして実行するオプション --lua-file を追加
+* `complete_hook(c)` の パラメータ c に項目を追加
+    * `c.field` : `c.text` を空白で分割したもの
+    * `c.left` : カーソル前の文字列
 * `|`, `&`, `;` の直後でも、コマンド名補完が有効になるようにした
 * #245 Lua の print がリダイレクトに対応
 * インクリメンタルサーチ中に Ctrl-S で逆方向サーチできるようにした
 * #248 バックスラッシュ直後の環境変数展開が機能しない不具合を修正
 * lua関数 `nyagos.msgbox(MESSAGE,TITLE)` を追加
-* `nyagos.completion_hook(c)`にカーソル前の文字列を保持するメンバー `c.left` を追加
 
 NYAGOS 4.2.2\_2
 ===============
