@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix: CR and LF did not work as the word seperator in the commandline.
+
 NYAGOS 4.2.3\_0
 ===============
 on Dec.25,2017
