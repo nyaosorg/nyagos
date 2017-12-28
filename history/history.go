@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/mattn/go-isatty"
 	"github.com/zetamatta/nyagos/shell"
@@ -140,7 +141,7 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 		seekStrBuf.WriteRune(ch)
 		for reader.Len() > 0 {
 			ch, _, _ := reader.ReadRune()
-			if ch == ' ' {
+			if unicode.IsSpace(ch) {
 				reader.UnreadRune()
 				break
 			}
