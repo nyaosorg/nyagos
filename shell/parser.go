@@ -245,14 +245,14 @@ func parse1(text string) ([]*StatementT, error) {
 		}
 		if quoteNow != NOTQUOTED {
 			buffer.WriteRune(ch)
-		} else if ch == ' ' {
+		} else if unicode.IsSpace(ch) {
 			if buffer.Len() > 0 {
 				term_word()
 				isNextRedirect = false
 			}
-		} else if lastchar == ' ' && ch == '#' {
+		} else if unicode.IsSpace(lastchar) && ch == '#' {
 			break
-		} else if lastchar == ' ' && ch == ';' {
+		} else if unicode.IsSpace(lastchar) && ch == ';' {
 			term_line(";")
 		} else if ch == '|' {
 			if lastchar == '|' {

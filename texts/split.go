@@ -8,17 +8,18 @@ import (
 var rxEscape = regexp.MustCompile(`\\["'\\]`)
 var rxDoubleQuoted = regexp.MustCompile(`"[^"]*"`)
 var rxSingleQuoted = regexp.MustCompile(`'[^']*'`)
-var rxNonSpace = regexp.MustCompile(`[^ ]+`)
+var rxSpace = regexp.MustCompile(`\s`)
+var rxNonSpaces = regexp.MustCompile(`\S+`)
 
 func SplitLikeShell(line string) [][]int {
 	line = rxEscape.ReplaceAllString(line, "\001\001")
 	line = rxDoubleQuoted.ReplaceAllStringFunc(line, func(str string) string {
-		str = strings.Replace(str, " ", "\001", -1)
+		str = rxSpace.ReplaceAllString(str, "\001")
 		str = strings.Replace(str, `'`, "\001", -1)
 		return str
 	})
 	line = rxSingleQuoted.ReplaceAllStringFunc(line, func(str string) string {
-		return strings.Replace(str, " ", "\001", -1)
+		return rxSpace.ReplaceAllString(str, "\001")
 	})
-	return rxNonSpace.FindAllStringIndex(line, -1)
+	return rxNonSpaces.FindAllStringIndex(line, -1)
 }

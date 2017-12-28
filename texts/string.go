@@ -3,6 +3,7 @@ package texts
 import (
 	"bytes"
 	"strings"
+	"unicode"
 )
 
 const NULQUOTE = '\000'
@@ -14,7 +15,7 @@ func quotedWordCutter(reader *strings.Reader) (string, bool) {
 			return "", false
 		}
 		ch, _, _ := reader.ReadRune()
-		if ch != ' ' {
+		if !unicode.IsSpace(ch) {
 			reader.UnreadRune()
 			break
 		}
@@ -30,7 +31,7 @@ func quotedWordCutter(reader *strings.Reader) (string, bool) {
 				quote = NULQUOTE
 			}
 		}
-		if ch == ' ' && quote == NULQUOTE {
+		if unicode.IsSpace(ch) && quote == NULQUOTE {
 			break
 		}
 		if ch == '\\' {

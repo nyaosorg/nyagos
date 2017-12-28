@@ -2,6 +2,7 @@ package shell
 
 import (
 	"bytes"
+	"unicode"
 )
 
 func SplitToStatement(line string) []string {
@@ -19,7 +20,7 @@ func SplitToStatement(line string) []string {
 	for _, c := range line {
 		if c == '"' {
 			quote = !quote
-		} else if !quote && c == ';' && lastc == ' ' {
+		} else if !quote && c == ';' && unicode.IsSpace(lastc) {
 			done()
 			lastc = c
 			continue
