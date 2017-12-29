@@ -357,7 +357,7 @@ function Get-Lua($url,$arch){
     Do-Copy (Join-Path $folder lua53.dll) .
 }
 
-function Make-Packege($arch){
+function Make-Package($arch){
     $zipname = ("nyagos-{0}.zip" -f (& cmd\$arch\nyagos.exe --show-version-only))
     Write-Verbose "$ zip -9 $zipname ...."
     if( Test-Path $zipname ){
@@ -473,10 +473,10 @@ switch( $args[0] ){
         }
     }
     "386package" {
-        Make-Packege "386"
+        Make-Package "386"
     }
     "amd64package" {
-        Make-Packege "amd64"
+        Make-Package "amd64"
     }
     "package" {
         Make-Package (Get-GoArch)
