@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.3\_1
+===============
+(2017.12.30)
+
 * 改行コード等が単語の区切りとして認識していなかった不具合を修正
 * #264 画面バッファの幅が広すぎる時に、画面にゴミが現われる不具合を修正 
     (You have to do `go get -u github.com/mattn/go-colorable`)

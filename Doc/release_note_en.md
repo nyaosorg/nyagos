@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.3\_1
+===============
+on Dec.30,2017
+
 * Fix: CR and LF did not work as the word seperator in the commandline.
 * Fix: #264 Garbage appears on the screen when screen buffer width is too large.
     (You have to do `go get -u github.com/mattn/go-colorable`)
