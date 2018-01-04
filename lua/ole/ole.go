@@ -1,6 +1,7 @@
 package goluaole
 
 import (
+	"fmt"
 	lua "github.com/zetamatta/nyagos/lua"
 
 	ole "github.com/go-ole/go-ole"
@@ -15,6 +16,7 @@ type capsule_t struct {
 
 type method_t struct {
 	Name string
+	Data *ole.IDispatch
 }
 
 const OBJECT_T = "OLE_OBJECT"
@@ -93,19 +95,24 @@ func call1(L lua.Lua) int {
 func call2(L lua.Lua) int {
 	var m method_t
 	if _, err := L.TestUDataTo(1, METHOD_T, &m); err != nil {
-		return L.Push(nil, err)
+		return L.Push(nil, fmt.Errorf("%s(%s,call2)", err, METHOD_T))
 	}
 	if m.Name == "" {
 		return L.Push(nil, "OLEOBJECT(): the method is null")
 	}
 	var p capsule_t
 	if _, err := L.TestUDataTo(2, OBJECT_T, &p); err != nil {
-		return L.Push(nil, err)
+		if m.Data == nil {
+			return L.Push(nil, fmt.Errorf("%s(%s,call2)", err, OBJECT_T))
+		}
+		// this code enables `OLEOBJ.PROPERTY.PROPERTY:METHOD()`
+		return call_common(L, m.Data, m.Name)
+	} else {
+		if p.Data == nil {
+			return L.Push(nil, "OLEOBJECT(): the receiver is null")
+		}
+		return call_common(L, p.Data, m.Name)
 	}
-	if p.Data == nil {
-		return L.Push(nil, "OLEOBJECT(): the receiver is null")
-	}
-	return call_common(L, p.Data, m.Name)
 }
 
 func call_common(L lua.Lua, com1 *ole.IDispatch, name string) int {
@@ -166,8 +173,8 @@ func get(L lua.Lua) int {
 	}
 }
 
-func index(L lua.Lua) int {
-	name, name_err := L.ToString(2)
+func indexSub(L lua.Lua, thisIndex int, nameIndex int) int {
+	name, name_err := L.ToString(nameIndex)
 	if name_err != nil {
 		return L.Push(nil, name_err)
 	}
@@ -179,14 +186,45 @@ func index(L lua.Lua) int {
 	case "_get":
 		return L.Push(get, nil)
 	default:
-		L.PushUserData(&method_t{Name: name})
+		m := &method_t{Name: name}
+		var p capsule_t
+		if _, err := L.TestUDataTo(thisIndex, OBJECT_T, &p); err == nil {
+			m.Data = p.Data
+		}
+		L.PushUserData(m)
 		L.NewMetaTable(METHOD_T)
 		L.PushGoFunction(call2)
 		L.SetField(-2, "__call")
+		L.PushGoFunction(get2)
+		L.SetField(-2, "__index")
 		L.SetGcFunctionForUserData(-2, -1)
 		L.SetMetaTable(-2)
 		return 1
 	}
+}
+
+func index(L lua.Lua) int {
+	return indexSub(L, 1, 2)
+}
+
+// THIS.member.member
+func get2(L lua.Lua) int {
+	var m method_t
+	if _, err := L.TestUDataTo(1, METHOD_T, &m); err != nil {
+		println(err.Error())
+		return L.Push(nil, err)
+	}
+	result, err := oleutil.GetProperty(m.Data, m.Name)
+	if err != nil {
+		println(err.Error())
+		return L.Push(nil, err)
+	}
+	if result.VT == ole.VT_DISPATCH {
+		capsule_t{result.ToIDispatch()}.Push(L)
+	} else {
+		L.Push(result.Value())
+	}
+	return indexSub(L, 3, 2)
 }
 
 func CreateObject(L lua.Lua) int {
