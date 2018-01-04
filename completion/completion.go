@@ -32,8 +32,11 @@ type List struct {
 var UseSlash = false
 
 func isTop(s string, indexes [][]int) bool {
-	if len(indexes) <= 1 {
+	if len(indexes) < 1 {
 		return true
+	}
+	if len(indexes) == 1 {
+		return indexes[0][1] == len(s)
 	}
 	prev := s[indexes[len(indexes)-2][0]:indexes[len(indexes)-2][1]]
 	return prev == ";" || prev == "|" || prev == "&"
