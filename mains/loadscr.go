@@ -37,7 +37,7 @@ func loadScripts(shellEngine func(string) error,
 			runtime.GOARCH,
 			runtime.Version(),
 			"Lua 5.3")
-		fmt.Println("(c) 2014-2017 NYAOS.ORG <http://www.nyaos.org>")
+		fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
 	}
 
 	nyagos_d := filepath.Join(exeFolder, "nyagos.d")
