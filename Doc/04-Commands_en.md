@@ -156,13 +156,24 @@ Report which file is executed.
 
 These built-in commands are always asking with prompt when files are override or removed.
 
-### `source BATCHFILENAME`
+### `source [-v] [-d] BATCHFILENAME`
 
 Execute the batch-file(`*.cmd`,`*.bat`) by CMD.exe and
 import the environment variables and working directory
 which CMD.exe changed.
 
-We use . (one-period) as an alias of source.
+- We use `.` (one-period) as an alias of `source`.
+- `source` makes three temporari files.
+    - `%TEMP%\nyagos-(PID).cmd`
+        - CMD.EXE executes it. It calls the batch file the user want to call.
+    - `%TEMP%\nyagos-(PID).tmp`
+        - It contains the new values of the environemnt variables.
+        - `nyagos-(PID).cmd` made it and nyagos.exe reads it.
+    - `%TEMP%\nyagos_(PID).tmp`
+        - It contains the new current working directory.
+        - `nyagos-(PID).cmd` made it and nyagos.exe reads it.
+- With option -d, temporary files made by `source` is not to be removed.
+- With option -v, `source` shows the temporari files to STDERR.
 
 ### `open FILE(s)`
 
