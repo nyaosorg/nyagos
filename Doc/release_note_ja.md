@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.3\_2
+===============
+(2018.01.06)
+
 * #265 `ls` + 空白 + TAB でコマンド名補完が動いていた不具合を修正
 
 NYAGOS 4.2.3\_1

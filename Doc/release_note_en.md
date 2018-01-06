@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.3\_2
+===============
+on Jan.6,2018
+
 * Fix: #265 Type `ls` , SPACE and TAB -> command name completion starts. 
 
 NYAGOS 4.2.3\_1
