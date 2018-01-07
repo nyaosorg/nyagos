@@ -7,8 +7,11 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
 set CMD "Cmd" -option constant
-set LUA64URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" -option constant
-set LUA32URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" -option constant
+
+$LUAURL = @{
+    "amd64"="https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download";
+    "386"="https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download";
+}
 
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
@@ -384,26 +387,18 @@ switch( $args[0] ){
         Build (git describe --tags) ""
     }
     "debug" {
+        $private:save = $env:GOARCH
+        if( $args[1] ){
+            $env:GOARCH = $args[1]
+        }
         Build "" "-tags=debug"
+        $env:GOARCH = $save
     }
     "release" {
-        Build (Get-Content Misc\version.txt) ""
-    }
-    "386" {
         $private:save = $env:GOARCH
-        $env:GOARCH = "386"
-        Build "" ""
-        $env:GOARCH = $save
-    }
-    "386release" {
-        $private:save = $env:GOARCH
-        $env:GOARCH = "386"
-        Build (Get-Content Misc\version.txt) ""
-        $env:GOARCH = $save
-    }
-    "amd64" {
-        $private:save = $env:GOARCH
-        $env:GOARCH = "amd64"
+        if( $args[1] ){
+            $env:GOARCH = $args[1]
+        }
         Build (Get-Content Misc\version.txt) ""
         $env:GOARCH = $save
     }
@@ -472,14 +467,9 @@ switch( $args[0] ){
             popd
         }
     }
-    "386package" {
-        Make-Package "386"
-    }
-    "amd64package" {
-        Make-Package "amd64"
-    }
     "package" {
-        Make-Package (Get-GoArch)
+        $goarch = if( $args[1] ){ $args[1] }else{ (Get-GoArch) }
+        Make-Package $goarch
     }
     "install" {
         $installDir = $args[1]
@@ -562,42 +552,27 @@ switch( $args[0] ){
             }
         }
     }
-    "get-lua64" {
-        Get-Lua $LUA64URL "amd64"
-    }
-    "get-lua32" {
-        Get-Lua $LUA32URL "386"
-    }
     "get-lua" {
-        if( (Get-GoArch) -eq "amd64" ){
-            Get-Lua $LUA64URL "amd64"
-        }else{
-            Get-Lua $LUA32URL "386"
-        }
+        $goarch = if( $args[1] ){ $args[1] } else { (Get-GoArch) }
+        Get-Lua ($LUAURL[ $goarch ]) $goarch
     }
     "help" {
         Write-Output @'
-make            build as snapshot version  (default)
-make debug      build as debug version     (tagged as `debug`)
-make release    build as release version.
-make 386        build for 32bit processor as release version.
-make amd64      build for 64bit processor as release version.
-make status     show version information 
-make vet        do `go vet` on each folder.
-make clean      remove all work files.
-make sweep      remove *.bak and *.~
-make const      make `const.go`. gcc is required.
-make package    make `nyagos-(VERSION)-(ARCH).zip`
-make install [FOLDER]
-                copy executables to FOLDER
-make install    copy executables to the last folder.
-make generate   execute `go generate` on the folder it required.
-make fmt        `go fmt`
+make                     build as snapshot
+make debug   [386|amd64] build as debug version     (tagged as `debug`)
+make release [386|amd64] build as release version
+make status              show version information 
+make vet                 do `go vet` on each folder
+make clean               remove all work files
+make sweep               remove *.bak and *.~
+make const               make `const.go`. gcc is required
+make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
+make install [FOLDER]    copy executables to FOLDER or last folder
+make generate            execute `go generate` on the folder it required
+make fmt                 `go fmt`
 make check-case [FILE]
-make get-lua    download Lua 5.3 for current architecture.
-make get-lua64  download Lua 5.3 64-bit runtime.
-make get-lua32  download Lua 5.3 32-bit runtime.
-make help       show this.
+make get-lua [386|amd64] download Lua 5.3 for current architecture
+make help                show this
 '@
     }
     default {
