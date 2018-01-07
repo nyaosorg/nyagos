@@ -29,6 +29,8 @@ func (this capsule_t) Push(L lua.Lua) int {
 	L.SetField(-2, "__gc")
 	L.PushGoFunction(index)
 	L.SetField(-2, "__index")
+	L.PushGoFunction(set)
+	L.SetField(-2, "__newindex")
 	L.SetMetaTable(-2)
 	return 1
 }
@@ -193,6 +195,8 @@ func indexSub(L lua.Lua, thisIndex int, nameIndex int) int {
 		}
 		L.PushUserData(m)
 		L.NewMetaTable(METHOD_T)
+		L.PushGoFunction(set)
+		L.SetField(-2, "__newindex")
 		L.PushGoFunction(call2)
 		L.SetField(-2, "__call")
 		L.PushGoFunction(get2)
