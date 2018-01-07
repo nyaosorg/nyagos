@@ -117,24 +117,7 @@ func call_batch(batch string, args []string, env string, pwd string, verbose io.
 	return errorlevel, nil
 }
 
-func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	var verbose io.Writer
-	args := make([]string, 0, len(cmd.Args))
-	debug := false
-	for _, arg1 := range cmd.Args[1:] {
-		switch arg1 {
-		case "-v":
-			verbose = cmd.Stderr
-		case "-d":
-			debug = true
-		default:
-			args = append(args, arg1)
-		}
-	}
-	if len(cmd.Args) <= 0 {
-		return 255, nil
-	}
-
+func Source(args []string, verbose io.Writer, debug bool) (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
@@ -160,6 +143,26 @@ func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	if err := load_pwdfile(pwd, verbose); err != nil {
 		return 1, err
 	}
+	return errorlevel, err
+}
 
-	return errorlevel, nil
+func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
+	var verbose io.Writer
+	args := make([]string, 0, len(cmd.Args))
+	debug := false
+	for _, arg1 := range cmd.Args[1:] {
+		switch arg1 {
+		case "-v":
+			verbose = cmd.Stderr
+		case "-d":
+			debug = true
+		default:
+			args = append(args, arg1)
+		}
+	}
+	if len(cmd.Args) <= 0 {
+		return 255, nil
+	}
+
+	return Source(args, verbose, debug)
 }
