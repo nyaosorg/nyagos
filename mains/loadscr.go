@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
-	. "github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -50,14 +49,16 @@ func loadScripts(shellEngine func(string) error,
 		} else {
 			for _, finfo1 := range finfos {
 				name1 := finfo1.Name()
-				if !strings.HasSuffix(strings.ToLower(name1), ".lua") {
-					continue
-				}
 				path1 := filepath.Join(nyagos_d, name1)
-				if DBG {
-					println("load real ", path1)
+				name1_ := strings.ToLower(name1)
+
+				var err error
+				if strings.HasSuffix(name1_, ".lua") {
+					_, err = langEngine(path1)
+				} else if strings.HasSuffix(name1_, ".ny") {
+					err = shellEngine(path1)
 				}
-				if _, err := langEngine(path1); err != nil {
+				if err != nil {
 					fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
 				}
 			}
