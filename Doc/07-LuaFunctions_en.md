@@ -286,6 +286,10 @@ Create OLEObject. OLEOBJECTs have methods and property.
 
 If it is true , enables the wildcard expansion on external commands also.
 
+### `nyagos.option.noclobber`
+
+If it is true , overwriting the existing file by redirect is forbidden.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe
