@@ -5,6 +5,8 @@ import (
 	"os"
 )
 
+var NoClobber = false
+
 type Redirecter struct {
 	path     string
 	isAppend bool
@@ -39,6 +41,12 @@ func (this *Redirecter) SetAppend() {
 func (this *Redirecter) open() (*os.File, error) {
 	if this.path == "" {
 		return nil, errors.New("Redirecter.open(): path=\"\"")
+	}
+	if this.no != 0 && NoClobber {
+		_, err := os.Stat(this.path)
+		if err == nil {
+			return nil, os.ErrExist
+		}
 	}
 	if this.no == 0 {
 		return os.Open(this.path)
