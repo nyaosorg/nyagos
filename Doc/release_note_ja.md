@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* `print(nil,true,false)` が何も出力しない不具合を修正
+
 NYAGOS 4.2.3\_2
 ===============
 (2018.01.06)
