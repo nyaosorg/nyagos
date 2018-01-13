@@ -43,12 +43,6 @@ func (this *Redirecter) open() (*os.File, error) {
 	if this.path == "" {
 		return nil, errors.New("Redirecter.open(): path=\"\"")
 	}
-	if this.no != 0 && NoClobber && !this.force {
-		_, err := os.Stat(this.path)
-		if err == nil {
-			return nil, os.ErrExist
-		}
-	}
 	if this.no == 0 {
 		return os.Open(this.path)
 	} else if this.isAppend {
@@ -58,6 +52,12 @@ func (this *Redirecter) open() (*os.File, error) {
 		}
 		return f, err
 	} else {
+		if NoClobber && !this.force {
+			_, err := os.Stat(this.path)
+			if err == nil {
+				return nil, os.ErrExist
+			}
+		}
 		return os.Create(this.path)
 	}
 }
