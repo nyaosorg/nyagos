@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix: `print(nil,true,false)` outputs nothing..
+
 NYAGOS 4.2.3\_2
 ===============
 on Jan.6,2018

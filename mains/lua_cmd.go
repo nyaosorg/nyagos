@@ -351,12 +351,25 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	}
 	n := L.GetTop()
 	for i := 1; i <= n; i++ {
-		str, err := L.ToString(i)
-		if err != nil {
-			return L.Push(nil, err)
-		}
 		if i > 1 {
 			fmt.Fprint(out, "\t")
+		}
+		var str string
+		var err error
+		switch L.GetType(i) {
+		case lua.LUA_TBOOLEAN:
+			if L.ToBool(i) {
+				str = "true"
+			} else {
+				str = "false"
+			}
+		case lua.LUA_TNIL:
+			str = "nil"
+		default:
+			str, err = L.ToString(i)
+			if err != nil {
+				return L.Push(nil, err)
+			}
 		}
 		fmt.Fprint(out, str)
 	}
