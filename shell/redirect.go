@@ -12,6 +12,7 @@ type Redirecter struct {
 	isAppend bool
 	no       int
 	dupFrom  int
+	force    bool
 }
 
 func NewRedirecter(no int) *Redirecter {
@@ -42,7 +43,7 @@ func (this *Redirecter) open() (*os.File, error) {
 	if this.path == "" {
 		return nil, errors.New("Redirecter.open(): path=\"\"")
 	}
-	if this.no != 0 && NoClobber {
+	if this.no != 0 && NoClobber && !this.force {
 		_, err := os.Stat(this.path)
 		if err == nil {
 			return nil, os.ErrExist
