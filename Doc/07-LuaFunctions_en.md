@@ -290,6 +290,9 @@ If it is true , enables the wildcard expansion on external commands also.
 
 If it is true , overwriting the existing file by redirect is forbidden.
 
+The redirect marks `>|` and `>!` can overwrite a file whenever 
+nyagos.option.noclobber is true.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe

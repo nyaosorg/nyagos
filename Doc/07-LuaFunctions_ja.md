@@ -309,7 +309,9 @@ true の時、外部コマンドに対するワイルドカード展開を有効
 
 ### `nyagos.option.noclobber`
 
-true の時、リダイレクトによる既存ファイルの上書きを禁止します
+true の時、リダイレクトによる既存ファイルの上書きを禁止します。
+リダイレクト記号の `>|` と `>!` は nyagos.option.noclobber が
+true の時でもファイルの上書きができます。
 
 ### `nyagos.goversion`
 
