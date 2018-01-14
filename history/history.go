@@ -160,7 +160,7 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 		}
 		if !found {
 			buffer.WriteRune(mark)
-			buffer.WriteRune(ch)
+			buffer.WriteString(seekStr)
 		}
 	}
 	return buffer.String(), isReplaced
