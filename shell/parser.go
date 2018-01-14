@@ -254,6 +254,8 @@ func parse1(text string) ([]*StatementT, error) {
 			break
 		} else if unicode.IsSpace(lastchar) && ch == ';' {
 			term_line(";")
+		} else if ch == '!' && lastchar == '>' && isNextRedirect && len(redirect) > 0 {
+			redirect[len(redirect)-1].force = true
 		} else if ch == '|' {
 			if lastchar == '>' && isNextRedirect && len(redirect) > 0 {
 				redirect[len(redirect)-1].force = true
