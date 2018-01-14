@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * Fix: `print(nil,true,false)` outputs nothing..
+* Fix the bug that `!notfoundstr` is replaced to `!n` only.
 
 NYAGOS 4.2.3\_2
 ===============
