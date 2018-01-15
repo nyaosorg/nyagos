@@ -204,6 +204,8 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this.RepaintAfterPrompt()
 
+	getch.Flush()
+
 	cursor_on := false
 	for {
 		var e getch.Event
