@@ -4,3 +4,4 @@
 * `nyagos.d/*.ny` のコマンドファイルも読み込むようにした
 * #266: `lua_e "nyagos.option.noclobber = true"` でリダイレクトでのファイル上書きを禁止
 * #269: `>| FILENAME` もしくは `>! FILENAME` で、`nyagos.option.noclobber = true` の時も上書きできるようにした
+* #270: プロンプト表示時にコンソール入力バッファをクリアするようにした
