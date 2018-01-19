@@ -386,6 +386,12 @@ switch( $args[0] ){
     "" {
         Build (git describe --tags) ""
     }
+    "386"{
+        $private:save = $env:GOARCH
+        $env:GOARCH = "386"
+        Build (git describe --tags) ""
+        $env:GOARCH = $save
+    }
     "debug" {
         $private:save = $env:GOARCH
         if( $args[1] ){
