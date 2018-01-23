@@ -204,7 +204,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		}
 		commonStr = string(buffer)
 	}
-	if len(comp.List) == 1 && !endWithRoot(commonStr) {
+	if len(comp.List) == 1 && !endWithRoot(commonStr) && !strings.HasSuffix(commonStr, `%`) {
 		commonStr += " "
 	}
 	if slashToBackSlash {
