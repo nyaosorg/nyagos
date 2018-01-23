@@ -70,26 +70,34 @@ func judgeDir(path string) bool {
 }
 
 func (this copymove_t) Run(ctx context.Context) (int, error) {
-	if len(this.Args) <= 2 {
+	all := false
+	args := this.Args[1:]
+	for {
+		if len(args) >= 1 && (args[0] == "/y" || args[0] == "/Y") {
+			all = true
+			args = args[1:]
+		} else if len(args) >= 1 && (args[0] == "/-y" || args[0] == "/-Y") {
+			all = false
+			args = args[1:]
+		} else {
+			break
+		}
+	}
+	if len(args) < 2 {
 		fmt.Fprintf(this.Stderr,
 			"Usage: %s [/y] SOURCE-FILENAME DESITINATE-FILENAME\n"+
 				"       %s [/y] FILENAMES... DESINATE-DIRECTORY\n",
 			this.Args[0], this.Args[0])
 		return 0, nil
 	}
-	all := false
-	isDir := judgeDir(this.Args[len(this.Args)-1])
-	srcs := this.Args[1 : len(this.Args)-1]
+	isDir := judgeDir(args[len(args)-1])
+	srcs := args[0 : len(args)-1]
 	for i, src := range srcs {
 		if getch.IsCtrlCPressed() {
 			fmt.Fprintln(this.Stderr, "^C")
 			return 0, nil
 		}
-		if src == "/y" {
-			all = true
-			continue
-		}
-		dst := this.Args[len(this.Args)-1]
+		dst := args[len(args)-1]
 		if isDir {
 			dst = filepath.Join(dst, filepath.Base(src))
 		}
