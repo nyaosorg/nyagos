@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"os"
-	"regexp"
 	"strings"
 
 	"github.com/zetamatta/go-findfile"
@@ -21,30 +20,6 @@ const (
 
 var IncludeHidden = false
 
-var rxEnvPattern = regexp.MustCompile("%[^%]+%")
-
-func replaceEnv(str string) string {
-	str = rxEnvPattern.ReplaceAllStringFunc(str, func(p string) string {
-		if len(p) == 2 {
-			return "%"
-		}
-		name := p[1 : len(p)-1]
-		for _, env := range PercentVariables {
-			if value := env.Lookup(name); value != "" {
-				return value
-			}
-		}
-		return p
-	})
-
-	if len(str) >= 2 && str[0] == '~' && os.IsPathSeparator(str[1]) {
-		if home := dos.GetHome(); home != "" {
-			str = home + str[1:]
-		}
-	}
-	return str
-}
-
 func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 	orgSlash := STD_SLASH[0]
 	if UseSlash {
@@ -55,7 +30,7 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 	}
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), `"`, "", -1)
 	directory := DirName(str)
-	wildcard := dos.Join(replaceEnv(directory), "*")
+	wildcard := dos.Join(findfile.ExpandEnv(directory), "*")
 
 	// Drive letter
 	cutprefix := 0
