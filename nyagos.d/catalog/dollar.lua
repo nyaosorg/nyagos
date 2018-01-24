@@ -27,9 +27,6 @@ nyagos.completion_hook = function(c)
     local text = string.gsub(c.word,"$(%w+)",function(m)
         return nyagos.env[m]
     end)
-    text = string.gsub(text,"$%b{}",function(m)
-        return nyagos.env[string.sub(m,3,string.len(m)-1)]
-    end)
     if text == c.word then
         if share.org_dollar_complete then
             return share.org_dollar_complete(c)
