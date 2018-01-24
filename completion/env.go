@@ -31,25 +31,16 @@ var PercentVariables = []IVariable{
 	new(EnvironmentVariable),
 }
 
-func findLastOpenPercent(this string) int {
-	pos := -1
-	for i, ch := range this {
-		if ch == '%' {
-			if pos >= 0 { // closing percent mark
-				pos = -1
-			} else { // opening percent mark
-				pos = i
-			}
-		}
-	}
-	return pos
-}
-
 func listUpEnv(cmdline string) ([]Element, int, error) {
-	lastPercentPos := findLastOpenPercent(cmdline)
+	percent_count := strings.Count(cmdline, "%")
+	if percent_count%2 == 0 {
+		return nil, -1, nil
+	}
+	lastPercentPos := strings.LastIndex(cmdline, "%")
 	if lastPercentPos < 0 {
 		return nil, -1, nil
 	}
+
 	str := cmdline[lastPercentPos:]
 	name := strings.ToUpper(str[1:])
 	var matches []Element
