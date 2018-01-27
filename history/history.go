@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -23,7 +24,7 @@ var Mark = "!"
 
 var DisableMarks = "\"'"
 
-func (hisObj *Container) Replace(line string) (string, bool) {
+func (hisObj *Container) Replace(line string) (string, bool, error) {
 	var mark rune
 	for _, c := range Mark {
 		mark = c
@@ -69,19 +70,19 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 				isReplaced = true
 				continue
 			} else {
-				buffer.WriteRune(mark)
-				continue
+				return "", false, errors.New("!!: event not found")
 			}
 		}
-		if strings.IndexRune("0123456789", ch) >= 0 { // !n
+		if unicode.IsDigit(ch) { // !n
 			reader.UnreadRune()
 			var backno int
 			fmt.Fscan(reader, &backno)
-			backno = backno % history_count
 			if 0 <= backno && backno < history_count {
 				line := hisObj.At(backno)
 				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
+			} else {
+				return "", false, fmt.Errorf("!%d: event not found", backno)
 			}
 			continue
 		}
@@ -89,16 +90,12 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			var number int
 			if _, err := fmt.Fscan(reader, &number); err == nil {
 				backno := history_count - number
-				for backno < 0 {
-					backno += history_count
-				}
 				if 0 <= backno && backno < history_count {
 					line := hisObj.At(backno)
 					ExpandMacro(&buffer, reader, line)
 					isReplaced = true
 				} else {
-					buffer.WriteRune(mark)
-					buffer.WriteString("-0")
+					return "", false, fmt.Errorf("!-%d: event not found", number)
 				}
 				continue
 			} else {
@@ -128,10 +125,10 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 				}
 			}
 			if !found {
-				buffer.WriteRune('?')
-				buffer.WriteString(seekStr)
 				if lastCharIsQuestionMark {
-					buffer.WriteRune('?')
+					return "", false, fmt.Errorf("?%s?: event not found", seekStr)
+				} else {
+					return "", false, fmt.Errorf("?%s: event not found", seekStr)
 				}
 			}
 			continue
@@ -159,11 +156,10 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			}
 		}
 		if !found {
-			buffer.WriteRune(mark)
-			buffer.WriteString(seekStr)
+			return "", false, fmt.Errorf("%c%s: event not found", mark, seekStr)
 		}
 	}
-	return buffer.String(), isReplaced
+	return buffer.String(), isReplaced, nil
 }
 
 func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
