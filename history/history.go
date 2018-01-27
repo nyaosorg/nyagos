@@ -121,7 +121,7 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			for i := history_count - 1; i >= 0; i-- {
 				his1 := hisObj.At(i)
 				if strings.Contains(his1, seekStr) {
-					buffer.WriteString(his1)
+					ExpandMacro(&buffer, reader, his1)
 					isReplaced = true
 					found = true
 					break
@@ -141,7 +141,7 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 		seekStrBuf.WriteRune(ch)
 		for reader.Len() > 0 {
 			ch, _, _ := reader.ReadRune()
-			if unicode.IsSpace(ch) {
+			if unicode.IsSpace(ch) || ch == ':' {
 				reader.UnreadRune()
 				break
 			}
@@ -152,7 +152,7 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 		for i := history_count - 1; i >= 0; i-- {
 			his1 := hisObj.At(i)
 			if strings.HasPrefix(his1, seekStr) {
-				buffer.WriteString(his1)
+				ExpandMacro(&buffer, reader, his1)
 				isReplaced = true
 				found = true
 				break
@@ -168,6 +168,9 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 
 func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
+	if siz > 0 && ch == ':' {
+		ch, siz, _ = reader.ReadRune()
+	}
 	if siz > 0 && ch == '^' {
 		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(words[1])
@@ -180,11 +183,12 @@ func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(strings.Join(words[1:], " "))
 		}
-	} else if siz > 0 && ch == ':' {
+	} else if siz > 0 && unicode.IsDigit(ch) {
 		var n int
-		if _, err := fmt.Fscan(reader, &n); err != nil {
-			buffer.WriteRune(':')
-		} else if words := texts.SplitLikeShellString(line); n < len(words) {
+		reader.UnreadRune()
+		fmt.Fscan(reader, &n)
+		words := texts.SplitLikeShellString(line)
+		if n < len(words) {
 			buffer.WriteString(words[n])
 		}
 	} else {
