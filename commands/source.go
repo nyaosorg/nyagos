@@ -73,7 +73,7 @@ func load_pwdfile(fname string, verbose io.Writer) error {
 	return nil
 }
 
-func call_batch(batch string, args []string, env string, pwd string, verbose io.Writer) (int, error) {
+func call_batch(batch string, args []string, env string, pwd string, verbose io.Writer, stdout io.Writer) (int, error) {
 	params := []string{
 		os.Getenv("COMSPEC"),
 		"/C",
@@ -106,7 +106,12 @@ func call_batch(batch string, args []string, env string, pwd string, verbose io.
 		return 1, err
 	}
 
-	cmd2 := exec.Cmd{Path: params[0], Args: params}
+	cmd2 := exec.Cmd{
+		Path:   params[0],
+		Args:   params,
+		Stdout: stdout,
+		Stderr: stdout,
+	}
 	if err := cmd2.Run(); err != nil {
 		return 1, err
 	}
@@ -140,8 +145,9 @@ func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
 	env := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
 	pwd := filepath.Join(tempDir, fmt.Sprintf("nyagos_%d.tmp", pid))
+	stdout := cmd.Stdout
 
-	errorlevel, err := call_batch(batch, args, env, pwd, verbose)
+	errorlevel, err := call_batch(batch, args, env, pwd, verbose, stdout)
 
 	if !debug {
 		defer os.Remove(env)
