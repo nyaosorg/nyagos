@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * Fix the bug that `!notfoundstr` is replaced to `!n` only.
 * #271: Fix Ctrl-O (box selector) does not work for the path contains %APPDATA% ( Fix zetamatta\go-findfile )
 * On completion, don't append SPACE after PERCENT mark.
+* #276 Fix that `source` did not execute a batch with stdout. (Thx @tyochiai )
 
 NYAGOS 4.2.3\_2
 ===============
