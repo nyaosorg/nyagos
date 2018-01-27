@@ -6,3 +6,5 @@
 * #269: `>| FILENAME` and `>! FILENAME` enable to overwrite the file already existing by redirect even if `nyagos.option.noclobber = true`
 * #270: Console input buffer has been cleaned up when prompt is drawn.
 * #228: Completion supports $ENV[TAB]... by native
+* #275: Fix: history substitution like `!str:$` , `!?str?:$` did not work.
+* The error `event not found` is caused when the event pointed !y does note exists.
