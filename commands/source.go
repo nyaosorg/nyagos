@@ -122,14 +122,12 @@ func call_batch(batch string, args []string, env string, pwd string, verbose io.
 	return errorlevel, nil
 }
 
-func Source(args []string, verbose io.Writer, debug bool) (int, error) {
+func Source(args []string, verbose io.Writer, debug bool, stdout io.Writer, stderr io.Writer) (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
 	env := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
 	pwd := filepath.Join(tempDir, fmt.Sprintf("nyagos_%d.tmp", pid))
-	stdout := cmd.Stdout
-	stderr := cmd.Stderr
 
 	errorlevel, err := call_batch(batch, args, env, pwd, verbose, stdout, stderr)
 
@@ -171,5 +169,5 @@ func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return 255, nil
 	}
 
-	return Source(args, verbose, debug)
+	return Source(args, verbose, debug, cmd.Stdout, cmd.Stderr)
 }
