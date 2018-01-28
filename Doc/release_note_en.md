@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* `ls -?` for help instead of `ls -h`
+
 NYAGOS 4.2.3\_3
 ===============
 on Jan.28,2018
