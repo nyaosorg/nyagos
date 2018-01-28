@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.3\_3
+===============
+(2018.01.28)
+
 * `print(nil,true,false)` が何も出力しない不具合を修正
 * 検索にヒットしないヒストリ置換で `!notfoundstr`  が `!n` になってしまう不具合を修正
 * #271: Ctrl-O が環境変数を含んだパスで効かない不具合を修正 (go-findfile)

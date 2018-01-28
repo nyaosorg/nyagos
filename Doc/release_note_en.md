@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.3\_3
+===============
+on Jan.28,2018
+
 * Fix: `print(nil,true,false)` outputs nothing..
 * Fix the bug that `!notfoundstr` is replaced to `!n` only.
 * #271: Fix Ctrl-O (box selector) does not work for the path contains %APPDATA% ( Fix zetamatta\go-findfile )
