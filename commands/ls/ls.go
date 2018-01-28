@@ -474,6 +474,10 @@ var option = map[rune](func(*int) error){
 		*flag |= O_HUMAN
 		return nil
 	},
+	'?': func(flag *int) error {
+		*flag |= O_HELP
+		return nil
+	},
 	'S': func(flag *int) error {
 		*flag |= O_SIZESORT
 		return nil
