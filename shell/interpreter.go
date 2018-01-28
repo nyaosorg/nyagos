@@ -149,21 +149,18 @@ func nvl(a *os.File, b *os.File) *os.File {
 }
 
 func makeCmdline(args, rawargs []string) string {
-	buffer := make([]byte, 0, 1024)
+	var buffer strings.Builder
 	for i, s := range args {
 		if i > 0 {
-			buffer = append(buffer, ' ')
+			buffer.WriteRune(' ')
 		}
 		if (len(rawargs) > i && len(rawargs[i]) > 0 && rawargs[i][0] == '"') || strings.ContainsAny(s, " &|<>\t\"") {
-			buffer = append(buffer, '"')
-			qs := strings.Replace(s, `"`, `\"`, -1)
-			buffer = append(buffer, qs...)
-			buffer = append(buffer, '"')
+			fmt.Fprintf(&buffer, `"%s"`, strings.Replace(s, `"`, `\"`, -1))
 		} else {
-			buffer = append(buffer, s...)
+			buffer.WriteString(s)
 		}
 	}
-	return string(buffer)
+	return buffer.String()
 }
 
 func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
