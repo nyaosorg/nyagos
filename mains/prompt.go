@@ -1,7 +1,6 @@
 package mains
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -15,7 +14,7 @@ func Format2Prompt(format string) string {
 	if format == "" {
 		format = "[$P]$_$$$S"
 	}
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	lastchar := '\000'
 	for reader := strings.NewReader(format); reader.Len() > 0; {
 		ch, _, err := reader.ReadRune()

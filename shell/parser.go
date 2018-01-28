@@ -1,7 +1,6 @@
 package shell
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -69,7 +68,7 @@ func OurGetEnv(name string) (string, bool) {
 	}
 }
 
-func chomp(buffer *bytes.Buffer) {
+func chomp(buffer *strings.Builder) {
 	original := buffer.String()
 	buffer.Reset()
 	var lastchar rune
@@ -86,7 +85,7 @@ const NOTQUOTED = '\000'
 const EMPTY_COMMAND_FOUND = "Empty command found"
 
 func string2word(source_ string, removeQuote bool) string {
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	source := strings.NewReader(source_)
 
 	lastchar := ' '
@@ -110,7 +109,7 @@ func string2word(source_ string, removeQuote bool) string {
 			for ; yenCount > 0; yenCount-- {
 				buffer.WriteRune('\\')
 			}
-			var nameBuf bytes.Buffer
+			var nameBuf strings.Builder
 			for {
 				ch, _, err = source.ReadRune()
 				if err != nil {
@@ -184,7 +183,7 @@ func parse1(text string) ([]*StatementT, error) {
 	args := make([]string, 0)
 	rawArgs := make([]string, 0)
 	lastchar := ' '
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	isNextRedirect := false
 	redirect := make([]*Redirecter, 0, 3)
 

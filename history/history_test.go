@@ -49,7 +49,7 @@ func TestReplace(t *testing.T) {
 }
 
 func TestExpandMacro(t *testing.T) {
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 
 	ExpandMacro(&buffer, strings.NewReader("^"), "aaa bbb ccc")
 	if buffer.String() != "bbb" {
@@ -91,7 +91,7 @@ func TestSaveToWriter(t *testing.T) {
 	hisObj := &history_t{
 		[]string{"aaaa", "bbbb", "aaaa", "dddd", "eeee"},
 	}
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	SaveToWriter(&buffer, hisObj)
 	if buffer.String() != "bbbb\naaaa\ndddd\neeee\n" {
 		t.Fail()

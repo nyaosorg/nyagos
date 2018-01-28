@@ -1,7 +1,6 @@
 package completion
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -137,7 +136,7 @@ func CommonPrefix(list []string) string {
 		cr := strings.NewReader(common)
 		fr := strings.NewReader(f)
 		i := 0
-		var buffer bytes.Buffer
+		var buffer strings.Builder
 		for {
 			ch, _, cerr := cr.ReadRune()
 			fh, _, ferr := fr.ReadRune()

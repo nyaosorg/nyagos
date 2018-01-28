@@ -1,7 +1,6 @@
 package dos
 
 import (
-	"bytes"
 	"os"
 	"path/filepath"
 	"strings"
@@ -52,7 +51,7 @@ func LookPath(name string, envnames ...string) string {
 	if strings.ContainsAny(name, "\\/:") {
 		return lookPath(filepath.Dir(name), name)
 	}
-	var envlist bytes.Buffer
+	var envlist strings.Builder
 	envlist.WriteRune('.')
 	envlist.WriteRune(os.PathListSeparator)
 	envlist.WriteString(os.Getenv("PATH"))
