@@ -528,7 +528,7 @@ switch( $args[0] ){
         Get-Imports | ForEach-Object{ Write-Output $_ ; go get -u $_ }
     }
     "fmt" {
-        Go-Fmt
+        Go-Fmt | Out-Null
     }
     "check-case" {
         $private:dic = @{}
