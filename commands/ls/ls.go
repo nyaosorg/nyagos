@@ -517,13 +517,13 @@ func Main(ctx context.Context, args []string, out io.Writer, err io.Writer) erro
 		}
 	}
 	if (flag & O_HELP) != 0 {
-		message := make([]byte, 0, 80)
-		message = append(message, "Usage: ls [-"...)
+		var message strings.Builder
+		message.WriteString("Usage: ls [-")
 		for optKey, _ := range option {
-			message = append(message, byte(optKey))
+			message.WriteRune(optKey)
 		}
-		message = append(message, "] [PATH(s)]..."...)
-		return errors.New(string(message))
+		message.WriteString("] [PATH(s)]...")
+		return errors.New(message.String())
 	}
 	if _, ok := out.(io.Closer); ok {
 		// output is a not colorable instance.
