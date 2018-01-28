@@ -6,6 +6,9 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
         $args[0].Groups[1] -replace " ",[char]1
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
+set GO "go" -option constant
+# set GO "go1.10rc1.exe" -option constant
+
 set CMD "Cmd" -option constant
 
 $LUAURL = @{
@@ -54,7 +57,7 @@ function Get-GoArch{
     }elseif( (Test-Path env:GOARCH) -and $env:GOARCH ){
         $arch = $env:GOARCH
     }else{
-        $arch = (go version | %{ $_.Split()[-1].Split("/")[-1] } )
+        $arch = (& $GO version | %{ $_.Split()[-1].Split("/")[-1] } )
     }
     Write-Verbose ("Found GOARCH="+$arch)
     return $arch
@@ -93,9 +96,9 @@ function Go-Generate{
                 foreach( $source in $li.source ){
                     if( -not $source ){ continue }
                     if( (Newer-Than $source $target) ){
-                        Write-Verbose ("$ go generate for {0}" -f
+                        Write-Verbose ("$ $GO generate for {0}" -f
                             (Join-Path $dir $target) )
-                        go generate
+                        & $GO generate
                         break allloop
                     }
                 }
@@ -111,8 +114,8 @@ function Go-Fmt{
     ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
     %{
         $fname = $_.FullName
-        Write-Verbose -Message "$ go fmt $fname"
-        go fmt $fname
+        Write-Verbose -Message "$ $GO fmt $fname"
+        & $GO fmt $fname
         if( $LastExitCode -ne 0 ){
             $status = $false
         }else{
@@ -120,7 +123,7 @@ function Go-Fmt{
         }
     }
     if( -not $status ){
-        Write-Warning "Some of 'go fmt' failed."
+        Write-Warning "Some of '$GO fmt' failed."
     }
     return $status
 }
@@ -201,13 +204,13 @@ function Download-Exe($url,$exename){
         return
     }
     Write-Verbose -Message ("{0} not found." -f $exename)
-    Write-Verbose -Message ("$ go get " + $url)
-    go get $url
+    Write-Verbose -Message ("$ $GO get " + $url)
+    & $GO get $url
     $workdir = (Join-Path (Join-Path (Get-Go1stPath) "src") $url)
     $cwd = (Get-Location)
     Set-Location $workdir
-    Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
-    go build
+    Write-Verbose -Message ("$ $GO build {0} on {1}" -f $exename,$workdir)
+    & $GO build
     Do-Copy $exename $cwd
     Set-Location $cwd
 }
@@ -261,8 +264,8 @@ function Build($version,$tags) {
     Make-SysO $version
 
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
-    Write-Verbose -Message "$ go build -o '$target'"
-    go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
+    Write-Verbose "$ $GO build -o '$target'"
+    & $GO build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
         Do-Copy $target ".\nyagos.exe"
     }
@@ -314,8 +317,8 @@ function Make-ConstGo($makexml){
     }
     Write-Verbose -Message '$ .\a.exe > const.go'
     & ".\a.exe" | Out-File const.go -Encoding default
-    Write-Verbose -Message '$ go fmt const.go'
-    go fmt const.go
+    Write-Verbose -Message "$ $GO fmt const.go"
+    & $GO fmt const.go
 
     Do-Remove "makeconst.o"
     Do-Remove "makeconst.c"
@@ -414,8 +417,8 @@ switch( $args[0] ){
     "vet" {
         ForEach-GoDir | ForEach-Object{
             pushd $_
-            Write-Verbose "$ go vet on $_"
-            go vet
+            Write-Verbose "$ $GO vet on $_"
+            & $GO vet
             popd
         }
     }
@@ -448,9 +451,9 @@ switch( $args[0] ){
         }
 
         ForEach-GoDir | %{
-            Write-Verbose "$ go clean on $_"
+            Write-Verbose "$ $GO clean on $_"
             pushd $_
-            go clean
+            & $GO clean
             popd
         }
     }
@@ -525,7 +528,7 @@ switch( $args[0] ){
     }
     "get" {
         Go-Generate
-        Get-Imports | ForEach-Object{ Write-Output $_ ; go get -u $_ }
+        Get-Imports | ForEach-Object{ Write-Output $_ ; & $GO get -u $_ }
     }
     "fmt" {
         Go-Fmt | Out-Null
