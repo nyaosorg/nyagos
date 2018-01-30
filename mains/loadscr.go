@@ -16,8 +16,10 @@ import (
 func versionOrStamp() string {
 	if Version != "" {
 		return Version
-	} else {
+	} else if Stamp != "" {
 		return "v" + Stamp
+	} else {
+		return "snapshot"
 	}
 }
 
