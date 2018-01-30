@@ -1,6 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
 * `ls -?` for help instead of `ls -h`
+* Building with `go build` instead of make.cmd, print version as `snapshot-GOARC
+H`
 
 NYAGOS 4.2.3\_3
 ===============
