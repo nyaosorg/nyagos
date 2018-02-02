@@ -2,6 +2,7 @@
 
 * `ls -h` のかわりに `ls -?` をヘルプに用意した
 * make.cmd のかわりに go build でビルドした時、バージョンを `snapshot-GOARCH` と表示するようにした
+* `type DIRECTORY` が実行された時にエラーにするようにした。
 
 NYAGOS 4.2.3\_3
 ===============
