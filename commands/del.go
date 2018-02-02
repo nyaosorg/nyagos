@@ -52,6 +52,11 @@ func cmd_del(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		}
 		path := arg1
 		stat, err := os.Lstat(path)
+		if os.IsNotExist(err) {
+			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: not found.\n", i, n-1, path)
+			errorcount++
+			continue
+		}
 		if err != nil {
 			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: %s\n", i, n-1, path, err)
 			errorcount++
