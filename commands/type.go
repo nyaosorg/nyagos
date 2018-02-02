@@ -42,6 +42,15 @@ func cmd_type(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			if err != nil {
 				return 1, err
 			}
+			stat1, err := r.Stat()
+			if err != nil {
+				r.Close()
+				return 2, err
+			}
+			if stat1.IsDir() {
+				r.Close()
+				return 3, fmt.Errorf("%s: Permission denied", arg1)
+			}
 			cat(r, cmd.Stdout)
 			r.Close()
 		}
