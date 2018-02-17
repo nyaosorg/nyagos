@@ -1,7 +1,6 @@
 package texts
 
 import (
-	"bytes"
 	"strings"
 	"unicode"
 )
@@ -9,7 +8,7 @@ import (
 const NULQUOTE = '\000'
 
 func quotedWordCutter(reader *strings.Reader) (string, bool) {
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	for {
 		if reader.Len() <= 0 {
 			return "", false

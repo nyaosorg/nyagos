@@ -2,7 +2,6 @@ package history
 
 import (
 	"bufio"
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -31,7 +30,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		break
 	}
 
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	isReplaced := false
 	reader := strings.NewReader(line)
 	history_count := hisObj.Len()
@@ -103,7 +102,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			}
 		}
 		if ch == '?' { // !?str?
-			var seekStrBuf bytes.Buffer
+			var seekStrBuf strings.Builder
 			lastCharIsQuestionMark := false
 			for reader.Len() > 0 {
 				ch, _, _ := reader.ReadRune()
@@ -134,7 +133,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			continue
 		}
 		// !str
-		var seekStrBuf bytes.Buffer
+		var seekStrBuf strings.Builder
 		seekStrBuf.WriteRune(ch)
 		for reader.Len() > 0 {
 			ch, _, _ := reader.ReadRune()
@@ -162,7 +161,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 	return buffer.String(), isReplaced, nil
 }
 
-func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
+func ExpandMacro(buffer *strings.Builder, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == ':' {
 		ch, siz, _ = reader.ReadRune()

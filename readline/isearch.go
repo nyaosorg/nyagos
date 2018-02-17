@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 	"unicode"
@@ -10,7 +9,7 @@ import (
 )
 
 func KeyFuncIncSearch(this *Buffer) Result {
-	var searchBuf bytes.Buffer
+	var searchBuf strings.Builder
 	foundStr := ""
 	searchStr := ""
 	lastDrawWidth := 0

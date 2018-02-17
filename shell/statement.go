@@ -1,14 +1,14 @@
 package shell
 
 import (
-	"bytes"
+	"strings"
 	"unicode"
 )
 
 func SplitToStatement(line string) []string {
 	result := make([]string, 0)
 	quote := false
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	lastc := ' '
 
 	done := func() {
