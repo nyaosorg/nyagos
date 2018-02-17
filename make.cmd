@@ -7,7 +7,7 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
 # set GO "go" -option constant
-set GO "go1.10rc2.exe" -option constant
+set GO "go.exe" -option constant
 
 set CMD "Cmd" -option constant
 
