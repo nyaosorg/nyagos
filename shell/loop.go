@@ -104,5 +104,4 @@ func (it *Cmd) Loop(stream Stream) (int, error) {
 			}
 		}
 	}
-	return rc, nil
 }
