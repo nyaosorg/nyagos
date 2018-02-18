@@ -519,7 +519,7 @@ func Main(ctx context.Context, args []string, out io.Writer, err io.Writer) erro
 	if (flag & O_HELP) != 0 {
 		message := make([]byte, 0, 80)
 		message = append(message, "Usage: ls [-"...)
-		for optKey, _ := range option {
+		for optKey := range option {
 			message = append(message, byte(optKey))
 		}
 		message = append(message, "] [PATH(s)]..."...)

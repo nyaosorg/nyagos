@@ -41,7 +41,7 @@ func Exec(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
 
 func AllNames() []completion.Element {
 	names := make([]completion.Element, 0, len(BuildInCommand))
-	for name1, _ := range BuildInCommand {
+	for name1 := range BuildInCommand {
 		names = append(names, completion.Element{InsertStr: name1, ListupStr: name1})
 	}
 	return names
