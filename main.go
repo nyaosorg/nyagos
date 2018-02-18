@@ -21,7 +21,7 @@ func when_panic() {
 	var dump bytes.Buffer
 	w := io.MultiWriter(os.Stderr, &dump)
 
-	fmt.Fprintln(w, "************ Panic Occured. ***********")
+	fmt.Fprintln(w, "************ Panic Occurred. ***********")
 	fmt.Fprintln(w, err)
 	w.Write(debug.Stack())
 	fmt.Fprintln(w, "*** Please copy these error message ***")

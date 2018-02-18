@@ -519,7 +519,7 @@ func Main(ctx context.Context, args []string, out io.Writer, err io.Writer) erro
 	if (flag & O_HELP) != 0 {
 		var message strings.Builder
 		message.WriteString("Usage: ls [-")
-		for optKey, _ := range option {
+		for optKey := range option {
 			message.WriteRune(optKey)
 		}
 		message.WriteString("] [PATH(s)]...")

@@ -18,7 +18,7 @@ func (this *ShellVariable) Lookup(name string) string {
 }
 
 func (this *ShellVariable) EachKey(f func(string)) {
-	for name, _ := range shell.PercentFunc {
+	for name := range shell.PercentFunc {
 		f(name)
 	}
 }

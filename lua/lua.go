@@ -206,7 +206,7 @@ func defaultGc(L Lua) int {
 func (this Lua) SetGcFunctionForUserData(userdata_index int, table_index int) {
 	if trace {
 		fmt.Fprintf(os.Stderr, "Lua(%v).SetGcFunctionForUserData(%v,%v)\n",
-			userdata_index, table_index)
+			this, userdata_index, table_index)
 	}
 	var address uintptr
 	if this.RawLen(userdata_index) != unsafe.Sizeof(address) {

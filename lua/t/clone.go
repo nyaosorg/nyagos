@@ -50,7 +50,7 @@ func main() {
 
 	N.GetGlobal("sample_table")
 	N.GetField(-1, "foo")
-	val2, err := N.ToInteger(-1)
+	val2, _ := N.ToInteger(-1)
 	L.Pop(2)
 	if val2 == 1 {
 		println("test-2: ok")
