@@ -279,7 +279,7 @@ func KeyFuncSwapChar(this *Buffer) Result {
 				PutRune(this.Buffer[i])
 			}
 		} else {
-			// no neccesary to scroll
+			// no necessary to scroll
 			redrawStart := maxInt(this.Cursor-1, this.ViewStart)
 			Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
 			for i := redrawStart; i <= this.Cursor; i++ {
