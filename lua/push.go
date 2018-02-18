@@ -96,14 +96,14 @@ var lua_pushcclosure = luaDLL.NewProc("lua_pushcclosure")
 
 func (this Lua) PushGoClosure(fn func(Lua) int, n uintptr) {
 	if trace {
-		fmt.Fprintf(os.Stderr, "Lua(%v).PushGoClosure(%v,%v)\n", this, fn, n)
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushGoClosure(%v)\n", this, n)
 	}
 	lua_pushcclosure.Call(this.State(), syscall.NewCallbackCDecl(fn), n)
 }
 
 func (this Lua) PushGoFunction(fn func(Lua) int) {
 	if trace {
-		fmt.Fprintf(os.Stderr, "Lua(%v).PushGoFunction(%v)\n", this, fn)
+		fmt.Fprintf(os.Stderr, "Lua(%v).PushGoFunction\n", this)
 	}
 	this.PushGoClosure(fn, 0)
 }
