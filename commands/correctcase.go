@@ -34,7 +34,7 @@ func CorrectCase(path string) (string, error) {
 	}
 	if len(dirname) > 0 {
 		// NOT root directory.
-		dirname, err = CorrectCase(dirname)
+		dirname, _ = CorrectCase(dirname)
 	}
 	return filepath.Join(dirname, fname), nil
 }
