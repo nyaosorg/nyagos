@@ -8,8 +8,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )

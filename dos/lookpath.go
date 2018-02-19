@@ -8,7 +8,7 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"github.com/zetamatta/nyagos/ifdbg"
+	"github.com/zetamatta/nyagos/defined"
 )
 
 func lookPath(dir1, patternBase string) (foundpath string) {

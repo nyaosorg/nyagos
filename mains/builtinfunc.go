@@ -13,8 +13,8 @@ import (
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
+	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )

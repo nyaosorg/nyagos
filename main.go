@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"runtime/debug"
 
-	"github.com/zetamatta/nyagos/ifdbg"
+	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/mains"
 )
 
