@@ -1,5 +1,5 @@
 // +build !debug
 
-package ifdbg
+package defined
 
 const DBG = false

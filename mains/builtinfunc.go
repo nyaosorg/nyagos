@@ -25,12 +25,12 @@ const TooFewArguments = "Too few arguments"
 
 func toStr(arr []any_t, n int) string {
 	if n < len(arr) {
-		if ifdbg.DBG {
+		if defined.DBG {
 			println(fmt.Sprint(arr[n]))
 		}
 		return fmt.Sprint(arr[n])
 	} else {
-		if ifdbg.DBG {
+		if defined.DBG {
 			println("''")
 		}
 		return ""
@@ -140,7 +140,7 @@ func cmdAccess(args []any_t) []any_t {
 	if !mode_ok {
 		return []any_t{nil, "mode value must be interger"}
 	}
-	if ifdbg.DBG {
+	if defined.DBG {
 		fmt.Fprintf(os.Stderr, "given mode==%o\n", mode)
 	}
 	fi, err := os.Stat(path)
@@ -149,7 +149,7 @@ func cmdAccess(args []any_t) []any_t {
 	if err != nil || fi == nil {
 		result = false
 	} else {
-		if ifdbg.DBG {
+		if defined.DBG {
 			fmt.Fprintf(os.Stderr, "file mode==%o\n", fi.Mode().Perm())
 		}
 		switch {
