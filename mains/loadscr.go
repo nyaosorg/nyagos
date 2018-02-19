@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
-	. "github.com/zetamatta/nyagos/ifdbg"
+	"github.com/zetamatta/nyagos/ifdbg"
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -56,7 +56,7 @@ func loadScripts(shellEngine func(string) error,
 					continue
 				}
 				path1 := filepath.Join(nyagos_d, name1)
-				if DBG {
+				if defined.DBG {
 					println("load real ", path1)
 				}
 				if _, err := langEngine(path1); err != nil {

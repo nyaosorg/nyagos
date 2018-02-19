@@ -15,7 +15,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/dos"
-	. "github.com/zetamatta/nyagos/ifdbg"
+	"github.com/zetamatta/nyagos/ifdbg"
 )
 
 var WildCardExpansionAlways = false
@@ -171,7 +171,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	if len(this.Args) <= 0 {
 		return 0, nil
 	}
-	if DBG {
+	if defined.DBG {
 		print("spawnvp_noerrmsg('", this.Args[0], "')\n")
 	}
 
@@ -188,7 +188,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	}
 	this.Args[0] = path1
 
-	if DBG {
+	if defined.DBG {
 		print("exec.LookPath(", this.Args[0], ")==", path1, "\n")
 	}
 
@@ -205,7 +205,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 		cmd1.SysProcAttr = new(syscall.SysProcAttr)
 	}
 	cmdline := makeCmdline(cmd1.Args, this.RawArgs)
-	if DBG {
+	if defined.DBG {
 		println(cmdline)
 	}
 	cmd1.SysProcAttr.CmdLine = cmdline
@@ -215,7 +215,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 		if len(cmd1.Args) >= 2 {
 			cmdline = makeCmdline(cmd1.Args[1:], this.RawArgs[1:])
 		}
-		if DBG {
+		if defined.DBG {
 			println("ShellExecute:Path=" + cmd1.Args[0])
 			println("Args=" + cmdline)
 		}
@@ -249,7 +249,7 @@ func (this *Cmd) Spawnvp() (int, error) {
 func (this *Cmd) SpawnvpContext(ctx context.Context) (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg(ctx)
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
-		if DBG {
+		if defined.DBG {
 			val := reflect.ValueOf(err)
 			fmt.Fprintf(this.Stderr, "error-type=%s\n", val.Type())
 		}
@@ -266,7 +266,7 @@ func (this *Cmd) Interpret(text string) (int, error) {
 }
 
 func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel int, finalerr error) {
-	if DBG {
+	if defined.DBG {
 		print("Interpret('", text, "')\n")
 	}
 	if this == nil {
@@ -277,13 +277,13 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 
 	statements, statementsErr := Parse(text)
 	if statementsErr != nil {
-		if DBG {
+		if defined.DBG {
 			print("Parse Error:", statementsErr.Error(), "\n")
 		}
 		return 0, statementsErr
 	}
 	if argsHook != nil {
-		if DBG {
+		if defined.DBG {
 			print("call argsHook\n")
 		}
 		for _, pipeline := range statements {
@@ -295,7 +295,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 				}
 			}
 		}
-		if DBG {
+		if defined.DBG {
 			print("done argsHook\n")
 		}
 	}
@@ -321,7 +321,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 		var wg sync.WaitGroup
 		shutdown_immediately := false
 		for i, state := range pipeline {
-			if DBG {
+			if defined.DBG {
 				print(i, ": pipeline loop(", state.Args[0], ")\n")
 			}
 			cmd, err := this.Clone()
