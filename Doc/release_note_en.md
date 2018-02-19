@@ -1,10 +1,10 @@
 English / [Japanese](release_note_ja.md)
 
 * `ls -?` for help instead of `ls -h`
-* Building with `go build` instead of make.cmd, print version as `snapshot-GOARC
-H`
+* Building with `go build` instead of make.cmd, print version as `snapshot-GOARCH`
 * Show an error when `type DIRECTORY` is executed.
 * Made error message simple on `del NOTEXISTFILE`
+* Fix: #279 Substitution on Environment variable (%VAR:OLD=NEW%) did not ignore case
 
 NYAGOS 4.2.3\_3
 ===============
