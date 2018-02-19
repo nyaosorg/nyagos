@@ -11,6 +11,7 @@ import (
 	"unicode"
 
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 type StatementT struct {
@@ -45,7 +46,7 @@ func ourGetenvSub(name string) (string, bool) {
 	if m != nil {
 		base, ok := OurGetEnv(m[1])
 		if ok {
-			return strings.Replace(base, m[2], m[3], -1), true
+			return texts.ReplaceIgnoreCase(base, m[2], m[3]), true
 		} else {
 			return "", false
 		}
