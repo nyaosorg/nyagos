@@ -1,12 +1,11 @@
 package texts
 
 import (
-	"bytes"
 	"strings"
 )
 
 func ReplaceIgnoreCase(s, old, new string) string {
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	for {
 		pos := strings.Index(strings.ToUpper(s), strings.ToUpper(old))
 		if pos < 0 {
