@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"os"
 
 	"github.com/zetamatta/go-getch"
 
@@ -26,7 +27,12 @@ func open1(fname string, out io.Writer) {
 func cmd_open(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	switch len(cmd.Args) {
 	case 1:
-		open1(".", cmd.Stderr)
+		wd, err := os.Getwd()
+		if err != nil {
+			open1(".", cmd.Stderr)
+		} else {
+			open1(wd, cmd.Stderr)
+		}
 	case 2:
 		open1(cmd.Args[1], cmd.Stderr)
 	default:
