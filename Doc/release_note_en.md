@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * Show an error when `type DIRECTORY` is executed.
 * Made error message simple on `del NOTEXISTFILE`
 * Fix: #279 Substitution on Environment variable (%VAR:OLD=NEW%) did not ignore case
+* Fix: #281 `cd \\server\folder ; open` -> `C:\Windows\system32` was open.
 
 NYAGOS 4.2.3\_3
 ===============
