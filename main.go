@@ -13,7 +13,7 @@ import (
 	"github.com/zetamatta/nyagos/mains"
 )
 
-func when_panic() {
+func whenPanic() {
 	err := recover()
 	if err == nil {
 		return
@@ -38,7 +38,7 @@ var commit string
 var version string
 
 func main() {
-	defer when_panic()
+	defer whenPanic()
 
 	if len(os.Args) >= 2 && os.Args[1] == "--show-version-only" {
 		fmt.Printf("%s-%s\n", version, runtime.GOARCH)

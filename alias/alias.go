@@ -14,7 +14,7 @@ import (
 
 var dbg = false
 
-type Callable interface {
+type callableT interface {
 	String() string
 	Call(ctx context.Context, cmd *shell.Cmd) (int, error)
 }
@@ -110,7 +110,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	return
 }
 
-var Table = map[string]Callable{}
+var Table = map[string]callableT{}
 var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 
 func AllNames() []completion.Element {

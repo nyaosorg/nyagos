@@ -13,7 +13,7 @@ var msvcrt = syscall.NewLazyDLL("msvcrt")
 var _chdrive = msvcrt.NewProc("_chdrive")
 var _wchdir = msvcrt.NewProc("_wchdir")
 
-func chdrive_(n rune) uintptr {
+func chDriveSub(n rune) uintptr {
 	rc, _, _ := _chdrive.Call(uintptr(n & 0x1F))
 	return rc
 }
@@ -21,7 +21,7 @@ func chdrive_(n rune) uintptr {
 // Change drive without changing the working directory there.
 func Chdrive(drive string) error {
 	for _, c := range drive {
-		chdrive_(unicode.ToUpper(c))
+		chDriveSub(unicode.ToUpper(c))
 		return nil
 	}
 	return errors.New("Chdrive: driveletter not found")
@@ -35,7 +35,7 @@ var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
 func Chdir(folder_ string) error {
 	folder := folder_
 	if m := rxPath.FindStringSubmatch(folder_); m != nil {
-		status := chdrive_(rune(m[1][0]))
+		status := chDriveSub(rune(m[1][0]))
 		if status != 0 {
 			return fmt.Errorf("%s: no such directory", folder_)
 		}

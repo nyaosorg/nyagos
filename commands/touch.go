@@ -28,12 +28,12 @@ func readTimeStamp(s string) *time.Time {
 	if m == nil {
 		return nil
 	}
-	yy, yy_err := strconv.Atoi(m[2])
-	if yy_err != nil {
+	yy, err := strconv.Atoi(m[2])
+	if err != nil {
 		yy = time.Now().Year() % 100
 	}
-	cc, cc_err := strconv.Atoi(m[1])
-	if cc_err != nil {
+	cc, err := strconv.Atoi(m[1])
+	if err != nil {
 		if yy <= 68 {
 			cc = 20
 		} else {
@@ -66,13 +66,13 @@ func cmd_touch(ctx context.Context, this *shell.Cmd) (int, error) {
 				fmt.Fprintf(this.Stderr, "-t: Too Few Arguments.\n")
 				return 255, nil
 			}
-			stamp_ := readTimeStamp(this.Args[i])
-			if stamp_ == nil {
+			stamp1 := readTimeStamp(this.Args[i])
+			if stamp1 == nil {
 				fmt.Fprintf(this.Stderr, "-t: %s: Invalid time format.\n",
 					this.Args[i])
 				return 255, nil
 			}
-			stamp = *stamp_
+			stamp = *stamp1
 		} else if arg1 == "-r" {
 			i++
 			if i >= len(this.Args) {

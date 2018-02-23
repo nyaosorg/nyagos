@@ -206,12 +206,12 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 
 	getch.Flush()
 
-	cursor_on := false
+	cursorOnSwitch := false
 	for {
 		var e getch.Event
-		if !cursor_on {
+		if !cursorOnSwitch {
 			fmt.Fprint(Console, CURSOR_ON)
-			cursor_on = true
+			cursorOnSwitch = true
 		}
 		for e.Key == nil {
 			e = getch.All()
@@ -249,7 +249,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
 			fmt.Fprint(Console, CURSOR_OFF)
-			cursor_on = false
+			cursorOnSwitch = false
 		}
 		rc := f.Call(&this)
 		if rc != CONTINUE {
