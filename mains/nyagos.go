@@ -159,7 +159,7 @@ type MainStream struct {
 }
 
 func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx = context.WithValue(ctx, lua.NoInstance, this.L)
+	ctx = context.WithValue(ctx, lua.PackageId, this.L)
 	ctx = context.WithValue(ctx, history.PackageId, default_history)
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {

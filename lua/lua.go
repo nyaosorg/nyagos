@@ -26,9 +26,9 @@ func (value Integer) Push(L Lua) int {
 
 type Lua uintptr
 
-const (
-	NoInstance Lua = 0
-)
+type packageIdT struct{}
+
+var PackageId packageIdT
 
 var userdataAnchor = make(map[Lua]map[uintptr]interface{})
 var userdateAnchorMutex = sync.RWMutex{}
