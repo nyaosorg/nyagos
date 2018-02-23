@@ -33,7 +33,7 @@ var rxRoot2 = regexp.MustCompile(`^\\\\\w+\\\w+$`)
 // correct path's case.
 func CorrectCase(path string) (string, error) {
 	if rxRoot1.MatchString(path) {
-		return strings.ToUpper(path),nil
+		return strings.ToUpper(path), nil
 	}
 	if rxRoot2.MatchString(path) {
 		return path, nil
