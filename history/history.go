@@ -220,7 +220,7 @@ func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	}
 	start := 0
 
-	historyObj_ := ctx.Value(NoInstance)
+	historyObj_ := ctx.Value(PackageId)
 	if historyObj, ok := historyObj_.(*Container); ok {
 		if isatty.IsTerminal(cmd.Stdout.Fd()) && historyObj.Len() > num {
 
