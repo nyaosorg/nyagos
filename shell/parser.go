@@ -97,7 +97,7 @@ func string2word(source_ string, removeQuote bool) string {
 		if err != nil {
 			break
 		}
-		if ch == '~' && unicode.IsSpace(lastchar) {
+		if ch == '~' && unicode.IsSpace(lastchar) && quoteNow == NOTQUOTED {
 			if home := dos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
