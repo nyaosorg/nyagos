@@ -60,9 +60,20 @@ type Cmd struct {
 	IsBackGround bool
 	RawArgs      []string
 
-	OnFork  func(*Cmd) error
-	OffFork func(*Cmd) error
-	Closers []io.Closer
+	OnFork   func(*Cmd) error
+	OffFork  func(*Cmd) error
+	Closers  []io.Closer
+	fullPath string
+}
+
+func (this *Cmd) FullPath() string {
+	if this.Args == nil || len(this.Args) <= 0 {
+		return ""
+	}
+	if this.fullPath == "" {
+		this.fullPath = dos.LookPath(this.Args[0], "NYAGOSPATH")
+	}
+	return this.fullPath
 }
 
 func (this *Cmd) GetRawArgs() []string {
@@ -179,7 +190,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 
 	// command not found hook
 	var err error
-	path1 := dos.LookPath(this.Args[0], "NYAGOSPATH")
+	path1 := this.FullPath()
 	if path1 == "" {
 		return 255, OnCommandNotFound(this, os.ErrNotExist)
 	}
