@@ -370,7 +370,12 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
-			if i == len(pipeline)-1 && state.Term != "&" {
+			isGui := false
+			if i == len(pipeline)-1 && dos.IsGui(cmd.FullPath()) {
+				isGui = true
+				isBackGround = true
+			}
+			if i == len(pipeline)-1 && state.Term != "&" && !isGui {
 				// foreground execution.
 				errorlevel, finalerr = cmd.SpawnvpContext(ctx)
 				LastErrorLevel = errorlevel
