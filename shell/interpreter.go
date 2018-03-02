@@ -39,11 +39,6 @@ func (this CommandNotFound) Error() string {
 	return this.Stringer()
 }
 
-func isElevationRequired(err error) bool {
-	e, ok := err.(*os.PathError)
-	return ok && e.Err == syscall.Errno(0x2e4)
-}
-
 type session struct {
 	unreadline []string
 }
@@ -205,7 +200,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	}
 	if this.UseShellExecute {
 		cmdline := makeCmdline(this.Args[1:], this.RawArgs[1:])
-		err = dos.ShellExecute("open", dos.TruePath(this.Args[0]), cmdline, "")
+		err = dos.ShellExecute("open", path1, cmdline, "")
 		return 0, err
 	} else {
 		cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
@@ -222,24 +217,11 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 		}
 		cmd1.SysProcAttr.CmdLine = cmdline
 		err = cmd1.Run()
-		if isElevationRequired(err) {
-			cmdline := ""
-			if len(cmd1.Args) >= 2 {
-				cmdline = makeCmdline(cmd1.Args[1:], this.RawArgs[1:])
-			}
-			if defined.DBG {
-				println("ShellExecute:Path=" + cmd1.Args[0])
-				println("Args=" + cmdline)
-			}
-			err = dos.ShellExecute("open", dos.TruePath(cmd1.Args[0]), cmdline, "")
-			return 0, err
+		errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
+		if errorlevelOk {
+			return errorlevel, err
 		} else {
-			errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
-			if errorlevelOk {
-				return errorlevel, err
-			} else {
-				return 255, err
-			}
+			return 255, err
 		}
 	}
 }
