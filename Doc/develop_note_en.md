@@ -8,4 +8,4 @@
 * #228: Completion supports $ENV[TAB]... by native
 * #275: Fix: history substitution like `!str:$` , `!?str?:$` did not work.
 * The error `event not found` is caused when the event pointed !y does note exists.
-* #285: Run GUI-process background automatically like CMD.EXE
+* #285: Not wait GUI-process not using pipeline terminating like CMD.EXE (Call them with ShellExecute() instead of CreateProcess() )
