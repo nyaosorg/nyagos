@@ -60,10 +60,11 @@ type Cmd struct {
 	IsBackGround bool
 	RawArgs      []string
 
-	OnFork   func(*Cmd) error
-	OffFork  func(*Cmd) error
-	Closers  []io.Closer
-	fullPath string
+	OnFork          func(*Cmd) error
+	OffFork         func(*Cmd) error
+	Closers         []io.Closer
+	fullPath        string
+	UseShellExecute bool
 }
 
 func (this *Cmd) FullPath() string {
@@ -199,41 +200,47 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	if defined.DBG {
 		print("exec.LookPath(", this.Args[0], ")==", path1, "\n")
 	}
-
 	if WildCardExpansionAlways {
 		this.Args = findfile.Globs(this.Args)
 	}
-
-	cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
-	cmd1.Stdin = this.Stdin
-	cmd1.Stdout = this.Stdout
-	cmd1.Stderr = this.Stderr
-
-	if cmd1.SysProcAttr == nil {
-		cmd1.SysProcAttr = new(syscall.SysProcAttr)
-	}
-	cmdline := makeCmdline(cmd1.Args, this.RawArgs)
-	if defined.DBG {
-		println(cmdline)
-	}
-	cmd1.SysProcAttr.CmdLine = cmdline
-	err = cmd1.Run()
-	if isElevationRequired(err) {
-		cmdline := ""
-		if len(cmd1.Args) >= 2 {
-			cmdline = makeCmdline(cmd1.Args[1:], this.RawArgs[1:])
-		}
-		if defined.DBG {
-			println("ShellExecute:Path=" + cmd1.Args[0])
-			println("Args=" + cmdline)
-		}
-		err = dos.ShellExecute("open", dos.TruePath(cmd1.Args[0]), cmdline, "")
-	}
-	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
-	if errorlevelOk {
-		return errorlevel, err
+	if this.UseShellExecute {
+		cmdline := makeCmdline(this.Args[1:], this.RawArgs[1:])
+		err = dos.ShellExecute("open", dos.TruePath(this.Args[0]), cmdline, "")
+		return 0, err
 	} else {
-		return 255, err
+		cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
+		cmd1.Stdin = this.Stdin
+		cmd1.Stdout = this.Stdout
+		cmd1.Stderr = this.Stderr
+
+		if cmd1.SysProcAttr == nil {
+			cmd1.SysProcAttr = new(syscall.SysProcAttr)
+		}
+		cmdline := makeCmdline(cmd1.Args, this.RawArgs)
+		if defined.DBG {
+			println(cmdline)
+		}
+		cmd1.SysProcAttr.CmdLine = cmdline
+		err = cmd1.Run()
+		if isElevationRequired(err) {
+			cmdline := ""
+			if len(cmd1.Args) >= 2 {
+				cmdline = makeCmdline(cmd1.Args[1:], this.RawArgs[1:])
+			}
+			if defined.DBG {
+				println("ShellExecute:Path=" + cmd1.Args[0])
+				println("Args=" + cmdline)
+			}
+			err = dos.ShellExecute("open", dos.TruePath(cmd1.Args[0]), cmdline, "")
+			return 0, err
+		} else {
+			errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
+			if errorlevelOk {
+				return errorlevel, err
+			} else {
+				return 255, err
+			}
+		}
 	}
 }
 
@@ -370,12 +377,10 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
-			isGui := false
-			if i == len(pipeline)-1 && dos.IsGui(cmd.FullPath()) {
-				isGui = true
-				isBackGround = true
+			if len(pipeline) == 1 && dos.IsGui(cmd.FullPath()) {
+				cmd.UseShellExecute = true
 			}
-			if i == len(pipeline)-1 && state.Term != "&" && !isGui {
+			if i == len(pipeline)-1 && state.Term != "&" {
 				// foreground execution.
 				errorlevel, finalerr = cmd.SpawnvpContext(ctx)
 				LastErrorLevel = errorlevel
