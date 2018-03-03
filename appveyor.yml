@@ -43,7 +43,7 @@ install:
         $script:bit = 64
         $env:GOARCH = "amd64"
       }
-      $targetURL = "http://osdn.jp/frs/g_redir.php?m=liquidtelecom&f=%2Fluabinaries%2F" + $env:LUA_VER + "%2FTools+Executables%2Flua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
+      $targetURL = "http://ja.osdn.jp/frs/g_redir.php?m=kent&f=%2Fluabinaries%2F" + $env:LUA_VER + "%2FTools+Executables%2Flua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
       $outputPath = $env:APPVEYOR_BUILD_FOLDER + "\lua.zip"
       $webClient = new-object System.Net.WebClient
       [int]$trials = 0
