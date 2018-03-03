@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: #279 Substitution on Environment variable (%VAR:OLD=NEW%) did not ignore case
 * Fix: #281 `cd \\server\folder ; open` -> `C:\Windows\system32` was open.
 * Fix: #286 A tilde(~) after whitespace enclosed with double quotations was interpreted same as %USERPROFILE%
+* #287 On the last entry of the history, do nothing for typing ARROW-DOWN
 
 NYAGOS 4.2.3\_3
 ===============
