@@ -34,10 +34,10 @@ func KeyFuncHistoryDown(this *Buffer) Result {
 	if this.History.Len() <= 0 {
 		return CONTINUE
 	}
-	this.HistoryPointer += 1
-	if this.HistoryPointer > this.History.Len() {
-		this.HistoryPointer = 0
+	if this.HistoryPointer+1 > this.History.Len() {
+		return CONTINUE
 	}
+	this.HistoryPointer += 1
 	KeyFuncClear(this)
 	if this.HistoryPointer < this.History.Len() {
 		this.InsertString(0, this.History.At(this.HistoryPointer))
