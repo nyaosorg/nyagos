@@ -140,6 +140,8 @@ func cmdSetAlias(L lua.Lua) int {
 	case lua.LUA_TFUNCTION:
 		chank := L.Dump()
 		alias.Table[key] = &LuaBinaryChank{Chank: chank}
+	case lua.LUA_TNIL:
+		delete(alias.Table, key)
 	}
 	return L.Push(true)
 }

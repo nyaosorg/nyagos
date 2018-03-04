@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix that `nyagos.alias.NAME = nil` could not remove the alias.
+
 NYAGOS 4.2.3\_4
 ===============
 on Mar.4,2018
