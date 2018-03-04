@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.3\_4
+===============
+(2018.03.04)
+
 * `ls -h` のかわりに `ls -?` をヘルプに用意した
 * make.cmd のかわりに go build でビルドした時、バージョンを `snapshot-GOARCH` と表示するようにした
 * `type DIRECTORY` が実行された時にエラーにするようにした。
