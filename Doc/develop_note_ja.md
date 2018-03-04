@@ -9,3 +9,4 @@
 * #275: `!str:$` や `!str?:$` といったヒストリ置換が機能しない不具合を修正
 * ! で指定されるヒストリが存在しない時「event not found」エラーを出させるようにした
 * #285: パイプラインを使っていない GUIプログラムは CMD.EXE 同様終了を待たないようにした (CreateProcess ではなく ShellExecute を使用する)
+* (bytes.Buffer を strings.Builder に置き換えた。Go 1.10 が必要になった)
