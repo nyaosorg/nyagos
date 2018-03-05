@@ -10,3 +10,4 @@
 * The error `event not found` is caused when the event pointed !y does note exists.
 * #285: Not wait GUI-process not using pipeline terminating like CMD.EXE (Call them with ShellExecute() instead of CreateProcess() )
 * (Replaced `bytes.Buffer` to `strings.Builder` and Go 1.10 is required to build)
+* When more than one are to be executed with `open` at once, display error: `open: ambiguous shellexecute`

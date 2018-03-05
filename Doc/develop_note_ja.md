@@ -10,3 +10,4 @@
 * ! で指定されるヒストリが存在しない時「event not found」エラーを出させるようにした
 * #285: パイプラインを使っていない GUIプログラムは CMD.EXE 同様終了を待たないようにした (CreateProcess ではなく ShellExecute を使用する)
 * (bytes.Buffer を strings.Builder に置き換えた。Go 1.10 が必要になった)
+* 複数のファイルが「open」で一度に開こうとした時、`open: ambiguous shellexecute` とエラーを表示するようにした。
