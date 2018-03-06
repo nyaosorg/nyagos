@@ -53,6 +53,11 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			continue
 		}
 		ch, _, _ = reader.ReadRune()
+		if unicode.IsSpace(ch) {
+			buffer.WriteRune('!')
+			buffer.WriteRune(ch)
+			continue
+		}
 		if n := strings.IndexRune("^$:*", ch); n >= 0 {
 			reader.UnreadRune()
 			if history_count >= 1 {
