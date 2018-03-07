@@ -110,16 +110,23 @@ function Go-Generate{
 
 function Go-Fmt{
     $status = $true
+    $mod = @{}
+    git status -s | %{
+        $fname = (Resolve-Path ($_.Substring(3))).Path 
+        $mod[ $fname ] = $true
+        # Write-Host $fname
+    }
     Get-ChildItem . -Recurse |
-    ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
-    %{
+    ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } | %{
         $fname = $_.FullName
-        Write-Verbose -Message "$ $GO fmt $fname"
-        & $GO fmt $fname
-        if( $LastExitCode -ne 0 ){
-            $status = $false
-        }else{
-            attrib -a $fname
+        if( $mod.ContainsKey( $fname ) ){
+            Write-Verbose -Message "$ $GO fmt $fname"
+            & $GO fmt $fname
+            if( $LastExitCode -ne 0 ){
+                $status = $false
+            }else{
+                attrib -a $fname
+            }
         }
     }
     if( -not $status ){
