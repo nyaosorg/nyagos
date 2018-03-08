@@ -17,7 +17,9 @@ type Container struct {
 	rows []Line
 }
 
-var NoInstance = &Container{}
+type packageIdT struct{}
+
+var PackageId packageIdT
 
 func (this *Container) Len() int {
 	return len(this.rows)

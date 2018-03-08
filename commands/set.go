@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -14,7 +13,7 @@ import (
 func shrink(values ...string) string {
 	hash := make(map[string]struct{})
 
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	for _, value := range values {
 		for _, val1 := range filepath.SplitList(value) {
 			val1 = strings.TrimSpace(val1)

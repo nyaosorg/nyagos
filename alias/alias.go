@@ -2,6 +2,7 @@ package alias
 
 import (
 	"context"
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
@@ -13,7 +14,7 @@ import (
 
 var dbg = false
 
-type Callable interface {
+type callableT interface {
 	String() string
 	Call(ctx context.Context, cmd *shell.Cmd) (int, error)
 }
@@ -74,13 +75,12 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	})
 
 	if !isReplaced {
-		buffer := make([]byte, 0, 200)
-		buffer = append(buffer, this.BaseStr...)
+		var buffer strings.Builder
+		buffer.WriteString(this.BaseStr)
 		for _, s := range cmd.RawArgs[1:] {
-			buffer = append(buffer, ' ')
-			buffer = append(buffer, s...)
+			fmt.Fprintf(&buffer, " %s", s)
 		}
-		cmdline = string(buffer)
+		cmdline = buffer.String()
 	}
 	if dbg {
 		print("replaced cmdline=='", cmdline, "'\n")
@@ -110,7 +110,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	return
 }
 
-var Table = map[string]Callable{}
+var Table = map[string]callableT{}
 var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 
 func AllNames() []completion.Element {
@@ -122,20 +122,18 @@ func AllNames() []completion.Element {
 }
 
 func quoteAndJoin(list []string) string {
-	buffer := make([]byte, 0, 100)
+	var buffer strings.Builder
 	for i, value := range list {
 		if i > 0 {
-			buffer = append(buffer, ' ')
+			buffer.WriteRune(' ')
 		}
 		if strings.IndexByte(value, ' ') >= 0 {
-			buffer = append(buffer, '"')
-			buffer = append(buffer, value...)
-			buffer = append(buffer, '"')
+			fmt.Fprintf(&buffer, `"%s"`, value)
 		} else {
-			buffer = append(buffer, value...)
+			buffer.WriteString(value)
 		}
 	}
-	return string(buffer)
+	return buffer.String()
 }
 
 var nextHook shell.HookT

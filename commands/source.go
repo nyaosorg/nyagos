@@ -16,7 +16,7 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-func load_envfile(fname string, verbose io.Writer) error {
+func loadEnvFile(fname string, verbose io.Writer) error {
 	fp, err := os.Open(fname)
 	if err != nil {
 		return err
@@ -42,13 +42,10 @@ func load_envfile(fname string, verbose io.Writer) error {
 			}
 		}
 	}
-	if err := scan.Err(); err != nil {
-		return err
-	}
-	return nil
+	return scan.Err()
 }
 
-func load_pwdfile(fname string, verbose io.Writer) error {
+func loadPwdFile(fname string, verbose io.Writer) error {
 	fp, err := os.Open(fname)
 	if err != nil {
 		return err
@@ -73,7 +70,7 @@ func load_pwdfile(fname string, verbose io.Writer) error {
 	return nil
 }
 
-func call_batch(batch string, args []string, env string, pwd string, verbose io.Writer, stdout io.Writer, stderr io.Writer) (int, error) {
+func callBatch(batch string, args []string, env string, pwd string, verbose io.Writer, stdout io.Writer, stderr io.Writer) (int, error) {
 	params := []string{
 		os.Getenv("COMSPEC"),
 		"/C",
@@ -122,6 +119,35 @@ func call_batch(batch string, args []string, env string, pwd string, verbose io.
 	return errorlevel, nil
 }
 
+func Source(args []string, verbose io.Writer, debug bool, stdout io.Writer, stderr io.Writer) (int, error) {
+	tempDir := os.TempDir()
+	pid := os.Getpid()
+	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
+	env := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
+	pwd := filepath.Join(tempDir, fmt.Sprintf("nyagos_%d.tmp", pid))
+
+	errorlevel, err := callBatch(batch, args, env, pwd, verbose, stdout, stderr)
+
+	if !debug {
+		defer os.Remove(env)
+		defer os.Remove(pwd)
+		defer os.Remove(batch)
+	}
+
+	if err != nil {
+		return errorlevel, err
+	}
+
+	if err := loadEnvFile(env, verbose); err != nil {
+		return 1, err
+	}
+
+	if err := loadPwdFile(pwd, verbose); err != nil {
+		return 1, err
+	}
+	return errorlevel, err
+}
+
 func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	var verbose io.Writer
 	args := make([]string, 0, len(cmd.Args))
@@ -140,33 +166,5 @@ func cmd_source(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return 255, nil
 	}
 
-	tempDir := os.TempDir()
-	pid := os.Getpid()
-	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
-	env := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
-	pwd := filepath.Join(tempDir, fmt.Sprintf("nyagos_%d.tmp", pid))
-	stdout := cmd.Stdout
-	stderr := cmd.Stderr
-
-	errorlevel, err := call_batch(batch, args, env, pwd, verbose, stdout, stderr)
-
-	if !debug {
-		defer os.Remove(env)
-		defer os.Remove(pwd)
-		defer os.Remove(batch)
-	}
-
-	if err != nil {
-		return errorlevel, err
-	}
-
-	if err := load_envfile(env, verbose); err != nil {
-		return 1, err
-	}
-
-	if err := load_pwdfile(pwd, verbose); err != nil {
-		return 1, err
-	}
-
-	return errorlevel, nil
+	return Source(args, verbose, debug, cmd.Stdout, cmd.Stderr)
 }

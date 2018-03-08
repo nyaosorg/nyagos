@@ -1,15 +1,14 @@
 package texts
 
 import (
-	"bytes"
 	"strings"
 	"unicode"
 )
 
-const NULQUOTE = '\000'
+const nulquote = '\000'
 
 func quotedWordCutter(reader *strings.Reader) (string, bool) {
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	for {
 		if reader.Len() <= 0 {
 			return "", false
@@ -20,18 +19,18 @@ func quotedWordCutter(reader *strings.Reader) (string, bool) {
 			break
 		}
 	}
-	quote := NULQUOTE
+	quote := nulquote
 	yenCount := 0
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
 		if yenCount%2 == 0 {
-			if quote == NULQUOTE && (ch == '"' || ch == '\'') {
+			if quote == nulquote && (ch == '"' || ch == '\'') {
 				quote = ch
-			} else if quote != NULQUOTE && ch == quote {
-				quote = NULQUOTE
+			} else if quote != nulquote && ch == quote {
+				quote = nulquote
 			}
 		}
-		if unicode.IsSpace(ch) && quote == NULQUOTE {
+		if unicode.IsSpace(ch) && quote == nulquote {
 			break
 		}
 		if ch == '\\' {
@@ -44,7 +43,7 @@ func quotedWordCutter(reader *strings.Reader) (string, bool) {
 	return buffer.String(), true
 }
 
-// Split s with SPACES not enclosing with double-quotations.
+// SplitLikeShellString - Split s with SPACES not enclosing with double-quotations.
 func SplitLikeShellString(line string) []string {
 	args := make([]string, 0, 10)
 	reader := strings.NewReader(line)

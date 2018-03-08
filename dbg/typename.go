@@ -5,5 +5,5 @@ import (
 )
 
 func TypeName(obj interface{}) string {
-	return reflect.ValueOf(obj).Type().String()
+	return reflect.TypeOf(obj).String()
 }

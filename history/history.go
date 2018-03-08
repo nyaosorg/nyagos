@@ -2,8 +2,8 @@ package history
 
 import (
 	"bufio"
-	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -23,14 +23,14 @@ var Mark = "!"
 
 var DisableMarks = "\"'"
 
-func (hisObj *Container) Replace(line string) (string, bool) {
+func (hisObj *Container) Replace(line string) (string, bool, error) {
 	var mark rune
 	for _, c := range Mark {
 		mark = c
 		break
 	}
 
-	var buffer bytes.Buffer
+	var buffer strings.Builder
 	isReplaced := false
 	reader := strings.NewReader(line)
 	history_count := hisObj.Len()
@@ -53,6 +53,11 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			continue
 		}
 		ch, _, _ = reader.ReadRune()
+		if unicode.IsSpace(ch) {
+			buffer.WriteRune('!')
+			buffer.WriteRune(ch)
+			continue
+		}
 		if n := strings.IndexRune("^$:*", ch); n >= 0 {
 			reader.UnreadRune()
 			if history_count >= 1 {
@@ -69,19 +74,19 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 				isReplaced = true
 				continue
 			} else {
-				buffer.WriteRune(mark)
-				continue
+				return "", false, errors.New("!!: event not found")
 			}
 		}
-		if strings.IndexRune("0123456789", ch) >= 0 { // !n
+		if unicode.IsDigit(ch) { // !n
 			reader.UnreadRune()
 			var backno int
 			fmt.Fscan(reader, &backno)
-			backno = backno % history_count
 			if 0 <= backno && backno < history_count {
 				line := hisObj.At(backno)
 				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
+			} else {
+				return "", false, fmt.Errorf("!%d: event not found", backno)
 			}
 			continue
 		}
@@ -89,16 +94,12 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			var number int
 			if _, err := fmt.Fscan(reader, &number); err == nil {
 				backno := history_count - number
-				for backno < 0 {
-					backno += history_count
-				}
 				if 0 <= backno && backno < history_count {
 					line := hisObj.At(backno)
 					ExpandMacro(&buffer, reader, line)
 					isReplaced = true
 				} else {
-					buffer.WriteRune(mark)
-					buffer.WriteString("-0")
+					return "", false, fmt.Errorf("!-%d: event not found", number)
 				}
 				continue
 			} else {
@@ -106,7 +107,7 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			}
 		}
 		if ch == '?' { // !?str?
-			var seekStrBuf bytes.Buffer
+			var seekStrBuf strings.Builder
 			lastCharIsQuestionMark := false
 			for reader.Len() > 0 {
 				ch, _, _ := reader.ReadRune()
@@ -121,27 +122,27 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 			for i := history_count - 1; i >= 0; i-- {
 				his1 := hisObj.At(i)
 				if strings.Contains(his1, seekStr) {
-					buffer.WriteString(his1)
+					ExpandMacro(&buffer, reader, his1)
 					isReplaced = true
 					found = true
 					break
 				}
 			}
 			if !found {
-				buffer.WriteRune('?')
-				buffer.WriteString(seekStr)
 				if lastCharIsQuestionMark {
-					buffer.WriteRune('?')
+					return "", false, fmt.Errorf("?%s?: event not found", seekStr)
+				} else {
+					return "", false, fmt.Errorf("?%s: event not found", seekStr)
 				}
 			}
 			continue
 		}
 		// !str
-		var seekStrBuf bytes.Buffer
+		var seekStrBuf strings.Builder
 		seekStrBuf.WriteRune(ch)
 		for reader.Len() > 0 {
 			ch, _, _ := reader.ReadRune()
-			if unicode.IsSpace(ch) {
+			if unicode.IsSpace(ch) || ch == ':' {
 				reader.UnreadRune()
 				break
 			}
@@ -152,22 +153,24 @@ func (hisObj *Container) Replace(line string) (string, bool) {
 		for i := history_count - 1; i >= 0; i-- {
 			his1 := hisObj.At(i)
 			if strings.HasPrefix(his1, seekStr) {
-				buffer.WriteString(his1)
+				ExpandMacro(&buffer, reader, his1)
 				isReplaced = true
 				found = true
 				break
 			}
 		}
 		if !found {
-			buffer.WriteRune(mark)
-			buffer.WriteString(seekStr)
+			return "", false, fmt.Errorf("%c%s: event not found", mark, seekStr)
 		}
 	}
-	return buffer.String(), isReplaced
+	return buffer.String(), isReplaced, nil
 }
 
-func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
+func ExpandMacro(buffer *strings.Builder, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
+	if siz > 0 && ch == ':' {
+		ch, siz, _ = reader.ReadRune()
+	}
 	if siz > 0 && ch == '^' {
 		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(words[1])
@@ -180,11 +183,12 @@ func ExpandMacro(buffer *bytes.Buffer, reader *strings.Reader, line string) {
 		if words := texts.SplitLikeShellString(line); len(words) >= 2 {
 			buffer.WriteString(strings.Join(words[1:], " "))
 		}
-	} else if siz > 0 && ch == ':' {
+	} else if siz > 0 && unicode.IsDigit(ch) {
 		var n int
-		if _, err := fmt.Fscan(reader, &n); err != nil {
-			buffer.WriteRune(':')
-		} else if words := texts.SplitLikeShellString(line); n < len(words) {
+		reader.UnreadRune()
+		fmt.Fscan(reader, &n)
+		words := texts.SplitLikeShellString(line)
+		if n < len(words) {
 			buffer.WriteString(words[n])
 		}
 	} else {
@@ -221,7 +225,7 @@ func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	}
 	start := 0
 
-	historyObj_ := ctx.Value(NoInstance)
+	historyObj_ := ctx.Value(PackageId)
 	if historyObj, ok := historyObj_.(*Container); ok {
 		if isatty.IsTerminal(cmd.Stdout.Fd()) && historyObj.Len() > num {
 

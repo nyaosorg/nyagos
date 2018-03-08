@@ -2,6 +2,7 @@ package completion
 
 import (
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -31,33 +32,54 @@ var PercentVariables = []IVariable{
 	new(EnvironmentVariable),
 }
 
-func findLastOpenPercent(this string) int {
-	pos := -1
-	for i, ch := range this {
-		if ch == '%' {
-			if pos >= 0 { // closing percent mark
-				pos = -1
-			} else { // opening percent mark
-				pos = i
+var rxDollar = regexp.MustCompile(`\$\w+$`)
+var rxDollar2 = regexp.MustCompile(`\$\{[^\}]+$`)
+
+func listUpEnv(cmdline string) ([]Element, int, error) {
+	var makeCandidateStr func(string) string
+	var replaceStartPos int
+	var name string
+
+	// %ENVNAME%
+	percent_count := strings.Count(cmdline, "%")
+	if percent_count%2 == 1 {
+		replaceStartPos = strings.LastIndex(cmdline, "%")
+		if replaceStartPos < 0 {
+			return nil, -1, nil
+		}
+		name = cmdline[replaceStartPos+1:]
+		makeCandidateStr = func(name string) string {
+			return "%" + name + "%"
+		}
+	} else {
+		// $ENVNAME
+		m := rxDollar.FindStringIndex(cmdline)
+		if m != nil && len(m) > 0 {
+			replaceStartPos = m[0]
+			name = cmdline[m[0]+1:]
+			makeCandidateStr = func(name string) string {
+				return "$" + name
+			}
+		} else {
+			m = rxDollar2.FindStringIndex(cmdline)
+			if m == nil || len(m) <= 0 {
+				return nil, -1, nil
+			}
+			replaceStartPos = m[0]
+			name = cmdline[m[0]+2:]
+			makeCandidateStr = func(name string) string {
+				return "${" + name + "}"
 			}
 		}
 	}
-	return pos
-}
 
-func listUpEnv(cmdline string) ([]Element, int, error) {
-	lastPercentPos := findLastOpenPercent(cmdline)
-	if lastPercentPos < 0 {
-		return nil, -1, nil
-	}
-	str := cmdline[lastPercentPos:]
-	name := strings.ToUpper(str[1:])
+	name = strings.ToUpper(name)
 	var matches []Element
 
 	for _, vars := range PercentVariables {
 		vars.EachKey(func(envName string) {
 			if strings.HasPrefix(strings.ToUpper(envName), name) {
-				envValue := "%" + envName + "%"
+				envValue := makeCandidateStr(envName)
 				element := Element{InsertStr: envValue, ListupStr: envValue}
 				matches = append(matches, element)
 			}
@@ -66,5 +88,5 @@ func listUpEnv(cmdline string) ([]Element, int, error) {
 	if len(matches) <= 0 { // nothing matches.
 		return nil, -1, nil
 	}
-	return matches, lastPercentPos, nil
+	return matches, replaceStartPos, nil
 }

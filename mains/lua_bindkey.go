@@ -1,7 +1,6 @@
 package mains
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"strings"
@@ -145,7 +144,7 @@ func (this KeyLuaFuncT) String() string {
 func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	this.L.LoadBufferX("", this.Chank, "b")
 	pos := -1
-	var text bytes.Buffer
+	var text strings.Builder
 	for i, c := range buffer.Buffer {
 		if i >= buffer.Length {
 			break

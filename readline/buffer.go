@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"strings"
@@ -207,7 +206,7 @@ func (this *Buffer) RepaintAll() {
 }
 
 func (this *Buffer) SubString(start, end int) string {
-	var result bytes.Buffer
+	var result strings.Builder
 	for i := start; i < end; i++ {
 		result.WriteRune(this.Buffer[i])
 	}

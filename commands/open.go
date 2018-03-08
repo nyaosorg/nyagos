@@ -6,8 +6,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/zetamatta/go-getch"
-
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -36,17 +34,7 @@ func cmd_open(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	case 2:
 		open1(cmd.Args[1], cmd.Stderr)
 	default:
-		for _, arg := range cmd.Args[1:] {
-			fmt.Fprintf(cmd.Stderr, "open: %s ? [y/n/q] ", arg)
-			ch := getch.Rune()
-			fmt.Fprintf(cmd.Stderr, "%c\n", ch)
-			if ch == 'q' {
-				break
-			} else if ch != 'y' && ch != 'Y' {
-				continue
-			}
-			open1(arg, cmd.Stderr)
-		}
+		fmt.Fprintln(cmd.Stderr, "open: ambiguous shellexecute")
 	}
 	return 0, nil
 }

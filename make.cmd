@@ -6,9 +6,15 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
         $args[0].Groups[1] -replace " ",[char]1
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
+# set GO "go" -option constant
+set GO "go.exe" -option constant
+
 set CMD "Cmd" -option constant
-set LUA64URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download" -option constant
-set LUA32URL "https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download" -option constant
+
+$LUAURL = @{
+    "amd64"="https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download";
+    "386"="https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download";
+}
 
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
@@ -51,7 +57,7 @@ function Get-GoArch{
     }elseif( (Test-Path env:GOARCH) -and $env:GOARCH ){
         $arch = $env:GOARCH
     }else{
-        $arch = (go version | %{ $_.Split()[-1].Split("/")[-1] } )
+        $arch = (& $GO version | %{ $_.Split()[-1].Split("/")[-1] } )
     }
     Write-Verbose ("Found GOARCH="+$arch)
     return $arch
@@ -90,9 +96,9 @@ function Go-Generate{
                 foreach( $source in $li.source ){
                     if( -not $source ){ continue }
                     if( (Newer-Than $source $target) ){
-                        Write-Verbose ("$ go generate for {0}" -f
+                        Write-Verbose ("$ $GO generate for {0}" -f
                             (Join-Path $dir $target) )
-                        go generate
+                        & $GO generate
                         break allloop
                     }
                 }
@@ -104,20 +110,23 @@ function Go-Generate{
 
 function Go-Fmt{
     $status = $true
-    Get-ChildItem . -Recurse |
-    ?{ $_.Name -like "*.go" -and $_.Mode -like "?a*" } |
-    %{
-        $fname = $_.FullName
-        Write-Verbose -Message "$ go fmt $fname"
-        go fmt $fname
-        if( $LastExitCode -ne 0 ){
-            $status = $false
-        }else{
-            attrib -a $fname
+    git status -s | %{
+        $fname = $_.Substring(3)
+        if( $fname -like "*.go" ){
+            $prop = Get-ItemProperty($fname)
+            if( $prop.Mode -like "?a*" ){
+                Write-Verbose "$ $GO fmt $fname"
+                & $GO fmt $fname
+                if( $LastExitCode -ne 0 ){
+                    $status = $false
+                }else{
+                    attrib -a $fname
+                }
+            }
         }
     }
     if( -not $status ){
-        Write-Warning "Some of 'go fmt' failed."
+        Write-Warning "Some of '$GO fmt' failed."
     }
     return $status
 }
@@ -198,13 +207,13 @@ function Download-Exe($url,$exename){
         return
     }
     Write-Verbose -Message ("{0} not found." -f $exename)
-    Write-Verbose -Message ("$ go get " + $url)
-    go get $url
+    Write-Verbose -Message ("$ $GO get " + $url)
+    & $GO get $url
     $workdir = (Join-Path (Join-Path (Get-Go1stPath) "src") $url)
     $cwd = (Get-Location)
     Set-Location $workdir
-    Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
-    go build
+    Write-Verbose -Message ("$ $GO build {0} on {1}" -f $exename,$workdir)
+    & $GO build
     Do-Copy $exename $cwd
     Set-Location $cwd
 }
@@ -258,8 +267,8 @@ function Build($version,$tags) {
     Make-SysO $version
 
     $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
-    Write-Verbose -Message "$ go build -o '$target'"
-    go build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
+    Write-Verbose "$ $GO build -o '$target'"
+    & $GO build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
         Do-Copy $target ".\nyagos.exe"
     }
@@ -311,8 +320,8 @@ function Make-ConstGo($makexml){
     }
     Write-Verbose -Message '$ .\a.exe > const.go'
     & ".\a.exe" | Out-File const.go -Encoding default
-    Write-Verbose -Message '$ go fmt const.go'
-    go fmt const.go
+    Write-Verbose -Message "$ $GO fmt const.go"
+    & $GO fmt const.go
 
     Do-Remove "makeconst.o"
     Do-Remove "makeconst.c"
@@ -383,27 +392,25 @@ switch( $args[0] ){
     "" {
         Build (git describe --tags) ""
     }
+    "386"{
+        $private:save = $env:GOARCH
+        $env:GOARCH = "386"
+        Build (git describe --tags) ""
+        $env:GOARCH = $save
+    }
     "debug" {
+        $private:save = $env:GOARCH
+        if( $args[1] ){
+            $env:GOARCH = $args[1]
+        }
         Build "" "-tags=debug"
+        $env:GOARCH = $save
     }
     "release" {
-        Build (Get-Content Misc\version.txt) ""
-    }
-    "386" {
         $private:save = $env:GOARCH
-        $env:GOARCH = "386"
-        Build "" ""
-        $env:GOARCH = $save
-    }
-    "386release" {
-        $private:save = $env:GOARCH
-        $env:GOARCH = "386"
-        Build (Get-Content Misc\version.txt) ""
-        $env:GOARCH = $save
-    }
-    "amd64" {
-        $private:save = $env:GOARCH
-        $env:GOARCH = "amd64"
+        if( $args[1] ){
+            $env:GOARCH = $args[1]
+        }
         Build (Get-Content Misc\version.txt) ""
         $env:GOARCH = $save
     }
@@ -413,8 +420,8 @@ switch( $args[0] ){
     "vet" {
         ForEach-GoDir | ForEach-Object{
             pushd $_
-            Write-Verbose "$ go vet on $_"
-            go vet
+            Write-Verbose "$ $GO vet on $_"
+            & $GO vet
             popd
         }
     }
@@ -447,9 +454,9 @@ switch( $args[0] ){
         }
 
         ForEach-GoDir | %{
-            Write-Verbose "$ go clean on $_"
+            Write-Verbose "$ $GO clean on $_"
             pushd $_
-            go clean
+            & $GO clean
             popd
         }
     }
@@ -472,14 +479,9 @@ switch( $args[0] ){
             popd
         }
     }
-    "386package" {
-        Make-Package "386"
-    }
-    "amd64package" {
-        Make-Package "amd64"
-    }
     "package" {
-        Make-Package (Get-GoArch)
+        $goarch = if( $args[1] ){ $args[1] }else{ (Get-GoArch) }
+        Make-Package $goarch
     }
     "install" {
         $installDir = $args[1]
@@ -529,7 +531,7 @@ switch( $args[0] ){
     }
     "get" {
         Go-Generate
-        Get-Imports | ForEach-Object{ Write-Output $_ ; go get -u $_ }
+        Get-Imports | ForEach-Object{ Write-Output $_ ; & $GO get -u $_ }
     }
     "fmt" {
         Go-Fmt | Out-Null
@@ -562,42 +564,27 @@ switch( $args[0] ){
             }
         }
     }
-    "get-lua64" {
-        Get-Lua $LUA64URL "amd64"
-    }
-    "get-lua32" {
-        Get-Lua $LUA32URL "386"
-    }
     "get-lua" {
-        if( (Get-GoArch) -eq "amd64" ){
-            Get-Lua $LUA64URL "amd64"
-        }else{
-            Get-Lua $LUA32URL "386"
-        }
+        $goarch = if( $args[1] ){ $args[1] } else { (Get-GoArch) }
+        Get-Lua ($LUAURL[ $goarch ]) $goarch
     }
     "help" {
         Write-Output @'
-make            build as snapshot version  (default)
-make debug      build as debug version     (tagged as `debug`)
-make release    build as release version.
-make 386        build for 32bit processor as release version.
-make amd64      build for 64bit processor as release version.
-make status     show version information 
-make vet        do `go vet` on each folder.
-make clean      remove all work files.
-make sweep      remove *.bak and *.~
-make const      make `const.go`. gcc is required.
-make package    make `nyagos-(VERSION)-(ARCH).zip`
-make install [FOLDER]
-                copy executables to FOLDER
-make install    copy executables to the last folder.
-make generate   execute `go generate` on the folder it required.
-make fmt        `go fmt`
+make                     build as snapshot
+make debug   [386|amd64] build as debug version     (tagged as `debug`)
+make release [386|amd64] build as release version
+make status              show version information 
+make vet                 do `go vet` on each folder
+make clean               remove all work files
+make sweep               remove *.bak and *.~
+make const               make `const.go`. gcc is required
+make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
+make install [FOLDER]    copy executables to FOLDER or last folder
+make generate            execute `go generate` on the folder it required
+make fmt                 `go fmt`
 make check-case [FILE]
-make get-lua    download Lua 5.3 for current architecture.
-make get-lua64  download Lua 5.3 64-bit runtime.
-make get-lua32  download Lua 5.3 32-bit runtime.
-make help       show this.
+make get-lua [386|amd64] download Lua 5.3 for current architecture
+make help                show this
 '@
     }
     default {

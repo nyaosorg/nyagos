@@ -5,11 +5,14 @@ import (
 	"os"
 )
 
+var NoClobber = false
+
 type Redirecter struct {
 	path     string
 	isAppend bool
 	no       int
 	dupFrom  int
+	force    bool
 }
 
 func NewRedirecter(no int) *Redirecter {
@@ -49,6 +52,12 @@ func (this *Redirecter) open() (*os.File, error) {
 		}
 		return f, err
 	} else {
+		if NoClobber && !this.force {
+			_, err := os.Stat(this.path)
+			if err == nil {
+				return nil, os.ErrExist
+			}
+		}
 		return os.Create(this.path)
 	}
 }

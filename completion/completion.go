@@ -1,7 +1,6 @@
 package completion
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -137,7 +136,7 @@ func CommonPrefix(list []string) string {
 		cr := strings.NewReader(common)
 		fr := strings.NewReader(f)
 		i := 0
-		var buffer bytes.Buffer
+		var buffer strings.Builder
 		for {
 			ch, _, cerr := cr.ReadRune()
 			fh, _, ferr := fr.ReadRune()
@@ -190,19 +189,20 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 		}
 	}
 	if quotechar != 0 {
-		buffer := make([]byte, 0, len(commonStr)+3)
+		var buffer strings.Builder
+		buffer.Grow(len(commonStr) + 3)
 		if len(commonStr) >= 2 && commonStr[0] == '~' && os.IsPathSeparator(commonStr[1]) {
-			buffer = append(buffer, commonStr[:1]...)
-			buffer = append(buffer, quotechar)
-			buffer = append(buffer, commonStr[1:]...)
+			buffer.WriteString(commonStr[:1])
+			buffer.WriteByte(quotechar)
+			buffer.WriteString(commonStr[1:])
 		} else {
-			buffer = append(buffer, quotechar)
-			buffer = append(buffer, commonStr...)
+			buffer.WriteByte(quotechar)
+			buffer.WriteString(commonStr)
 		}
 		if len(comp.List) == 1 && !endWithRoot(comp.List[0].InsertStr) {
-			buffer = append(buffer, quotechar)
+			buffer.WriteByte(quotechar)
 		}
-		commonStr = string(buffer)
+		commonStr = buffer.String()
 	}
 	if len(comp.List) == 1 && !endWithRoot(commonStr) && !strings.HasSuffix(commonStr, `%`) {
 		commonStr += " "
