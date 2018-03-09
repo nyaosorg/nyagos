@@ -1,0 +1,1 @@
+- Read the value of environment variables that a batchfile changed like CMD.EXE.
