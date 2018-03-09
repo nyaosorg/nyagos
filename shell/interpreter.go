@@ -199,30 +199,35 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 		this.Args = findfile.Globs(this.Args)
 	}
 	if this.UseShellExecute {
+		// GUI Application
 		cmdline := makeCmdline(this.Args[1:], this.RawArgs[1:])
 		err = dos.ShellExecute("open", path1, cmdline, "")
 		return 0, err
-	} else {
-		cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
-		cmd1.Stdin = this.Stdin
-		cmd1.Stdout = this.Stdout
-		cmd1.Stderr = this.Stderr
+	}
+	lowerName := strings.ToLower(this.Args[0])
+	if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
+		// Batch files
+		return Source(this.Args, nil, false, this.Stdin, this.Stdout, this.Stderr)
+	}
+	cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
+	cmd1.Stdin = this.Stdin
+	cmd1.Stdout = this.Stdout
+	cmd1.Stderr = this.Stderr
 
-		if cmd1.SysProcAttr == nil {
-			cmd1.SysProcAttr = new(syscall.SysProcAttr)
-		}
-		cmdline := makeCmdline(cmd1.Args, this.RawArgs)
-		if defined.DBG {
-			println(cmdline)
-		}
-		cmd1.SysProcAttr.CmdLine = cmdline
-		err = cmd1.Run()
-		errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
-		if errorlevelOk {
-			return errorlevel, err
-		} else {
-			return 255, err
-		}
+	if cmd1.SysProcAttr == nil {
+		cmd1.SysProcAttr = new(syscall.SysProcAttr)
+	}
+	cmdline := makeCmdline(cmd1.Args, this.RawArgs)
+	if defined.DBG {
+		println(cmdline)
+	}
+	cmd1.SysProcAttr.CmdLine = cmdline
+	err = cmd1.Run()
+	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
+	if errorlevelOk {
+		return errorlevel, err
+	} else {
+		return 255, err
 	}
 }
 
