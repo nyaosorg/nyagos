@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.4\_0
+===============
+on Mar.9,2018
+
 * lua: ole: `variable = OLE.property` is avaliable instead of `OLE:_get('property')`
 * lua: ole: `OLE.property = value` is avaliable instead of `OLE:_set('property',value)`
 * Load `nyagos.d/*.ny` as batchlike file

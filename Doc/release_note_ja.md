@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.2.4\_0
+===============
+(2018.03.09)
+
 * lua: ole: `variable = OLE.property` が `OLE:_get('property')` のかわりに使えるようになった
 * lua: ole: `OLE.property = value` が `OLE:_set('property',value)` のかわりに使えるようになった
 * `nyagos.d/*.ny` のコマンドファイルも読み込むようにした
