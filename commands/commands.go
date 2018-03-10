@@ -54,15 +54,30 @@ type Param interface {
 	In() io.Reader
 	Out() io.Writer
 	Err() io.Writer
+	RawArgs() []string
+	Spawn(context.Context, []string, []string) (int, error)
+	Loop(s shell.Stream) (int, error)
+	ReadCommand(context.Context, shell.Stream) (context.Context, string, error)
 }
 
 type ParamImpl struct{ *shell.Cmd }
 
-func (this *ParamImpl) Arg(n int) string { return this.Cmd.Args[n] }
-func (this *ParamImpl) Args() []string   { return this.Cmd.Args }
-func (this *ParamImpl) In() io.Reader    { return this.Cmd.Stdin }
-func (this *ParamImpl) Out() io.Writer   { return this.Cmd.Stdout }
-func (this *ParamImpl) Err() io.Writer   { return this.Cmd.Stderr }
+func (this *ParamImpl) Arg(n int) string  { return this.Cmd.Args[n] }
+func (this *ParamImpl) Args() []string    { return this.Cmd.Args }
+func (this *ParamImpl) In() io.Reader     { return this.Cmd.Stdin }
+func (this *ParamImpl) Out() io.Writer    { return this.Cmd.Stdout }
+func (this *ParamImpl) Err() io.Writer    { return this.Cmd.Stderr }
+func (this *ParamImpl) RawArgs() []string { return this.Cmd.RawArgs }
+
+func (this *ParamImpl) Spawn(ctx context.Context, args, rawargs []string) (int, error) {
+	subCmd, err := this.Clone()
+	if err != nil {
+		return 0, err
+	}
+	subCmd.Args = args
+	subCmd.RawArgs = rawargs
+	return subCmd.SpawnvpContext(ctx)
+}
 
 func cmd2param(f func(context.Context, Param) (int, error)) func(context.Context, *shell.Cmd) (int, error) {
 	return func(ctx context.Context, cmd *shell.Cmd) (int, error) {
@@ -93,7 +108,7 @@ func Init() {
 		"exit":     cmd2param(cmdExit),
 		"foreach":  cmd_foreach,
 		"history":  history.CmdHistory,
-		"if":       cmd_if,
+		"if":       cmd2param(cmdIf),
 		"ln":       cmd2param(cmdLn),
 		"lnk":      cmd2param(cmdLnk),
 		"ls":       cmd2param(cmdLs),
