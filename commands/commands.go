@@ -29,7 +29,7 @@ type Param interface {
 var buildInCommand map[string]func(context.Context, Param) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
-func exec(ctx context.Context, cmd Param) (int, bool, error) {
+func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	name := strings.ToLower(cmd.Arg(0))
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		err := dos.Chdrive(name)
