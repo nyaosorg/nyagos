@@ -21,7 +21,7 @@ type Param interface {
 	Out() io.Writer
 	Err() io.Writer
 	RawArgs() []string
-	Spawn(context.Context, []string, []string) (int, error)
+	Spawnlp(context.Context, []string, []string) (int, error)
 	Loop(s shell.Stream) (int, error)
 	ReadCommand(context.Context, shell.Stream) (context.Context, string, error)
 }

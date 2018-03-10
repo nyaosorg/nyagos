@@ -35,7 +35,7 @@ func cmdEnv(ctx context.Context, cmd Param) (int, error) {
 		os.Setenv(key, val)
 	}
 
-	rc, err := cmd.Spawn(ctx, args, args)
+	rc, err := cmd.Spawnlp(ctx, args, args)
 
 	for key, val := range backup {
 		os.Setenv(key, val)

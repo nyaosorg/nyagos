@@ -267,6 +267,16 @@ func (this *Cmd) SpawnvpContext(ctx context.Context) (int, error) {
 	return errorlevel, err
 }
 
+func (this *Cmd) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
+	subCmd, err := this.Clone()
+	if err != nil {
+		return -1, err
+	}
+	subCmd.SetArgs(args)
+	subCmd.SetRawArgs(rawargs)
+	return subCmd.SpawnvpContext(ctx)
+}
+
 var pipeSeq uint = 0
 
 func (this *Cmd) Interpret(text string) (int, error) {

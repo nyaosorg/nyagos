@@ -79,7 +79,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 		} else {
 			// inline `then`
 			if status {
-				return cmd.Spawn(ctx, cmd.Args()[start:], cmd.RawArgs()[start:])
+				return cmd.Spawnlp(ctx, cmd.Args()[start:], cmd.RawArgs()[start:])
 			} else {
 				return 0, nil
 			}
