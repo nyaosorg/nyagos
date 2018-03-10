@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"io"
 	"regexp"
 	"strings"
 
@@ -47,9 +48,31 @@ func AllNames() []completion.Element {
 	return names
 }
 
+type Param interface {
+	Arg(int) string
+	Args() []string
+	In() io.Reader
+	Out() io.Writer
+	Err() io.Writer
+}
+
+type ParamImpl struct{ *shell.Cmd }
+
+func (this *ParamImpl) Arg(n int) string { return this.Cmd.Args[n] }
+func (this *ParamImpl) Args() []string   { return this.Cmd.Args }
+func (this *ParamImpl) In() io.Reader    { return this.Cmd.Stdin }
+func (this *ParamImpl) Out() io.Writer   { return this.Cmd.Stdout }
+func (this *ParamImpl) Err() io.Writer   { return this.Cmd.Stderr }
+
+func cmd2param(f func(context.Context, Param) (int, error)) func(context.Context, *shell.Cmd) (int, error) {
+	return func(ctx context.Context, cmd *shell.Cmd) (int, error) {
+		return f(ctx, &ParamImpl{cmd})
+	}
+}
+
 func Init() {
 	BuildInCommand = map[string]func(context.Context, *shell.Cmd) (int, error){
-		".":        cmd_source,
+		".":        cmd2param(cmdSource),
 		"alias":    cmd_alias,
 		"attrib":   cmd_attrib,
 		"bindkey":  cmd_bindkey,
@@ -86,7 +109,7 @@ func Init() {
 		"rem":      cmd_rem,
 		"rmdir":    cmd_rmdir,
 		"set":      cmd_set,
-		"source":   cmd_source,
+		"source":   cmd2param(cmdSource),
 		"su":       cmd_su,
 		"touch":    cmd_touch,
 		"type":     cmd_type,
