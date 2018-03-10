@@ -9,7 +9,6 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func getbit(c byte) uint32 {
@@ -46,12 +45,12 @@ func globfile(pattern string) (result []string) {
 	return
 }
 
-func cmd_attrib(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 	var set_bits uint32 = 0
 	var reset_bits uint32 = 0
-	files := make([]string, 0, len(cmd.Args)-1)
+	files := make([]string, 0, len(cmd.Args())-1)
 
-	for _, arg1 := range cmd.Args[1:] {
+	for _, arg1 := range cmd.Args()[1:] {
 		if len(arg1) == 2 && arg1[0] == '+' {
 			bits := getbit(arg1[1])
 			if bits != 0 {
@@ -89,7 +88,7 @@ func cmd_attrib(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			if err != nil {
 				fullpath = arg1
 			}
-			fmt.Fprintf(cmd.Stdout, "%c  %c%c%c       %s\n",
+			fmt.Fprintf(cmd.Out(), "%c  %c%c%c       %s\n",
 				bit2flg(bits, dos.FILE_ATTRIBUTE_ARCHIVE, 'A'),
 				bit2flg(bits, dos.FILE_ATTRIBUTE_SYSTEM, 'S'),
 				bit2flg(bits, dos.FILE_ATTRIBUTE_HIDDEN, 'H'),

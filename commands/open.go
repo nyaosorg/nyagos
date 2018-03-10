@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func open1(fname string, out io.Writer) {
@@ -22,19 +21,19 @@ func open1(fname string, out io.Writer) {
 	}
 }
 
-func cmd_open(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	switch len(cmd.Args) {
+func cmdOpen(ctx context.Context, cmd Param) (int, error) {
+	switch len(cmd.Args()) {
 	case 1:
 		wd, err := os.Getwd()
 		if err != nil {
-			open1(".", cmd.Stderr)
+			open1(".", cmd.Err())
 		} else {
-			open1(wd, cmd.Stderr)
+			open1(wd, cmd.Err())
 		}
 	case 2:
-		open1(cmd.Args[1], cmd.Stderr)
+		open1(cmd.Arg(1), cmd.Err())
 	default:
-		fmt.Fprintln(cmd.Stderr, "open: ambiguous shellexecute")
+		fmt.Fprintln(cmd.Err(), "open: ambiguous shellexecute")
 	}
 	return 0, nil
 }

@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/zetamatta/nyagos/commands/timecheck"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var timePattern = regexp.MustCompile(
@@ -55,38 +54,38 @@ func readTimeStamp(s string) *time.Time {
 	return &stamp
 }
 
-func cmd_touch(ctx context.Context, this *shell.Cmd) (int, error) {
+func cmdTouch(ctx context.Context, this Param) (int, error) {
 	errcnt := 0
 	stamp := time.Now()
-	for i := 1; i < len(this.Args); i++ {
-		arg1 := this.Args[i]
+	for i := 1; i < len(this.Args()); i++ {
+		arg1 := this.Arg(i)
 		if arg1 == "-t" {
 			i++
-			if i >= len(this.Args) {
-				fmt.Fprintf(this.Stderr, "-t: Too Few Arguments.\n")
+			if i >= len(this.Args()) {
+				fmt.Fprintf(this.Err(), "-t: Too Few Arguments.\n")
 				return 255, nil
 			}
-			stamp1 := readTimeStamp(this.Args[i])
+			stamp1 := readTimeStamp(this.Arg(i))
 			if stamp1 == nil {
-				fmt.Fprintf(this.Stderr, "-t: %s: Invalid time format.\n",
-					this.Args[i])
+				fmt.Fprintf(this.Err(), "-t: %s: Invalid time format.\n",
+					this.Arg(i))
 				return 255, nil
 			}
 			stamp = *stamp1
 		} else if arg1 == "-r" {
 			i++
-			if i >= len(this.Args) {
-				fmt.Fprintf(this.Stderr, "-r: Too Few Arguments.\n")
+			if i >= len(this.Args()) {
+				fmt.Fprintf(this.Err(), "-r: Too Few Arguments.\n")
 				return 255, nil
 			}
-			stat, statErr := os.Stat(this.Args[i])
+			stat, statErr := os.Stat(this.Arg(i))
 			if statErr != nil {
-				fmt.Fprintf(this.Stderr, "-r: %s: %s\n", this.Args[i], statErr)
+				fmt.Fprintf(this.Err(), "-r: %s: %s\n", this.Arg(i), statErr)
 				return 255, nil
 			}
 			stamp = stat.ModTime()
 		} else if arg1[0] == '-' {
-			fmt.Fprintf(this.Stderr,
+			fmt.Fprintf(this.Err(),
 				"%s: built-in touch: Not implemented.\n",
 				arg1)
 		} else {
@@ -96,13 +95,13 @@ func cmd_touch(ctx context.Context, this *shell.Cmd) (int, error) {
 			}
 			if err == nil {
 				if err = fd.Close(); err != nil {
-					fmt.Fprintln(this.Stderr, err.Error())
+					fmt.Fprintln(this.Err(), err.Error())
 					errcnt++
 					continue
 				}
 				os.Chtimes(arg1, stamp, stamp)
 			} else {
-				fmt.Fprintln(this.Stderr, err.Error())
+				fmt.Fprintln(this.Err(), err.Error())
 				errcnt++
 			}
 		}

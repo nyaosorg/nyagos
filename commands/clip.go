@@ -7,12 +7,10 @@ import (
 
 	"github.com/atotto/clipboard"
 	"github.com/zetamatta/go-mbcs"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
-func cmd_clip(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	data, err := ioutil.ReadAll(cmd.Stdin)
+func cmdClip(ctx context.Context, cmd Param) (int, error) {
+	data, err := ioutil.ReadAll(cmd.In())
 	if err != nil {
 		return 1, err
 	}

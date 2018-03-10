@@ -6,8 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func shrink(values ...string) string {
@@ -32,18 +30,18 @@ func shrink(values ...string) string {
 	return buffer.String()
 }
 
-func cmd_set(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	if len(cmd.Args) <= 1 {
+func cmdSet(ctx context.Context, cmd Param) (int, error) {
+	if len(cmd.Args()) <= 1 {
 		for _, val := range os.Environ() {
-			fmt.Fprintln(cmd.Stdout, val)
+			fmt.Fprintln(cmd.Out(), val)
 		}
 		return 0, nil
 	}
-	arg := strings.Join(cmd.Args[1:], " ")
+	arg := strings.Join(cmd.Args()[1:], " ")
 	eqlPos := strings.Index(arg, "=")
 	if eqlPos < 0 {
 		// set NAME
-		fmt.Fprintf(cmd.Stdout, "%s=%s\n", arg, os.Getenv(arg))
+		fmt.Fprintf(cmd.Out(), "%s=%s\n", arg, os.Getenv(arg))
 	} else if eqlPos >= 3 && arg[eqlPos-1] == '+' {
 		// set NAME+=VALUE
 		right := arg[eqlPos+1:]

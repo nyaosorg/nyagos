@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func printShortcut(s, t, d string, out io.Writer) {
@@ -48,25 +47,25 @@ func makeShortcut(s, t, d string, out io.Writer) error {
 	return err
 }
 
-func cmd_lnk(_ context.Context, cmd1 *shell.Cmd) (int, error) {
-	switch len(cmd1.Args) {
+func cmdLnk(_ context.Context, cmd1 Param) (int, error) {
+	switch len(cmd1.Args()) {
 	case 0, 1:
-		fmt.Fprintln(cmd1.Stdout, "usage: lnk FILENAME SHORTCUT WORKING-DIR")
+		fmt.Fprintln(cmd1.Err(), "usage: lnk FILENAME SHORTCUT WORKING-DIR")
 		return 0, nil
 	case 2:
-		target, dir, err := dos.ReadShortcut(cmd1.Args[1])
+		target, dir, err := dos.ReadShortcut(cmd1.Arg(1))
 		if err != nil {
 			return 1, err
 		}
-		printShortcut(target, cmd1.Args[1], dir, cmd1.Stdout)
+		printShortcut(target, cmd1.Arg(1), dir, cmd1.Out())
 		break
 	case 3:
-		if err := makeShortcut(cmd1.Args[1], cmd1.Args[2], "", cmd1.Stdout); err != nil {
+		if err := makeShortcut(cmd1.Arg(1), cmd1.Arg(2), "", cmd1.Out()); err != nil {
 			return 1, err
 		}
 		break
 	case 4:
-		if err := makeShortcut(cmd1.Args[1], cmd1.Args[2], cmd1.Args[3], cmd1.Stdout); err != nil {
+		if err := makeShortcut(cmd1.Arg(1), cmd1.Arg(2), cmd1.Arg(3), cmd1.Out()); err != nil {
 			return 1, err
 		}
 		break

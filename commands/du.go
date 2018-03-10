@@ -6,8 +6,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var ErrCtrlC = errors.New("^C")
@@ -56,9 +54,9 @@ func du_(path string, output func(string, int64) error, blocksize int64) (int64,
 	return diskuse, nil
 }
 
-func cmd_du(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 	output := func(name string, size int64) error {
-		fmt.Fprintf(cmd.Stdout, "%d\t%s\n", size/1024, name)
+		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, name)
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
@@ -69,7 +67,7 @@ func cmd_du(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return nil
 	}
 	count := 0
-	for _, arg1 := range cmd.Args[1:] {
+	for _, arg1 := range cmd.Args()[1:] {
 		if arg1 == "-s" {
 			output = func(_ string, _ int64) error {
 				if ctx != nil {
@@ -86,17 +84,17 @@ func cmd_du(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		size, err := du_(arg1, output, 4096)
 		count++
 		if err != nil {
-			fmt.Fprintf(cmd.Stderr, "%s: %s\n", arg1, err)
+			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
 			continue
 		}
-		fmt.Fprintf(cmd.Stdout, "%d\t%s\n", size/1024, arg1)
+		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, arg1)
 	}
 	if count <= 0 {
 		size, err := du_(".", output, 4096)
 		if err != nil {
 			return 1, err
 		}
-		fmt.Fprintf(cmd.Stdout, "%d\t%s\n", size/1024, ".")
+		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, ".")
 	}
 	return 0, nil
 }

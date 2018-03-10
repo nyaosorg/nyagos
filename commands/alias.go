@@ -6,17 +6,16 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/shell"
 )
 
-func cmd_alias(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	if len(cmd.Args) <= 1 {
+func cmdAlias(ctx context.Context, cmd Param) (int, error) {
+	if len(cmd.Args()) <= 1 {
 		for key, val := range alias.Table {
-			fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
+			fmt.Fprintf(cmd.Out(), "%s=%s\n", key, val.String())
 		}
 		return 0, nil
 	}
-	for _, args := range cmd.Args[1:] {
+	for _, args := range cmd.Args()[1:] {
 		if eqlPos := strings.IndexRune(args, '='); eqlPos >= 0 {
 			key := args[0:eqlPos]
 			val := args[eqlPos+1:]
@@ -29,7 +28,7 @@ func cmd_alias(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			key := strings.ToLower(args)
 			val, ok := alias.Table[key]
 			if ok {
-				fmt.Fprintf(cmd.Stdout, "%s=%s\n", key, val.String())
+				fmt.Fprintf(cmd.Out(), "%s=%s\n", key, val.String())
 			}
 		}
 	}

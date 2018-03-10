@@ -7,8 +7,6 @@ import (
 	"os"
 	"regexp"
 	"strings"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var rxOOO = regexp.MustCompile("^[0-7][0-7][0-7]$")
@@ -100,8 +98,8 @@ func cmd_chmod_(args []string) error {
 	return nil
 }
 
-func cmd_chmod(_ context.Context, cmd *shell.Cmd) (int, error) {
-	if err := cmd_chmod_(cmd.Args[1:]); err != nil {
+func cmdChmod(_ context.Context, cmd Param) (int, error) {
+	if err := cmd_chmod_(cmd.Args()[1:]); err != nil {
 		return 1, err
 	} else {
 		return 0, nil
