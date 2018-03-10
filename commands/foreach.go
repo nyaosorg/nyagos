@@ -17,7 +17,7 @@ var start_list = map[string]bool{
 }
 
 func cmdForeach(ctx context.Context, cmd Param) (int, error) {
-	stream, ok := ctx.Value("stream").(shell.Stream)
+	stream, ok := ctx.Value(shell.StreamId).(shell.Stream)
 
 	if !ok {
 		return 1, errors.New("Not found stream")

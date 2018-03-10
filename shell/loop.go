@@ -51,6 +51,10 @@ func (it *Cmd) ReadCommand(ctx context.Context, stream Stream) (context.Context,
 	return ctx, line, nil
 }
 
+type streamIdT struct{}
+
+var StreamId streamIdT
+
 func (it *Cmd) Loop(stream Stream) (int, error) {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
@@ -61,7 +65,7 @@ func (it *Cmd) Loop(stream Stream) (int, error) {
 
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
-		ctx = context.WithValue(ctx, "stream", stream)
+		ctx = context.WithValue(ctx, StreamId, stream)
 
 		ctx, line, err := it.ReadCommand(ctx, stream)
 		if err != nil {
