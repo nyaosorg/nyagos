@@ -10,7 +10,6 @@ import (
 
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -72,7 +71,7 @@ func (this *ParamImpl) RawArgs() []string { return this.Cmd.RawArgs }
 func (this *ParamImpl) Spawn(ctx context.Context, args, rawargs []string) (int, error) {
 	subCmd, err := this.Clone()
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 	subCmd.Args = args
 	subCmd.RawArgs = rawargs
@@ -103,11 +102,11 @@ func Init() {
 		"diskfree": cmd2param(cmdDiskFree),
 		"diskused": cmd2param(cmdDiskUsed),
 		"echo":     cmd2param(cmdEcho),
-		"env":      cmd_env,
+		"env":      cmd2param(cmdEnv),
 		"erase":    cmd2param(cmdDel),
 		"exit":     cmd2param(cmdExit),
-		"foreach":  cmd_foreach,
-		"history":  history.CmdHistory,
+		"foreach":  cmd2param(cmdForeach),
+		"history":  cmd2param(cmdHistory),
 		"if":       cmd2param(cmdIf),
 		"ln":       cmd2param(cmdLn),
 		"lnk":      cmd2param(cmdLnk),

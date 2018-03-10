@@ -16,7 +16,7 @@ var start_list = map[string]bool{
 	"if":      true,
 }
 
-func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdForeach(ctx context.Context, cmd Param) (int, error) {
 	stream, ok := ctx.Value("stream").(shell.Stream)
 
 	if !ok {
@@ -47,13 +47,13 @@ func cmd_foreach(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		}
 		bufstream.Add(line)
 	}
-	if len(cmd.Args) < 2 {
+	if len(cmd.Args()) < 2 {
 		return 0, nil
 	}
 
-	name := cmd.Args[1]
+	name := cmd.Arg(1)
 	save := os.Getenv(name)
-	for _, value := range cmd.Args[2:] {
+	for _, value := range cmd.Args()[2:] {
 		os.Setenv(name, value)
 		cmd.Loop(&bufstream)
 		bufstream.SetPos(0)
