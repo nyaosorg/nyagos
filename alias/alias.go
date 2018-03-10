@@ -47,7 +47,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 		} else if s == "$*" {
 			isReplaced = true
 			if cmd.Args != nil && len(cmd.Args()) >= 2 {
-				return strings.Join(cmd.RawArgs[1:], " ")
+				return strings.Join(cmd.RawArgs()[1:], " ")
 			} else {
 				return ""
 			}
@@ -66,7 +66,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 		if err == nil {
 			isReplaced = true
 			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args()) {
-				return cmd.RawArgs[i]
+				return cmd.RawArg(int(i))
 			} else {
 				return ""
 			}
@@ -77,7 +77,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	if !isReplaced {
 		var buffer strings.Builder
 		buffer.WriteString(this.BaseStr)
-		for _, s := range cmd.RawArgs[1:] {
+		for _, s := range cmd.RawArgs()[1:] {
 			fmt.Fprintf(&buffer, " %s", s)
 		}
 		cmdline = buffer.String()

@@ -53,7 +53,7 @@ type Cmd struct {
 	Tag          interface{}
 	PipeSeq      [2]uint
 	IsBackGround bool
-	RawArgs      []string
+	rawArgs      []string
 
 	OnFork          func(*Cmd) error
 	OffFork         func(*Cmd) error
@@ -62,12 +62,15 @@ type Cmd struct {
 	UseShellExecute bool
 }
 
-func (this *Cmd) Arg(n int) string   { return this.args[n] }
-func (this *Cmd) Args() []string     { return this.args }
-func (this *Cmd) SetArgs(s []string) { this.args = s }
-func (this *Cmd) In() io.Reader      { return this.Stdin }
-func (this *Cmd) Out() io.Writer     { return this.Stdout }
-func (this *Cmd) Err() io.Writer     { return this.Stderr }
+func (this *Cmd) Arg(n int) string      { return this.args[n] }
+func (this *Cmd) Args() []string        { return this.args }
+func (this *Cmd) SetArgs(s []string)    { this.args = s }
+func (this *Cmd) In() io.Reader         { return this.Stdin }
+func (this *Cmd) Out() io.Writer        { return this.Stdout }
+func (this *Cmd) Err() io.Writer        { return this.Stderr }
+func (this *Cmd) RawArg(n int) string   { return this.rawArgs[n] }
+func (this *Cmd) RawArgs() []string     { return this.rawArgs }
+func (this *Cmd) SetRawArgs(s []string) { this.rawArgs = s }
 
 func (this *Cmd) FullPath() string {
 	if this.args == nil || len(this.args) <= 0 {
@@ -77,10 +80,6 @@ func (this *Cmd) FullPath() string {
 		this.fullPath = dos.LookPath(this.args[0], "NYAGOSPATH")
 	}
 	return this.fullPath
-}
-
-func (this *Cmd) GetRawArgs() []string {
-	return this.RawArgs
 }
 
 func (this *Cmd) Close() {
@@ -107,7 +106,7 @@ func New() *Cmd {
 func (this *Cmd) Clone() (*Cmd, error) {
 	rv := new(Cmd)
 	rv.args = this.args
-	rv.RawArgs = this.RawArgs
+	rv.rawArgs = this.rawArgs
 	rv.Stdin = this.Stdin
 	rv.Stdout = this.Stdout
 	rv.Stderr = this.Stderr
@@ -207,7 +206,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	}
 	if this.UseShellExecute {
 		// GUI Application
-		cmdline := makeCmdline(this.args[1:], this.RawArgs[1:])
+		cmdline := makeCmdline(this.args[1:], this.rawArgs[1:])
 		err = dos.ShellExecute("open", path1, cmdline, "")
 		return 0, err
 	}
@@ -224,7 +223,7 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	if cmd1.SysProcAttr == nil {
 		cmd1.SysProcAttr = new(syscall.SysProcAttr)
 	}
-	cmdline := makeCmdline(cmd1.Args, this.RawArgs)
+	cmdline := makeCmdline(cmd1.Args, this.rawArgs)
 	if defined.DBG {
 		println(cmdline)
 	}
@@ -367,7 +366,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			}
 
 			cmd.args = state.Args
-			cmd.RawArgs = state.RawArgs
+			cmd.rawArgs = state.RawArgs
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
