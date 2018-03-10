@@ -121,21 +121,6 @@ func AllNames() []completion.Element {
 	return names
 }
 
-func quoteAndJoin(list []string) string {
-	var buffer strings.Builder
-	for i, value := range list {
-		if i > 0 {
-			buffer.WriteRune(' ')
-		}
-		if strings.IndexByte(value, ' ') >= 0 {
-			fmt.Fprintf(&buffer, `"%s"`, value)
-		} else {
-			buffer.WriteString(value)
-		}
-	}
-	return buffer.String()
-}
-
 var nextHook shell.HookT
 
 func hook(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
