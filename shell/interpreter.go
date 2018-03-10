@@ -62,6 +62,12 @@ type Cmd struct {
 	UseShellExecute bool
 }
 
+func (this *Cmd) Arg(n int) string   { return this.Args[n] }
+func (this *Cmd) SetArgs(s []string) { this.Args = s }
+func (this *Cmd) In() io.Reader      { return this.Stdin }
+func (this *Cmd) Out() io.Writer     { return this.Stdout }
+func (this *Cmd) Err() io.Writer     { return this.Stderr }
+
 func (this *Cmd) FullPath() string {
 	if this.Args == nil || len(this.Args) <= 0 {
 		return ""
