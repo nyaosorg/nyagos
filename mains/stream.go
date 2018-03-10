@@ -19,14 +19,6 @@ type CmdSeeker struct {
 	Pointer      int
 }
 
-func (this *CmdSeeker) GetPos() int {
-	if this.Pointer >= 0 {
-		return this.Pointer
-	} else {
-		return len(this.PlainHistory)
-	}
-}
-
 func (this *CmdSeeker) SetPos(pos int) error {
 	if pos < len(this.PlainHistory) {
 		this.Pointer = pos

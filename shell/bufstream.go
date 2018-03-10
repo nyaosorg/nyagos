@@ -18,10 +18,6 @@ func (this *BufStream) ReadLine(c context.Context) (context.Context, string, err
 	return c, this.line[this.n-1], nil
 }
 
-func (this *BufStream) GetPos() int {
-	return this.n
-}
-
 func (this *BufStream) SetPos(n int) error {
 	this.n = n
 	return nil

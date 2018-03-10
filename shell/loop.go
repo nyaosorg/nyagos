@@ -10,7 +10,6 @@ import (
 
 type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
-	GetPos() int
 	SetPos(int) error
 }
 
