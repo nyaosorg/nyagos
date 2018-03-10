@@ -25,7 +25,7 @@ func loadEnvFile(fname string, verbose io.Writer) error {
 	for scan.Scan() {
 		line, err := mbcs.AtoU(scan.Bytes())
 		if err != nil {
-			return err
+			continue
 		}
 		line = strings.TrimSpace(line)
 		eqlPos := strings.Index(line, "=")
@@ -33,10 +33,14 @@ func loadEnvFile(fname string, verbose io.Writer) error {
 			left := line[:eqlPos]
 			right := line[eqlPos+1:]
 			if left != "ERRORLEVEL_" {
+				orig := os.Getenv(left)
 				if verbose != nil {
 					fmt.Fprintf(verbose, "%s=%s\n", left, right)
 				}
-				os.Setenv(left, right)
+				if orig != right {
+					// fmt.Fprintf(os.Stderr, "%s:=%s\n", left, right)
+					os.Setenv(left, right)
+				}
 			}
 		}
 	}
