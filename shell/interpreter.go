@@ -48,7 +48,7 @@ type Cmd struct {
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
-	Args         []string
+	args         []string
 	HookCount    int
 	Tag          interface{}
 	PipeSeq      [2]uint
@@ -62,18 +62,19 @@ type Cmd struct {
 	UseShellExecute bool
 }
 
-func (this *Cmd) Arg(n int) string   { return this.Args[n] }
-func (this *Cmd) SetArgs(s []string) { this.Args = s }
+func (this *Cmd) Arg(n int) string   { return this.args[n] }
+func (this *Cmd) Args() []string     { return this.args }
+func (this *Cmd) SetArgs(s []string) { this.args = s }
 func (this *Cmd) In() io.Reader      { return this.Stdin }
 func (this *Cmd) Out() io.Writer     { return this.Stdout }
 func (this *Cmd) Err() io.Writer     { return this.Stderr }
 
 func (this *Cmd) FullPath() string {
-	if this.Args == nil || len(this.Args) <= 0 {
+	if this.args == nil || len(this.args) <= 0 {
 		return ""
 	}
 	if this.fullPath == "" {
-		this.fullPath = dos.LookPath(this.Args[0], "NYAGOSPATH")
+		this.fullPath = dos.LookPath(this.args[0], "NYAGOSPATH")
 	}
 	return this.fullPath
 }
@@ -105,7 +106,7 @@ func New() *Cmd {
 
 func (this *Cmd) Clone() (*Cmd, error) {
 	rv := new(Cmd)
-	rv.Args = this.Args
+	rv.args = this.args
 	rv.RawArgs = this.RawArgs
 	rv.Stdin = this.Stdin
 	rv.Stdout = this.Stdout
@@ -147,7 +148,7 @@ func SetHook(hook_ HookT) (rv HookT) {
 }
 
 var OnCommandNotFound = func(this *Cmd, err error) error {
-	err = &CommandNotFound{this.Args[0], err}
+	err = &CommandNotFound{this.args[0], err}
 	return err
 }
 
@@ -178,11 +179,11 @@ func makeCmdline(args, rawargs []string) string {
 
 func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	// command is empty.
-	if len(this.Args) <= 0 {
+	if len(this.args) <= 0 {
 		return 0, nil
 	}
 	if defined.DBG {
-		print("spawnvp_noerrmsg('", this.Args[0], "')\n")
+		print("spawnvp_noerrmsg('", this.args[0], "')\n")
 	}
 
 	// aliases and lua-commands
@@ -196,26 +197,26 @@ func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
 	if path1 == "" {
 		return 255, OnCommandNotFound(this, os.ErrNotExist)
 	}
-	this.Args[0] = path1
+	this.args[0] = path1
 
 	if defined.DBG {
-		print("exec.LookPath(", this.Args[0], ")==", path1, "\n")
+		print("exec.LookPath(", this.args[0], ")==", path1, "\n")
 	}
 	if WildCardExpansionAlways {
-		this.Args = findfile.Globs(this.Args)
+		this.args = findfile.Globs(this.args)
 	}
 	if this.UseShellExecute {
 		// GUI Application
-		cmdline := makeCmdline(this.Args[1:], this.RawArgs[1:])
+		cmdline := makeCmdline(this.args[1:], this.RawArgs[1:])
 		err = dos.ShellExecute("open", path1, cmdline, "")
 		return 0, err
 	}
-	lowerName := strings.ToLower(this.Args[0])
+	lowerName := strings.ToLower(this.args[0])
 	if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
 		// Batch files
-		return Source(this.Args, nil, false, this.Stdin, this.Stdout, this.Stderr)
+		return Source(this.args, nil, false, this.Stdin, this.Stdout, this.Stderr)
 	}
-	cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
+	cmd1 := exec.Command(this.args[0], this.args[1:]...)
 	cmd1.Stdin = this.Stdin
 	cmd1.Stdout = this.Stdout
 	cmd1.Stderr = this.Stderr
@@ -365,7 +366,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 				defer fd.Close()
 			}
 
-			cmd.Args = state.Args
+			cmd.args = state.Args
 			cmd.RawArgs = state.RawArgs
 			if i > 0 {
 				cmd.IsBackGround = true

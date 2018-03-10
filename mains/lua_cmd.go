@@ -60,11 +60,11 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		L.Pop(1) // remove io-table
 	}
 
-	if err := L.LoadBufferX(cmd.Args[0], this.Chank, "b"); err != nil {
+	if err := L.LoadBufferX(cmd.Arg(0), this.Chank, "b"); err != nil {
 		return 255, err
 	}
 	L.NewTable()
-	for i, arg1 := range cmd.Args {
+	for i, arg1 := range cmd.Args() {
 		L.PushString(arg1)
 		L.RawSetI(-2, lua.Integer(i))
 	}
@@ -104,7 +104,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 				errorlevel = 255
 				err = err1
 			} else {
-				it.Args = newargs
+				it.SetArgs(newargs)
 				errorlevel, err = it.SpawnvpContext(ctx)
 			}
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
@@ -194,7 +194,7 @@ func cmdExec(L lua.Lua) int {
 				return L.Push(nil, err)
 			}
 		}
-		it.Args = args
+		it.SetArgs(args)
 		errorlevel, err = it.Spawnvp()
 	} else {
 		statement, statementErr := L.ToString(1)

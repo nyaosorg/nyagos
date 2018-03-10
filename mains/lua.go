@@ -101,7 +101,7 @@ func on_command_not_found(inte *shell.Cmd, err error) error {
 		return orgOnCommandNotFound(inte, err)
 	}
 	L.NewTable()
-	for key, val := range inte.Args {
+	for key, val := range inte.Args() {
 		L.PushString(val)
 		L.RawSetI(-2, lua.Integer(key))
 	}

@@ -34,19 +34,19 @@ func (this *AliasFunc) String() string {
 func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err error) {
 	isReplaced := false
 	if dbg {
-		print("AliasFunc.Call('", cmd.Args[0], "')\n")
+		print("AliasFunc.Call('", cmd.Arg(0), "')\n")
 	}
 	cmdline := paramMatch.ReplaceAllStringFunc(this.BaseStr, func(s string) string {
 		if s == "$~*" {
 			isReplaced = true
-			if cmd.Args != nil && len(cmd.Args) >= 2 {
-				return strings.Join(cmd.Args[1:], " ")
+			if cmd.Args() != nil && len(cmd.Args()) >= 2 {
+				return strings.Join(cmd.Args()[1:], " ")
 			} else {
 				return ""
 			}
 		} else if s == "$*" {
 			isReplaced = true
-			if cmd.Args != nil && len(cmd.Args) >= 2 {
+			if cmd.Args != nil && len(cmd.Args()) >= 2 {
 				return strings.Join(cmd.RawArgs[1:], " ")
 			} else {
 				return ""
@@ -55,8 +55,8 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 			i, err := strconv.ParseInt(s[2:], 10, 0)
 			if err == nil {
 				isReplaced = true
-				if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args) {
-					return cmd.Args[i]
+				if 0 <= i && cmd.Args() != nil && int(i) < len(cmd.Args()) {
+					return cmd.Arg(int(i))
 				} else {
 					return ""
 				}
@@ -65,7 +65,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 		i, err := strconv.ParseInt(s[1:], 10, 0)
 		if err == nil {
 			isReplaced = true
-			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args) {
+			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args()) {
 				return cmd.RawArgs[i]
 			} else {
 				return ""
@@ -95,7 +95,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	}
 
 	arg1 := texts.FirstWord(cmdline)
-	if strings.EqualFold(arg1, cmd.Args[0]) {
+	if strings.EqualFold(arg1, cmd.Arg(0)) {
 		it.HookCount = 100
 	} else {
 		it.HookCount = cmd.HookCount + 1
@@ -142,7 +142,7 @@ func hook(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
 	if cmd.HookCount > 5 {
 		return nextHook(ctx, cmd)
 	}
-	callee, ok := Table[strings.ToLower(cmd.Args[0])]
+	callee, ok := Table[strings.ToLower(cmd.Arg(0))]
 	if !ok {
 		return nextHook(ctx, cmd)
 	}
