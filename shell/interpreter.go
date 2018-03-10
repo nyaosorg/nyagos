@@ -250,11 +250,7 @@ func IsAlreadyReported(err error) bool {
 	return ok
 }
 
-func (this *Cmd) Spawnvp() (int, error) {
-	return this.SpawnvpContext(context.Background())
-}
-
-func (this *Cmd) SpawnvpContext(ctx context.Context) (int, error) {
+func (this *Cmd) Spawnvp(ctx context.Context) (int, error) {
 	errorlevel, err := this.spawnvp_noerrmsg(ctx)
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if defined.DBG {
@@ -274,7 +270,7 @@ func (this *Cmd) Spawnlp(ctx context.Context, args, rawargs []string) (int, erro
 	}
 	subCmd.SetArgs(args)
 	subCmd.SetRawArgs(rawargs)
-	return subCmd.SpawnvpContext(ctx)
+	return subCmd.Spawnvp(ctx)
 }
 
 var pipeSeq uint = 0
@@ -385,7 +381,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				// foreground execution.
-				errorlevel, finalerr = cmd.SpawnvpContext(ctx)
+				errorlevel, finalerr = cmd.Spawnvp(ctx)
 				LastErrorLevel = errorlevel
 				cmd.Close()
 			} else {
@@ -403,7 +399,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 					if !isBackGround {
 						defer wg.Done()
 					}
-					cmd1.SpawnvpContext(ctx)
+					cmd1.Spawnvp(ctx)
 					if cmd1.OffFork != nil {
 						if err := cmd1.OffFork(cmd1); err != nil {
 							fmt.Fprintln(cmd1.Stderr, err.Error())

@@ -105,7 +105,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 				err = err1
 			} else {
 				it.SetArgs(newargs)
-				errorlevel, err = it.SpawnvpContext(ctx)
+				errorlevel, err = it.Spawnvp(ctx)
 			}
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
 			errorlevel = val
@@ -195,7 +195,7 @@ func cmdExec(L lua.Lua) int {
 			}
 		}
 		it.SetArgs(args)
-		errorlevel, err = it.Spawnvp()
+		errorlevel, err = it.Spawnvp(context.Background())
 	} else {
 		statement, statementErr := L.ToString(1)
 		if statementErr != nil {
