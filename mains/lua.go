@@ -46,7 +46,7 @@ var orgArgHook func(*shell.Cmd, []string) ([]string, error)
 var luaArgsFilter lua.Object = lua.TNil{}
 
 func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
-	L, ok := it.Tag.(lua.Lua)
+	L, ok := it.Tag().(lua.Lua)
 	if !ok {
 		return nil, errors.New("Could not get lua instance(newArgHook)")
 	}
@@ -90,7 +90,7 @@ var orgOnCommandNotFound func(*shell.Cmd, error) error
 var luaOnCommandNotFound lua.Object = lua.TNil{}
 
 func on_command_not_found(inte *shell.Cmd, err error) error {
-	L, ok := inte.Tag.(lua.Lua)
+	L, ok := inte.Tag().(lua.Lua)
 	if !ok {
 		return errors.New("Could get lua instance(on_command_not_found)")
 	}

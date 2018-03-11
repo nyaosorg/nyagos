@@ -49,8 +49,8 @@ type Cmd struct {
 	Stderr       *os.File
 	Stdin        *os.File
 	args         []string
-	HookCount    int
-	Tag          interface{}
+	hookCount    int
+	tag          interface{}
 	PipeSeq      [2]uint
 	IsBackGround bool
 	rawArgs      []string
@@ -62,15 +62,19 @@ type Cmd struct {
 	UseShellExecute bool
 }
 
-func (this *Cmd) Arg(n int) string      { return this.args[n] }
-func (this *Cmd) Args() []string        { return this.args }
-func (this *Cmd) SetArgs(s []string)    { this.args = s }
-func (this *Cmd) In() io.Reader         { return this.Stdin }
-func (this *Cmd) Out() io.Writer        { return this.Stdout }
-func (this *Cmd) Err() io.Writer        { return this.Stderr }
-func (this *Cmd) RawArg(n int) string   { return this.rawArgs[n] }
-func (this *Cmd) RawArgs() []string     { return this.rawArgs }
-func (this *Cmd) SetRawArgs(s []string) { this.rawArgs = s }
+func (this *Cmd) Arg(n int) string       { return this.args[n] }
+func (this *Cmd) Args() []string         { return this.args }
+func (this *Cmd) SetArgs(s []string)     { this.args = s }
+func (this *Cmd) In() io.Reader          { return this.Stdin }
+func (this *Cmd) Out() io.Writer         { return this.Stdout }
+func (this *Cmd) Err() io.Writer         { return this.Stderr }
+func (this *Cmd) RawArg(n int) string    { return this.rawArgs[n] }
+func (this *Cmd) RawArgs() []string      { return this.rawArgs }
+func (this *Cmd) SetRawArgs(s []string)  { this.rawArgs = s }
+func (this *Cmd) HookCount() int         { return this.hookCount }
+func (this *Cmd) SetHookCount(n int)     { this.hookCount = n }
+func (this *Cmd) Tag() interface{}       { return this.tag }
+func (this *Cmd) SetTag(tag interface{}) { this.tag = tag }
 
 func (this *Cmd) FullPath() string {
 	if this.args == nil || len(this.args) <= 0 {
@@ -110,8 +114,8 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv.Stdin = this.Stdin
 	rv.Stdout = this.Stdout
 	rv.Stderr = this.Stderr
-	rv.HookCount = this.HookCount
-	rv.Tag = this.Tag
+	rv.hookCount = this.hookCount
+	rv.tag = this.tag
 	rv.PipeSeq = this.PipeSeq
 	rv.Closers = nil
 	rv.OnFork = this.OnFork

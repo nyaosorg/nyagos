@@ -96,9 +96,9 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 
 	arg1 := texts.FirstWord(cmdline)
 	if strings.EqualFold(arg1, cmd.Arg(0)) {
-		it.HookCount = 100
+		cmd.SetHookCount(100)
 	} else {
-		it.HookCount = cmd.HookCount + 1
+		cmd.SetHookCount(cmd.HookCount() + 1)
 	}
 	if dbg {
 		print("it.Interpret\n")
@@ -124,7 +124,7 @@ func AllNames() []completion.Element {
 var nextHook shell.HookT
 
 func hook(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
-	if cmd.HookCount > 5 {
+	if cmd.HookCount() > 5 {
 		return nextHook(ctx, cmd)
 	}
 	callee, ok := Table[strings.ToLower(cmd.Arg(0))]
