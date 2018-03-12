@@ -103,7 +103,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	if dbg {
 		print("it.Interpret\n")
 	}
-	next, err = it.Eval(ctx, cmdline)
+	next, err = it.InterpretContext(ctx, cmdline)
 	if dbg {
 		print("done it.Interpret\n")
 	}
