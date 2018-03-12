@@ -96,9 +96,9 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 
 	arg1 := texts.FirstWord(cmdline)
 	if strings.EqualFold(arg1, cmd.Arg(0)) {
-		cmd.SetHookCount(100)
+		it.SetHookCount(100)
 	} else {
-		cmd.SetHookCount(cmd.HookCount() + 1)
+		it.SetHookCount(cmd.HookCount() + 1)
 	}
 	if dbg {
 		print("it.Interpret\n")
