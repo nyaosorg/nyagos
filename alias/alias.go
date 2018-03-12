@@ -9,7 +9,6 @@ import (
 
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/shell"
-	"github.com/zetamatta/nyagos/texts"
 )
 
 var dbg = false
@@ -93,13 +92,6 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	if dbg {
 		print("done cmd.Clone\n")
 	}
-
-	arg1 := texts.FirstWord(cmdline)
-	if strings.EqualFold(arg1, cmd.Arg(0)) {
-		it.SetHookCount(100)
-	} else {
-		it.SetHookCount(cmd.HookCount() + 1)
-	}
 	if dbg {
 		print("it.Interpret\n")
 	}
@@ -123,15 +115,19 @@ func AllNames() []completion.Element {
 
 var nextHook shell.HookT
 
+type noAliasT string
+
 func hook(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
-	if cmd.HookCount() > 5 {
+	lowerName := strings.ToLower(cmd.Arg(0))
+	ctxKey := noAliasT(lowerName)
+	if ctx.Value(ctxKey) != nil {
 		return nextHook(ctx, cmd)
 	}
-	callee, ok := Table[strings.ToLower(cmd.Arg(0))]
+	callee, ok := Table[lowerName]
 	if !ok {
 		return nextHook(ctx, cmd)
 	}
-	next, err := callee.Call(ctx, cmd)
+	next, err := callee.Call(context.WithValue(ctx, ctxKey, true), cmd)
 	return next, true, err
 }
 
