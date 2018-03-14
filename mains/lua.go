@@ -33,7 +33,11 @@ func getRegInt(L lua.Lua) *shell.Cmd {
 	return rc
 }
 
-func NyagosCallLua(L lua.Lua, it *shell.Cmd, nargs int, nresult int) error {
+func callLua(it *shell.Cmd, nargs int, nresult int) error {
+	L, ok := it.Tag().(lua.Lua)
+	if !ok {
+		return errors.New("callLua: can not find Lua instance in the shell")
+	}
 	save := getRegInt(L)
 	setRegInt(L, it)
 	err := L.Call(nargs, nresult)

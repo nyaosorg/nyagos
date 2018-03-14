@@ -74,7 +74,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		L.RawSetI(-2, lua.Integer(i))
 	}
 	L.SetField(-2, "rawargs")
-	err := NyagosCallLua(L, cmd, 1, 1)
+	err := callLua(cmd, 1, 1)
 	errorlevel := 0
 	if err == nil {
 		newargs := make([]string, 0)
