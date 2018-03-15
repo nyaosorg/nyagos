@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"unicode"
 
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/shell"
@@ -50,7 +51,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 			} else {
 				return ""
 			}
-		} else if len(s) >= 3 && s[0] == '$' && s[1] == '~' && strings.IndexByte("0123456789", s[2]) >= 0 {
+		} else if len(s) >= 3 && s[0] == '$' && s[1] == '~' && unicode.IsDigit(rune(s[2])) {
 			i, err := strconv.ParseInt(s[2:], 10, 0)
 			if err == nil {
 				isReplaced = true
