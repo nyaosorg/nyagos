@@ -27,8 +27,8 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 	list := make([]string, len(rv.List))
 	shownlist := make([]string, len(rv.List))
 	for i, v := range rv.List {
-		list[i] = v.InsertStr
-		shownlist[i] = v.ListupStr
+		list[i] = v.String()
+		shownlist[i] = v.Display()
 	}
 	L.Push(map[string]interface{}{
 		"rawword":   rv.RawWord,
@@ -62,7 +62,7 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 						if !ok {
 							listupStr = str
 						}
-						list = append(list, completion.Element{InsertStr: str, ListupStr: listupStr})
+						list = append(list, completion.Element2{str, listupStr})
 					}
 				}
 			}

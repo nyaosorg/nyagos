@@ -71,7 +71,7 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 			if orgSlash != STD_SLASH[0] {
 				name = strings.Replace(name, STD_SLASH, OPT_SLASH, -1)
 			}
-			element := Element{InsertStr: name, ListupStr: listname}
+			element := Element2{name, listname}
 			commons = append(commons, element)
 		}
 		return true

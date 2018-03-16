@@ -13,10 +13,20 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
-type Element struct {
-	InsertStr string
-	ListupStr string
+type Element interface {
+	String() string
+	Display() string
 }
+
+type Element2 [2]string
+
+func (s Element2) String() string  { return s[0] }
+func (s Element2) Display() string { return s[1] }
+
+type Element1 string
+
+func (s Element1) String() string  { return string(s) }
+func (s Element1) Display() string { return string(s) }
 
 type List struct {
 	AllLine string
@@ -86,7 +96,10 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	}
 
 	for i := 0; i < len(rv.List); i++ {
-		rv.List[i].InsertStr = rv.Word[:start] + rv.List[i].InsertStr
+		rv.List[i] = Element2{
+			rv.Word[:start] + rv.List[i].String(),
+			rv.List[i].Display(),
+		}
 	}
 	for _, f := range HookToList {
 		rv, err = f(this, rv)
@@ -100,7 +113,7 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 func toComplete(source []Element) []string {
 	result := make([]string, len(source))
 	for key, val := range source {
-		result[key] = val.InsertStr
+		result[key] = val.String()
 	}
 	return result
 }
@@ -108,7 +121,7 @@ func toComplete(source []Element) []string {
 func toDisplay(source []Element) []string {
 	result := make([]string, len(source))
 	for key, val := range source {
-		result[key] = val.ListupStr
+		result[key] = val.Display()
 	}
 	return result
 }
@@ -199,7 +212,7 @@ func KeyFuncCompletion(this *readline.Buffer) readline.Result {
 			buffer.WriteByte(quotechar)
 			buffer.WriteString(commonStr)
 		}
-		if len(comp.List) == 1 && !endWithRoot(comp.List[0].InsertStr) {
+		if len(comp.List) == 1 && !endWithRoot(comp.List[0].String()) {
 			buffer.WriteByte(quotechar)
 		}
 		commonStr = buffer.String()

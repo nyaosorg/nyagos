@@ -80,7 +80,7 @@ func listUpEnv(cmdline string) ([]Element, int, error) {
 		vars.EachKey(func(envName string) {
 			if strings.HasPrefix(strings.ToUpper(envName), name) {
 				envValue := makeCandidateStr(envName)
-				element := Element{InsertStr: envValue, ListupStr: envValue}
+				element := Element1(envValue)
 				matches = append(matches, element)
 			}
 		})

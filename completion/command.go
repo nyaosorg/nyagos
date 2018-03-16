@@ -35,7 +35,7 @@ func listUpAllExecutableOnEnv(envName string) []Element {
 			name := file1.Name()
 			if isExecutable(name) {
 				name_ := path.Base(name)
-				element := Element{InsertStr: name_, ListupStr: name_}
+				element := Element1(name_)
 				list = append(list, element)
 			}
 		}
@@ -50,7 +50,7 @@ func listUpCurrentAllExecutable(ctx context.Context, str string) ([]Element, err
 	}
 	list := make([]Element, 0)
 	for _, p := range listTmp {
-		if endWithRoot(p.InsertStr) || isExecutable(p.InsertStr) {
+		if endWithRoot(p.String()) || isExecutable(p.String()) {
 			list = append(list, p)
 		}
 	}
@@ -62,9 +62,9 @@ func removeDup(list []Element) []Element {
 	result := make([]Element, 0, len(list))
 
 	for _, value := range list {
-		if _, ok := found[value.InsertStr]; !ok {
+		if _, ok := found[value.String()]; !ok {
 			result = append(result, value)
-			found[value.InsertStr] = struct{}{}
+			found[value.String()] = struct{}{}
 		}
 	}
 	return result
@@ -78,7 +78,7 @@ func listUpCommands(ctx context.Context, str string) ([]Element, error) {
 	strUpr := strings.ToUpper(str)
 	for _, f := range command_listupper {
 		for _, element := range f() {
-			name1Upr := strings.ToUpper(element.InsertStr)
+			name1Upr := strings.ToUpper(element.String())
 			if strings.HasPrefix(name1Upr, strUpr) {
 				list = append(list, element)
 			}
