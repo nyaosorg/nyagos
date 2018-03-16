@@ -419,13 +419,6 @@ func (this Lua) Len(index int) {
 	lua_len.Call(this.State(), uintptr(index))
 }
 
-var lua_newthread = luaDLL.NewProc("lua_newthread")
-
-func (this Lua) NewThread() Lua {
-	newthread, _, _ := lua_newthread.Call(this.State())
-	return Lua(newthread)
-}
-
 func callback_writer(L, p, sz, ud uintptr) uintptr {
 	buffer := (*[]byte)(unsafe.Pointer(ud))
 	for i := uintptr(0); i < sz; i++ {

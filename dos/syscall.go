@@ -9,5 +9,3 @@ package dos
 //sys GetDriveType(rootPathName string)(rc uintptr,err error) = kernel32.GetDriveTypeW
 //sys CoInitializeEx(res uintptr,opt uintptr) = ole32.CoInitializeEx
 //sys CoUninitialize() = ole32.CoUninitialize
-//sys GlobalAlloc(flag uintptr,size uintptr)(ptr uintptr,err error) = kernel32.GlobalAlloc
-//sys GlobalFree(ptr uintptr) = kernel32.GlobalFree

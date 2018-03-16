@@ -50,7 +50,6 @@ type Cmd struct {
 	Stdin        *os.File
 	args         []string
 	tag          interface{}
-	PipeSeq      [2]uint
 	IsBackGround bool
 	rawArgs      []string
 
@@ -98,8 +97,6 @@ func New() *Cmd {
 		Stdout: os.Stdout,
 		Stderr: os.Stderr,
 	}
-	this.PipeSeq[0] = pipeSeq
-	this.PipeSeq[1] = 0
 	this.session = &session{}
 	return &this
 }
@@ -112,7 +109,6 @@ func (this *Cmd) Clone() (*Cmd, error) {
 	rv.Stdout = this.Stdout
 	rv.Stderr = this.Stderr
 	rv.tag = this.tag
-	rv.PipeSeq = this.PipeSeq
 	rv.Closers = nil
 	rv.OnFork = this.OnFork
 	rv.OffFork = this.OffFork
@@ -273,8 +269,6 @@ func (this *Cmd) Spawnlp(ctx context.Context, args, rawargs []string) (int, erro
 	return subCmd.Spawnvp(ctx)
 }
 
-var pipeSeq uint = 0
-
 func (this *Cmd) Interpret(text string) (int, error) {
 	return this.InterpretContext(context.Background(), text)
 }
@@ -324,7 +318,6 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 	for _, pipeline := range statements {
 
 		var pipeIn *os.File = nil
-		pipeSeq++
 		isBackGround := this.IsBackGround
 		for _, state := range pipeline {
 			if state.Term == "&" {
@@ -342,8 +335,6 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			if err != nil {
 				return 255, err
 			}
-			cmd.PipeSeq[0] = pipeSeq
-			cmd.PipeSeq[1] = uint(1 + i)
 			cmd.IsBackGround = isBackGround
 
 			if pipeIn != nil {

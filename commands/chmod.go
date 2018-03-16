@@ -6,23 +6,10 @@ import (
 	"fmt"
 	"os"
 	"regexp"
-	"strings"
+	"strconv"
 )
 
 var rxOOO = regexp.MustCompile("^[0-7][0-7][0-7]$")
-
-func getOct(s string) (int, error) {
-	val := 0
-	for _, r := range s {
-		n := strings.IndexRune("01234567", r)
-		if n < 0 {
-			return 0, fmt.Errorf("%s: invalid permission str", s)
-		}
-		val = val*8 + n
-	}
-	return val, nil
-}
-
 var rxEqu = regexp.MustCompile(`^([aogu]+)([\-\+\=])([rwx]+)$`)
 
 func cmd_chmod_(args []string) error {
@@ -31,7 +18,7 @@ func cmd_chmod_(args []string) error {
 	}
 	var f func(string) error
 	if rxOOO.MatchString(args[0]) {
-		val, err := getOct(args[0])
+		val, err := strconv.ParseInt(args[0], 8, 32)
 		if err != nil {
 			return fmt.Errorf("%s: invalid permission str", args[0])
 		}
