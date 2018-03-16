@@ -46,7 +46,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 			}
 		} else if s == "$*" {
 			isReplaced = true
-			if cmd.Args != nil && len(cmd.Args()) >= 2 {
+			if cmd.Args() != nil && len(cmd.Args()) >= 2 {
 				return strings.Join(cmd.RawArgs()[1:], " ")
 			} else {
 				return ""
@@ -65,7 +65,7 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 		i, err := strconv.ParseInt(s[1:], 10, 0)
 		if err == nil {
 			isReplaced = true
-			if 0 <= i && cmd.Args != nil && int(i) < len(cmd.Args()) {
+			if 0 <= i && cmd.Args() != nil && int(i) < len(cmd.Args()) {
 				return cmd.RawArg(int(i))
 			} else {
 				return ""
