@@ -74,7 +74,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		L.RawSetI(-2, lua.Integer(i))
 	}
 	L.SetField(-2, "rawargs")
-	err := callLua(cmd, 1, 1)
+	err := callLua(&cmd.Shell, 1, 1)
 	errorlevel := 0
 	if err == nil {
 		newargs := make([]string, 0)
@@ -99,24 +99,13 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 				}
 				newargs = append(newargs, val)
 			}
-			it, err1 := cmd.Clone()
-			if err1 != nil {
-				errorlevel = 255
-				err = err1
-			} else {
-				it.SetArgs(newargs)
-				errorlevel, err = it.Spawnvp(ctx)
-			}
+			it := cmd.Command()
+			it.SetArgs(newargs)
+			errorlevel, err = it.Spawnvp(ctx)
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
 			errorlevel = val
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-			it, err1 := cmd.Clone()
-			if err1 != nil {
-				errorlevel = 255
-				err = err1
-			} else {
-				errorlevel, err = it.InterpretContext(ctx, val)
-			}
+			errorlevel, err = cmd.InterpretContext(ctx, val)
 		}
 	}
 	L.Pop(1)
@@ -183,19 +172,15 @@ func cmdExec(L lua.Lua) int {
 			}
 			L.Pop(1)
 		}
-		it := getRegInt(L)
-		if it == nil {
+		sh := getRegInt(L)
+		if sh == nil {
 			println("main/lua_cmd.go: cmdExec: not found interpreter object")
-			it = shell.New()
-			it.SetTag(L)
-		} else {
-			it, err = it.Clone()
-			if err != nil {
-				return L.Push(nil, err)
-			}
+			sh = shell.New()
+			sh.SetTag(L)
 		}
-		it.SetArgs(args)
-		errorlevel, err = it.Spawnvp(context.Background())
+		cmd := sh.Command()
+		cmd.SetArgs(args)
+		errorlevel, err = cmd.Spawnvp(context.Background())
 	} else {
 		statement, statementErr := L.ToString(1)
 		if statementErr != nil {

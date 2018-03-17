@@ -195,13 +195,13 @@ func Main() error {
 	}
 	defer L.Close()
 
-	it := shell.New()
-	it.SetTag(L)
-	it.OnFork = onFork
-	it.OffFork = offFork
+	sh := shell.New()
+	sh.SetTag(L)
+	sh.OnFork = onFork
+	sh.OffFork = offFork
 
 	langEngine := func(fname string) ([]byte, error) {
-		return runLua(it, L, fname)
+		return runLua(sh, L, fname)
 	}
 	shellEngine := func(fname string) error {
 		fd, err := os.Open(fname)
@@ -209,7 +209,7 @@ func Main() error {
 			return err
 		}
 		stream1 := NewCmdStreamFile(fd)
-		_, err = it.Loop(stream1)
+		_, err = sh.Loop(stream1)
 		fd.Close()
 		if err == io.EOF {
 			return nil
@@ -218,7 +218,7 @@ func Main() error {
 		}
 	}
 
-	script, err := optionParse(it, L)
+	script, err := optionParse(sh, L)
 	if err != nil {
 		return err
 	}
@@ -259,7 +259,7 @@ func Main() error {
 	}
 
 	for {
-		_, err = it.Loop(&MainStream{stream1, L})
+		_, err = sh.Loop(&MainStream{stream1, L})
 		if err == io.EOF {
 			return err
 		}

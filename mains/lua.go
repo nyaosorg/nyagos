@@ -18,22 +18,22 @@ import (
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"
 
-func setRegInt(L lua.Lua, it *shell.Cmd) {
+func setRegInt(L lua.Lua, it *shell.Shell) {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.PushLightUserData(unsafe.Pointer(it))
 	L.SetField(-2, REGKEY_INTERPRETER)
 	L.Pop(1)
 }
 
-func getRegInt(L lua.Lua) *shell.Cmd {
+func getRegInt(L lua.Lua) *shell.Shell {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.GetField(-1, REGKEY_INTERPRETER)
-	rc := (*shell.Cmd)(L.ToUserData(-1))
+	rc := (*shell.Shell)(L.ToUserData(-1))
 	L.Pop(2)
 	return rc
 }
 
-func callLua(it *shell.Cmd, nargs int, nresult int) error {
+func callLua(it *shell.Shell, nargs int, nresult int) error {
 	L, ok := it.Tag().(lua.Lua)
 	if !ok {
 		return errors.New("callLua: can not find Lua instance in the shell")
@@ -45,11 +45,11 @@ func callLua(it *shell.Cmd, nargs int, nresult int) error {
 	return err
 }
 
-var orgArgHook func(*shell.Cmd, []string) ([]string, error)
+var orgArgHook func(*shell.Shell, []string) ([]string, error)
 
 var luaArgsFilter lua.Object = lua.TNil{}
 
-func newArgHook(it *shell.Cmd, args []string) ([]string, error) {
+func newArgHook(it *shell.Shell, args []string) ([]string, error) {
 	L, ok := it.Tag().(lua.Lua)
 	if !ok {
 		return nil, errors.New("Could not get lua instance(newArgHook)")

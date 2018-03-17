@@ -77,7 +77,7 @@ func loadScripts(shellEngine func(string) error,
 	return nil
 }
 
-func runLua(it *shell.Cmd, L lua.Lua, fname string) ([]byte, error) {
+func runLua(it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
 	_, err := os.Stat(fname)
 	if err != nil {
 		if os.IsNotExist(err) {

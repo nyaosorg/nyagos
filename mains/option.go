@@ -24,7 +24,7 @@ func setLuaArg(L lua.Lua, args []string) {
 
 var optionNorc = false
 
-func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
+func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 	args := os.Args[1:]
 	for i := 0; i < len(args); i++ {
 		arg1 := args[i]
@@ -34,7 +34,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 				return nil, errors.New("-k: requires parameters")
 			}
 			return func() error {
-				it.Interpret(args[i])
+				sh.Interpret(args[i])
 				return nil
 			}, nil
 		} else if arg1 == "-c" {
@@ -43,7 +43,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 				return nil, errors.New("-c: requires parameters")
 			}
 			return func() error {
-				it.Interpret(args[i])
+				sh.Interpret(args[i])
 				return io.EOF
 			}, nil
 		} else if arg1 == "-b" {
@@ -57,7 +57,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 			}
 			text := string(data)
 			return func() error {
-				it.Interpret(text)
+				sh.Interpret(text)
 				return io.EOF
 			}, nil
 		} else if arg1 == "-f" {
@@ -69,7 +69,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 				// lua script
 				return func() error {
 					setLuaArg(L, args[i:])
-					_, err := runLua(it, L, args[i])
+					_, err := runLua(sh, L, args[i])
 					if err != nil {
 						return err
 					} else {
@@ -85,7 +85,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 					}
 					scanner := bufio.NewScanner(fd)
 					for scanner.Scan() {
-						it.Interpret(scanner.Text())
+						sh.Interpret(scanner.Text())
 					}
 					fd.Close()
 					return io.EOF
@@ -114,7 +114,7 @@ func optionParse(it *shell.Cmd, L lua.Lua) (func() error, error) {
 			}
 			return func() error {
 				setLuaArg(L, args[i:])
-				_, err := runLua(it, L, args[i])
+				_, err := runLua(sh, L, args[i])
 				if err != nil {
 					return err
 				} else {

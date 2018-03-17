@@ -84,22 +84,8 @@ func (this *AliasFunc) Call(ctx context.Context, cmd *shell.Cmd) (next int, err 
 	}
 	if dbg {
 		print("replaced cmdline=='", cmdline, "'\n")
-		print("cmd.Clone\n")
 	}
-	it, err := cmd.Clone()
-	if err != nil {
-		return 255, err
-	}
-	if dbg {
-		print("done cmd.Clone\n")
-	}
-	if dbg {
-		print("it.Interpret\n")
-	}
-	next, err = it.InterpretContext(ctx, cmdline)
-	if dbg {
-		print("done it.Interpret\n")
-	}
+	next, err = cmd.InterpretContext(ctx, cmdline)
 	return
 }
 
