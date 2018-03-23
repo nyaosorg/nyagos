@@ -176,15 +176,3 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 	}
 	return errorlevel, err
 }
-
-func Source(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
-	rawArgs := make([]string, 0, len(args))
-	for _, s := range args {
-		if strings.ContainsAny(s, " \r\n\v\t\f<>&|") {
-			rawArgs = append(rawArgs, fmt.Sprintf("\"%s\"", s))
-		} else {
-			rawArgs = append(rawArgs, s)
-		}
-	}
-	return RawSource(rawArgs, verbose, debug, stdin, stdout, stderr)
-}
