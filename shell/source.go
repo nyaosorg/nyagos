@@ -108,15 +108,7 @@ func callBatch(batch string,
 		if ansi[len(ansi)-1] == 0 {
 			ansi = ansi[:len(ansi)-1]
 		}
-		if strings.ContainsRune(arg1, ' ') {
-			_, err = fmt.Fprintf(writer, " \"%s\"", ansi)
-		} else {
-			_, err = fmt.Fprintf(writer, " %s", ansi)
-		}
-		if err != nil {
-			fd.Close()
-			return -1, err
-		}
+		fmt.Fprintf(writer, " %s", ansi)
 	}
 	fmt.Fprintf(writer, "\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\n")
 	fmt.Fprintf(writer, "@set > \"%s\"\n", env)
@@ -144,7 +136,7 @@ func callBatch(batch string,
 	return errorlevel, nil
 }
 
-func Source(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
+func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
@@ -183,4 +175,16 @@ func Source(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdou
 		return 1, err
 	}
 	return errorlevel, err
+}
+
+func Source(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
+	rawArgs := make([]string, 0, len(args))
+	for _, s := range args {
+		if strings.ContainsAny(s, " \r\n\v\t\f<>&|") {
+			rawArgs = append(rawArgs, fmt.Sprintf("\"%s\"", s))
+		} else {
+			rawArgs = append(rawArgs, s)
+		}
+	}
+	return RawSource(rawArgs, verbose, debug, stdin, stdout, stderr)
 }

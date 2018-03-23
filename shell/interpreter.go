@@ -197,7 +197,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	lowerName := strings.ToLower(cmd.args[0])
 	if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
 		// Batch files
-		return Source(cmd.args, nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+		return RawSource(cmd.RawArgs(), nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
 	}
 	xcmd := exec.Command(cmd.args[0], cmd.args[1:]...)
 	xcmd.Stdin = cmd.Stdin

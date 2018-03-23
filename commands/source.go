@@ -10,7 +10,7 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 	var verbose io.Writer
 	args := make([]string, 0, len(cmd.Args()))
 	debug := false
-	for _, arg1 := range cmd.Args()[1:] {
+	for _, arg1 := range cmd.RawArgs()[1:] {
 		switch arg1 {
 		case "-v":
 			verbose = cmd.Err()
@@ -24,5 +24,5 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 		return 255, nil
 	}
 
-	return shell.Source(args, verbose, debug, cmd.In(), cmd.Out(), cmd.Err())
+	return shell.RawSource(args, verbose, debug, cmd.In(), cmd.Out(), cmd.Err())
 }
