@@ -96,11 +96,26 @@ func callBatch(batch string,
 		writer = bufio.NewWriter(fd)
 	}
 	fmt.Fprint(writer, "@call")
-	for _, v := range args {
-		if strings.ContainsRune(v, ' ') {
-			fmt.Fprintf(writer, " \"%s\"", v)
+	for _, arg1 := range args {
+		// UTF8 parameter to ANSI
+		ansi, err := mbcs.UtoA(arg1)
+		if err != nil {
+			// println("utoa: " + err.Error())
+			fd.Close()
+			return -1, err
+		}
+		// chop last '\0'
+		if ansi[len(ansi)-1] == 0 {
+			ansi = ansi[:len(ansi)-1]
+		}
+		if strings.ContainsRune(arg1, ' ') {
+			_, err = fmt.Fprintf(writer, " \"%s\"", ansi)
 		} else {
-			fmt.Fprintf(writer, " %s", v)
+			_, err = fmt.Fprintf(writer, " %s", ansi)
+		}
+		if err != nil {
+			fd.Close()
+			return -1, err
 		}
 	}
 	fmt.Fprintf(writer, "\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\n")
@@ -145,6 +160,10 @@ func Source(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdou
 		stdin,
 		stdout,
 		stderr)
+
+	if err != nil {
+		return -1, err
+	}
 
 	if !debug {
 		defer os.Remove(env)
