@@ -22,6 +22,7 @@ end
 
 -- subcommands
 local gitsubcommands={}
+
 -- keyword
 gitsubcommands["bisect"]={"start", "bad", "good", "skip", "reset", "visualize", "replay", "log", "run"}
 gitsubcommands["notes"]={"add", "append", "copy", "edit", "list", "prune", "remove", "show"}
@@ -59,3 +60,5 @@ if share.maincmds then
     share.maincmds = maincmds
   end
 end
+
+-- EOF
