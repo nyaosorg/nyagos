@@ -2,6 +2,7 @@ package shell
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,14 +15,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-func loadEnvFile(fname string, verbose io.Writer) error {
-	fp, err := os.Open(fname)
-	if err != nil {
-		return err
-	}
-	defer fp.Close()
-
-	scan := bufio.NewScanner(fp)
+func readEnv(scan *bufio.Scanner, verbose io.Writer) error {
 	for scan.Scan() {
 		line, err := mbcs.AtoU(scan.Bytes())
 		if err != nil {
@@ -47,15 +41,9 @@ func loadEnvFile(fname string, verbose io.Writer) error {
 	return scan.Err()
 }
 
-func loadPwdFile(fname string, verbose io.Writer) error {
-	fp, err := os.Open(fname)
-	if err != nil {
-		return err
-	}
-	defer fp.Close()
-	scan := bufio.NewScanner(fp)
+func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
 	if !scan.Scan() {
-		return fmt.Errorf("Could not load the new current directory from %s", fname)
+		return errors.New("Could not load the new current directory")
 	}
 	if err := scan.Err(); err != nil {
 		return err
@@ -72,10 +60,24 @@ func loadPwdFile(fname string, verbose io.Writer) error {
 	return nil
 }
 
+// loadTmpFile - read update the current-directory and environment-variables from tmp-file.
+func loadTmpFile(fname string, verbose io.Writer) error {
+	fp, err := os.Open(fname)
+	if err != nil {
+		return err
+	}
+	defer fp.Close()
+
+	scan := bufio.NewScanner(fp)
+	if err := readPwd(scan, verbose); err != nil {
+		return err
+	}
+	return readEnv(scan, verbose)
+}
+
 func callBatch(batch string,
 	args []string,
-	env string,
-	pwd string,
+	tmpfile string,
 	verbose io.Writer,
 	stdin io.Reader,
 	stdout io.Writer,
@@ -111,25 +113,23 @@ func callBatch(batch string,
 		fmt.Fprintf(writer, " %s", ansi)
 	}
 	fmt.Fprintf(writer, "\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\n")
-	fmt.Fprintf(writer, "@set > \"%s\"\n", env)
-	fmt.Fprintf(writer, "@cd > \"%s\"\n", pwd)
+	fmt.Fprintf(writer, "@(cd & set) > \"%s\"\n", tmpfile)
 	fmt.Fprintf(writer, "@exit /b \"%%ERRORLEVEL_%%\"\n")
 	writer.Flush()
 	if err := fd.Close(); err != nil {
 		return 1, err
 	}
-
-	cmd2 := exec.Cmd{
+	cmd := exec.Cmd{
 		Path:   params[0],
 		Args:   params,
 		Stdin:  stdin,
 		Stdout: stdout,
 		Stderr: stderr,
 	}
-	if err := cmd2.Run(); err != nil {
+	if err := cmd.Run(); err != nil {
 		return 1, err
 	}
-	errorlevel, errorlevelOk := dos.GetErrorLevel(&cmd2)
+	errorlevel, errorlevelOk := dos.GetErrorLevel(&cmd)
 	if !errorlevelOk {
 		errorlevel = 255
 	}
@@ -140,39 +140,29 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	batch := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.cmd", pid))
-	env := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
-	pwd := filepath.Join(tempDir, fmt.Sprintf("nyagos_%d.tmp", pid))
+	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
 
 	errorlevel, err := callBatch(
 		batch,
 		args,
-		env,
-		pwd,
+		tmpfile,
 		verbose,
 		stdin,
 		stdout,
 		stderr)
 
 	if err != nil {
-		return -1, err
-	}
-
-	if !debug {
-		defer os.Remove(env)
-		defer os.Remove(pwd)
-		defer os.Remove(batch)
-	}
-
-	if err != nil {
 		return errorlevel, err
 	}
 
-	if err := loadEnvFile(env, verbose); err != nil {
+	if !debug {
+		defer os.Remove(tmpfile)
+		defer os.Remove(batch)
+	}
+
+	if err := loadTmpFile(tmpfile, verbose); err != nil {
 		return 1, err
 	}
 
-	if err := loadPwdFile(pwd, verbose); err != nil {
-		return 1, err
-	}
 	return errorlevel, err
 }
