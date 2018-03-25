@@ -13,4 +13,7 @@ for _,name in pairs{
     nyagos.alias[name] = "%COMSPEC% /c "..name.." $*"
 end
 
-nyagos.alias.grep = "findstr.exe"
+local greppath=nyagos.which("grep")
+if not greppath and not nyagos.alias.grep then
+    nyagos.alias.grep = "findstr.exe"
+end
