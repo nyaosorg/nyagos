@@ -15,7 +15,6 @@ import (
 	"unicode"
 
 	"github.com/mattn/go-isatty"
-	"github.com/zetamatta/nyagos/shell"
 	"github.com/zetamatta/nyagos/texts"
 )
 
@@ -199,19 +198,26 @@ func ExpandMacro(buffer *strings.Builder, reader *strings.Reader, line string) {
 	}
 }
 
-func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
+type Param interface {
+	Arg(int) string
+	Args() []string
+	Out() io.Writer
+	Err() io.Writer
+}
+
+func CmdHistory(ctx context.Context, cmd Param) (int, error) {
 	if ctx == nil {
-		fmt.Fprintln(cmd.Stderr, "history not found (case1)")
+		fmt.Fprintln(cmd.Err(), "history not found (case1)")
 		return 1, nil
 	}
 	var num int
-	if len(cmd.Args) >= 2 {
-		num64, err := strconv.ParseInt(cmd.Args[1], 0, 32)
+	if len(cmd.Args()) >= 2 {
+		num64, err := strconv.ParseInt(cmd.Arg(1), 0, 32)
 		if err != nil {
 			switch err.(type) {
 			case *strconv.NumError:
 				return 0, fmt.Errorf(
-					"history: %s not a number", cmd.Args[1])
+					"history: %s not a number", cmd.Arg(1))
 			default:
 				return 0, err
 			}
@@ -227,7 +233,7 @@ func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 
 	historyObj_ := ctx.Value(PackageId)
 	if historyObj, ok := historyObj_.(*Container); ok {
-		if isatty.IsTerminal(cmd.Stdout.Fd()) && historyObj.Len() > num {
+		if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) && historyObj.Len() > num {
 
 			start = historyObj.Len() - num
 		}
@@ -239,7 +245,7 @@ func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 				dir = "~" + dir[len(home):]
 			}
 			dir = filepath.ToSlash(dir)
-			fmt.Fprintf(cmd.Stdout, "%4d  %s [%d] %-s (%s)\n",
+			fmt.Fprintf(cmd.Out(), "%4d  %s [%d] %-s (%s)\n",
 				i,
 				row.Stamp.Format("Jan _2 15:04:05"),
 				row.Pid,
@@ -247,7 +253,7 @@ func CmdHistory(ctx context.Context, cmd *shell.Cmd) (int, error) {
 				dir)
 		}
 	} else {
-		fmt.Fprintln(cmd.Stderr, "history not found (case 2)")
+		fmt.Fprintln(cmd.Err(), "history not found (case 2)")
 	}
 	return 0, nil
 }

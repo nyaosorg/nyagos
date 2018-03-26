@@ -3,7 +3,6 @@ package mains
 import (
 	"bufio"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -17,23 +16,6 @@ import (
 type CmdSeeker struct {
 	PlainHistory []string
 	Pointer      int
-}
-
-func (this *CmdSeeker) GetPos() int {
-	if this.Pointer >= 0 {
-		return this.Pointer
-	} else {
-		return len(this.PlainHistory)
-	}
-}
-
-func (this *CmdSeeker) SetPos(pos int) error {
-	if pos < len(this.PlainHistory) {
-		this.Pointer = pos
-		return nil
-	} else {
-		return errors.New("ICmdStream.SetPos(): Position Overflow")
-	}
 }
 
 type CmdStreamConsole struct {

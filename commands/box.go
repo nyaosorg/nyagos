@@ -4,19 +4,17 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strings"
 
 	"github.com/zetamatta/go-box"
 
 	"github.com/zetamatta/nyagos/readline"
-	"github.com/zetamatta/nyagos/shell"
 )
 
-func cmd_box(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	data, err := ioutil.ReadAll(cmd.Stdin)
+func cmdBox(ctx context.Context, cmd Param) (int, error) {
+	data, err := ioutil.ReadAll(cmd.In())
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+		fmt.Fprintln(cmd.Err(), err.Error())
 		return 1, err
 	}
 	list := strings.Split(string(data), "\n")
@@ -30,6 +28,6 @@ func cmd_box(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		list,
 		readline.Console)
 	fmt.Fprintln(readline.Console)
-	fmt.Fprintln(cmd.Stdout, result)
+	fmt.Fprintln(cmd.Out(), result)
 	return 0, nil
 }

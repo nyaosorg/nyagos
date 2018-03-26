@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var cd_history = make([]string, 0, 100)
@@ -62,9 +61,10 @@ func cmd_cd_sub(dir string) (int, error) {
 	}
 }
 
-func cmd_cd(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	if len(cmd.Args) >= 2 {
-		if cmd.Args[1] == "-" {
+func cmdCd(ctx context.Context, cmd Param) (int, error) {
+	args := cmd.Args()
+	if len(args) >= 2 {
+		if args[1] == "-" {
 			if len(cd_history) < 1 {
 				return NO_HISTORY, errors.New("cd - : there is no previous directory")
 
@@ -72,46 +72,46 @@ func cmd_cd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			directory := cd_history[len(cd_history)-1]
 			push_cd_history()
 			return cmd_cd_sub(directory)
-		} else if cmd.Args[1] == "--history" {
+		} else if args[1] == "--history" {
 			dir, dir_err := os.Getwd()
 			if dir_err == nil {
-				fmt.Fprintln(cmd.Stdout, dir)
+				fmt.Fprintln(cmd.Out(), dir)
 			} else {
-				fmt.Fprintln(cmd.Stderr, dir_err.Error())
+				fmt.Fprintln(cmd.Err(), dir_err.Error())
 			}
 			for i := len(cd_history) - 1; i >= 0; i-- {
-				fmt.Fprintln(cmd.Stdout, cd_history[i])
+				fmt.Fprintln(cmd.Out(), cd_history[i])
 			}
 			return 0, nil
-		} else if cmd.Args[1] == "-h" || cmd.Args[1] == "?" {
+		} else if args[1] == "-h" || args[1] == "?" {
 			i := len(cd_history) - 10
 			if i < 0 {
 				i = 0
 			}
 			for ; i < len(cd_history); i++ {
-				fmt.Fprintf(cmd.Stdout, "%d %s\n", i-len(cd_history), cd_history[i])
+				fmt.Fprintf(cmd.Out(), "%d %s\n", i-len(cd_history), cd_history[i])
 			}
 			return 0, nil
-		} else if i, err := strconv.ParseInt(cmd.Args[1], 10, 0); err == nil && i < 0 {
+		} else if i, err := strconv.ParseInt(args[1], 10, 0); err == nil && i < 0 {
 			i += int64(len(cd_history))
 			if i < 0 {
-				return NO_HISTORY, fmt.Errorf("cd %s: too old history", cmd.Args[1])
+				return NO_HISTORY, fmt.Errorf("cd %s: too old history", args[1])
 			}
 			directory := cd_history[i]
 			push_cd_history()
 			return cmd_cd_sub(directory)
 		}
-		if strings.EqualFold(cmd.Args[1], "/D") {
+		if strings.EqualFold(args[1], "/D") {
 			// ignore /D
-			cmd.Args = cmd.Args[1:]
+			args = args[1:]
 		}
 		push_cd_history()
-		return cmd_cd_sub(strings.Join(cmd.Args[1:], " "))
+		return cmd_cd_sub(strings.Join(args[1:], " "))
 	}
 	home := dos.GetHome()
 	if home != "" {
 		push_cd_history()
 		return cmd_cd_sub(home)
 	}
-	return cmd_pwd(ctx, cmd)
+	return cmdPwd(ctx, cmd)
 }

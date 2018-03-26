@@ -3,19 +3,18 @@ package commands
 import (
 	"context"
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/mattn/go-isatty"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
-func cmd_echo(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	fmt.Fprint(cmd.Stdout, strings.Join(cmd.Args[1:], " "))
-	if isatty.IsTerminal(cmd.Stdout.Fd()) {
-		fmt.Fprint(cmd.Stdout, "\n")
+func cmdEcho(ctx context.Context, cmd Param) (int, error) {
+	fmt.Fprint(cmd.Out(), strings.Join(cmd.Args()[1:], " "))
+	if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) {
+		fmt.Fprint(f, "\n")
 	} else {
-		fmt.Fprint(cmd.Stdout, "\r\n")
+		fmt.Fprint(cmd.Out(), "\r\n")
 	}
 	return 0, nil
 }

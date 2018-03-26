@@ -25,12 +25,6 @@ type CommandNotFound struct {
 	Err  error
 }
 
-// from "TDM-GCC-64/x86_64-w64-mingw32/include/winbase.h"
-const (
-	CREATE_NEW_CONSOLE       = 0x10
-	CREATE_NEW_PROCESS_GROUP = 0x200
-)
-
 func (this CommandNotFound) Stringer() string {
 	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", this.Name)
 }
@@ -43,84 +37,89 @@ type session struct {
 	unreadline []string
 }
 
-type Cmd struct {
+type Shell struct {
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
-	Args         []string
-	HookCount    int
-	Tag          interface{}
-	PipeSeq      [2]uint
+	tag          interface{}
+	OnFork       func(*Cmd) error
+	OffFork      func(*Cmd) error
+	Closers      []io.Closer
 	IsBackGround bool
-	RawArgs      []string
+}
 
-	OnFork          func(*Cmd) error
-	OffFork         func(*Cmd) error
-	Closers         []io.Closer
+func (sh *Shell) In() io.Reader          { return sh.Stdin }
+func (sh *Shell) Out() io.Writer         { return sh.Stdout }
+func (sh *Shell) Err() io.Writer         { return sh.Stderr }
+func (sh *Shell) Tag() interface{}       { return sh.tag }
+func (sh *Shell) SetTag(tag interface{}) { sh.tag = tag }
+
+type Cmd struct {
+	Shell
+	args            []string
+	rawArgs         []string
 	fullPath        string
 	UseShellExecute bool
 }
 
-func (this *Cmd) FullPath() string {
-	if this.Args == nil || len(this.Args) <= 0 {
+func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
+func (cmd *Cmd) Args() []string        { return cmd.args }
+func (cmd *Cmd) SetArgs(s []string)    { cmd.args = s }
+func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
+func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
+func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
+
+func (cmd *Cmd) FullPath() string {
+	if cmd.args == nil || len(cmd.args) <= 0 {
 		return ""
 	}
-	if this.fullPath == "" {
-		this.fullPath = dos.LookPath(this.Args[0], "NYAGOSPATH")
+	if cmd.fullPath == "" {
+		cmd.fullPath = dos.LookPath(cmd.args[0], "NYAGOSPATH")
 	}
-	return this.fullPath
+	return cmd.fullPath
 }
 
-func (this *Cmd) GetRawArgs() []string {
-	return this.RawArgs
-}
-
-func (this *Cmd) Close() {
-	if this.Closers != nil {
-		for _, c := range this.Closers {
+func (sh *Shell) Close() {
+	if sh.Closers != nil {
+		for _, c := range sh.Closers {
 			c.Close()
 		}
-		this.Closers = nil
+		sh.Closers = nil
 	}
 }
 
-func New() *Cmd {
-	this := Cmd{
-		Stdin:  os.Stdin,
-		Stdout: os.Stdout,
-		Stderr: os.Stderr,
+func New() *Shell {
+	return &Shell{
+		Stdin:   os.Stdin,
+		Stdout:  os.Stdout,
+		Stderr:  os.Stderr,
+		session: &session{},
 	}
-	this.PipeSeq[0] = pipeSeq
-	this.PipeSeq[1] = 0
-	this.session = &session{}
-	return &this
 }
 
-func (this *Cmd) Clone() (*Cmd, error) {
-	rv := new(Cmd)
-	rv.Args = this.Args
-	rv.RawArgs = this.RawArgs
-	rv.Stdin = this.Stdin
-	rv.Stdout = this.Stdout
-	rv.Stderr = this.Stderr
-	rv.HookCount = this.HookCount
-	rv.Tag = this.Tag
-	rv.PipeSeq = this.PipeSeq
-	rv.Closers = nil
-	rv.OnFork = this.OnFork
-	rv.OffFork = this.OffFork
-	if this.session != nil {
-		rv.session = this.session
+func (sh *Shell) Command() *Cmd {
+	cmd := &Cmd{
+		Shell: Shell{
+			Stdin:   sh.Stdin,
+			Stdout:  sh.Stdout,
+			Stderr:  sh.Stderr,
+			tag:     sh.tag,
+			OnFork:  sh.OnFork,
+			OffFork: sh.OffFork,
+		},
+	}
+	if sh.session != nil {
+		cmd.session = sh.session
 	} else {
-		rv.session = &session{}
+		cmd.session = &session{}
 	}
-	return rv, nil
+	return cmd
 }
 
-type ArgsHookT func(it *Cmd, args []string) ([]string, error)
+type ArgsHookT func(sh *Shell, args []string) ([]string, error)
 
-var argsHook = func(it *Cmd, args []string) ([]string, error) {
+var argsHook = func(sh *Shell, args []string) ([]string, error) {
 	return args, nil
 }
 
@@ -140,20 +139,12 @@ func SetHook(hook_ HookT) (rv HookT) {
 	return
 }
 
-var OnCommandNotFound = func(this *Cmd, err error) error {
-	err = &CommandNotFound{this.Args[0], err}
+var OnCommandNotFound = func(cmd *Cmd, err error) error {
+	err = &CommandNotFound{cmd.args[0], err}
 	return err
 }
 
 var LastErrorLevel int
-
-func nvl(a *os.File, b *os.File) *os.File {
-	if a != nil {
-		return a
-	} else {
-		return b
-	}
-}
 
 func makeCmdline(args, rawargs []string) string {
 	var buffer strings.Builder
@@ -170,59 +161,63 @@ func makeCmdline(args, rawargs []string) string {
 	return buffer.String()
 }
 
-func (this *Cmd) spawnvp_noerrmsg(ctx context.Context) (int, error) {
+func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	// command is empty.
-	if len(this.Args) <= 0 {
+	if len(cmd.args) <= 0 {
 		return 0, nil
 	}
 	if defined.DBG {
-		print("spawnvp_noerrmsg('", this.Args[0], "')\n")
+		print("spawnvpSilent('", cmd.args[0], "')\n")
 	}
 
 	// aliases and lua-commands
-	if errorlevel, done, err := hook(ctx, this); done || err != nil {
+	if errorlevel, done, err := hook(ctx, cmd); done || err != nil {
 		return errorlevel, err
 	}
 
 	// command not found hook
-	var err error
-	path1 := this.FullPath()
-	if path1 == "" {
-		return 255, OnCommandNotFound(this, os.ErrNotExist)
+	fullpath := cmd.FullPath()
+	if fullpath == "" {
+		return 255, OnCommandNotFound(cmd, os.ErrNotExist)
 	}
-	this.Args[0] = path1
+	cmd.args[0] = fullpath
 
 	if defined.DBG {
-		print("exec.LookPath(", this.Args[0], ")==", path1, "\n")
+		print("exec.LookPath(", cmd.args[0], ")==", fullpath, "\n")
 	}
 	if WildCardExpansionAlways {
-		this.Args = findfile.Globs(this.Args)
+		cmd.args = findfile.Globs(cmd.args)
 	}
-	if this.UseShellExecute {
-		cmdline := makeCmdline(this.Args[1:], this.RawArgs[1:])
-		err = dos.ShellExecute("open", path1, cmdline, "")
+	if cmd.UseShellExecute {
+		// GUI Application
+		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
+		err := dos.ShellExecute("open", fullpath, cmdline, "")
 		return 0, err
-	} else {
-		cmd1 := exec.Command(this.Args[0], this.Args[1:]...)
-		cmd1.Stdin = this.Stdin
-		cmd1.Stdout = this.Stdout
-		cmd1.Stderr = this.Stderr
+	}
+	lowerName := strings.ToLower(cmd.args[0])
+	if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
+		// Batch files
+		return RawSource(cmd.RawArgs(), nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+	}
+	xcmd := exec.Command(cmd.args[0], cmd.args[1:]...)
+	xcmd.Stdin = cmd.Stdin
+	xcmd.Stdout = cmd.Stdout
+	xcmd.Stderr = cmd.Stderr
 
-		if cmd1.SysProcAttr == nil {
-			cmd1.SysProcAttr = new(syscall.SysProcAttr)
-		}
-		cmdline := makeCmdline(cmd1.Args, this.RawArgs)
-		if defined.DBG {
-			println(cmdline)
-		}
-		cmd1.SysProcAttr.CmdLine = cmdline
-		err = cmd1.Run()
-		errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
-		if errorlevelOk {
-			return errorlevel, err
-		} else {
-			return 255, err
-		}
+	if xcmd.SysProcAttr == nil {
+		xcmd.SysProcAttr = new(syscall.SysProcAttr)
+	}
+	cmdline := makeCmdline(xcmd.Args, cmd.rawArgs)
+	if defined.DBG {
+		println(cmdline)
+	}
+	xcmd.SysProcAttr.CmdLine = cmdline
+	err := xcmd.Run()
+	errorlevel, errorlevelOk := dos.GetErrorLevel(xcmd)
+	if errorlevelOk {
+		return errorlevel, err
+	} else {
+		return 255, err
 	}
 }
 
@@ -230,7 +225,7 @@ type AlreadyReportedError struct {
 	Err error
 }
 
-func (this AlreadyReportedError) Error() string {
+func (_ AlreadyReportedError) Error() string {
 	return ""
 }
 
@@ -239,34 +234,35 @@ func IsAlreadyReported(err error) bool {
 	return ok
 }
 
-func (this *Cmd) Spawnvp() (int, error) {
-	return this.SpawnvpContext(context.Background())
-}
-
-func (this *Cmd) SpawnvpContext(ctx context.Context) (int, error) {
-	errorlevel, err := this.spawnvp_noerrmsg(ctx)
+func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
+	errorlevel, err := cmd.spawnvpSilent(ctx)
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if defined.DBG {
 			val := reflect.ValueOf(err)
-			fmt.Fprintf(this.Stderr, "error-type=%s\n", val.Type())
+			fmt.Fprintf(cmd.Stderr, "error-type=%s\n", val.Type())
 		}
-		fmt.Fprintln(this.Stderr, err.Error())
+		fmt.Fprintln(cmd.Stderr, err.Error())
 		err = AlreadyReportedError{err}
 	}
 	return errorlevel, err
 }
 
-var pipeSeq uint = 0
-
-func (this *Cmd) Interpret(text string) (int, error) {
-	return this.InterpretContext(context.Background(), text)
+func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
+	cmd := sh.Command()
+	cmd.SetArgs(args)
+	cmd.SetRawArgs(rawargs)
+	return cmd.Spawnvp(ctx)
 }
 
-func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel int, finalerr error) {
+func (sh *Shell) Interpret(text string) (int, error) {
+	return sh.InterpretContext(context.Background(), text)
+}
+
+func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel int, finalerr error) {
 	if defined.DBG {
 		print("Interpret('", text, "')\n")
 	}
-	if this == nil {
+	if sh == nil {
 		return 255, errors.New("Fatal Error: Interpret: instance is nil")
 	}
 	errorlevel = 0
@@ -286,7 +282,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
 				var err error
-				state.Args, err = argsHook(this, state.Args)
+				state.Args, err = argsHook(sh, state.Args)
 				if err != nil {
 					return 255, err
 				}
@@ -307,8 +303,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 	for _, pipeline := range statements {
 
 		var pipeIn *os.File = nil
-		pipeSeq++
-		isBackGround := this.IsBackGround
+		isBackGround := sh.IsBackGround
 		for _, state := range pipeline {
 			if state.Term == "&" {
 				isBackGround = true
@@ -321,12 +316,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			if defined.DBG {
 				print(i, ": pipeline loop(", state.Args[0], ")\n")
 			}
-			cmd, err := this.Clone()
-			if err != nil {
-				return 255, err
-			}
-			cmd.PipeSeq[0] = pipeSeq
-			cmd.PipeSeq[1] = uint(1 + i)
+			cmd := sh.Command()
 			cmd.IsBackGround = isBackGround
 
 			if pipeIn != nil {
@@ -335,6 +325,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 				pipeIn = nil
 			}
 
+			var err error
 			if state.Term[0] == '|' {
 				var pipeOut *os.File
 				pipeIn, pipeOut, err = os.Pipe()
@@ -354,8 +345,8 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 				defer fd.Close()
 			}
 
-			cmd.Args = state.Args
-			cmd.RawArgs = state.RawArgs
+			cmd.args = state.Args
+			cmd.rawArgs = state.RawArgs
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
@@ -364,7 +355,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				// foreground execution.
-				errorlevel, finalerr = cmd.SpawnvpContext(ctx)
+				errorlevel, finalerr = cmd.Spawnvp(ctx)
 				LastErrorLevel = errorlevel
 				cmd.Close()
 			} else {
@@ -382,7 +373,7 @@ func (this *Cmd) InterpretContext(ctx context.Context, text string) (errorlevel 
 					if !isBackGround {
 						defer wg.Done()
 					}
-					cmd1.SpawnvpContext(ctx)
+					cmd1.Spawnvp(ctx)
 					if cmd1.OffFork != nil {
 						if err := cmd1.OffFork(cmd1); err != nil {
 							fmt.Fprintln(cmd1.Stderr, err.Error())

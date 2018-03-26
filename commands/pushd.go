@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var dirstack = make([]string, 0, 20)
@@ -17,20 +16,20 @@ const (
 	GETWD_FAIL  = 3
 )
 
-func cmd_dirs(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdDirs(ctx context.Context, cmd Param) (int, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
 	}
-	fmt.Fprint(cmd.Stdout, wd)
+	fmt.Fprint(cmd.Out(), wd)
 	for i := len(dirstack) - 1; i >= 0; i-- {
-		fmt.Fprint(cmd.Stdout, " ", dirstack[i])
+		fmt.Fprint(cmd.Out(), " ", dirstack[i])
 	}
-	fmt.Fprintln(cmd.Stdout)
+	fmt.Fprintln(cmd.Out())
 	return 0, nil
 }
 
-func cmd_popd(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdPopd(ctx context.Context, cmd Param) (int, error) {
 	if len(dirstack) <= 0 {
 		return NO_DIRSTACK, errors.New("popd: directory stack empty.")
 	}
@@ -39,17 +38,17 @@ func cmd_popd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		return CHDIR_FAIL, err
 	}
 	dirstack = dirstack[:len(dirstack)-1]
-	return cmd_dirs(ctx, cmd)
+	return cmdDirs(ctx, cmd)
 }
 
-func cmd_pushd(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdPushd(ctx context.Context, cmd Param) (int, error) {
 	wd, err := os.Getwd()
 	if err != nil {
 		return GETWD_FAIL, err
 	}
-	if len(cmd.Args) >= 2 {
+	if len(cmd.Args()) >= 2 {
 		dirstack = append(dirstack, wd)
-		_, err := cmd_cd_sub(cmd.Args[1])
+		_, err := cmd_cd_sub(cmd.Arg(1))
 		if err != nil {
 			return CHDIR_FAIL, err
 		}
@@ -63,5 +62,5 @@ func cmd_pushd(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		}
 		dirstack[len(dirstack)-1] = wd
 	}
-	return cmd_dirs(ctx, cmd)
+	return cmdDirs(ctx, cmd)
 }

@@ -10,8 +10,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/zetamatta/go-mbcs"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func cat(r io.Reader, w io.Writer) {
@@ -33,11 +31,11 @@ func cat(r io.Reader, w io.Writer) {
 	}
 }
 
-func cmd_type(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	if len(cmd.Args) <= 1 {
-		cat(cmd.Stdin, cmd.Stdout)
+func cmdType(ctx context.Context, cmd Param) (int, error) {
+	if len(cmd.Args()) <= 1 {
+		cat(cmd.In(), cmd.Out())
 	} else {
-		for _, arg1 := range cmd.Args[1:] {
+		for _, arg1 := range cmd.Args()[1:] {
 			r, err := os.Open(arg1)
 			if err != nil {
 				return 1, err
@@ -51,7 +49,7 @@ func cmd_type(ctx context.Context, cmd *shell.Cmd) (int, error) {
 				r.Close()
 				return 3, fmt.Errorf("%s: Permission denied", arg1)
 			}
-			cat(r, cmd.Stdout)
+			cat(r, cmd.Out())
 			r.Close()
 		}
 	}

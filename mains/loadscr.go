@@ -77,7 +77,7 @@ func loadScripts(shellEngine func(string) error,
 	return nil
 }
 
-func runLua(it *shell.Cmd, L lua.Lua, fname string) ([]byte, error) {
+func runLua(it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
 	_, err := os.Stat(fname)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -91,7 +91,7 @@ func runLua(it *shell.Cmd, L lua.Lua, fname string) ([]byte, error) {
 		return nil, err
 	}
 	chank := L.Dump()
-	if err := NyagosCallLua(L, it, 0, 0); err != nil {
+	if err := callLua(it, 0, 0); err != nil {
 		return nil, err
 	}
 	// println("Run: " + fname)

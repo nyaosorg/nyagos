@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"strings"
-
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func array2hash(args []string) ([]string, map[string]string) {
@@ -23,11 +21,11 @@ func array2hash(args []string) ([]string, map[string]string) {
 	return []string{}, hash
 }
 
-func cmd_env(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	args, hash := array2hash(cmd.Args[1:])
+func cmdEnv(ctx context.Context, cmd Param) (int, error) {
+	args, hash := array2hash(cmd.Args()[1:])
 	if len(args) <= 0 {
 		for _, val := range os.Environ() {
-			fmt.Fprintln(cmd.Stdout, val)
+			fmt.Fprintln(cmd.Out(), val)
 		}
 		return 0, nil
 	}
@@ -37,14 +35,7 @@ func cmd_env(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		os.Setenv(key, val)
 	}
 
-	var rc int
-	subCmd, err := cmd.Clone()
-	if err == nil {
-		subCmd.Args = args
-		rc, err = subCmd.SpawnvpContext(ctx)
-	} else {
-		rc = -1
-	}
+	rc, err := cmd.Spawnlp(ctx, args, args)
 
 	for key, val := range backup {
 		os.Setenv(key, val)

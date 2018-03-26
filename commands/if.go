@@ -15,10 +15,10 @@ import (
 
 var rxElse = regexp.MustCompile(`(?i)^\s*else`)
 
-func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdIf(ctx context.Context, cmd Param) (int, error) {
 	// if "xxx" == "yyy"
-	args := cmd.Args
-	rawargs := cmd.RawArgs
+	args := cmd.Args()
+	rawargs := cmd.RawArgs()
 	not := false
 	start := 1
 
@@ -79,13 +79,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		} else {
 			// inline `then`
 			if status {
-				subCmd, err := cmd.Clone()
-				if err != nil {
-					return 0, err
-				}
-				subCmd.Args = cmd.Args[start:]
-				subCmd.RawArgs = cmd.RawArgs[start:]
-				return subCmd.SpawnvpContext(ctx)
+				return cmd.Spawnlp(ctx, cmd.Args()[start:], cmd.RawArgs()[start:])
 			} else {
 				return 0, nil
 			}
@@ -94,7 +88,7 @@ func cmd_if(ctx context.Context, cmd *shell.Cmd) (int, error) {
 
 	// block `then` / `else`
 
-	stream, ok := ctx.Value("stream").(shell.Stream)
+	stream, ok := ctx.Value(shell.StreamId).(shell.Stream)
 	if !ok {
 		return 1, errors.New("not found stream")
 	}

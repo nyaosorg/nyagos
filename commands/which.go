@@ -9,7 +9,6 @@ import (
 
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 const (
@@ -26,11 +25,11 @@ func envToList(first1 string, envs ...string) []string {
 	return result
 }
 
-func cmd_which(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdWhich(ctx context.Context, cmd Param) (int, error) {
 	all := false
 	var pathList []string
 	var extList []string
-	for _, name := range cmd.Args[1:] {
+	for _, name := range cmd.Args()[1:] {
 		if name == "-a" {
 			all = true
 			pathList = envToList(".", "PATH", "NYAGOSPATH")
@@ -38,13 +37,13 @@ func cmd_which(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			continue
 		}
 		if a, ok := alias.Table[strings.ToLower(name)]; ok {
-			fmt.Fprintf(cmd.Stdout, "%s: aliased to %s\n", name, a.String())
+			fmt.Fprintf(cmd.Out(), "%s: aliased to %s\n", name, a.String())
 			if !all {
 				continue
 			}
 		}
-		if _, ok := BuildInCommand[name]; ok {
-			fmt.Fprintf(cmd.Stdout, "%s: built-in command\n", name)
+		if _, ok := buildInCommand[name]; ok {
+			fmt.Fprintf(cmd.Out(), "%s: built-in command\n", name)
 			if !all {
 				continue
 			}
@@ -55,7 +54,7 @@ func cmd_which(ctx context.Context, cmd *shell.Cmd) (int, error) {
 					fullpath1 := filepath.Join(dir1, name)
 					fullpath1 = fullpath1 + ext1
 					if _, err1 := os.Stat(fullpath1); err1 == nil {
-						fmt.Fprintln(cmd.Stdout, fullpath1)
+						fmt.Fprintln(cmd.Out(), fullpath1)
 					}
 				}
 			}
@@ -65,7 +64,7 @@ func cmd_which(ctx context.Context, cmd *shell.Cmd) (int, error) {
 			if path == "" {
 				return WHICH_NOT_FOUND, fmt.Errorf("which %s: not found", name)
 			}
-			fmt.Fprintln(cmd.Stdout, filepath.Clean(path))
+			fmt.Fprintln(cmd.Out(), filepath.Clean(path))
 		}
 	}
 	return 0, nil

@@ -15,7 +15,6 @@ import (
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
@@ -24,7 +23,7 @@ var bold = false
 var screenWidth int
 var screenHeight int
 
-func more(r io.Reader, cmd *shell.Cmd) bool {
+func more(r io.Reader, cmd Param) bool {
 	scanner := bufio.NewScanner(r)
 	count := 0
 	for scanner.Scan() {
@@ -43,9 +42,9 @@ func more(r io.Reader, cmd *shell.Cmd) bool {
 		width := runewidth.StringWidth(ansiStrip.ReplaceAllString(text, ""))
 		lines := (width + screenWidth) / screenWidth
 		for count+lines >= screenHeight {
-			fmt.Fprint(cmd.Stderr, "more>")
+			fmt.Fprint(cmd.Err(), "more>")
 			ch := getch.Rune()
-			fmt.Fprint(cmd.Stderr, "\r     \b\b\b\b\b")
+			fmt.Fprint(cmd.Err(), "\r     \b\b\b\b\b")
 			if ch == 'q' {
 				return false
 			} else if ch == '\r' {
@@ -55,18 +54,18 @@ func more(r io.Reader, cmd *shell.Cmd) bool {
 			}
 		}
 		if bold {
-			fmt.Fprint(cmd.Stdout, "\x1B[1m")
+			fmt.Fprint(cmd.Out(), "\x1B[1m")
 		}
-		fmt.Fprintln(cmd.Stdout, text)
+		fmt.Fprintln(cmd.Out(), text)
 		count += lines
 	}
 	return true
 }
 
-func cmd_more(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
 	screenWidth, screenHeight = box.GetScreenBufferInfo().ViewSize()
-	for _, arg1 := range os.Args[1:] {
+	for _, arg1 := range cmd.Args()[1:] {
 		if arg1 == "-b" {
 			bold = true
 			continue
@@ -85,7 +84,7 @@ func cmd_more(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		count++
 	}
 	if count <= 0 {
-		more(cmd.Stdin, cmd)
+		more(cmd.In(), cmd)
 	}
 	return 0, nil
 }

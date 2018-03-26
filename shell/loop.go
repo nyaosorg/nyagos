@@ -10,8 +10,6 @@ import (
 
 type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
-	GetPos() int
-	SetPos(int) error
 }
 
 func (this *session) push(lines []string) {
@@ -33,11 +31,11 @@ func (this *session) pop() (string, bool) {
 	return line, true
 }
 
-func (it *Cmd) ReadCommand(ctx context.Context, stream Stream) (context.Context, string, error) {
+func (sh *Shell) ReadCommand(ctx context.Context, stream Stream) (context.Context, string, error) {
 	var line string
 	var err error
 
-	line, ok := it.pop()
+	line, ok := sh.pop()
 	if !ok {
 		ctx, line, err = stream.ReadLine(ctx)
 		if err != nil {
@@ -46,24 +44,26 @@ func (it *Cmd) ReadCommand(ctx context.Context, stream Stream) (context.Context,
 
 		texts := SplitToStatement(line)
 		line = texts[0]
-		it.push(texts[1:])
+		sh.push(texts[1:])
 	}
 	return ctx, line, nil
 }
 
-func (it *Cmd) Loop(stream Stream) (int, error) {
+type streamIdT struct{}
+
+var StreamId streamIdT
+
+func (sh *Shell) Loop(stream Stream) (int, error) {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
 	quit := make(chan struct{}, 1)
 	defer close(quit)
 
-	var rc int
-
 	for {
 		ctx, cancel := context.WithCancel(context.Background())
-		ctx = context.WithValue(ctx, "stream", stream)
+		ctx = context.WithValue(ctx, StreamId, stream)
 
-		ctx, line, err := it.ReadCommand(ctx, stream)
+		ctx, line, err := sh.ReadCommand(ctx, stream)
 		if err != nil {
 			cancel()
 			if err == io.EOF {
@@ -87,7 +87,7 @@ func (it *Cmd) Loop(stream Stream) (int, error) {
 				}
 			}
 		}(sigint, quit, cancel)
-		rc, err = it.InterpretContext(ctx, line)
+		rc, err := sh.InterpretContext(ctx, line)
 		signal.Stop(sigint)
 		quit <- struct{}{}
 

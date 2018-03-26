@@ -10,7 +10,6 @@ import (
 	"github.com/zetamatta/go-getch"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func attrib_plus_r(path string) error {
@@ -21,18 +20,18 @@ func attrib_plus_r(path string) error {
 	return dos.SetFileAttributes(path, perm&^dos.FILE_ATTRIBUTE_READONLY)
 }
 
-func cmd_del(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	n := len(cmd.Args)
+func cmdDel(ctx context.Context, cmd Param) (int, error) {
+	n := len(cmd.Args())
 	if n <= 1 {
-		fmt.Fprintln(cmd.Stderr, "Usage: del   [/q] FILE(S)...")
-		fmt.Fprintln(cmd.Stderr, "       erase [/q] FILE(S)...")
+		fmt.Fprintln(cmd.Err(), "Usage: del   [/q] FILE(S)...")
+		fmt.Fprintln(cmd.Err(), "       erase [/q] FILE(S)...")
 		return 0, nil
 	}
 	all := false
 	force := false
 	errorcount := 0
 	i := 1
-	for _, arg1 := range cmd.Args[1:] {
+	for _, arg1 := range cmd.Args()[1:] {
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
@@ -53,34 +52,34 @@ func cmd_del(ctx context.Context, cmd *shell.Cmd) (int, error) {
 		path := arg1
 		stat, err := os.Lstat(path)
 		if _, ok := err.(*os.PathError); ok || os.IsNotExist(err) {
-			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: not found.\n", i, n-1, path)
+			fmt.Fprintf(cmd.Out(), "(%d/%d) %s: not found.\n", i, n-1, path)
 			errorcount++
 			continue
 		}
 		if err != nil {
-			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: %s\n", i, n-1, path, err)
+			fmt.Fprintf(cmd.Out(), "(%d/%d) %s: %s\n", i, n-1, path, err)
 			errorcount++
 			continue
 		}
 		if mode := stat.Mode(); mode.IsDir() {
-			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s is directory and passed.\n",
+			fmt.Fprintf(cmd.Out(), "(%d/%d) %s is directory and passed.\n",
 				i, n-1, path)
 			errorcount++
 			continue
 		}
 		if all {
-			fmt.Fprintf(cmd.Stdout, "(%d/%d) %s: Remove ", i, n-1, path)
+			fmt.Fprintf(cmd.Out(), "(%d/%d) %s: Remove ", i, n-1, path)
 		} else {
-			fmt.Fprintf(cmd.Stdout,
+			fmt.Fprintf(cmd.Out(),
 				"(%d/%d) %s: Remove ? [Yes/No/All/Quit] ",
 				i, n-1, path)
 			ch := getch.Rune()
 			if unicode.IsPrint(ch) {
-				fmt.Fprintf(cmd.Stdout, "%c ", ch)
+				fmt.Fprintf(cmd.Out(), "%c ", ch)
 			}
 			switch ch {
 			case 'q', 'Q', rune(0x03):
-				fmt.Fprintln(cmd.Stdout)
+				fmt.Fprintln(cmd.Out())
 				return errorcount, nil
 			case 'y', 'Y':
 				break

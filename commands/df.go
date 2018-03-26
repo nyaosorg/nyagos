@@ -8,7 +8,6 @@ import (
 	"github.com/dustin/go-humanize"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func df(rootPathName string, w io.Writer) (err error) {
@@ -49,19 +48,19 @@ func df(rootPathName string, w io.Writer) (err error) {
 	return
 }
 
-func cmd_df(_ context.Context, cmd *shell.Cmd) (int, error) {
+func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
 	bits, err := dos.GetLogicalDrives()
 	if err != nil {
 		return 0, err
 	}
-	fmt.Fprintf(cmd.Stdout, "   %20s %20s %20s Use%%\n",
+	fmt.Fprintf(cmd.Out(), "   %20s %20s %20s Use%%\n",
 		"Available",
 		"TotalNumber",
 		"TotalNumberOfFree")
 
 	count := 0
-	for _, arg1 := range cmd.Args[1:] {
-		if err := df(arg1, cmd.Stdout); err != nil {
+	for _, arg1 := range cmd.Args()[1:] {
+		if err := df(arg1, cmd.Out()); err != nil {
 			return 0, err
 		}
 		count++
@@ -70,8 +69,8 @@ func cmd_df(_ context.Context, cmd *shell.Cmd) (int, error) {
 		for d := 'A'; d <= 'Z'; d++ {
 			if (bits & 1) != 0 {
 				rootPathName := fmt.Sprintf("%c:", d)
-				if err := df(rootPathName, cmd.Stdout); err != nil {
-					fmt.Fprintln(cmd.Stderr, err)
+				if err := df(rootPathName, cmd.Out()); err != nil {
+					fmt.Fprintln(cmd.Err(), err)
 				}
 			}
 			bits >>= 1

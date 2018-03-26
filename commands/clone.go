@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func getwd_() string {
@@ -38,10 +37,10 @@ func clone_(action string, out io.Writer) (int, error) {
 	return 0, nil
 }
 
-func cmd_clone(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	return clone_("open", cmd.Stderr)
+func cmdClone(ctx context.Context, cmd Param) (int, error) {
+	return clone_("open", cmd.Err())
 }
 
-func cmd_su(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	return clone_("runas", cmd.Stderr)
+func cmdSu(ctx context.Context, cmd Param) (int, error) {
+	return clone_("runas", cmd.Err())
 }

@@ -8,15 +8,14 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/zetamatta/nyagos/commands/ls"
-	"github.com/zetamatta/nyagos/shell"
 )
 
-func cmd_ls(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func cmdLs(ctx context.Context, cmd Param) (int, error) {
 	var out io.Writer
-	if cmd.Stdout == os.Stdout {
+	if cmd.Out() == os.Stdout {
 		out = colorable.NewColorableStdout()
 	} else {
-		out = cmd.Stdout
+		out = cmd.Out()
 	}
-	return 0, ls.Main(ctx, cmd.Args[1:], out, cmd.Stderr)
+	return 0, ls.Main(ctx, cmd.Args()[1:], out, cmd.Err())
 }
