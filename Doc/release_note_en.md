@@ -1,5 +1,12 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.5\_beta
+==================
+on Mar.26,2018
+
+- Read the value of environment variables that a batchfile changed like CMD.EXE.
+- And refactored source files
+
 NYAGOS 4.2.4\_0
 ===============
 on Mar.9,2018
