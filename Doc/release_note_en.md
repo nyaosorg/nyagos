@@ -7,6 +7,7 @@ on Mar.27,2018
 - Fix: #296 the batchfile could not be executed when the username contains multibyte-character.
     - Fix that the encoding of the temporary batchfile was UTF8.
     - Fix that the end of the each line of the temporary batchfile was LF not CRLF.
+- Fix: #297 running the batchfile includes `exit` without `/b` option, an error occurs
 
 NYAGOS 4.2.5\_beta
 ==================
