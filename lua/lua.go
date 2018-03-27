@@ -75,16 +75,6 @@ func (this Lua) Close() error {
 	return nil
 }
 
-func (this Lua) Source(fname string) error {
-	if trace {
-		fmt.Fprintf(os.Stderr, "Lua(%v).Source(%v)\n", this, fname)
-	}
-	if _, err := this.LoadFile(fname, "bt"); err != nil {
-		return err
-	}
-	return this.Call(0, 0)
-}
-
 var lua_settable = luaDLL.NewProc("lua_settable")
 
 // t[k] = v , t: given index, k: top of stack , v: value just below the top (pop 2 and push 0 element)
