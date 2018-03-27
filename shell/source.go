@@ -2,6 +2,7 @@ package shell
 
 import (
 	"bufio"
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -106,15 +107,20 @@ func callBatch(batch string,
 			fd.Close()
 			return -1, err
 		}
-		// chop last '\0'
-		if ansi[len(ansi)-1] == 0 {
-			ansi = ansi[:len(ansi)-1]
-		}
+		ansi = bytes.TrimSuffix(ansi, []byte{0})
 		fmt.Fprintf(writer, " %s", ansi)
 	}
-	fmt.Fprintf(writer, "\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\n")
-	fmt.Fprintf(writer, "@(cd & set) > \"%s\"\n", tmpfile)
-	fmt.Fprintf(writer, "@exit /b \"%%ERRORLEVEL_%%\"\n")
+	fmt.Fprintf(writer, "\r\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\r\n")
+
+	// Sometimes %TEMP% has not ASCII letters.
+	ansi, err := mbcs.UtoA(tmpfile)
+	if err != nil {
+		fd.Close()
+		return -1, err
+	}
+	ansi = bytes.TrimSuffix(ansi, []byte{0})
+	fmt.Fprintf(writer, "@(cd & set) > \"%s\"\r\n", ansi)
+	fmt.Fprintf(writer, "@exit /b \"%%ERRORLEVEL_%%\"\r\n")
 	writer.Flush()
 	if err := fd.Close(); err != nil {
 		return 1, err
