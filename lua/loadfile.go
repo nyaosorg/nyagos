@@ -1,6 +1,7 @@
 package lua
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"os"
@@ -14,7 +15,7 @@ var lua_load = luaDLL.NewProc("lua_load")
 var static_load_buffer [4096]byte
 var load_buffer_mutex sync.Mutex
 
-func callback_reader(this uintptr, fd *os.File, size *uintptr) *byte {
+func callback_reader(this uintptr, fd *bufio.Reader, size *uintptr) *byte {
 	n, err := fd.Read(static_load_buffer[:])
 	if err != nil || n == 0 {
 		*size = 0
@@ -34,6 +35,7 @@ func (this Lua) LoadFile(path string, mode string) (int, error) {
 		return 0, err
 	}
 	defer fd.Close()
+	reader := bufio.NewReader(fd)
 
 	path_ptr, path_err := syscall.BytePtrFromString(path)
 	if path_err != nil {
@@ -49,7 +51,7 @@ func (this Lua) LoadFile(path string, mode string) (int, error) {
 	rc, _, _ := lua_load.Call(
 		this.State(),
 		callback,
-		uintptr(unsafe.Pointer(fd)),
+		uintptr(unsafe.Pointer(reader)),
 		uintptr(unsafe.Pointer(path_ptr)),
 		uintptr(unsafe.Pointer(mode_ptr)))
 
