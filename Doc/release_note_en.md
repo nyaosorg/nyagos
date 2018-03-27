@@ -1,5 +1,13 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.5\_beta2
+===================
+on Mar.27,2018
+
+- Fix: #296 the batchfile could not be executed when the username contains multibyte-character.
+    - Fix that the encoding of the temporary batchfile was UTF8.
+    - Fix that the end of the each line of the temporary batchfile was LF not CRLF.
+
 NYAGOS 4.2.5\_beta
 ==================
 on Mar.26,2018
