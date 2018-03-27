@@ -161,6 +161,9 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 	}
 
 	if err := loadTmpFile(tmpfile, verbose); err != nil {
+		if os.IsNotExist(err) {
+			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", args[0])
+		}
 		return 1, err
 	}
 
