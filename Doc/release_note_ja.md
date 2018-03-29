@@ -1,5 +1,8 @@
 [English](release_note_en.md) / Japanese
 
+- luaフラグ nyagos.option.usesource を追加。false の時、バッチファイルは NYAGOS の環境変数を変更できなくなる(default:true)
+
+
 NYAGOS 4.2.5\_beta2
 ===================
 (2018.03.27)
