@@ -38,7 +38,7 @@ executes the string(-table) as a new commandline.
 
 Aliases run on the other Lua-instance and can not access variables
 assigned on .nyagos but `share[]`. You can use share[] as you like.
-Only the member of the table `share[]` are shared on all Lua-instances 
+Only the member of the table `share[]` are shared on all Lua-instances
 of nyagos.
 
 ### `nyagos.completion_hidden = (bool)`
@@ -48,7 +48,7 @@ completion list.
 
 ### `nyagos.env.NAME`
 
-It is linked to the the environment variable, which are able 
+It is linked to the the environment variable, which are able
 to be refered and assigned.
 
 ### `errorlevel,errormessage = nyagos.exec("COMMAND")`
@@ -216,7 +216,7 @@ Returning nil equals to returning c.list with no change.
 
 ### `nyagos.completion_slash = true OR false`
 
-When it is assigned true, filename-completion uses a slash as the 
+When it is assigned true, filename-completion uses a slash as the
 path-seperator as default. Otherwise it uses backslash.
 
 ### `nyagos.on_command_not_found = function(args) ... end`
@@ -227,7 +227,7 @@ If the function returns nil or false, nyagos.exe prints errors of
 usual.
 
 Since the function runs the other Lua-instance, accesss to variables
-assigned on .nyagos have the same restriction with aliases. 
+assigned on .nyagos have the same restriction with aliases.
 
 ### `nyagos.getkey()`
 
@@ -290,7 +290,7 @@ If it is true , enables the wildcard expansion on external commands also.
 
 If it is true , overwriting the existing file by redirect is forbidden.
 
-The redirect marks `>|` and `>!` can overwrite a file whenever 
+The redirect marks `>|` and `>!` can overwrite a file whenever
 nyagos.option.noclobber is true.
 
 ### `nyagos.option.usesource`
