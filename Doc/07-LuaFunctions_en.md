@@ -293,6 +293,12 @@ If it is true , overwriting the existing file by redirect is forbidden.
 The redirect marks `>|` and `>!` can overwrite a file whenever 
 nyagos.option.noclobber is true.
 
+### `nyagos.option.usesource`
+
+If it is true(=default), batchfiles can change the environment variable of
+nyagos. False, you have to use `source BATCHFILE` to read the changes of
+the environment variables from batchfiles.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe
