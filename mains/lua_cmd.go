@@ -21,7 +21,6 @@ import (
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/lua"
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -349,20 +348,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 		fmt.Fprint(out, str)
 	}
 	return L.Push(true)
-}
-
-func cmdSetRuneWidth(this lua.Lua) int {
-	char, charErr := this.ToInteger(1)
-	if charErr != nil {
-		return this.Push(nil, charErr)
-	}
-	width, widthErr := this.ToInteger(2)
-	if widthErr != nil {
-		return this.Push(nil, widthErr)
-	}
-	readline.SetCharWidth(rune(char), width)
-	this.PushBool(true)
-	return 1
 }
 
 func cmdCommonPrefix(L lua.Lua) int {

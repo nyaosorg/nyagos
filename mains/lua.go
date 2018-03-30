@@ -430,7 +430,7 @@ func init() {
 		"resetcharwidth": lua.TGoFunction(lua2cmd(cmdResetCharWidth)),
 		"setalias":       lua.TGoFunction(cmdSetAlias),
 		"setenv":         lua.TGoFunction(lua2cmd(cmdSetEnv)),
-		"setrunewidth":   lua.TGoFunction(cmdSetRuneWidth),
+		"setrunewidth":   lua.TGoFunction(lua2cmd(cmdSetRuneWidth)),
 		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
 		"silentmode":     &lua.BoolProperty{Pointer: &silentmode},
 		"stamp":          lua.StringProperty{Pointer: &Stamp},

@@ -338,3 +338,19 @@ func cmdRawEval(args []any_t) []any_t {
 		return []any_t{out}
 	}
 }
+
+func cmdSetRuneWidth(args []any_t) []any_t {
+	if len(args) < 2 {
+		return []any_t{nil, "too few aruments"}
+	}
+	char, ok := args[0].(int)
+	if !ok {
+		return []any_t{nil, "not a number"}
+	}
+	width, ok := args[1].(int)
+	if !ok {
+		return []any_t{nil, "not a number"}
+	}
+	readline.SetCharWidth(rune(char), width)
+	return []any_t{true}
+}
