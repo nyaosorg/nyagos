@@ -331,7 +331,7 @@ func NewLua() (lua.Lua, error) {
 		NewIndex: setShareTable})
 	this.SetGlobal("share")
 
-	this.PushGoFunction(cmdPrint)
+	this.PushGoFunction(lua2param(cmdPrint))
 	this.SetGlobal("print")
 
 	if !hook_setuped {

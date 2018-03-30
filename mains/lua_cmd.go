@@ -6,7 +6,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -14,7 +13,6 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-ansicfile"
 
 	"github.com/zetamatta/nyagos/alias"
@@ -286,58 +284,6 @@ func cmdRawExec(L lua.Lua) int {
 	} else {
 		return L.Push(errorlevel)
 	}
-}
-
-func getStdout(L lua.Lua) io.Writer {
-	cmd := getRegInt(L)
-	if cmd != nil && cmd.Stdout != nil {
-		return cmd.Stdout
-	} else {
-		return os.Stdout
-	}
-}
-
-func cmdWrite(L lua.Lua) int {
-	return cmdWriteSub(L, getStdout(L))
-}
-
-func cmdPrint(L lua.Lua) int {
-	out := getStdout(L)
-	rc := cmdWrite(L)
-	fmt.Fprintln(out)
-	return rc
-}
-
-func cmdWriteSub(L lua.Lua, out io.Writer) int {
-	switch f := out.(type) {
-	case *os.File:
-		out = colorable.NewColorable(f)
-	}
-	n := L.GetTop()
-	for i := 1; i <= n; i++ {
-		if i > 1 {
-			fmt.Fprint(out, "\t")
-		}
-		var str string
-		var err error
-		switch L.GetType(i) {
-		case lua.LUA_TBOOLEAN:
-			if L.ToBool(i) {
-				str = "true"
-			} else {
-				str = "false"
-			}
-		case lua.LUA_TNIL:
-			str = "nil"
-		default:
-			str, err = L.ToString(i)
-			if err != nil {
-				return L.Push(nil, err)
-			}
-		}
-		fmt.Fprint(out, str)
-	}
-	return L.Push(true)
 }
 
 func cmdOpenFile(L lua.Lua) int {

@@ -409,3 +409,9 @@ func cmdWrite_(this *langParam) []any_t {
 func cmdWriteErr(this *langParam) []any_t {
 	return cmdWriteSub_(this.Args, this.Err)
 }
+
+func cmdPrint(this *langParam) []any_t {
+	rc := cmdWrite_(this)
+	fmt.Fprintln(this.Out)
+	return rc
+}
