@@ -14,6 +14,7 @@ import (
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/readline"
@@ -353,4 +354,20 @@ func cmdSetRuneWidth(args []any_t) []any_t {
 	}
 	readline.SetCharWidth(rune(char), width)
 	return []any_t{true}
+}
+
+func cmdCommonPrefix(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, "too few arguments"}
+	}
+	list := []string{}
+
+	table, ok := args[0].(map[any_t]any_t)
+	if !ok {
+		return []any_t{nil, "not a table"}
+	}
+	for _, val := range table {
+		list = append(list, fmt.Sprint(val))
+	}
+	return []any_t{completion.CommonPrefix(list)}
 }

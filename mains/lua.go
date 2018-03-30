@@ -384,7 +384,7 @@ func init() {
 		"box":               lua.TGoFunction(lua2cmd(cmdBox)),
 		"chdir":             lua.TGoFunction(lua2cmd(cmdChdir)),
 		"commit":            lua.StringProperty{Pointer: &Commit},
-		"commonprefix":      lua.TGoFunction(cmdCommonPrefix),
+		"commonprefix":      lua.TGoFunction(lua2cmd(cmdCommonPrefix)),
 		"completion_slash":  lua.BoolProperty{Pointer: &completion.UseSlash},
 		"completion_hook":   lua.Property{Pointer: &completionHook},
 		"completion_hidden": lua.BoolProperty{Pointer: &completion.IncludeHidden},

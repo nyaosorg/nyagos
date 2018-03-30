@@ -18,7 +18,6 @@ import (
 	"github.com/zetamatta/go-ansicfile"
 
 	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
@@ -348,25 +347,6 @@ func cmdWriteSub(L lua.Lua, out io.Writer) int {
 		fmt.Fprint(out, str)
 	}
 	return L.Push(true)
-}
-
-func cmdCommonPrefix(L lua.Lua) int {
-	if L.GetType(1) != lua.LUA_TTABLE {
-		return 0
-	}
-	list := []string{}
-	for i := lua.Integer(1); true; i++ {
-		L.PushInteger(i)
-		L.GetTable(1)
-		if str, err := L.ToString(2); err == nil && str != "" {
-			list = append(list, str)
-		} else {
-			break
-		}
-		L.Remove(2)
-	}
-	L.PushString(completion.CommonPrefix(list))
-	return 1
 }
 
 func cmdOpenFile(L lua.Lua) int {
