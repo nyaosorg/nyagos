@@ -61,7 +61,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			reader.UnreadRune()
 			if history_count >= 1 {
 				line := hisObj.At(history_count - 1)
-				ExpandMacro(&buffer, reader, line)
+				expandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
@@ -69,7 +69,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		if ch == mark { // !!
 			if history_count >= 1 {
 				line := hisObj.At(history_count - 1)
-				ExpandMacro(&buffer, reader, line)
+				expandMacro(&buffer, reader, line)
 				isReplaced = true
 				continue
 			} else {
@@ -82,7 +82,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			fmt.Fscan(reader, &backno)
 			if 0 <= backno && backno < history_count {
 				line := hisObj.At(backno)
-				ExpandMacro(&buffer, reader, line)
+				expandMacro(&buffer, reader, line)
 				isReplaced = true
 			} else {
 				return "", false, fmt.Errorf("!%d: event not found", backno)
@@ -95,7 +95,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 				backno := history_count - number
 				if 0 <= backno && backno < history_count {
 					line := hisObj.At(backno)
-					ExpandMacro(&buffer, reader, line)
+					expandMacro(&buffer, reader, line)
 					isReplaced = true
 				} else {
 					return "", false, fmt.Errorf("!-%d: event not found", number)
@@ -121,7 +121,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			for i := history_count - 1; i >= 0; i-- {
 				his1 := hisObj.At(i)
 				if strings.Contains(his1, seekStr) {
-					ExpandMacro(&buffer, reader, his1)
+					expandMacro(&buffer, reader, his1)
 					isReplaced = true
 					found = true
 					break
@@ -152,7 +152,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		for i := history_count - 1; i >= 0; i-- {
 			his1 := hisObj.At(i)
 			if strings.HasPrefix(his1, seekStr) {
-				ExpandMacro(&buffer, reader, his1)
+				expandMacro(&buffer, reader, his1)
 				isReplaced = true
 				found = true
 				break
@@ -165,7 +165,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 	return buffer.String(), isReplaced, nil
 }
 
-func ExpandMacro(buffer *strings.Builder, reader *strings.Reader, line string) {
+func expandMacro(buffer *strings.Builder, reader *strings.Reader, line string) {
 	ch, siz, _ := reader.ReadRune()
 	if siz > 0 && ch == ':' {
 		ch, siz, _ = reader.ReadRune()
