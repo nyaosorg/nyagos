@@ -185,7 +185,6 @@ func Main() error {
 
 	getch.DisableCtrlC()
 
-	commands.Init()
 	alias.Init()
 
 	// Lua extension

@@ -60,7 +60,7 @@ func AllNames() []completion.Element {
 	return names
 }
 
-func Init() {
+func init() {
 	buildInCommand = map[string]func(context.Context, Param) (int, error){
 		".":        cmdSource,
 		"alias":    cmdAlias,
