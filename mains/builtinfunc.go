@@ -2,11 +2,13 @@ package mains
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"sort"
 
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/msgbox"
 
 	"github.com/zetamatta/go-box"
@@ -370,4 +372,36 @@ func cmdCommonPrefix(args []any_t) []any_t {
 		list = append(list, fmt.Sprint(val))
 	}
 	return []any_t{completion.CommonPrefix(list)}
+}
+
+func cmdWriteSub_(args []any_t, out io.Writer) []any_t {
+	if f, ok := out.(*os.File); ok {
+		out = colorable.NewColorable(f)
+	}
+	for i, arg1 := range args {
+		if i > 0 {
+			fmt.Fprint(out, "\t")
+		}
+		var str string
+		if arg1 == nil {
+			str = "nil"
+		} else {
+			switch v := arg1.(type) {
+			case bool:
+				if v {
+					str = "true"
+				} else {
+					str = "false"
+				}
+			default:
+				str = fmt.Sprint(v)
+			}
+		}
+		fmt.Fprint(out, str)
+	}
+	return []any_t{true}
+}
+
+func cmdWrite_(this *langParam) []any_t {
+	return cmdWriteSub_(this.Args, this.Out)
 }

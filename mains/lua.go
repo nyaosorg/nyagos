@@ -470,7 +470,7 @@ func init() {
 		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
 		"version":        lua.StringProperty{Pointer: &Version},
 		"which":          lua.TGoFunction(lua2cmd(cmdWhich)),
-		"write":          lua.TGoFunction(cmdWrite),
+		"write":          lua.TGoFunction(lua2param(cmdWrite_)),
 		"writerr":        lua.TGoFunction(cmdWriteErr),
 	}
 }
