@@ -345,23 +345,32 @@ func NewLua() (lua.Lua, error) {
 
 var silentmode = false
 
+func luaArgsToInterfaces(L lua.Lua) []interface{} {
+	end := L.GetTop()
+	var param []interface{}
+	if end > 0 {
+		param = make([]interface{}, 0, end-1)
+		for i := 1; i <= end; i++ {
+			value, _ := L.ToInterface(i)
+			param = append(param, value)
+		}
+	} else {
+		param = []interface{}{}
+	}
+	return param
+}
+
+func pushInterfaces(L lua.Lua, values []interface{}) {
+	for _, value := range values {
+		L.PushReflect(value)
+	}
+}
+
 func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 	return func(L lua.Lua) int {
-		end := L.GetTop()
-		var param []interface{}
-		if end > 0 {
-			param = make([]interface{}, 0, end-1)
-			for i := 1; i <= end; i++ {
-				value, _ := L.ToInterface(i)
-				param = append(param, value)
-			}
-		} else {
-			param = []interface{}{}
-		}
+		param := luaArgsToInterfaces(L)
 		result := f(param)
-		for _, value := range result {
-			L.PushReflect(value)
-		}
+		pushInterfaces(L, result)
 		return len(result)
 	}
 }
