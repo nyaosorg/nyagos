@@ -3,6 +3,7 @@ package mains
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"reflect"
 	"runtime"
@@ -369,6 +370,28 @@ func pushInterfaces(L lua.Lua, values []interface{}) {
 func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 	return func(L lua.Lua) int {
 		param := luaArgsToInterfaces(L)
+		result := f(param)
+		pushInterfaces(L, result)
+		return len(result)
+	}
+}
+
+type langParam struct {
+	Args []interface{}
+	In   io.Reader
+	Out  io.Writer
+	Err  io.Writer
+}
+
+func lua2param(f func(*langParam) []interface{}) func(lua.Lua) int {
+	return func(L lua.Lua) int {
+		sh := getRegInt(L)
+		param := &langParam{
+			Args: luaArgsToInterfaces(L),
+			In:   sh.In(),
+			Out:  sh.Out(),
+			Err:  sh.Err(),
+		}
 		result := f(param)
 		pushInterfaces(L, result)
 		return len(result)
