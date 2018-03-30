@@ -405,3 +405,7 @@ func cmdWriteSub_(args []any_t, out io.Writer) []any_t {
 func cmdWrite_(this *langParam) []any_t {
 	return cmdWriteSub_(this.Args, this.Out)
 }
+
+func cmdWriteErr(this *langParam) []any_t {
+	return cmdWriteSub_(this.Args, this.Err)
+}

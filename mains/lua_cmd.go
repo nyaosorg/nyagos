@@ -308,15 +308,6 @@ func cmdPrint(L lua.Lua) int {
 	return rc
 }
 
-func cmdWriteErr(L lua.Lua) int {
-	var out io.Writer = os.Stderr
-	cmd := getRegInt(L)
-	if cmd != nil && cmd.Stderr != nil {
-		out = cmd.Stderr
-	}
-	return cmdWriteSub(L, out)
-}
-
 func cmdWriteSub(L lua.Lua, out io.Writer) int {
 	switch f := out.(type) {
 	case *os.File:
