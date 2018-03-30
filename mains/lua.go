@@ -425,7 +425,7 @@ func init() {
 		"pathjoin":       lua.TGoFunction(lua2cmd(cmdPathJoin)),
 		"prompt":         lua.Property{Pointer: &prompt_hook},
 		"quotation":      lua.StringProperty{Pointer: &readline.Delimiters},
-		"raweval":        lua.TGoFunction(cmdRawEval),
+		"raweval":        lua.TGoFunction(lua2cmd(cmdRawEval)),
 		"rawexec":        lua.TGoFunction(cmdRawExec),
 		"resetcharwidth": lua.TGoFunction(lua2cmd(cmdResetCharWidth)),
 		"setalias":       lua.TGoFunction(cmdSetAlias),

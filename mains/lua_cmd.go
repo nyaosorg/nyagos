@@ -290,18 +290,6 @@ func cmdRawExec(L lua.Lua) int {
 	}
 }
 
-func cmdRawEval(L lua.Lua) int {
-	argv := luaStackToSlice(L)
-	cmd1 := exec.Command(argv[0], argv[1:]...)
-	out, err := cmd1.Output()
-	if err != nil {
-		return L.Push(nil, err.Error())
-	} else {
-		L.PushBytes(out)
-		return 1
-	}
-}
-
 func getStdout(L lua.Lua) io.Writer {
 	cmd := getRegInt(L)
 	if cmd != nil && cmd.Stdout != nil {

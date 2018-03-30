@@ -3,6 +3,7 @@ package mains
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 
@@ -322,4 +323,18 @@ func cmdMsgBox(args []any_t) []any_t {
 	}
 	msgbox.Show(0, message, title, msgbox.OK)
 	return []any_t{}
+}
+
+func cmdRawEval(args []any_t) []any_t {
+	argv := make([]string, 0, len(args))
+	for _, s := range args {
+		argv = append(argv, fmt.Sprint(s))
+	}
+	cmd1 := exec.Command(argv[0], argv[1:]...)
+	out, err := cmd1.Output()
+	if err != nil {
+		return []any_t{nil, err.Error()}
+	} else {
+		return []any_t{out}
+	}
 }
