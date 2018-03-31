@@ -374,7 +374,7 @@ func cmdCommonPrefix(args []any_t) []any_t {
 	return []any_t{completion.CommonPrefix(list)}
 }
 
-func cmdWriteSub_(args []any_t, out io.Writer) []any_t {
+func cmdWriteSub(args []any_t, out io.Writer) []any_t {
 	if f, ok := out.(*os.File); ok {
 		out = colorable.NewColorable(f)
 	}
@@ -402,16 +402,16 @@ func cmdWriteSub_(args []any_t, out io.Writer) []any_t {
 	return []any_t{true}
 }
 
-func cmdWrite_(this *langParam) []any_t {
-	return cmdWriteSub_(this.Args, this.Out)
+func cmdWrite(this *langParam) []any_t {
+	return cmdWriteSub(this.Args, this.Out)
 }
 
 func cmdWriteErr(this *langParam) []any_t {
-	return cmdWriteSub_(this.Args, this.Err)
+	return cmdWriteSub(this.Args, this.Err)
 }
 
 func cmdPrint(this *langParam) []any_t {
-	rc := cmdWrite_(this)
+	rc := cmdWrite(this)
 	fmt.Fprintln(this.Out)
 	return rc
 }
