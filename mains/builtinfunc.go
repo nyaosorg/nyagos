@@ -415,3 +415,25 @@ func cmdPrint(this *langParam) []any_t {
 	fmt.Fprintln(this.Out)
 	return rc
 }
+
+func cmdRawExec(this *langParam) []any_t {
+	argv := make([]string, 0, len(this.Args))
+	for _, arg1 := range this.Args {
+		argv = append(argv, fmt.Sprint(arg1))
+	}
+	xcmd := exec.Command(argv[0], argv[1:]...)
+	xcmd.Stdin = this.In
+	xcmd.Stdout = this.Out
+	xcmd.Stderr = this.Err
+	err := xcmd.Run()
+	errorlevel, errorlevelOk := dos.GetErrorLevel(xcmd)
+	if !errorlevelOk {
+		errorlevel = 255
+	}
+	if err != nil {
+		fmt.Fprintln(xcmd.Stderr, err.Error())
+		return []any_t{errorlevel, err.Error()}
+	} else {
+		return []any_t{errorlevel}
+	}
+}

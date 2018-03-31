@@ -464,7 +464,7 @@ func init() {
 		"prompt":         lua.Property{Pointer: &prompt_hook},
 		"quotation":      lua.StringProperty{Pointer: &readline.Delimiters},
 		"raweval":        lua.TGoFunction(lua2cmd(cmdRawEval)),
-		"rawexec":        lua.TGoFunction(cmdRawExec),
+		"rawexec":        lua.TGoFunction(lua2param(cmdRawExec)),
 		"resetcharwidth": lua.TGoFunction(lua2cmd(cmdResetCharWidth)),
 		"setalias":       lua.TGoFunction(cmdSetAlias),
 		"setenv":         lua.TGoFunction(lua2cmd(cmdSetEnv)),

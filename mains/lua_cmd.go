@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"strconv"
 	"strings"
 	"unicode"
@@ -16,7 +15,6 @@ import (
 	"github.com/zetamatta/go-ansicfile"
 
 	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -254,36 +252,6 @@ func luaStackToSlice(L lua.Lua) []string {
 		}
 	}
 	return argv
-}
-
-func cmdRawExec(L lua.Lua) int {
-	argv := luaStackToSlice(L)
-	cmd1 := exec.Command(argv[0], argv[1:]...)
-	cmd1.Stdout = os.Stdout
-	cmd1.Stderr = os.Stderr
-	cmd1.Stdin = os.Stdin
-	if it := getRegInt(L); it != nil {
-		if it.Stdout != nil {
-			cmd1.Stdout = it.Stdout
-		}
-		if it.Stderr != nil {
-			cmd1.Stderr = it.Stderr
-		}
-		if it.Stdin != nil {
-			cmd1.Stdin = it.Stdin
-		}
-	}
-	err := cmd1.Run()
-	errorlevel, errorlevelOk := dos.GetErrorLevel(cmd1)
-	if !errorlevelOk {
-		errorlevel = 255
-	}
-	if err != nil {
-		fmt.Fprintln(cmd1.Stderr, err.Error())
-		return L.Push(errorlevel, err.Error())
-	} else {
-		return L.Push(errorlevel)
-	}
 }
 
 func cmdOpenFile(L lua.Lua) int {
