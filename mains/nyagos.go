@@ -168,6 +168,32 @@ func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, 
 	return ctx, doLuaFilter(this.L, line), nil
 }
 
+type ScriptEngineForOptionImpl struct {
+	L  lua.Lua
+	Sh *shell.Shell
+}
+
+func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
+	setLuaArg(this.L, args)
+}
+
+func (this *ScriptEngineForOptionImpl) RunFile(fname string) ([]byte, error) {
+	return runLua(this.Sh, this.L, fname)
+}
+
+func (this *ScriptEngineForOptionImpl) RunString(code string) error {
+	if err := this.L.LoadString(code); err != nil {
+		return err
+	}
+	this.L.Call(0, 0)
+	return nil
+}
+
+func optionParseLua(sh *shell.Shell, L lua.Lua) (func() error, error) {
+	e := &ScriptEngineForOptionImpl{Sh: sh, L: L}
+	return optionParse(sh, e)
+}
+
 func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
@@ -217,7 +243,7 @@ func Main() error {
 		}
 	}
 
-	script, err := optionParse(sh, L)
+	script, err := optionParseLua(sh, L)
 	if err != nil {
 		return err
 	}

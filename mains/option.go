@@ -9,13 +9,18 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )
 
 var optionNorc = false
 
-func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
+type ScriptEngineForOption interface {
+	SetArg([]string)
+	RunFile(string) ([]byte, error)
+	RunString(string) error
+}
+
+func optionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error) {
 	args := os.Args[1:]
 	for i := 0; i < len(args); i++ {
 		arg1 := args[i]
@@ -59,8 +64,8 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 			if strings.HasSuffix(strings.ToLower(args[i]), ".lua") {
 				// lua script
 				return func() error {
-					setLuaArg(L, args[i:])
-					_, err := runLua(sh, L, args[i])
+					e.SetArg(args[i:])
+					_, err := e.RunFile(args[i])
 					if err != nil {
 						return err
 					} else {
@@ -88,12 +93,8 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 				return nil, errors.New("-e: requires parameters")
 			}
 			return func() error {
-				err := L.LoadString(args[i])
-				if err != nil {
-					return err
-				}
-				setLuaArg(L, args[i:])
-				L.Call(0, 0)
+				e.SetArg(args[i:])
+				e.RunString(args[i])
 				return io.EOF
 			}, nil
 		} else if arg1 == "--norc" {
@@ -104,8 +105,8 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 				return nil, errors.New("--lua-file: requires parameters")
 			}
 			return func() error {
-				setLuaArg(L, args[i:])
-				_, err := runLua(sh, L, args[i])
+				e.SetArg(args[i:])
+				_, err := e.RunFile(args[i])
 				if err != nil {
 					return err
 				} else {
