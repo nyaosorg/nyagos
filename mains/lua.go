@@ -388,9 +388,15 @@ func lua2param(f func(*langParam) []interface{}) func(lua.Lua) int {
 		sh := getRegInt(L)
 		param := &langParam{
 			Args: luaArgsToInterfaces(L),
-			In:   sh.In(),
-			Out:  sh.Out(),
-			Err:  sh.Err(),
+		}
+		if sh != nil {
+			param.In = sh.In()
+			param.Out = sh.Out()
+			param.Err = sh.Err()
+		} else {
+			param.In = os.Stdin
+			param.Out = os.Stdout
+			param.Err = os.Stderr
 		}
 		result := f(param)
 		pushInterfaces(L, result)
