@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.5\_0
+================
+on Mar.31,2018
+
 - Add Lua-flag: nyagos.option.usesource. When it is false, batchfiles can not change nyagos's environment variables and directory.(default:true)
 
 NYAGOS 4.2.5\_beta2
