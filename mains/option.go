@@ -13,15 +13,6 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-func setLuaArg(L lua.Lua, args []string) {
-	L.NewTable()
-	for i, arg1 := range args {
-		L.PushString(arg1)
-		L.RawSetI(-2, lua.Integer(i))
-	}
-	L.SetGlobal("arg")
-}
-
 var optionNorc = false
 
 func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {

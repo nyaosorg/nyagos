@@ -474,3 +474,33 @@ func init() {
 		"writerr":        lua.TGoFunction(lua2param(cmdWriteErr)),
 	}
 }
+
+func setLuaArg(L lua.Lua, args []string) {
+	L.NewTable()
+	for i, arg1 := range args {
+		L.PushString(arg1)
+		L.RawSetI(-2, lua.Integer(i))
+	}
+	L.SetGlobal("arg")
+}
+
+func runLua(it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
+	_, err := os.Stat(fname)
+	if err != nil {
+		if os.IsNotExist(err) {
+			// println("pass " + fname + " (not exists)")
+			return []byte{}, nil
+		} else {
+			return nil, err
+		}
+	}
+	if _, err := L.LoadFile(fname, "bt"); err != nil {
+		return nil, err
+	}
+	chank := L.Dump()
+	if err := callLua(it, 0, 0); err != nil {
+		return nil, err
+	}
+	// println("Run: " + fname)
+	return chank, nil
+}
