@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+- ブロックif で `if [not] errorlevel N` が動かなかった不具合を修正
+
 NYAGOS 4.2.5\_0
 ===============
 (2018.03.31)
