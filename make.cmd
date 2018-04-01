@@ -112,6 +112,10 @@ function Go-Fmt{
     $status = $true
     git status -s | %{
         $fname = $_.Substring(3)
+        $arrow = $fname.IndexOf(" -> ")
+        if( $arrow -ge 0 ){
+            $fname = $fname.Substring($arrow+4)
+        }
         if( $fname -like "*.go" -and (Test-Path($fname)) ){
             $prop = Get-ItemProperty($fname)
             if( $prop.Mode -like "?a*" ){
