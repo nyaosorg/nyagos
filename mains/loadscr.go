@@ -15,7 +15,7 @@ var Stamp string
 var Version string
 var Commit string
 
-func versionOrStamp() string {
+func VersionOrStamp() string {
 	if Version != "" {
 		return Version
 	} else if Stamp != "" {
@@ -25,7 +25,7 @@ func versionOrStamp() string {
 	}
 }
 
-func loadScripts(shellEngine func(string) error,
+func LoadScripts(shellEngine func(string) error,
 	langEngine func(string) ([]byte, error)) error {
 
 	exeName, exeNameErr := os.Executable()

@@ -49,7 +49,7 @@ func main() {
 	mains.Commit = commit
 	mains.Version = version
 
-	if err := mains.Main(); err != nil {
+	if err := Main(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		if err != io.EOF {
 			if defined.DBG {

@@ -1,6 +1,4 @@
-// +build !nolua
-
-package mains
+package mainl
 
 import (
 	"errors"
@@ -15,6 +13,7 @@ import (
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
 	ole "github.com/zetamatta/nyagos/lua/ole"
+	"github.com/zetamatta/nyagos/mains"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -421,7 +420,7 @@ func init() {
 		"bindkey":           lua.TGoFunction(cmdBindKey),
 		"box":               lua.TGoFunction(lua2cmd(cmdBox)),
 		"chdir":             lua.TGoFunction(lua2cmd(cmdChdir)),
-		"commit":            lua.StringProperty{Pointer: &Commit},
+		"commit":            lua.StringProperty{Pointer: &mains.Commit},
 		"commonprefix":      lua.TGoFunction(lua2cmd(cmdCommonPrefix)),
 		"completion_slash":  lua.BoolProperty{Pointer: &completion.UseSlash},
 		"completion_hook":   lua.Property{Pointer: &completionHook},
@@ -470,11 +469,11 @@ func init() {
 		"setenv":         lua.TGoFunction(lua2cmd(cmdSetEnv)),
 		"setrunewidth":   lua.TGoFunction(lua2cmd(cmdSetRuneWidth)),
 		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
-		"silentmode":     &lua.BoolProperty{Pointer: &silentmode},
-		"stamp":          lua.StringProperty{Pointer: &Stamp},
+		"silentmode":     &lua.BoolProperty{Pointer: &mains.SilentMode},
+		"stamp":          lua.StringProperty{Pointer: &mains.Stamp},
 		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
 		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
-		"version":        lua.StringProperty{Pointer: &Version},
+		"version":        lua.StringProperty{Pointer: &mains.Version},
 		"which":          lua.TGoFunction(lua2cmd(cmdWhich)),
 		"write":          lua.TGoFunction(lua2param(cmdWrite)),
 		"writerr":        lua.TGoFunction(lua2param(cmdWriteErr)),

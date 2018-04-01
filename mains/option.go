@@ -12,7 +12,7 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-var optionNorc = false
+var OptionNorc = false
 
 type ScriptEngineForOption interface {
 	SetArg([]string)
@@ -20,7 +20,7 @@ type ScriptEngineForOption interface {
 	RunString(string) error
 }
 
-func optionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error) {
+func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error) {
 	args := os.Args[1:]
 	for i := 0; i < len(args); i++ {
 		arg1 := args[i]
@@ -98,7 +98,7 @@ func optionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 				return io.EOF
 			}, nil
 		} else if arg1 == "--norc" {
-			optionNorc = true
+			OptionNorc = true
 		} else if arg1 == "--lua-file" {
 			i++
 			if i >= len(args) {
@@ -118,4 +118,4 @@ func optionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 	return nil, nil
 }
 
-var silentmode = false
+var SilentMode = false

@@ -1,6 +1,4 @@
-// +build !nolua
-
-package mains
+package mainl
 
 import (
 	"errors"
