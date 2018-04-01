@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"regexp"
 	"strings"
 
@@ -24,10 +23,6 @@ import (
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
-
-var Stamp string
-var Commit string
-var Version string
 
 func setTitle(s string) {
 	fmt.Fprintf(readline.Console, "\x1B]0;%s\007", s)
@@ -90,16 +85,6 @@ func printPrompt(L lua.Lua) (int, error) {
 }
 
 var luaFilter lua.Object = lua.TNil{}
-
-var appdatapath_ string
-
-func AppDataDir() string {
-	if appdatapath_ == "" {
-		appdatapath_ = filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
-		os.Mkdir(appdatapath_, 0777)
-	}
-	return appdatapath_
-}
 
 var default_history *history.Container
 

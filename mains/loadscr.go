@@ -11,6 +11,10 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
+var Stamp string
+var Version string
+var Commit string
+
 func versionOrStamp() string {
 	if Version != "" {
 		return Version
@@ -105,4 +109,14 @@ func barNyagos(shellEngine func(string) error, folder string) {
 		fmt.Fprint(os.Stderr, err.Error())
 	}
 	fd.Close()
+}
+
+var appdatapath_ string
+
+func AppDataDir() string {
+	if appdatapath_ == "" {
+		appdatapath_ = filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
+		os.Mkdir(appdatapath_, 0777)
+	}
+	return appdatapath_
 }
