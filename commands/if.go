@@ -58,8 +58,8 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 		if num_err == nil {
 			status = (shell.LastErrorLevel >= num)
 		}
-		args = args[2:]
-		rawargs = rawargs[2:]
+		args = args[3:]
+		rawargs = rawargs[3:]
 		start += 2
 	}
 
