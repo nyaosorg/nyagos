@@ -83,7 +83,12 @@ func Main() error {
 		}
 	}
 
-	if !isatty.IsTerminal(os.Stdin.Fd()) {
+	script, err := OptionParse(sh, &ScriptEngineForOptionImpl{})
+	if err != nil {
+		return err
+	}
+
+	if !isatty.IsTerminal(os.Stdin.Fd()) || script != nil {
 		SilentMode = true
 	}
 
@@ -97,6 +102,16 @@ func Main() error {
 		}
 		if err := LoadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
+		}
+	}
+
+	if script != nil {
+		if err := script(); err != nil {
+			if err != io.EOF {
+				return err
+			} else {
+				return nil
+			}
 		}
 	}
 
