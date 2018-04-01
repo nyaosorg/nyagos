@@ -1,3 +1,5 @@
+// +build !nolua
+
 package mains
 
 import (

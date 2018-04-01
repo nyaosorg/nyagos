@@ -117,3 +117,5 @@ func optionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 	}
 	return nil, nil
 }
+
+var silentmode = false

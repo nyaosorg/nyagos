@@ -1,3 +1,5 @@
+// +build !nolua
+
 package mains
 
 import (
@@ -7,6 +9,7 @@ import (
 	"io"
 	"os"
 	"regexp"
+	"runtime"
 	"strings"
 
 	"github.com/mattn/go-isatty"
@@ -238,6 +241,13 @@ func Main() error {
 	}
 
 	if !optionNorc {
+		if !silentmode {
+			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s & Lua 5.3\n",
+				versionOrStamp(),
+				runtime.GOARCH,
+				runtime.Version())
+			fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
+		}
 		if err := loadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}

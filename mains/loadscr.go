@@ -33,16 +33,6 @@ func loadScripts(shellEngine func(string) error,
 		fmt.Fprintln(os.Stderr, exeNameErr)
 	}
 	exeFolder := filepath.Dir(exeName)
-
-	if !silentmode {
-		fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s & %s\n",
-			versionOrStamp(),
-			runtime.GOARCH,
-			runtime.Version(),
-			"Lua 5.3")
-		fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
-	}
-
 	nyagos_d := filepath.Join(exeFolder, "nyagos.d")
 	nyagos_d_fd, nyagos_d_err := os.Open(nyagos_d)
 	if nyagos_d_err == nil {

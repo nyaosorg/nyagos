@@ -1,3 +1,5 @@
+// +build !nolua
+
 package mains
 
 import (
@@ -343,8 +345,6 @@ func NewLua() (lua.Lua, error) {
 	}
 	return this, nil
 }
-
-var silentmode = false
 
 func luaArgsToInterfaces(L lua.Lua) []interface{} {
 	end := L.GetTop()
