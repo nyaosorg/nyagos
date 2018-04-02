@@ -6,6 +6,6 @@ import (
 	"github.com/zetamatta/nyagos/mains"
 )
 
-func Main() error {
+func switchMain() error {
 	return mains.Main()
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -9,8 +10,15 @@ import (
 	"runtime"
 	"runtime/debug"
 
+	"github.com/zetamatta/go-getch"
+
+	"github.com/zetamatta/nyagos/alias"
+	"github.com/zetamatta/nyagos/commands"
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/defined"
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/mains"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func whenPanic() {
@@ -37,7 +45,7 @@ var stamp string
 var commit string
 var version string
 
-func main() {
+func startMain() error {
 	defer whenPanic()
 
 	if len(os.Args) >= 2 && os.Args[1] == "--show-version-only" {
@@ -49,7 +57,24 @@ func main() {
 	mains.Commit = commit
 	mains.Version = version
 
-	if err := Main(); err != nil {
+	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
+		rc, done, err := commands.Exec(ctx, it)
+		return rc, done, err
+	})
+	completion.AppendCommandLister(commands.AllNames)
+	completion.AppendCommandLister(alias.AllNames)
+
+	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
+	defer dos.CoUninitialize()
+
+	getch.DisableCtrlC()
+	alias.Init()
+
+	return switchMain()
+}
+
+func main() {
+	if err := startMain(); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		if err != io.EOF {
 			if defined.DBG {

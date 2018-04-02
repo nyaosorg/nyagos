@@ -11,11 +11,7 @@ import (
 	"strings"
 
 	"github.com/mattn/go-isatty"
-	"github.com/zetamatta/go-getch"
 
-	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
@@ -184,21 +180,6 @@ func optionParseLua(sh *shell.Shell, L lua.Lua) (func() error, error) {
 func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
-
-	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
-		rc, done, err := commands.Exec(ctx, it)
-		return rc, done, err
-	})
-	completion.AppendCommandLister(commands.AllNames)
-	completion.AppendCommandLister(alias.AllNames)
-	completion.HookToList = append(completion.HookToList, luaHookForComplete)
-
-	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
-	defer dos.CoUninitialize()
-
-	getch.DisableCtrlC()
-
-	alias.Init()
 
 	// Lua extension
 	L, err := NewLua()

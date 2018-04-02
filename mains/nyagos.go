@@ -8,12 +8,7 @@ import (
 	"runtime"
 
 	"github.com/mattn/go-isatty"
-	"github.com/zetamatta/go-getch"
 
-	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -49,20 +44,6 @@ func (this *ScriptEngineForOptionImpl) RunString(code string) error {
 }
 
 func Main() error {
-	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
-		rc, done, err := commands.Exec(ctx, it)
-		return rc, done, err
-	})
-	completion.AppendCommandLister(commands.AllNames)
-	completion.AppendCommandLister(alias.AllNames)
-
-	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
-	defer dos.CoUninitialize()
-
-	getch.DisableCtrlC()
-
-	alias.Init()
-
 	sh := shell.New()
 
 	langEngine := func(fname string) ([]byte, error) {

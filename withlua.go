@@ -6,6 +6,6 @@ import (
 	"github.com/zetamatta/nyagos/mainl"
 )
 
-func Main() error {
+func switchMain() error {
 	return mainl.Main()
 }
