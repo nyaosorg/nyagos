@@ -1,0 +1,2 @@
+- `nyagos.option.cleanup_buffer` を追加(デフォルトは false)。true の場合、一行入力の前にコンソールバッファをクリアする
+- Lua無しバージョンの nyagos.exe を `make nolua` でビルドできるようになった

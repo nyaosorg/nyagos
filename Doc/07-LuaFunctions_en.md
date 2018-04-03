@@ -299,6 +299,10 @@ If it is true(=default), batchfiles can change the environment variable of
 nyagos. False, you have to use `source BATCHFILE` to read the changes of
 the environment variables from batchfiles.
 
+### `nyagos.option.cleaup_buffer`
+
+When it is true, clean up console input buffer before readline.
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe

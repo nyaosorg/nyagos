@@ -1,0 +1,2 @@
+- Made `nyagos.option.cleanup_buffer` (default=false). When it is true, clean up console input buffer before readline.
+- NYAGOS.exe without Lua cab be built with `make nolua`
