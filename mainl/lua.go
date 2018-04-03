@@ -124,9 +124,10 @@ func on_command_not_found(inte *shell.Cmd, err error) error {
 }
 
 var option_table_member = map[string]IProperty{
-	"glob":      &lua.BoolProperty{Pointer: &shell.WildCardExpansionAlways},
-	"noclobber": &lua.BoolProperty{Pointer: &shell.NoClobber},
-	"usesource": &lua.BoolProperty{Pointer: &shell.UseSourceRunBatch},
+	"glob":           &lua.BoolProperty{Pointer: &shell.WildCardExpansionAlways},
+	"noclobber":      &lua.BoolProperty{Pointer: &shell.NoClobber},
+	"usesource":      &lua.BoolProperty{Pointer: &shell.UseSourceRunBatch},
+	"cleanup_buffer": &lua.BoolProperty{Pointer: &readline.FlushBeforeReadline},
 }
 
 func getOption(L lua.Lua) int {

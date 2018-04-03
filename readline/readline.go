@@ -11,6 +11,8 @@ import (
 	"github.com/zetamatta/go-getch"
 )
 
+var FlushBeforeReadline = false
+
 type Result int
 
 const (
@@ -204,7 +206,9 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this.RepaintAfterPrompt()
 
-	getch.Flush()
+	if FlushBeforeReadline {
+		getch.Flush()
+	}
 
 	cursorOnSwitch := false
 	for {
