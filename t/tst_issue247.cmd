@@ -8,5 +8,7 @@ rem
 set GOGC=1
 set "ME=%~0"
 set "ME=%ME:\=\\%"
+echo %TIME%
 nyagos.exe -e "for i=1,10000 do for line in nyagos.lines('%ME%') do end end"
+echo %TIME%
 endlocal
