@@ -50,7 +50,7 @@ func startMain() error {
 
 	if len(os.Args) >= 2 && os.Args[1] == "--show-version-only" {
 		fmt.Printf("%s-%s\n", version, runtime.GOARCH)
-		os.Exit(0)
+		return nil
 	}
 
 	mains.Stamp = stamp
