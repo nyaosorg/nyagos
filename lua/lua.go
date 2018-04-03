@@ -30,8 +30,9 @@ type packageIdT struct{}
 
 var PackageId packageIdT
 
-var userdataAnchor = make(map[Lua]map[uintptr]interface{})
-var userdateAnchorMutex = sync.RWMutex{}
+var userdataAnchor sync.Map
+
+type anchor_t map[uintptr]interface{}
 
 var luaL_newstate = luaDLL.NewProc("luaL_newstate")
 
@@ -43,10 +44,9 @@ func New() (Lua, error) {
 	if trace {
 		fmt.Fprintf(os.Stderr, "lua.New()=%v\n", lua)
 	}
-	userdateAnchorMutex.Lock()
-	userdataAnchor[Lua(lua)] = make(map[uintptr]interface{})
-	userdateAnchorMutex.Unlock()
-	return Lua(lua), nil
+	this := Lua(lua)
+	userdataAnchor.Store(this, make(anchor_t))
+	return this, nil
 }
 
 func (this Lua) State() uintptr {
@@ -69,9 +69,7 @@ func (this Lua) Close() error {
 		fmt.Fprintf(os.Stderr, "Lua(%v).Close()\n", this)
 	}
 	lua_close.Call(this.State())
-	userdateAnchorMutex.Lock()
-	delete(userdataAnchor, this)
-	userdateAnchorMutex.Unlock()
+	userdataAnchor.Delete(this)
 	return nil
 }
 
@@ -179,9 +177,14 @@ func (this Lua) PushUserData(p interface{}) {
 	area, _, _ := lua_newuserdata.Call(this.State(), unsafe.Sizeof(address))
 	*(*uintptr)(unsafe.Pointer(area)) = address
 
-	userdateAnchorMutex.RLock()
-	anchor := userdataAnchor[this]
-	userdateAnchorMutex.RUnlock()
+	anchor_, ok := userdataAnchor.Load(this)
+	if !ok {
+		panic("On (lua.Lua).PushUserData(), anchor is not found.")
+	}
+	anchor, ok := anchor_.(anchor_t)
+	if !ok {
+		panic("On (lua.Lua).PushUserData(), anchor is not anchor_t.")
+	}
 	anchor[address] = anchordata.Interface()
 }
 
@@ -213,12 +216,17 @@ func (this Lua) DeleteUserDataAnchor(index int) {
 		return
 	}
 
-	userdateAnchorMutex.RLock()
-	anchor := userdataAnchor[this]
-	userdateAnchorMutex.RUnlock()
-
 	area := uintptr(this.ToUserData(index))
 	address = *(*uintptr)(unsafe.Pointer(area))
+
+	anchor_, ok := userdataAnchor.Load(this)
+	if !ok {
+		panic("lua.Lua)DeleteUserDataAnchor: anchor is not found.")
+	}
+	anchor, ok := anchor_.(anchor_t)
+	if !ok {
+		panic("(lua.Lua)DeleteUserDataAnchor: anchor is not anchor_t.")
+	}
 	delete(anchor, address)
 }
 
