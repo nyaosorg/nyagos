@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"unsafe"
 
+	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
@@ -123,23 +124,16 @@ func on_command_not_found(inte *shell.Cmd, err error) error {
 	}
 }
 
-var option_table_member = map[string]IProperty{
-	"glob":           &lua.BoolProperty{Pointer: &shell.WildCardExpansionAlways},
-	"noclobber":      &lua.BoolProperty{Pointer: &shell.NoClobber},
-	"usesource":      &lua.BoolProperty{Pointer: &shell.UseSourceRunBatch},
-	"cleanup_buffer": &lua.BoolProperty{Pointer: &readline.FlushBeforeReadline},
-}
-
 func getOption(L lua.Lua) int {
 	key, key_err := L.ToString(2)
 	if key_err != nil {
 		return L.Push(nil, key_err)
 	}
-	val, val_ok := option_table_member[key]
-	if !val_ok {
+	ptr, ok := commands.BoolOptions[key]
+	if !ok {
 		return L.Push(nil)
 	}
-	return L.Push(val)
+	return L.Push(&lua.BoolProperty{Pointer: ptr})
 }
 
 func setOption(L lua.Lua) int {
@@ -147,11 +141,11 @@ func setOption(L lua.Lua) int {
 	if key_err != nil {
 		return L.Push(nil, key_err)
 	}
-	opt, opt_ok := option_table_member[key]
-	if !opt_ok {
-		print(key, " not found\n")
+	ptr, ok := commands.BoolOptions[key]
+	if !ok {
 		return L.Push(nil)
 	}
+	opt := lua.BoolProperty{Pointer: ptr}
 	if err := opt.Set(L, 3); err != nil {
 		return L.Push(nil, err.Error())
 	} else {

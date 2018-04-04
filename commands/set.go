@@ -34,7 +34,7 @@ func shrink(values ...string) string {
 	return buffer.String()
 }
 
-var boolOptions = map[string]*bool{
+var BoolOptions = map[string]*bool{
 	"glob":           &shell.WildCardExpansionAlways,
 	"noclobber":      &shell.NoClobber,
 	"usesource":      &shell.UseSourceRunBatch,
@@ -42,7 +42,7 @@ var boolOptions = map[string]*bool{
 }
 
 func dumpBoolOptions(out io.Writer) {
-	for key, val := range boolOptions {
+	for key, val := range BoolOptions {
 		fmt.Fprintf(out, "%-16s", key)
 		if *val {
 			fmt.Fprintln(out, "on")
@@ -67,7 +67,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 			if len(args) < 1 {
 				dumpBoolOptions(cmd.Out())
 			} else {
-				if ptr, ok := boolOptions[args[0]]; ok {
+				if ptr, ok := BoolOptions[args[0]]; ok {
 					*ptr = true
 				} else {
 					fmt.Fprintf(cmd.Err(), "-o %s: no such option\n", args[0])
@@ -79,7 +79,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 			if len(args) < 1 {
 				dumpBoolOptions(cmd.Out())
 			} else {
-				if ptr, ok := boolOptions[args[0]]; ok {
+				if ptr, ok := BoolOptions[args[0]]; ok {
 					*ptr = false
 				} else {
 					fmt.Fprintf(cmd.Err(), "+o %s: no such option\n", args[0])
