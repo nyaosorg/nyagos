@@ -396,14 +396,6 @@ switch( $args[0] ){
     "" {
         Build (git describe --tags) ""
     }
-    "nolua" {
-        $private:save = $env:GOARCH
-        if( $args[1] ){
-            $env:GOARCH = $args[1]
-        }
-        Build (git describe --tags) "-tags=nolua"
-        $env:GOARCH = $save
-    }
     "386"{
         $private:save = $env:GOARCH
         $env:GOARCH = "386"

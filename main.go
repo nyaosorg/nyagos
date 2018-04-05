@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/zetamatta/nyagos/defined"
+	"github.com/zetamatta/nyagos/mainl"
 	"github.com/zetamatta/nyagos/mains"
 )
 
@@ -18,7 +19,7 @@ func main() {
 	mains.Commit = commit
 	mains.Version = version
 
-	if err := mains.Start(switchMain); err != nil {
+	if err := mains.Start(mainl.Main); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		if err != io.EOF {
 			if defined.DBG {
