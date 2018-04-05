@@ -270,9 +270,8 @@ function Build($version,$tags) {
 
     Make-SysO $version
 
-    $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose "$ $GO build -o '$target'"
-    & $GO build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
+    & $GO build "-o" $target -ldflags "-X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
         Do-Copy $target ".\nyagos.exe"
     }

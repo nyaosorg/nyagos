@@ -15,8 +15,6 @@ var commit string
 var version string
 
 func main() {
-	mains.Stamp = stamp
-	mains.Commit = commit
 	mains.Version = version
 
 	if err := mains.Start(mainl.Main); err != nil {

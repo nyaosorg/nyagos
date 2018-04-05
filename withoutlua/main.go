@@ -9,8 +9,6 @@ import (
 )
 
 func main() {
-	// mains.Stamp = stamp
-	// mains.Commit = commit
 	mains.Version = "without Lua"
 
 	if err := mains.Start(mains.Main); err != nil {

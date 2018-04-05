@@ -11,15 +11,11 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-var Stamp string
 var Version string
-var Commit string
 
 func VersionOrStamp() string {
 	if Version != "" {
 		return Version
-	} else if Stamp != "" {
-		return "v" + Stamp
 	} else {
 		return "snapshot"
 	}
