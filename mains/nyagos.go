@@ -12,6 +12,11 @@ import (
 
 	"github.com/mattn/go-isatty"
 
+	"github.com/zetamatta/go-getch"
+	"github.com/zetamatta/nyagos/alias"
+	"github.com/zetamatta/nyagos/commands"
+	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -147,4 +152,23 @@ func PanicHandler() {
 
 	var dummy [1]byte
 	os.Stdin.Read(dummy[:])
+}
+
+func Start(mainHandler func() error) error {
+	defer PanicHandler()
+
+	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
+		rc, done, err := commands.Exec(ctx, it)
+		return rc, done, err
+	})
+	completion.AppendCommandLister(commands.AllNames)
+	completion.AppendCommandLister(alias.AllNames)
+
+	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
+	defer dos.CoUninitialize()
+
+	getch.DisableCtrlC()
+	alias.Init()
+
+	return mainHandler()
 }
