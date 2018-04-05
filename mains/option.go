@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 
 	"github.com/zetamatta/nyagos/shell"
@@ -112,6 +113,11 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 				} else {
 					return io.EOF
 				}
+			}, nil
+		} else if arg1 == "--show-version-only" {
+			return func() error {
+				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
+				return io.EOF
 			}, nil
 		}
 	}

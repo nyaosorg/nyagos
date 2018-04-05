@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"runtime"
 
 	"github.com/zetamatta/go-getch"
 
@@ -24,11 +23,6 @@ var version string
 
 func startMain() error {
 	defer mains.PanicHandler()
-
-	if len(os.Args) >= 2 && os.Args[1] == "--show-version-only" {
-		fmt.Printf("%s-%s\n", version, runtime.GOARCH)
-		return nil
-	}
 
 	mains.Stamp = stamp
 	mains.Commit = commit
