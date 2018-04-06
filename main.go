@@ -11,8 +11,6 @@ import (
 	"github.com/zetamatta/nyagos/mains"
 )
 
-var stamp string
-var commit string
 var version string
 
 func main() {
