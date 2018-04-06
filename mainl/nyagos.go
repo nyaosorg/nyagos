@@ -12,9 +12,9 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
-	"github.com/zetamatta/nyagos/mains"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -46,7 +46,7 @@ func nyagosPrompt(L lua.Lua) int {
 	if err != nil {
 		template = "[" + err.Error() + "]"
 	}
-	text := mains.Format2Prompt(template)
+	text := frame.Format2Prompt(template)
 
 	fmt.Fprint(readline.Console, text)
 
@@ -169,7 +169,7 @@ func (this *ScriptEngineForOptionImpl) RunString(code string) error {
 
 func optionParseLua(sh *shell.Shell, L lua.Lua) (func() error, error) {
 	e := &ScriptEngineForOptionImpl{Sh: sh, L: L}
-	return mains.OptionParse(sh, e)
+	return frame.OptionParse(sh, e)
 }
 
 func Main() error {
@@ -195,7 +195,7 @@ func Main() error {
 		if err != nil {
 			return err
 		}
-		stream1 := mains.NewCmdStreamFile(fd)
+		stream1 := frame.NewCmdStreamFile(fd)
 		_, err = sh.Loop(stream1)
 		fd.Close()
 		if err == io.EOF {
@@ -211,18 +211,18 @@ func Main() error {
 	}
 
 	if !isatty.IsTerminal(os.Stdin.Fd()) || script != nil {
-		mains.SilentMode = true
+		frame.SilentMode = true
 	}
 
-	if !mains.OptionNorc {
-		if !mains.SilentMode {
+	if !frame.OptionNorc {
+		if !frame.SilentMode {
 			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s & Lua 5.3\n",
-				mains.VersionOrStamp(),
+				frame.VersionOrStamp(),
 				runtime.GOARCH,
 				runtime.Version())
 			fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
 		}
-		if err := mains.LoadScripts(shellEngine, langEngine); err != nil {
+		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}
@@ -244,12 +244,12 @@ func Main() error {
 
 	var stream1 shell.Stream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		constream := mains.NewCmdStreamConsole(
+		constream := frame.NewCmdStreamConsole(
 			func() (int, error) { return printPrompt(L) })
 		stream1 = constream
 		default_history = constream.History
 	} else {
-		stream1 = mains.NewCmdStreamFile(os.Stdin)
+		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
 
 	for {

@@ -1,4 +1,4 @@
-package mains
+package frame
 
 import (
 	"github.com/zetamatta/nyagos/completion"

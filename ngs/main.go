@@ -5,13 +5,13 @@ import (
 	"io"
 	"os"
 
-	"github.com/zetamatta/nyagos/mains"
+	"github.com/zetamatta/nyagos/frame"
 )
 
 func main() {
-	mains.Version = "without Lua"
+	frame.Version = "without Lua"
 
-	if err := mains.Start(mains.Main); err != nil && err != io.EOF {
+	if err := frame.Start(frame.Main); err != nil && err != io.EOF {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}

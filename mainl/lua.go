@@ -11,10 +11,10 @@ import (
 
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
 	ole "github.com/zetamatta/nyagos/lua/ole"
-	"github.com/zetamatta/nyagos/mains"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -466,10 +466,10 @@ func init() {
 		"setenv":         lua.TGoFunction(lua2cmd(cmdSetEnv)),
 		"setrunewidth":   lua.TGoFunction(lua2cmd(cmdSetRuneWidth)),
 		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
-		"silentmode":     &lua.BoolProperty{Pointer: &mains.SilentMode},
+		"silentmode":     &lua.BoolProperty{Pointer: &frame.SilentMode},
 		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
 		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
-		"version":        lua.StringProperty{Pointer: &mains.Version},
+		"version":        lua.StringProperty{Pointer: &frame.Version},
 		"which":          lua.TGoFunction(lua2cmd(cmdWhich)),
 		"write":          lua.TGoFunction(lua2param(cmdWrite)),
 		"writerr":        lua.TGoFunction(lua2param(cmdWriteErr)),
