@@ -28,10 +28,11 @@ func (this *LuaBinaryChank) String() string {
 }
 
 func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, error) {
-	L, L_ok := cmd.Tag().(lua.Lua)
-	if !L_ok {
+	luawrapper, ok := cmd.Tag().(*luaWrapper)
+	if !ok {
 		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
 	}
+	L := luawrapper.Lua
 
 	if f := cmd.Out().(*os.File); f != os.Stdout && f != os.Stderr {
 		L.GetGlobal("io")        // +1
@@ -96,6 +97,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 			it := cmd.Command()
 			it.SetArgs(newargs)
 			errorlevel, err = it.Spawnvp(ctx)
+			it.Close()
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
 			errorlevel = val
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
@@ -170,9 +172,18 @@ func cmdExec(L lua.Lua) int {
 		if sh == nil {
 			println("main/lua_cmd.go: cmdExec: not found interpreter object")
 			sh = shell.New()
-			sh.SetTag(L)
+			newL_tmp, err := L.Clone()
+			if err == nil && newL_tmp != nil {
+				if newL, ok := newL_tmp.(lua.Lua); ok {
+					sh.SetTag(&luaWrapper{Lua: newL})
+				} else {
+					println("lua clone failed")
+				}
+			}
+			defer sh.Close()
 		}
 		cmd := sh.Command()
+		defer cmd.Close()
 		cmd.SetArgs(args)
 		errorlevel, err = cmd.Spawnvp(context.Background())
 	} else {
@@ -183,7 +194,8 @@ func cmdExec(L lua.Lua) int {
 		it := getRegInt(L)
 		if it == nil {
 			it = shell.New()
-			it.SetTag(L)
+			it.SetTag(&luaWrapper{L})
+			defer it.Close()
 		}
 		errorlevel, err = it.Interpret(statement)
 	}
@@ -201,9 +213,10 @@ func cmdEval(L lua.Lua) int {
 	}
 	go func(statement string, w *os.File) {
 		it := shell.New()
-		it.SetTag(L)
+		it.SetTag(&luaWrapper{L})
 		it.Stdout = w
 		it.Interpret(statement)
+		it.Close()
 		w.Close()
 	}(statement, w)
 

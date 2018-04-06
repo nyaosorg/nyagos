@@ -53,6 +53,7 @@ func (this *ScriptEngineForOptionImpl) RunString(code string) error {
 
 func Main() error {
 	sh := shell.New()
+	defer sh.Close()
 
 	langEngine := func(fname string) ([]byte, error) {
 		return nil, nil

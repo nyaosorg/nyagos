@@ -37,14 +37,17 @@ type session struct {
 	unreadline []string
 }
 
+type CloneCloser interface {
+	Clone() (CloneCloser, error)
+	Close() error
+}
+
 type Shell struct {
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
-	tag          interface{}
-	OnFork       func(*Cmd) error
-	OffFork      func(*Cmd) error
+	tag          CloneCloser
 	Closers      []io.Closer
 	IsBackGround bool
 }
@@ -52,8 +55,8 @@ type Shell struct {
 func (sh *Shell) In() io.Reader          { return sh.Stdin }
 func (sh *Shell) Out() io.Writer         { return sh.Stdout }
 func (sh *Shell) Err() io.Writer         { return sh.Stderr }
-func (sh *Shell) Tag() interface{}       { return sh.tag }
-func (sh *Shell) SetTag(tag interface{}) { sh.tag = tag }
+func (sh *Shell) Tag() CloneCloser       { return sh.tag }
+func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
 
 type Cmd struct {
 	Shell
@@ -101,12 +104,10 @@ func New() *Shell {
 func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
-			Stdin:   sh.Stdin,
-			Stdout:  sh.Stdout,
-			Stderr:  sh.Stderr,
-			tag:     sh.tag,
-			OnFork:  sh.OnFork,
-			OffFork: sh.OffFork,
+			Stdin:  sh.Stdin,
+			Stdout: sh.Stdout,
+			Stderr: sh.Stderr,
+			tag:    sh.tag,
 		},
 	}
 	if sh.session != nil {
@@ -253,6 +254,7 @@ func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
 
 func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
 	cmd := sh.Command()
+	defer cmd.Close()
 	cmd.SetArgs(args)
 	cmd.SetRawArgs(rawargs)
 	return cmd.Spawnvp(ctx)
@@ -367,10 +369,12 @@ func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel 
 				if !isBackGround {
 					wg.Add(1)
 				}
-				if cmd.OnFork != nil {
-					if err := cmd.OnFork(cmd); err != nil {
-						fmt.Fprintln(cmd.Stderr, err.Error())
+				if tag := cmd.Tag(); tag != nil {
+					if newtag, err := tag.Clone(); err != nil {
+						fmt.Fprintln(os.Stderr, err.Error())
 						return -1, err
+					} else {
+						cmd.SetTag(newtag)
 					}
 				}
 				go func(cmd1 *Cmd) {
@@ -378,13 +382,11 @@ func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel 
 						defer wg.Done()
 					}
 					cmd1.Spawnvp(ctx)
-					if cmd1.OffFork != nil {
-						if err := cmd1.OffFork(cmd1); err != nil {
-							fmt.Fprintln(cmd1.Stderr, err.Error())
-							goto exit
+					if tag := cmd1.Tag(); tag != nil {
+						if err := tag.Close(); err != nil {
+							fmt.Fprintln(os.Stderr, err.Error())
 						}
 					}
-				exit:
 					cmd1.Close()
 				}(cmd)
 			}

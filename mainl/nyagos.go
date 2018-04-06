@@ -2,7 +2,6 @@ package mainl
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -111,29 +110,25 @@ func doLuaFilter(L lua.Lua, line string) string {
 	return line2
 }
 
-func onFork(cmd *shell.Cmd) error {
-	L, ok := cmd.Tag().(lua.Lua)
-	if !ok {
-		return errors.New("could not get lua instance")
-	}
+type luaWrapper struct {
+	lua.Lua
+}
+
+func (this *luaWrapper) Clone() (shell.CloneCloser, error) {
+	L := this.Lua
 	newL, err := NewLua()
 	if err != nil {
-		return err
+		return nil, err
 	}
 	err = L.CloneTo(newL)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	cmd.SetTag(newL)
-	return nil
+	return &luaWrapper{newL}, nil
 }
 
-func offFork(cmd *shell.Cmd) error {
-	L, ok := cmd.Tag().(lua.Lua)
-	if !ok {
-		return errors.New("could not get lua instance")
-	}
-	return L.Close()
+func (this *luaWrapper) Close() error {
+	return this.Lua.Close()
 }
 
 type MainStream struct {
@@ -189,9 +184,8 @@ func Main() error {
 	defer L.Close()
 
 	sh := shell.New()
-	sh.SetTag(L)
-	sh.OnFork = onFork
-	sh.OffFork = offFork
+	sh.SetTag(&luaWrapper{L})
+	defer sh.Close()
 
 	langEngine := func(fname string) ([]byte, error) {
 		return runLua(sh, L, fname)

@@ -37,10 +37,11 @@ func getRegInt(L lua.Lua) *shell.Shell {
 }
 
 func callLua(it *shell.Shell, nargs int, nresult int) error {
-	L, ok := it.Tag().(lua.Lua)
+	luawrapper, ok := it.Tag().(*luaWrapper)
 	if !ok {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
+	L := luawrapper.Lua
 	save := getRegInt(L)
 	setRegInt(L, it)
 	err := L.Call(nargs, nresult)
@@ -53,10 +54,11 @@ var orgArgHook func(*shell.Shell, []string) ([]string, error)
 var luaArgsFilter lua.Object = lua.TNil{}
 
 func newArgHook(it *shell.Shell, args []string) ([]string, error) {
-	L, ok := it.Tag().(lua.Lua)
+	luawrapper, ok := it.Tag().(*luaWrapper)
 	if !ok {
 		return nil, errors.New("Could not get lua instance(newArgHook)")
 	}
+	L := luawrapper.Lua
 	L.Push(luaArgsFilter)
 	if !L.IsFunction(-1) {
 		L.Pop(1)
@@ -97,10 +99,11 @@ var orgOnCommandNotFound func(*shell.Cmd, error) error
 var luaOnCommandNotFound lua.Object = lua.TNil{}
 
 func on_command_not_found(inte *shell.Cmd, err error) error {
-	L, ok := inte.Tag().(lua.Lua)
+	luawrapper, ok := inte.Tag().(*luaWrapper)
 	if !ok {
 		return errors.New("Could get lua instance(on_command_not_found)")
 	}
+	L := luawrapper.Lua
 
 	L.Push(luaOnCommandNotFound)
 	if !L.IsFunction(-1) {
