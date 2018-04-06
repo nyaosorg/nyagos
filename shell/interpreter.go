@@ -48,7 +48,6 @@ type Shell struct {
 	Stderr       *os.File
 	Stdin        *os.File
 	tag          CloneCloser
-	Closers      []io.Closer
 	IsBackGround bool
 }
 
@@ -64,6 +63,7 @@ type Cmd struct {
 	rawArgs         []string
 	fullPath        string
 	UseShellExecute bool
+	Closers         []io.Closer
 }
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
@@ -83,14 +83,16 @@ func (cmd *Cmd) FullPath() string {
 	return cmd.fullPath
 }
 
-func (sh *Shell) Close() {
-	if sh.Closers != nil {
-		for _, c := range sh.Closers {
+func (cmd *Cmd) Close() {
+	if cmd.Closers != nil {
+		for _, c := range cmd.Closers {
 			c.Close()
 		}
-		sh.Closers = nil
+		cmd.Closers = nil
 	}
 }
+
+func (sh *Shell) Close() {}
 
 func New() *Shell {
 	return &Shell{
