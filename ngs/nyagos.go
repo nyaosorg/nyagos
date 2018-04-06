@@ -10,8 +10,8 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/zetamatta/nyagos/frame"
+	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -105,8 +105,8 @@ func Main() error {
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
 			func() (int, error) {
-				fmt.Fprint(readline.Console,
-					frame.Format2Prompt(os.Getenv("PROMPT")))
+				functions.Prompt(
+					[]interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))})
 				return 0, nil
 			})
 		stream1 = constream

@@ -5,61 +5,18 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"regexp"
 	"runtime"
-	"strings"
 
 	"github.com/mattn/go-isatty"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/frame"
+	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 
-var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
-
-func setTitle(s string) {
-	fmt.Fprintf(readline.Console, "\x1B]0;%s\007", s)
-}
-
-func nyagosPrompt(L lua.Lua) int {
-	title, title_err := L.ToString(2)
-	if title_err == nil && title != "" {
-		setTitle(title)
-	} else if wd, wdErr := os.Getwd(); wdErr == nil {
-		if flag, _ := dos.IsElevated(); flag {
-			setTitle("(Admin) - " + wd)
-		} else {
-			setTitle("NYAGOS - " + wd)
-		}
-	} else {
-		if flag, _ := dos.IsElevated(); flag {
-			setTitle("(Admin)")
-		} else {
-			setTitle("NYAGOS")
-		}
-	}
-	template, err := L.ToString(1)
-	if err != nil {
-		template = "[" + err.Error() + "]"
-	}
-	text := frame.Format2Prompt(template)
-
-	fmt.Fprint(readline.Console, text)
-
-	text = rxAnsiEscCode.ReplaceAllString(text, "")
-	lfPos := strings.LastIndex(text, "\n")
-	if lfPos >= 0 {
-		text = text[lfPos+1:]
-	}
-	L.PushInteger(lua.Integer(readline.GetStringWidth(text)))
-	return 1
-}
-
-var prompt_hook lua.Object = lua.TGoFunction(nyagosPrompt)
+var prompt_hook lua.Object = lua.TGoFunction(lua2cmd(functions.Prompt))
 
 func printPrompt(L lua.Lua) (int, error) {
 	L.Push(prompt_hook)

@@ -416,7 +416,7 @@ func init() {
 		"completion_hook":   lua.Property{Pointer: &completionHook},
 		"completion_hidden": lua.BoolProperty{Pointer: &completion.IncludeHidden},
 		"create_object":     lua.TGoFunction(ole.CreateObject),
-		"default_prompt":    lua.TGoFunction(nyagosPrompt),
+		"default_prompt":    lua.TGoFunction(lua2cmd(functions.Prompt)),
 		"elevated":          lua.TGoFunction(lua2cmd(functions.CmdElevated)),
 		"env": &lua.VirtualTable{
 			Name:     "nyagos.env",
