@@ -22,14 +22,14 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-var default_history *history.Container
+var DefaultHistory *history.Container
 
 type MainStream struct {
 	shell.Stream
 }
 
 func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx = context.WithValue(ctx, history.PackageId, default_history)
+	ctx = context.WithValue(ctx, history.PackageId, DefaultHistory)
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
@@ -105,9 +105,9 @@ func Main() error {
 		}
 	}
 
-	backupHistory := default_history
+	backupHistory := DefaultHistory
 	defer func() {
-		default_history = backupHistory
+		DefaultHistory = backupHistory
 	}()
 
 	var stream1 shell.Stream
@@ -119,7 +119,7 @@ func Main() error {
 				return 0, nil
 			})
 		stream1 = constream
-		default_history = constream.History
+		DefaultHistory = constream.History
 	} else {
 		stream1 = NewCmdStreamFile(os.Stdin)
 	}

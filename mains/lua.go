@@ -3,7 +3,6 @@ package mains
 import (
 	"errors"
 	"fmt"
-	"io"
 	"os"
 	"reflect"
 	"runtime"
@@ -12,6 +11,7 @@ import (
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
+	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/lua"
 	ole "github.com/zetamatta/nyagos/lua/ole"
@@ -330,7 +330,7 @@ func NewLua() (lua.Lua, error) {
 		NewIndex: setShareTable})
 	this.SetGlobal("share")
 
-	this.PushGoFunction(lua2param(cmdPrint))
+	this.PushGoFunction(lua2param(functions.CmdPrint))
 	this.SetGlobal("print")
 
 	if !hook_setuped {
@@ -373,17 +373,10 @@ func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 	}
 }
 
-type langParam struct {
-	Args []interface{}
-	In   io.Reader
-	Out  io.Writer
-	Err  io.Writer
-}
-
-func lua2param(f func(*langParam) []interface{}) func(lua.Lua) int {
+func lua2param(f func(*functions.Param) []interface{}) func(lua.Lua) int {
 	return func(L lua.Lua) int {
 		sh := getRegInt(L)
-		param := &langParam{
+		param := &functions.Param{
 			Args: luaArgsToInterfaces(L),
 		}
 		if sh != nil {
@@ -403,76 +396,76 @@ func lua2param(f func(*langParam) []interface{}) func(lua.Lua) int {
 
 func init() {
 	nyagos_table_member = map[string]lua.Object{
-		"access": lua.TGoFunction(lua2cmd(cmdAccess)),
+		"access": lua.TGoFunction(lua2cmd(functions.CmdAccess)),
 		"alias": &lua.VirtualTable{
 			Name:     "nyagos.alias",
 			Index:    cmdGetAlias,
 			NewIndex: cmdSetAlias},
 		"antihistquot": lua.StringProperty{Pointer: &history.DisableMarks},
 		"argsfilter":   lua.Property{Pointer: &luaArgsFilter},
-		"atou":         lua.TGoFunction(lua2cmd(cmdAtoU)),
+		"atou":         lua.TGoFunction(lua2cmd(functions.CmdAtoU)),
 		"key": &lua.VirtualTable{
 			Name:     "nyagos.key",
 			Index:    cmdGetBindKey,
 			NewIndex: cmdBindKey},
 		"bindkey":           lua.TGoFunction(cmdBindKey),
-		"box":               lua.TGoFunction(lua2cmd(cmdBox)),
-		"chdir":             lua.TGoFunction(lua2cmd(cmdChdir)),
-		"commonprefix":      lua.TGoFunction(lua2cmd(cmdCommonPrefix)),
+		"box":               lua.TGoFunction(lua2cmd(functions.CmdBox)),
+		"chdir":             lua.TGoFunction(lua2cmd(functions.CmdChdir)),
+		"commonprefix":      lua.TGoFunction(lua2cmd(functions.CmdCommonPrefix)),
 		"completion_slash":  lua.BoolProperty{Pointer: &completion.UseSlash},
 		"completion_hook":   lua.Property{Pointer: &completionHook},
 		"completion_hidden": lua.BoolProperty{Pointer: &completion.IncludeHidden},
 		"create_object":     lua.TGoFunction(ole.CreateObject),
 		"default_prompt":    lua.TGoFunction(nyagosPrompt),
-		"elevated":          lua.TGoFunction(lua2cmd(cmdElevated)),
+		"elevated":          lua.TGoFunction(lua2cmd(functions.CmdElevated)),
 		"env": &lua.VirtualTable{
 			Name:     "nyagos.env",
-			Index:    lua2cmd(cmdGetEnv),
-			NewIndex: lua2cmd(cmdSetEnv)},
+			Index:    lua2cmd(functions.CmdGetEnv),
+			NewIndex: lua2cmd(functions.CmdSetEnv)},
 		"eval":         lua.TGoFunction(cmdEval),
 		"exec":         lua.TGoFunction(cmdExec),
 		"filter":       lua.Property{Pointer: &luaFilter},
 		"getalias":     lua.TGoFunction(cmdGetAlias),
-		"getenv":       lua.TGoFunction(lua2cmd(cmdGetEnv)),
-		"gethistory":   lua.TGoFunction(lua2cmd(cmdGetHistory)),
-		"getkey":       lua.TGoFunction(lua2cmd(cmdGetKey)),
-		"getviewwidth": lua.TGoFunction(lua2cmd(cmdGetViewWidth)),
-		"getwd":        lua.TGoFunction(lua2cmd(cmdGetwd)),
-		"glob":         lua.TGoFunction(lua2cmd(cmdGlob)),
+		"getenv":       lua.TGoFunction(lua2cmd(functions.CmdGetEnv)),
+		"gethistory":   lua.TGoFunction(lua2cmd(functions.CmdGetHistory)),
+		"getkey":       lua.TGoFunction(lua2cmd(functions.CmdGetKey)),
+		"getviewwidth": lua.TGoFunction(lua2cmd(functions.CmdGetViewWidth)),
+		"getwd":        lua.TGoFunction(lua2cmd(functions.CmdGetwd)),
+		"glob":         lua.TGoFunction(lua2cmd(functions.CmdGlob)),
 		"goarch":       lua.TString(runtime.GOARCH),
 		"goversion":    lua.TString(runtime.Version()),
 		"histchar":     lua.StringProperty{Pointer: &history.Mark},
 		"history": &lua.VirtualTable{
 			Name:  "nyagos.history",
-			Index: lua2cmd(cmdGetHistory),
-			Len:   lua2cmd(cmdLenHistory)},
+			Index: lua2cmd(functions.CmdGetHistory),
+			Len:   lua2cmd(functions.CmdLenHistory)},
 		"lines":                lua.TGoFunction(cmdLines),
 		"loadfile":             lua.TGoFunction(cmdLoadFile),
-		"msgbox":               lua.TGoFunction(lua2cmd(cmdMsgBox)),
-		"netdrivetounc":        lua.TGoFunction(lua2cmd(cmdNetDriveToUNC)),
+		"msgbox":               lua.TGoFunction(lua2cmd(functions.CmdMsgBox)),
+		"netdrivetounc":        lua.TGoFunction(lua2cmd(functions.CmdNetDriveToUNC)),
 		"on_command_not_found": lua.Property{Pointer: &luaOnCommandNotFound},
 		"open":                 lua.TGoFunction(cmdOpenFile),
 		"option": &lua.VirtualTable{
 			Name:     "nyagos.option",
 			Index:    getOption,
 			NewIndex: setOption},
-		"pathjoin":       lua.TGoFunction(lua2cmd(cmdPathJoin)),
+		"pathjoin":       lua.TGoFunction(lua2cmd(functions.CmdPathJoin)),
 		"prompt":         lua.Property{Pointer: &prompt_hook},
 		"quotation":      lua.StringProperty{Pointer: &readline.Delimiters},
-		"raweval":        lua.TGoFunction(lua2cmd(cmdRawEval)),
-		"rawexec":        lua.TGoFunction(lua2param(cmdRawExec)),
-		"resetcharwidth": lua.TGoFunction(lua2cmd(cmdResetCharWidth)),
+		"raweval":        lua.TGoFunction(lua2cmd(functions.CmdRawEval)),
+		"rawexec":        lua.TGoFunction(lua2param(functions.CmdRawExec)),
+		"resetcharwidth": lua.TGoFunction(lua2cmd(functions.CmdResetCharWidth)),
 		"setalias":       lua.TGoFunction(cmdSetAlias),
-		"setenv":         lua.TGoFunction(lua2cmd(cmdSetEnv)),
-		"setrunewidth":   lua.TGoFunction(lua2cmd(cmdSetRuneWidth)),
-		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
+		"setenv":         lua.TGoFunction(lua2cmd(functions.CmdSetEnv)),
+		"setrunewidth":   lua.TGoFunction(lua2cmd(functions.CmdSetRuneWidth)),
+		"shellexecute":   lua.TGoFunction(lua2cmd(functions.CmdShellExecute)),
 		"silentmode":     &lua.BoolProperty{Pointer: &frame.SilentMode},
-		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
-		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
+		"stat":           lua.TGoFunction(lua2cmd(functions.CmdStat)),
+		"utoa":           lua.TGoFunction(lua2cmd(functions.CmdUtoA)),
 		"version":        lua.StringProperty{Pointer: &frame.Version},
-		"which":          lua.TGoFunction(lua2cmd(cmdWhich)),
-		"write":          lua.TGoFunction(lua2param(cmdWrite)),
-		"writerr":        lua.TGoFunction(lua2param(cmdWriteErr)),
+		"which":          lua.TGoFunction(lua2cmd(functions.CmdWhich)),
+		"write":          lua.TGoFunction(lua2param(functions.CmdWrite)),
+		"writerr":        lua.TGoFunction(lua2param(functions.CmdWriteErr)),
 	}
 }
 

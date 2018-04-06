@@ -83,8 +83,6 @@ func printPrompt(L lua.Lua) (int, error) {
 
 var luaFilter lua.Object = lua.TNil{}
 
-var default_history *history.Container
-
 func doLuaFilter(L lua.Lua, line string) string {
 	stackPos := L.GetTop()
 	defer L.SetTop(stackPos)
@@ -138,7 +136,7 @@ type MainStream struct {
 
 func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
 	ctx = context.WithValue(ctx, lua.PackageId, this.L)
-	ctx = context.WithValue(ctx, history.PackageId, default_history)
+	ctx = context.WithValue(ctx, history.PackageId, frame.DefaultHistory)
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
@@ -237,9 +235,9 @@ func Main() error {
 		}
 	}
 
-	backupHistory := default_history
+	backupHistory := frame.DefaultHistory
 	defer func() {
-		default_history = backupHistory
+		frame.DefaultHistory = backupHistory
 	}()
 
 	var stream1 shell.Stream
@@ -247,7 +245,7 @@ func Main() error {
 		constream := frame.NewCmdStreamConsole(
 			func() (int, error) { return printPrompt(L) })
 		stream1 = constream
-		default_history = constream.History
+		frame.DefaultHistory = constream.History
 	} else {
 		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
