@@ -1,35 +1,26 @@
-package frame
+package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"runtime"
-	"runtime/debug"
 
 	"github.com/mattn/go-isatty"
 
-	"github.com/zetamatta/go-getch"
-	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
-
-var DefaultHistory *history.Container
 
 type MainStream struct {
 	shell.Stream
 }
 
 func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx = context.WithValue(ctx, history.PackageId, DefaultHistory)
+	ctx = context.WithValue(ctx, history.PackageId, frame.DefaultHistory)
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
@@ -63,7 +54,7 @@ func Main() error {
 		if err != nil {
 			return err
 		}
-		stream1 := NewCmdStreamFile(fd)
+		stream1 := frame.NewCmdStreamFile(fd)
 		_, err = sh.Loop(stream1)
 		fd.Close()
 		if err == io.EOF {
@@ -73,24 +64,24 @@ func Main() error {
 		}
 	}
 
-	script, err := OptionParse(sh, &ScriptEngineForOptionImpl{})
+	script, err := frame.OptionParse(sh, &ScriptEngineForOptionImpl{})
 	if err != nil {
 		return err
 	}
 
 	if !isatty.IsTerminal(os.Stdin.Fd()) || script != nil {
-		SilentMode = true
+		frame.SilentMode = true
 	}
 
-	if !OptionNorc {
-		if !SilentMode {
+	if !frame.OptionNorc {
+		if !frame.SilentMode {
 			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s\n",
-				VersionOrStamp(),
+				frame.VersionOrStamp(),
 				runtime.GOARCH,
 				runtime.Version())
 			fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
 		}
-		if err := LoadScripts(shellEngine, langEngine); err != nil {
+		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}
@@ -105,23 +96,23 @@ func Main() error {
 		}
 	}
 
-	backupHistory := DefaultHistory
+	backupHistory := frame.DefaultHistory
 	defer func() {
-		DefaultHistory = backupHistory
+		frame.DefaultHistory = backupHistory
 	}()
 
 	var stream1 shell.Stream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		constream := NewCmdStreamConsole(
+		constream := frame.NewCmdStreamConsole(
 			func() (int, error) {
 				fmt.Fprint(readline.Console,
-					Format2Prompt(os.Getenv("PROMPT")))
+					frame.Format2Prompt(os.Getenv("PROMPT")))
 				return 0, nil
 			})
 		stream1 = constream
-		DefaultHistory = constream.History
+		frame.DefaultHistory = constream.History
 	} else {
-		stream1 = NewCmdStreamFile(os.Stdin)
+		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
 
 	for {
@@ -133,43 +124,4 @@ func Main() error {
 			fmt.Println(err.Error())
 		}
 	}
-}
-
-func PanicHandler() {
-	err := recover()
-	if err == nil {
-		return
-	}
-	var dump bytes.Buffer
-	w := io.MultiWriter(os.Stderr, &dump)
-
-	fmt.Fprintln(w, "************ Panic Occurred. ***********")
-	fmt.Fprintln(w, err)
-	w.Write(debug.Stack())
-	fmt.Fprintln(w, "*** Please copy these error message ***")
-	fmt.Fprintln(w, "*** And hit ENTER key to quit.      ***")
-
-	ioutil.WriteFile("nyagos.dump", dump.Bytes(), 0666)
-
-	var dummy [1]byte
-	os.Stdin.Read(dummy[:])
-}
-
-func Start(mainHandler func() error) error {
-	defer PanicHandler()
-
-	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
-		rc, done, err := commands.Exec(ctx, it)
-		return rc, done, err
-	})
-	completion.AppendCommandLister(commands.AllNames)
-	completion.AppendCommandLister(alias.AllNames)
-
-	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
-	defer dos.CoUninitialize()
-
-	getch.DisableCtrlC()
-	alias.Init()
-
-	return mainHandler()
 }

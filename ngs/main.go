@@ -11,7 +11,7 @@ import (
 func main() {
 	frame.Version = "without Lua"
 
-	if err := frame.Start(frame.Main); err != nil && err != io.EOF {
+	if err := frame.Start(Main); err != nil && err != io.EOF {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
