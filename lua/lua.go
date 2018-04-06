@@ -24,6 +24,8 @@ func (value Integer) Push(L Lua) int {
 	return 1
 }
 
+var InstanceCounter = 0
+
 type Lua uintptr
 
 type packageIdT struct{}
@@ -46,6 +48,7 @@ func New() (Lua, error) {
 	}
 	this := Lua(lua)
 	userdataAnchor.Store(this, make(anchor_t))
+	InstanceCounter++
 	return this, nil
 }
 
@@ -70,6 +73,7 @@ func (this Lua) Close() error {
 	}
 	lua_close.Call(this.State())
 	userdataAnchor.Delete(this)
+	InstanceCounter--
 	return nil
 }
 
