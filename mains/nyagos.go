@@ -2,6 +2,7 @@ package mains
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -15,6 +16,8 @@ import (
 	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )
+
+var noLuaEngineErr = errors.New("no lua engine")
 
 var prompt_hook lua.Object = lua.TGoFunction(lua2cmd(functions.Prompt))
 
@@ -92,13 +95,19 @@ type MainStream struct {
 }
 
 func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx = context.WithValue(ctx, lua.PackageId, this.L)
+	if this.L != 0 {
+		ctx = context.WithValue(ctx, lua.PackageId, this.L)
+	}
 	ctx = context.WithValue(ctx, history.PackageId, frame.DefaultHistory)
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
 	}
-	return ctx, doLuaFilter(this.L, line), nil
+	if this.L != 0 {
+		return ctx, doLuaFilter(this.L, line), nil
+	} else {
+		return ctx, line, nil
+	}
 }
 
 type ScriptEngineForOptionImpl struct {
@@ -107,14 +116,23 @@ type ScriptEngineForOptionImpl struct {
 }
 
 func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
-	setLuaArg(this.L, args)
+	if this.L != 0 {
+		setLuaArg(this.L, args)
+	}
 }
 
 func (this *ScriptEngineForOptionImpl) RunFile(fname string) ([]byte, error) {
-	return runLua(this.Sh, this.L, fname)
+	if this.L != 0 {
+		return runLua(this.Sh, this.L, fname)
+	} else {
+		return nil, noLuaEngineErr
+	}
 }
 
 func (this *ScriptEngineForOptionImpl) RunString(code string) error {
+	if this.L == 0 {
+		return noLuaEngineErr
+	}
 	if err := this.L.LoadString(code); err != nil {
 		return err
 	}
@@ -134,16 +152,23 @@ func Main() error {
 	// Lua extension
 	L, err := NewLua()
 	if err != nil {
-		return err
+		fmt.Fprintln(os.Stderr, err.Error())
+	} else {
+		defer L.Close()
 	}
-	defer L.Close()
 
 	sh := shell.New()
-	sh.SetTag(&luaWrapper{L})
+	if L != 0 {
+		sh.SetTag(&luaWrapper{L})
+	}
 	defer sh.Close()
 
 	langEngine := func(fname string) ([]byte, error) {
-		return runLua(sh, L, fname)
+		if L != 0 {
+			return runLua(sh, L, fname)
+		} else {
+			return nil, nil
+		}
 	}
 	shellEngine := func(fname string) error {
 		fd, err := os.Open(fname)
@@ -171,11 +196,14 @@ func Main() error {
 
 	if !frame.OptionNorc {
 		if !frame.SilentMode {
-			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s & Lua 5.3\n",
+			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s",
 				frame.VersionOrStamp(),
 				runtime.GOARCH,
 				runtime.Version())
-			fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
+			if L != 0 {
+				fmt.Print(" & Lua 5.3")
+			}
+			fmt.Println("\n(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
 		}
 		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
@@ -199,8 +227,15 @@ func Main() error {
 
 	var stream1 shell.Stream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
-		constream := frame.NewCmdStreamConsole(
-			func() (int, error) { return printPrompt(L) })
+		constream := frame.NewCmdStreamConsole(func() (int, error) {
+			if L != 0 {
+				return printPrompt(L)
+			} else {
+				functions.Prompt(
+					[]interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))})
+				return 0, nil
+			}
+		})
 		stream1 = constream
 		frame.DefaultHistory = constream.History
 	} else {
