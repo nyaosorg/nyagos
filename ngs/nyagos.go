@@ -114,14 +114,6 @@ func Main() error {
 	} else {
 		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
-
-	for {
-		_, err := sh.Loop(&MainStream{stream1})
-		if err == io.EOF {
-			return err
-		}
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}
+	sh.ForEver(&MainStream{stream1})
+	return nil
 }

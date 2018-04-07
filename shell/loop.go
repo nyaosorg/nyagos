@@ -105,3 +105,15 @@ func (sh *Shell) Loop(stream Stream) (int, error) {
 		}
 	}
 }
+
+func (sh *Shell) ForEver(stream Stream) {
+	for {
+		_, err := sh.Loop(stream)
+		if err == io.EOF {
+			return
+		}
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+}
