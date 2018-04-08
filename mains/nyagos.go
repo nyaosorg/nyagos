@@ -108,8 +108,13 @@ type ScriptEngineForOptionImpl struct {
 }
 
 func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
-	if this.L != 0 {
-		setLuaArg(this.L, args)
+	if L := this.L; L != 0 {
+		L.NewTable()
+		for i, arg1 := range args {
+			L.PushString(arg1)
+			L.RawSetI(-2, lua.Integer(i))
+		}
+		L.SetGlobal("arg")
 	}
 }
 

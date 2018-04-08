@@ -481,15 +481,6 @@ func init() {
 	}
 }
 
-func setLuaArg(L lua.Lua, args []string) {
-	L.NewTable()
-	for i, arg1 := range args {
-		L.PushString(arg1)
-		L.RawSetI(-2, lua.Integer(i))
-	}
-	L.SetGlobal("arg")
-}
-
 func runLua(ctx context.Context, it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
 	_, err := os.Stat(fname)
 	if err != nil {
