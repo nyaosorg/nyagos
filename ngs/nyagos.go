@@ -76,7 +76,7 @@ func Main() error {
 	}
 
 	if script != nil {
-		if err := script(); err != nil {
+		if err := script(ctx); err != nil {
 			if err != io.EOF {
 				return err
 			} else {

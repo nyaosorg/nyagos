@@ -197,7 +197,8 @@ func cmdExec(L lua.Lua) int {
 			it.SetTag(&luaWrapper{L})
 			defer it.Close()
 		}
-		errorlevel, err = it.Interpret(statement)
+		ctx := context.Background()
+		errorlevel, err = it.InterpretContext(ctx, statement)
 	}
 	return L.Push(int(errorlevel), err)
 }
@@ -215,7 +216,8 @@ func cmdEval(L lua.Lua) int {
 		it := shell.New()
 		it.SetTag(&luaWrapper{L})
 		it.Stdout = w
-		it.Interpret(statement)
+		ctx := context.Background()
+		it.InterpretContext(ctx, statement)
 		it.Close()
 		w.Close()
 	}(statement, w)

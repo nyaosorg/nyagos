@@ -2,6 +2,7 @@ package frame
 
 import (
 	"bufio"
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -21,7 +22,7 @@ type ScriptEngineForOption interface {
 	RunString(string) error
 }
 
-func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error) {
+func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
 	args := os.Args[1:]
 	for i := 0; i < len(args); i++ {
 		arg1 := args[i]
@@ -30,8 +31,8 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 			if i >= len(args) {
 				return nil, errors.New("-k: requires parameters")
 			}
-			return func() error {
-				sh.Interpret(args[i])
+			return func(ctx context.Context) error {
+				sh.InterpretContext(ctx, args[i])
 				return nil
 			}, nil
 		} else if arg1 == "-c" {
@@ -39,8 +40,8 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 			if i >= len(args) {
 				return nil, errors.New("-c: requires parameters")
 			}
-			return func() error {
-				sh.Interpret(args[i])
+			return func(ctx context.Context) error {
+				sh.InterpretContext(ctx, args[i])
 				return io.EOF
 			}, nil
 		} else if arg1 == "-b" {
@@ -53,8 +54,8 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 				return nil, err
 			}
 			text := string(data)
-			return func() error {
-				sh.Interpret(text)
+			return func(ctx context.Context) error {
+				sh.InterpretContext(ctx, text)
 				return io.EOF
 			}, nil
 		} else if arg1 == "-f" {
@@ -64,7 +65,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 			}
 			if strings.HasSuffix(strings.ToLower(args[i]), ".lua") {
 				// lua script
-				return func() error {
+				return func(context.Context) error {
 					e.SetArg(args[i:])
 					_, err := e.RunFile(args[i])
 					if err != nil {
@@ -74,7 +75,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 					}
 				}, nil
 			} else {
-				return func() error {
+				return func(ctx context.Context) error {
 					// command script
 					fd, fd_err := os.Open(args[i])
 					if fd_err != nil {
@@ -82,7 +83,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 					}
 					scanner := bufio.NewScanner(fd)
 					for scanner.Scan() {
-						sh.Interpret(scanner.Text())
+						sh.InterpretContext(ctx, scanner.Text())
 					}
 					fd.Close()
 					return io.EOF
@@ -93,7 +94,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 			if i >= len(args) {
 				return nil, errors.New("-e: requires parameters")
 			}
-			return func() error {
+			return func(context.Context) error {
 				e.SetArg(args[i:])
 				e.RunString(args[i])
 				return io.EOF
@@ -105,7 +106,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 			if i >= len(args) {
 				return nil, errors.New("--lua-file: requires parameters")
 			}
-			return func() error {
+			return func(context.Context) error {
 				e.SetArg(args[i:])
 				_, err := e.RunFile(args[i])
 				if err != nil {
@@ -115,7 +116,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func() error, error)
 				}
 			}, nil
 		} else if arg1 == "--show-version-only" {
-			return func() error {
+			return func(context.Context) error {
 				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
 				return io.EOF
 			}, nil

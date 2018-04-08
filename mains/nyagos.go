@@ -132,7 +132,7 @@ func (this *ScriptEngineForOptionImpl) RunString(code string) error {
 	return nil
 }
 
-func optionParseLua(sh *shell.Shell, L lua.Lua) (func() error, error) {
+func optionParseLua(sh *shell.Shell, L lua.Lua) (func(context.Context) error, error) {
 	e := &ScriptEngineForOptionImpl{Sh: sh, L: L}
 	return frame.OptionParse(sh, e)
 }
@@ -205,7 +205,7 @@ func Main() error {
 	}
 
 	if script != nil {
-		if err := script(); err != nil {
+		if err := script(ctx); err != nil {
 			if err != io.EOF {
 				return err
 			} else {
