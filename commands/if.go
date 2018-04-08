@@ -135,9 +135,9 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 	}
 
 	if status {
-		cmd.Loop(&thenBuffer)
+		cmd.Loop(ctx, &thenBuffer)
 	} else {
-		cmd.Loop(&elseBuffer)
+		cmd.Loop(ctx, &elseBuffer)
 	}
 	return 0, nil
 }

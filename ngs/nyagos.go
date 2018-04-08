@@ -15,19 +15,6 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-type MainStream struct {
-	shell.Stream
-}
-
-func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx = context.WithValue(ctx, history.PackageId, frame.DefaultHistory)
-	ctx, line, err := this.Stream.ReadLine(ctx)
-	if err != nil {
-		return ctx, "", err
-	}
-	return ctx, line, nil
-}
-
 type ScriptEngineForOptionImpl struct{}
 
 func (this *ScriptEngineForOptionImpl) SetArg(args []string) {}
@@ -46,6 +33,8 @@ func Main() error {
 	sh := shell.New()
 	defer sh.Close()
 
+	ctx := context.Background()
+
 	langEngine := func(fname string) ([]byte, error) {
 		return nil, nil
 	}
@@ -55,7 +44,7 @@ func Main() error {
 			return err
 		}
 		stream1 := frame.NewCmdStreamFile(fd)
-		_, err = sh.Loop(stream1)
+		_, err = sh.Loop(ctx, stream1)
 		fd.Close()
 		if err == io.EOF {
 			return nil
@@ -96,11 +85,6 @@ func Main() error {
 		}
 	}
 
-	backupHistory := frame.DefaultHistory
-	defer func() {
-		frame.DefaultHistory = backupHistory
-	}()
-
 	var stream1 shell.Stream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
@@ -111,9 +95,10 @@ func Main() error {
 			})
 		stream1 = constream
 		frame.DefaultHistory = constream.History
+		ctx = context.WithValue(ctx, history.PackageId, constream.History)
 	} else {
 		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
-	sh.ForEver(&MainStream{stream1})
+	sh.ForEver(ctx, stream1)
 	return nil
 }

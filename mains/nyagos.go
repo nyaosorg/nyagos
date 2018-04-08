@@ -98,7 +98,6 @@ func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, 
 	if this.L != 0 {
 		ctx = context.WithValue(ctx, lua.PackageId, this.L)
 	}
-	ctx = context.WithValue(ctx, history.PackageId, frame.DefaultHistory)
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
@@ -163,6 +162,8 @@ func Main() error {
 	}
 	defer sh.Close()
 
+	ctx := context.Background()
+
 	langEngine := func(fname string) ([]byte, error) {
 		if L != 0 {
 			return runLua(sh, L, fname)
@@ -176,7 +177,7 @@ func Main() error {
 			return err
 		}
 		stream1 := frame.NewCmdStreamFile(fd)
-		_, err = sh.Loop(stream1)
+		_, err = sh.Loop(ctx, stream1)
 		fd.Close()
 		if err == io.EOF {
 			return nil
@@ -220,11 +221,6 @@ func Main() error {
 		}
 	}
 
-	backupHistory := frame.DefaultHistory
-	defer func() {
-		frame.DefaultHistory = backupHistory
-	}()
-
 	var stream1 shell.Stream
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(func() (int, error) {
@@ -238,10 +234,11 @@ func Main() error {
 		})
 		stream1 = constream
 		frame.DefaultHistory = constream.History
+		ctx = context.WithValue(ctx, history.PackageId, constream.History)
 	} else {
 		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
 
-	sh.ForEver(&MainStream{stream1, L})
+	sh.ForEver(ctx, &MainStream{stream1, L})
 	return nil
 }

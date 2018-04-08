@@ -53,14 +53,14 @@ type streamIdT struct{}
 
 var StreamId streamIdT
 
-func (sh *Shell) Loop(stream Stream) (int, error) {
+func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
 	quit := make(chan struct{}, 1)
 	defer close(quit)
 
 	for {
-		ctx, cancel := context.WithCancel(context.Background())
+		ctx, cancel := context.WithCancel(ctx0)
 		ctx = context.WithValue(ctx, StreamId, stream)
 
 		ctx, line, err := sh.ReadCommand(ctx, stream)
@@ -106,9 +106,9 @@ func (sh *Shell) Loop(stream Stream) (int, error) {
 	}
 }
 
-func (sh *Shell) ForEver(stream Stream) {
+func (sh *Shell) ForEver(ctx context.Context, stream Stream) {
 	for {
-		_, err := sh.Loop(stream)
+		_, err := sh.Loop(ctx, stream)
 		if err == io.EOF {
 			return
 		}

@@ -55,7 +55,7 @@ func cmdForeach(ctx context.Context, cmd Param) (int, error) {
 	save := os.Getenv(name)
 	for _, value := range cmd.Args()[2:] {
 		os.Setenv(name, value)
-		cmd.Loop(&bufstream)
+		cmd.Loop(ctx, &bufstream)
 		bufstream.SetPos(0)
 	}
 	os.Setenv(name, save)
