@@ -38,7 +38,7 @@ type session struct {
 }
 
 type CloneCloser interface {
-	Clone() (CloneCloser, error)
+	Clone(context.Context) (context.Context, CloneCloser, error)
 	Close() error
 }
 
@@ -371,26 +371,28 @@ func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel 
 				if !isBackGround {
 					wg.Add(1)
 				}
+				newctx := ctx
 				if tag := cmd.Tag(); tag != nil {
-					if newtag, err := tag.Clone(); err != nil {
+					var newtag CloneCloser
+					if newctx, newtag, err = tag.Clone(ctx); err != nil {
 						fmt.Fprintln(os.Stderr, err.Error())
 						return -1, err
 					} else {
 						cmd.SetTag(newtag)
 					}
 				}
-				go func(cmd1 *Cmd) {
+				go func(ctx1 context.Context, cmd1 *Cmd) {
 					if !isBackGround {
 						defer wg.Done()
 					}
-					cmd1.Spawnvp(ctx)
+					cmd1.Spawnvp(ctx1)
 					if tag := cmd1.Tag(); tag != nil {
 						if err := tag.Close(); err != nil {
 							fmt.Fprintln(os.Stderr, err.Error())
 						}
 					}
 					cmd1.Close()
-				}(cmd)
+				}(newctx, cmd)
 			}
 		}
 		if !isBackGround {

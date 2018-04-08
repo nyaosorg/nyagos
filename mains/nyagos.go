@@ -47,17 +47,18 @@ type luaWrapper struct {
 	lua.Lua
 }
 
-func (this *luaWrapper) Clone() (shell.CloneCloser, error) {
+func (this *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
 	L := this.Lua
 	newL, err := NewLua()
 	if err != nil {
-		return nil, err
+		return ctx, nil, err
 	}
 	err = L.CloneTo(newL)
 	if err != nil {
-		return nil, err
+		return ctx, nil, err
 	}
-	return &luaWrapper{newL}, nil
+	ctx = context.WithValue(ctx, lua.PackageId, newL)
+	return ctx, &luaWrapper{newL}, nil
 }
 
 func (this *luaWrapper) Close() error {
