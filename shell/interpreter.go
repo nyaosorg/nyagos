@@ -262,7 +262,7 @@ func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, erro
 	return cmd.Spawnvp(ctx)
 }
 
-func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel int, finalerr error) {
+func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, finalerr error) {
 	if defined.DBG {
 		print("Interpret('", text, "')\n")
 	}

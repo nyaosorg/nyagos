@@ -32,7 +32,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 				return nil, errors.New("-k: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				sh.InterpretContext(ctx, args[i])
+				sh.Interpret(ctx, args[i])
 				return nil
 			}, nil
 		} else if arg1 == "-c" {
@@ -41,7 +41,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 				return nil, errors.New("-c: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				sh.InterpretContext(ctx, args[i])
+				sh.Interpret(ctx, args[i])
 				return io.EOF
 			}, nil
 		} else if arg1 == "-b" {
@@ -55,7 +55,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			}
 			text := string(data)
 			return func(ctx context.Context) error {
-				sh.InterpretContext(ctx, text)
+				sh.Interpret(ctx, text)
 				return io.EOF
 			}, nil
 		} else if arg1 == "-f" {
@@ -83,7 +83,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 					}
 					scanner := bufio.NewScanner(fd)
 					for scanner.Scan() {
-						sh.InterpretContext(ctx, scanner.Text())
+						sh.Interpret(ctx, scanner.Text())
 					}
 					fd.Close()
 					return io.EOF

@@ -87,7 +87,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 				}
 			}
 		}(sigint, quit, cancel)
-		rc, err := sh.InterpretContext(ctx, line)
+		rc, err := sh.Interpret(ctx, line)
 		signal.Stop(sigint)
 		quit <- struct{}{}
 

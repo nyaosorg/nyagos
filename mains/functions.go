@@ -101,7 +101,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		} else if val, err1 := L.ToInteger(-1); err1 == nil {
 			errorlevel = val
 		} else if val, err1 := L.ToString(-1); val != "" && err1 == nil {
-			errorlevel, err = cmd.InterpretContext(ctx, val)
+			errorlevel, err = cmd.Interpret(ctx, val)
 		}
 	}
 	L.Pop(1)
@@ -198,7 +198,7 @@ func cmdExec(L lua.Lua) int {
 			defer it.Close()
 		}
 		ctx := context.Background()
-		errorlevel, err = it.InterpretContext(ctx, statement)
+		errorlevel, err = it.Interpret(ctx, statement)
 	}
 	return L.Push(int(errorlevel), err)
 }
@@ -217,7 +217,7 @@ func cmdEval(L lua.Lua) int {
 		it.SetTag(&luaWrapper{L})
 		it.Stdout = w
 		ctx := context.Background()
-		it.InterpretContext(ctx, statement)
+		it.Interpret(ctx, statement)
 		it.Close()
 		w.Close()
 	}(statement, w)
