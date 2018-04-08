@@ -212,12 +212,21 @@ func cmdEval(L lua.Lua) int {
 		return L.Push(nil, err)
 	}
 	go func(statement string, w *os.File) {
-		it := shell.New()
-		it.SetTag(&luaWrapper{L})
-		it.Stdout = w
-		ctx := context.Background()
-		it.Interpret(ctx, statement)
-		it.Close()
+		ctx, sh := getRegInt(L)
+		if ctx == nil {
+			ctx = context.Background()
+			println("cmdEval: context not found.")
+		}
+		if sh == nil {
+			sh := shell.New()
+			println("cmdEval: shell not found.")
+			defer sh.Close()
+		}
+		sh.SetTag(&luaWrapper{L})
+		saveOut := sh.Stdout
+		sh.Stdout = w
+		sh.Interpret(ctx, statement)
+		sh.Stdout = saveOut
 		w.Close()
 	}(statement, w)
 
