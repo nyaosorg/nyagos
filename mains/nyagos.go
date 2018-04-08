@@ -113,9 +113,9 @@ func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
 	}
 }
 
-func (this *ScriptEngineForOptionImpl) RunFile(fname string) ([]byte, error) {
+func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
 	if this.L != 0 {
-		return runLua(this.Sh, this.L, fname)
+		return runLua(ctx, this.Sh, this.L, fname)
 	} else {
 		return nil, noLuaEngineErr
 	}
@@ -159,7 +159,7 @@ func Main() error {
 
 	langEngine := func(fname string) ([]byte, error) {
 		if L != 0 {
-			return runLua(sh, L, fname)
+			return runLua(ctx, sh, L, fname)
 		} else {
 			return nil, nil
 		}

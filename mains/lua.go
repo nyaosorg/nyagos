@@ -1,6 +1,7 @@
 package mains
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
@@ -20,32 +21,43 @@ import (
 )
 
 const REGKEY_INTERPRETER = "nyagos.interpreter"
+const REGKEY_CONTEXT = "nyagos.context"
 
-func setRegInt(L lua.Lua, it *shell.Shell) {
+type container4lua struct {
+	Ctx context.Context
+	Sh  *shell.Shell
+}
+
+func setRegInt(L lua.Lua, ctx context.Context, sh *shell.Shell) {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
-	L.PushLightUserData(unsafe.Pointer(it))
+	c := &container4lua{Ctx: ctx, Sh: sh}
+	L.PushLightUserData(unsafe.Pointer(c))
 	L.SetField(-2, REGKEY_INTERPRETER)
 	L.Pop(1)
 }
 
-func getRegInt(L lua.Lua) *shell.Shell {
+func getRegInt(L lua.Lua) (context.Context, *shell.Shell) {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
 	L.GetField(-1, REGKEY_INTERPRETER)
-	rc := (*shell.Shell)(L.ToUserData(-1))
+	c := (*container4lua)(unsafe.Pointer(L.ToUserData(-1)))
 	L.Pop(2)
-	return rc
+	if c != nil {
+		return c.Ctx, c.Sh
+	} else {
+		return nil, nil
+	}
 }
 
-func callLua(it *shell.Shell, nargs int, nresult int) error {
-	luawrapper, ok := it.Tag().(*luaWrapper)
+func callLua(ctx context.Context, sh *shell.Shell, nargs int, nresult int) error {
+	luawrapper, ok := sh.Tag().(*luaWrapper)
 	if !ok {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
 	L := luawrapper.Lua
-	save := getRegInt(L)
-	setRegInt(L, it)
+	ctxSave, shSave := getRegInt(L)
+	setRegInt(L, ctx, sh)
 	err := L.Call(nargs, nresult)
-	setRegInt(L, save)
+	setRegInt(L, ctxSave, shSave)
 	return err
 }
 
@@ -375,7 +387,7 @@ func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 
 func lua2param(f func(*functions.Param) []interface{}) func(lua.Lua) int {
 	return func(L lua.Lua) int {
-		sh := getRegInt(L)
+		_, sh := getRegInt(L)
 		param := &functions.Param{
 			Args: luaArgsToInterfaces(L),
 		}
@@ -478,7 +490,7 @@ func setLuaArg(L lua.Lua, args []string) {
 	L.SetGlobal("arg")
 }
 
-func runLua(it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
+func runLua(ctx context.Context, it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
 	_, err := os.Stat(fname)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -492,7 +504,7 @@ func runLua(it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
 		return nil, err
 	}
 	chank := L.Dump()
-	if err := callLua(it, 0, 0); err != nil {
+	if err := callLua(ctx, it, 0, 0); err != nil {
 		return nil, err
 	}
 	// println("Run: " + fname)

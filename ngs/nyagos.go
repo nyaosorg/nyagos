@@ -19,7 +19,7 @@ type ScriptEngineForOptionImpl struct{}
 
 func (this *ScriptEngineForOptionImpl) SetArg(args []string) {}
 
-func (this *ScriptEngineForOptionImpl) RunFile(fname string) ([]byte, error) {
+func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context,fname string) ([]byte, error) {
 	println("Script is not supported.")
 	return nil, nil
 }

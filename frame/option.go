@@ -18,7 +18,7 @@ var OptionNorc = false
 
 type ScriptEngineForOption interface {
 	SetArg([]string)
-	RunFile(string) ([]byte, error)
+	RunFile(context.Context, string) ([]byte, error)
 	RunString(string) error
 }
 
@@ -65,9 +65,9 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			}
 			if strings.HasSuffix(strings.ToLower(args[i]), ".lua") {
 				// lua script
-				return func(context.Context) error {
+				return func(ctx context.Context) error {
 					e.SetArg(args[i:])
-					_, err := e.RunFile(args[i])
+					_, err := e.RunFile(ctx, args[i])
 					if err != nil {
 						return err
 					} else {
@@ -106,9 +106,9 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			if i >= len(args) {
 				return nil, errors.New("--lua-file: requires parameters")
 			}
-			return func(context.Context) error {
+			return func(ctx context.Context) error {
 				e.SetArg(args[i:])
-				_, err := e.RunFile(args[i])
+				_, err := e.RunFile(ctx, args[i])
 				if err != nil {
 					return err
 				} else {

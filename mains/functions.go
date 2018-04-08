@@ -69,7 +69,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		L.RawSetI(-2, lua.Integer(i))
 	}
 	L.SetField(-2, "rawargs")
-	err := callLua(&cmd.Shell, 1, 1)
+	err := callLua(ctx, &cmd.Shell, 1, 1)
 	errorlevel := 0
 	if err == nil {
 		newargs := make([]string, 0)
@@ -168,7 +168,7 @@ func cmdExec(L lua.Lua) int {
 			}
 			L.Pop(1)
 		}
-		sh := getRegInt(L)
+		ctx, sh := getRegInt(L)
 		if sh == nil {
 			println("main/lua_cmd.go: cmdExec: not found interpreter object")
 			sh = shell.New()
@@ -185,19 +185,18 @@ func cmdExec(L lua.Lua) int {
 		cmd := sh.Command()
 		defer cmd.Close()
 		cmd.SetArgs(args)
-		errorlevel, err = cmd.Spawnvp(context.Background())
+		errorlevel, err = cmd.Spawnvp(ctx)
 	} else {
 		statement, statementErr := L.ToString(1)
 		if statementErr != nil {
 			return L.Push(nil, statementErr)
 		}
-		it := getRegInt(L)
+		ctx, it := getRegInt(L)
 		if it == nil {
 			it = shell.New()
 			it.SetTag(&luaWrapper{L})
 			defer it.Close()
 		}
-		ctx := context.Background()
 		errorlevel, err = it.Interpret(ctx, statement)
 	}
 	return L.Push(int(errorlevel), err)
@@ -383,7 +382,7 @@ func cmdLines(L lua.Lua) int {
 	top := L.GetTop()
 	if top < 1 || L.IsNil(1) {
 		L.Push(cmdLinesCallback)
-		cmd := getRegInt(L)
+		_, cmd := getRegInt(L)
 		L.PushUserData(&iolines_t{
 			Fd:         cmd.Stdin,
 			Reader:     bufio.NewReader(cmd.Stdin),
