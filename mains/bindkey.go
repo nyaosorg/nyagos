@@ -1,6 +1,7 @@
 package mains
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -81,7 +82,8 @@ func callKeyFunc(L lua.Lua) int {
 	if funcErr != nil {
 		return L.Push(nil, funcErr)
 	}
-	switch function.Call(buffer) {
+	ctx := context.Background()
+	switch function.Call(ctx, buffer) {
 	case readline.ENTER:
 		return L.Push(true, true)
 	case readline.ABORT:
@@ -141,7 +143,7 @@ func callBoxListing(L lua.Lua) int {
 func (this KeyLuaFuncT) String() string {
 	return "(lua function)"
 }
-func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
+func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
 	this.L.LoadBufferX("", this.Chank, "b")
 	pos := -1
 	var text strings.Builder

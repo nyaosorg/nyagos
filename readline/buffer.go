@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"unicode"
@@ -65,7 +64,6 @@ type Buffer struct {
 	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
-	Context        context.Context
 }
 
 func (this *Buffer) ViewWidth() int {

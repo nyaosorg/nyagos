@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"unicode"
@@ -8,7 +9,7 @@ import (
 	"github.com/zetamatta/go-getch"
 )
 
-func KeyFuncIncSearch(this *Buffer) Result {
+func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	var searchBuf strings.Builder
 	foundStr := ""
 	searchStr := ""

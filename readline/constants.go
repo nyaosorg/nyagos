@@ -1,5 +1,7 @@
 package readline
 
+import "context"
+
 const (
 	K_BACKSPACE     = "BACKSPACE"
 	K_CAPSLOCK      = "CAPSLOCK"
@@ -235,7 +237,7 @@ var name2alt = map[string]uint16{
 	K_ALT_OEM_2:     0xBF,
 }
 
-var NAME2FUNC = map[string]func(*Buffer) Result{
+var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 	F_ACCEPT_LINE:          KeyFuncEnter,
 	F_BACKWARD_CHAR:        KeyFuncBackword,
 	F_BACKWARD_DELETE_CHAR: KeyFuncBackSpace,

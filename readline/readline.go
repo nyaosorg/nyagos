@@ -38,19 +38,19 @@ func (this Result) String() string {
 }
 
 type KeyFuncT interface {
-	Call(buffer *Buffer) Result
+	Call(ctx context.Context, buffer *Buffer) Result
 }
 
 type KeyGoFuncT struct {
-	Func func(buffer *Buffer) Result
+	Func func(ctx context.Context, buffer *Buffer) Result
 	Name string
 }
 
-func (this *KeyGoFuncT) Call(buffer *Buffer) Result {
+func (this *KeyGoFuncT) Call(ctx context.Context, buffer *Buffer) Result {
 	if this.Func == nil {
 		return CONTINUE
 	}
-	return this.Func(buffer)
+	return this.Func(ctx, buffer)
 }
 
 func (this KeyGoFuncT) String() string {
@@ -119,7 +119,7 @@ func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	}
 }
 
-func BindKeyClosure(name string, f func(*Buffer) Result) error {
+func BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
 	return BindKeyFunc(name, &KeyGoFuncT{Func: f, Name: "annonymous"})
 }
 
@@ -183,7 +183,6 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		Editor:         session,
 		Buffer:         make([]rune, 20),
 		HistoryPointer: session.History.Len(),
-		Context:        ctx,
 	}
 	this.TermWidth, _ = box.GetScreenBufferInfo().ViewSize()
 
@@ -255,7 +254,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			fmt.Fprint(Console, CURSOR_OFF)
 			cursorOnSwitch = false
 		}
-		rc := f.Call(&this)
+		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
 			fmt.Fprint(Console, "\n")
 			result := this.String()

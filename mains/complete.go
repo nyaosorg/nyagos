@@ -1,6 +1,7 @@
 package mains
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
@@ -12,8 +13,8 @@ import (
 
 var completionHook lua.Object = lua.TNil{}
 
-func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion.List, error) {
-	L, L_ok := this.Context.Value(lua.PackageId).(lua.Lua)
+func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {
+	L, L_ok := ctx.Value(lua.PackageId).(lua.Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
 	}
