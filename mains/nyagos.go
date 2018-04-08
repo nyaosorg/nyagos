@@ -43,31 +43,6 @@ func printPrompt(L lua.Lua) (int, error) {
 
 var luaFilter lua.Object = lua.TNil{}
 
-func doLuaFilter(L lua.Lua, line string) string {
-	stackPos := L.GetTop()
-	defer L.SetTop(stackPos)
-
-	L.Push(luaFilter)
-	if !L.IsFunction(-1) {
-		return line
-	}
-	L.PushString(line)
-	err := L.Call(1, 1)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		return line
-	}
-	if !L.IsString(-1) {
-		return line
-	}
-	line2, err2 := L.ToString(-1)
-	if err2 != nil {
-		fmt.Fprintln(os.Stderr, err2)
-		return line
-	}
-	return line2
-}
-
 type luaWrapper struct {
 	lua.Lua
 }
@@ -89,24 +64,41 @@ func (this *luaWrapper) Close() error {
 	return this.Lua.Close()
 }
 
-type MainStream struct {
+type LuaFilterStream struct {
 	shell.Stream
 	L lua.Lua
 }
 
-func (this *MainStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	if this.L != 0 {
-		ctx = context.WithValue(ctx, lua.PackageId, this.L)
-	}
+func (this *LuaFilterStream) ReadLine(ctx context.Context) (context.Context, string, error) {
 	ctx, line, err := this.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
 	}
-	if this.L != 0 {
-		return ctx, doLuaFilter(this.L, line), nil
-	} else {
+
+	L := this.L
+
+	stackPos := L.GetTop()
+	defer L.SetTop(stackPos)
+
+	L.Push(luaFilter)
+	if !L.IsFunction(-1) {
 		return ctx, line, nil
 	}
+	L.PushString(line)
+	err = L.Call(1, 1)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return ctx, line, nil
+	}
+	if !L.IsString(-1) {
+		return ctx, line, nil
+	}
+	newLine, err := L.ToString(-1)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		return ctx, line, nil
+	}
+	return ctx, newLine, nil
 }
 
 type ScriptEngineForOptionImpl struct {
@@ -238,7 +230,11 @@ func Main() error {
 	} else {
 		stream1 = frame.NewCmdStreamFile(os.Stdin)
 	}
-
-	sh.ForEver(ctx, &MainStream{stream1, L})
+	if L != 0 {
+		ctx = context.WithValue(ctx, lua.PackageId, L)
+		sh.ForEver(ctx, &LuaFilterStream{stream1, L})
+	} else {
+		sh.ForEver(ctx, stream1)
+	}
 	return nil
 }
