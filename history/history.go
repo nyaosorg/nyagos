@@ -231,29 +231,27 @@ func CmdHistory(ctx context.Context, cmd Param) (int, error) {
 	}
 	start := 0
 
-	historyObj_ := ctx.Value(PackageId)
-	if historyObj, ok := historyObj_.(*Container); ok {
-		if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) && historyObj.Len() > num {
-
-			start = historyObj.Len() - num
+	historyObj, ok := ctx.Value(PackageId).(*Container)
+	if !ok {
+		return -1, errors.New("history: not available in startup script")
+	}
+	if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) && historyObj.Len() > num {
+		start = historyObj.Len() - num
+	}
+	home := os.Getenv("USERPROFILE")
+	for i := start; i < historyObj.Len(); i++ {
+		row := historyObj.rows[i]
+		dir := row.Dir
+		if strings.HasPrefix(strings.ToUpper(dir), strings.ToUpper(home)) {
+			dir = "~" + dir[len(home):]
 		}
-		home := os.Getenv("USERPROFILE")
-		for i := start; i < historyObj.Len(); i++ {
-			row := historyObj.rows[i]
-			dir := row.Dir
-			if strings.HasPrefix(strings.ToUpper(dir), strings.ToUpper(home)) {
-				dir = "~" + dir[len(home):]
-			}
-			dir = filepath.ToSlash(dir)
-			fmt.Fprintf(cmd.Out(), "%4d  %s [%d] %-s (%s)\n",
-				i,
-				row.Stamp.Format("Jan _2 15:04:05"),
-				row.Pid,
-				row.Text,
-				dir)
-		}
-	} else {
-		fmt.Fprintln(cmd.Err(), "history not found (case 2)")
+		dir = filepath.ToSlash(dir)
+		fmt.Fprintf(cmd.Out(), "%4d  %s [%d] %-s (%s)\n",
+			i,
+			row.Stamp.Format("Jan _2 15:04:05"),
+			row.Pid,
+			row.Text,
+			dir)
 	}
 	return 0, nil
 }
