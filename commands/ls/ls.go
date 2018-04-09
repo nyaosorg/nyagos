@@ -254,7 +254,17 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
-		fmt.Fprintln(out, f.Name())
+		fmt.Fprint(out, f.Name())
+		if (flag & O_INDICATOR) != 0 {
+			if attr := findfile.GetFileAttributes(f); (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
+				fmt.Fprint(out, "@")
+			} else if f.IsDir() {
+				fmt.Fprint(out, "/")
+			} else if dos.IsExecutableSuffix(filepath.Ext(f.Name())) {
+				fmt.Fprint(out, "*")
+			}
+		}
+		fmt.Fprintln(out)
 		if isCancel(ctx) {
 			return ErrCtrlC
 		}
