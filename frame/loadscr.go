@@ -24,33 +24,27 @@ func VersionOrStamp() string {
 func LoadScripts(shellEngine func(string) error,
 	langEngine func(string) ([]byte, error)) error {
 
-	exeName, exeNameErr := os.Executable()
-	if exeNameErr != nil {
-		fmt.Fprintln(os.Stderr, exeNameErr)
+	exeName, err := os.Executable()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err)
 	}
 	exeFolder := filepath.Dir(exeName)
 	nyagos_d := filepath.Join(exeFolder, "nyagos.d")
-	nyagos_d_fd, nyagos_d_err := os.Open(nyagos_d)
-	if nyagos_d_err == nil {
-		defer nyagos_d_fd.Close()
-		finfos, err := nyagos_d_fd.Readdir(-1)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
-		} else {
-			for _, finfo1 := range finfos {
-				name1 := finfo1.Name()
-				path1 := filepath.Join(nyagos_d, name1)
-				name1_ := strings.ToLower(name1)
+	files, err := ioutil.ReadDir(nyagos_d)
+	if err == nil {
+		for _, finfo1 := range files {
+			name1 := finfo1.Name()
+			path1 := filepath.Join(nyagos_d, name1)
+			name1_ := strings.ToLower(name1)
 
-				var err error
-				if strings.HasSuffix(name1_, ".lua") {
-					_, err = langEngine(path1)
-				} else if strings.HasSuffix(name1_, ".ny") {
-					err = shellEngine(path1)
-				}
-				if err != nil {
-					fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
-				}
+			var err error
+			if strings.HasSuffix(name1_, ".lua") {
+				_, err = langEngine(path1)
+			} else if strings.HasSuffix(name1_, ".ny") {
+				err = shellEngine(path1)
+			}
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", name1, err.Error())
 			}
 		}
 	}

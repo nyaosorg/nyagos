@@ -2,6 +2,7 @@ package completion
 
 import (
 	"context"
+	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -19,13 +20,8 @@ func listUpAllExecutableOnEnv(envName string) []Element {
 	pathEnv := os.Getenv(envName)
 	dirList := filepath.SplitList(pathEnv)
 	for _, dir1 := range dirList {
-		dirHandle, dirErr := os.Open(dir1)
-		if dirErr != nil {
-			continue
-		}
-		defer dirHandle.Close()
-		files, filesErr := dirHandle.Readdir(0)
-		if filesErr != nil {
+		files, err := ioutil.ReadDir(dir1)
+		if err != nil {
 			continue
 		}
 		for _, file1 := range files {
