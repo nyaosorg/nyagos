@@ -1,25 +1,18 @@
 package frame
 
 import (
-	"bufio"
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/nyagos/shell"
 )
 
-type CmdSeeker struct {
-	PlainHistory []string
-	Pointer      int
-}
-
 type CmdStreamConsole struct {
-	CmdSeeker
+	shell.CmdSeeker
 	DoPrompt func() (int, error)
 	History  *history.Container
 	Editor   *readline.Editor
@@ -32,7 +25,7 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 		History:  history1,
 		Editor:   &readline.Editor{History: history1, Prompt: doPrompt},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
-		CmdSeeker: CmdSeeker{
+		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},
 			Pointer:      -1,
 		},
@@ -83,39 +76,4 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 	}
 	this.PlainHistory = append(this.PlainHistory, line)
 	return ctx, line, err
-}
-
-type CmdStreamFile struct {
-	CmdSeeker
-	Scanner *bufio.Scanner
-}
-
-func NewCmdStreamFile(r io.Reader) *CmdStreamFile {
-	return &CmdStreamFile{
-		Scanner: bufio.NewScanner(r),
-		CmdSeeker: CmdSeeker{
-			PlainHistory: []string{},
-			Pointer:      -1,
-		},
-	}
-}
-
-func (this *CmdStreamFile) ReadLine(ctx context.Context) (context.Context, string, error) {
-	if this.Pointer >= 0 {
-		if this.Pointer < len(this.PlainHistory) {
-			this.Pointer++
-			return ctx, this.PlainHistory[this.Pointer-1], nil
-		}
-		this.Pointer = -1
-	}
-	if !this.Scanner.Scan() {
-		if err := this.Scanner.Err(); err != nil {
-			return ctx, "", err
-		} else {
-			return ctx, "", io.EOF
-		}
-	}
-	text := strings.TrimRight(this.Scanner.Text(), "\r\n")
-	this.PlainHistory = append(this.PlainHistory, text)
-	return ctx, text, nil
 }

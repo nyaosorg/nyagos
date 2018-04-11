@@ -174,7 +174,7 @@ func Main() error {
 		if err != nil {
 			return err
 		}
-		stream1 := frame.NewCmdStreamFile(fd)
+		stream1 := shell.NewCmdStreamFile(fd)
 		_, err = sh.Loop(ctx, stream1)
 		fd.Close()
 		if err == io.EOF {
@@ -234,7 +234,7 @@ func Main() error {
 		frame.DefaultHistory = constream.History
 		ctx = context.WithValue(ctx, history.PackageId, constream.History)
 	} else {
-		stream1 = frame.NewCmdStreamFile(os.Stdin)
+		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
 	if L != 0 {
 		ctx = context.WithValue(ctx, lua.PackageId, L)
