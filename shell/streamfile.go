@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"context"
 	"io"
+	"os"
 	"strings"
 )
 
@@ -45,4 +46,19 @@ func (this *CmdStreamFile) ReadLine(ctx context.Context) (context.Context, strin
 	text := strings.TrimRight(this.Scanner.Text(), "\r\n")
 	this.PlainHistory = append(this.PlainHistory, text)
 	return ctx, text, nil
+}
+
+func (sh *Shell) Source(ctx context.Context, fname string) error {
+	fd, err := os.Open(fname)
+	if err != nil {
+		return err
+	}
+	stream1 := NewCmdStreamFile(fd)
+	_, err = sh.Loop(ctx, stream1)
+	fd.Close()
+	if err == io.EOF {
+		return nil
+	} else {
+		return err
+	}
 }
