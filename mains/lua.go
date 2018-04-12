@@ -38,13 +38,16 @@ func setRegInt(L lua.Lua, ctx context.Context, sh *shell.Shell) {
 
 func getRegInt(L lua.Lua) (context.Context, *shell.Shell) {
 	L.PushValue(lua.LUA_REGISTRYINDEX)
-	L.GetField(-1, REGKEY_INTERPRETER)
+	typ := L.GetField(-1, REGKEY_INTERPRETER)
+	defer L.Pop(2)
+	if typ != lua.LUA_TUSERDATA {
+		return context.Background(), nil
+	}
 	c := (*container4lua)(unsafe.Pointer(L.ToUserData(-1)))
-	L.Pop(2)
 	if c != nil {
 		return c.Ctx, c.Sh
 	} else {
-		return nil, nil
+		return context.Background(), nil
 	}
 }
 
