@@ -317,12 +317,14 @@ func (this Lua) SetField(index int, str string) {
 
 var lua_getfield = luaDLL.NewProc("lua_getfield")
 
-func (this Lua) GetField(index int, str string) {
+// GetField - returns the typeof pushed value.
+func (this Lua) GetField(index int, str string) int {
 	cstr, err := syscall.BytePtrFromString(str)
 	if err != nil {
 		panic(err.Error())
 	}
-	lua_getfield.Call(this.State(), uintptr(index), uintptr(unsafe.Pointer(cstr)))
+	rc, _, _ := lua_getfield.Call(this.State(), uintptr(index), uintptr(unsafe.Pointer(cstr)))
+	return int(rc)
 }
 
 var lua_getglobal = luaDLL.NewProc("lua_getglobal")
