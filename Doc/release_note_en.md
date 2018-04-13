@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 - Fix: `if [not] errorlevel N` did not work on block-if.
+- Fix the problem that executables reparse-pointed can not be found.
 
 NYAGOS 4.2.5\_0
 ================
