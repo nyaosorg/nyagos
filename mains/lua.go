@@ -7,7 +7,6 @@ import (
 	"os"
 	"reflect"
 	"runtime"
-	"unsafe"
 
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
@@ -20,35 +19,22 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-const REGKEY_INTERPRETER = "nyagos.interpreter"
-const REGKEY_CONTEXT = "nyagos.context"
+type shellKeyT struct{}
 
-type container4lua struct {
-	Ctx context.Context
-	Sh  *shell.Shell
-}
-
-func setRegInt(L lua.Lua, ctx context.Context, sh *shell.Shell) {
-	L.PushValue(lua.LUA_REGISTRYINDEX)
-	c := &container4lua{Ctx: ctx, Sh: sh}
-	L.PushLightUserData(unsafe.Pointer(c))
-	L.SetField(-2, REGKEY_INTERPRETER)
-	L.Pop(1)
-}
+var shellKey shellKeyT
 
 func getRegInt(L lua.Lua) (context.Context, *shell.Shell) {
-	L.PushValue(lua.LUA_REGISTRYINDEX)
-	typ := L.GetField(-1, REGKEY_INTERPRETER)
-	defer L.Pop(2)
-	if typ != lua.LUA_TUSERDATA {
+	ctx := L.Context()
+	if ctx == nil {
+		println("getRegInt: could not find context in Lua instance")
 		return context.Background(), nil
 	}
-	c := (*container4lua)(unsafe.Pointer(L.ToUserData(-1)))
-	if c != nil {
-		return c.Ctx, c.Sh
-	} else {
-		return context.Background(), nil
+	sh, ok := ctx.Value(shellKey).(*shell.Shell)
+	if !ok {
+		println("getRegInt: could not find shell in Lua instance")
+		return ctx, nil
 	}
+	return ctx, sh
 }
 
 func callLua(ctx context.Context, sh *shell.Shell, nargs int, nresult int) error {
@@ -57,11 +43,8 @@ func callLua(ctx context.Context, sh *shell.Shell, nargs int, nresult int) error
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
 	L := luawrapper.Lua
-	ctxSave, shSave := getRegInt(L)
-	setRegInt(L, ctx, sh)
-	err := L.Call(nargs, nresult)
-	setRegInt(L, ctxSave, shSave)
-	return err
+	ctx = context.WithValue(ctx, shellKey, sh)
+	return L.CallWithContext(ctx, nargs, nresult)
 }
 
 var orgArgHook func(*shell.Shell, []string) ([]string, error)
