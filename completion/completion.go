@@ -103,7 +103,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 		}
 	}
 	for _, f := range HookToList {
-		rv, err = f(this, rv)
+		rv, err = f(ctx, this, rv)
 		if err != nil {
 			break
 		}

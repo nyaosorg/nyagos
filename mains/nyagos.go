@@ -10,6 +10,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
@@ -145,6 +146,8 @@ func optionParseLua(sh *shell.Shell, L lua.Lua) (func(context.Context) error, er
 func Main() error {
 	// for issue #155 & #158
 	lua.NG_UPVALUE_NAME["prompter"] = struct{}{}
+
+	completion.HookToList = append(completion.HookToList, luaHookForComplete)
 
 	// Lua extension
 	L, err := NewLua()
