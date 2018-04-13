@@ -161,6 +161,7 @@ func Main() error {
 	defer sh.Close()
 
 	ctx := context.Background()
+	ctx = context.WithValue(ctx, shellKey, sh)
 
 	langEngine := func(fname string) ([]byte, error) {
 		if L != 0 {

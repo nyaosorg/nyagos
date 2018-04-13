@@ -41,7 +41,7 @@ func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completi
 		"field":     rv.Field,
 		"left":      rv.Left,
 	})
-	if err := L.Call(1, 2); err != nil {
+	if err := L.CallWithContext(ctx, 1, 2); err != nil {
 		fmt.Println(err)
 		return rv, nil
 	}

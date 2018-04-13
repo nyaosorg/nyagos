@@ -175,7 +175,7 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 			},
 			Array: map[int]lua.Object{},
 		})
-	if err := this.L.Call(1, 1); err != nil {
+	if err := this.L.CallWithContext(ctx, 1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 	switch this.L.GetType(-1) {

@@ -41,7 +41,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 			L.Pop(2)
 			return 255, err
 		}
-		L.Call(1, 0)
+		L.CallWithContext(ctx, 1, 0)
 		L.Pop(1) // remove io-table
 	}
 	if f := cmd.In().(*os.File); f != os.Stdin {
@@ -51,7 +51,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 			L.Pop(2)
 			return 255, err
 		}
-		L.Call(1, 0)
+		L.CallWithContext(ctx, 1, 0)
 		L.Pop(1) // remove io-table
 	}
 
