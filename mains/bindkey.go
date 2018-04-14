@@ -15,7 +15,6 @@ import (
 )
 
 type KeyLuaFuncT struct {
-	L     lua.Lua
 	Chank []byte
 }
 
@@ -144,7 +143,12 @@ func (this KeyLuaFuncT) String() string {
 	return "(lua function)"
 }
 func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
-	this.L.LoadBufferX("", this.Chank, "b")
+	L, ok := ctx.Value(lua.PackageId).(lua.Lua)
+	if !ok {
+		println("(*mains.KeyLuaFuncT)Call: lua instance not found")
+		return readline.CONTINUE
+	}
+	L.LoadBufferX("", this.Chank, "b")
 	pos := -1
 	var text strings.Builder
 	for i, c := range buffer.Buffer {
@@ -160,7 +164,7 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 		pos = text.Len() + 1
 	}
 
-	this.L.Push(
+	L.Push(
 		lua.TTable{
 			Dict: map[string]lua.Object{
 				"pos":         lua.Integer(pos),
@@ -175,17 +179,17 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 			},
 			Array: map[int]lua.Object{},
 		})
-	if err := this.L.CallWithContext(ctx, 1, 1); err != nil {
+	if err := L.CallWithContext(ctx, 1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
-	switch this.L.GetType(-1) {
+	switch L.GetType(-1) {
 	case lua.LUA_TSTRING:
-		str, strErr := this.L.ToString(-1)
+		str, strErr := L.ToString(-1)
 		if strErr == nil {
 			buffer.InsertAndRepaint(str)
 		}
 	case lua.LUA_TBOOLEAN:
-		if !this.L.ToBool(-1) {
+		if !L.ToBool(-1) {
 			buffer.Buffer = []rune{}
 			buffer.Length = 0
 		}
@@ -203,7 +207,7 @@ func cmdBindKey(L lua.Lua) int {
 	switch L.GetType(-1) {
 	case lua.LUA_TFUNCTION:
 		chank := L.Dump()
-		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, chank}); err != nil {
+		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{chank}); err != nil {
 			return L.Push(nil, err)
 		} else {
 			return L.Push(true)
