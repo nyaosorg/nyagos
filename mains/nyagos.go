@@ -87,7 +87,7 @@ func (this *LuaFilterStream) ReadLine(ctx context.Context) (context.Context, str
 		return ctx, line, nil
 	}
 	L.PushString(line)
-	err = L.Call(1, 1)
+	err = L.CallWithContext(ctx, 1, 1)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return ctx, line, nil
