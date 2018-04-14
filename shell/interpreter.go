@@ -120,9 +120,9 @@ func (sh *Shell) Command() *Cmd {
 	return cmd
 }
 
-type ArgsHookT func(sh *Shell, args []string) ([]string, error)
+type ArgsHookT func(ctx context.Context, sh *Shell, args []string) ([]string, error)
 
-var argsHook = func(sh *Shell, args []string) ([]string, error) {
+var argsHook = func(ctx context.Context, sh *Shell, args []string) ([]string, error) {
 	return args, nil
 }
 
@@ -286,7 +286,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
 				var err error
-				state.Args, err = argsHook(sh, state.Args)
+				state.Args, err = argsHook(ctx, sh, state.Args)
 				if err != nil {
 					return 255, err
 				}

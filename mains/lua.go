@@ -47,11 +47,11 @@ func callLua(ctx context.Context, sh *shell.Shell, nargs int, nresult int) error
 	return L.CallWithContext(ctx, nargs, nresult)
 }
 
-var orgArgHook func(*shell.Shell, []string) ([]string, error)
+var orgArgHook func(context.Context, *shell.Shell, []string) ([]string, error)
 
 var luaArgsFilter lua.Object = lua.TNil{}
 
-func newArgHook(it *shell.Shell, args []string) ([]string, error) {
+func newArgHook(ctx context.Context, it *shell.Shell, args []string) ([]string, error) {
 	luawrapper, ok := it.Tag().(*luaWrapper)
 	if !ok {
 		return nil, errors.New("Could not get lua instance(newArgHook)")
@@ -60,19 +60,19 @@ func newArgHook(it *shell.Shell, args []string) ([]string, error) {
 	L.Push(luaArgsFilter)
 	if !L.IsFunction(-1) {
 		L.Pop(1)
-		return orgArgHook(it, args)
+		return orgArgHook(ctx, it, args)
 	}
 	L.NewTable()
 	for i := 0; i < len(args); i++ {
 		L.PushString(args[i])
 		L.RawSetI(-2, lua.Integer(i))
 	}
-	if err := L.Call(1, 1); err != nil {
+	if err := callLua(ctx, it, 1, 1); err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return orgArgHook(it, args)
+		return orgArgHook(ctx, it, args)
 	}
 	if L.GetType(-1) != lua.LUA_TTABLE {
-		return orgArgHook(it, args)
+		return orgArgHook(ctx, it, args)
 	}
 	newargs := []string{}
 	for i := lua.Integer(0); true; i++ {
@@ -89,7 +89,7 @@ func newArgHook(it *shell.Shell, args []string) ([]string, error) {
 		}
 		L.Pop(1)
 	}
-	return orgArgHook(it, newargs)
+	return orgArgHook(ctx, it, newargs)
 }
 
 var orgOnCommandNotFound func(*shell.Cmd, error) error
