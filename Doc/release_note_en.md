@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 - Fix: `if [not] errorlevel N` did not work on block-if.
+- Fix that `ls -1F` did not show the indicator such as `/`,`*` or `@`.
 - Fix the problem that executables reparse-pointed can not be found.
 
 NYAGOS 4.2.5\_0
