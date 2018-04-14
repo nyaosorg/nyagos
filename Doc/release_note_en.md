@@ -1,9 +1,14 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.2.5\_1
+===============
+on Apr.14,2018
+
 - Fix: `if [not] errorlevel N` did not work on block-if.
 - Fix: that `ls -1F` did not show the indicator such as `/`,`*` or `@`.
-- Fix: the problem that executables reparse-pointed can not be found.
-- Fix: `ls -F` marked '@' to files and directories which ar reparse-pointed but not symbolic-link or junction
+- Fix: the problem that executables reparse-pointed but not symbolic-linked can not be found.
+- Fix: `ls -F` marked '@' to files and directories which ar reparse-pointed but not symbolic-link nor junction
+- Changed the error message when the command `history` is called in `_nyagos`
 
 NYAGOS 4.2.5\_0
 ================
