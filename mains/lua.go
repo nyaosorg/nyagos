@@ -37,14 +37,17 @@ func getRegInt(L lua.Lua) (context.Context, *shell.Shell) {
 	return ctx, sh
 }
 
-func callLua(ctx context.Context, sh *shell.Shell, nargs int, nresult int) error {
+func callCSL(ctx context.Context, sh *shell.Shell, L lua.Lua, nargs, nresult int) error {
+	ctx = context.WithValue(ctx, shellKey, sh)
+	return L.CallWithContext(ctx, nargs, nresult)
+}
+
+func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
 	luawrapper, ok := sh.Tag().(*luaWrapper)
 	if !ok {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
-	L := luawrapper.Lua
-	ctx = context.WithValue(ctx, shellKey, sh)
-	return L.CallWithContext(ctx, nargs, nresult)
+	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
 }
 
 var orgArgHook func(context.Context, *shell.Shell, []string) ([]string, error)
