@@ -218,7 +218,7 @@ func cmdEval(L lua.Lua) int {
 			println("cmdEval: context not found.")
 		}
 		if sh == nil {
-			sh := shell.New()
+			sh = shell.New()
 			println("cmdEval: shell not found.")
 			defer sh.Close()
 		}
