@@ -145,18 +145,22 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	fmt.Fprint(out, name)
 	fmt.Fprint(out, postfix)
 
+	var linkTo string
 	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
-		indicator = "@"
+		var err error
+		path := dos.Join(folder, name)
+		linkTo, err = os.Readlink(path)
+		if err == nil {
+			indicator = "@"
+		} else {
+			linkTo = ""
+		}
 	}
 	if (flag & O_INDICATOR) > 0 {
 		io.WriteString(out, indicator)
 	}
-	if indicator == "@" {
-		path := dos.Join(folder, name)
-		link_to, err := os.Readlink(path)
-		if err == nil {
-			fmt.Fprintf(out, " -> %s", link_to)
-		}
+	if linkTo != "" {
+		fmt.Fprintf(out, " -> %s", linkTo)
 	}
 	if strings.HasSuffix(name, ".lnk") {
 		path := dos.Join(folder, name)
@@ -212,7 +216,9 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 			postfix = ANSI_END
 		}
 		if (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
-			(flag&O_INDICATOR) != 0 {
+			(flag&O_INDICATOR) != 0 &&
+			hasLink(folder, val.Name()) {
+
 			indicator = "@"
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
@@ -252,11 +258,16 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 	return nil
 }
 
+func hasLink(folder, name string) bool {
+	fullpath, err := os.Readlink(dos.Join(folder, name))
+	return err == nil && fullpath != ""
+}
+
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
 		fmt.Fprint(out, f.Name())
 		if (flag & O_INDICATOR) != 0 {
-			if attr := findfile.GetFileAttributes(f); (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
+			if attr := findfile.GetFileAttributes(f); (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 && hasLink(folder, f.Name()) {
 				fmt.Fprint(out, "@")
 			} else if f.IsDir() {
 				fmt.Fprint(out, "/")
