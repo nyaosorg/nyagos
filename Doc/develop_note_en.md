@@ -2,4 +2,3 @@
 - NYAGOS.exe without Lua cab be built with `make nolua`
 - `set -o OPTION_NAME` and `set +o OPTION_NAME` (=`nyagos.option.OPTION_NAME=` on Lua)
 - Do not abort and do continue even if lua53.dll is not found.
-- Fix that `ls -1F` did not show the indicator such as `/`,`*` or `@`.

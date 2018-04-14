@@ -2,4 +2,3 @@
 - Lua無しバージョンの nyagos.exe を `make nolua` でビルドできるようになった
 - `set -o OPTION_NAME` と `set +o OPTION_NAME` を新設(`nyagos.option.OPTION_NAME=` on Lua と等価)
 - lua53.dll が見付からなかった時でも、終了せず、シェルを継続するようにした。
-- `ls -1F` が `/`,`*` や `@` といったインジケーターを出力しない問題を修正
