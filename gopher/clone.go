@@ -1,4 +1,4 @@
-package gopher
+package main
 
 import (
 	"github.com/yuin/gopher-lua"
