@@ -25,7 +25,7 @@ func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string
 	return nil, nil
 }
 
-func (this *ScriptEngineForOptionImpl) RunString(code string) error {
+func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
 	println("Script is not supported.")
 	return nil
 }
