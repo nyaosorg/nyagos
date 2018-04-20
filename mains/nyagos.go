@@ -22,7 +22,7 @@ var noLuaEngineErr = errors.New("no lua engine")
 
 var prompt_hook lua.Object = lua.TGoFunction(lua2cmd(functions.Prompt))
 
-func printPrompt(ctx context.Context, sh *shell.Shell, L lua.Lua) (int, error) {
+func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
 	L.Push(prompt_hook)
 
 	if !L.IsFunction(-1) {
@@ -45,7 +45,7 @@ func printPrompt(ctx context.Context, sh *shell.Shell, L lua.Lua) (int, error) {
 var luaFilter lua.Object = lua.TNil{}
 
 type luaWrapper struct {
-	lua.Lua
+	Lua
 }
 
 func (this *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
@@ -68,7 +68,7 @@ func (this *luaWrapper) Close() error {
 
 type LuaFilterStream struct {
 	shell.Stream
-	L lua.Lua
+	L Lua
 }
 
 func (this *LuaFilterStream) ReadLine(ctx context.Context) (context.Context, string, error) {
@@ -104,7 +104,7 @@ func (this *LuaFilterStream) ReadLine(ctx context.Context) (context.Context, str
 }
 
 type ScriptEngineForOptionImpl struct {
-	L  lua.Lua
+	L  Lua
 	Sh *shell.Shell
 }
 
@@ -138,7 +138,7 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 	return nil
 }
 
-func optionParseLua(sh *shell.Shell, L lua.Lua) (func(context.Context) error, error) {
+func optionParseLua(sh *shell.Shell, L Lua) (func(context.Context) error, error) {
 	e := &ScriptEngineForOptionImpl{Sh: sh, L: L}
 	return frame.OptionParse(sh, e)
 }

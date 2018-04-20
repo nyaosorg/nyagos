@@ -14,7 +14,7 @@ import (
 var completionHook lua.Object = lua.TNil{}
 
 func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {
-	L, L_ok := ctx.Value(lua.PackageId).(lua.Lua)
+	L, L_ok := ctx.Value(lua.PackageId).(Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
 	}

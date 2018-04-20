@@ -18,7 +18,7 @@ type KeyLuaFuncT struct {
 	Chank []byte
 }
 
-func getBufferForCallBack(L lua.Lua) (*readline.Buffer, int) {
+func getBufferForCallBack(L Lua) (*readline.Buffer, int) {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		return nil, L.Push(nil, "bindKeyExec: call with : not .")
 	}
@@ -34,7 +34,7 @@ func getBufferForCallBack(L lua.Lua) (*readline.Buffer, int) {
 	return buffer, 0
 }
 
-func callReplace(L lua.Lua) int {
+func callReplace(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -55,7 +55,7 @@ func callReplace(L lua.Lua) int {
 	return L.Push(true, nil)
 }
 
-func callInsert(L lua.Lua) int {
+func callInsert(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -68,7 +68,7 @@ func callInsert(L lua.Lua) int {
 	return L.Push(true)
 }
 
-func callKeyFunc(L lua.Lua) int {
+func callKeyFunc(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -92,7 +92,7 @@ func callKeyFunc(L lua.Lua) int {
 	}
 }
 
-func callLastWord(L lua.Lua) int {
+func callLastWord(L Lua) int {
 	this, stack_count := getBufferForCallBack(L)
 	if this == nil {
 		return stack_count
@@ -101,7 +101,7 @@ func callLastWord(L lua.Lua) int {
 	return L.Push(word, pos+1)
 }
 
-func callFirstWord(L lua.Lua) int {
+func callFirstWord(L Lua) int {
 	this, stack_count := getBufferForCallBack(L)
 	if this == nil {
 		return stack_count
@@ -110,7 +110,7 @@ func callFirstWord(L lua.Lua) int {
 	return L.Push(word, 0)
 }
 
-func callBoxListing(L lua.Lua) int {
+func callBoxListing(L Lua) int {
 	// stack +1: readline.Buffer
 	// stack +2: table
 	// stack +3: index or value
@@ -143,7 +143,7 @@ func (this KeyLuaFuncT) String() string {
 	return "(lua function)"
 }
 func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
-	L, ok := ctx.Value(lua.PackageId).(lua.Lua)
+	L, ok := ctx.Value(lua.PackageId).(Lua)
 	if !ok {
 		println("(*mains.KeyLuaFuncT)Call: lua instance not found")
 		return readline.CONTINUE
@@ -198,7 +198,7 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 	return readline.CONTINUE
 }
 
-func cmdBindKey(L lua.Lua) int {
+func cmdBindKey(L Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		return L.Push(keyErr)
@@ -226,7 +226,7 @@ func cmdBindKey(L lua.Lua) int {
 	}
 }
 
-func cmdGetBindKey(L lua.Lua) int {
+func cmdGetBindKey(L Lua) int {
 	key, keyErr := L.ToString(-1)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
