@@ -108,7 +108,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	return errorlevel, err
 }
 
-func cmdSetAlias(L lua.Lua) int {
+func cmdSetAlias(L Lua) int {
 	name, nameErr := L.ToString(-2)
 	if nameErr != nil {
 		return L.Push(nil, nameErr.Error())
@@ -131,7 +131,7 @@ func cmdSetAlias(L lua.Lua) int {
 	return L.Push(true)
 }
 
-func cmdGetAlias(L lua.Lua) int {
+func cmdGetAlias(L Lua) int {
 	name, nameErr := L.ToString(-1)
 	if nameErr != nil {
 		return L.Push(nil, nameErr)
@@ -152,7 +152,7 @@ func cmdGetAlias(L lua.Lua) int {
 	return 1
 }
 
-func cmdExec(L lua.Lua) int {
+func cmdExec(L Lua) int {
 	errorlevel := 0
 	var err error
 	if L.IsTable(1) {
@@ -174,7 +174,7 @@ func cmdExec(L lua.Lua) int {
 			sh = shell.New()
 			newL_tmp, err := L.Clone()
 			if err == nil && newL_tmp != nil {
-				if newL, ok := newL_tmp.(lua.Lua); ok {
+				if newL, ok := newL_tmp.(Lua); ok {
 					sh.SetTag(&luaWrapper{Lua: newL})
 				} else {
 					println("lua clone failed")
@@ -202,7 +202,7 @@ func cmdExec(L lua.Lua) int {
 	return L.Push(int(errorlevel), err)
 }
 
-func cmdEval(L lua.Lua) int {
+func cmdEval(L Lua) int {
 	statement, statementErr := L.ToString(1)
 	if statementErr != nil {
 		return L.Push(nil, statementErr)
@@ -240,7 +240,7 @@ func cmdEval(L lua.Lua) int {
 	return 1
 }
 
-func cmdOpenFile(L lua.Lua) int {
+func cmdOpenFile(L Lua) int {
 	path, path_err := L.ToString(1)
 	if path_err != nil {
 		return L.Push(nil, path_err.Error())
@@ -262,7 +262,7 @@ func cmdOpenFile(L lua.Lua) int {
 	return 1
 }
 
-func cmdLoadFile(L lua.Lua) int {
+func cmdLoadFile(L Lua) int {
 	path, path_err := L.ToString(-1)
 	if path_err != nil {
 		return L.Push(nil, path_err.Error())
@@ -294,7 +294,7 @@ func (this *iolines_t) Ok() bool {
 	return this != nil && this.Fd != nil && this.Reader != nil
 }
 
-func iolines_t_gc(L lua.Lua) int {
+func iolines_t_gc(L Lua) int {
 	defer L.DeleteUserDataAnchor(1)
 	userdata := iolines_t{}
 	sync := L.ToUserDataTo(1, &userdata)
@@ -308,7 +308,7 @@ func iolines_t_gc(L lua.Lua) int {
 	return 0
 }
 
-func cmdLinesCallback(L lua.Lua) int {
+func cmdLinesCallback(L Lua) int {
 	userdata := iolines_t{}
 	sync := L.ToUserDataTo(1, &userdata)
 	defer sync()
@@ -387,7 +387,7 @@ func cmdLinesCallback(L lua.Lua) int {
 	return count
 }
 
-func cmdLines(L lua.Lua) int {
+func cmdLines(L Lua) int {
 	top := L.GetTop()
 	if top < 1 || L.IsNil(1) {
 		L.Push(cmdLinesCallback)

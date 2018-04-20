@@ -1,17 +1,17 @@
-package gopher
+package main
 
 import (
 	"github.com/yuin/gopher-lua"
 	"testing"
 )
 
-func makeSource(L *lua.LState) {
+func makeSource(L Lua) {
 	tbl := L.NewTable()
 	L.SetTable(tbl, lua.LString("alpha"), lua.LString("beta"))
 	L.SetGlobal("gamma", tbl)
 }
 
-func testDestinate(t *testing.T, L *lua.LState) {
+func testDestinate(t *testing.T, L Lua) {
 	tbl := L.GetGlobal("gamma")
 	if tbl.Type() != lua.LTTable {
 		t.Fatal("Failed to copy table.")

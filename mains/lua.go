@@ -19,11 +19,13 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
+type Lua = lua.Lua
+
 type shellKeyT struct{}
 
 var shellKey shellKeyT
 
-func getRegInt(L lua.Lua) (context.Context, *shell.Shell) {
+func getRegInt(L Lua) (context.Context, *shell.Shell) {
 	ctx := L.Context()
 	if ctx == nil {
 		println("getRegInt: could not find context in Lua instance")
@@ -37,7 +39,7 @@ func getRegInt(L lua.Lua) (context.Context, *shell.Shell) {
 	return ctx, sh
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L lua.Lua, nargs, nresult int) error {
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	ctx = context.WithValue(ctx, shellKey, sh)
 	return L.CallWithContext(ctx, nargs, nresult)
 }
@@ -128,7 +130,7 @@ func on_command_not_found(inte *shell.Cmd, err error) error {
 	}
 }
 
-func getOption(L lua.Lua) int {
+func getOption(L Lua) int {
 	key, key_err := L.ToString(2)
 	if key_err != nil {
 		return L.Push(nil, key_err)
@@ -140,7 +142,7 @@ func getOption(L lua.Lua) int {
 	return L.Push(&lua.BoolProperty{Pointer: ptr})
 }
 
-func setOption(L lua.Lua) int {
+func setOption(L Lua) int {
 	key, key_err := L.ToString(2)
 	if key_err != nil {
 		return L.Push(nil, key_err)
@@ -159,7 +161,7 @@ func setOption(L lua.Lua) int {
 
 var nyagos_table_member map[string]lua.Object
 
-func getNyagosTable(L lua.Lua) int {
+func getNyagosTable(L Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err.Error())
@@ -180,11 +182,11 @@ func getNyagosTable(L lua.Lua) int {
 }
 
 type IProperty interface {
-	Push(lua.Lua) int
-	Set(lua.Lua, int) error
+	Push(Lua) int
+	Set(Lua, int) error
 }
 
-func setNyagosTable(L lua.Lua) int {
+func setNyagosTable(L Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err)
@@ -214,7 +216,7 @@ func setNyagosTable(L lua.Lua) int {
 var share_table = map[string]lua.Object{}
 var share_table_generation = map[string]int{}
 
-func setMemberOfShareTable(L lua.Lua) int {
+func setMemberOfShareTable(L Lua) int {
 	// table exists at [-3]
 	key, err := L.ToObject(-2)
 	if err != nil {
@@ -270,7 +272,7 @@ func setMemberOfShareTable(L lua.Lua) int {
 	return 0
 }
 
-func getShareTable(L lua.Lua) int {
+func getShareTable(L Lua) int {
 	key, keyErr := L.ToString(-1)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
@@ -295,7 +297,7 @@ func getShareTable(L lua.Lua) int {
 	}
 }
 
-func setShareTable(L lua.Lua) int {
+func setShareTable(L Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
@@ -312,7 +314,7 @@ func setShareTable(L lua.Lua) int {
 
 var hook_setuped = false
 
-func NewLua() (lua.Lua, error) {
+func NewLua() (Lua, error) {
 	this, err := lua.New()
 	if err != nil {
 		return this, err
@@ -344,7 +346,7 @@ func NewLua() (lua.Lua, error) {
 	return this, nil
 }
 
-func luaArgsToInterfaces(L lua.Lua) []interface{} {
+func luaArgsToInterfaces(L Lua) []interface{} {
 	end := L.GetTop()
 	var param []interface{}
 	if end > 0 {
@@ -359,14 +361,14 @@ func luaArgsToInterfaces(L lua.Lua) []interface{} {
 	return param
 }
 
-func pushInterfaces(L lua.Lua, values []interface{}) {
+func pushInterfaces(L Lua, values []interface{}) {
 	for _, value := range values {
 		L.PushReflect(value)
 	}
 }
 
-func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
-	return func(L lua.Lua) int {
+func lua2cmd(f func([]interface{}) []interface{}) func(Lua) int {
+	return func(L Lua) int {
 		param := luaArgsToInterfaces(L)
 		result := f(param)
 		pushInterfaces(L, result)
@@ -374,8 +376,8 @@ func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
 	}
 }
 
-func lua2param(f func(*functions.Param) []interface{}) func(lua.Lua) int {
-	return func(L lua.Lua) int {
+func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
+	return func(L Lua) int {
 		_, sh := getRegInt(L)
 		param := &functions.Param{
 			Args: luaArgsToInterfaces(L),
@@ -449,7 +451,7 @@ func init() {
 	}
 }
 
-func runLua(ctx context.Context, it *shell.Shell, L lua.Lua, fname string) ([]byte, error) {
+func runLua(ctx context.Context, it *shell.Shell, L Lua, fname string) ([]byte, error) {
 	_, err := os.Stat(fname)
 	if err != nil {
 		if os.IsNotExist(err) {
