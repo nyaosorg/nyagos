@@ -1,8 +1,13 @@
 package main
 
 import (
+	"context"
+	"errors"
+	"os"
+
 	"github.com/yuin/gopher-lua"
 	"github.com/zetamatta/nyagos/functions"
+	"github.com/zetamatta/nyagos/shell"
 )
 
 type Lua = *lua.LState
@@ -14,6 +19,9 @@ func NewLua() (Lua, error) {
 
 	for name, function := range functions.Table {
 		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2cmd(function)))
+	}
+	for name, function := range functions.Table2 {
+		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2param(function)))
 	}
 	L.SetGlobal("nyagos", nyagosTable)
 
@@ -66,4 +74,61 @@ func lua2cmd(f func([]interface{}) []interface{}) func(Lua) int {
 		pushInterfaces(L, result)
 		return len(result)
 	}
+}
+
+type shellKeyT struct{}
+
+var shellKey shellKeyT
+
+func getRegInt(L Lua) (context.Context, *shell.Shell) {
+	ctx := L.Context()
+	if ctx == nil {
+		println("getRegInt: could not find context in Lua instance")
+		return context.Background(), nil
+	}
+	sh, ok := ctx.Value(shellKey).(*shell.Shell)
+	if !ok {
+		println("getRegInt: could not find shell in Lua instance")
+		return ctx, nil
+	}
+	return ctx, sh
+}
+
+func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
+	return func(L Lua) int {
+		_, sh := getRegInt(L)
+		param := &functions.Param{
+			Args: luaArgsToInterfaces(L),
+		}
+		if sh != nil {
+			param.In = sh.In()
+			param.Out = sh.Out()
+			param.Err = sh.Err()
+		} else {
+			param.In = os.Stdin
+			param.Out = os.Stdout
+			param.Err = os.Stderr
+		}
+		result := f(param)
+		pushInterfaces(L, result)
+		return len(result)
+	}
+}
+
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
+	if save := L.Context(); save != nil {
+		defer L.SetContext(save)
+	}
+	ctx = context.WithValue(ctx, shellKey, sh)
+	L.SetContext(ctx)
+	L.Call(nargs, nresult)
+	return nil
+}
+
+func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
+	luawrapper, ok := sh.Tag().(*luaWrapper)
+	if !ok {
+		return errors.New("callLua: can not find Lua instance in the shell")
+	}
+	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
 }
