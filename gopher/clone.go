@@ -1,10 +1,12 @@
 package main
 
 import (
+	"errors"
+
 	"github.com/yuin/gopher-lua"
 )
 
-func deepCopyTable(L2 *lua.LState, t1 *lua.LTable, t2 *lua.LTable) {
+func deepCopyTable(L2 Lua, t1 *lua.LTable, t2 *lua.LTable) {
 	t1.ForEach(func(key, val lua.LValue) {
 		target := L2.GetTable(t2, key)
 		if target.Type() == lua.LTNil { // do not override
@@ -19,7 +21,7 @@ func deepCopyTable(L2 *lua.LState, t1 *lua.LTable, t2 *lua.LTable) {
 	})
 }
 
-func cloneTo(L1, L2 *lua.LState) bool {
+func cloneTo(L1, L2 Lua) bool {
 	G1, ok := L1.GetGlobal("_G").(*lua.LTable)
 	if !ok {
 		return false
@@ -33,12 +35,15 @@ func cloneTo(L1, L2 *lua.LState) bool {
 	return true
 }
 
-func Clone(L *lua.LState) *lua.LState {
-	L2 := lua.NewState()
+func Clone(L Lua) (Lua, error) {
+	L2, err := NewLua()
+	if err != nil {
+		return L2, err
+	}
 	if cloneTo(L, L2) {
-		return L2
+		return L2, nil
 	} else {
 		L2.Close()
-		return nil
+		return nil, errors.New("could not create Lua instance")
 	}
 }

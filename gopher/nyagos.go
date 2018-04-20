@@ -9,7 +9,6 @@ import (
 	"runtime"
 
 	"github.com/mattn/go-isatty"
-	"github.com/yuin/gopher-lua"
 
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
@@ -26,7 +25,7 @@ type ScriptEngineForOptionImpl struct{}
 func (this *ScriptEngineForOptionImpl) SetArg(args []string) {}
 
 func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
-	L, ok := ctx.Value(luaKey).(*lua.LState)
+	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
 		return nil, errors.New("Script is not supported.")
 	}
@@ -34,7 +33,7 @@ func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string
 }
 
 func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
-	L, ok := ctx.Value(luaKey).(*lua.LState)
+	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
 		return errors.New("Script is not supported.")
 	}
@@ -42,27 +41,36 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 }
 
 type luaWrapper struct {
-	*lua.LState
+	Lua
 }
 
 func (this *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
-	newL := Clone(this.LState)
+	newL, err := Clone(this.Lua)
+	if err != nil {
+		return nil, nil, err
+	}
 	ctx = context.WithValue(ctx, luaKey, newL)
 	return ctx, &luaWrapper{newL}, nil
 }
 
 func (this *luaWrapper) Close() error {
-	this.LState.Close()
+	this.Lua.Close()
 	return nil
 }
 
 func Main() error {
-	sh := shell.New()
-	defer sh.Close()
+	L, err := NewLua()
+	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
+	} else {
+		defer L.Close()
+	}
 
-	L := lua.NewState()
-	defer L.Close()
-	sh.SetTag(&luaWrapper{L})
+	sh := shell.New()
+	if L != nil {
+		sh.SetTag(&luaWrapper{L})
+	}
+	defer sh.Close()
 
 	ctx := context.Background()
 
