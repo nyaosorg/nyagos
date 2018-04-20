@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -16,27 +17,33 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
+type luaKeyT struct{}
+
+var luaKey luaKeyT
+
 type ScriptEngineForOptionImpl struct{}
 
 func (this *ScriptEngineForOptionImpl) SetArg(args []string) {}
 
 func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
-	println("Script is not supported.")
-	return nil, nil
+	L, ok := ctx.Value(luaKey).(*lua.LState)
+	if !ok {
+		return nil, errors.New("Script is not supported.")
+	}
+	return nil, L.DoFile(fname)
 }
 
 func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
-	println("Script is not supported.")
-	return nil
+	L, ok := ctx.Value(luaKey).(*lua.LState)
+	if !ok {
+		return errors.New("Script is not supported.")
+	}
+	return L.DoString(code)
 }
 
 type luaWrapper struct {
 	*lua.LState
 }
-
-type luaKeyT struct{}
-
-var luaKey luaKeyT
 
 func (this *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
 	newL := Clone(this.LState)
@@ -60,7 +67,7 @@ func Main() error {
 	ctx := context.Background()
 
 	langEngine := func(fname string) ([]byte, error) {
-		return nil, nil
+		return nil, L.DoFile(fname)
 	}
 	shellEngine := func(fname string) error {
 		fd, err := os.Open(fname)
