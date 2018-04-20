@@ -19,7 +19,7 @@ var OptionNorc = false
 type ScriptEngineForOption interface {
 	SetArg([]string)
 	RunFile(context.Context, string) ([]byte, error)
-	RunString(string) error
+	RunString(context.Context, string) error
 }
 
 func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
@@ -94,9 +94,9 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			if i >= len(args) {
 				return nil, errors.New("-e: requires parameters")
 			}
-			return func(context.Context) error {
+			return func(ctx context.Context) error {
 				e.SetArg(args[i:])
-				e.RunString(args[i])
+				e.RunString(ctx, args[i])
 				return io.EOF
 			}, nil
 		} else if arg1 == "--norc" {

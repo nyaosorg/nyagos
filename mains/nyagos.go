@@ -127,7 +127,7 @@ func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string
 	}
 }
 
-func (this *ScriptEngineForOptionImpl) RunString(code string) error {
+func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
 	if this.L == 0 {
 		return noLuaEngineErr
 	}
