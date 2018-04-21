@@ -88,18 +88,7 @@ func Main() error {
 		return nil, L.DoFile(fname)
 	}
 	shellEngine := func(fname string) error {
-		fd, err := os.Open(fname)
-		if err != nil {
-			return err
-		}
-		stream1 := shell.NewCmdStreamFile(fd)
-		_, err = sh.Loop(ctx, stream1)
-		fd.Close()
-		if err == io.EOF {
-			return nil
-		} else {
-			return err
-		}
+		return sh.Source(ctx, fname)
 	}
 
 	script, err := frame.OptionParse(sh, &ScriptEngineForOptionImpl{})
