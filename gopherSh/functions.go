@@ -26,7 +26,14 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	L := luawrapper.Lua
 	ctx = context.WithValue(ctx, luaKey, L)
 	L.Push(this.Chank)
-	callLua(ctx, &cmd.Shell, 0, 0)
+
+	table := L.NewTable()
+	for i, arg1 := range cmd.Args() {
+		L.SetTable(table, lua.LNumber(i), lua.LString(arg1))
+	}
+	L.Push(table)
+
+	callLua(ctx, &cmd.Shell, 1, 0)
 
 	return 1, nil
 }
