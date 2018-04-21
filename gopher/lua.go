@@ -12,6 +12,15 @@ import (
 
 type Lua = *lua.LState
 
+func makeVirtualTable(L Lua, getter, setter func(Lua) int) lua.LValue {
+	table := L.NewTable()
+	metaTable := L.NewTable()
+	L.SetField(metaTable, "__index", L.NewFunction(getter))
+	L.SetField(metaTable, "__newindex", L.NewFunction(setter))
+	L.SetMetatable(table, metaTable)
+	return table
+}
+
 func NewLua() (Lua, error) {
 	L := lua.NewState()
 
@@ -20,6 +29,11 @@ func NewLua() (Lua, error) {
 	for name, function := range functions.Table {
 		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2cmd(function)))
 	}
+	envTable := makeVirtualTable(L,
+		lua2cmd(functions.CmdGetEnv),
+		lua2cmd(functions.CmdSetEnv))
+	L.SetTable(nyagosTable, lua.LString("env"), envTable)
+
 	for name, function := range functions.Table2 {
 		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2param(function)))
 	}
