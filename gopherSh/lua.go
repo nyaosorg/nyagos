@@ -34,6 +34,9 @@ func NewLua() (Lua, error) {
 		lua2cmd(functions.CmdSetEnv))
 	L.SetTable(nyagosTable, lua.LString("env"), envTable)
 
+	aliasTable := makeVirtualTable(L, cmdGetAlias, cmdSetAlias)
+	L.SetTable(nyagosTable, lua.LString("alias"), aliasTable)
+
 	for name, function := range functions.Table2 {
 		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2param(function)))
 	}
