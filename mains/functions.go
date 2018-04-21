@@ -115,20 +115,20 @@ func cmdSetAlias(L Lua) int {
 	}
 	key := strings.ToLower(name)
 	switch L.GetType(-1) {
-	case lua.LUA_TSTRING:
+	case lua.LTString:
 		value, err := L.ToString(-1)
 		if err == nil {
 			alias.Table[key] = alias.New(value)
 		} else {
 			return L.Push(nil, err)
 		}
-	case lua.LUA_TFUNCTION:
+	case lua.LTFunction:
 		chank := L.Dump()
 		alias.Table[key] = &LuaBinaryChank{Chank: chank}
-	case lua.LUA_TNIL:
+	case lua.LTNil:
 		delete(alias.Table, key)
 	}
-	return L.Push(true)
+	return L.Push(lua.LTrue)
 }
 
 func cmdGetAlias(L Lua) int {
