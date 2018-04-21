@@ -452,15 +452,6 @@ func init() {
 }
 
 func runLua(ctx context.Context, it *shell.Shell, L Lua, fname string) ([]byte, error) {
-	_, err := os.Stat(fname)
-	if err != nil {
-		if os.IsNotExist(err) {
-			// println("pass " + fname + " (not exists)")
-			return []byte{}, nil
-		} else {
-			return nil, err
-		}
-	}
 	if _, err := L.LoadFile(fname, "bt"); err != nil {
 		return nil, err
 	}
