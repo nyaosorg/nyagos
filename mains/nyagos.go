@@ -134,7 +134,7 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 	if err := this.L.LoadString(code); err != nil {
 		return err
 	}
-	this.L.Call(0, 0)
+	this.L.CallWithContext(ctx, 0, 0)
 	return nil
 }
 
