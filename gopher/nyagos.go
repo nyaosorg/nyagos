@@ -67,10 +67,13 @@ func (this *luaWrapper) Close() error {
 }
 
 func Main() error {
+	ctx := context.Background()
+
 	L, err := NewLua()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	} else {
+		ctx = context.WithValue(ctx, luaKey, L)
 		defer L.Close()
 	}
 
@@ -79,8 +82,6 @@ func Main() error {
 		sh.SetTag(&luaWrapper{L})
 	}
 	defer sh.Close()
-
-	ctx := context.Background()
 
 	langEngine := func(fname string) ([]byte, error) {
 		ctxTmp := context.WithValue(ctx, shellKey, sh)
