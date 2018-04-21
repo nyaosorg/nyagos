@@ -43,7 +43,7 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 			case lua.LTNumber:
 				param = append(param, L.ToInt(i))
 			default:
-				param = append(param, lua.LNil)
+				param = append(param, nil)
 			}
 		}
 	} else {
