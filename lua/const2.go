@@ -11,6 +11,9 @@ const LTTable = LUA_TTABLE
 const LTThread = LUA_TTHREAD
 const LTUserData = LUA_TUSERDATA
 
+const LTrue = true
+const LFalse = false
+
 // const LUA_REGISTRYINDEX = -1001000
 // const LUA_TLIGHTUSERDATA = 2
 // const LUA_FILEHANDLE = "FILE*"
