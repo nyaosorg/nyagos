@@ -1,7 +1,6 @@
 package frame
 
 import (
-	"bufio"
 	"context"
 	"encoding/base64"
 	"errors"
@@ -77,15 +76,9 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			} else {
 				return func(ctx context.Context) error {
 					// command script
-					fd, fd_err := os.Open(args[i])
-					if fd_err != nil {
-						return fmt.Errorf("%s: %s\n", args[i], fd_err.Error())
+					if err := sh.Source(ctx, args[i]); err != nil {
+						return err
 					}
-					scanner := bufio.NewScanner(fd)
-					for scanner.Scan() {
-						sh.Interpret(ctx, scanner.Text())
-					}
-					fd.Close()
 					return io.EOF
 				}, nil
 			}
