@@ -45,6 +45,8 @@ func NewLua() (Lua, error) {
 	shareTable := L.NewTable()
 	L.SetGlobal("share", shareTable)
 
+	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
+
 	return L, nil
 }
 
