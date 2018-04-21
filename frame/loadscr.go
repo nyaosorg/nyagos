@@ -48,8 +48,11 @@ func LoadScripts(shellEngine func(string) error,
 			}
 		}
 	}
-	if _, err := langEngine(filepath.Join(exeFolder, ".nyagos")); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+	fname := filepath.Join(exeFolder, ".nyagos")
+	if _, err := os.Stat(fname); err == nil {
+		if _, err := langEngine(fname); err != nil {
+			fmt.Fprintln(os.Stderr, err.Error())
+		}
 	}
 	barNyagos(shellEngine, exeFolder)
 	if err := dotNyagos(langEngine); err != nil {
