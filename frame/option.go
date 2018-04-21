@@ -96,8 +96,12 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			}
 			return func(ctx context.Context) error {
 				e.SetArg(args[i:])
-				e.RunString(ctx, args[i])
-				return io.EOF
+				err := e.RunString(ctx, args[i])
+				if err != nil {
+					return err
+				} else {
+					return io.EOF
+				}
 			}, nil
 		} else if arg1 == "--norc" {
 			OptionNorc = true
