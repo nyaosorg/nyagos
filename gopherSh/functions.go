@@ -33,9 +33,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	}
 	L.Push(table)
 
-	callLua(ctx, &cmd.Shell, 1, 0)
-
-	return 1, nil
+	return 1, callLua(ctx, &cmd.Shell, 1, 0)
 }
 
 func cmdSetAlias(L Lua) int {

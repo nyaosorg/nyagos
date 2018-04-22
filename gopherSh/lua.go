@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 
 	"github.com/yuin/gopher-lua"
@@ -152,14 +153,22 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 	}
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (err error) {
 	if save := L.Context(); save != nil {
 		defer L.SetContext(save)
 	}
 	ctx = context.WithValue(ctx, shellKey, sh)
 	L.SetContext(ctx)
+	err = nil
+	defer func() {
+		if errTmp := recover() ; errTmp != nil {
+			err = errors.New(fmt.Sprint(errTmp))
+		}else{
+			err = nil
+		}
+	}()
 	L.Call(nargs, nresult)
-	return nil
+	return
 }
 
 func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
