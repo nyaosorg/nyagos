@@ -5,7 +5,11 @@ end
 
 nyagos.alias.lua_e=function(args)
     if #args >= 1 then
-        assert(load(args[1]))() 
+        if _VERSION == "Lua 5.3" then
+            assert(load(args[1]))()
+        else
+            assert(loadstring(args[1]))()
+        end
     end
 end
 nyagos.alias.lua_f=function(args)
