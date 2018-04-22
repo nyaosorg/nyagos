@@ -46,6 +46,9 @@ func NewLua() (Lua, error) {
 	optionTable := makeVirtualTable(L, getOption, setOption)
 	L.SetField(nyagosTable, "option", optionTable)
 
+	ioTable := L.GetGlobal("io")
+	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
+
 	L.SetGlobal("nyagos", nyagosTable)
 
 	shareTable := L.NewTable()
