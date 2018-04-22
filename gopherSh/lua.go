@@ -29,22 +29,22 @@ func NewLua() (Lua, error) {
 	nyagosTable := L.NewTable()
 
 	for name, function := range functions.Table {
-		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2cmd(function)))
+		L.SetField(nyagosTable, name, L.NewFunction(lua2cmd(function)))
 	}
 	envTable := makeVirtualTable(L,
 		lua2cmd(functions.CmdGetEnv),
 		lua2cmd(functions.CmdSetEnv))
-	L.SetTable(nyagosTable, lua.LString("env"), envTable)
+	L.SetField(nyagosTable, "env", envTable)
 
 	aliasTable := makeVirtualTable(L, cmdGetAlias, cmdSetAlias)
-	L.SetTable(nyagosTable, lua.LString("alias"), aliasTable)
+	L.SetField(nyagosTable, "alias", aliasTable)
 
 	for name, function := range functions.Table2 {
-		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2param(function)))
+		L.SetField(nyagosTable, name, L.NewFunction(lua2param(function)))
 	}
 
 	optionTable := makeVirtualTable(L, getOption, setOption)
-	L.SetTable(nyagosTable, lua.LString("option"), optionTable)
+	L.SetField(nyagosTable, "option", optionTable)
 
 	L.SetGlobal("nyagos", nyagosTable)
 
