@@ -14,8 +14,8 @@ type LuaBinaryChank struct {
 	Chank *lua.LFunction
 }
 
-func (this *LuaBinaryChank) String() string {
-	return "(lua-function)"
+func (this LuaBinaryChank) String() string {
+	return this.Chank.String()
 }
 
 func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, error) {
