@@ -5,11 +5,12 @@ import (
 	"io"
 	"os"
 
+	"github.com/yuin/gopher-lua"
 	"github.com/zetamatta/nyagos/frame"
 )
 
 func main() {
-	frame.Version = "with GopherLua"
+	frame.Version = "with " + lua.PackageName + "-" + lua.PackageVersion
 
 	if err := frame.Start(Main); err != nil && err != io.EOF {
 		fmt.Fprintln(os.Stderr, err.Error())
