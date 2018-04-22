@@ -7,7 +7,6 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
-	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -43,7 +42,7 @@ func NewLua() (Lua, error) {
 		L.SetField(nyagosTable, name, L.NewFunction(lua2param(function)))
 	}
 
-	optionTable := makeVirtualTable(L, getOption, setOption)
+	optionTable := makeVirtualTable(L, lua2cmd(functions.GetOption), lua2cmd(functions.SetOption))
 	L.SetField(nyagosTable, "option", optionTable)
 
 	ioTable := L.GetGlobal("io")
@@ -70,6 +69,10 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 				param = append(param, L.ToString(i))
 			case lua.LTNumber:
 				param = append(param, L.ToInt(i))
+			case lua.LTBool:
+				param = append(param, L.ToBool(i))
+			case lua.LTNil:
+				param = append(param, nil)
 			default:
 				param = append(param, nil)
 			}
@@ -90,6 +93,12 @@ func pushInterfaces(L Lua, values []interface{}) {
 				L.Push(lua.LString(value))
 			case int:
 				L.Push(lua.LNumber(value))
+			case bool:
+				if value {
+					L.Push(lua.LTrue)
+				} else {
+					L.Push(lua.LFalse)
+				}
 			}
 		}
 	}
@@ -159,30 +168,4 @@ func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
 	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
-}
-
-func getOption(L Lua) int {
-	key := L.ToString(2)
-	ptr, ok := commands.BoolOptions[key]
-	if !ok || ptr == nil {
-		L.Push(lua.LNil)
-		return 1
-	} else if *ptr {
-		L.Push(lua.LTrue)
-	} else {
-		L.Push(lua.LFalse)
-	}
-	return 1
-}
-
-func setOption(L Lua) int {
-	key := L.ToString(2)
-	ptr, ok := commands.BoolOptions[key]
-	if !ok {
-		L.Push(lua.LNil)
-		return 1
-	}
-	*ptr = L.ToBool(3)
-	L.Push(lua.LTrue)
-	return 1
 }

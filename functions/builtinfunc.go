@@ -16,6 +16,7 @@ import (
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
+	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
@@ -437,4 +438,30 @@ func CmdRawExec(this *Param) []any_t {
 	} else {
 		return []any_t{errorlevel}
 	}
+}
+
+func GetOption(args []any_t) []any_t {
+	if len(args) < 2 {
+		return []any_t{nil, "too few arguments"}
+	}
+	key := fmt.Sprint(args[1])
+	ptr, ok := commands.BoolOptions[key]
+	if !ok {
+		return []any_t{nil, fmt.Sprintf("key: %s: not found")}
+	}
+	return []any_t{*ptr}
+}
+
+func SetOption(args []any_t) []any_t {
+	if len(args) < 3 {
+		return []any_t{nil, "too few arguments"}
+	}
+	key := fmt.Sprint(args[1])
+	ptr, ok := commands.BoolOptions[key]
+	if !ok || ptr == nil {
+		return []any_t{nil, "key: %s: not found"}
+	}
+	val := args[2]
+	*ptr = (val != nil && val != false && val == "")
+	return []any_t{true}
 }

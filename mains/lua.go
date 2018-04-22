@@ -8,7 +8,6 @@ import (
 	"reflect"
 	"runtime"
 
-	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
@@ -127,35 +126,6 @@ func on_command_not_found(inte *shell.Cmd, err error) error {
 		return nil
 	} else {
 		return orgOnCommandNotFound(inte, err)
-	}
-}
-
-func getOption(L Lua) int {
-	key, key_err := L.ToString(2)
-	if key_err != nil {
-		return L.Push(nil, key_err)
-	}
-	ptr, ok := commands.BoolOptions[key]
-	if !ok {
-		return L.Push(nil)
-	}
-	return L.Push(&lua.BoolProperty{Pointer: ptr})
-}
-
-func setOption(L Lua) int {
-	key, key_err := L.ToString(2)
-	if key_err != nil {
-		return L.Push(nil, key_err)
-	}
-	ptr, ok := commands.BoolOptions[key]
-	if !ok {
-		return L.Push(nil)
-	}
-	opt := lua.BoolProperty{Pointer: ptr}
-	if err := opt.Set(L, 3); err != nil {
-		return L.Push(nil, err.Error())
-	} else {
-		return L.Push(true)
 	}
 }
 
@@ -435,8 +405,8 @@ func init() {
 		"open":                 lua.TGoFunction(cmdOpenFile),
 		"option": &lua.VirtualTable{
 			Name:     "nyagos.option",
-			Index:    getOption,
-			NewIndex: setOption},
+			Index:    lua2cmd(functions.GetOption),
+			NewIndex: lua2cmd(functions.SetOption)},
 		"prompt":     lua.Property{Pointer: &prompt_hook},
 		"quotation":  lua.StringProperty{Pointer: &readline.Delimiters},
 		"setalias":   lua.TGoFunction(cmdSetAlias),
