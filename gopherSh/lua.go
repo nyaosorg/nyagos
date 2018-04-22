@@ -6,6 +6,8 @@ import (
 	"os"
 
 	"github.com/yuin/gopher-lua"
+
+	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -40,6 +42,10 @@ func NewLua() (Lua, error) {
 	for name, function := range functions.Table2 {
 		L.SetTable(nyagosTable, lua.LString(name), L.NewFunction(lua2param(function)))
 	}
+
+	optionTable := makeVirtualTable(L, getOption, setOption)
+	L.SetTable(nyagosTable, lua.LString("option"), optionTable)
+
 	L.SetGlobal("nyagos", nyagosTable)
 
 	shareTable := L.NewTable()
@@ -150,4 +156,30 @@ func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
 	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
+}
+
+func getOption(L Lua) int {
+	key := L.ToString(2)
+	ptr, ok := commands.BoolOptions[key]
+	if !ok || ptr == nil {
+		L.Push(lua.LNil)
+		return 1
+	} else if *ptr {
+		L.Push(lua.LTrue)
+	} else {
+		L.Push(lua.LFalse)
+	}
+	return 1
+}
+
+func setOption(L Lua) int {
+	key := L.ToString(2)
+	ptr, ok := commands.BoolOptions[key]
+	if !ok {
+		L.Push(lua.LNil)
+		return 1
+	}
+	*ptr = L.ToBool(3)
+	L.Push(lua.LTrue)
+	return 1
 }
