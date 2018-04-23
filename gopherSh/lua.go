@@ -72,6 +72,10 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 				param = append(param, L.ToInt(i))
 			case lua.LTBool:
 				param = append(param, L.ToBool(i))
+			case lua.LTFunction:
+				param = append(param, L.ToFunction(i))
+			case lua.LTUserData:
+				param = append(param, L.ToUserData(i))
 			case lua.LTNil:
 				param = append(param, nil)
 			default:
@@ -100,6 +104,10 @@ func pushInterfaces(L Lua, values []interface{}) {
 				} else {
 					L.Push(lua.LFalse)
 				}
+			case func([]interface{}) []interface{}:
+				L.Push(L.NewFunction(lua2cmd(value)))
+			case func(*functions.Param) []interface{}:
+				L.Push(L.NewFunction(lua2param(value)))
 			}
 		}
 	}
@@ -161,9 +169,9 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (e
 	L.SetContext(ctx)
 	err = nil
 	defer func() {
-		if errTmp := recover() ; errTmp != nil {
+		if errTmp := recover(); errTmp != nil {
 			err = errors.New(fmt.Sprint(errTmp))
-		}else{
+		} else {
 			err = nil
 		}
 	}()
