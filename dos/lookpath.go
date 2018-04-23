@@ -30,7 +30,7 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 					return false
 				}
 				var err error
-				foundpath_, err := os.Readlink(foundpath)
+				foundpath_, err := filepath.EvalSymlinks(foundpath)
 				if err == nil {
 					if foundpath_ != "" {
 						foundpath = foundpath_

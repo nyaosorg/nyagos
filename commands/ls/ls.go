@@ -149,7 +149,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		var err error
 		path := dos.Join(folder, name)
-		linkTo, err = os.Readlink(path)
+		linkTo, err = filepath.EvalSymlinks(path)
 		if err == nil {
 			indicator = "@"
 		} else {
@@ -259,7 +259,7 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 }
 
 func hasLink(folder, name string) bool {
-	fullpath, err := os.Readlink(dos.Join(folder, name))
+	fullpath, err := filepath.EvalSymlinks(dos.Join(folder, name))
 	return err == nil && fullpath != ""
 }
 
