@@ -135,6 +135,7 @@ func Main() error {
 		stream1 = constream
 		frame.DefaultHistory = constream.History
 		ctx = context.WithValue(ctx, history.PackageId, constream.History)
+		ctx = context.WithValue(ctx, shellKey, sh)
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
