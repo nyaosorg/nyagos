@@ -477,3 +477,15 @@ func CmdBitAnd(args []any_t) []any_t {
 	}
 	return []any_t{result}
 }
+
+func CmdBitOr(args []any_t) []any_t {
+	result := 0
+	for _, arg1tmp := range args {
+		if arg1, ok := arg1tmp.(int); ok {
+			result |= arg1
+		} else {
+			return []any_t{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
+		}
+	}
+	return []any_t{result}
+}

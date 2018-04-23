@@ -4,6 +4,7 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"access":         CmdAccess,
 	"atou":           CmdAtoU,
 	"bitand":         CmdBitAnd,
+	"bitor":          CmdBitOr,
 	"box":            CmdBox,
 	"chdir":          CmdChdir,
 	"commonprefix":   CmdCommonPrefix,
