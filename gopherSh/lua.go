@@ -49,6 +49,10 @@ func NewLua() (Lua, error) {
 	ioTable := L.GetGlobal("io")
 	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
 
+	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
+	L.SetField(nyagosTable, "key", keyTable)
+	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
+
 	L.SetGlobal("nyagos", nyagosTable)
 
 	shareTable := L.NewTable()
