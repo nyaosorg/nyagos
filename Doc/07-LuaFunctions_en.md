@@ -41,6 +41,14 @@ assigned on .nyagos but `share[]`. You can use share[] as you like.
 Only the member of the table `share[]` are shared on all Lua-instances
 of nyagos.
 
+### `nyagos.bitand(a,b...)`
+
+returns bit-and of a,b,... This function is for Lua 5.1
+
+### `nyagos.bitor(a,b...)`
+
+returns bit-or of a,b,... This function is for Lua 5.1
+
 ### `nyagos.completion_hidden = (bool)`
 
 If it is set true, on filename completion, hidden files are also included
