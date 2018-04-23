@@ -377,7 +377,7 @@ func init() {
 		"argsfilter":   lua.Property{Pointer: &luaArgsFilter},
 		"key": &lua.VirtualTable{
 			Name:     "nyagos.key",
-			Index:    cmdGetBindKey,
+			Index:    lua2cmd(functions.CmdGetBindKey),
 			NewIndex: cmdBindKey},
 		"bindkey":           lua.TGoFunction(cmdBindKey),
 		"completion_slash":  lua.BoolProperty{Pointer: &completion.UseSlash},

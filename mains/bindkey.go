@@ -225,21 +225,3 @@ func cmdBindKey(L Lua) int {
 		}
 	}
 }
-
-func cmdGetBindKey(L Lua) int {
-	key, keyErr := L.ToString(-1)
-	if keyErr != nil {
-		return L.Push(nil, keyErr)
-	}
-	fnc := readline.GetBindKey(key)
-	if fnc != nil {
-		if stringer, ok := fnc.(fmt.Stringer); ok {
-			if str := stringer.String(); str != "" {
-				L.PushString(str)
-				return 1
-			}
-		}
-	}
-	L.PushNil()
-	return 1
-}
