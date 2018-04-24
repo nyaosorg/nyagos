@@ -148,10 +148,15 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	var linkTo string
 	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		var err error
-		path := dos.Join(folder, name)
+		path := filepath.Join(folder, name)
 		linkTo, err = filepath.EvalSymlinks(path)
-		if err == nil {
-			indicator = "@"
+		if err == nil && linkTo != path {
+			path, err = filepath.Abs(path)
+			if err == nil && linkTo != path {
+				indicator = "@"
+			} else {
+				linkTo = ""
+			}
 		} else {
 			linkTo = ""
 		}
@@ -259,8 +264,13 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 }
 
 func hasLink(folder, name string) bool {
-	fullpath, err := filepath.EvalSymlinks(dos.Join(folder, name))
-	return err == nil && fullpath != ""
+	origpath := filepath.Join(folder, name)
+	fullpath, err := filepath.EvalSymlinks(origpath)
+	if err != nil || fullpath == "" || fullpath == origpath {
+		return false
+	}
+	origpath, err = filepath.Abs(origpath)
+	return err == nil && origpath != fullpath
 }
 
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
