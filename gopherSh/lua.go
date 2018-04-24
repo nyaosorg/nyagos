@@ -24,6 +24,8 @@ func makeVirtualTable(L Lua, getter, setter func(Lua) int) lua.LValue {
 	return table
 }
 
+var isHookSetup = false
+
 func NewLua() (Lua, error) {
 	L := lua.NewState()
 
@@ -60,6 +62,14 @@ func NewLua() (Lua, error) {
 	L.SetGlobal("share", shareTable)
 
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
+
+	if !isHookSetup {
+		orgArgHook = shell.SetArgsHook(newArgHook)
+
+		// orgOnCommandNotFound = shell.OnCommandNotFound
+		// shell.OnCommandNotFound = on_command_not_found
+		isHookSetup = true
+	}
 
 	return L, nil
 }
