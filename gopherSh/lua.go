@@ -76,7 +76,7 @@ func lvalueToInterface(L Lua, valueTmp lua.LValue) interface{} {
 	case lua.LString:
 		return string(value)
 	case lua.LNumber:
-		return float64(value)
+		return int(value)
 	case *lua.LUserData:
 		return value.Value
 	case *lua.LFunction:
@@ -146,7 +146,7 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 	case []string:
 		table := L.NewTable()
 		for keyTmp, valTmp := range value {
-			key := interfaceToLValue(L, keyTmp)
+			key := interfaceToLValue(L, keyTmp+1)
 			val := interfaceToLValue(L, valTmp)
 			L.SetTable(table, key, val)
 		}
