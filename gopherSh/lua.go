@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/yuin/gopher-lua"
@@ -171,16 +170,7 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (e
 	}
 	ctx = context.WithValue(ctx, shellKey, sh)
 	L.SetContext(ctx)
-	err = nil
-	defer func() {
-		if errTmp := recover(); errTmp != nil {
-			err = errors.New(fmt.Sprint(errTmp))
-		} else {
-			err = nil
-		}
-	}()
-	L.Call(nargs, nresult)
-	return
+	return L.PCall(nargs, nresult, nil)
 }
 
 func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {

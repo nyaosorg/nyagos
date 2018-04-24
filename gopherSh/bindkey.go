@@ -193,16 +193,20 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 	L.SetContext(ctx)
 
 	L.Push(table)
-	L.Call(1, 1)
-	switch value := L.Get(-1).(type) {
-	case lua.LString:
-		buffer.InsertAndRepaint(string(value))
-	case lua.LBool:
-		if !value {
-			buffer.Buffer = []rune{}
-			buffer.Length = 0
+	err := L.PCall(1, 1, nil)
+	if err != nil {
+		println(err.Error())
+	} else {
+		switch value := L.Get(-1).(type) {
+		case lua.LString:
+			buffer.InsertAndRepaint(string(value))
+		case lua.LBool:
+			if !value {
+				buffer.Buffer = []rune{}
+				buffer.Length = 0
+			}
+			return readline.ENTER
 		}
-		return readline.ENTER
 	}
 	return readline.CONTINUE
 }
