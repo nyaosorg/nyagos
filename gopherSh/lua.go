@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"os"
+	"reflect"
+	"time"
 
 	"github.com/yuin/gopher-lua"
 
@@ -62,28 +64,45 @@ func NewLua() (Lua, error) {
 	return L, nil
 }
 
+func lvalueToInterface(L Lua, valueTmp lua.LValue) interface{} {
+	if valueTmp == lua.LNil {
+		return nil
+	} else if valueTmp == lua.LTrue {
+		return true
+	} else if valueTmp == lua.LFalse {
+		return false
+	}
+	switch value := valueTmp.(type) {
+	case lua.LString:
+		return string(value)
+	case lua.LNumber:
+		return float64(value)
+	case *lua.LUserData:
+		return value.Value
+	case *lua.LFunction:
+		return value
+	case *lua.LTable:
+		table := make(map[interface{}]interface{})
+		L.ForEach(value, func(keyTmp, valTmp lua.LValue) {
+			key := lvalueToInterface(L, keyTmp)
+			val := lvalueToInterface(L, valTmp)
+			table[key] = val
+		})
+		return table
+	default:
+		println("lvalueToInterface: type not found")
+		println(reflect.TypeOf(value).String())
+		return nil
+	}
+}
+
 func luaArgsToInterfaces(L Lua) []interface{} {
 	end := L.GetTop()
 	var param []interface{}
 	if end > 0 {
 		param = make([]interface{}, 0, end-1)
 		for i := 1; i <= end; i++ {
-			switch L.Get(i).Type() {
-			case lua.LTString:
-				param = append(param, L.ToString(i))
-			case lua.LTNumber:
-				param = append(param, L.ToInt(i))
-			case lua.LTBool:
-				param = append(param, L.ToBool(i))
-			case lua.LTFunction:
-				param = append(param, L.ToFunction(i))
-			case lua.LTUserData:
-				param = append(param, L.ToUserData(i))
-			case lua.LTNil:
-				param = append(param, nil)
-			default:
-				param = append(param, nil)
-			}
+			param = append(param, lvalueToInterface(L, L.Get(i)))
 		}
 	} else {
 		param = []interface{}{}
@@ -91,28 +110,66 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 	return param
 }
 
-func pushInterfaces(L Lua, values []interface{}) {
-	for _, valueTmp := range values {
-		if valueTmp == nil {
-			L.Push(lua.LNil)
+func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
+	if valueTmp == nil {
+		return lua.LNil
+	}
+	switch value := valueTmp.(type) {
+	case string:
+		return lua.LString(value)
+	case error:
+		return lua.LString(value.Error())
+	case int:
+		return lua.LNumber(value)
+	case int64:
+		return lua.LNumber(value)
+	case time.Month:
+		return lua.LNumber(value)
+	case bool:
+		if value {
+			return lua.LTrue
 		} else {
-			switch value := valueTmp.(type) {
-			case string:
-				L.Push(lua.LString(value))
-			case int:
-				L.Push(lua.LNumber(value))
-			case bool:
-				if value {
-					L.Push(lua.LTrue)
-				} else {
-					L.Push(lua.LFalse)
-				}
-			case func([]interface{}) []interface{}:
-				L.Push(L.NewFunction(lua2cmd(value)))
-			case func(*functions.Param) []interface{}:
-				L.Push(L.NewFunction(lua2param(value)))
-			}
+			return lua.LFalse
 		}
+	case func([]interface{}) []interface{}:
+		return L.NewFunction(lua2cmd(value))
+	case func(*functions.Param) []interface{}:
+		return L.NewFunction(lua2param(value))
+	case map[interface{}]interface{}:
+		table := L.NewTable()
+		for keyTmp, valTmp := range value {
+			key := interfaceToLValue(L, keyTmp)
+			val := interfaceToLValue(L, valTmp)
+			L.SetTable(table, key, val)
+		}
+		return table
+	case []string:
+		table := L.NewTable()
+		for keyTmp, valTmp := range value {
+			key := interfaceToLValue(L, keyTmp)
+			val := interfaceToLValue(L, valTmp)
+			L.SetTable(table, key, val)
+		}
+		return table
+	case map[string]interface{}:
+		table := L.NewTable()
+		for keyTmp, valTmp := range value {
+			key := interfaceToLValue(L, keyTmp)
+			val := interfaceToLValue(L, valTmp)
+			L.SetTable(table, key, val)
+		}
+		return table
+
+	default:
+		println("interfaceToLValue: not support type")
+		println(reflect.TypeOf(value).String())
+		return nil
+	}
+}
+
+func pushInterfaces(L Lua, values []interface{}) {
+	for _, value := range values {
+		L.Push(interfaceToLValue(L, value))
 	}
 }
 
