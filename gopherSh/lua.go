@@ -55,6 +55,7 @@ func NewLua() (Lua, error) {
 	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
 	L.SetField(nyagosTable, "key", keyTable)
 	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
+	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
 
 	L.SetGlobal("nyagos", nyagosTable)
 

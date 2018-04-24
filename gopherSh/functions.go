@@ -1,8 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io/ioutil"
+	"os"
 	"strings"
 
 	"github.com/yuin/gopher-lua"
@@ -61,6 +64,48 @@ func cmdGetAlias(L Lua) int {
 		L.Push(v.Chank)
 	default:
 		L.Push(lua.LString(v.String()))
+	}
+	return 1
+}
+
+func cmdEval(L Lua) int {
+	statement, ok := L.Get(1).(lua.LString)
+	if !ok {
+		L.Push(lua.LNil)
+		L.Push(lua.LString("nyagos.eval: an argument is not string"))
+		return 2
+	}
+	r, w, err := os.Pipe()
+	if err != nil {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(err.Error()))
+		return 2
+	}
+	go func(statement string, w *os.File) {
+		ctx, sh := getRegInt(L)
+		if ctx == nil {
+			ctx = context.Background()
+			println("cmdEval: context not found.")
+		}
+		if sh == nil {
+			sh = shell.New()
+			println("cmdEval: shell not found.")
+			defer sh.Close()
+		}
+		sh.SetTag(&luaWrapper{L})
+		saveOut := sh.Stdout
+		sh.Stdout = w
+		sh.Interpret(ctx, statement)
+		sh.Stdout = saveOut
+		w.Close()
+	}(string(statement), w)
+
+	result, err := ioutil.ReadAll(r)
+	r.Close()
+	if err == nil {
+		L.Push(lua.LString(string(bytes.Trim(result, "\r\n\t "))))
+	} else {
+		L.Push(lua.LNil)
 	}
 	return 1
 }
