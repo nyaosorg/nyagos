@@ -147,35 +147,58 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		return L.NewFunction(lua2cmd(value))
 	case func(*functions.Param) []interface{}:
 		return L.NewFunction(lua2param(value))
-	case map[interface{}]interface{}:
-		table := L.NewTable()
-		for keyTmp, valTmp := range value {
-			key := interfaceToLValue(L, keyTmp)
-			val := interfaceToLValue(L, valTmp)
-			L.SetTable(table, key, val)
+	case reflect.Value:
+		switch value.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return lua.LNumber(value.Int())
+		case reflect.Uint, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+			return lua.LNumber(value.Uint())
+		case reflect.Bool:
+			if value.Bool() {
+				return lua.LTrue
+			} else {
+				return lua.LFalse
+			}
+		case reflect.String:
+			return lua.LString(value.String())
+		default:
+			panic("not supporting type even in reflect value")
 		}
-		return table
-	case []string:
-		table := L.NewTable()
-		for keyTmp, valTmp := range value {
-			key := interfaceToLValue(L, keyTmp+1)
-			val := interfaceToLValue(L, valTmp)
-			L.SetTable(table, key, val)
-		}
-		return table
-	case map[string]interface{}:
-		table := L.NewTable()
-		for keyTmp, valTmp := range value {
-			key := interfaceToLValue(L, keyTmp)
-			val := interfaceToLValue(L, valTmp)
-			L.SetTable(table, key, val)
-		}
-		return table
-
 	default:
-		println("interfaceToLValue: not support type")
-		println(reflect.TypeOf(value).String())
-		return nil
+		reflectValue := reflect.ValueOf(value)
+		switch reflectValue.Kind() {
+		case reflect.Slice, reflect.Array:
+			elem := reflectValue.Type().Elem()
+			if elem.Kind() == reflect.Uint8 {
+				buffer := make([]byte, 0, reflectValue.Len())
+				for i, end := 0, reflectValue.Len(); i < end; i++ {
+					buffer = append(buffer, byte(reflectValue.Index(i).Uint()))
+				}
+				return lua.LString(string(buffer))
+			} else {
+				array1 := L.NewTable()
+				for i, end := 0, reflectValue.Len(); i < end; i++ {
+					val := reflectValue.Index(i)
+					L.SetTable(array1,
+						interfaceToLValue(L, i+1),
+						interfaceToLValue(L, val))
+				}
+				return array1
+			}
+		case reflect.Map:
+			map1 := L.NewTable()
+			for _, key := range reflectValue.MapKeys() {
+				L.SetTable(map1,
+					interfaceToLValue(L, key),
+					interfaceToLValue(L, reflectValue.MapIndex(key)))
+			}
+			return map1
+		default:
+			println("interfaceToLValue: not support type")
+			println(reflect.TypeOf(value).String())
+			return nil
+		}
+
 	}
 }
 
