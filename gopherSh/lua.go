@@ -222,7 +222,7 @@ type shellKeyT struct{}
 var shellKey shellKeyT
 
 func getRegInt(L Lua) (context.Context, *shell.Shell) {
-	ctx := L.Context()
+	ctx := getContext(L)
 	if ctx == nil {
 		println("getRegInt: could not find context in Lua instance")
 		return context.Background(), nil
@@ -256,12 +256,39 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 	}
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (err error) {
-	if save := L.Context(); save != nil {
-		defer L.SetContext(save)
+const ctxkey = "github.com/zetamatta/nyagos"
+
+// setContext
+// We does not use (lua.LState)SetContext.
+// Because sometimes cancel is requrested on unexpected timing.
+func setContext(L Lua, ctx context.Context) {
+	reg := L.Get(lua.RegistryIndex)
+	if ctx != nil {
+		u := L.NewUserData()
+		u.Value = ctx
+		L.SetField(reg, ctxkey, u)
+	} else {
+		L.SetField(reg, ctxkey, lua.LNil)
 	}
+}
+
+func getContext(L Lua) context.Context {
+	reg := L.Get(lua.RegistryIndex)
+	valueUD, ok := L.GetField(reg, ctxkey).(*lua.LUserData)
+	if !ok {
+		return nil
+	}
+	ctx, ok := valueUD.Value.(context.Context)
+	if !ok {
+		return nil
+	}
+	return ctx
+}
+
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (err error) {
+	defer setContext(L, getContext(L))
 	ctx = context.WithValue(ctx, shellKey, sh)
-	L.SetContext(ctx)
+	setContext(L, ctx)
 	return L.PCall(nargs, nresult, nil)
 }
 

@@ -186,11 +186,8 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 	L.SetField(table, "firstword", L.NewFunction(callFirstWord))
 	L.SetField(table, "boxprint", L.NewFunction(callBoxListing))
 
-	save := L.Context()
-	defer func() {
-		L.SetContext(save)
-	}()
-	L.SetContext(ctx)
+	defer setContext(L, getContext(L))
+	setContext(L, ctx)
 
 	L.Push(table)
 	err := L.PCall(1, 1, nil)

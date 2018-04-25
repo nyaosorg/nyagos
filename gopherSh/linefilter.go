@@ -36,7 +36,8 @@ func (this *LuaFilterStream) ReadLine(ctx context.Context) (context.Context, str
 
 	L.Push(luaFilter)
 	L.Push(lua.LString(line))
-	L.SetContext(ctx)
+	defer setContext(L, getContext(L))
+	setContext(L, ctx)
 	err = L.PCall(1, 1, nil)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)

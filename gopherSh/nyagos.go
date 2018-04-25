@@ -29,10 +29,8 @@ func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string
 	if !ok {
 		return nil, errors.New("Script is not supported.")
 	}
-	if save := L.Context(); save != nil {
-		defer L.SetContext(save)
-	}
-	L.SetContext(ctx)
+	defer setContext(L, getContext(L))
+	setContext(L, ctx)
 	return nil, L.DoFile(fname)
 }
 
@@ -41,10 +39,8 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 	if !ok {
 		return errors.New("Script is not supported.")
 	}
-	if save := L.Context(); save != nil {
-		defer L.SetContext(save)
-	}
-	L.SetContext(ctx)
+	defer setContext(L, getContext(L))
+	setContext(L, ctx)
 	return L.DoString(code)
 }
 
@@ -85,7 +81,8 @@ func Main() error {
 
 	langEngine := func(fname string) ([]byte, error) {
 		ctxTmp := context.WithValue(ctx, shellKey, sh)
-		L.SetContext(ctxTmp)
+		defer setContext(L, getContext(L))
+		setContext(L, ctxTmp)
 		return nil, L.DoFile(fname)
 	}
 	shellEngine := func(fname string) error {
