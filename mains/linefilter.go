@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
 	"github.com/zetamatta/nyagos/shell"
 )
 

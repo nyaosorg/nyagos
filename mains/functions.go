@@ -15,7 +15,7 @@ import (
 	"github.com/zetamatta/go-ansicfile"
 
 	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
 	"github.com/zetamatta/nyagos/shell"
 )
 

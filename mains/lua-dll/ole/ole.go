@@ -2,7 +2,7 @@ package goluaole
 
 import (
 	"fmt"
-	lua "github.com/zetamatta/nyagos/lua"
+	lua "github.com/zetamatta/nyagos/mains/lua-dll"
 
 	ole "github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"

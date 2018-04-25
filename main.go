@@ -7,8 +7,8 @@ import (
 
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/frame"
-	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/mains"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
 )
 
 var version string
