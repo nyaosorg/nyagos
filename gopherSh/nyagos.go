@@ -10,6 +10,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
@@ -64,6 +65,8 @@ func (this *luaWrapper) Close() error {
 
 func Main() error {
 	ctx := context.Background()
+
+	completion.HookToList = append(completion.HookToList, luaHookForComplete)
 
 	L, err := NewLua()
 	if err != nil {

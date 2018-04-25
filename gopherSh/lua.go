@@ -161,8 +161,10 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 			}
 		case reflect.String:
 			return lua.LString(value.String())
+		case reflect.Interface:
+			return interfaceToLValue(L, value.Interface())
 		default:
-			panic("not supporting type even in reflect value")
+			panic("not supporting type even in reflect value: " + value.Kind().String())
 		}
 	default:
 		reflectValue := reflect.ValueOf(value)
