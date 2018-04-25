@@ -128,9 +128,13 @@ func Main() error {
 	if isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
 			func() (int, error) {
-				functions.Prompt(
-					[]interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))})
-				return 0, nil
+				if L != nil {
+					return printPrompt(ctx, sh, L)
+				} else {
+					functions.Prompt(
+						[]interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))})
+					return 0, nil
+				}
 			})
 		stream1 = constream
 		frame.DefaultHistory = constream.History
