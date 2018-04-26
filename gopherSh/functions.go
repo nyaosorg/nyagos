@@ -68,6 +68,57 @@ func cmdGetAlias(L Lua) int {
 	return 1
 }
 
+func cmdExec(L Lua) int {
+	errorlevel := 0
+	var err error
+	table, ok := L.Get(1).(*lua.LTable)
+	if ok {
+		n := table.Len()
+		args := make([]string, 0, n)
+		for i := 1; i <= n; i++ {
+			arg1 := L.GetTable(table, lua.LNumber(i)).String()
+			args = append(args, arg1)
+		}
+		ctx, sh := getRegInt(L)
+		if sh == nil {
+			println("main/lua_cmd.go: cmdExec: not found interpreter object")
+			sh = shell.New()
+			newL, err := Clone(L)
+			if err == nil && newL != nil {
+				sh.SetTag(&luaWrapper{Lua: newL})
+			}
+			defer sh.Close()
+		}
+		cmd := sh.Command()
+		defer cmd.Close()
+		cmd.SetArgs(args)
+		errorlevel, err = cmd.Spawnvp(ctx)
+	} else {
+		statement, ok := L.Get(1).(lua.LString)
+		if !ok {
+			return lerror(L, "nyagos.exec: the 1st argument is not a string")
+		}
+		ctx, sh := getRegInt(L)
+		if ctx == nil {
+			return lerror(L, "nyagos.exec: context not found")
+		}
+		if sh == nil {
+			println("nyagos.exec: warning shell is not found.")
+			sh = shell.New()
+			sh.SetTag(&luaWrapper{L})
+			defer sh.Close()
+		}
+		errorlevel, err = sh.Interpret(ctx, string(statement))
+	}
+	L.Push(lua.LNumber(errorlevel))
+	if err != nil {
+		L.Push(lua.LString(err.Error()))
+	} else {
+		L.Push(lua.LNil)
+	}
+	return 2
+}
+
 func cmdEval(L Lua) int {
 	statement, ok := L.Get(1).(lua.LString)
 	if !ok {
