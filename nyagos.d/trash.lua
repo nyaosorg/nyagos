@@ -11,8 +11,12 @@ nyagos.alias.trash = function(args)
     end
     local fsObj = nyagos.create_object("Scripting.FileSystemObject")
     local shellApp = nyagos.create_object("Shell.Application")
-    local trashBox = shellApp:NameSpace(math.tointeger(10))
-    args = nyagos.glob(table.unpack(args))
+    local ten = 10
+    if _VERSION == "Lua 5.3" then
+        ten = math.tointeger(10)
+    end
+    local trashBox = shellApp:NameSpace(ten)
+    args = nyagos.glob((table.unpack or unpack)(args))
     for i=1,#args do
         if fsObj:FileExists(args[i]) or fsObj:FolderExists(args[i]) then
             trashBox:MoveHere(fsObj:GetAbsolutePathName(args[i]))
