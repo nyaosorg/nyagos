@@ -27,7 +27,7 @@ func makeVirtualTable(L Lua, getter, setter func(Lua) int) lua.LValue {
 var isHookSetup = false
 
 func NewLua() (Lua, error) {
-	L := lua.NewState()
+	L := lua.NewState(lua.Options{IncludeGoStackTrace: true})
 
 	nyagosTable := L.NewTable()
 
@@ -57,6 +57,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2cmd(functions.Prompt)))
+	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
 
 	L.SetGlobal("nyagos", nyagosTable)
 
@@ -122,11 +123,17 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 	return param
 }
 
+type ToLValueT interface {
+	ToLValue(Lua) lua.LValue
+}
+
 func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 	if valueTmp == nil {
 		return lua.LNil
 	}
 	switch value := valueTmp.(type) {
+	case ToLValueT:
+		return value.ToLValue(L)
 	case string:
 		return lua.LString(value)
 	case error:
