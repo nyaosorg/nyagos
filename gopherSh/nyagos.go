@@ -9,6 +9,7 @@ import (
 	"runtime"
 
 	"github.com/mattn/go-isatty"
+	"github.com/yuin/gopher-lua"
 
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
@@ -107,6 +108,7 @@ func Main() error {
 				frame.VersionOrStamp(),
 				runtime.GOARCH,
 				runtime.Version())
+			fmt.Printf("Powered by %s %s\n", lua.PackageName, lua.PackageVersion)
 			fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
 		}
 		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
