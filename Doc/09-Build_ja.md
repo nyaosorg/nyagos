@@ -7,7 +7,6 @@
 github.com 上のモジュールは `make.cmd get` でダウンロード可能です。
 
 * [go 1.10 for windows](http://golang.org)
-* [LuaBinaries 5.3.2 - Release 1 for Win32/64](http://luabinaries.sourceforge.net/download.html)
 * https://github.com/atotto/clipboard
 * https://github.com/dustin/go-humanize
 * https://github.com/go-ole/go-ole
@@ -17,6 +16,7 @@ github.com 上のモジュールは `make.cmd get` でダウンロード可能�
 * https://github.com/mattn/go-isatty
 * https://github.com/mattn/go-runewidth
 * https://github.com/mattn/msgbox
+* https://github.com/yuin/gopher-lua
 * https://github.com/zetamatta/go-ansicfile
 * https://github.com/zetamatta/go-box
 * https://github.com/zetamatta/go-findfile
@@ -28,12 +28,9 @@ github.com 上のモジュールは `make.cmd get` でダウンロード可能�
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
-    make.cmd get-lua
     make.cmd get
     make.cmd
     make.cmd install INSTALLDIR
-
-`make.cmd get-lua` は `lua-5.3.2_Win32_bin.zip` もしくは `lua-5.3.2_Win64_bin.zip` をネットよりダウンロードします。
 
 make.cmd の使い方については `make.cmd help` を参照してください。
 
