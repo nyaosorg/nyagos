@@ -24,8 +24,6 @@ environment:
     dest_dir: bin
     gopath: C:\Users\appveyor\go
     go_shortv: 16
-    lua_ver: 5.3.2
-    lua_shortv: 53
   matrix:
     - platform: i386
     - platform: amd64
@@ -42,25 +40,6 @@ install:
         $script:bit = 64
         $env:GOARCH = "amd64"
       }
-      $targetURL = "http://ja.osdn.jp/frs/g_redir.php?m=kent&f=%2Fluabinaries%2F" + $env:LUA_VER + "%2FTools+Executables%2Flua-" + $env:LUA_VER + "_Win" + $script:bit + "_bin.zip"
-      $outputPath = $env:APPVEYOR_BUILD_FOLDER + "\lua.zip"
-      $webClient = new-object System.Net.WebClient
-      [int]$trials = 0
-      do {
-        try {
-          $trials +=1
-          $webClient.DownloadFile($targetURL, $outputPath)
-          break
-        } catch [System.Net.WebException] {
-          write-host "Problem downloading $targetURL `tTrial $trials `
-                     `n`tException: " $_.Exception.Message
-          sleep 3
-        }
-      }
-      while ($trials -lt 5)
-  - cd %APPVEYOR_BUILD_FOLDER%
-  - 7z x lua.zip -oc:lua -y > nul
-  - move %APPVEYOR_BUILD_FOLDER%\lua\lua%LUA_SHORTV%.dll %APPVEYOR_BUILD_FOLDER%
   - md %INSTALL_DIR% > nul 2>&1
 
 
