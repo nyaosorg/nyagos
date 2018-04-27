@@ -5,6 +5,7 @@ import (
 	"errors"
 	"os"
 	"reflect"
+	"runtime"
 	"time"
 
 	"github.com/yuin/gopher-lua"
@@ -59,6 +60,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2cmd(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
+	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
 
 	if exePath, err := os.Executable(); err == nil {
 		L.SetField(nyagosTable, "exe", lua.LString(exePath))
