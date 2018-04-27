@@ -60,6 +60,12 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2cmd(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
 
+	if exePath, err := os.Executable(); err == nil {
+		L.SetField(nyagosTable, "exe", lua.LString(exePath))
+	} else {
+		println("gopherSh: NewLua: os.Executable() failed: " + err.Error())
+	}
+
 	L.SetGlobal("nyagos", nyagosTable)
 
 	shareTable := L.NewTable()
