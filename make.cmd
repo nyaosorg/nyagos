@@ -6,7 +6,6 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
         $args[0].Groups[1] -replace " ",[char]1
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
-# set GO "go" -option constant
 set GO "go.exe" -option constant
 
 set CMD "Cmd" -option constant
@@ -342,18 +341,6 @@ function Get-Architecture($bin){
     }
     return $null
 }
-
-function Download-File($url){
-    $fname = (Split-Path $url -Leaf)
-    if( $fname -like "download*" ){
-        $fname = (Split-Path (Split-Path $url -Parent) -Leaf)
-    }
-    $client = New-Object System.Net.WebClient
-    Write-Verbose "$ wget '$url' -> '$fname'"
-    $client.DownloadFile($url,$fname)
-    return $fname
-}
-
 
 function Make-Package($arch){
     $zipname = ("nyagos-{0}.zip" -f (& cmd\$arch\nyagos.exe --show-version-only))
