@@ -78,8 +78,8 @@ func NewLua() (Lua, error) {
 	if !isHookSetup {
 		orgArgHook = shell.SetArgsHook(newArgHook)
 
-		// orgOnCommandNotFound = shell.OnCommandNotFound
-		// shell.OnCommandNotFound = on_command_not_found
+		orgOnCommandNotFound = shell.OnCommandNotFound
+		shell.OnCommandNotFound = onCommandNotFound
 		isHookSetup = true
 	}
 
