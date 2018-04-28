@@ -51,39 +51,6 @@ func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
 	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
 }
 
-var orgOnCommandNotFound func(*shell.Cmd, error) error
-
-var luaOnCommandNotFound lua.Object = lua.TNil{}
-
-func on_command_not_found(inte *shell.Cmd, err error) error {
-	luawrapper, ok := inte.Tag().(*luaWrapper)
-	if !ok {
-		return errors.New("Could get lua instance(on_command_not_found)")
-	}
-	L := luawrapper.Lua
-
-	L.Push(luaOnCommandNotFound)
-	if !L.IsFunction(-1) {
-		L.Pop(1)
-		return orgOnCommandNotFound(inte, err)
-	}
-	L.NewTable()
-	for key, val := range inte.Args() {
-		L.PushString(val)
-		L.RawSetI(-2, lua.Integer(key))
-	}
-	err1 := L.Call(1, 1)
-	defer L.Pop(1)
-	if err1 != nil {
-		return err
-	}
-	if L.ToBool(-1) {
-		return nil
-	} else {
-		return orgOnCommandNotFound(inte, err)
-	}
-}
-
 var nyagos_table_member map[string]lua.Object
 
 func getNyagosTable(L Lua) int {
@@ -265,7 +232,7 @@ func NewLua() (Lua, error) {
 		orgArgHook = shell.SetArgsHook(newArgHook)
 
 		orgOnCommandNotFound = shell.OnCommandNotFound
-		shell.OnCommandNotFound = on_command_not_found
+		shell.OnCommandNotFound = onCommandNotFound
 		hook_setuped = true
 	}
 	return this, nil
