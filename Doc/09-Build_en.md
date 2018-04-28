@@ -4,7 +4,7 @@ Build
 -----
 
 These sortwares are required.
-Modules on github.com are able to be downloaded with `make.cmd get`.
+They are able to be downloaded with `make.cmd get`.
 
 * [go 1.10 for windows](http://golang.org)
 * https://github.com/atotto/clipboard
@@ -28,8 +28,34 @@ On `%GOPATH%` folder,
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
+
+(for stable version)
+
+    git checkout master
+
+(for latest version)
+
+    git checkout develop
+
     make.cmd get
     make.cmd
     make.cmd install INSTALLDIR
 
 How to use make.cmd is shown with `make.cmd help`
+
+Build the minimum version (no-lua)
+----------------------------------
+
+    cd nyagos/ngs
+    go build
+
+Build the version using lua53.dll as lua-engine
+-----------------------------------------------
+
+Since 4.3, GopherLua is used as the lua engine,
+but we can still use lua53.dll.
+
+    cd nyagos/mains
+    go build
+
+<!-- vim:set fenc=utf8: -->

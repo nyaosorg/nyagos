@@ -4,7 +4,7 @@
 ----------
 
 次のソフトウェアが必要となります。
-github.com 上のモジュールは `make.cmd get` でダウンロード可能です。
+これらは `make.cmd get` でダウンロード可能です。
 
 * [go 1.10 for windows](http://golang.org)
 * https://github.com/atotto/clipboard
@@ -28,10 +28,32 @@ github.com 上のモジュールは `make.cmd get` でダウンロード可能�
 
     git clone https://github.com/zetamatta/nyagos nyagos
     cd nyagos
+
+(安定板の時)
+    git checkout master
+
+(最新版の時)
+    git checkout develop
+
     make.cmd get
     make.cmd
     make.cmd install INSTALLDIR
 
 make.cmd の使い方については `make.cmd help` を参照してください。
+
+Lua を使わない最小バージョンをビルドする
+----------------------------------------
+
+    cd nyagos/ngs
+    go build
+
+lua53.dll を Lua のエンジンとして使用するバージョンをビルドする
+---------------------------------------------------------------
+
+4.3 から Lua エンジンは GopherLua に切り変わりましたが、
+lua53.dll をまだ使用することもできます。
+
+    cd nyagos/mains
+    go build
 
 <!-- vim:set fenc=utf8: -->
