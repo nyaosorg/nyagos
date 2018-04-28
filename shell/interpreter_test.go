@@ -8,7 +8,7 @@ import (
 
 func TestInterpret(t *testing.T) {
 	ctx := context.Background()
-	_, err := New().Interpret(ctx,"ls.exe | cat.exe -n > hogehoge")
+	_, err := New().Interpret(ctx, "ls.exe | cat.exe -n > hogehoge")
 	fmt.Println(err)
 }
 
