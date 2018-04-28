@@ -10,6 +10,7 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -61,6 +62,8 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2cmd(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
+	L.SetField(nyagosTable, "goversion", lua.LString(runtime.Version()))
+	L.SetField(nyagosTable, "version", lua.LString(frame.Version))
 
 	if exePath, err := os.Executable(); err == nil {
 		L.SetField(nyagosTable, "exe", lua.LString(exePath))
