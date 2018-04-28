@@ -47,16 +47,12 @@ func callReplace(L Lua) int {
 	}
 	pos, ok := L.Get(-2).(lua.LNumber)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("not a number"))
-		return 2
+		return lerror(L, "not a number")
 	}
 	str := L.ToString(-1)
 	pos_zero_base := int(pos) - 1
 	if pos_zero_base > buffer.Length {
-		L.Push(lua.LNil)
-		L.Push(lua.LString(fmt.Sprintf(":replace: pos=%d: Too big.", pos)))
-		return 2
+		return lerror(L, fmt.Sprintf(":replace: pos=%d: Too big.", pos))
 	}
 	buffer.ReplaceAndRepaint(pos_zero_base, string(str))
 	L.Push(lua.LTrue)
@@ -83,9 +79,7 @@ func callKeyFunc(L Lua) int {
 	key := L.ToString(2)
 	function, err := readline.GetFunc(key)
 	if err != nil {
-		L.Push(lua.LNil)
-		L.Push(lua.LString(err.Error()))
-		return 2
+		return lerror(L, err.Error())
 	}
 	ctx := context.Background()
 	switch function.Call(ctx, buffer) {
@@ -211,17 +205,13 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 func cmdBindKey(L Lua) int {
 	keyTmp, ok := L.Get(-2).(lua.LString)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("bindkey: key error"))
-		return 2
+		return lerror(L, "bindkey: key error")
 	}
 	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
 	switch value := L.Get(-1).(type) {
 	case *lua.LFunction:
 		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{value}); err != nil {
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		} else {
 			L.Push(lua.LTrue)
 			return 1
@@ -230,9 +220,7 @@ func cmdBindKey(L Lua) int {
 		val := L.ToString(-1)
 		err := readline.BindKeySymbol(key, val)
 		if err != nil {
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		} else {
 			L.Push(lua.LTrue)
 			return 1
