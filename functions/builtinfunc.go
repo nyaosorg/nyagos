@@ -447,7 +447,7 @@ func GetOption(args []any_t) []any_t {
 	key := fmt.Sprint(args[1])
 	ptr, ok := commands.BoolOptions[key]
 	if !ok {
-		return []any_t{nil, fmt.Sprintf("key: %s: not found")}
+		return []any_t{nil, fmt.Sprintf("key: %s: not found", key)}
 	}
 	return []any_t{*ptr}
 }
