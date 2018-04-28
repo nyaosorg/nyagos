@@ -142,7 +142,7 @@ func SetHook(hook_ HookT) (rv HookT) {
 	return
 }
 
-var OnCommandNotFound = func(cmd *Cmd, err error) error {
+var OnCommandNotFound = func(ctx context.Context, cmd *Cmd, err error) error {
 	err = &CommandNotFound{cmd.args[0], err}
 	return err
 }
@@ -183,7 +183,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	// command not found hook
 	fullpath := cmd.FullPath()
 	if fullpath == "" {
-		return 255, OnCommandNotFound(cmd, os.ErrNotExist)
+		return 255, OnCommandNotFound(ctx, cmd, os.ErrNotExist)
 	}
 	cmd.args[0] = fullpath
 
