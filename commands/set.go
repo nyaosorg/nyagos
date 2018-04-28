@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -35,10 +36,12 @@ func shrink(values ...string) string {
 }
 
 var BoolOptions = map[string]*bool{
-	"glob":           &shell.WildCardExpansionAlways,
-	"noclobber":      &shell.NoClobber,
-	"usesource":      &shell.UseSourceRunBatch,
-	"cleanup_buffer": &readline.FlushBeforeReadline,
+	"cleanup_buffer":    &readline.FlushBeforeReadline,
+	"completion_hidden": &completion.IncludeHidden,
+	"completion_slash":  &completion.UseSlash,
+	"glob":              &shell.WildCardExpansionAlways,
+	"noclobber":         &shell.NoClobber,
+	"usesource":         &shell.UseSourceRunBatch,
 }
 
 func dumpBoolOptions(out io.Writer) {
