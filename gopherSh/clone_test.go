@@ -28,7 +28,11 @@ func TestClone(t *testing.T) {
 	L1 := lua.NewState()
 
 	makeSource(L1)
-	L2 := Clone(L1)
+	L2, err := Clone(L1)
+	if err != nil {
+		t.Fatalf("Failed to create instance: %s", err.Error())
+		return
+	}
 	L1.Close()
 
 	if L2 == nil {

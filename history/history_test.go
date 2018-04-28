@@ -50,21 +50,21 @@ func TestReplace(t *testing.T) {
 func TestExpandMacro(t *testing.T) {
 	var buffer strings.Builder
 
-	ExpandMacro(&buffer, strings.NewReader("^"), "aaa bbb ccc")
+	expandMacro(&buffer, strings.NewReader("^"), "aaa bbb ccc")
 	if buffer.String() != "bbb" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	ExpandMacro(&buffer, strings.NewReader("$"), "aaa bbb ccc ddd")
+	expandMacro(&buffer, strings.NewReader("$"), "aaa bbb ccc ddd")
 	if buffer.String() != "ddd" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	ExpandMacro(&buffer, strings.NewReader(":1"), `aaa "b bb" ccc ddd`)
+	expandMacro(&buffer, strings.NewReader(":1"), `aaa "b bb" ccc ddd`)
 	if buffer.String() != `"b bb"` {
 		t.Fail()
 		return
