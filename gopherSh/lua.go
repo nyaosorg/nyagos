@@ -3,6 +3,7 @@ package gopherSh
 import (
 	"context"
 	"errors"
+	"fmt"
 	"os"
 	"reflect"
 	"runtime"
@@ -10,8 +11,11 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
+	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -24,6 +28,65 @@ func makeVirtualTable(L Lua, getter, setter func(Lua) int) lua.LValue {
 	L.SetField(metaTable, "__newindex", L.NewFunction(setter))
 	L.SetMetatable(table, metaTable)
 	return table
+}
+
+var stringProperty = map[string]*string{
+	"antihistquot": &history.DisableMarks,
+	"histchar":     &history.Mark,
+	"quotation":    &readline.Delimiters,
+	"version":      &frame.Version,
+}
+
+var boolProperty = map[string]*bool{
+	"silentmode":        &frame.SilentMode,
+	"completion_hidden": &completion.IncludeHidden,
+	"completion_slash":  &completion.UseSlash,
+}
+
+func nyagosGetter(L Lua) int {
+	keyTmp, ok := L.Get(2).(lua.LString)
+	if !ok {
+		return lerror(L, "nyagos[]: too few arguments")
+	}
+	key := string(keyTmp)
+	if ptr, ok := stringProperty[key]; ok {
+		L.Push(lua.LString(*ptr))
+	} else if ptr, ok := boolProperty[key]; ok {
+		if *ptr {
+			L.Push(lua.LTrue)
+		} else {
+			L.Push(lua.LFalse)
+		}
+	} else {
+		L.Push(L.RawGet(L.Get(1).(*lua.LTable), keyTmp))
+	}
+	return 1
+}
+
+func nyagosSetter(L Lua) int {
+	keyTmp, ok := L.Get(2).(lua.LString)
+	if !ok {
+		return lerror(L, "nyagos[]: too few arguments")
+	}
+	key := string(keyTmp)
+	if ptr, ok := stringProperty[key]; ok {
+		val, ok := L.Get(3).(lua.LString)
+		if !ok {
+			return lerror(L, fmt.Sprintf("nyagos[]: val is not a string"))
+		}
+		*ptr = string(val)
+	} else if ptr, ok := boolProperty[key]; ok {
+		if L.Get(3) == lua.LTrue {
+			*ptr = true
+		} else if L.Get(3) == lua.LFalse {
+			*ptr = false
+		} else {
+			return lerror(L, fmt.Sprintf("nyagos.%s: must be boolean", key))
+		}
+	} else {
+		L.RawSet(L.Get(1).(*lua.LTable), L.Get(2), L.Get(3))
+	}
+	return 1
 }
 
 var isHookSetup = false
@@ -70,6 +133,11 @@ func NewLua() (Lua, error) {
 	} else {
 		println("gopherSh: NewLua: os.Executable() failed: " + err.Error())
 	}
+
+	metaTable := L.NewTable()
+	L.SetField(metaTable, "__index", L.NewFunction(nyagosGetter))
+	L.SetField(metaTable, "__newindex", L.NewFunction(nyagosSetter))
+	L.SetMetatable(nyagosTable, metaTable)
 
 	L.SetGlobal("nyagos", nyagosTable)
 
