@@ -134,6 +134,13 @@ func NewLua() (Lua, error) {
 		println("gopherSh: NewLua: os.Executable() failed: " + err.Error())
 	}
 
+	historyMeta := L.NewTable()
+	L.SetField(historyMeta, "__index", L.NewFunction(lua2cmd(functions.CmdGetHistory)))
+	L.SetField(historyMeta, "__len", L.NewFunction(lua2cmd(functions.CmdLenHistory)))
+	historyTable := L.NewTable()
+	L.SetMetatable(historyTable, historyMeta)
+	L.SetField(nyagosTable, "history", historyTable)
+
 	metaTable := L.NewTable()
 	L.SetField(metaTable, "__index", L.NewFunction(nyagosGetter))
 	L.SetField(metaTable, "__newindex", L.NewFunction(nyagosSetter))
