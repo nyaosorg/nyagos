@@ -116,6 +116,7 @@ func NewLua() (Lua, error) {
 
 	ioTable := L.GetGlobal("io")
 	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
+	L.SetField(nyagosTable, "lines", L.GetField(ioTable, "lines"))
 
 	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
 	L.SetField(nyagosTable, "key", keyTable)
