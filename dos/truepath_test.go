@@ -28,7 +28,7 @@ func TestTruePath(t *testing.T) {
 		return
 	}
 
-	if err := os.Mkdir("sub/hoge",0777); err != nil {
+	if err := os.Mkdir("sub/hoge", 0777); err != nil {
 		t.Fatalf("Failed: could not mkdir: %s", err.Error())
 		return
 	}
