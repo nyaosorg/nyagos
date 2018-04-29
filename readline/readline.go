@@ -216,6 +216,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			fmt.Fprint(Console, CURSOR_ON)
 			cursorOnSwitch = true
 		}
+		Console.Flush()
 		for e.Key == nil {
 			e = getch.All()
 			if e.Resize != nil {
@@ -257,6 +258,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
 			fmt.Fprint(Console, "\n")
+			Console.Flush()
 			result := this.String()
 			if rc == ENTER {
 				return result, nil

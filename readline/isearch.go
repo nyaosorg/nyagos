@@ -49,6 +49,7 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 		}
 		lastDrawWidth = drawWidth
 		fmt.Fprint(Console, CURSOR_ON)
+		Console.Flush()
 		charcode := getch.Rune()
 		fmt.Fprint(Console, CURSOR_OFF)
 		Backspace(drawWidth)

@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"os"
@@ -378,7 +379,9 @@ func CmdCommonPrefix(args []any_t) []any_t {
 
 func CmdWriteSub(args []any_t, out io.Writer) []any_t {
 	if f, ok := out.(*os.File); ok {
-		out = colorable.NewColorable(f)
+		cout := bufio.NewWriter(colorable.NewColorable(f))
+		defer cout.Flush()
+		out = cout
 	}
 	for i, arg1 := range args {
 		if i > 0 {

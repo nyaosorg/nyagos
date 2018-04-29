@@ -1,6 +1,7 @@
 package commands
 
 import (
+	"bufio"
 	"context"
 	"io"
 	"os"
@@ -13,7 +14,9 @@ import (
 func cmdLs(ctx context.Context, cmd Param) (int, error) {
 	var out io.Writer
 	if cmd.Out() == os.Stdout {
-		out = colorable.NewColorableStdout()
+		cout := bufio.NewWriter(colorable.NewColorableStdout())
+		defer cout.Flush()
+		out = cout
 	} else {
 		out = cmd.Out()
 	}

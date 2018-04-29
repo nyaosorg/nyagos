@@ -214,6 +214,7 @@ func KeyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
 	fmt.Fprint(Console, CURSOR_ON)
 	defer fmt.Fprint(Console, CURSOR_OFF)
 	for {
+		Console.Flush()
 		e := getch.All()
 		if e.Key != nil && e.Key.Rune != 0 {
 			this.Unicode = e.Key.Rune

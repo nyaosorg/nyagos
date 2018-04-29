@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"bufio"
 	"fmt"
 	"strings"
 	"unicode"
@@ -9,7 +10,7 @@ import (
 	"github.com/zetamatta/go-box"
 )
 
-var Console = colorable.NewColorableStdout()
+var Console = bufio.NewWriter(colorable.NewColorableStdout())
 
 var hasCache = map[rune]struct{}{}
 
