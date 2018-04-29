@@ -30,16 +30,14 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 					return false
 				}
 				var err error
-				foundpath_, err := filepath.EvalSymlinks(foundpath)
-				if err == nil {
-					if foundpath_ != "" {
-						foundpath = foundpath_
-						if filepath.IsAbs(foundpath) {
-							return false
-						}
-						foundpath = filepath.Join(dir1, foundpath)
+				linkTo, err := os.Readlink(foundpath)
+				if err == nil && linkTo != "" {
+					foundpath = linkTo
+					if filepath.IsAbs(foundpath) {
 						return false
 					}
+					foundpath = filepath.Join(dir1, foundpath)
+					return false
 				} else if defined.DBG {
 					print(err.Error(), "\n")
 				}
