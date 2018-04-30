@@ -37,23 +37,25 @@ type session struct {
 	unreadline []string
 }
 
+type CloneCloser interface {
+	Clone(context.Context) (context.Context, CloneCloser, error)
+	Close() error
+}
+
 type Shell struct {
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
-	tag          interface{}
-	OnFork       func(*Cmd) error
-	OffFork      func(*Cmd) error
-	Closers      []io.Closer
+	tag          CloneCloser
 	IsBackGround bool
 }
 
 func (sh *Shell) In() io.Reader          { return sh.Stdin }
 func (sh *Shell) Out() io.Writer         { return sh.Stdout }
 func (sh *Shell) Err() io.Writer         { return sh.Stderr }
-func (sh *Shell) Tag() interface{}       { return sh.tag }
-func (sh *Shell) SetTag(tag interface{}) { sh.tag = tag }
+func (sh *Shell) Tag() CloneCloser       { return sh.tag }
+func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
 
 type Cmd struct {
 	Shell
@@ -61,6 +63,7 @@ type Cmd struct {
 	rawArgs         []string
 	fullPath        string
 	UseShellExecute bool
+	Closers         []io.Closer
 }
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
@@ -80,14 +83,16 @@ func (cmd *Cmd) FullPath() string {
 	return cmd.fullPath
 }
 
-func (sh *Shell) Close() {
-	if sh.Closers != nil {
-		for _, c := range sh.Closers {
+func (cmd *Cmd) Close() {
+	if cmd.Closers != nil {
+		for _, c := range cmd.Closers {
 			c.Close()
 		}
-		sh.Closers = nil
+		cmd.Closers = nil
 	}
 }
+
+func (sh *Shell) Close() {}
 
 func New() *Shell {
 	return &Shell{
@@ -101,12 +106,10 @@ func New() *Shell {
 func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
-			Stdin:   sh.Stdin,
-			Stdout:  sh.Stdout,
-			Stderr:  sh.Stderr,
-			tag:     sh.tag,
-			OnFork:  sh.OnFork,
-			OffFork: sh.OffFork,
+			Stdin:  sh.Stdin,
+			Stdout: sh.Stdout,
+			Stderr: sh.Stderr,
+			tag:    sh.tag,
 		},
 	}
 	if sh.session != nil {
@@ -117,9 +120,9 @@ func (sh *Shell) Command() *Cmd {
 	return cmd
 }
 
-type ArgsHookT func(sh *Shell, args []string) ([]string, error)
+type ArgsHookT func(ctx context.Context, sh *Shell, args []string) ([]string, error)
 
-var argsHook = func(sh *Shell, args []string) ([]string, error) {
+var argsHook = func(ctx context.Context, sh *Shell, args []string) ([]string, error) {
 	return args, nil
 }
 
@@ -139,7 +142,7 @@ func SetHook(hook_ HookT) (rv HookT) {
 	return
 }
 
-var OnCommandNotFound = func(cmd *Cmd, err error) error {
+var OnCommandNotFound = func(ctx context.Context, cmd *Cmd, err error) error {
 	err = &CommandNotFound{cmd.args[0], err}
 	return err
 }
@@ -180,7 +183,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	// command not found hook
 	fullpath := cmd.FullPath()
 	if fullpath == "" {
-		return 255, OnCommandNotFound(cmd, os.ErrNotExist)
+		return 255, OnCommandNotFound(ctx, cmd, os.ErrNotExist)
 	}
 	cmd.args[0] = fullpath
 
@@ -253,16 +256,13 @@ func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
 
 func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
 	cmd := sh.Command()
+	defer cmd.Close()
 	cmd.SetArgs(args)
 	cmd.SetRawArgs(rawargs)
 	return cmd.Spawnvp(ctx)
 }
 
-func (sh *Shell) Interpret(text string) (int, error) {
-	return sh.InterpretContext(context.Background(), text)
-}
-
-func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel int, finalerr error) {
+func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, finalerr error) {
 	if defined.DBG {
 		print("Interpret('", text, "')\n")
 	}
@@ -286,7 +286,7 @@ func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel 
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
 				var err error
-				state.Args, err = argsHook(sh, state.Args)
+				state.Args, err = argsHook(ctx, sh, state.Args)
 				if err != nil {
 					return 255, err
 				}
@@ -367,26 +367,28 @@ func (sh *Shell) InterpretContext(ctx context.Context, text string) (errorlevel 
 				if !isBackGround {
 					wg.Add(1)
 				}
-				if cmd.OnFork != nil {
-					if err := cmd.OnFork(cmd); err != nil {
-						fmt.Fprintln(cmd.Stderr, err.Error())
+				newctx := ctx
+				if tag := cmd.Tag(); tag != nil {
+					var newtag CloneCloser
+					if newctx, newtag, err = tag.Clone(ctx); err != nil {
+						fmt.Fprintln(os.Stderr, err.Error())
 						return -1, err
+					} else {
+						cmd.SetTag(newtag)
 					}
 				}
-				go func(cmd1 *Cmd) {
+				go func(ctx1 context.Context, cmd1 *Cmd) {
 					if !isBackGround {
 						defer wg.Done()
 					}
-					cmd1.Spawnvp(ctx)
-					if cmd1.OffFork != nil {
-						if err := cmd1.OffFork(cmd1); err != nil {
-							fmt.Fprintln(cmd1.Stderr, err.Error())
-							goto exit
+					cmd1.Spawnvp(ctx1)
+					if tag := cmd1.Tag(); tag != nil {
+						if err := tag.Close(); err != nil {
+							fmt.Fprintln(os.Stderr, err.Error())
 						}
 					}
-				exit:
 					cmd1.Close()
-				}(cmd)
+				}(newctx, cmd)
 			}
 		}
 		if !isBackGround {

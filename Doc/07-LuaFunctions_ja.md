@@ -217,6 +217,14 @@ C言語の access 関数と同じです。
 
 ユーザがカーソルキーなどで選択した結果を得ます
 
+### `nyagos.bitand(a,b...)`
+
+a,b… の bit-and の結果を返します。本関数は Lua 5.1 向けです。
+
+### `nyagos.bitor(a,b...)`
+
+a,b… の bit-or の結果を返します。本関数は Lua 5.1 向けです。
+
 ### `nyagos.completion_hook = function(c) ... end`
 
 補完のフックです。関数を代入してください。
@@ -318,6 +326,10 @@ true の時でもファイルの上書きができます。
 true の時(デフォルト)、バッチファイルで NYAGOS の環境変数が変更できる
 ようになります。false の場合、バッチファイルから環境変数の変更を読みと
 るには source コマンドを使う必要があります。
+
+### `nyagos.option.cleaup_buffer`
+
+true の場合、一行入力の前に入力バッファをクリアします。
 
 ### `nyagos.goversion`
 

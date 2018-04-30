@@ -1,164 +1,59 @@
-package mains
+package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"os"
 	"reflect"
 	"runtime"
-	"unsafe"
 
 	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/frame"
+	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/lua"
-	ole "github.com/zetamatta/nyagos/lua/ole"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
+	ole "github.com/zetamatta/nyagos/mains/lua-dll/ole"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 
-const REGKEY_INTERPRETER = "nyagos.interpreter"
+type Lua = lua.Lua
 
-func setRegInt(L lua.Lua, it *shell.Shell) {
-	L.PushValue(lua.LUA_REGISTRYINDEX)
-	L.PushLightUserData(unsafe.Pointer(it))
-	L.SetField(-2, REGKEY_INTERPRETER)
-	L.Pop(1)
+type shellKeyT struct{}
+
+var shellKey shellKeyT
+
+func getRegInt(L Lua) (context.Context, *shell.Shell) {
+	ctx := L.Context()
+	if ctx == nil {
+		println("getRegInt: could not find context in Lua instance")
+		return context.Background(), nil
+	}
+	sh, ok := ctx.Value(shellKey).(*shell.Shell)
+	if !ok {
+		println("getRegInt: could not find shell in Lua instance")
+		return ctx, nil
+	}
+	return ctx, sh
 }
 
-func getRegInt(L lua.Lua) *shell.Shell {
-	L.PushValue(lua.LUA_REGISTRYINDEX)
-	L.GetField(-1, REGKEY_INTERPRETER)
-	rc := (*shell.Shell)(L.ToUserData(-1))
-	L.Pop(2)
-	return rc
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
+	ctx = context.WithValue(ctx, shellKey, sh)
+	return L.CallWithContext(ctx, nargs, nresult)
 }
 
-func callLua(it *shell.Shell, nargs int, nresult int) error {
-	L, ok := it.Tag().(lua.Lua)
+func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
+	luawrapper, ok := sh.Tag().(*luaWrapper)
 	if !ok {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
-	save := getRegInt(L)
-	setRegInt(L, it)
-	err := L.Call(nargs, nresult)
-	setRegInt(L, save)
-	return err
-}
-
-var orgArgHook func(*shell.Shell, []string) ([]string, error)
-
-var luaArgsFilter lua.Object = lua.TNil{}
-
-func newArgHook(it *shell.Shell, args []string) ([]string, error) {
-	L, ok := it.Tag().(lua.Lua)
-	if !ok {
-		return nil, errors.New("Could not get lua instance(newArgHook)")
-	}
-	L.Push(luaArgsFilter)
-	if !L.IsFunction(-1) {
-		L.Pop(1)
-		return orgArgHook(it, args)
-	}
-	L.NewTable()
-	for i := 0; i < len(args); i++ {
-		L.PushString(args[i])
-		L.RawSetI(-2, lua.Integer(i))
-	}
-	if err := L.Call(1, 1); err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		return orgArgHook(it, args)
-	}
-	if L.GetType(-1) != lua.LUA_TTABLE {
-		return orgArgHook(it, args)
-	}
-	newargs := []string{}
-	for i := lua.Integer(0); true; i++ {
-		L.PushInteger(i)
-		L.GetTable(-2)
-		if L.GetType(-1) == lua.LUA_TNIL {
-			break
-		}
-		arg1, arg1err := L.ToString(-1)
-		if arg1err == nil {
-			newargs = append(newargs, arg1)
-		} else {
-			fmt.Fprintln(os.Stderr, arg1err.Error())
-		}
-		L.Pop(1)
-	}
-	return orgArgHook(it, newargs)
-}
-
-var orgOnCommandNotFound func(*shell.Cmd, error) error
-
-var luaOnCommandNotFound lua.Object = lua.TNil{}
-
-func on_command_not_found(inte *shell.Cmd, err error) error {
-	L, ok := inte.Tag().(lua.Lua)
-	if !ok {
-		return errors.New("Could get lua instance(on_command_not_found)")
-	}
-
-	L.Push(luaOnCommandNotFound)
-	if !L.IsFunction(-1) {
-		L.Pop(1)
-		return orgOnCommandNotFound(inte, err)
-	}
-	L.NewTable()
-	for key, val := range inte.Args() {
-		L.PushString(val)
-		L.RawSetI(-2, lua.Integer(key))
-	}
-	err1 := L.Call(1, 1)
-	defer L.Pop(1)
-	if err1 != nil {
-		return err
-	}
-	if L.ToBool(-1) {
-		return nil
-	} else {
-		return orgOnCommandNotFound(inte, err)
-	}
-}
-
-var option_table_member = map[string]IProperty{
-	"glob":      &lua.BoolProperty{Pointer: &shell.WildCardExpansionAlways},
-	"noclobber": &lua.BoolProperty{Pointer: &shell.NoClobber},
-	"usesource": &lua.BoolProperty{Pointer: &shell.UseSourceRunBatch},
-}
-
-func getOption(L lua.Lua) int {
-	key, key_err := L.ToString(2)
-	if key_err != nil {
-		return L.Push(nil, key_err)
-	}
-	val, val_ok := option_table_member[key]
-	if !val_ok {
-		return L.Push(nil)
-	}
-	return L.Push(val)
-}
-
-func setOption(L lua.Lua) int {
-	key, key_err := L.ToString(2)
-	if key_err != nil {
-		return L.Push(nil, key_err)
-	}
-	opt, opt_ok := option_table_member[key]
-	if !opt_ok {
-		print(key, " not found\n")
-		return L.Push(nil)
-	}
-	if err := opt.Set(L, 3); err != nil {
-		return L.Push(nil, err.Error())
-	} else {
-		return L.Push(true)
-	}
+	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
 }
 
 var nyagos_table_member map[string]lua.Object
 
-func getNyagosTable(L lua.Lua) int {
+func getNyagosTable(L Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err.Error())
@@ -179,11 +74,11 @@ func getNyagosTable(L lua.Lua) int {
 }
 
 type IProperty interface {
-	Push(lua.Lua) int
-	Set(lua.Lua, int) error
+	Push(Lua) int
+	Set(Lua, int) error
 }
 
-func setNyagosTable(L lua.Lua) int {
+func setNyagosTable(L Lua) int {
 	index, index_err := L.ToString(2)
 	if index_err != nil {
 		return L.Push(nil, index_err)
@@ -213,7 +108,7 @@ func setNyagosTable(L lua.Lua) int {
 var share_table = map[string]lua.Object{}
 var share_table_generation = map[string]int{}
 
-func setMemberOfShareTable(L lua.Lua) int {
+func setMemberOfShareTable(L Lua) int {
 	// table exists at [-3]
 	key, err := L.ToObject(-2)
 	if err != nil {
@@ -269,7 +164,7 @@ func setMemberOfShareTable(L lua.Lua) int {
 	return 0
 }
 
-func getShareTable(L lua.Lua) int {
+func getShareTable(L Lua) int {
 	key, keyErr := L.ToString(-1)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
@@ -294,7 +189,7 @@ func getShareTable(L lua.Lua) int {
 	}
 }
 
-func setShareTable(L lua.Lua) int {
+func setShareTable(L Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		return L.Push(nil, keyErr)
@@ -311,7 +206,7 @@ func setShareTable(L lua.Lua) int {
 
 var hook_setuped = false
 
-func NewLua() (lua.Lua, error) {
+func NewLua() (Lua, error) {
 	this, err := lua.New()
 	if err != nil {
 		return this, err
@@ -330,115 +225,132 @@ func NewLua() (lua.Lua, error) {
 		NewIndex: setShareTable})
 	this.SetGlobal("share")
 
-	this.PushGoFunction(cmdPrint)
+	this.PushGoFunction(lua2param(functions.CmdPrint))
 	this.SetGlobal("print")
 
 	if !hook_setuped {
 		orgArgHook = shell.SetArgsHook(newArgHook)
 
 		orgOnCommandNotFound = shell.OnCommandNotFound
-		shell.OnCommandNotFound = on_command_not_found
+		shell.OnCommandNotFound = onCommandNotFound
 		hook_setuped = true
 	}
 	return this, nil
 }
 
-var silentmode = false
+func luaArgsToInterfaces(L Lua) []interface{} {
+	end := L.GetTop()
+	var param []interface{}
+	if end > 0 {
+		param = make([]interface{}, 0, end-1)
+		for i := 1; i <= end; i++ {
+			value, _ := L.ToInterface(i)
+			param = append(param, value)
+		}
+	} else {
+		param = []interface{}{}
+	}
+	return param
+}
 
-func lua2cmd(f func([]interface{}) []interface{}) func(lua.Lua) int {
-	return func(L lua.Lua) int {
-		end := L.GetTop()
-		var param []interface{}
-		if end > 0 {
-			param = make([]interface{}, 0, end-1)
-			for i := 1; i <= end; i++ {
-				value, _ := L.ToInterface(i)
-				param = append(param, value)
-			}
+func pushInterfaces(L Lua, values []interface{}) {
+	for _, value := range values {
+		L.PushReflect(value)
+	}
+}
+
+func lua2cmd(f func([]interface{}) []interface{}) func(Lua) int {
+	return func(L Lua) int {
+		param := luaArgsToInterfaces(L)
+		result := f(param)
+		pushInterfaces(L, result)
+		return len(result)
+	}
+}
+
+func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
+	return func(L Lua) int {
+		_, sh := getRegInt(L)
+		param := &functions.Param{
+			Args: luaArgsToInterfaces(L),
+		}
+		if sh != nil {
+			param.In = sh.In()
+			param.Out = sh.Out()
+			param.Err = sh.Err()
 		} else {
-			param = []interface{}{}
+			param.In = os.Stdin
+			param.Out = os.Stdout
+			param.Err = os.Stderr
 		}
 		result := f(param)
-		for _, value := range result {
-			L.PushReflect(value)
-		}
+		pushInterfaces(L, result)
 		return len(result)
 	}
 }
 
 func init() {
 	nyagos_table_member = map[string]lua.Object{
-		"access": lua.TGoFunction(lua2cmd(cmdAccess)),
 		"alias": &lua.VirtualTable{
 			Name:     "nyagos.alias",
 			Index:    cmdGetAlias,
 			NewIndex: cmdSetAlias},
 		"antihistquot": lua.StringProperty{Pointer: &history.DisableMarks},
 		"argsfilter":   lua.Property{Pointer: &luaArgsFilter},
-		"atou":         lua.TGoFunction(lua2cmd(cmdAtoU)),
 		"key": &lua.VirtualTable{
 			Name:     "nyagos.key",
-			Index:    cmdGetBindKey,
+			Index:    lua2cmd(functions.CmdGetBindKey),
 			NewIndex: cmdBindKey},
 		"bindkey":           lua.TGoFunction(cmdBindKey),
-		"box":               lua.TGoFunction(lua2cmd(cmdBox)),
-		"chdir":             lua.TGoFunction(lua2cmd(cmdChdir)),
-		"commit":            lua.StringProperty{Pointer: &Commit},
-		"commonprefix":      lua.TGoFunction(cmdCommonPrefix),
 		"completion_slash":  lua.BoolProperty{Pointer: &completion.UseSlash},
 		"completion_hook":   lua.Property{Pointer: &completionHook},
 		"completion_hidden": lua.BoolProperty{Pointer: &completion.IncludeHidden},
 		"create_object":     lua.TGoFunction(ole.CreateObject),
-		"default_prompt":    lua.TGoFunction(nyagosPrompt),
-		"elevated":          lua.TGoFunction(lua2cmd(cmdElevated)),
 		"env": &lua.VirtualTable{
 			Name:     "nyagos.env",
-			Index:    lua2cmd(cmdGetEnv),
-			NewIndex: lua2cmd(cmdSetEnv)},
-		"eval":         lua.TGoFunction(cmdEval),
-		"exec":         lua.TGoFunction(cmdExec),
-		"filter":       lua.Property{Pointer: &luaFilter},
-		"getalias":     lua.TGoFunction(cmdGetAlias),
-		"getenv":       lua.TGoFunction(lua2cmd(cmdGetEnv)),
-		"gethistory":   lua.TGoFunction(lua2cmd(cmdGetHistory)),
-		"getkey":       lua.TGoFunction(lua2cmd(cmdGetKey)),
-		"getviewwidth": lua.TGoFunction(lua2cmd(cmdGetViewWidth)),
-		"getwd":        lua.TGoFunction(lua2cmd(cmdGetwd)),
-		"glob":         lua.TGoFunction(lua2cmd(cmdGlob)),
-		"goarch":       lua.TString(runtime.GOARCH),
-		"goversion":    lua.TString(runtime.Version()),
-		"histchar":     lua.StringProperty{Pointer: &history.Mark},
+			Index:    lua2cmd(functions.CmdGetEnv),
+			NewIndex: lua2cmd(functions.CmdSetEnv)},
+		"eval":      lua.TGoFunction(cmdEval),
+		"exec":      lua.TGoFunction(cmdExec),
+		"filter":    lua.Property{Pointer: &luaFilter},
+		"getalias":  lua.TGoFunction(cmdGetAlias),
+		"goarch":    lua.TString(runtime.GOARCH),
+		"goversion": lua.TString(runtime.Version()),
+		"histchar":  lua.StringProperty{Pointer: &history.Mark},
 		"history": &lua.VirtualTable{
 			Name:  "nyagos.history",
-			Index: lua2cmd(cmdGetHistory),
-			Len:   lua2cmd(cmdLenHistory)},
+			Index: lua2cmd(functions.CmdGetHistory),
+			Len:   lua2cmd(functions.CmdLenHistory)},
 		"lines":                lua.TGoFunction(cmdLines),
 		"loadfile":             lua.TGoFunction(cmdLoadFile),
-		"msgbox":               lua.TGoFunction(lua2cmd(cmdMsgBox)),
-		"netdrivetounc":        lua.TGoFunction(lua2cmd(cmdNetDriveToUNC)),
 		"on_command_not_found": lua.Property{Pointer: &luaOnCommandNotFound},
 		"open":                 lua.TGoFunction(cmdOpenFile),
 		"option": &lua.VirtualTable{
 			Name:     "nyagos.option",
-			Index:    getOption,
-			NewIndex: setOption},
-		"pathjoin":       lua.TGoFunction(lua2cmd(cmdPathJoin)),
-		"prompt":         lua.Property{Pointer: &prompt_hook},
-		"quotation":      lua.StringProperty{Pointer: &readline.Delimiters},
-		"raweval":        lua.TGoFunction(cmdRawEval),
-		"rawexec":        lua.TGoFunction(cmdRawExec),
-		"resetcharwidth": lua.TGoFunction(lua2cmd(cmdResetCharWidth)),
-		"setalias":       lua.TGoFunction(cmdSetAlias),
-		"setenv":         lua.TGoFunction(lua2cmd(cmdSetEnv)),
-		"setrunewidth":   lua.TGoFunction(cmdSetRuneWidth),
-		"shellexecute":   lua.TGoFunction(lua2cmd(cmdShellExecute)),
-		"silentmode":     &lua.BoolProperty{Pointer: &silentmode},
-		"stamp":          lua.StringProperty{Pointer: &Stamp},
-		"stat":           lua.TGoFunction(lua2cmd(cmdStat)),
-		"utoa":           lua.TGoFunction(lua2cmd(cmdUtoA)),
-		"version":        lua.StringProperty{Pointer: &Version},
-		"which":          lua.TGoFunction(lua2cmd(cmdWhich)),
-		"write":          lua.TGoFunction(cmdWrite),
-		"writerr":        lua.TGoFunction(cmdWriteErr),
+			Index:    lua2cmd(functions.GetOption),
+			NewIndex: lua2cmd(functions.SetOption)},
+		"prompt":     lua.Property{Pointer: &prompt_hook},
+		"quotation":  lua.StringProperty{Pointer: &readline.Delimiters},
+		"setalias":   lua.TGoFunction(cmdSetAlias),
+		"silentmode": &lua.BoolProperty{Pointer: &frame.SilentMode},
+		"version":    lua.StringProperty{Pointer: &frame.Version},
 	}
+	for key, val := range functions.Table {
+		nyagos_table_member[key] = lua.TGoFunction(lua2cmd(val))
+	}
+	for key, val := range functions.Table2 {
+		nyagos_table_member[key] = lua.TGoFunction(lua2param(val))
+	}
+}
+
+func runLua(ctx context.Context, it *shell.Shell, L Lua, fname string) ([]byte, error) {
+	if _, err := L.LoadFile(fname, "bt"); err != nil {
+		return nil, err
+	}
+	chank := L.Dump()
+	if err := callLua(ctx, it, 0, 0); err != nil {
+		return nil, err
+	}
+	// println("Run: " + fname)
+	return chank, nil
 }

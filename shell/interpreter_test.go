@@ -1,12 +1,14 @@
 package shell
 
 import (
+	"context"
 	"fmt"
 	"testing"
 )
 
 func TestInterpret(t *testing.T) {
-	_, err := New().Interpret("ls.exe | cat.exe -n > hogehoge")
+	ctx := context.Background()
+	_, err := New().Interpret(ctx, "ls.exe | cat.exe -n > hogehoge")
 	fmt.Println(err)
 }
 

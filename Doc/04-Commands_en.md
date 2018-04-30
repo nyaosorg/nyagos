@@ -131,6 +131,16 @@ you should `set "ENV=VAL"`.
 * `set ENV^=VAL` is same as `set ENV=VAL;%ENV%` but removes duplicated VAL.
 * `set ENV+=VAL` is same as `set ENV=%ENV%;VAL` but removes duplicated VAL.
 
+### `set -o OPTION-NAME`, `set +o OPTION-NAME`
+
+`-o` makes OPTION true, `+o` false.
+
+- `-o glob` enables the wildcard expansion on external commands also.
+- `-o noclobber` overwriting the existing file by redirect is forbidden.
+- `-o usesource` batchfiles can change the environment variable of nyagos.
+- `+o usesource` you have to use `source BATCHFILE` to read the changes of the environment variables from batchfiles.
+- `-o cleaup_buffer` clean up console input buffer before readline.
+
 ### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r ref_file ] FILENAME(s)`
 
 If FILENAME exists, update its timestamp, otherwise create it.

@@ -1,6 +1,7 @@
 package completion
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -51,7 +52,7 @@ func isTop(s string, indexes [][]int) bool {
 	return prev == ";" || prev == "|" || prev == "&"
 }
 
-func listUpComplete(this *readline.Buffer) (*List, rune, error) {
+func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
 	var err error
 	rv := &List{
 		AllLine: this.String(),
@@ -90,9 +91,9 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
 
 	if isTop(rv.Left, indexes) {
-		rv.List, err = listUpCommands(this.Context, rv.Word[start:])
+		rv.List, err = listUpCommands(ctx, rv.Word[start:])
 	} else {
-		rv.List, err = listUpFiles(this.Context, rv.Word[start:])
+		rv.List, err = listUpFiles(ctx, rv.Word[start:])
 	}
 
 	for i := 0; i < len(rv.List); i++ {
@@ -102,7 +103,7 @@ func listUpComplete(this *readline.Buffer) (*List, rune, error) {
 		}
 	}
 	for _, f := range HookToList {
-		rv, err = f(this, rv)
+		rv, err = f(ctx, this, rv)
 		if err != nil {
 			break
 		}
@@ -126,8 +127,8 @@ func toDisplay(source []Element) []string {
 	return result
 }
 
-func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
-	comp, _, err := listUpComplete(this)
+func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
+	comp, _, err := listUpComplete(ctx, this)
 	if comp == nil {
 		return readline.CONTINUE
 	}
@@ -135,7 +136,7 @@ func KeyFuncCompletionList(this *readline.Buffer) readline.Result {
 	if err != nil {
 		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 	}
-	box.Print(this.Context, toDisplay(comp.List), readline.Console)
+	box.Print(ctx, toDisplay(comp.List), readline.Console)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
@@ -168,8 +169,8 @@ func endWithRoot(path string) bool {
 	return len(path) >= 1 && os.IsPathSeparator(path[len(path)-1])
 }
 
-func KeyFuncCompletion(this *readline.Buffer) readline.Result {
-	comp, default_delimiter, err := listUpComplete(this)
+func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Result {
+	comp, default_delimiter, err := listUpComplete(ctx, this)
 	if comp.List == nil || len(comp.List) <= 0 {
 		return readline.CONTINUE
 	}

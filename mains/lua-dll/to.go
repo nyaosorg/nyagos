@@ -74,10 +74,14 @@ func (this Lua) ToUserDataTo(index int, p interface{}) func() {
 
 	src, _, _ := lua_touserdata.Call(this.State(), uintptr(index))
 
-	userdateAnchorMutex.RLock()
-	anchor := userdataAnchor[this]
-	userdateAnchorMutex.RUnlock()
-
+	anchor_, ok := userdataAnchor.Load(this)
+	if !ok {
+		panic("(lua.Lua)ToUserDataTo: anchor is not found")
+	}
+	anchor, ok := anchor_.(anchor_t)
+	if !ok {
+		panic("(lua.Lua)ToUserDataTo: anchor is not anchor_t")
+	}
 	address = *(*uintptr)(unsafe.Pointer(src))
 	anchordata, ok := anchor[address]
 	if !ok {

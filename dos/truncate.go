@@ -3,28 +3,23 @@ package dos
 import (
 	"fmt"
 	"io"
-	"os"
+	"io/ioutil"
 	"path/filepath"
 	"syscall"
 )
 
 func Truncate(folder string, whenError func(string, error) bool, out io.Writer) error {
-	attr, attrErr := GetFileAttributes(folder)
-	if attrErr != nil {
-		return fmt.Errorf("%s: %s", folder, attrErr)
+	attr, err := GetFileAttributes(folder)
+	if err != nil {
+		return fmt.Errorf("%s: %s", folder, err)
 	}
 	if (attr & FILE_ATTRIBUTE_REPARSE_POINT) == 0 {
 		// Only not junction, delete files under folder.
-		fd, fdErr := os.Open(folder)
-		if fdErr != nil {
-			return fdErr
+		files, err := ioutil.ReadDir(folder)
+		if err != nil {
+			return err
 		}
-		fi, fiErr := fd.Readdir(-1)
-		fd.Close()
-		if fiErr != nil {
-			return fiErr
-		}
-		for _, f := range fi {
+		for _, f := range files {
 			if f.Name() == "." || f.Name() == ".." {
 				continue
 			}

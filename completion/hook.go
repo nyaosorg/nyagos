@@ -1,6 +1,7 @@
 package completion
 
 import (
+	"context"
 	"github.com/zetamatta/nyagos/readline"
 )
 
@@ -13,7 +14,7 @@ func AppendCommandLister(f func() []Element) {
 	command_listupper = append(command_listupper, f)
 }
 
-var HookToList = []func(*readline.Buffer, *List) (*List, error){}
+var HookToList = []func(context.Context, *readline.Buffer, *List) (*List, error){}
 
 func init() {
 	f := readline.KeyGoFuncT{Func: KeyFuncCompletion, Name: "COMPLETE"}

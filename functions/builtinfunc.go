@@ -1,11 +1,15 @@
-package mains
+package functions
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"sort"
 
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/msgbox"
 
 	"github.com/zetamatta/go-box"
@@ -13,8 +17,11 @@ import (
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-mbcs"
 
+	"github.com/zetamatta/nyagos/commands"
+	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -37,12 +44,12 @@ func toStr(arr []any_t, n int) string {
 	}
 }
 
-func cmdElevated([]any_t) []any_t {
+func CmdElevated([]any_t) []any_t {
 	flag, _ := dos.IsElevated()
 	return []any_t{flag}
 }
 
-func cmdChdir(args []any_t) []any_t {
+func CmdChdir(args []any_t) []any_t {
 	if len(args) >= 1 {
 		dos.Chdir(fmt.Sprint(args[0]))
 		return []any_t{true}
@@ -50,7 +57,7 @@ func cmdChdir(args []any_t) []any_t {
 	return []any_t{nil, "directory is required"}
 }
 
-func cmdBox(args []any_t) []any_t {
+func CmdBox(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -70,12 +77,12 @@ func cmdBox(args []any_t) []any_t {
 	return []any_t{box.Choice(sources, readline.Console)}
 }
 
-func cmdResetCharWidth(args []any_t) []any_t {
+func CmdResetCharWidth(args []any_t) []any_t {
 	readline.ResetCharWidth()
 	return []any_t{}
 }
 
-func cmdNetDriveToUNC(args []any_t) []any_t {
+func CmdNetDriveToUNC(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{}
 	}
@@ -87,7 +94,7 @@ func cmdNetDriveToUNC(args []any_t) []any_t {
 	return []any_t{unc}
 }
 
-func cmdShellExecute(args []any_t) []any_t {
+func CmdShellExecute(args []any_t) []any_t {
 	err := dos.ShellExecute(
 		toStr(args, 0),
 		dos.TruePath(toStr(args, 1)),
@@ -100,7 +107,7 @@ func cmdShellExecute(args []any_t) []any_t {
 	}
 }
 
-func cmdGetwd(args []any_t) []any_t {
+func CmdGetwd(args []any_t) []any_t {
 	wd, err := os.Getwd()
 	if err == nil {
 		return []any_t{wd}
@@ -109,17 +116,17 @@ func cmdGetwd(args []any_t) []any_t {
 	}
 }
 
-func cmdGetKey(args []any_t) []any_t {
+func CmdGetKey(args []any_t) []any_t {
 	keycode, scancode, shiftstatus := getch.Full()
 	return []any_t{keycode, scancode, shiftstatus}
 }
 
-func cmdGetViewWidth(args []any_t) []any_t {
+func CmdGetViewWidth(args []any_t) []any_t {
 	width, height := box.GetScreenBufferInfo().ViewSize()
 	return []any_t{width, height}
 }
 
-func cmdPathJoin(args []any_t) []any_t {
+func CmdPathJoin(args []any_t) []any_t {
 	if len(args) < 0 {
 		return []any_t{""}
 	}
@@ -131,7 +138,7 @@ func cmdPathJoin(args []any_t) []any_t {
 	return []any_t{path}
 }
 
-func cmdAccess(args []any_t) []any_t {
+func CmdAccess(args []any_t) []any_t {
 	if len(args) < 2 {
 		return []any_t{nil, "nyagos.access requilres two arguments"}
 	}
@@ -165,7 +172,7 @@ func cmdAccess(args []any_t) []any_t {
 	return []any_t{result}
 }
 
-func cmdStat(args []any_t) []any_t {
+func CmdStat(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -205,7 +212,7 @@ func cmdStat(args []any_t) []any_t {
 	}
 }
 
-func cmdSetEnv(args []any_t) []any_t {
+func CmdSetEnv(args []any_t) []any_t {
 	if len(args) < 2 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -219,7 +226,7 @@ func cmdSetEnv(args []any_t) []any_t {
 	return []any_t{true}
 }
 
-func cmdGetEnv(args []any_t) []any_t {
+func CmdGetEnv(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -232,7 +239,7 @@ func cmdGetEnv(args []any_t) []any_t {
 	}
 }
 
-func cmdAtoU(args []any_t) []any_t {
+func CmdAtoU(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -247,7 +254,7 @@ func cmdAtoU(args []any_t) []any_t {
 	}
 }
 
-func cmdUtoA(args []any_t) []any_t {
+func CmdUtoA(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -264,7 +271,7 @@ func cmdUtoA(args []any_t) []any_t {
 	}
 }
 
-func cmdWhich(args []any_t) []any_t {
+func CmdWhich(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -277,7 +284,7 @@ func cmdWhich(args []any_t) []any_t {
 	}
 }
 
-func cmdGlob(args []any_t) []any_t {
+func CmdGlob(args []any_t) []any_t {
 	result := make([]string, 0)
 	for _, arg1 := range args {
 		wildcard := fmt.Sprint(arg1)
@@ -292,26 +299,26 @@ func cmdGlob(args []any_t) []any_t {
 	return []any_t{result}
 }
 
-func cmdGetHistory(args []any_t) []any_t {
-	if default_history == nil {
+func CmdGetHistory(args []any_t) []any_t {
+	if frame.DefaultHistory == nil {
 		return []any_t{}
 	}
 	if len(args) >= 1 {
 		if n, ok := args[len(args)-1].(int); ok {
-			return []any_t{default_history.At(n)}
+			return []any_t{frame.DefaultHistory.At(n)}
 		}
 	}
-	return []any_t{default_history.Len()}
+	return []any_t{frame.DefaultHistory.Len()}
 }
 
-func cmdLenHistory(args []any_t) []any_t {
-	if default_history == nil {
+func CmdLenHistory(args []any_t) []any_t {
+	if frame.DefaultHistory == nil {
 		return []any_t{}
 	}
-	return []any_t{default_history.Len()}
+	return []any_t{frame.DefaultHistory.Len()}
 }
 
-func cmdMsgBox(args []any_t) []any_t {
+func CmdMsgBox(args []any_t) []any_t {
 	var message string
 	title := "nyagos"
 	if len(args) >= 1 {
@@ -322,4 +329,166 @@ func cmdMsgBox(args []any_t) []any_t {
 	}
 	msgbox.Show(0, message, title, msgbox.OK)
 	return []any_t{}
+}
+
+func CmdRawEval(args []any_t) []any_t {
+	argv := make([]string, 0, len(args))
+	for _, s := range args {
+		argv = append(argv, fmt.Sprint(s))
+	}
+	cmd1 := exec.Command(argv[0], argv[1:]...)
+	out, err := cmd1.Output()
+	if err != nil {
+		return []any_t{nil, err.Error()}
+	} else {
+		return []any_t{out}
+	}
+}
+
+func CmdSetRuneWidth(args []any_t) []any_t {
+	if len(args) < 2 {
+		return []any_t{nil, "too few aruments"}
+	}
+	char, ok := args[0].(int)
+	if !ok {
+		return []any_t{nil, "not a number"}
+	}
+	width, ok := args[1].(int)
+	if !ok {
+		return []any_t{nil, "not a number"}
+	}
+	readline.SetCharWidth(rune(char), width)
+	return []any_t{true}
+}
+
+func CmdCommonPrefix(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, "too few arguments"}
+	}
+	list := []string{}
+
+	table, ok := args[0].(map[any_t]any_t)
+	if !ok {
+		return []any_t{nil, "not a table"}
+	}
+	for _, val := range table {
+		list = append(list, fmt.Sprint(val))
+	}
+	return []any_t{completion.CommonPrefix(list)}
+}
+
+func CmdWriteSub(args []any_t, out io.Writer) []any_t {
+	if f, ok := out.(*os.File); ok {
+		cout := bufio.NewWriter(colorable.NewColorable(f))
+		defer cout.Flush()
+		out = cout
+	}
+	for i, arg1 := range args {
+		if i > 0 {
+			fmt.Fprint(out, "\t")
+		}
+		var str string
+		if arg1 == nil {
+			str = "nil"
+		} else {
+			switch v := arg1.(type) {
+			case bool:
+				if v {
+					str = "true"
+				} else {
+					str = "false"
+				}
+			default:
+				str = fmt.Sprint(v)
+			}
+		}
+		fmt.Fprint(out, str)
+	}
+	return []any_t{true}
+}
+
+func CmdWrite(this *Param) []any_t {
+	return CmdWriteSub(this.Args, this.Out)
+}
+
+func CmdWriteErr(this *Param) []any_t {
+	return CmdWriteSub(this.Args, this.Err)
+}
+
+func CmdPrint(this *Param) []any_t {
+	rc := CmdWrite(this)
+	fmt.Fprintln(this.Out)
+	return rc
+}
+
+func CmdRawExec(this *Param) []any_t {
+	argv := make([]string, 0, len(this.Args))
+	for _, arg1 := range this.Args {
+		argv = append(argv, fmt.Sprint(arg1))
+	}
+	xcmd := exec.Command(argv[0], argv[1:]...)
+	xcmd.Stdin = this.In
+	xcmd.Stdout = this.Out
+	xcmd.Stderr = this.Err
+	err := xcmd.Run()
+	errorlevel, errorlevelOk := dos.GetErrorLevel(xcmd)
+	if !errorlevelOk {
+		errorlevel = 255
+	}
+	if err != nil {
+		fmt.Fprintln(xcmd.Stderr, err.Error())
+		return []any_t{errorlevel, err.Error()}
+	} else {
+		return []any_t{errorlevel}
+	}
+}
+
+func GetOption(args []any_t) []any_t {
+	if len(args) < 2 {
+		return []any_t{nil, "too few arguments"}
+	}
+	key := fmt.Sprint(args[1])
+	ptr, ok := commands.BoolOptions[key]
+	if !ok {
+		return []any_t{nil, fmt.Sprintf("key: %s: not found", key)}
+	}
+	return []any_t{*ptr}
+}
+
+func SetOption(args []any_t) []any_t {
+	if len(args) < 3 {
+		return []any_t{nil, "too few arguments"}
+	}
+	key := fmt.Sprint(args[1])
+	ptr, ok := commands.BoolOptions[key]
+	if !ok || ptr == nil {
+		return []any_t{nil, "key: %s: not found"}
+	}
+	val := args[2]
+	*ptr = (val != nil && val != false && val == "")
+	return []any_t{true}
+}
+
+func CmdBitAnd(args []any_t) []any_t {
+	result := ^0
+	for _, arg1tmp := range args {
+		if arg1, ok := arg1tmp.(int); ok {
+			result &= arg1
+		} else {
+			return []any_t{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
+		}
+	}
+	return []any_t{result}
+}
+
+func CmdBitOr(args []any_t) []any_t {
+	result := 0
+	for _, arg1tmp := range args {
+		if arg1, ok := arg1tmp.(int); ok {
+			result |= arg1
+		} else {
+			return []any_t{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
+		}
+	}
+	return []any_t{result}
 }

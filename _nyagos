@@ -5,15 +5,18 @@ alias "ls=__ls__ -oFh $*"
 alias "ll=__ls__ -olFh $*"
 alias "wordpad=""%PROGRAMFILES%\Windows NT\Accessories\wordpad.exe"""
 
-suffix "awk=gawk -f"
-suffix "js=cscript //nologo"
-suffix "lua=nyagos.exe --norc --lua-file"
-suffix "pl=perl"
-suffix "ps1=powershell -ExecutionPolicy RemoteSigned -file"
-suffix "rb=ruby"
-suffix "vbs=cscript //nologo"
-suffix "wsf=cscript //nologo"
-suffix "py=python"
+suffix >nul 2>nul
+if not errorlevel 1 then
+    suffix "awk=gawk -f"
+    suffix "js=cscript //nologo"
+    suffix "lua=nyagos.exe --norc --lua-file"
+    suffix "pl=perl"
+    suffix "ps1=powershell -ExecutionPolicy RemoteSigned -file"
+    suffix "rb=ruby"
+    suffix "vbs=cscript //nologo"
+    suffix "wsf=cscript //nologo"
+    suffix "py=python"
+end
 
 set "PROMPT=$L%COMPUTERNAME%:$P$G$_$$$s"
 

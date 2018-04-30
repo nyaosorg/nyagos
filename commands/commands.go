@@ -22,7 +22,7 @@ type Param interface {
 	Err() io.Writer
 	RawArgs() []string
 	Spawnlp(context.Context, []string, []string) (int, error)
-	Loop(s shell.Stream) (int, error)
+	Loop(context.Context, shell.Stream) (int, error)
 	ReadCommand(context.Context, shell.Stream) (context.Context, string, error)
 }
 
@@ -60,7 +60,7 @@ func AllNames() []completion.Element {
 	return names
 }
 
-func Init() {
+func init() {
 	buildInCommand = map[string]func(context.Context, Param) (int, error){
 		".":        cmdSource,
 		"alias":    cmdAlias,

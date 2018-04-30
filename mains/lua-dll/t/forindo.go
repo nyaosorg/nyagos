@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
 )
 
 func main() {

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -93,7 +94,7 @@ func callBatch(batch string,
 		return 1, err
 	}
 	var writer *bufio.Writer
-	if verbose != nil {
+	if verbose != nil && verbose != ioutil.Discard {
 		writer = bufio.NewWriter(io.MultiWriter(fd, verbose))
 	} else {
 		writer = bufio.NewWriter(fd)

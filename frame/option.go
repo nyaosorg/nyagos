@@ -1,30 +1,27 @@
-package mains
+package frame
 
 import (
-	"bufio"
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+	"runtime"
 	"strings"
 
-	"github.com/zetamatta/nyagos/lua"
 	"github.com/zetamatta/nyagos/shell"
 )
 
-func setLuaArg(L lua.Lua, args []string) {
-	L.NewTable()
-	for i, arg1 := range args {
-		L.PushString(arg1)
-		L.RawSetI(-2, lua.Integer(i))
-	}
-	L.SetGlobal("arg")
+var OptionNorc = false
+
+type ScriptEngineForOption interface {
+	SetArg([]string)
+	RunFile(context.Context, string) ([]byte, error)
+	RunString(context.Context, string) error
 }
 
-var optionNorc = false
-
-func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
+func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
 	args := os.Args[1:]
 	for i := 0; i < len(args); i++ {
 		arg1 := args[i]
@@ -33,8 +30,8 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 			if i >= len(args) {
 				return nil, errors.New("-k: requires parameters")
 			}
-			return func() error {
-				sh.Interpret(args[i])
+			return func(ctx context.Context) error {
+				sh.Interpret(ctx, args[i])
 				return nil
 			}, nil
 		} else if arg1 == "-c" {
@@ -42,8 +39,8 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 			if i >= len(args) {
 				return nil, errors.New("-c: requires parameters")
 			}
-			return func() error {
-				sh.Interpret(args[i])
+			return func(ctx context.Context) error {
+				sh.Interpret(ctx, args[i])
 				return io.EOF
 			}, nil
 		} else if arg1 == "-b" {
@@ -56,8 +53,8 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 				return nil, err
 			}
 			text := string(data)
-			return func() error {
-				sh.Interpret(text)
+			return func(ctx context.Context) error {
+				sh.Interpret(ctx, text)
 				return io.EOF
 			}, nil
 		} else if arg1 == "-f" {
@@ -67,9 +64,9 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 			}
 			if strings.HasSuffix(strings.ToLower(args[i]), ".lua") {
 				// lua script
-				return func() error {
-					setLuaArg(L, args[i:])
-					_, err := runLua(sh, L, args[i])
+				return func(ctx context.Context) error {
+					e.SetArg(args[i:])
+					_, err := e.RunFile(ctx, args[i])
 					if err != nil {
 						return err
 					} else {
@@ -77,17 +74,11 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 					}
 				}, nil
 			} else {
-				return func() error {
+				return func(ctx context.Context) error {
 					// command script
-					fd, fd_err := os.Open(args[i])
-					if fd_err != nil {
-						return fmt.Errorf("%s: %s\n", args[i], fd_err.Error())
+					if err := sh.Source(ctx, args[i]); err != nil {
+						return err
 					}
-					scanner := bufio.NewScanner(fd)
-					for scanner.Scan() {
-						sh.Interpret(scanner.Text())
-					}
-					fd.Close()
 					return io.EOF
 				}, nil
 			}
@@ -96,32 +87,39 @@ func optionParse(sh *shell.Shell, L lua.Lua) (func() error, error) {
 			if i >= len(args) {
 				return nil, errors.New("-e: requires parameters")
 			}
-			return func() error {
-				err := L.LoadString(args[i])
-				if err != nil {
-					return err
-				}
-				setLuaArg(L, args[i:])
-				L.Call(0, 0)
-				return io.EOF
-			}, nil
-		} else if arg1 == "--norc" {
-			optionNorc = true
-		} else if arg1 == "--lua-file" {
-			i++
-			if i >= len(args) {
-				return nil, errors.New("--lua-file: requires parameters")
-			}
-			return func() error {
-				setLuaArg(L, args[i:])
-				_, err := runLua(sh, L, args[i])
+			return func(ctx context.Context) error {
+				e.SetArg(args[i:])
+				err := e.RunString(ctx, args[i])
 				if err != nil {
 					return err
 				} else {
 					return io.EOF
 				}
 			}, nil
+		} else if arg1 == "--norc" {
+			OptionNorc = true
+		} else if arg1 == "--lua-file" {
+			i++
+			if i >= len(args) {
+				return nil, errors.New("--lua-file: requires parameters")
+			}
+			return func(ctx context.Context) error {
+				e.SetArg(args[i:])
+				_, err := e.RunFile(ctx, args[i])
+				if err != nil {
+					return err
+				} else {
+					return io.EOF
+				}
+			}, nil
+		} else if arg1 == "--show-version-only" {
+			return func(context.Context) error {
+				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
+				return io.EOF
+			}, nil
 		}
 	}
 	return nil, nil
 }
+
+var SilentMode = false

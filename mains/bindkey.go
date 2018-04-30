@@ -1,6 +1,7 @@
-package mains
+package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"strings"
@@ -8,17 +9,16 @@ import (
 
 	"github.com/zetamatta/go-box"
 
-	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/texts"
 )
 
 type KeyLuaFuncT struct {
-	L     lua.Lua
 	Chank []byte
 }
 
-func getBufferForCallBack(L lua.Lua) (*readline.Buffer, int) {
+func getBufferForCallBack(L Lua) (*readline.Buffer, int) {
 	if L.GetType(1) != lua.LUA_TTABLE {
 		return nil, L.Push(nil, "bindKeyExec: call with : not .")
 	}
@@ -34,7 +34,7 @@ func getBufferForCallBack(L lua.Lua) (*readline.Buffer, int) {
 	return buffer, 0
 }
 
-func callReplace(L lua.Lua) int {
+func callReplace(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -55,7 +55,7 @@ func callReplace(L lua.Lua) int {
 	return L.Push(true, nil)
 }
 
-func callInsert(L lua.Lua) int {
+func callInsert(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -68,7 +68,7 @@ func callInsert(L lua.Lua) int {
 	return L.Push(true)
 }
 
-func callKeyFunc(L lua.Lua) int {
+func callKeyFunc(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
 		return stackRc
@@ -81,7 +81,8 @@ func callKeyFunc(L lua.Lua) int {
 	if funcErr != nil {
 		return L.Push(nil, funcErr)
 	}
-	switch function.Call(buffer) {
+	ctx := context.Background()
+	switch function.Call(ctx, buffer) {
 	case readline.ENTER:
 		return L.Push(true, true)
 	case readline.ABORT:
@@ -91,7 +92,7 @@ func callKeyFunc(L lua.Lua) int {
 	}
 }
 
-func callLastWord(L lua.Lua) int {
+func callLastWord(L Lua) int {
 	this, stack_count := getBufferForCallBack(L)
 	if this == nil {
 		return stack_count
@@ -100,7 +101,7 @@ func callLastWord(L lua.Lua) int {
 	return L.Push(word, pos+1)
 }
 
-func callFirstWord(L lua.Lua) int {
+func callFirstWord(L Lua) int {
 	this, stack_count := getBufferForCallBack(L)
 	if this == nil {
 		return stack_count
@@ -109,7 +110,7 @@ func callFirstWord(L lua.Lua) int {
 	return L.Push(word, 0)
 }
 
-func callBoxListing(L lua.Lua) int {
+func callBoxListing(L Lua) int {
 	// stack +1: readline.Buffer
 	// stack +2: table
 	// stack +3: index or value
@@ -141,8 +142,13 @@ func callBoxListing(L lua.Lua) int {
 func (this KeyLuaFuncT) String() string {
 	return "(lua function)"
 }
-func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
-	this.L.LoadBufferX("", this.Chank, "b")
+func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
+	L, ok := ctx.Value(lua.PackageId).(Lua)
+	if !ok {
+		println("(*mains.KeyLuaFuncT)Call: lua instance not found")
+		return readline.CONTINUE
+	}
+	L.LoadBufferX("", this.Chank, "b")
 	pos := -1
 	var text strings.Builder
 	for i, c := range buffer.Buffer {
@@ -158,7 +164,7 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 		pos = text.Len() + 1
 	}
 
-	this.L.Push(
+	L.Push(
 		lua.TTable{
 			Dict: map[string]lua.Object{
 				"pos":         lua.Integer(pos),
@@ -173,17 +179,17 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 			},
 			Array: map[int]lua.Object{},
 		})
-	if err := this.L.Call(1, 1); err != nil {
+	if err := L.CallWithContext(ctx, 1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
-	switch this.L.GetType(-1) {
+	switch L.GetType(-1) {
 	case lua.LUA_TSTRING:
-		str, strErr := this.L.ToString(-1)
+		str, strErr := L.ToString(-1)
 		if strErr == nil {
 			buffer.InsertAndRepaint(str)
 		}
 	case lua.LUA_TBOOLEAN:
-		if !this.L.ToBool(-1) {
+		if !L.ToBool(-1) {
 			buffer.Buffer = []rune{}
 			buffer.Length = 0
 		}
@@ -192,7 +198,7 @@ func (this *KeyLuaFuncT) Call(buffer *readline.Buffer) readline.Result {
 	return readline.CONTINUE
 }
 
-func cmdBindKey(L lua.Lua) int {
+func cmdBindKey(L Lua) int {
 	key, keyErr := L.ToString(-2)
 	if keyErr != nil {
 		return L.Push(keyErr)
@@ -201,7 +207,7 @@ func cmdBindKey(L lua.Lua) int {
 	switch L.GetType(-1) {
 	case lua.LUA_TFUNCTION:
 		chank := L.Dump()
-		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{L, chank}); err != nil {
+		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{chank}); err != nil {
 			return L.Push(nil, err)
 		} else {
 			return L.Push(true)
@@ -218,22 +224,4 @@ func cmdBindKey(L lua.Lua) int {
 			return L.Push(true)
 		}
 	}
-}
-
-func cmdGetBindKey(L lua.Lua) int {
-	key, keyErr := L.ToString(-1)
-	if keyErr != nil {
-		return L.Push(nil, keyErr)
-	}
-	fnc := readline.GetBindKey(key)
-	if fnc != nil {
-		if stringer, ok := fnc.(fmt.Stringer); ok {
-			if str := stringer.String(); str != "" {
-				L.PushString(str)
-				return 1
-			}
-		}
-	}
-	L.PushNil()
-	return 1
 }

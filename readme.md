@@ -23,7 +23,7 @@ Programming Language GO and Lua.
 * Built-in ls
   * color support (-o option)
   * print hard-link,symbolic-link and junction's target-path
-* Customizing with Lua
+* Customizing with [GopherLua](https://github.com/yuin/gopher-lua)
   * built-in command written with Lua
   * filtering command-line
   * useful functions: ANSI-String & UTF8 convert , eval and so on.

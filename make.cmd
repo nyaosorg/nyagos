@@ -6,15 +6,9 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
         $args[0].Groups[1] -replace " ",[char]1
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
-# set GO "go" -option constant
 set GO "go.exe" -option constant
 
 set CMD "Cmd" -option constant
-
-$LUAURL = @{
-    "amd64"="https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win64_dllw4_lib.zip/download";
-    "386"="https://sourceforge.net/projects/luabinaries/files/5.3.4/Windows%20Libraries/Dynamic/lua-5.3.4_Win32_dllw4_lib.zip/download";
-}
 
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
@@ -159,7 +153,7 @@ function Make-SysO($version) {
     .\goversioninfo.exe `
         "-file-version=$version" `
         "-product-version=$version" `
-        "-icon=mains\nyagos.ico" `
+        "-icon=nyagos.ico" `
         ("-ver-major=" + $v[0]) `
         ("-ver-minor=" + $v[1]) `
         ("-ver-patch=" + $v[2]) `
@@ -270,9 +264,8 @@ function Build($version,$tags) {
 
     Make-SysO $version
 
-    $ldflags = (git log -1 --date=short --pretty=format:"-X main.stamp=%ad -X main.commit=%H")
     Write-Verbose "$ $GO build -o '$target'"
-    & $GO build "-o" $target -ldflags "$ldflags -X main.version=$version" $tags
+    & $GO build "-o" $target -ldflags "-X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
         Do-Copy $target ".\nyagos.exe"
     }
@@ -349,27 +342,6 @@ function Get-Architecture($bin){
     return $null
 }
 
-function Download-File($url){
-    $fname = (Split-Path $url -Leaf)
-    if( $fname -like "download*" ){
-        $fname = (Split-Path (Split-Path $url -Parent) -Leaf)
-    }
-    $client = New-Object System.Net.WebClient
-    Write-Verbose "$ wget '$url' -> '$fname'"
-    $client.DownloadFile($url,$fname)
-    return $fname
-}
-
-function Get-Lua($url,$arch){
-    $zip = (Download-File $url)
-    unzip -o $zip include\*
-    $folder = (Join-Path $CMD $arch)
-    Make-Dir $CMD
-    Make-Dir $folder
-    unzip -o $zip lua53.dll -d $folder
-    Do-Copy (Join-Path $folder lua53.dll) .
-}
-
 function Make-Package($arch){
     $zipname = ("nyagos-{0}.zip" -f (& cmd\$arch\nyagos.exe --show-version-only))
     Write-Verbose "$ zip -9 $zipname ...."
@@ -378,7 +350,6 @@ function Make-Package($arch){
     }
     zip -9j $zipname `
         "cmd\$arch\nyagos.exe" `
-        "cmd\$arch\lua53.dll" `
         .nyagos `
         _nyagos `
         makeicon.cmd `
@@ -512,9 +483,6 @@ switch( $args[0] ){
         if( $LastExitCode -lt 8 ){
             Remove-Item Variable:LastExitCode
         }
-        if( -not (Test-Path (Join-Path $installDir "lua53.dll") ) ){
-            Do-Copy lua53.dll $installDir
-        }
         Ask-Copy "_nyagos" $installDir
         try{
             Do-Copy nyagos.exe $installDir
@@ -568,10 +536,6 @@ switch( $args[0] ){
             }
         }
     }
-    "get-lua" {
-        $goarch = if( $args[1] ){ $args[1] } else { (Get-GoArch) }
-        Get-Lua ($LUAURL[ $goarch ]) $goarch
-    }
     "help" {
         Write-Output @'
 make                     build as snapshot
@@ -587,7 +551,6 @@ make install [FOLDER]    copy executables to FOLDER or last folder
 make generate            execute `go generate` on the folder it required
 make fmt                 `go fmt`
 make check-case [FILE]
-make get-lua [386|amd64] download Lua 5.3 for current architecture
 make help                show this
 '@
     }

@@ -1,7 +1,7 @@
 package readline
 
 import (
-	"context"
+	"bufio"
 	"fmt"
 	"strings"
 	"unicode"
@@ -10,7 +10,7 @@ import (
 	"github.com/zetamatta/go-box"
 )
 
-var Console = colorable.NewColorableStdout()
+var Console = bufio.NewWriter(colorable.NewColorableStdout())
 
 var hasCache = map[rune]struct{}{}
 
@@ -65,7 +65,6 @@ type Buffer struct {
 	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
-	Context        context.Context
 }
 
 func (this *Buffer) ViewWidth() int {

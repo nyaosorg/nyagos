@@ -16,13 +16,13 @@ func main() {
 
 	enter_status := 0
 	readline.BindKeyClosure(readline.K_CTRL_P,
-		func(r *readline.Buffer) readline.Result {
+		func(ctx context.Context, r *readline.Buffer) readline.Result {
 			enter_status = -1
 			return readline.ENTER
 		})
 
 	readline.BindKeyClosure(readline.K_CTRL_N,
-		func(r *readline.Buffer) readline.Result {
+		func(ctx context.Context, r *readline.Buffer) readline.Result {
 			enter_status = +1
 			return readline.ENTER
 		})

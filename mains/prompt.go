@@ -1,101 +1,33 @@
-package mains
+package main
 
 import (
+	"context"
 	"fmt"
 	"os"
-	"strings"
-	"time"
-	"unicode"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/functions"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
+	"github.com/zetamatta/nyagos/shell"
 )
 
-func Format2Prompt(format string) string {
-	if format == "" {
-		format = "[$P]$_$$$S"
+var prompt_hook lua.Object = lua.TGoFunction(lua2cmd(functions.Prompt))
+
+func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
+	L.Push(prompt_hook)
+
+	if !L.IsFunction(-1) {
+		L.Pop(1)
+		return 0, nil
 	}
-	var buffer strings.Builder
-	lastchar := '\000'
-	for reader := strings.NewReader(format); reader.Len() > 0; {
-		ch, _, err := reader.ReadRune()
-		if err != nil {
-			break
-		}
-		if lastchar == '$' {
-			c := unicode.ToLower(ch)
-			if c == 'a' {
-				buffer.WriteRune('&')
-			} else if c == 'b' {
-				buffer.WriteRune('|')
-			} else if c == 'c' {
-				buffer.WriteRune('(')
-			} else if c == 'd' {
-				buffer.WriteString(time.Now().Format("2006-01-02"))
-			} else if c == 'e' {
-				buffer.WriteRune('\x1B')
-			} else if c == 'f' {
-				buffer.WriteRune(')')
-			} else if c == 'g' {
-				buffer.WriteRune('>')
-			} else if c == 'h' {
-				buffer.WriteRune('\b')
-			} else if c == 'l' {
-				buffer.WriteRune('<')
-			} else if c == 'n' {
-				wd, err := os.Getwd()
-				if err == nil {
-					buffer.WriteString(wd[:2])
-				}
-			} else if c == 'p' {
-				if wd, err := os.Getwd(); err != nil {
-					fmt.Fprintf(os.Stderr, "$P: %s\n", err.Error())
-				} else {
-					buffer.WriteString(dos.ReplaceHomeToTildeSlash(wd))
-				}
-			} else if c == 'q' {
-				buffer.WriteRune('=')
-			} else if c == 's' {
-				buffer.WriteRune(' ')
-			} else if c == 't' {
-				now := time.Now()
-				hour, min, sec := now.Clock()
-				nnn := now.Nanosecond() / 10000000
-				buffer.WriteString(
-					fmt.Sprintf("%02d:%02d:%02d.%02d",
-						hour, min, sec, nnn))
-			} else if c == 'u' {
-				r := 0
-				for i := 0; i < 4 && reader.Len() > 0; i++ {
-					r1, _, err := reader.ReadRune()
-					if err != nil {
-						break
-					}
-					n := strings.IndexRune("0123456789ABCDEF",
-						unicode.ToUpper(r1))
-					if n < 0 {
-						reader.UnreadRune()
-						break
-					}
-					r = r*16 + n
-				}
-				if r > 0 {
-					buffer.WriteRune(rune(r))
-				}
-			} else if c == 'v' {
-				// Windows Version
-			} else if c == '_' {
-				buffer.WriteRune('\n')
-			} else if c == '$' {
-				buffer.WriteRune('$')
-				ch = '\000'
-			} else {
-				buffer.WriteRune('$')
-				buffer.WriteRune(ch)
-			}
-		} else if ch != '$' {
-			buffer.WriteRune(ch)
-		}
-		lastchar = ch
+	L.PushString(os.Getenv("PROMPT"))
+	if err := callCSL(ctx, sh, L, 1, 1); err != nil {
+		return 0, err
 	}
-	return buffer.String()
+	length, lengthErr := L.ToInteger(-1)
+	L.Pop(1)
+	if lengthErr == nil {
+		return length, nil
+	} else {
+		return 0, fmt.Errorf("nyagos.prompt: return-value(length) is invalid: %s", lengthErr.Error())
+	}
 }

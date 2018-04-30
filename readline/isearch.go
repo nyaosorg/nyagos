@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"unicode"
@@ -8,7 +9,7 @@ import (
 	"github.com/zetamatta/go-getch"
 )
 
-func KeyFuncIncSearch(this *Buffer) Result {
+func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	var searchBuf strings.Builder
 	foundStr := ""
 	searchStr := ""
@@ -48,6 +49,7 @@ func KeyFuncIncSearch(this *Buffer) Result {
 		}
 		lastDrawWidth = drawWidth
 		fmt.Fprint(Console, CURSOR_ON)
+		Console.Flush()
 		charcode := getch.Rune()
 		fmt.Fprint(Console, CURSOR_OFF)
 		Backspace(drawWidth)

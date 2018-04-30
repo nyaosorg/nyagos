@@ -41,6 +41,14 @@ assigned on .nyagos but `share[]`. You can use share[] as you like.
 Only the member of the table `share[]` are shared on all Lua-instances
 of nyagos.
 
+### `nyagos.bitand(a,b...)`
+
+returns bit-and of a,b,... This function is for Lua 5.1
+
+### `nyagos.bitor(a,b...)`
+
+returns bit-or of a,b,... This function is for Lua 5.1
+
 ### `nyagos.completion_hidden = (bool)`
 
 If it is set true, on filename completion, hidden files are also included
@@ -298,6 +306,10 @@ nyagos.option.noclobber is true.
 If it is true(=default), batchfiles can change the environment variable of
 nyagos. False, you have to use `source BATCHFILE` to read the changes of
 the environment variables from batchfiles.
+
+### `nyagos.option.cleaup_buffer`
+
+When it is true, clean up console input buffer before readline.
 
 ### `nyagos.goversion`
 

@@ -1,19 +1,20 @@
-package mains
+package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/lua"
+	"github.com/zetamatta/nyagos/mains/lua-dll"
 	"github.com/zetamatta/nyagos/readline"
 )
 
 var completionHook lua.Object = lua.TNil{}
 
-func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion.List, error) {
-	L, L_ok := this.Context.Value(lua.PackageId).(lua.Lua)
+func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {
+	L, L_ok := ctx.Value(lua.PackageId).(Lua)
 	if !L_ok {
 		return rv, errors.New("listUpComplete: could not get lua instance")
 	}
@@ -40,7 +41,7 @@ func luaHookForComplete(this *readline.Buffer, rv *completion.List) (*completion
 		"field":     rv.Field,
 		"left":      rv.Left,
 	})
-	if err := L.Call(1, 2); err != nil {
+	if err := L.CallWithContext(ctx, 1, 2); err != nil {
 		fmt.Println(err)
 		return rv, nil
 	}
