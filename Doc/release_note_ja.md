@@ -1,5 +1,8 @@
 [English](release_note_en.md) / Japanese
 
+- C-o を押すと Enter か Escape が押されるまでハングしたように見える不具合を修正
+    - (ライブラリを修正: [go-box](https://github.com/zetamatta/go-box/commit/322b2318471f1ad3ce99a3531118b7095cdf3842))
+
 NYAGOS 4.3\_beta
 =================
 (2018.04.30)
