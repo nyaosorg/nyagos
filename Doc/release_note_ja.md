@@ -1,5 +1,16 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3\_beta
+=================
+(2018.04.30)
+
+- **lua53.dll のかわりに Gopher-Lua を採用** #300
+    - 旧来の lua53.dll 版 nyagos.exe は `cd mains ; go build` でビルド可能
+    - Lua無し版 nyagos.exe を `cd ngs ; go build` でビルド可能
+- `nyagos.option.cleanup_buffer` を追加(デフォルトは false)。true の場合、一行入力の前にコンソールバッファをクリアする
+- `set -o OPTION_NAME` と `set +o OPTION_NAME` を新設(`nyagos.option.OPTION_NAME=` on Lua と等価)
+- コンソール出力をバッファリングするようにした ( go-colorable and bufio.Writer )
+
 NYAGOS 4.2.5\_1
 ===============
 (2018.04.14)
