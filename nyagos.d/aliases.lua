@@ -55,7 +55,7 @@ end
 -- on chcp, font-width is changed.
 nyagos.alias.chcp = function(args)
     nyagos.resetcharwidth()
-    nyagos.rawexec(args[0],table.unpack(args))
+    nyagos.rawexec(args[0],(table.unpack or unpack)(args))
 end
 
 -- wildcard expand for external commands
