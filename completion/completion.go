@@ -146,15 +146,27 @@ func CommonPrefix(list []string) string {
 		return ""
 	}
 	common := list[0]
+	var cr, fr *strings.Reader
 	for _, f := range list[1:] {
-		cr := strings.NewReader(common)
-		fr := strings.NewReader(f)
+		if cr != nil {
+			cr.Reset(common)
+		} else {
+			cr = strings.NewReader(common)
+		}
+		if fr != nil {
+			fr.Reset(f)
+		} else {
+			fr = strings.NewReader(f)
+		}
 		i := 0
 		var buffer strings.Builder
 		for {
-			ch, _, cerr := cr.ReadRune()
-			fh, _, ferr := fr.ReadRune()
-			if cerr != nil || ferr != nil || unicode.ToUpper(ch) != unicode.ToUpper(fh) {
+			ch, _, err := cr.ReadRune()
+			if err != nil {
+				break
+			}
+			fh, _, err := fr.ReadRune()
+			if err != nil || unicode.ToUpper(ch) != unicode.ToUpper(fh) {
 				break
 			}
 			buffer.WriteRune(ch)
