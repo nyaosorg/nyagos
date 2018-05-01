@@ -2,6 +2,7 @@
 
 - C-o を押すと Enter か Escape が押されるまでハングしたように見える不具合を修正
     - (ライブラリを修正: [go-box](https://github.com/zetamatta/go-box/commit/322b2318471f1ad3ce99a3531118b7095cdf3842))
+- chcp が動作しない不具合を修正 (同コマンドは画面幅取得のため別名定義していた)
 
 NYAGOS 4.3\_beta
 =================

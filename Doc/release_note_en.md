@@ -1,7 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
 - Fix: Typing C-o looks to raise hang up until Enter or ESCAPE is typed (on 4.3beta) #303
-    - (Fix the library: [go-box](https://github.com/zetamatta/go-box/commit/322b2318471f1ad3ce99a3531118b7095cdf3842)
+    - Fix the library: [go-box](https://github.com/zetamatta/go-box/commit/322b2318471f1ad3ce99a3531118b7095cdf3842)
+- Fix: chcp did not work. (`chcp` was aliaes to update memory of screen width)
 
 NYAGOS 4.3\_beta
 ==================
