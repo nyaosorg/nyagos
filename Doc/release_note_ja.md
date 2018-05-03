@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+- シンボリックリンクの先を参照するオプション `ls -L` を追加
+
 NYAGOS 4.3\_beta2
 =================
 (2018.05.01)
