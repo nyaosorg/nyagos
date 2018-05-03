@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.0\_0
+===============
+on May.3,2018
+
 - Add `ls -L` which shows information for the file refernces rather than for the link it self.
 
 NYAGOS 4.3\_beta2
