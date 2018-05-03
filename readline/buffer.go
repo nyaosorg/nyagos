@@ -71,20 +71,23 @@ func (this *Buffer) ViewWidth() int {
 	return this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
 }
 
-func (this *Buffer) Insert(pos int, c []rune) {
-	n := len(c)
-	for this.Length+n >= len(this.Buffer) {
-		tmp := make([]rune, len(this.Buffer)*2)
-		copy(tmp, this.Buffer)
-		this.Buffer = tmp
+func (this *Buffer) Insert(csrPos int, insStr []rune) {
+	addSize := len(insStr)
+	newSize := len(this.Buffer)
+	for this.Length+addSize >= newSize {
+		newSize *= 2
 	}
-	for i := this.Length - 1; i >= pos; i-- {
-		this.Buffer[i+n] = this.Buffer[i]
+	tmp := make([]rune, newSize)
+	copy(tmp, this.Buffer)
+	this.Buffer = tmp
+
+	for i := this.Length - 1; i >= csrPos; i-- {
+		this.Buffer[i+addSize] = this.Buffer[i]
 	}
-	for i := 0; i < n; i++ {
-		this.Buffer[pos+i] = c[i]
+	for i := 0; i < addSize; i++ {
+		this.Buffer[csrPos+i] = insStr[i]
 	}
-	this.Length += n
+	this.Length += addSize
 }
 
 // Insert String :s at :pos
