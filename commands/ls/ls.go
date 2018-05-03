@@ -20,19 +20,21 @@ import (
 )
 
 const (
-	O_STRIP_DIR     = 1
-	O_LONG          = 2
-	O_INDICATOR     = 4
-	O_COLOR         = 8
-	O_ALL           = 16
-	O_TIME          = 32
-	O_REVERSE       = 64
-	O_RECURSIVE     = 128
-	O_ONE           = 256
-	O_HELP          = 512
-	O_SIZESORT      = 1024
-	O_HUMAN         = 2048
-	O_NOT_RECURSIVE = 4096
+	_           = iota
+	O_STRIP_DIR = (1 << iota)
+	O_LONG
+	O_INDICATOR
+	O_COLOR
+	O_ALL
+	O_TIME
+	O_REVERSE
+	O_RECURSIVE
+	O_ONE
+	O_HELP
+	O_SIZESORT
+	O_HUMAN
+	O_NOT_RECURSIVE
+	O_DEREFERENCE
 )
 
 type fileInfoT struct {
@@ -420,7 +422,13 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 		} else {
 			nameStat = name
 		}
-		status, err := os.Lstat(nameStat)
+		var status os.FileInfo
+		var err error
+		if (flag & O_DEREFERENCE) != 0 {
+			status, err = os.Stat(nameStat)
+		} else {
+			status, err = os.Lstat(nameStat)
+		}
 		if err != nil {
 			if os.IsNotExist(err) {
 				fmt.Fprintf(errout, "ls: %s not exist.\n", nameStat)
@@ -515,6 +523,10 @@ var option = map[rune](func(*int) error){
 	},
 	'd': func(flag *int) error {
 		*flag |= O_NOT_RECURSIVE
+		return nil
+	},
+	'L': func(flag *int) error {
+		*flag |= O_DEREFERENCE
 		return nil
 	},
 }
