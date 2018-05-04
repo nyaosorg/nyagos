@@ -128,14 +128,11 @@ func callBoxListing(L Lua) int {
 		return stackCount
 	}
 	fmt.Print("\n")
-	list := make([]string, 0, 100)
 	table := L.ToTable(2)
-	for i := 1; true; i++ {
-		str, ok := L.GetTable(table, lua.LNumber(i)).(lua.LString)
-		if !ok {
-			break
-		}
-		list = append(list, string(str))
+	size := table.Len()
+	list := make([]string, size)
+	for i := 0; i < size; i++ {
+		list[i] = L.GetTable(table, lua.LNumber(i+1)).String()
 	}
 	box.Print(nil, list, os.Stdout)
 	this.RepaintAll()

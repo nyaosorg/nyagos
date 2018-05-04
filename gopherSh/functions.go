@@ -100,10 +100,9 @@ func cmdExec(L Lua) int {
 	table, ok := L.Get(1).(*lua.LTable)
 	if ok {
 		n := table.Len()
-		args := make([]string, 0, n)
-		for i := 1; i <= n; i++ {
-			arg1 := L.GetTable(table, lua.LNumber(i)).String()
-			args = append(args, arg1)
+		args := make([]string, n)
+		for i := 0; i < n; i++ {
+			args[i] = L.GetTable(table, lua.LNumber(i+1)).String()
 		}
 		ctx, sh := getRegInt(L)
 		if sh == nil {

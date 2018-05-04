@@ -51,13 +51,10 @@ func newArgHook(ctx context.Context, it *shell.Shell, args []string) ([]string, 
 	if !ok {
 		return orgArgHook(ctx, it, args)
 	}
-	newargs := []string{}
-	for i := 0; true; i++ {
-		e := L.GetTable(result, lua.LNumber(i))
-		if e == lua.LNil {
-			break
-		}
-		newargs = append(newargs, e.String())
+	size := result.Len()
+	newargs := make([]string, size+1)
+	for i := 0; i <= size; i++ {
+		newargs[i] = L.GetTable(result, lua.LNumber(i)).String()
 	}
 	return orgArgHook(ctx, it, newargs)
 }
