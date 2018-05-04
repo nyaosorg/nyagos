@@ -46,11 +46,7 @@ func (this *Redirecter) open() (*os.File, error) {
 	if this.no == 0 {
 		return os.Open(this.path)
 	} else if this.isAppend {
-		f, err := os.OpenFile(this.path, os.O_APPEND, 0666)
-		if err != nil && os.IsNotExist(err) {
-			f, err = os.Create(this.path)
-		}
-		return f, err
+		return os.OpenFile(this.path, os.O_APPEND|os.O_CREATE, 0666)
 	} else {
 		if NoClobber && !this.force {
 			_, err := os.Stat(this.path)

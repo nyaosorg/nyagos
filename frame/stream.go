@@ -64,10 +64,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 	}
 	row := history.NewHistoryLine(line)
 	this.History.PushLine(row)
-	fd, err := os.OpenFile(this.HistPath, os.O_APPEND, 0600)
-	if err != nil && os.IsNotExist(err) {
-		fd, err = os.Create(this.HistPath)
-	}
+	fd, err := os.OpenFile(this.HistPath, os.O_APPEND|os.O_CREATE, 0600)
 	if err == nil {
 		fmt.Fprintln(fd, row.String())
 		fd.Close()
