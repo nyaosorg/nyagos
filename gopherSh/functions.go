@@ -41,7 +41,28 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	L.SetField(table, "rawargs", rawargs)
 	L.Push(table)
 
-	return 1, callLua(ctx, &cmd.Shell, 1, 0)
+	errorlevel := 0
+	err := callLua(ctx, &cmd.Shell, 1, 1)
+	if err == nil {
+		switch val := L.Get(-1).(type) {
+		case *lua.LTable:
+			size := val.Len()
+			newargs := make([]string, size)
+			for i := 0; i < size; i++ {
+				newargs[i] = L.GetTable(val, lua.LNumber(i+1)).String()
+			}
+			sh := cmd.Command()
+			sh.SetArgs(newargs)
+			errorlevel, err = sh.Spawnvp(ctx)
+			sh.Close()
+		case lua.LNumber:
+			errorlevel = int(val)
+		case lua.LString:
+			errorlevel, err = cmd.Interpret(ctx, string(val))
+		}
+	}
+	L.Pop(1)
+	return errorlevel, err
 }
 
 func cmdSetAlias(L Lua) int {
