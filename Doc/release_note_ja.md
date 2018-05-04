@@ -1,5 +1,8 @@
 [English](release_note_en.md) / Japanese
 
+- nyagos.d/start.lua が動作していなかった不具合を修正 (エイリアス関数の rawargs パラメータが実装されていなかった)
+- alias 関数の戻り値が評価されていなかった不具合を修正
+
 NYAGOS 4.3.0\_0
 ===============
 (2018.05.03)
