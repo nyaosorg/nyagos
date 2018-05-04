@@ -3,6 +3,7 @@
 - nyagos.d/start.lua が動作していなかった不具合を修正 (エイリアス関数の rawargs パラメータが実装されていなかった)
 - alias 関数の戻り値が評価されていなかった不具合を修正
 - -e オプションのスクリプト向けに、arg[] に引数が代入されていなかった
+- -e,-f オプションで、`getRegInt: could not find shell in Lua instance` が表示される不具合を修正
 
 NYAGOS 4.3.0\_0
 ===============

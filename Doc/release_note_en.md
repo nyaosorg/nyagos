@@ -3,6 +3,8 @@ English / [Japanese](release_note_ja.md)
 - Fix: nyagos.d/start.lua did not worked because the member `rawargs` of alias-function's argument was not implemented.
 - Fix: the return value of alias-function was not evaluted.
 - Fix: for the script in -e option, arg[] was not assinged.
+- Fix: On -f & -e option, warned as `getRegInt: could not find shell in Lua instanc
+e`
 
 NYAGOS 4.3.0\_0
 ===============
