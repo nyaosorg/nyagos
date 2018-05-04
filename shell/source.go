@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/zetamatta/go-mbcs"
@@ -17,7 +18,8 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-func readEnv(scan *bufio.Scanner, verbose io.Writer) error {
+func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
+	errorlevel := -1
 	for scan.Scan() {
 		line, err := mbcs.AtoU(scan.Bytes())
 		if err != nil {
@@ -28,7 +30,14 @@ func readEnv(scan *bufio.Scanner, verbose io.Writer) error {
 		if eqlPos > 0 {
 			left := line[:eqlPos]
 			right := line[eqlPos+1:]
-			if left != "ERRORLEVEL_" {
+			if left == "ERRORLEVEL_" {
+				value, err := strconv.ParseUint(right, 10, 32)
+				if err != nil {
+					fmt.Fprintf(verbose, "Could not read ERRORLEVEL(%s)\n", right)
+				} else {
+					errorlevel = int(value)
+				}
+			} else {
 				orig := os.Getenv(left)
 				if verbose != nil {
 					fmt.Fprintf(verbose, "%s=%s\n", left, right)
@@ -40,7 +49,7 @@ func readEnv(scan *bufio.Scanner, verbose io.Writer) error {
 			}
 		}
 	}
-	return scan.Err()
+	return errorlevel, scan.Err()
 }
 
 func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
@@ -63,16 +72,16 @@ func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
 }
 
 // loadTmpFile - read update the current-directory and environment-variables from tmp-file.
-func loadTmpFile(fname string, verbose io.Writer) error {
+func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	fp, err := os.Open(fname)
 	if err != nil {
-		return err
+		return -1, err
 	}
 	defer fp.Close()
 
 	scan := bufio.NewScanner(fp)
 	if err := readPwd(scan, verbose); err != nil {
-		return err
+		return -1, err
 	}
 	return readEnv(scan, verbose)
 }
@@ -167,12 +176,12 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 		defer os.Remove(batch)
 	}
 
-	if err := loadTmpFile(tmpfile, verbose); err != nil {
+	if errorlevel, err = loadTmpFile(tmpfile, verbose); err != nil {
 		if os.IsNotExist(err) {
 			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", args[0])
 		}
 		return 1, err
 	}
-
+	// println("ERRORLEVEL=", errorlevel)
 	return errorlevel, err
 }
