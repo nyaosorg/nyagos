@@ -385,7 +385,7 @@ func CmdWriteSub(args []any_t, out io.Writer) []any_t {
 	}
 	for i, arg1 := range args {
 		if i > 0 {
-			fmt.Fprint(out, "\t")
+			io.WriteString(out, "\t")
 		}
 		var str string
 		if arg1 == nil {
@@ -402,7 +402,7 @@ func CmdWriteSub(args []any_t, out io.Writer) []any_t {
 				str = fmt.Sprint(v)
 			}
 		}
-		fmt.Fprint(out, str)
+		io.WriteString(out, str)
 	}
 	return []any_t{true}
 }

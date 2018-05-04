@@ -2,6 +2,7 @@ package functions
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"regexp"
 	"strings"
@@ -41,7 +42,7 @@ func Prompt(args []interface{}) []interface{} {
 	}
 	text := frame.Format2Prompt(template)
 
-	fmt.Fprint(readline.Console, text)
+	io.WriteString(readline.Console, text)
 
 	text = rxAnsiEscCode.ReplaceAllString(text, "")
 	lfPos := strings.LastIndex(text, "\n")

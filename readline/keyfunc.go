@@ -3,6 +3,7 @@ package readline
 import (
 	"context"
 	"fmt"
+	"io"
 	"strings"
 	"unicode"
 
@@ -50,7 +51,7 @@ func KeyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 			PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
-		fmt.Fprint(Console, "\a")
+		io.WriteString(Console, "\a")
 		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
@@ -199,20 +200,20 @@ func KeyFuncClearBefore(ctx context.Context, this *Buffer) Result {
 }
 
 func KeyFuncCLS(ctx context.Context, this *Buffer) Result {
-	fmt.Fprint(Console, "\x1B[1;1H\x1B[2J")
+	io.WriteString(Console, "\x1B[1;1H\x1B[2J")
 	this.RepaintAll()
 	return CONTINUE
 }
 
 func KeyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
-	fmt.Fprint(Console, "\n")
+	io.WriteString(Console, "\n")
 	this.RepaintAll()
 	return CONTINUE
 }
 
 func KeyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
-	fmt.Fprint(Console, CURSOR_ON)
-	defer fmt.Fprint(Console, CURSOR_OFF)
+	io.WriteString(Console, CURSOR_ON)
+	defer io.WriteString(Console, CURSOR_OFF)
 	for {
 		Console.Flush()
 		e := getch.All()

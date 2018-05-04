@@ -2,6 +2,7 @@ package frame
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -94,7 +95,7 @@ func barNyagos(shellEngine func(string) error, folder string) {
 	}
 	err = shellEngine(bar_nyagos)
 	if err != nil {
-		fmt.Fprint(os.Stderr, err.Error())
+		io.WriteString(os.Stderr, err.Error())
 	}
 	fd.Close()
 }

@@ -139,13 +139,13 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	stamp := status.ModTime()
 	onelastyear := time.Now().AddDate(0, -11, 0)
 	if stamp.After(onelastyear) {
-		fmt.Fprint(out, stamp.Format(" Jan _2 15:04:05 "))
+		io.WriteString(out, stamp.Format(" Jan _2 15:04:05 "))
 	} else {
-		fmt.Fprint(out, stamp.Format(" Jan _2 2006     "))
+		io.WriteString(out, stamp.Format(" Jan _2 2006     "))
 	}
-	fmt.Fprint(out, prefix)
-	fmt.Fprint(out, name)
-	fmt.Fprint(out, postfix)
+	io.WriteString(out, prefix)
+	io.WriteString(out, name)
+	io.WriteString(out, postfix)
 
 	var linkTo string
 	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
@@ -277,14 +277,14 @@ func hasLink(folder, name string) bool {
 
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
-		fmt.Fprint(out, f.Name())
+		io.WriteString(out, f.Name())
 		if (flag & O_INDICATOR) != 0 {
 			if attr := findfile.GetFileAttributes(f); (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 && hasLink(folder, f.Name()) {
-				fmt.Fprint(out, "@")
+				io.WriteString(out, "@")
 			} else if f.IsDir() {
-				fmt.Fprint(out, "/")
+				io.WriteString(out, "/")
 			} else if dos.IsExecutableSuffix(filepath.Ext(f.Name())) {
-				fmt.Fprint(out, "*")
+				io.WriteString(out, "*")
 			}
 		}
 		fmt.Fprintln(out)

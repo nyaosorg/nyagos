@@ -108,7 +108,7 @@ func callBatch(batch string,
 	} else {
 		writer = bufio.NewWriter(fd)
 	}
-	fmt.Fprint(writer, "@call")
+	io.WriteString(writer, "@call")
 	for _, arg1 := range args {
 		// UTF8 parameter to ANSI
 		ansi, err := mbcs.UtoA(arg1)

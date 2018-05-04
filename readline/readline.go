@@ -172,7 +172,7 @@ var CtrlC = errors.New("^C")
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Prompt == nil {
 		session.Prompt = func() (int, error) {
-			fmt.Fprint(Console, "\n> ")
+			io.WriteString(Console, "\n> ")
 			return 2, nil
 		}
 	}
@@ -194,10 +194,10 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		this.TopColumn = 2
 	} else if this.TopColumn >= this.TermWidth-3 {
 		// ViewWidth is too narrow to edit.
-		fmt.Fprint(Console, "\n")
+		io.WriteString(Console, "\n")
 		this.TopColumn = 0
 	}
-	defer fmt.Fprint(Console, CURSOR_ON)
+	defer io.WriteString(Console, CURSOR_ON)
 
 	this.InsertString(0, session.Default)
 	if this.Cursor > this.Length {
@@ -213,7 +213,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	for {
 		var e getch.Event
 		if !cursorOnSwitch {
-			fmt.Fprint(Console, CURSOR_ON)
+			io.WriteString(Console, CURSOR_ON)
 			cursorOnSwitch = true
 		}
 		Console.Flush()
@@ -252,12 +252,12 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			}
 		}
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
-			fmt.Fprint(Console, CURSOR_OFF)
+			io.WriteString(Console, CURSOR_OFF)
 			cursorOnSwitch = false
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
-			fmt.Fprint(Console, "\n")
+			Console.WriteByte(byte('\n'))
 			Console.Flush()
 			result := this.String()
 			if rc == ENTER {

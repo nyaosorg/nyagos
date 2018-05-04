@@ -3,6 +3,7 @@ package readline
 import (
 	"context"
 	"fmt"
+	"io"
 	"strings"
 	"unicode"
 
@@ -48,10 +49,10 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			Backspace(n)
 		}
 		lastDrawWidth = drawWidth
-		fmt.Fprint(Console, CURSOR_ON)
+		io.WriteString(Console, CURSOR_ON)
 		Console.Flush()
 		charcode := getch.Rune()
-		fmt.Fprint(Console, CURSOR_OFF)
+		io.WriteString(Console, CURSOR_OFF)
 		Backspace(drawWidth)
 		switch charcode {
 		case '\b':

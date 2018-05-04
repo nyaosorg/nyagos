@@ -3,6 +3,7 @@ package readline
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"strings"
 	"unicode"
 
@@ -18,10 +19,10 @@ func PutRune(ch rune) {
 	if ch < ' ' {
 		fmt.Fprintf(Console, "^%c", 'A'+(ch-1))
 	} else if _, ok := hasCache[ch]; ok {
-		fmt.Fprintf(Console, "%c", ch)
+		Console.WriteRune(ch)
 	} else {
 		pre_x, pre_y := box.GetLocate()
-		fmt.Fprintf(Console, "%c", ch)
+		Console.WriteRune(ch)
 		post_x, post_y := box.GetLocate()
 		if post_y == pre_y && post_x > pre_x {
 			hasCache[ch] = struct{}{}
@@ -36,7 +37,7 @@ func PutRunes(ch rune, n int) {
 	}
 	PutRune(ch)
 	for i := 1; i < n; i++ {
-		fmt.Fprintf(Console, "%c", ch)
+		Console.WriteRune(ch)
 	}
 }
 
@@ -44,12 +45,12 @@ func Backspace(n int) {
 	if n > 1 {
 		fmt.Fprintf(Console, "\x1B[%dD", n)
 	} else if n == 1 {
-		fmt.Fprint(Console, "\b")
+		Console.WriteByte(byte('\b'))
 	}
 }
 
 func Eraseline() {
-	fmt.Fprint(Console, "\x1B[0K")
+	io.WriteString(Console, "\x1B[0K")
 }
 
 const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)

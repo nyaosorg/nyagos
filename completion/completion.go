@@ -3,6 +3,7 @@ package completion
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -132,7 +133,7 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if comp == nil {
 		return readline.CONTINUE
 	}
-	fmt.Fprint(readline.Console, "\n")
+	io.WriteString(readline.Console, "\n")
 	if err != nil {
 		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 	}
@@ -237,7 +238,7 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		commonStr = filepath.FromSlash(commonStr)
 	}
 	if comp.RawWord == commonStr {
-		fmt.Fprint(readline.Console, "\n")
+		io.WriteString(readline.Console, "\n")
 		if err != nil {
 			fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
 		}
