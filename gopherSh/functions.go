@@ -60,8 +60,8 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 		case lua.LString:
 			errorlevel, err = cmd.Interpret(ctx, string(val))
 		}
+		L.Pop(1)
 	}
-	L.Pop(1)
 	return errorlevel, err
 }
 
