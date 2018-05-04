@@ -94,6 +94,7 @@ func Main() error {
 		sh.SetTag(&luaWrapper{L})
 	}
 	defer sh.Close()
+	ctx = context.WithValue(ctx, shellKey, sh)
 
 	langEngine := func(fname string) ([]byte, error) {
 		ctxTmp := context.WithValue(ctx, shellKey, sh)
