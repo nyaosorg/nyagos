@@ -22,9 +22,20 @@ type luaKeyT struct{}
 
 var luaKey luaKeyT
 
-type ScriptEngineForOptionImpl struct{}
+type ScriptEngineForOptionImpl struct {
+	L  Lua
+	Sh *shell.Shell
+}
 
-func (this *ScriptEngineForOptionImpl) SetArg(args []string) {}
+func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
+	if L := this.L; L != nil {
+		table := L.NewTable()
+		for i, arg1 := range args {
+			L.SetTable(table, lua.LNumber(i), lua.LString(arg1))
+		}
+		L.SetGlobal("arg", table)
+	}
+}
 
 func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
 	L, ok := ctx.Value(luaKey).(Lua)
@@ -41,6 +52,7 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 	if !ok {
 		return errors.New("Script is not supported.")
 	}
+	ctx = context.WithValue(ctx, shellKey, this.Sh)
 	defer setContext(L, getContext(L))
 	setContext(L, ctx)
 	return L.DoString(code)
@@ -93,7 +105,7 @@ func Main() error {
 		return sh.Source(ctx, fname)
 	}
 
-	script, err := frame.OptionParse(sh, &ScriptEngineForOptionImpl{})
+	script, err := frame.OptionParse(sh, &ScriptEngineForOptionImpl{L: L, Sh: sh})
 	if err != nil {
 		return err
 	}
