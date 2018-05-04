@@ -34,6 +34,11 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	for i, arg1 := range cmd.Args() {
 		L.SetTable(table, lua.LNumber(i), lua.LString(arg1))
 	}
+	rawargs := L.NewTable()
+	for i, arg1 := range cmd.RawArgs() {
+		L.SetTable(rawargs, lua.LNumber(i), lua.LString(arg1))
+	}
+	L.SetField(table, "rawargs", rawargs)
 	L.Push(table)
 
 	return 1, callLua(ctx, &cmd.Shell, 1, 0)
