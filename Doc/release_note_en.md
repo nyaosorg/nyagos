@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 - Fix: for the script in -e option, arg[] was not assinged.
 - Fix: On -f & -e option, warned as `getRegInt: could not find shell in Lua instanc
 e`
+- Fix: batchfile cound not return the value of `exit /b` as ERRORLEVEL
 
 NYAGOS 4.3.0\_0
 ===============
