@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+- #298: Ctrl-C can terminate the `type` command.
+- Fix: batchfile cound not return the value of `exit /b` as ERRORLEVEL
+- Add ls -L which shows information for the file refernces rather than for the link it self. (because ls could not show the directories in OneDrive )
+
 NYAGOS 4.2.5\_1
 ===============
 on Apr.14,2018

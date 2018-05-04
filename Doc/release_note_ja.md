@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+- Ctrl-C で type が終了できるようにした。
+- バッチファイルが exit /b で ERRORLEVEL の値を返せなかった不具合を修正
+- シンボリックリンクの先を参照するオプション ls -L を追加（OneDrive内のディレクトリーが表示できなかったため）
+
 NYAGOS 4.2.5\_1
 ===============
 (2018.04.14)
