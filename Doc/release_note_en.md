@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.0\_1
+===============
+on May.5,2018
+
 - Fix: nyagos.d/start.lua did not worked because the member `rawargs` of alias-function's argument was not implemented.
 - Fix: the return value of alias-function was not evaluted.
 - Fix: for the script in -e option, arg[] was not assinged.
