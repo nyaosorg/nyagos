@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.0\_2
+===============
+(2018.05.07)
+
 - #305: ユーザの .nyagos が二回目以降ロードされない不具合を修正(Thx! @erw7)
 
 NYAGOS 4.3.0\_1

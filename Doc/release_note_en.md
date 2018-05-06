@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.0\_2
+===============
+on May.7,2018
+
 - #305: Fix issue that user's .nyagos was not loaded again (Thx! @erw7)
 
 NYAGOS 4.3.0\_1
