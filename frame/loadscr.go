@@ -70,7 +70,8 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 	}
 	cachePath := filepath.Join(AppDataDir(), runtime.GOARCH+".nyagos.luac")
 	cacheStat, err := os.Stat(cachePath)
-	if err == nil && !dotStat.ModTime().After(cacheStat.ModTime()) {
+	if err == nil && cacheStat.Size() != 0 &&
+		!dotStat.ModTime().After(cacheStat.ModTime()) {
 		_, err = langEngine(cachePath)
 		return err
 	}
@@ -78,7 +79,11 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(cachePath, chank, os.FileMode(0644))
+	if chank != nil {
+		return ioutil.WriteFile(cachePath, chank, os.FileMode(0644))
+	} else {
+		return nil
+	}
 }
 
 func barNyagos(shellEngine func(string) error, folder string) {
