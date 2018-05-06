@@ -92,6 +92,7 @@ Acknowledgement
 * [tyochiai](https://github.com/tyochiai)
 * [masamitsu-murase](https://github.com/masamitsu-murase)
 * [hazychill](https://github.com/hazychill)
+* [erw7](https://github.com/erw7)
 
 Author
 ------
