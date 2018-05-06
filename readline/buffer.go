@@ -45,7 +45,7 @@ func Backspace(n int) {
 	if n > 1 {
 		fmt.Fprintf(Console, "\x1B[%dD", n)
 	} else if n == 1 {
-		Console.WriteByte(byte('\b'))
+		Console.WriteByte('\b')
 	}
 }
 

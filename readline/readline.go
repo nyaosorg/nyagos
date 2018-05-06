@@ -257,7 +257,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
-			Console.WriteByte(byte('\n'))
+			Console.WriteByte('\n')
 			Console.Flush()
 			result := this.String()
 			if rc == ENTER {

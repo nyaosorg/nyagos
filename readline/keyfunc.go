@@ -206,7 +206,7 @@ func KeyFuncCLS(ctx context.Context, this *Buffer) Result {
 }
 
 func KeyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
-	io.WriteString(Console, "\n")
+	Console.WriteByte('\n')
 	this.RepaintAll()
 	return CONTINUE
 }
