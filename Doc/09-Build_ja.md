@@ -26,13 +26,15 @@
 
 `%GOPATH%` にて
 
-    git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos
+    git clone https://github.com/zetamatta/nyagos src/github.com/zetamatta/nyagos
+    cd src/github.com/zetamatta/nyagos
 
 (安定板の時)
+
     git checkout master
 
 (最新版の時)
+
     git checkout develop
 
     make.cmd get
