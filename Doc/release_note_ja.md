@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 - nyagos.setalias, nyagos.getalias の実装が漏れており、`alias { CMD=XXX}` が動かなくなっていた
+- エイリアスの戻り値でテーブルが与えられた時、コマンド名として解釈すべき、要素[0]が使われていなかった不具合を修正
 
 NYAGOS 4.3.0\_2
 ===============
