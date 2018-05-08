@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+- nyagos.setalias, nyagos.getalias の実装が漏れており、`alias { CMD=XXX}` が動かなくなっていた
+
 NYAGOS 4.3.0\_2
 ===============
 (2018.05.07)
