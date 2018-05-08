@@ -46,10 +46,16 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	if err == nil {
 		switch val := L.Get(-1).(type) {
 		case *lua.LTable:
-			size := val.Len()
-			newargs := make([]string, size)
-			for i := 0; i < size; i++ {
-				newargs[i] = L.GetTable(val, lua.LNumber(i+1)).String()
+			newargs := make([]string, 0, val.Len()+1)
+			if val, ok := L.GetTable(val, lua.LNumber(0)).(lua.LString); ok {
+				newargs = append(newargs, string(val))
+			}
+			for i := 1; true; i++ {
+				arg1 := L.GetTable(val, lua.LNumber(i))
+				if arg1 == lua.LNil {
+					break
+				}
+				newargs = append(newargs, arg1.String())
 			}
 			sh := cmd.Command()
 			sh.SetArgs(newargs)
