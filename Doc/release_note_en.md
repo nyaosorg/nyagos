@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+- Fix: forgot implement nyagos.setalias , nyagos.getalias (`alias { CMD=XXX}` did not work.)
+
 NYAGOS 4.3.0\_2
 ===============
 on May.7,2018
