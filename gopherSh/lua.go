@@ -106,6 +106,8 @@ func NewLua() (Lua, error) {
 
 	aliasTable := makeVirtualTable(L, cmdGetAlias, cmdSetAlias)
 	L.SetField(nyagosTable, "alias", aliasTable)
+	L.SetField(nyagosTable, "setalias", L.NewFunction(cmdSetAlias))
+	L.SetField(nyagosTable, "getalias", L.NewFunction(cmdGetAlias))
 
 	for name, function := range functions.Table2 {
 		L.SetField(nyagosTable, name, L.NewFunction(lua2param(function)))
