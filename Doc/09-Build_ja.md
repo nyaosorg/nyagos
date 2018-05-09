@@ -24,10 +24,8 @@
 * https://github.com/zetamatta/go-mbcs
 * https://golang.org/x/sys/windows
 
-`%GOPATH%` にて
-
-    git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos
+    go get github.com/zetamatta/nyagos
+    cd "%GOPATH%\src\github.com\zetamatta\nyagos"
 
 (安定板の時)
     git checkout master

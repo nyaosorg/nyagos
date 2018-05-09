@@ -1,7 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
 - Fix: forgot implement nyagos.setalias , nyagos.getalias (`alias { CMD=XXX}` did not work.)
-- Fix that the element [0] of the table value returned by alias-function was not used as the new command name to evaluate.
+- Fix: that the element [0] of the table value returned by alias-function was not used as the new command name to evaluate.
+- Fix: `doc/09-Build_*.md` about how to download sourcefiles from github
 
 NYAGOS 4.3.0\_2
 ===============
