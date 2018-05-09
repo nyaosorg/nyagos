@@ -7,8 +7,6 @@
 *.syso
 *.zip
 *~
-bindata.go
 include/
 version.cmd
 version.json
-zsyscall.go
