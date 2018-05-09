@@ -26,8 +26,8 @@ They are able to be downloaded with `make.cmd get`.
 
 On `%GOPATH%` folder,
 
-    git clone https://github.com/zetamatta/nyagos nyagos
-    cd nyagos
+    git clone https://github.com/zetamatta/nyagos src/github.com/zetamatta/nyagos
+    cd src/github.com/zetamatta/nyagos
 
 (for stable version)
 
