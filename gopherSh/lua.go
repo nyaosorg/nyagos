@@ -231,7 +231,21 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		return lua.LString(value.Error())
 	case int:
 		return lua.LNumber(value)
+	case int16:
+		return lua.LNumber(value)
+	case int32:
+		return lua.LNumber(value)
 	case int64:
+		return lua.LNumber(value)
+	case uint:
+		return lua.LNumber(value)
+	case uint16:
+		return lua.LNumber(value)
+	case uint32:
+		return lua.LNumber(value)
+	case uint64:
+		return lua.LNumber(value)
+	case uintptr:
 		return lua.LNumber(value)
 	case time.Month:
 		return lua.LNumber(value)
