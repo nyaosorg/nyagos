@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+- Fix: #309 nyagos.getkey() が使えない不具合を修正
+
 NYAGOS 4.3.0\_3
 ===============
 (2018.05.09)
