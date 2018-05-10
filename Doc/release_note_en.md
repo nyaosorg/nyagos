@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+- Fix: #309 nyagos.getkey() raised panic
+
 NYAGOS 4.3.0\_3
 ===============
 on May.9,2018
