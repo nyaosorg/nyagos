@@ -254,6 +254,10 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		rc := f.Call(&this)
 		if rc != CONTINUE {
 			fmt.Fprint(Console, "\n")
+			if !cursorOnSwitch {
+				io.WriteString(Console, CURSOR_ON)
+			}
+			Console.Flush()
 			result := this.String()
 			if rc == ENTER {
 				return result, nil
