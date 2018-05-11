@@ -3,6 +3,8 @@ English / [Japanese](release_note_ja.md)
 - #298: Ctrl-C can terminate the `type` command.
 - Fix: batchfile cound not return the value of `exit /b` as ERRORLEVEL
 - Add ls -L which shows information for the file refernces rather than for the link it self. (because ls could not show the directories in OneDrive )
+- Fix: error-message when command `lnk`'s target is not `*.lnk` nor exist.
+- Fix: the cursor blink was switched to off on the child process.
 
 NYAGOS 4.2.5\_1
 ===============
