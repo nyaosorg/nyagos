@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 - Fix: #309 nyagos.getkey() が使えない不具合を修正
+- lnk コマンドの宛先が `*.lnk` でなかったり存在しなかった時のエラーメッセージを修正
 
 NYAGOS 4.3.0\_3
 ===============

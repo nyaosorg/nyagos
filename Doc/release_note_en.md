@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 - Fix: #309 nyagos.getkey() raised panic
+- Fix error-message when command `lnk`'s target is not `*.lnk` nor exist.
 
 NYAGOS 4.3.0\_3
 ===============
