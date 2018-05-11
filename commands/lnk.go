@@ -53,11 +53,18 @@ func cmdLnk(_ context.Context, cmd1 Param) (int, error) {
 		fmt.Fprintln(cmd1.Err(), "usage: lnk FILENAME SHORTCUT WORKING-DIR")
 		return 0, nil
 	case 2:
-		target, dir, err := dos.ReadShortcut(cmd1.Arg(1))
+		fn := cmd1.Arg(1)
+		if strings.ToLower(filepath.Ext(fn)) != ".lnk" {
+			return 1, fmt.Errorf("%s: not shotcut file", fn)
+		}
+		if _, err := os.Stat(fn); err != nil {
+			return 1, fmt.Errorf("%s: not exist", fn)
+		}
+		target, dir, err := dos.ReadShortcut(fn)
 		if err != nil {
 			return 1, err
 		}
-		printShortcut(target, cmd1.Arg(1), dir, cmd1.Out())
+		printShortcut(target, fn, dir, cmd1.Out())
 		break
 	case 3:
 		if err := makeShortcut(cmd1.Arg(1), cmd1.Arg(2), "", cmd1.Out()); err != nil {
