@@ -1,6 +1,10 @@
 English / [Japanese](release_note_ja.md)
 
-- Fix: #309 nyagos.getkey() raised panic
+NYAGOS 4.3.0\_4
+===============
+on May.12,2018
+
+- Fix: #309 nyagos.getkey() raised panic (Thx @nocd5)
 - Fix: error-message when command `lnk`'s target is not `*.lnk` nor exist.
 - Fix: the cursor blink was switched to off on the child process.
 

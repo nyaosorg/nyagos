@@ -1,6 +1,10 @@
 [English](release_note_en.md) / Japanese
 
-- Fix: #309 nyagos.getkey() が使えない不具合を修正
+NYAGOS 4.3.0\_4
+===============
+(2018.05.12)
+
+- Fix: #309 nyagos.getkey() が使えない不具合を修正 (Thx @nocd5)
 - lnk コマンドの宛先が `*.lnk` でなかったり存在しなかった時のエラーメッセージを修正
 - 子プロセスのカーソルがオフになってしまう不具合を修正
 
