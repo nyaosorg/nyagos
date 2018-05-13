@@ -7,22 +7,19 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/mattn/go-colorable"
 	"github.com/zetamatta/go-box"
 )
 
-var Console = bufio.NewWriter(colorable.NewColorableStdout())
-
 var hasCache = map[rune]struct{}{}
 
-func PutRune(ch rune) {
+func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
-		fmt.Fprintf(Console, "^%c", 'A'+(ch-1))
+		fmt.Fprintf(this.Writer, "^%c", 'A'+(ch-1))
 	} else if _, ok := hasCache[ch]; ok {
-		Console.WriteRune(ch)
+		this.Writer.WriteRune(ch)
 	} else {
 		pre_x, pre_y := box.GetLocate()
-		Console.WriteRune(ch)
+		this.Writer.WriteRune(ch)
 		post_x, post_y := box.GetLocate()
 		if post_y == pre_y && post_x > pre_x {
 			hasCache[ch] = struct{}{}
@@ -31,32 +28,33 @@ func PutRune(ch rune) {
 	}
 }
 
-func PutRunes(ch rune, n int) {
+func (this *Buffer) PutRunes(ch rune, n int) {
 	if n <= 0 {
 		return
 	}
-	PutRune(ch)
+	this.PutRune(ch)
 	for i := 1; i < n; i++ {
-		Console.WriteRune(ch)
+		this.Writer.WriteRune(ch)
 	}
 }
 
-func Backspace(n int) {
+func (this *Buffer) Backspace(n int) {
 	if n > 1 {
-		fmt.Fprintf(Console, "\x1B[%dD", n)
+		fmt.Fprintf(this.Writer, "\x1B[%dD", n)
 	} else if n == 1 {
-		Console.WriteByte('\b')
+		this.Writer.WriteRune('\b')
 	}
 }
 
-func Eraseline() {
-	io.WriteString(Console, "\x1B[0K")
+func (this *Buffer) Eraseline() {
+	io.WriteString(this.Writer, "\x1B[0K")
 }
 
 const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
 	*Editor
+	Writer         *bufio.Writer
 	Buffer         []rune
 	Length         int
 	Unicode        rune
@@ -134,7 +132,7 @@ func (this *Buffer) ResetViewStart() {
 
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
-	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 
 	// Replace Buffer
 	this.Delete(pos, this.Cursor-pos)
@@ -146,7 +144,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Repaint
 	w := 0
 	for i := this.ViewStart; i < this.Cursor; i++ {
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 		w += GetCharWidth(this.Buffer[i])
 	}
 	bs := 0
@@ -155,13 +153,13 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		if w+w1 >= this.ViewWidth() {
 			break
 		}
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 		w += w1
 		bs += w1
 	}
-	Eraseline()
+	this.Eraseline()
 	if bs > 0 {
-		Backspace(bs)
+		this.Backspace(bs)
 	}
 }
 
@@ -182,28 +180,29 @@ func (this *Buffer) Repaint(pos int, del int) {
 		if vp+w1 >= this.ViewWidth() {
 			break
 		}
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 		vp += w1
 		bs += w1
 	}
-	Eraseline()
+	this.Eraseline()
 	if del > 0 {
-		Backspace(bs)
+		this.Backspace(bs)
 	} else {
 		// for readline_keyfunc.go: KeyFuncInsertSelf()
-		Backspace(bs + del)
+		this.Backspace(bs + del)
 	}
 }
 
 func (this *Buffer) RepaintAfterPrompt() {
 	this.ResetViewStart()
 	for i := this.ViewStart; i < this.Cursor; i++ {
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 	}
 	this.Repaint(this.Cursor, 0)
 }
 
 func (this *Buffer) RepaintAll() {
+	this.Writer.Flush()
 	this.TopColumn, _ = this.Prompt()
 	this.RepaintAfterPrompt()
 }

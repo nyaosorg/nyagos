@@ -1,14 +1,15 @@
 package commands
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"io/ioutil"
 	"strings"
 
-	"github.com/zetamatta/go-box"
+	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/go-box"
 )
 
 func cmdBox(ctx context.Context, cmd Param) (int, error) {
@@ -24,10 +25,13 @@ func cmdBox(ctx context.Context, cmd Param) (int, error) {
 	for i := 0; i < len(list); i++ {
 		list[i] = strings.TrimSpace(list[i])
 	}
+
+	console := bufio.NewWriter(colorable.NewColorableStdout())
 	result := box.Choice(
 		list,
-		readline.Console)
-	fmt.Fprintln(readline.Console)
+		console)
+	fmt.Fprintln(console)
+	console.Flush()
 	fmt.Fprintln(cmd.Out(), result)
 	return 0, nil
 }

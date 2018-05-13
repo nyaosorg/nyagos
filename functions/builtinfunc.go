@@ -74,7 +74,7 @@ func CmdBox(args []any_t) []any_t {
 			sources = append(sources, fmt.Sprint(val))
 		}
 	}
-	return []any_t{box.Choice(sources, readline.Console)}
+	return []any_t{box.Choice(sources, colorable.NewColorableStdout())}
 }
 
 func CmdResetCharWidth(args []any_t) []any_t {

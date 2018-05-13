@@ -23,7 +23,7 @@ func KeyFuncIntr(ctx context.Context, this *Buffer) Result { // Ctrl-C
 }
 
 func KeyFuncHead(ctx context.Context, this *Buffer) Result { // Ctrl-A
-	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0
 	this.ViewStart = 0
 	this.Repaint(0, 1)
@@ -39,7 +39,7 @@ func KeyFuncBackword(ctx context.Context, this *Buffer) Result { // Ctrl-B
 		this.ViewStart--
 		this.Repaint(this.Cursor, 1)
 	} else {
-		Backspace(GetCharWidth(this.Buffer[this.Cursor]))
+		this.Backspace(GetCharWidth(this.Buffer[this.Cursor]))
 	}
 	return CONTINUE
 }
@@ -48,11 +48,11 @@ func KeyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, this.Length)
 	if allength < this.ViewWidth() {
 		for ; this.Cursor < this.Length; this.Cursor++ {
-			PutRune(this.Buffer[this.Cursor])
+			this.PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
-		io.WriteString(Console, "\a")
-		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+		io.WriteString(this.Writer, "\a")
+		this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
 		for {
@@ -67,7 +67,7 @@ func KeyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 			this.ViewStart--
 		}
 		for this.Cursor = this.ViewStart; this.Cursor < this.Length; this.Cursor++ {
-			PutRune(this.Buffer[this.Cursor])
+			this.PutRune(this.Buffer[this.Cursor])
 		}
 	}
 	return CONTINUE
@@ -80,18 +80,18 @@ func KeyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 	if w < this.ViewWidth() {
 		// No Scroll
-		PutRune(this.Buffer[this.Cursor])
+		this.PutRune(this.Buffer[this.Cursor])
 	} else {
 		// Right Scroll
-		Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+		this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
 		this.ViewStart++
 		for i := this.ViewStart; i <= this.Cursor; i++ {
-			PutRune(this.Buffer[i])
+			this.PutRune(this.Buffer[i])
 		}
-		Eraseline()
+		this.Eraseline()
 	}
 	this.Cursor++
 	return CONTINUE
@@ -102,7 +102,7 @@ func KeyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 		this.Cursor--
 		delw := this.Delete(this.Cursor, 1)
 		if this.Cursor >= this.ViewStart {
-			Backspace(delw)
+			this.Backspace(delw)
 		} else {
 			this.ViewStart = this.Cursor
 		}
@@ -133,13 +133,13 @@ func KeyFuncInsertSelf(ctx context.Context, this *Buffer) Result {
 	w1 := GetCharWidth(ch)
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
-		Backspace(w)
+		this.Backspace(w)
 		this.Cursor++
 		this.ResetViewStart()
 		for i := this.ViewStart; i < this.Cursor; i++ {
-			PutRune(this.Buffer[i])
+			this.PutRune(this.Buffer[i])
 		}
-		Eraseline()
+		this.Eraseline()
 	} else {
 		this.Repaint(this.Cursor, -w1)
 		this.Cursor++
@@ -155,15 +155,15 @@ func KeyFuncInsertReport(ctx context.Context, this *Buffer) Result {
 func KeyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	clipboard.WriteAll(this.SubString(this.Cursor, this.Length))
 
-	Eraseline()
+	this.Eraseline()
 	this.Length = this.Cursor
 	return CONTINUE
 }
 
 func KeyFuncClear(ctx context.Context, this *Buffer) Result {
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	Backspace(width)
-	Eraseline()
+	this.Backspace(width)
+	this.Eraseline()
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -179,9 +179,9 @@ func KeyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	clipboard.WriteAll(this.SubString(i, org_cursor))
 	keta := this.Delete(i, org_cursor-i)
 	if i >= this.ViewStart {
-		Backspace(keta)
+		this.Backspace(keta)
 	} else {
-		Backspace(this.GetWidthBetween(this.ViewStart, org_cursor))
+		this.Backspace(this.GetWidthBetween(this.ViewStart, org_cursor))
 	}
 	this.Cursor = i
 	this.Repaint(i, keta)
@@ -192,7 +192,7 @@ func KeyFuncClearBefore(ctx context.Context, this *Buffer) Result {
 	keta := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	clipboard.WriteAll(this.SubString(0, this.Cursor))
 	this.Delete(0, this.Cursor)
-	Backspace(keta)
+	this.Backspace(keta)
 	this.Cursor = 0
 	this.ViewStart = 0
 	this.Repaint(0, keta)
@@ -200,22 +200,22 @@ func KeyFuncClearBefore(ctx context.Context, this *Buffer) Result {
 }
 
 func KeyFuncCLS(ctx context.Context, this *Buffer) Result {
-	io.WriteString(Console, "\x1B[1;1H\x1B[2J")
+	io.WriteString(this.Writer, "\x1B[1;1H\x1B[2J")
 	this.RepaintAll()
 	return CONTINUE
 }
 
 func KeyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
-	Console.WriteByte('\n')
+	this.Writer.WriteByte('\n')
 	this.RepaintAll()
 	return CONTINUE
 }
 
 func KeyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
-	io.WriteString(Console, CURSOR_ON)
-	defer io.WriteString(Console, CURSOR_OFF)
+	io.WriteString(this.Writer, CURSOR_ON)
+	defer io.WriteString(this.Writer, CURSOR_OFF)
 	for {
-		Console.Flush()
+		this.Writer.Flush()
 		e := getch.All()
 		if e.Key != nil && e.Key.Rune != 0 {
 			this.Unicode = e.Key.Rune
@@ -262,9 +262,9 @@ func KeyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		this.Buffer[this.Cursor-2], this.Buffer[this.Cursor-1] = this.Buffer[this.Cursor-1], this.Buffer[this.Cursor-2]
 
 		redrawStart := maxInt(this.Cursor-2, this.ViewStart)
-		Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
+		this.Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
 		for i := redrawStart; i < this.Cursor; i++ {
-			PutRune(this.Buffer[i])
+			this.PutRune(this.Buffer[i])
 		}
 	} else {
 		if this.Cursor < 1 {
@@ -276,17 +276,17 @@ func KeyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		if w >= this.ViewWidth() {
 			// cursor move right and scroll
 			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
-			Backspace(w_1)
+			this.Backspace(w_1)
 			this.ViewStart++
 			for i := this.ViewStart; i <= this.Cursor; i++ {
-				PutRune(this.Buffer[i])
+				this.PutRune(this.Buffer[i])
 			}
 		} else {
 			// no necessary to scroll
 			redrawStart := maxInt(this.Cursor-1, this.ViewStart)
-			Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
+			this.Backspace(this.GetWidthBetween(redrawStart, this.Cursor))
 			for i := redrawStart; i <= this.Cursor; i++ {
-				PutRune(this.Buffer[i])
+				this.PutRune(this.Buffer[i])
 			}
 		}
 		this.Cursor++

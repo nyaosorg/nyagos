@@ -10,28 +10,31 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/readline"
+
+	"github.com/mattn/go-colorable"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 
-func setTitle(s string) {
-	fmt.Fprintf(readline.Console, "\x1B]0;%s\007", s)
+func setTitle(w io.Writer, s string) {
+	fmt.Fprintf(w, "\x1B]0;%s\007", s)
 }
 
 func Prompt(args []interface{}) []interface{} {
+	console := colorable.NewColorableStdout()
 	if len(args) >= 2 {
-		setTitle(fmt.Sprint(args[1]))
+		setTitle(console, fmt.Sprint(args[1]))
 	} else if wd, err := os.Getwd(); err == nil {
 		if flag, _ := dos.IsElevated(); flag {
-			setTitle("(Admin) - " + wd)
+			setTitle(console, "(Admin) - "+wd)
 		} else {
-			setTitle("NYAGOS - " + wd)
+			setTitle(console, "NYAGOS - "+wd)
 		}
 	} else {
 		if flag, _ := dos.IsElevated(); flag {
-			setTitle("(Admin)")
+			setTitle(console, "(Admin)")
 		} else {
-			setTitle("NYAGOS")
+			setTitle(console, "NYAGOS")
 		}
 	}
 	var template string
@@ -42,7 +45,7 @@ func Prompt(args []interface{}) []interface{} {
 	}
 	text := frame.Format2Prompt(template)
 
-	io.WriteString(readline.Console, text)
+	io.WriteString(console, text)
 
 	text = rxAnsiEscCode.ReplaceAllString(text, "")
 	lfPos := strings.LastIndex(text, "\n")
