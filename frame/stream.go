@@ -24,20 +24,30 @@ type CmdStreamConsole struct {
 	HistPath string
 }
 
-func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
-	var console io.Writer
-	if OptionGoColorable {
-		console = colorable.NewColorableStdout()
-	} else {
-		console = os.Stdout
-		if OptionEnableVirtualTerminalProcessing {
-			dos.EnableStdoutVirtualTerminalProcessing()
+var console io.Writer
+
+func GetConsole() io.Writer {
+	if console == nil {
+		if OptionGoColorable {
+			console = colorable.NewColorableStdout()
+		} else {
+			console = os.Stdout
+			if OptionEnableVirtualTerminalProcessing {
+				dos.EnableStdoutVirtualTerminalProcessing()
+			}
 		}
 	}
+	return console
+}
+
+func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	history1 := &history.Container{}
 	this := &CmdStreamConsole{
-		History:  history1,
-		Editor:   &readline.Editor{History: history1, Prompt: doPrompt, Writer: bufio.NewWriter(console)},
+		History: history1,
+		Editor: &readline.Editor{
+			History: history1,
+			Prompt:  doPrompt,
+			Writer:  bufio.NewWriter(GetConsole())},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},

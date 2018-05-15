@@ -10,8 +10,6 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/readline"
-
-	"github.com/mattn/go-colorable"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
@@ -20,8 +18,9 @@ func setTitle(w io.Writer, s string) {
 	fmt.Fprintf(w, "\x1B]0;%s\007", s)
 }
 
-func Prompt(args []interface{}) []interface{} {
-	console := colorable.NewColorableStdout()
+func Prompt(param *Param) []interface{} {
+	console := param.Term
+	args := param.Args
 	if len(args) >= 2 {
 		setTitle(console, fmt.Sprint(args[1]))
 	} else if wd, err := os.Getwd(); err == nil {

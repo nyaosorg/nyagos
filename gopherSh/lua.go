@@ -126,7 +126,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
 	L.SetField(nyagosTable, "exec", L.NewFunction(cmdExec))
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
-	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2cmd(functions.Prompt)))
+	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2param(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
 	L.SetField(nyagosTable, "goversion", lua.LString(runtime.Version()))
@@ -364,6 +364,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = os.Stdout
 			param.Err = os.Stderr
 		}
+		param.Term = frame.GetConsole()
 		result := f(param)
 		pushInterfaces(L, result)
 		return len(result)
