@@ -14,6 +14,8 @@ import (
 )
 
 var OptionNorc = false
+var OptionGoColorable = true
+var OptionEnableVirtualTerminalProcessing = false
 
 type ScriptEngineForOption interface {
 	SetArg([]string)
@@ -117,8 +119,19 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
 				return io.EOF
 			}, nil
+		} else if arg1 == "--go-colorable" {
+			OptionGoColorable = true
+		} else if arg1 == "--no-go-colorable" {
+			OptionGoColorable = false
+		} else if arg1 == "--enable-virtual-terminal-processing" {
+			OptionEnableVirtualTerminalProcessing = true
+		} else if arg1 == "--disable-virtual-terminal-processing" {
+			OptionEnableVirtualTerminalProcessing = false
+		} else {
+			fmt.Fprintf(os.Stderr, "%s: unknwon parameter\n", arg1)
 		}
 	}
+
 	return nil, nil
 }
 

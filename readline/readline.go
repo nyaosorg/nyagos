@@ -1,14 +1,11 @@
 package readline
 
 import (
-	"bufio"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"strings"
-
-	"github.com/mattn/go-colorable"
 
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-getch"
@@ -174,7 +171,7 @@ var CtrlC = errors.New("^C")
 // - CTRL-D typed -> returns "" and io.EOF
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Writer == nil {
-		session.Writer = bufio.NewWriter(colorable.NewColorableStdout())
+		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
 	}
 	defer func() {
 		session.Writer.WriteString(CURSOR_ON)

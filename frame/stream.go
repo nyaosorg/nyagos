@@ -1,11 +1,16 @@
 package frame
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
+	"github.com/mattn/go-colorable"
+
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -20,10 +25,19 @@ type CmdStreamConsole struct {
 }
 
 func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
+	var console io.Writer
+	if OptionGoColorable {
+		console = colorable.NewColorableStdout()
+	} else {
+		console = os.Stdout
+		if OptionEnableVirtualTerminalProcessing {
+			dos.EnableStdoutVirtualTerminalProcessing()
+		}
+	}
 	history1 := &history.Container{}
 	this := &CmdStreamConsole{
 		History:  history1,
-		Editor:   &readline.Editor{History: history1, Prompt: doPrompt},
+		Editor:   &readline.Editor{History: history1, Prompt: doPrompt, Writer: bufio.NewWriter(console)},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},
