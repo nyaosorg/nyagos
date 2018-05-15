@@ -1,7 +1,6 @@
 package readline
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"strings"
@@ -54,7 +53,6 @@ const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
 	*Editor
-	Writer         *bufio.Writer
 	Buffer         []rune
 	Length         int
 	Unicode        rune

@@ -173,10 +173,17 @@ var CtrlC = errors.New("^C")
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
-	console := bufio.NewWriter(colorable.NewColorableStdout())
+	if session.Writer == nil {
+		session.Writer = bufio.NewWriter(colorable.NewColorableStdout())
+	}
+	defer func() {
+		session.Writer.WriteString(CURSOR_ON)
+		session.Writer.Flush()
+	}()
+
 	if session.Prompt == nil {
 		session.Prompt = func() (int, error) {
-			io.WriteString(console, "\n> ")
+			session.Writer.WriteString("\n> ")
 			return 2, nil
 		}
 	}
@@ -184,16 +191,10 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		session.History = new(EmptyHistory)
 	}
 	this := Buffer{
-		Writer:         console,
 		Editor:         session,
 		Buffer:         make([]rune, 20),
 		HistoryPointer: session.History.Len(),
 	}
-
-	defer func() {
-		io.WriteString(this.Writer, CURSOR_ON)
-		this.Writer.Flush()
-	}()
 
 	this.TermWidth, _ = box.GetScreenBufferInfo().ViewSize()
 
