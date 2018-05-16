@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"sort"
 
-	"github.com/mattn/go-colorable"
+	"github.com/mattn/go-isatty"
 	"github.com/mattn/msgbox"
 
 	"github.com/zetamatta/go-box"
@@ -57,7 +57,8 @@ func CmdChdir(args []any_t) []any_t {
 	return []any_t{nil, "directory is required"}
 }
 
-func CmdBox(args []any_t) []any_t {
+func CmdBox(this *Param) []any_t {
+	args := this.Args
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
@@ -74,7 +75,7 @@ func CmdBox(args []any_t) []any_t {
 			sources = append(sources, fmt.Sprint(val))
 		}
 	}
-	return []any_t{box.Choice(sources, colorable.NewColorableStdout())}
+	return []any_t{box.Choice(sources, this.Term)}
 }
 
 func CmdResetCharWidth(args []any_t) []any_t {
@@ -377,9 +378,10 @@ func CmdCommonPrefix(args []any_t) []any_t {
 	return []any_t{completion.CommonPrefix(list)}
 }
 
-func CmdWriteSub(args []any_t, out io.Writer) []any_t {
-	if f, ok := out.(*os.File); ok {
-		cout := bufio.NewWriter(colorable.NewColorable(f))
+func CmdWriteSub(this *Param, out io.Writer) []any_t {
+	args := this.Args
+	if f, ok := out.(*os.File); ok && isatty.IsTerminal(f.Fd()) {
+		cout := bufio.NewWriter(this.Term)
 		defer cout.Flush()
 		out = cout
 	}
@@ -408,11 +410,11 @@ func CmdWriteSub(args []any_t, out io.Writer) []any_t {
 }
 
 func CmdWrite(this *Param) []any_t {
-	return CmdWriteSub(this.Args, this.Out)
+	return CmdWriteSub(this, this.Out)
 }
 
 func CmdWriteErr(this *Param) []any_t {
-	return CmdWriteSub(this.Args, this.Err)
+	return CmdWriteSub(this, this.Err)
 }
 
 func CmdPrint(this *Param) []any_t {
