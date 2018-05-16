@@ -47,6 +47,7 @@ type Shell struct {
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
+	Console      io.Writer
 	tag          CloneCloser
 	IsBackGround bool
 }
@@ -54,6 +55,7 @@ type Shell struct {
 func (sh *Shell) In() io.Reader          { return sh.Stdin }
 func (sh *Shell) Out() io.Writer         { return sh.Stdout }
 func (sh *Shell) Err() io.Writer         { return sh.Stderr }
+func (sh *Shell) Term() io.Writer        { return sh.Console }
 func (sh *Shell) Tag() CloneCloser       { return sh.tag }
 func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
 
@@ -106,10 +108,11 @@ func New() *Shell {
 func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
-			Stdin:  sh.Stdin,
-			Stdout: sh.Stdout,
-			Stderr: sh.Stderr,
-			tag:    sh.tag,
+			Stdin:   sh.Stdin,
+			Stdout:  sh.Stdout,
+			Stderr:  sh.Stderr,
+			Console: sh.Console,
+			tag:     sh.tag,
 		},
 	}
 	if sh.session != nil {

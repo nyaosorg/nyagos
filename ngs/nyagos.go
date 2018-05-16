@@ -32,6 +32,7 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 func Main() error {
 	sh := shell.New()
 	defer sh.Close()
+	sh.Console = frame.GetConsole()
 
 	ctx := context.Background()
 

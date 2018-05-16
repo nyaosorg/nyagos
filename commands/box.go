@@ -7,8 +7,6 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/mattn/go-colorable"
-
 	"github.com/zetamatta/go-box"
 )
 
@@ -26,7 +24,7 @@ func cmdBox(ctx context.Context, cmd Param) (int, error) {
 		list[i] = strings.TrimSpace(list[i])
 	}
 
-	console := bufio.NewWriter(colorable.NewColorableStdout())
+	console := bufio.NewWriter(cmd.Term())
 	result := box.Choice(
 		list,
 		console)

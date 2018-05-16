@@ -101,6 +101,7 @@ func Main() error {
 		sh.SetTag(&luaWrapper{L})
 	}
 	defer sh.Close()
+	sh.Console = frame.GetConsole()
 
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, shellKey, sh)

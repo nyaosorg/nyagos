@@ -20,6 +20,7 @@ type Param interface {
 	In() io.Reader
 	Out() io.Writer
 	Err() io.Writer
+	Term() io.Writer
 	RawArgs() []string
 	Spawnlp(context.Context, []string, []string) (int, error)
 	Loop(context.Context, shell.Stream) (int, error)

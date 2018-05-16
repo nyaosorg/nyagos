@@ -6,15 +6,13 @@ import (
 	"io"
 	"os"
 
-	"github.com/mattn/go-colorable"
-
 	"github.com/zetamatta/nyagos/commands/ls"
 )
 
 func cmdLs(ctx context.Context, cmd Param) (int, error) {
 	var out io.Writer
 	if cmd.Out() == os.Stdout {
-		cout := bufio.NewWriter(colorable.NewColorableStdout())
+		cout := bufio.NewWriter(cmd.Term())
 		defer cout.Flush()
 		out = cout
 	} else {
