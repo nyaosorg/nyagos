@@ -257,7 +257,6 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			if !cursorOnSwitch {
 				io.WriteString(Console, CURSOR_ON)
 			}
-			Console.Flush()
 			result := this.String()
 			if rc == ENTER {
 				return result, nil
