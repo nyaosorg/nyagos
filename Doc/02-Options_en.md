@@ -36,3 +36,11 @@ Execute SCRIPTCODE with Lua interpretor and quit.
 ### `--norc`
 
 Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*`.
+
+### `--no-go-colorable`
+
+Do not use the ESCAPE SEQUENCE emulation with go-colorable library.
+
+### `--enable-virtual-terminal-processing`
+
+Enable Windows10's native ESCAPE SEQUENCE. It should be used with `--no-go-colorable`.

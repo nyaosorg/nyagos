@@ -37,4 +37,13 @@ Luaインタプリタでスクリプトコードを実行後、終了します�
 
 `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*` といった起動スクリプトをロードしないようにします。
 
+### `--no-go-colorable`
+
+Go言語のカラーライブラリによるエスケープシーケンスのエミュレーションを使わないようにします。
+
+### `--enable-virtual-terminal-processing`
+
+Windows10 によるネイティブのエスケープシーケンス処理を有効にします。
+`--no-go-colorable` とセットで使います。
+
 <!-- set:fenc=utf8: -->
