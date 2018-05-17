@@ -205,8 +205,8 @@ function Download-Exe($url,$exename){
         return
     }
     Write-Verbose -Message ("{0} not found." -f $exename)
-    Write-Verbose -Message ("$ $GO get " + $url)
-    & $GO get $url
+    Write-Verbose -Message ("$ $GO get -d " + $url)
+    & $GO get -d $url
     $workdir = (Join-Path (Join-Path (Get-Go1stPath) "src") $url)
     $cwd = (Get-Location)
     Set-Location $workdir
