@@ -169,6 +169,18 @@ func makeCmdline(args, rawargs []string) string {
 
 var UseSourceRunBatch = true
 
+func encloseWithQuote(fullpath string) string {
+	if strings.ContainsRune(fullpath, ' ') {
+		var f strings.Builder
+		f.WriteRune('"')
+		f.WriteString(fullpath)
+		f.WriteRune('"')
+		return f.String()
+	} else {
+		return fullpath
+	}
+}
+
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	// command is empty.
 	if len(cmd.args) <= 0 {
@@ -205,8 +217,14 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	if UseSourceRunBatch {
 		lowerName := strings.ToLower(cmd.args[0])
 		if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
+			rawargs := cmd.RawArgs()
+			args := make([]string, len(rawargs))
+			args[0] = encloseWithQuote(fullpath)
+			for i, end := 1, len(rawargs); i < end; i++ {
+				args[i] = rawargs[i]
+			}
 			// Batch files
-			return RawSource(cmd.RawArgs(), nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+			return RawSource(args, nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
 		}
 	}
 	xcmd := exec.Command(cmd.args[0], cmd.args[1:]...)
