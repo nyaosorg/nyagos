@@ -5,25 +5,16 @@ import (
 	"io"
 	"strings"
 	"unicode"
-
-	"github.com/zetamatta/go-box"
 )
 
 var hasCache = map[rune]struct{}{}
 
 func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
-		fmt.Fprintf(this.Writer, "^%c", 'A'+(ch-1))
-	} else if _, ok := hasCache[ch]; ok {
-		this.Writer.WriteRune(ch)
+		this.Writer.WriteByte('^')
+		this.Writer.WriteByte(byte('A' + (ch - 1)))
 	} else {
-		pre_x, pre_y := box.GetLocate()
 		this.Writer.WriteRune(ch)
-		post_x, post_y := box.GetLocate()
-		if post_y == pre_y && post_x > pre_x {
-			hasCache[ch] = struct{}{}
-			SetCharWidth(ch, post_x-pre_x)
-		}
 	}
 }
 
@@ -41,7 +32,7 @@ func (this *Buffer) Backspace(n int) {
 	if n > 1 {
 		fmt.Fprintf(this.Writer, "\x1B[%dD", n)
 	} else if n == 1 {
-		this.Writer.WriteRune('\b')
+		this.Writer.WriteByte('\b')
 	}
 }
 
