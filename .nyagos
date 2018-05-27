@@ -5,6 +5,11 @@
 nyagos.env.prompt='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
 
 -- Coloring Prompt for NYAGOS.exe
+-- Sample 1: simple prompt string
+
+-- nyagos.prompt = '$e[40;31;1m'.. nyagos.env.prompt ..'$e[37;1m'
+
+-- Sample 2: function
 nyagos.prompt = function(this)
     local wd = nyagos.getwd()
     local env = nyagos.env
