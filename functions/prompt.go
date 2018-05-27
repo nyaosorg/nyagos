@@ -19,8 +19,10 @@ func setTitle(w io.Writer, s string) {
 }
 
 func Prompt(param *Param) []interface{} {
-	console := param.Term
-	args := param.Args
+	return []interface{}{PromptCore(param.Term, param.Args...)}
+}
+
+func PromptCore(console io.Writer, args ...interface{}) int {
 	if len(args) >= 2 {
 		setTitle(console, fmt.Sprint(args[1]))
 	} else if wd, err := os.Getwd(); err == nil {
@@ -51,5 +53,5 @@ func Prompt(param *Param) []interface{} {
 	if lfPos >= 0 {
 		text = text[lfPos+1:]
 	}
-	return []interface{}{readline.GetStringWidth(text)}
+	return readline.GetStringWidth(text)
 }
