@@ -4,3 +4,4 @@
     * --look-curdir-last : %PATH% より後に探す(PowerShell互換動作)
     * --look-curdir-never: %PATH% だけから実行ファイルを探す(UNIX Shells互換動作)
 * nyagos.prompt にプロンプトテンプレートの文字列を直接代入できるようになった。
+* #314 rmdir がジャンクションを削除できなかった問題を修正
