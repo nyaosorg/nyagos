@@ -229,7 +229,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 			return RawSource(args, nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
 		}
 	}
-	xcmd := exec.CommandContext(ctx, cmd.args[0], cmd.args[1:]...)
+	xcmd := exec.Command(cmd.args[0], cmd.args[1:]...)
 	xcmd.Stdin = cmd.Stdin
 	xcmd.Stdout = cmd.Stdout
 	xcmd.Stderr = cmd.Stderr
