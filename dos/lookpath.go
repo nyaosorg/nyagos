@@ -48,14 +48,28 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 	return
 }
 
-func LookPath(name string, envnames ...string) string {
+type LookCurdirT int
+
+const (
+	LookCurdirFirst LookCurdirT = iota
+	LookCurdirLast
+	LookCurdirNever
+)
+
+func LookPath(where LookCurdirT, name string, envnames ...string) string {
 	if strings.ContainsAny(name, "\\/:") {
 		return lookPath(filepath.Dir(name), name)
 	}
 	var envlist strings.Builder
+	if where == LookCurdirFirst {
+		envlist.WriteRune('.')
+		envlist.WriteRune(os.PathListSeparator)
+	}
 	envlist.WriteString(os.Getenv("PATH"))
-	envlist.WriteRune(os.PathListSeparator)
-	envlist.WriteRune('.')
+	if where == LookCurdirLast {
+		envlist.WriteRune(os.PathListSeparator)
+		envlist.WriteRune('.')
+	}
 	for _, name1 := range envnames {
 		envlist.WriteRune(os.PathListSeparator)
 		envlist.WriteString(os.Getenv(name1))

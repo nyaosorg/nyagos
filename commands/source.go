@@ -49,7 +49,7 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 		return 1, errors.New("source: too few arguments")
 	}
 	if !filepath.IsAbs(args[0]) {
-		args[0] = dos.LookPath(args[0], "NYAGOSPATH")
+		args[0] = dos.LookPath(shell.LookCurdirOrder, args[0], "NYAGOSPATH")
 	}
 	if tmp, ok := findBatch(args[0]); ok {
 		args[0] = tmp

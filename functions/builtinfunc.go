@@ -277,7 +277,7 @@ func CmdWhich(args []any_t) []any_t {
 		return []any_t{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[0])
-	path := dos.LookPath(name, "NYAGOSPATH")
+	path := dos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
 	if path != "" {
 		return []any_t{path}
 	} else {

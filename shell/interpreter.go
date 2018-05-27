@@ -75,12 +75,14 @@ func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
 
+var LookCurdirOrder = dos.LookCurdirFirst
+
 func (cmd *Cmd) FullPath() string {
 	if cmd.args == nil || len(cmd.args) <= 0 {
 		return ""
 	}
 	if cmd.fullPath == "" {
-		cmd.fullPath = dos.LookPath(cmd.args[0], "NYAGOSPATH")
+		cmd.fullPath = dos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
 	}
 	return cmd.fullPath
 }
