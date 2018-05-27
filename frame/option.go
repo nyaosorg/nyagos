@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -127,6 +128,12 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			OptionEnableVirtualTerminalProcessing = true
 		} else if arg1 == "--disable-virtual-terminal-processing" {
 			OptionEnableVirtualTerminalProcessing = false
+		} else if arg1 == "--look-curdir-first" {
+			shell.LookCurdirOrder = dos.LookCurdirFirst
+		} else if arg1 == "--look-curdir-last" {
+			shell.LookCurdirOrder = dos.LookCurdirLast
+		} else if arg1 == "--look-curdir-never" {
+			shell.LookCurdirOrder = dos.LookCurdirNever
 		} else {
 			fmt.Fprintf(os.Stderr, "%s: unknwon parameter\n", arg1)
 		}
