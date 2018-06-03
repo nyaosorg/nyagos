@@ -7,7 +7,7 @@ import (
 
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/frame"
-	mains "github.com/zetamatta/nyagos/gopherSh"
+	"github.com/zetamatta/nyagos/mains"
 )
 
 var version string
