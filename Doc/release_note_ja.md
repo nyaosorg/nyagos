@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* lua53.dll 向けのソースコードを削除
+
 NYAGOS 4.3.1\_0
 ===============
 (2018.06.03)
