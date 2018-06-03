@@ -79,13 +79,13 @@ func lua2interface(L Lua, index int) (interface{}, error) {
 }
 
 func lua2interfaceS(L Lua, start, end int) ([]interface{}, error) {
-	result := make([]interface{}, 0, end-start+1)
+	result := make([]interface{}, end-start+1)
 	for i := start; i <= end; i++ {
 		val, err := lua2interface(L, i)
 		if err != nil {
 			return nil, err
 		}
-		result = append(result, val)
+		result[i-start] = val
 	}
 	return result, nil
 }

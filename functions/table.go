@@ -5,10 +5,8 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"atou":           CmdAtoU,
 	"bitand":         CmdBitAnd,
 	"bitor":          CmdBitOr,
-	"box":            CmdBox,
 	"chdir":          CmdChdir,
 	"commonprefix":   CmdCommonPrefix,
-	"default_prompt": Prompt,
 	"elevated":       CmdElevated,
 	"getenv":         CmdGetEnv,
 	"gethistory":     CmdGetHistory,
@@ -30,7 +28,9 @@ var Table = map[string]func([]interface{}) []interface{}{
 }
 
 var Table2 = map[string]func(*Param) []interface{}{
-	"rawexec": CmdRawExec,
-	"write":   CmdWrite,
-	"writerr": CmdWriteErr,
+	"box":            CmdBox,
+	"rawexec":        CmdRawExec,
+	"write":          CmdWrite,
+	"writerr":        CmdWriteErr,
+	"default_prompt": Prompt,
 }

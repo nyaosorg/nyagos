@@ -3,6 +3,7 @@ package readline
 import (
 	"context"
 	"fmt"
+	"io"
 	"strings"
 	"unicode"
 
@@ -15,7 +16,7 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	searchStr := ""
 	lastDrawWidth := 0
 	lastFoundPos := this.History.Len() - 1
-	Backspace(this.Cursor - this.ViewStart)
+	this.Backspace(this.Cursor - this.ViewStart)
 
 	update := func() {
 		for i := this.History.Len() - 1; ; i-- {
@@ -39,20 +40,20 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
-			PutRune(ch)
+			this.PutRune(ch)
 			drawWidth += w1
 		}
 		if lastDrawWidth > drawWidth {
 			n := lastDrawWidth - drawWidth
-			PutRunes(' ', n)
-			Backspace(n)
+			this.PutRunes(' ', n)
+			this.Backspace(n)
 		}
 		lastDrawWidth = drawWidth
-		fmt.Fprint(Console, CURSOR_ON)
-		Console.Flush()
+		io.WriteString(this.Writer, CURSOR_ON)
+		this.Writer.Flush()
 		charcode := getch.Rune()
-		fmt.Fprint(Console, CURSOR_OFF)
-		Backspace(drawWidth)
+		io.WriteString(this.Writer, CURSOR_OFF)
+		this.Backspace(drawWidth)
 		switch charcode {
 		case '\b':
 			searchBuf.Reset()
@@ -77,13 +78,13 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
 				w += GetCharWidth(this.Buffer[i])
-				PutRune(this.Buffer[i])
+				this.PutRune(this.Buffer[i])
 			}
 			bs := 0
 			for {
 				if i >= this.Length {
 					if drawWidth > w {
-						PutRunes(' ', drawWidth-w)
+						this.PutRunes(' ', drawWidth-w)
 						bs += (drawWidth - w)
 					}
 					break
@@ -92,12 +93,12 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 				if w+w1 >= this.ViewWidth() {
 					break
 				}
-				PutRune(this.Buffer[i])
+				this.PutRune(this.Buffer[i])
 				w += w1
 				bs += w1
 				i++
 			}
-			Backspace(bs)
+			this.Backspace(bs)
 			return CONTINUE
 		case rune('r' & 0x1F):
 			for i := lastFoundPos - 1; ; i-- {

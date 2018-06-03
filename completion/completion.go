@@ -132,11 +132,11 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if comp == nil {
 		return readline.CONTINUE
 	}
-	fmt.Fprint(readline.Console, "\n")
+	this.Writer.WriteByte('\n')
 	if err != nil {
-		fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
+		fmt.Fprintf(this.Writer, "(warning) %s\n", err.Error())
 	}
-	box.Print(ctx, toDisplay(comp.List), readline.Console)
+	box.Print(ctx, toDisplay(comp.List), this.Writer)
 	this.RepaintAll()
 	return readline.CONTINUE
 }
@@ -237,11 +237,11 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		commonStr = filepath.FromSlash(commonStr)
 	}
 	if comp.RawWord == commonStr {
-		fmt.Fprint(readline.Console, "\n")
+		this.Writer.WriteByte('\n')
 		if err != nil {
-			fmt.Fprintf(readline.Console, "(warning) %s\n", err.Error())
+			fmt.Fprintf(this.Writer, "(warning) %s\n", err.Error())
 		}
-		box.Print(nil, toDisplay(comp.List), readline.Console)
+		box.Print(nil, toDisplay(comp.List), this.Writer)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}

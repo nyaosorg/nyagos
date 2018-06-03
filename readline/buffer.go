@@ -1,55 +1,43 @@
 package readline
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 	"strings"
 	"unicode"
-
-	"github.com/mattn/go-colorable"
-	"github.com/zetamatta/go-box"
 )
-
-var Console = bufio.NewWriter(colorable.NewColorableStdout())
 
 var hasCache = map[rune]struct{}{}
 
-func PutRune(ch rune) {
+func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
-		fmt.Fprintf(Console, "^%c", 'A'+(ch-1))
-	} else if _, ok := hasCache[ch]; ok {
-		fmt.Fprintf(Console, "%c", ch)
+		this.Writer.WriteByte('^')
+		this.Writer.WriteByte(byte('A' + (ch - 1)))
 	} else {
-		pre_x, pre_y := box.GetLocate()
-		fmt.Fprintf(Console, "%c", ch)
-		post_x, post_y := box.GetLocate()
-		if post_y == pre_y && post_x > pre_x {
-			hasCache[ch] = struct{}{}
-			SetCharWidth(ch, post_x-pre_x)
-		}
+		this.Writer.WriteRune(ch)
 	}
 }
 
-func PutRunes(ch rune, n int) {
+func (this *Buffer) PutRunes(ch rune, n int) {
 	if n <= 0 {
 		return
 	}
-	PutRune(ch)
+	this.PutRune(ch)
 	for i := 1; i < n; i++ {
-		fmt.Fprintf(Console, "%c", ch)
+		this.Writer.WriteRune(ch)
 	}
 }
 
-func Backspace(n int) {
+func (this *Buffer) Backspace(n int) {
 	if n > 1 {
-		fmt.Fprintf(Console, "\x1B[%dD", n)
+		fmt.Fprintf(this.Writer, "\x1B[%dD", n)
 	} else if n == 1 {
-		fmt.Fprint(Console, "\b")
+		this.Writer.WriteByte('\b')
 	}
 }
 
-func Eraseline() {
-	fmt.Fprint(Console, "\x1B[0K")
+func (this *Buffer) Eraseline() {
+	io.WriteString(this.Writer, "\x1B[0K")
 }
 
 const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
@@ -71,20 +59,23 @@ func (this *Buffer) ViewWidth() int {
 	return this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
 }
 
-func (this *Buffer) Insert(pos int, c []rune) {
-	n := len(c)
-	for this.Length+n >= len(this.Buffer) {
-		tmp := make([]rune, len(this.Buffer)*2)
-		copy(tmp, this.Buffer)
-		this.Buffer = tmp
+func (this *Buffer) Insert(csrPos int, insStr []rune) {
+	addSize := len(insStr)
+	newSize := len(this.Buffer)
+	for this.Length+addSize >= newSize {
+		newSize *= 2
 	}
-	for i := this.Length - 1; i >= pos; i-- {
-		this.Buffer[i+n] = this.Buffer[i]
+	tmp := make([]rune, newSize)
+	copy(tmp, this.Buffer)
+	this.Buffer = tmp
+
+	for i := this.Length - 1; i >= csrPos; i-- {
+		this.Buffer[i+addSize] = this.Buffer[i]
 	}
-	for i := 0; i < n; i++ {
-		this.Buffer[pos+i] = c[i]
+	for i := 0; i < addSize; i++ {
+		this.Buffer[csrPos+i] = insStr[i]
 	}
-	this.Length += n
+	this.Length += addSize
 }
 
 // Insert String :s at :pos
@@ -130,7 +121,7 @@ func (this *Buffer) ResetViewStart() {
 
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
-	Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 
 	// Replace Buffer
 	this.Delete(pos, this.Cursor-pos)
@@ -142,7 +133,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Repaint
 	w := 0
 	for i := this.ViewStart; i < this.Cursor; i++ {
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 		w += GetCharWidth(this.Buffer[i])
 	}
 	bs := 0
@@ -151,13 +142,13 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		if w+w1 >= this.ViewWidth() {
 			break
 		}
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 		w += w1
 		bs += w1
 	}
-	Eraseline()
+	this.Eraseline()
 	if bs > 0 {
-		Backspace(bs)
+		this.Backspace(bs)
 	}
 }
 
@@ -178,28 +169,29 @@ func (this *Buffer) Repaint(pos int, del int) {
 		if vp+w1 >= this.ViewWidth() {
 			break
 		}
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 		vp += w1
 		bs += w1
 	}
-	Eraseline()
+	this.Eraseline()
 	if del > 0 {
-		Backspace(bs)
+		this.Backspace(bs)
 	} else {
 		// for readline_keyfunc.go: KeyFuncInsertSelf()
-		Backspace(bs + del)
+		this.Backspace(bs + del)
 	}
 }
 
 func (this *Buffer) RepaintAfterPrompt() {
 	this.ResetViewStart()
 	for i := this.ViewStart; i < this.Cursor; i++ {
-		PutRune(this.Buffer[i])
+		this.PutRune(this.Buffer[i])
 	}
 	this.Repaint(this.Cursor, 0)
 }
 
 func (this *Buffer) RepaintAll() {
+	this.Writer.Flush()
 	this.TopColumn, _ = this.Prompt()
 	this.RepaintAfterPrompt()
 }

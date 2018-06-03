@@ -51,7 +51,7 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 			quiet = true
 			continue
 		}
-		stat, err := os.Lstat(arg1)
+		stat, err := os.Stat(arg1)
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
 			errorcount++

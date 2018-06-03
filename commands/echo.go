@@ -2,7 +2,7 @@ package commands
 
 import (
 	"context"
-	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -10,11 +10,11 @@ import (
 )
 
 func cmdEcho(ctx context.Context, cmd Param) (int, error) {
-	fmt.Fprint(cmd.Out(), strings.Join(cmd.Args()[1:], " "))
+	io.WriteString(cmd.Out(), strings.Join(cmd.Args()[1:], " "))
 	if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) {
-		fmt.Fprint(f, "\n")
+		io.WriteString(f, "\n")
 	} else {
-		fmt.Fprint(cmd.Out(), "\r\n")
+		io.WriteString(cmd.Out(), "\r\n")
 	}
 	return 0, nil
 }

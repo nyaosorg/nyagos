@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 
 	"github.com/zetamatta/nyagos/dos"
@@ -21,7 +22,7 @@ func cmdDirs(ctx context.Context, cmd Param) (int, error) {
 	if err != nil {
 		return GETWD_FAIL, err
 	}
-	fmt.Fprint(cmd.Out(), wd)
+	io.WriteString(cmd.Out(), wd)
 	for i := len(dirstack) - 1; i >= 0; i-- {
 		fmt.Fprint(cmd.Out(), " ", dirstack[i])
 	}

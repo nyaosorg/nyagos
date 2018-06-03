@@ -1,11 +1,16 @@
 package frame
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
+	"github.com/mattn/go-colorable"
+
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -19,11 +24,30 @@ type CmdStreamConsole struct {
 	HistPath string
 }
 
+var console io.Writer
+
+func GetConsole() io.Writer {
+	if console == nil {
+		if OptionGoColorable {
+			console = colorable.NewColorableStdout()
+		} else {
+			console = os.Stdout
+			if OptionEnableVirtualTerminalProcessing {
+				dos.EnableStdoutVirtualTerminalProcessing()
+			}
+		}
+	}
+	return console
+}
+
 func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	history1 := &history.Container{}
 	this := &CmdStreamConsole{
-		History:  history1,
-		Editor:   &readline.Editor{History: history1, Prompt: doPrompt},
+		History: history1,
+		Editor: &readline.Editor{
+			History: history1,
+			Prompt:  doPrompt,
+			Writer:  bufio.NewWriter(GetConsole())},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},
@@ -64,10 +88,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 	}
 	row := history.NewHistoryLine(line)
 	this.History.PushLine(row)
-	fd, err := os.OpenFile(this.HistPath, os.O_APPEND, 0600)
-	if err != nil && os.IsNotExist(err) {
-		fd, err = os.Create(this.HistPath)
-	}
+	fd, err := os.OpenFile(this.HistPath, os.O_APPEND|os.O_CREATE, 0600)
 	if err == nil {
 		fmt.Fprintln(fd, row.String())
 		fd.Close()

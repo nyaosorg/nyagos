@@ -42,9 +42,9 @@ func more(r io.Reader, cmd Param) bool {
 		width := runewidth.StringWidth(ansiStrip.ReplaceAllString(text, ""))
 		lines := (width + screenWidth) / screenWidth
 		for count+lines >= screenHeight {
-			fmt.Fprint(cmd.Err(), "more>")
+			io.WriteString(cmd.Err(), "more>")
 			ch := getch.Rune()
-			fmt.Fprint(cmd.Err(), "\r     \b\b\b\b\b")
+			io.WriteString(cmd.Err(), "\r     \b\b\b\b\b")
 			if ch == 'q' {
 				return false
 			} else if ch == '\r' {
@@ -54,7 +54,7 @@ func more(r io.Reader, cmd Param) bool {
 			}
 		}
 		if bold {
-			fmt.Fprint(cmd.Out(), "\x1B[1m")
+			io.WriteString(cmd.Out(), "\x1B[1m")
 		}
 		fmt.Fprintln(cmd.Out(), text)
 		count += lines

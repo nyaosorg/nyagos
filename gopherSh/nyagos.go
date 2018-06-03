@@ -94,6 +94,7 @@ func Main() error {
 		sh.SetTag(&luaWrapper{L})
 	}
 	defer sh.Close()
+	sh.Console = frame.GetConsole()
 	ctx = context.WithValue(ctx, shellKey, sh)
 
 	langEngine := func(fname string) ([]byte, error) {
@@ -147,7 +148,13 @@ func Main() error {
 					return printPrompt(ctx, sh, L)
 				} else {
 					functions.Prompt(
-						[]interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))})
+						&functions.Param{
+							Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
+							In:   os.Stdin,
+							Out:  os.Stdout,
+							Err:  os.Stderr,
+							Term: frame.GetConsole(),
+						})
 					return 0, nil
 				}
 			})

@@ -7,4 +7,5 @@ type Param struct {
 	In   io.Reader
 	Out  io.Writer
 	Err  io.Writer
+	Term io.Writer
 }

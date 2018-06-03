@@ -11,7 +11,7 @@ import (
 )
 
 func df(rootPathName string, w io.Writer) (err error) {
-	fmt.Fprint(w, rootPathName)
+	io.WriteString(w, rootPathName)
 	free, total, totalFree, err1 := dos.GetDiskFreeSpace(rootPathName)
 	if err1 != nil {
 		fmt.Fprintf(w, " %20s %20s %20s     ", "", "", "")
@@ -33,15 +33,15 @@ func df(rootPathName string, w io.Writer) (err error) {
 	} else {
 		switch t {
 		case dos.DRIVE_REMOVABLE:
-			fmt.Fprint(w, " [REMOVABLE]")
+			io.WriteString(w, " [REMOVABLE]")
 		case dos.DRIVE_FIXED:
-			fmt.Fprint(w, " [FIXED]")
+			io.WriteString(w, " [FIXED]")
 		case dos.DRIVE_REMOTE:
-			fmt.Fprint(w, " [REMOTE]")
+			io.WriteString(w, " [REMOTE]")
 		case dos.DRIVE_CDROM:
-			fmt.Fprint(w, " [CDROM]")
+			io.WriteString(w, " [CDROM]")
 		case dos.DRIVE_RAMDISK:
-			fmt.Fprint(w, " [RAMDISK]")
+			io.WriteString(w, " [RAMDISK]")
 		}
 	}
 	fmt.Fprintln(w)

@@ -32,6 +32,7 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 func Main() error {
 	sh := shell.New()
 	defer sh.Close()
+	sh.Console = frame.GetConsole()
 
 	ctx := context.Background()
 
@@ -90,7 +91,14 @@ func Main() error {
 		constream := frame.NewCmdStreamConsole(
 			func() (int, error) {
 				functions.Prompt(
-					[]interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))})
+					&functions.Param{
+						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
+						Out:  os.Stdout,
+						Err:  os.Stderr,
+						In:   os.Stdin,
+						Term: frame.GetConsole(),
+					},
+				)
 				return 0, nil
 			})
 		stream1 = constream

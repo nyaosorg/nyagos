@@ -1,6 +1,9 @@
 package readline
 
-import "context"
+import (
+	"bufio"
+	"context"
+)
 
 type IHistory interface {
 	Len() int
@@ -9,6 +12,7 @@ type IHistory interface {
 
 type Editor struct {
 	History IHistory
+	Writer  *bufio.Writer
 	Prompt  func() (int, error)
 	Default string
 	Cursor  int

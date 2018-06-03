@@ -283,6 +283,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = os.Stdout
 			param.Err = os.Stderr
 		}
+		param.Term = frame.GetConsole()
 		result := f(param)
 		pushInterfaces(L, result)
 		return len(result)

@@ -3,6 +3,7 @@ package commands
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -118,7 +119,7 @@ func (this copymove_t) Run(ctx context.Context, args []string) (int, error) {
 				if unicode.IsPrint(ch) {
 					fmt.Fprintf(this.Err(), "%c\n", ch)
 				} else {
-					fmt.Fprint(this.Err(), "\n")
+					io.WriteString(this.Err(), "\n")
 				}
 				switch ch {
 				case 'y', 'Y':
@@ -149,7 +150,7 @@ func (this copymove_t) Run(ctx context.Context, args []string) (int, error) {
 			if unicode.IsPrint(ch) {
 				fmt.Fprintf(this.Err(), "%c\n", ch)
 			} else {
-				fmt.Fprint(this.Err(), "\n")
+				io.WriteString(this.Err(), "\n")
 			}
 			if ch != 'y' && ch != 'Y' {
 				return 0, nil

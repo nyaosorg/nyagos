@@ -37,4 +37,28 @@ Luaインタプリタでスクリプトコードを実行後、終了します�
 
 `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*` といった起動スクリプトをロードしないようにします。
 
+### `--no-go-colorable`
+
+Go言語のカラーライブラリによるエスケープシーケンスのエミュレーションを使わないようにします。
+
+### `--enable-virtual-terminal-processing`
+
+Windows10 によるネイティブのエスケープシーケンス処理を有効にします。
+`--no-go-colorable` とセットで使います。
+
+### `--look-curdir-first`
+
+カレントディレクトリから実行ファイルを %PATH% より前に探します
+(デフォルト:CMD.EXE互換動作)
+
+### `--look-curdir-last`
+
+カレントディレクトリから実行ファイルを %PATH% より後に探します
+(PowerShell互換動作)
+
+### `--look-curdir-never`
+
+%PATH% にカレントディレクトリが含まれない限り、カレントディレクトリから
+実行ファイルは探しません(UNIX Shells互換動作)
+
 <!-- set:fenc=utf8: -->

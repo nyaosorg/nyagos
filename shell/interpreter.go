@@ -47,6 +47,7 @@ type Shell struct {
 	Stdout       *os.File
 	Stderr       *os.File
 	Stdin        *os.File
+	Console      io.Writer
 	tag          CloneCloser
 	IsBackGround bool
 }
@@ -54,6 +55,7 @@ type Shell struct {
 func (sh *Shell) In() io.Reader          { return sh.Stdin }
 func (sh *Shell) Out() io.Writer         { return sh.Stdout }
 func (sh *Shell) Err() io.Writer         { return sh.Stderr }
+func (sh *Shell) Term() io.Writer        { return sh.Console }
 func (sh *Shell) Tag() CloneCloser       { return sh.tag }
 func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
 
@@ -73,12 +75,14 @@ func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
 
+var LookCurdirOrder = dos.LookCurdirFirst
+
 func (cmd *Cmd) FullPath() string {
 	if cmd.args == nil || len(cmd.args) <= 0 {
 		return ""
 	}
 	if cmd.fullPath == "" {
-		cmd.fullPath = dos.LookPath(cmd.args[0], "NYAGOSPATH")
+		cmd.fullPath = dos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
 	}
 	return cmd.fullPath
 }
@@ -106,10 +110,11 @@ func New() *Shell {
 func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
-			Stdin:  sh.Stdin,
-			Stdout: sh.Stdout,
-			Stderr: sh.Stderr,
-			tag:    sh.tag,
+			Stdin:   sh.Stdin,
+			Stdout:  sh.Stdout,
+			Stderr:  sh.Stderr,
+			Console: sh.Console,
+			tag:     sh.tag,
 		},
 	}
 	if sh.session != nil {
@@ -166,6 +171,18 @@ func makeCmdline(args, rawargs []string) string {
 
 var UseSourceRunBatch = true
 
+func encloseWithQuote(fullpath string) string {
+	if strings.ContainsRune(fullpath, ' ') {
+		var f strings.Builder
+		f.WriteRune('"')
+		f.WriteString(fullpath)
+		f.WriteRune('"')
+		return f.String()
+	} else {
+		return fullpath
+	}
+}
+
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	// command is empty.
 	if len(cmd.args) <= 0 {
@@ -202,10 +219,17 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	if UseSourceRunBatch {
 		lowerName := strings.ToLower(cmd.args[0])
 		if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
+			rawargs := cmd.RawArgs()
+			args := make([]string, len(rawargs))
+			args[0] = encloseWithQuote(fullpath)
+			for i, end := 1, len(rawargs); i < end; i++ {
+				args[i] = rawargs[i]
+			}
 			// Batch files
-			return RawSource(cmd.RawArgs(), nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+			return RawSource(args, nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
 		}
 	}
+	// Do not use exec.CommandContext because it cancels background process.
 	xcmd := exec.Command(cmd.args[0], cmd.args[1:]...)
 	xcmd.Stdin = cmd.Stdin
 	xcmd.Stdout = cmd.Stdout

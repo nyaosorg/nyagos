@@ -170,9 +170,17 @@ var CtrlC = errors.New("^C")
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
+	if session.Writer == nil {
+		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
+	}
+	defer func() {
+		session.Writer.WriteString(CURSOR_ON)
+		session.Writer.Flush()
+	}()
+
 	if session.Prompt == nil {
 		session.Prompt = func() (int, error) {
-			fmt.Fprint(Console, "\n> ")
+			session.Writer.WriteString("\n> ")
 			return 2, nil
 		}
 	}
@@ -184,21 +192,20 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		Buffer:         make([]rune, 20),
 		HistoryPointer: session.History.Len(),
 	}
+
 	this.TermWidth, _ = box.GetScreenBufferInfo().ViewSize()
 
 	var err1 error
 	this.TopColumn, err1 = session.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(Console, "%s\n$ ", err1.Error())
+		fmt.Fprintf(this.Writer, "%s\n$ ", err1.Error())
 		this.TopColumn = 2
 	} else if this.TopColumn >= this.TermWidth-3 {
 		// ViewWidth is too narrow to edit.
-		fmt.Fprint(Console, "\n")
+		io.WriteString(this.Writer, "\n")
 		this.TopColumn = 0
 	}
-	defer fmt.Fprint(Console, CURSOR_ON)
-
 	this.InsertString(0, session.Default)
 	if this.Cursor > this.Length {
 		this.Cursor = this.Length
@@ -213,17 +220,17 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	for {
 		var e getch.Event
 		if !cursorOnSwitch {
-			fmt.Fprint(Console, CURSOR_ON)
+			io.WriteString(this.Writer, CURSOR_ON)
 			cursorOnSwitch = true
 		}
-		Console.Flush()
+		this.Writer.Flush()
 		for e.Key == nil {
 			e = getch.All()
 			if e.Resize != nil {
 				w := int(e.Resize.Width)
 				if this.TermWidth != w {
 					this.TermWidth = w
-					fmt.Fprintf(Console, "\x1B[%dG", this.TopColumn+1)
+					fmt.Fprintf(this.Writer, "\x1B[%dG", this.TopColumn+1)
 					this.RepaintAfterPrompt()
 				}
 			}
@@ -252,16 +259,16 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			}
 		}
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
-			fmt.Fprint(Console, CURSOR_OFF)
+			io.WriteString(this.Writer, CURSOR_OFF)
 			cursorOnSwitch = false
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
-			fmt.Fprint(Console, "\n")
+			this.Writer.WriteByte('\n')
 			if !cursorOnSwitch {
-				io.WriteString(Console, CURSOR_ON)
+				io.WriteString(this.Writer, CURSOR_ON)
 			}
-			Console.Flush()
+			this.Writer.Flush()
 			result := this.String()
 			if rc == ENTER {
 				return result, nil

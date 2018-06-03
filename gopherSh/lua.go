@@ -126,7 +126,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
 	L.SetField(nyagosTable, "exec", L.NewFunction(cmdExec))
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
-	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2cmd(functions.Prompt)))
+	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2param(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
 	L.SetField(nyagosTable, "goversion", lua.LString(runtime.Version()))
@@ -204,9 +204,9 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 	end := L.GetTop()
 	var param []interface{}
 	if end > 0 {
-		param = make([]interface{}, 0, end-1)
-		for i := 1; i <= end; i++ {
-			param = append(param, lvalueToInterface(L, L.Get(i)))
+		param = make([]interface{}, end)
+		for i := 0; i < end; i++ {
+			param[i] = lvalueToInterface(L, L.Get(i+1))
 		}
 	} else {
 		param = []interface{}{}
@@ -284,9 +284,9 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		case reflect.Slice, reflect.Array:
 			elem := reflectValue.Type().Elem()
 			if elem.Kind() == reflect.Uint8 {
-				buffer := make([]byte, 0, reflectValue.Len())
+				buffer := make([]byte, reflectValue.Len())
 				for i, end := 0, reflectValue.Len(); i < end; i++ {
-					buffer = append(buffer, byte(reflectValue.Index(i).Uint()))
+					buffer[i] = byte(reflectValue.Index(i).Uint())
 				}
 				return lua.LString(string(buffer))
 			} else {
@@ -364,6 +364,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = os.Stdout
 			param.Err = os.Stderr
 		}
+		param.Term = frame.GetConsole()
 		result := f(param)
 		pushInterfaces(L, result)
 		return len(result)

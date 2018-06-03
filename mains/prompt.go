@@ -10,7 +10,7 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-var prompt_hook lua.Object = lua.TGoFunction(lua2cmd(functions.Prompt))
+var prompt_hook lua.Object = lua.TGoFunction(lua2param(functions.Prompt))
 
 func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
 	L.Push(prompt_hook)
