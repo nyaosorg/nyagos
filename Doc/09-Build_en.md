@@ -47,13 +47,4 @@ Build the minimum version (no-lua)
     cd nyagos/ngs
     go build
 
-Build the version using lua53.dll as lua-engine
------------------------------------------------
-
-Since 4.3, GopherLua is used as the lua engine,
-but we can still use lua53.dll.
-
-    cd nyagos/mains
-    go build
-
 <!-- vim:set fenc=utf8: -->

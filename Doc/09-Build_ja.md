@@ -45,13 +45,4 @@ Lua を使わない最小バージョンをビルドする
     cd nyagos/ngs
     go build
 
-lua53.dll を Lua のエンジンとして使用するバージョンをビルドする
----------------------------------------------------------------
-
-4.3 から Lua エンジンは GopherLua に切り変わりましたが、
-lua53.dll をまだ使用することもできます。
-
-    cd nyagos/mains
-    go build
-
 <!-- vim:set fenc=utf8: -->
