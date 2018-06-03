@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.1\_0
+===============
+on Jun.3,2018
+
 * Support Windows10's native ESCAPE SEQUENCE processing with --no-go-colorable and --enable-virtual-terminal-processing
 * For #304,#312, added options to search for the executable from the current directory
     * --look-curdir-first: do before %PATH% (compatible with CMD.EXE)

@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.1\_0
+===============
+(2018.06.03)
+
 * `--no-go-colorable` と `--enable-virtual-terminal-processing` で、Windows10 ネイティブのエスケープシーケンスをサポート
 * #304,#312, カレントディレクトリから実行ファイルを探す時のオプションを追加
     * --look-curdir-first: %PATH% より前に探す(デフォルト:CMD.EXE互換動作)
