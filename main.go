@@ -7,7 +7,7 @@ import (
 
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/frame"
-	"github.com/zetamatta/nyagos/gopherSh"
+	mains "github.com/zetamatta/nyagos/gopherSh"
 )
 
 var version string
@@ -16,7 +16,7 @@ func main() {
 	var dummy [1]byte
 	frame.Version = version
 
-	if err := frame.Start(gopherSh.Main); err != nil && err != io.EOF {
+	if err := frame.Start(mains.Main); err != nil && err != io.EOF {
 		fmt.Fprintln(os.Stderr, err.Error())
 		if defined.DBG {
 			os.Stdin.Read(dummy[:])
