@@ -67,18 +67,21 @@ local rclonehelp=io.popen("rclone --help 2>nul","r")
 if rclonehelp then
   local rclonecmds={}
   local startflag = false
+  local flagsfound=false
   for line in rclonehelp:lines() do
-      if string.match(line,"Available Commands:") then
-        startflag = true
-      end
-      if string.match(line,"Flags:") then
-        break
-      end
-      if startflag then
-        local m=string.match(line,"^%s+([a-z]+)")
-        if m then
-            rclonecmds[ #rclonecmds+1 ] = m
-        end
+      if not flagsfound then
+          if string.match(line,"Available Commands:") then
+            startflag = true
+          end
+          if string.match(line,"Flags:") then
+              flagsfound = true
+          end
+          if startflag then
+            local m=string.match(line,"^%s+([a-z]+)")
+            if m then
+                rclonecmds[ #rclonecmds+1 ] = m
+            end
+          end
       end
   end
   rclonehelp:close()
