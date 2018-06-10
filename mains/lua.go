@@ -155,6 +155,8 @@ func NewLua() (Lua, error) {
 	shareTable := L.NewTable()
 	L.SetGlobal("share", shareTable)
 
+	SetupUtf8Table(L)
+
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
 
 	if !isHookSetup {
