@@ -156,6 +156,7 @@ func NewLua() (Lua, error) {
 	L.SetGlobal("share", shareTable)
 
 	SetupUtf8Table(L)
+	SetupBit32Table(L)
 
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
 
