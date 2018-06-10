@@ -1,11 +1,12 @@
 package mains
 
 import (
-	"github.com/yuin/gopher-lua"
 	"strings"
+
+	"github.com/yuin/gopher-lua"
 )
 
-func utf8code(L *lua.LState) int {
+func utf8codes(L *lua.LState) int {
 	lstr, ok := L.Get(-1).(lua.LString)
 	if !ok {
 		L.Push(lua.LNil)
@@ -34,6 +35,6 @@ func utf8code(L *lua.LState) int {
 
 func SetupUtf8Table(L *lua.LState) {
 	table := L.NewTable()
-	L.SetField(table, "codes", L.NewFunction(utf8code))
+	L.SetField(table, "codes", L.NewFunction(utf8codes))
 	L.SetGlobal("utf8", table)
 }
