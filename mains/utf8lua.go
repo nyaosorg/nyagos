@@ -36,5 +36,6 @@ func utf8codes(L *lua.LState) int {
 func SetupUtf8Table(L *lua.LState) {
 	table := L.NewTable()
 	L.SetField(table, "codes", L.NewFunction(utf8codes))
+	L.SetField(table, "charpattern", lua.LString("[\000-\x7F\xC2-\xF4][\x80-\xBF]*"))
 	L.SetGlobal("utf8", table)
 }
