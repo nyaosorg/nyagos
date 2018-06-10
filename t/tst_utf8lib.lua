@@ -5,7 +5,7 @@
 ---   lua.exe tst_utf8lib.lua | nkf32
 
 for i,c in utf8.codes("あいうえお") do
-    print(i,c,type(c))
+    print(i,c,type(c),utf8.char(c))
 end
 
 for c in string.gmatch("あいうえお",utf8.charpattern) do

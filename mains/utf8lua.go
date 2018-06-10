@@ -6,6 +6,21 @@ import (
 	"github.com/yuin/gopher-lua"
 )
 
+func utf8char(L *lua.LState) int {
+	var buffer strings.Builder
+	for i, n := 1, L.GetTop(); i <= n; i++ {
+		number, ok := L.Get(i).(lua.LNumber)
+		if !ok {
+			L.Push(lua.LNil)
+			L.Push(lua.LString("NaN"))
+			return 2
+		}
+		buffer.WriteRune(rune(number))
+	}
+	L.Push(lua.LString(buffer.String()))
+	return 1
+}
+
 func utf8codes(L *lua.LState) int {
 	lstr, ok := L.Get(-1).(lua.LString)
 	if !ok {
@@ -37,5 +52,6 @@ func SetupUtf8Table(L *lua.LState) {
 	table := L.NewTable()
 	L.SetField(table, "codes", L.NewFunction(utf8codes))
 	L.SetField(table, "charpattern", lua.LString("[\000-\x7F\xC2-\xF4][\x80-\xBF]*"))
+	L.SetField(table, "char", L.NewFunction(utf8char))
 	L.SetGlobal("utf8", table)
 }
