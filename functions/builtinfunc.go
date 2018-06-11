@@ -471,11 +471,10 @@ func SetOption(args []any_t) []any_t {
 	return []any_t{true}
 }
 
-func CmdBitAnd(args []any_t) []any_t {
-	result := ^0
+func bitOperators(args []any_t, result int, f func(int, int) int) []any_t {
 	for _, arg1tmp := range args {
 		if arg1, ok := arg1tmp.(int); ok {
-			result &= arg1
+			result = f(result, arg1)
 		} else {
 			return []any_t{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
 		}
@@ -483,14 +482,10 @@ func CmdBitAnd(args []any_t) []any_t {
 	return []any_t{result}
 }
 
+func CmdBitAnd(args []any_t) []any_t {
+	return bitOperators(args, ^0, func(r, v int) int { return r & v })
+}
+
 func CmdBitOr(args []any_t) []any_t {
-	result := 0
-	for _, arg1tmp := range args {
-		if arg1, ok := arg1tmp.(int); ok {
-			result |= arg1
-		} else {
-			return []any_t{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
-		}
-	}
-	return []any_t{result}
+	return bitOperators(args, 0, func(r, v int) int { return r | v })
 }
