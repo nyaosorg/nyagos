@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.1\_1
+===============
+on Jun.11,2018
+
 * Remove source code for lua53.dll
 * #317: deadlock when `use "subcomplete"` is enabled and rclone.exe is found.
     - See also: https://github.com/yuin/gopher-lua/issues/181

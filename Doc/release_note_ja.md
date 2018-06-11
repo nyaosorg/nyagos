@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.1\_1
+===============
+(2018.06.11)
+
 * lua53.dll 向けのソースコードを削除
 * #317: `use subcomplete` が有効で、rclone.exe が見付かった時デッドロックしていた
     - https://github.com/yuin/gopher-lua/issues/181 も参照のこと
