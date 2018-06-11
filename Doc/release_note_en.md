@@ -1,6 +1,11 @@
 English / [Japanese](release_note_ja.md)
 
 * Remove source code for lua53.dll
+* #317: deadlock when `use "subcomplete"` is enabled and rclone.exe is found.
+    - See also: https://github.com/yuin/gopher-lua/issues/181
+* #318,#319: add compatible functions with lua 5.3
+    - bit32.band/bitor/bxor
+    - utf8.char/charpattern/codes
 
 NYAGOS 4.3.1\_0
 ===============

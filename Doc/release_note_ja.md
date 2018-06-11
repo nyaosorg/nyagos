@@ -1,6 +1,11 @@
 [English](release_note_en.md) / Japanese
 
 * lua53.dll 向けのソースコードを削除
+* #317: `use subcomplete` が有効で、rclone.exe が見付かった時デッドロックしていた
+    - https://github.com/yuin/gopher-lua/issues/181 も参照のこと
+* #318,#319 下記の Lua 5.3 互換関数を追加
+    - bit32.band/bitor/bxor
+    - utf8.char/charpattern/codes
 
 NYAGOS 4.3.1\_0
 ===============
