@@ -489,3 +489,7 @@ func CmdBitAnd(args []any_t) []any_t {
 func CmdBitOr(args []any_t) []any_t {
 	return bitOperators(args, 0, func(r, v int) int { return r | v })
 }
+
+func CmdBitXor(args []any_t) []any_t {
+	return bitOperators(args, 0, func(r, v int) int { return r ^ v })
+}
