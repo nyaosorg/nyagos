@@ -58,10 +58,8 @@ It executes "COMMAND" as shell command.
 It returns the integer-value for %ERRORLEVEL% and the error-message.
 With no error, they are 0 and nil.
 
-
-
-
 ### `errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
+### `errorlevel,errormessage = nyagos.rawexec{'COMMAND-NAME','ARG-1','ARG-2'...}`
 
 It executes "COMMAND-NAME" with ARGs. COMMAND-NAME is not interpreted as
 a built-in command nor an alias. The difference with os.execute is that
@@ -73,6 +71,7 @@ It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
 When error occures, OUTPUT is set `nil`.
 
 ### `OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)`
+### `OUTPUT,ERR = nyagos.raweval{'COMMAND-NAME','ARG-1','ARG-2'...}`
 
 It executes "COMMAND-NAME" with ARGs and returns commands' standard-output.
 COMMAND-NAME is not intepreted as a built-in command nor an alias.
