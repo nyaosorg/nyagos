@@ -136,7 +136,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 		} else if arg1 == "--look-curdir-never" {
 			shell.LookCurdirOrder = dos.LookCurdirNever
 		} else {
-			fmt.Fprintf(os.Stderr, "%s: unknwon parameter\n", arg1)
+			fmt.Fprintf(os.Stderr, "%s: unknown parameter\n", arg1)
 		}
 	}
 
