@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* #320: fix the imcompatibility: nyagos.rawexec & raweval did not expand tables in arguments.
+
 NYAGOS 4.3.1\_1
 ===============
 on Jun.11,2018

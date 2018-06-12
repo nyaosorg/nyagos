@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* #320: nyagos.rawexec & raweval が引数内のテーブルを展開していなかった非互換性を修正
+
 NYAGOS 4.3.1\_1
 ===============
 (2018.06.11)
