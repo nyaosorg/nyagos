@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.1\_2
+===============
+on Jun.12,2018
+
 * #320: fix the imcompatibility: nyagos.rawexec & raweval did not expand tables in arguments.
 * --show-version-only enables --norc automatically
 

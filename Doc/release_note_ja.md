@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.1\_2
+===============
+(2018.06.12)
+
 * #320: nyagos.rawexec & raweval が引数内のテーブルを展開していなかった非互換性を修正
 * --show-version-only を指定すると --norc を自動的に有効化するようにした
 
