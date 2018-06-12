@@ -44,7 +44,7 @@ func listUpCurrentAllExecutable(ctx context.Context, str string) ([]Element, err
 	if listErr != nil {
 		return nil, listErr
 	}
-	list := make([]Element, 0,len(listTmp))
+	list := make([]Element, 0, len(listTmp))
 	for _, p := range listTmp {
 		if endWithRoot(p.String()) || isExecutable(p.String()) {
 			list = append(list, p)
