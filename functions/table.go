@@ -17,7 +17,6 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"msgbox":         CmdMsgBox,
 	"netdrivetounc":  CmdNetDriveToUNC,
 	"pathjoin":       CmdPathJoin,
-	"raweval":        CmdRawEval,
 	"resetcharwidth": CmdResetCharWidth,
 	"setenv":         CmdSetEnv,
 	"setrunewidth":   CmdSetRuneWidth,
@@ -29,6 +28,7 @@ var Table = map[string]func([]interface{}) []interface{}{
 
 var Table2 = map[string]func(*Param) []interface{}{
 	"box":            CmdBox,
+	"raweval":        CmdRawEval,
 	"rawexec":        CmdRawExec,
 	"write":          CmdWrite,
 	"writerr":        CmdWriteErr,

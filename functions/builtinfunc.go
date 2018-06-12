@@ -332,11 +332,8 @@ func CmdMsgBox(args []any_t) []any_t {
 	return []any_t{}
 }
 
-func CmdRawEval(args []any_t) []any_t {
-	argv := make([]string, 0, len(args))
-	for _, s := range args {
-		argv = append(argv, fmt.Sprint(s))
-	}
+func CmdRawEval(this *Param) []any_t {
+	argv := stackToSlice(this)
 	cmd1 := exec.Command(argv[0], argv[1:]...)
 	out, err := cmd1.Output()
 	if err != nil {
@@ -423,11 +420,24 @@ func CmdPrint(this *Param) []any_t {
 	return rc
 }
 
-func CmdRawExec(this *Param) []any_t {
+func stackToSlice(this *Param) []string {
 	argv := make([]string, 0, len(this.Args))
 	for _, arg1 := range this.Args {
-		argv = append(argv, fmt.Sprint(arg1))
+		if table, ok := arg1.(map[interface{}]interface{}); ok {
+			for i := 0; i < len(table); i++ {
+				if _, ok = table[i]; ok {
+					argv = append(argv, fmt.Sprint(table[i]))
+				}
+			}
+		} else {
+			argv = append(argv, fmt.Sprint(arg1))
+		}
 	}
+	return argv
+}
+
+func CmdRawExec(this *Param) []any_t {
+	argv := stackToSlice(this)
 	xcmd := exec.Command(argv[0], argv[1:]...)
 	xcmd.Stdin = this.In
 	xcmd.Stdout = this.Out
