@@ -116,6 +116,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 				}
 			}, nil
 		} else if arg1 == "--show-version-only" {
+			OptionNorc = true
 			return func(context.Context) error {
 				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
 				return io.EOF
