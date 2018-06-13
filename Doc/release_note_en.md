@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* #316 Fix: zero-length directory-name in %PATH% is regarded as the current directory
+
 NYAGOS 4.3.1\_2
 ===============
 on Jun.12,2018
