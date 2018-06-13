@@ -79,7 +79,11 @@ func LookPath(where LookCurdirT, name string, envnames ...string) string {
 
 	for _, dir1 := range pathDirList {
 		// println("lookPath:" + dir1)
-		if path := lookPath(dir1, filepath.Join(dir1, name)); path != "" {
+		_dir1 := strings.TrimSpace(dir1)
+		if _dir1 == "" {
+			continue
+		}
+		if path := lookPath(dir1, filepath.Join(_dir1, name)); path != "" {
 			// println("Found:" + path)
 			return path
 		}
