@@ -24,52 +24,67 @@ type ScriptEngineForOption interface {
 	RunString(context.Context, string) error
 }
 
-func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
-	args := os.Args[1:]
-	for i := 0; i < len(args); i++ {
-		arg1 := args[i]
-		if arg1 == "-k" {
-			i++
-			if i >= len(args) {
+type optionArg struct {
+	args []string
+	sh   *shell.Shell
+	e    ScriptEngineForOption
+}
+
+type optionT struct {
+	F func()
+	V func(*optionArg) (func(context.Context) error, error)
+	U string
+}
+
+var optionMap = map[string]optionT{
+	"-k": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
 				return nil, errors.New("-k: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				sh.Interpret(ctx, args[i])
+				p.sh.Interpret(ctx, p.args[0])
 				return nil
 			}, nil
-		} else if arg1 == "-c" {
-			i++
-			if i >= len(args) {
+		},
+	},
+	"-c": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
 				return nil, errors.New("-c: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				sh.Interpret(ctx, args[i])
+				p.sh.Interpret(ctx, p.args[0])
 				return io.EOF
 			}, nil
-		} else if arg1 == "-b" {
-			i++
-			if i >= len(args) {
+		},
+	},
+	"-b": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
 				return nil, errors.New("-b: requires parameters")
 			}
-			data, err := base64.StdEncoding.DecodeString(args[i])
+			data, err := base64.StdEncoding.DecodeString(p.args[0])
 			if err != nil {
 				return nil, err
 			}
 			text := string(data)
 			return func(ctx context.Context) error {
-				sh.Interpret(ctx, text)
+				p.sh.Interpret(ctx, text)
 				return io.EOF
 			}, nil
-		} else if arg1 == "-f" {
-			i++
-			if i >= len(args) {
+		},
+	},
+	"-f": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
 				return nil, errors.New("-f: requires parameters")
 			}
-			if strings.HasSuffix(strings.ToLower(args[i]), ".lua") {
+			if strings.HasSuffix(strings.ToLower(p.args[0]), ".lua") {
 				// lua script
 				return func(ctx context.Context) error {
-					e.SetArg(args[i:])
-					_, err := e.RunFile(ctx, args[i])
+					p.e.SetArg(p.args)
+					_, err := p.e.RunFile(ctx, p.args[0])
 					if err != nil {
 						return err
 					} else {
@@ -79,67 +94,116 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 			} else {
 				return func(ctx context.Context) error {
 					// command script
-					if err := sh.Source(ctx, args[i]); err != nil {
+					if err := p.sh.Source(ctx, p.args[0]); err != nil {
 						return err
 					}
 					return io.EOF
 				}, nil
 			}
-		} else if arg1 == "-e" {
-			i++
-			if i >= len(args) {
+		},
+	},
+	"-e": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
 				return nil, errors.New("-e: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				e.SetArg(args[i:])
-				err := e.RunString(ctx, args[i])
+				p.e.SetArg(p.args)
+				err := p.e.RunString(ctx, p.args[0])
 				if err != nil {
 					return err
 				} else {
 					return io.EOF
 				}
 			}, nil
-		} else if arg1 == "--norc" {
-			OptionNorc = true
-		} else if arg1 == "--lua-file" {
-			i++
-			if i >= len(args) {
+		},
+	},
+	"--lua-file": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
 				return nil, errors.New("--lua-file: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				e.SetArg(args[i:])
-				_, err := e.RunFile(ctx, args[i])
+				p.e.SetArg(p.args)
+				_, err := p.e.RunFile(ctx, p.args[0])
 				if err != nil {
 					return err
 				} else {
 					return io.EOF
 				}
 			}, nil
-		} else if arg1 == "--show-version-only" {
+		},
+	},
+	"--show-version-only": optionT{
+		V: func(p *optionArg) (func(context.Context) error, error) {
 			OptionNorc = true
 			return func(context.Context) error {
 				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
 				return io.EOF
 			}, nil
-		} else if arg1 == "--go-colorable" {
-			OptionGoColorable = true
-		} else if arg1 == "--no-go-colorable" {
-			OptionGoColorable = false
-		} else if arg1 == "--enable-virtual-terminal-processing" {
-			OptionEnableVirtualTerminalProcessing = true
-		} else if arg1 == "--disable-virtual-terminal-processing" {
+		},
+	},
+	"--disable-virtual-terminal-processing": optionT{
+		F: func() {
 			OptionEnableVirtualTerminalProcessing = false
-		} else if arg1 == "--look-curdir-first" {
+		},
+	},
+	"--enable-virtual-terminal-processing": optionT{
+		F: func() {
+			OptionEnableVirtualTerminalProcessing = true
+		},
+	},
+	"--no-go-colorable": optionT{
+		F: func() {
+			OptionGoColorable = false
+		},
+	},
+	"--go-colorable": optionT{
+		F: func() {
+			OptionGoColorable = true
+		},
+	},
+	"--norc": optionT{
+		F: func() {
+			OptionNorc = true
+		},
+	},
+	"--look-curdir-first": optionT{
+		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirFirst
-		} else if arg1 == "--look-curdir-last" {
+		},
+	},
+	"--look-curdir-last": optionT{
+		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirLast
-		} else if arg1 == "--look-curdir-never" {
+		},
+	},
+	"--look-curdir-never": optionT{
+		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirNever
+		},
+	},
+}
+
+func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
+	args := os.Args[1:]
+
+	for i := 0; i < len(args); i++ {
+		if f, ok := optionMap[args[i]]; ok {
+			if f.F != nil {
+				f.F()
+			}
+			if f.V != nil {
+				return f.V(&optionArg{
+					args: args[i+1:],
+					sh:   sh,
+					e:    e,
+				})
+			}
 		} else {
-			fmt.Fprintf(os.Stderr, "%s: unknown parameter\n", arg1)
+			fmt.Fprintf(os.Stderr, "%s: unknown parameter\n", args[i])
 		}
 	}
-
 	return nil, nil
 }
 
