@@ -200,11 +200,21 @@ var optionMap = map[string]optionT{
 	},
 }
 
+func Title() {
+	fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s\n",
+		VersionOrStamp(),
+		runtime.GOARCH,
+		runtime.Version())
+	fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
+}
+
 func help(p *optionArg) (func(context.Context) error, error) {
 	OptionNorc = true
 	return func(context.Context) error {
+		Title()
+		fmt.Println()
 		for key, val := range optionMap {
-			fmt.Printf("  %s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
+			fmt.Printf("%s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
 		}
 		return io.EOF
 	}, nil

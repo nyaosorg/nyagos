@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"runtime"
 
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
@@ -118,12 +117,8 @@ func Main() error {
 
 	if !frame.OptionNorc {
 		if !frame.SilentMode {
-			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s\n",
-				frame.VersionOrStamp(),
-				runtime.GOARCH,
-				runtime.Version())
-			fmt.Printf("Powered by %s %s\n", lua.PackageName, lua.PackageVersion)
-			fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
+			frame.Title()
+			fmt.Println()
 		}
 		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
