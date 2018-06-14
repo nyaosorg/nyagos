@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * #316 Fix: zero-length directory-name in %PATH% is regarded as the current directory
+* #321 Fix: key function names `previous_history` & `next_history` were not registered.
 
 NYAGOS 4.3.1\_2
 ===============

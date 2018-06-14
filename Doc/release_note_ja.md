@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * #316 %PATH% の中の長さゼロのエントリがカレントディレクトリとみなされていた不具合を修正
+* #321 キー機能名の `previous_history` と `next_history` が未登録だった不具合を修正
 
 NYAGOS 4.3.1\_2
 ===============
