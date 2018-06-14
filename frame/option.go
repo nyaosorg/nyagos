@@ -38,6 +38,7 @@ type optionT struct {
 
 var optionMap = map[string]optionT{
 	"-k": optionT{
+		U: "\"COMMAND\"\nExecute \"COMMAND\" and quit.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-k: requires parameters")
@@ -49,6 +50,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"-c": optionT{
+		U: "\"COMMAND\"\nExecute `COMMAND` and quit.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-c: requires parameters")
@@ -60,6 +62,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"-b": optionT{
+		U: "\"BASE64edCOMMAND\"\nDecode and execute the command which is encoded with Base64.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-b: requires parameters")
@@ -76,6 +79,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"-f": optionT{
+		U: "FILE ARG1 ARG2 ...\nIf FILE's suffix is .lua, execute Lua-code on it.\n(The script can refer arguments as `arg[]`).\nOtherwise, read and execute commands on it.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-f: requires parameters")
@@ -103,6 +107,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"-e": optionT{
+		U: "\"SCRIPTCODE\"\nExecute SCRIPTCODE with Lua interpretor and quit.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-e: requires parameters")
@@ -119,6 +124,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"--lua-file": optionT{
+		U: "FILE ARG1 ARG2...\nExecute FILE as Lua Script.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("--lua-file: requires parameters")
@@ -135,6 +141,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"--show-version-only": optionT{
+		U: "\nshow version only",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			OptionNorc = true
 			return func(context.Context) error {
@@ -144,49 +151,69 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"--disable-virtual-terminal-processing": optionT{
+		U: "\nDo not use Windows10's native ESCAPE SEQUENCE.",
 		F: func() {
 			OptionEnableVirtualTerminalProcessing = false
 		},
 	},
 	"--enable-virtual-terminal-processing": optionT{
+		U: "\nEnable Windows10's native ESCAPE SEQUENCE.\nIt should be used with `--no-go-colorable`.",
 		F: func() {
 			OptionEnableVirtualTerminalProcessing = true
 		},
 	},
 	"--no-go-colorable": optionT{
+		U: "\nDo not use the ESCAPE SEQUENCE emulation with go-colorable library.",
 		F: func() {
 			OptionGoColorable = false
 		},
 	},
 	"--go-colorable": optionT{
+		U: "\nUse the ESCAPE SEQUENCE emulation with go-colorable library.",
 		F: func() {
 			OptionGoColorable = true
 		},
 	},
 	"--norc": optionT{
+		U: "\nDo not load the startup-scripts: `~\\.nyagos` , `~\\_nyagos`\nand `(BINDIR)\\nyagos.d\\*`.",
 		F: func() {
 			OptionNorc = true
 		},
 	},
 	"--look-curdir-first": optionT{
+		U: "\nSearch for the executable from the current directory before %PATH%.\n(compatible with CMD.EXE)",
 		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirFirst
 		},
 	},
 	"--look-curdir-last": optionT{
+		U: "\nSearch for the executable from the current directory after %PATH%.\n(compatible with PowerShell)",
 		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirLast
 		},
 	},
 	"--look-curdir-never": optionT{
+		U: "\nNever search for the executable from the current directory\nunless %PATH% contains.\n(compatible with UNIX Shells)",
 		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirNever
 		},
 	},
 }
 
+func help(p *optionArg) (func(context.Context) error, error) {
+	OptionNorc = true
+	return func(context.Context) error {
+		for key, val := range optionMap {
+			fmt.Printf("  %s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
+		}
+		return io.EOF
+	}, nil
+}
+
 func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
 	args := os.Args[1:]
+	optionMap["-h"] = optionT{V: help, U: "\nPrint this usage"}
+	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
 
 	for i := 0; i < len(args); i++ {
 		if f, ok := optionMap[args[i]]; ok {
