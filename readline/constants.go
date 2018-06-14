@@ -112,8 +112,10 @@ const (
 	F_DELETE_OR_ABORT      = "DELETE_OR_ABORT"
 	F_END_OF_LINE          = "END_OF_LINE"
 	F_FORWARD_CHAR         = "FORWARD_CHAR"
-	F_HISTORY_DOWN         = "HISTORY_DOWN"
-	F_HISTORY_UP           = "HISTORY_UP"
+	F_HISTORY_DOWN         = "HISTORY_DOWN" // for compatible
+	F_HISTORY_UP           = "HISTORY_UP"   // for compatible
+	F_NEXT_HISTORY         = "NEXT_HISTORY"
+	F_PREVIOUS_HISTORY     = "PREVIOUS_HISTORY"
 	F_INTR                 = "INTR"
 	F_ISEARCH_BACKWARD     = "ISEARCH_BACKWARD"
 	F_KILL_LINE            = "KILL_LINE"
@@ -247,8 +249,10 @@ var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 	F_DELETE_OR_ABORT:      KeyFuncDeleteOrAbort,
 	F_END_OF_LINE:          KeyFuncTail,
 	F_FORWARD_CHAR:         KeyFuncForward,
-	F_HISTORY_DOWN:         KeyFuncHistoryDown,
-	F_HISTORY_UP:           KeyFuncHistoryUp,
+	F_HISTORY_DOWN:         KeyFuncHistoryDown, // for compatible
+	F_HISTORY_UP:           KeyFuncHistoryUp,   // for compatible
+	F_NEXT_HISTORY:         KeyFuncHistoryDown,
+	F_PREVIOUS_HISTORY:     KeyFuncHistoryUp,
 	F_INTR:                 KeyFuncIntr,
 	F_ISEARCH_BACKWARD:     KeyFuncIncSearch,
 	F_KILL_LINE:            KeyFuncClearAfter,
