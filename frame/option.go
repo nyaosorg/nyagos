@@ -38,7 +38,7 @@ type optionT struct {
 
 var optionMap = map[string]optionT{
 	"-k": optionT{
-		U: "\"COMMAND\"\nExecute \"COMMAND\" and quit.",
+		U: "\"COMMAND\"\nExecute \"COMMAND\" and continue the command-line.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-k: requires parameters")
