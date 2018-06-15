@@ -118,7 +118,6 @@ func Main() error {
 	if !frame.OptionNorc {
 		if !frame.SilentMode {
 			frame.Title()
-			fmt.Println()
 		}
 		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
