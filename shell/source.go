@@ -21,7 +21,7 @@ import (
 func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
 	errorlevel := -1
 	for scan.Scan() {
-		line, err := mbcs.AtoU(scan.Bytes())
+		line, err := mbcs.ConsoleCpToUtf8(scan.Bytes())
 		if err != nil {
 			continue
 		}
@@ -59,7 +59,7 @@ func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
 	if err := scan.Err(); err != nil {
 		return err
 	}
-	line, err := mbcs.AtoU(scan.Bytes())
+	line, err := mbcs.ConsoleCpToUtf8(scan.Bytes())
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func callBatch(batch string,
 	io.WriteString(writer, "@call")
 	for _, arg1 := range args {
 		// UTF8 parameter to ANSI
-		ansi, err := mbcs.UtoA(arg1)
+		ansi, err := mbcs.Utf8ToConsoleCp(arg1)
 		if err != nil {
 			// println("utoa: " + err.Error())
 			fd.Close()
@@ -123,7 +123,7 @@ func callBatch(batch string,
 	fmt.Fprintf(writer, "\r\n@set \"ERRORLEVEL_=%%ERRORLEVEL%%\"\r\n")
 
 	// Sometimes %TEMP% has not ASCII letters.
-	ansi, err := mbcs.UtoA(tmpfile)
+	ansi, err := mbcs.Utf8ToConsoleCp(tmpfile)
 	if err != nil {
 		fd.Close()
 		return -1, err
