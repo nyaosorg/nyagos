@@ -79,7 +79,10 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"-f": optionT{
-		U: "FILE ARG1 ARG2 ...\nIf FILE's suffix is .lua, execute Lua-code on it.\n(The script can refer arguments as `arg[]`).\nOtherwise, read and execute commands on it.",
+		U: "FILE ARG1 ARG2 ...\n" +
+			"If FILE's suffix is .lua, execute Lua-code on it.\n" +
+			"The script can refer arguments as `arg[]`.\n" +
+			"Otherwise, read and execute commands on it.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-f: requires parameters")
@@ -124,7 +127,10 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"--lua-file": optionT{
-		U: "FILE ARG1 ARG2...\nExecute FILE as Lua Script.",
+		U: "FILE ARG1 ARG2...\n" +
+			"Execute FILE as Lua Script even if FILE's suffix is not .lua .\n" +
+			"The script can refer arguments as `arg[]`.\n" +
+			"Lines starting with `@` are ignored to embed into batchfile.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("--lua-file: requires parameters")
