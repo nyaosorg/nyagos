@@ -204,6 +204,18 @@ var optionMap = map[string]optionT{
 			shell.LookCurdirOrder = dos.LookCurdirNever
 		},
 	},
+	"--no-use-source": optionT{
+		U: "\nforbide batchfile to change environment variables of nyagos",
+		F: func() {
+			shell.UseSourceRunBatch = false
+		},
+	},
+	"--use-source": optionT{
+		U: "\nallow batchfile to change environment variables of nyagos",
+		F: func() {
+			shell.UseSourceRunBatch = true
+		},
+	},
 }
 
 func Title() {
