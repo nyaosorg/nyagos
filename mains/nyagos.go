@@ -1,6 +1,7 @@
 package mains
 
 import (
+	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -36,6 +37,33 @@ func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
 	}
 }
 
+func DoFileExceptForAtmarkLines(L *lua.LState, fname string) error {
+	fd, err := os.Open(fname)
+	if err != nil {
+		return err
+	}
+	reader, writer := io.Pipe()
+	go func() {
+		scan := bufio.NewScanner(fd)
+		for scan.Scan() {
+			line := scan.Text()
+			if len(line) > 0 && line[0] == '@' {
+				line = ""
+			}
+			fmt.Fprintln(writer, line)
+		}
+		writer.Close()
+		fd.Close()
+	}()
+	f, err := L.Load(reader, fname)
+	reader.Close()
+	if err != nil {
+		return err
+	}
+	L.Push(f)
+	return L.PCall(0, 0, nil)
+}
+
 func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
@@ -43,7 +71,7 @@ func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string
 	}
 	defer setContext(L, getContext(L))
 	setContext(L, ctx)
-	return nil, L.DoFile(fname)
+	return nil, DoFileExceptForAtmarkLines(L, fname)
 }
 
 func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
