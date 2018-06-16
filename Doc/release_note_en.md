@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * #321 Fix: key function names `previous_history` & `next_history` were not registered.
 * Add -h and --help option
 * Lines starting with `@` of Lua script are now ignored to embed into batchfile.
+* #322 Fix: change tthe encoding for batchfile's parameters from Thread Codepage to Console Codepage #322
 
 NYAGOS 4.3.1\_2
 ===============
