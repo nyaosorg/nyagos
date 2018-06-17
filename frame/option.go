@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"runtime"
 	"sort"
 	"strings"
@@ -232,6 +233,27 @@ func help(p *optionArg) (func(context.Context) error, error) {
 			val := optionMap[key]
 			fmt.Printf("%s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
 		}
+
+		fmt.Println("\nThese script are called on startup")
+		if me, err := os.Executable(); err == nil {
+			binDir := filepath.Dir(me)
+			nyagos_d := filepath.Join(binDir, "nyagos.d")
+			fmt.Printf("  %s\\*.lua\n", nyagos_d)
+			file1 := filepath.Join(binDir, ".nyagos")
+			fmt.Printf("  %s (Lua)\n", file1)
+			file1 = filepath.Join(binDir, "_nyagos")
+			fmt.Printf("  %s (Command-lines)\n", file1)
+		}
+
+		home := strings.TrimSpace(os.Getenv("HOME"))
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		file1 := filepath.Join(home, ".nyagos")
+		fmt.Printf("  %s (Lua)\n", file1)
+		file1 = filepath.Join(home, "_nyagos")
+		fmt.Printf("  %s (Command-lines)\n", file1)
+
 		return io.EOF
 	}, nil
 }
