@@ -35,19 +35,49 @@ func shrink(values ...string) string {
 	return buffer.String()
 }
 
-var BoolOptions = map[string]*bool{
-	"cleanup_buffer":    &readline.FlushBeforeReadline,
-	"completion_hidden": &completion.IncludeHidden,
-	"completion_slash":  &completion.UseSlash,
-	"glob":              &shell.WildCardExpansionAlways,
-	"noclobber":         &shell.NoClobber,
-	"usesource":         &shell.UseSourceRunBatch,
+type optionT struct {
+	V       *bool
+	Usage   string
+	NoUsage string
+}
+
+var BoolOptions = map[string]*optionT{
+	"cleanup_buffer": &optionT{
+		V:       &readline.FlushBeforeReadline,
+		Usage:   "Clean up key buffer at prompt",
+		NoUsage: "Do not clean up key buffer at prompt",
+	},
+	"completion_hidden": &optionT{
+		V:       &completion.IncludeHidden,
+		Usage:   "Include hidden files on completion",
+		NoUsage: "Do not include hidden files on completion",
+	},
+	"completion_slash": &optionT{
+		V:       &completion.UseSlash,
+		Usage:   "use forward slash on completion",
+		NoUsage: "Do not use slash on completion",
+	},
+	"glob": &optionT{
+		V:       &shell.WildCardExpansionAlways,
+		Usage:   "Enable to expand wildcards",
+		NoUsage: "Disable to expand wildcards",
+	},
+	"noclobber": &optionT{
+		V:       &shell.NoClobber,
+		Usage:   "forbide to overwrite files on redirect",
+		NoUsage: "Do not forbide to overwrite files no redirect",
+	},
+	"usesource": &optionT{
+		V:       &shell.UseSourceRunBatch,
+		Usage:   "allow batchfile to change environment variables of nyagos",
+		NoUsage: "forbide batchfile to change environment variables of nyagos",
+	},
 }
 
 func dumpBoolOptions(out io.Writer) {
 	for key, val := range BoolOptions {
 		fmt.Fprintf(out, "%-16s", key)
-		if *val {
+		if *val.V {
 			fmt.Fprintln(out, "on")
 		} else {
 			fmt.Fprintln(out, "off")
@@ -71,7 +101,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				dumpBoolOptions(cmd.Out())
 			} else {
 				if ptr, ok := BoolOptions[args[0]]; ok {
-					*ptr = true
+					*ptr.V = true
 				} else {
 					fmt.Fprintf(cmd.Err(), "-o %s: no such option\n", args[0])
 				}
@@ -83,7 +113,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				dumpBoolOptions(cmd.Out())
 			} else {
 				if ptr, ok := BoolOptions[args[0]]; ok {
-					*ptr = false
+					*ptr.V = false
 				} else {
 					fmt.Fprintf(cmd.Err(), "+o %s: no such option\n", args[0])
 				}

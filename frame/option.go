@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -204,18 +205,6 @@ var optionMap = map[string]optionT{
 			shell.LookCurdirOrder = dos.LookCurdirNever
 		},
 	},
-	"--no-use-source": optionT{
-		U: "\nforbide batchfile to change environment variables of nyagos",
-		F: func() {
-			shell.UseSourceRunBatch = false
-		},
-	},
-	"--use-source": optionT{
-		U: "\nallow batchfile to change environment variables of nyagos",
-		F: func() {
-			shell.UseSourceRunBatch = true
-		},
-	},
 }
 
 func Title() {
@@ -238,10 +227,41 @@ func help(p *optionArg) (func(context.Context) error, error) {
 	}, nil
 }
 
+func isDefault(value bool) string {
+	if value {
+		return " [default]"
+	} else {
+		return ""
+	}
+}
+
 func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
 	args := os.Args[1:]
 	optionMap["-h"] = optionT{V: help, U: "\nPrint this usage"}
 	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
+
+	for key, val := range commands.BoolOptions {
+		key_ := strings.Replace(key, "_", "-", -1)
+		val_ := val
+		optionMap["--"+key_] = optionT{
+			F: func() {
+				*val_.V = true
+			},
+			U: fmt.Sprintf("(lua: nyagos.option.%s=true)%s\n%s",
+				key,
+				isDefault(*val.V),
+				val_.Usage),
+		}
+		optionMap["--no-"+key_] = optionT{
+			F: func() {
+				*val_.V = false
+			},
+			U: fmt.Sprintf("(lua: nyagos.option.%s=false)%s\n%s",
+				key,
+				isDefault(!*val.V),
+				val_.NoUsage),
+		}
+	}
 
 	for i := 0; i < len(args); i++ {
 		if f, ok := optionMap[args[i]]; ok {

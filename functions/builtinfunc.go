@@ -464,7 +464,7 @@ func GetOption(args []any_t) []any_t {
 	if !ok {
 		return []any_t{nil, fmt.Sprintf("key: %s: not found", key)}
 	}
-	return []any_t{*ptr}
+	return []any_t{*ptr.V}
 }
 
 func SetOption(args []any_t) []any_t {
@@ -477,7 +477,7 @@ func SetOption(args []any_t) []any_t {
 		return []any_t{nil, "key: %s: not found"}
 	}
 	val := args[2]
-	*ptr = (val != nil && val != false && val == "")
+	*ptr.V = (val != nil && val != false && val == "")
 	return []any_t{true}
 }
 
