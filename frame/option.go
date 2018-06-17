@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"runtime"
+	"sort"
 	"strings"
 
 	"github.com/zetamatta/nyagos/commands"
@@ -220,7 +221,15 @@ func help(p *optionArg) (func(context.Context) error, error) {
 	return func(context.Context) error {
 		Title()
 		fmt.Println()
-		for key, val := range optionMap {
+		var keys = sort.StringSlice(make([]string, len(optionMap)))
+		i := 0
+		for key, _ := range optionMap {
+			keys[i] = key
+			i++
+		}
+		keys.Sort()
+		for _, key := range keys {
+			val := optionMap[key]
 			fmt.Printf("%s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
 		}
 		return io.EOF
