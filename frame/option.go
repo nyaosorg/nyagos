@@ -9,12 +9,12 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"sort"
 	"strings"
 
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 var OptionNorc = false
@@ -222,14 +222,7 @@ func help(p *optionArg) (func(context.Context) error, error) {
 	return func(context.Context) error {
 		Title()
 		fmt.Println()
-		var keys = sort.StringSlice(make([]string, len(optionMap)))
-		i := 0
-		for key, _ := range optionMap {
-			keys[i] = key
-			i++
-		}
-		keys.Sort()
-		for _, key := range keys {
+		for _, key := range texts.SortedKeys(optionMap) {
 			val := optionMap[key]
 			fmt.Printf("%s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
 		}
