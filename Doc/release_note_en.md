@@ -1,10 +1,14 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.1\_3
+===============
+on Jun.19,2018
+
 * #316 Fix: zero-length directory-name in %PATH% is regarded as the current directory
 * #321 Fix: key function names `previous_history` & `next_history` were not registered.
 * Add -h and --help option
 * Lines starting with `@` of Lua script are now ignored to embed into batchfile.
-* #322 Fix: change tthe encoding for batchfile's parameters from Thread Codepage to Console Codepage #322
+* #322 Fix: change the encoding for batchfile's parameters from Thread Codepage to Console Codepage #322
 
 NYAGOS 4.3.1\_2
 ===============
