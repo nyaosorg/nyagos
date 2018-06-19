@@ -11,6 +11,7 @@ import (
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 func shrink(values ...string) string {
@@ -75,12 +76,24 @@ var BoolOptions = map[string]*optionT{
 }
 
 func dumpBoolOptions(out io.Writer) {
-	for key, val := range BoolOptions {
-		fmt.Fprintf(out, "%-16s", key)
+	max := 0
+	for key := range BoolOptions {
+		if L := len(key); L > max {
+			max = L
+		}
+	}
+	for _, key := range texts.SortedKeys(BoolOptions) {
+		val := BoolOptions[key]
 		if *val.V {
-			fmt.Fprintln(out, "on")
+			fmt.Fprint(out, "-o ")
 		} else {
-			fmt.Fprintln(out, "off")
+			fmt.Fprint(out, "+o ")
+		}
+		fmt.Fprintf(out, "%-*s", max, key)
+		if *val.V {
+			fmt.Fprintf(out, " (%s)\n", val.Usage)
+		} else {
+			fmt.Fprintf(out, " (%s)\n", val.NoUsage)
 		}
 	}
 }
