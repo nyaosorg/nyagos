@@ -9,6 +9,7 @@ on Jun.19,2018
 * Add -h and --help option
 * Lines starting with `@` of Lua script are now ignored to embed into batchfile.
 * #322 Fix: change the encoding for batchfile's parameters from Thread Codepage to Console Codepage #322
+* All of lua variables `nyagos.option.*` are now able to be set by nyagos.exe's command-line option.
 
 NYAGOS 4.3.1\_2
 ===============
