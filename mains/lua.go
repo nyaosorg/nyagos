@@ -19,6 +19,7 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
+// Lua is the alias for Lua's state type.
 type Lua = *lua.LState
 
 func makeVirtualTable(L Lua, getter, setter func(Lua) int) lua.LValue {
@@ -91,6 +92,7 @@ func nyagosSetter(L Lua) int {
 
 var isHookSetup = false
 
+// NewLua sets up the lua instance with NYAOGS' environment.
 func NewLua() (Lua, error) {
 	L := lua.NewState(lua.Options{IncludeGoStackTrace: true})
 
