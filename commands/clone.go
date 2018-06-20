@@ -8,7 +8,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-func getwd_() string {
+func _getwd() string {
 	wd, err := os.Getwd()
 	if err != nil {
 		return ""
@@ -17,7 +17,7 @@ func getwd_() string {
 }
 
 func clone_(action string, out io.Writer) (int, error) {
-	wd := getwd_()
+	wd := _getwd()
 	var err error
 	var me string
 	me, err = os.Executable()
