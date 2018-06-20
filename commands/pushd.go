@@ -13,14 +13,14 @@ import (
 var dirstack = make([]string, 0, 20)
 
 const (
-	NO_DIRSTACK = 2
-	GETWD_FAIL  = 3
+	noDirStack = 2
+	getwdFail  = 3
 )
 
 func cmdDirs(ctx context.Context, cmd Param) (int, error) {
 	wd, err := os.Getwd()
 	if err != nil {
-		return GETWD_FAIL, err
+		return getwdFail, err
 	}
 	io.WriteString(cmd.Out(), wd)
 	for i := len(dirstack) - 1; i >= 0; i-- {
@@ -32,7 +32,7 @@ func cmdDirs(ctx context.Context, cmd Param) (int, error) {
 
 func cmdPopd(ctx context.Context, cmd Param) (int, error) {
 	if len(dirstack) <= 0 {
-		return NO_DIRSTACK, errors.New("popd: directory stack empty.")
+		return noDirStack, errors.New("popd: directory stack empty")
 	}
 	err := dos.Chdir(dirstack[len(dirstack)-1])
 	if err != nil {
@@ -45,7 +45,7 @@ func cmdPopd(ctx context.Context, cmd Param) (int, error) {
 func cmdPushd(ctx context.Context, cmd Param) (int, error) {
 	wd, err := os.Getwd()
 	if err != nil {
-		return GETWD_FAIL, err
+		return getwdFail, err
 	}
 	if len(cmd.Args()) >= 2 {
 		dirstack = append(dirstack, wd)
@@ -55,7 +55,7 @@ func cmdPushd(ctx context.Context, cmd Param) (int, error) {
 		}
 	} else {
 		if len(dirstack) <= 0 {
-			return NO_DIRSTACK, errors.New("pushd: directory stack empty.")
+			return noDirStack, errors.New("pushd: directory stack empty")
 		}
 		err := dos.Chdir(dirstack[len(dirstack)-1])
 		if err != nil {
