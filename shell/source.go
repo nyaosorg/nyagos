@@ -152,6 +152,7 @@ func callBatch(batch string,
 	return errorlevel, nil
 }
 
+// RawSource calls the batchfiles and load the changed variable the batchfile has done.
 func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
