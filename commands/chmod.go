@@ -12,7 +12,7 @@ import (
 var rxOOO = regexp.MustCompile("^[0-7][0-7][0-7]$")
 var rxEqu = regexp.MustCompile(`^([aogu]+)([\-\+\=])([rwx]+)$`)
 
-func cmd_chmod_(args []string) error {
+func _cmdChmod(args []string) error {
 	if len(args) < 2 {
 		return errors.New("Usage: chmod ooo (files...)")
 	}
@@ -86,10 +86,8 @@ func cmd_chmod_(args []string) error {
 }
 
 func cmdChmod(_ context.Context, cmd Param) (int, error) {
-	if err := cmd_chmod_(cmd.Args()[1:]); err != nil {
+	if err := _cmdChmod(cmd.Args()[1:]); err != nil {
 		return 1, err
-	} else {
-		return 0, nil
 	}
-
+	return 0, nil
 }
