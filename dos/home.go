@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-// Get %HOME% || %USERPROFILE%
+// GetHome get %HOME% or %USERPROFILE%
 func GetHome() string {
 	home := os.Getenv("HOME")
 	if home == "" {
@@ -15,7 +15,7 @@ func GetHome() string {
 	return home
 }
 
-// C:\users\name\foo\bar -> ~\foo\bar
+// ReplaceHomeToTilde replaces path like C:\users\name\foo\bar -> ~\foo\bar
 func ReplaceHomeToTilde(wd string) string {
 	home := GetHome()
 	homeLen := len(home)
@@ -25,7 +25,7 @@ func ReplaceHomeToTilde(wd string) string {
 	return wd
 }
 
-// C:\users\name\foo\bar -> ~/foo/bar
+// ReplaceHomeToTildeSlash replaces path like C:\users\name\foo\bar -> ~/foo/bar
 func ReplaceHomeToTildeSlash(wd string) string {
 	return filepath.ToSlash(ReplaceHomeToTilde(wd))
 }
