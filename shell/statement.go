@@ -5,7 +5,7 @@ import (
 	"unicode"
 )
 
-func SplitToStatement(line string) []string {
+func splitToStatement(line string) []string {
 	result := make([]string, 0)
 	quote := false
 	var buffer strings.Builder

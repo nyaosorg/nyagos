@@ -44,7 +44,7 @@ func (sh *Shell) ReadCommand(ctx context.Context, stream Stream) (context.Contex
 			return ctx, line, err
 		}
 
-		texts := SplitToStatement(line)
+		texts := splitToStatement(line)
 		line = texts[0]
 		sh.push(texts[1:])
 	}
