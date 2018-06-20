@@ -15,17 +15,10 @@ func isGui(fname string) (bool, error) {
 		return false, err
 	}
 	opt := pe.OptionalHeader
-	if opt != nil {
-		if opt.Subsystem == pefile.IMAGE_SUBSYSTEM_WINDOWS_GUI {
-			return true, nil
-		} else {
-			return false, nil
-		}
-	} else {
-		return false, nil
-	}
+	return (opt != nil && opt.Subsystem == pefile.IMAGE_SUBSYSTEM_WINDOWS_GUI), nil
 }
 
+// IsGui returns true if fname is Windows GUI Application
 func IsGui(fname string) bool {
 	if fname == "" {
 		return false
