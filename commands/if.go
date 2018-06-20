@@ -54,8 +54,8 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 		rawargs = rawargs[3:]
 		start += 2
 	} else if len(args) >= 3 && strings.EqualFold(args[1], "errorlevel") {
-		num, num_err := strconv.Atoi(args[2])
-		if num_err == nil {
+		num, err := strconv.Atoi(args[2])
+		if err == nil {
 			status = (shell.LastErrorLevel >= num)
 		}
 		args = args[3:]
@@ -80,9 +80,8 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 			// inline `then`
 			if status {
 				return cmd.Spawnlp(ctx, cmd.Args()[start:], cmd.RawArgs()[start:])
-			} else {
-				return 0, nil
 			}
+			return 0, nil
 		}
 	}
 
@@ -96,9 +95,9 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 	elseBuffer := shell.BufStream{}
 	elsePart := false
 
-	save_prompt := os.Getenv("PROMPT")
+	savePrompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "if>")
-	defer os.Setenv("PROMPT", save_prompt)
+	defer os.Setenv("PROMPT", savePrompt)
 	nest := 1
 	for {
 		_, line, err := cmd.ReadCommand(ctx, stream)
