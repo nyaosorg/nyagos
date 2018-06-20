@@ -1,3 +1,5 @@
+// +build ignore
+
 package main
 
 // Example to use readline
