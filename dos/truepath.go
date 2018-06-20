@@ -16,6 +16,7 @@ func truePathSub(path string) string {
 	return path
 }
 
+// TruePath returns the casesensitive filename
 func TruePath(path string) string {
 	if newpath, err := filepath.Abs(path); err == nil {
 		path = newpath
