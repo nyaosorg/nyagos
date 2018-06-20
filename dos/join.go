@@ -14,9 +14,8 @@ func joinPath2(a, b string) string {
 	if b[0] == '\\' || b[0] == '/' {
 		if rxDrive.MatchString(a) {
 			return a[:2] + b
-		} else {
-			return b
 		}
+		return b
 	}
 	switch a[len(a)-1] {
 	case '\\', '/', ':':
@@ -26,7 +25,7 @@ func joinPath2(a, b string) string {
 	}
 }
 
-// Compatible Join with CPath::Combine of MFC (ex:`C:\foo` + `\bar` -> `c:\bar`)
+// Join is compatible with CPath::Combine of MFC (ex:`C:\foo` + `\bar` -> `c:\bar`)
 // Do not clean path (keep `./` on arguments)
 func Join(paths ...string) string {
 	result := paths[len(paths)-1]
