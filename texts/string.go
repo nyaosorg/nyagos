@@ -43,7 +43,7 @@ func quotedWordCutter(reader *strings.Reader) (string, bool) {
 	return buffer.String(), true
 }
 
-// SplitLikeShellString - Split s with SPACES not enclosing with double-quotations.
+// SplitLikeShellString splits s with SPACES not enclosing with double-quotations. This version returns fields themselves.
 func SplitLikeShellString(line string) []string {
 	args := make([]string, 0, 10)
 	reader := strings.NewReader(line)
@@ -56,6 +56,7 @@ func SplitLikeShellString(line string) []string {
 	return args
 }
 
+// FirstWord returns the first field split with spaces not enclosed with double-quotations.
 func FirstWord(line string) string {
 	reader := strings.NewReader(line)
 	str, _ := quotedWordCutter(reader)

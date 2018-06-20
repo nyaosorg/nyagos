@@ -4,6 +4,7 @@ import (
 	"strings"
 )
 
+// ReplaceIgnoreCase works like strings.Replace but ignores cases.
 func ReplaceIgnoreCase(s, old, new string) string {
 	var buffer strings.Builder
 	for {
