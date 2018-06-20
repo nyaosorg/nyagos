@@ -12,7 +12,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-func attrib_plus_r(path string) error {
+func setReadonly(path string) error {
 	perm, err := dos.GetFileAttributes(path)
 	if err != nil {
 		return err
@@ -92,7 +92,7 @@ func cmdDel(ctx context.Context, cmd Param) (int, error) {
 		}
 		err = syscall.Unlink(path)
 		if err != nil && force {
-			if err1 := attrib_plus_r(path); err1 == nil {
+			if err1 := setReadonly(path); err1 == nil {
 				err = syscall.Unlink(path)
 			}
 		}
