@@ -18,10 +18,12 @@ func setTitle(w io.Writer, s string) {
 	fmt.Fprintf(w, "\x1B]0;%s\007", s)
 }
 
+// Prompt is the body of the lua-function `nyagos.default_prompt`
 func Prompt(param *Param) []interface{} {
 	return []interface{}{PromptCore(param.Term, param.Args...)}
 }
 
+// PromptCore prints prompt-str(args[0]) to console.
 func PromptCore(console io.Writer, args ...interface{}) int {
 	if len(args) >= 2 {
 		setTitle(console, fmt.Sprint(args[1]))
