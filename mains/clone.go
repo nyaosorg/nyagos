@@ -35,6 +35,7 @@ func cloneTo(L1, L2 Lua) bool {
 	return true
 }
 
+// Clone makes a copy of Lua instance.
 func Clone(L Lua) (Lua, error) {
 	L2, err := NewLua()
 	if err != nil {
@@ -42,8 +43,7 @@ func Clone(L Lua) (Lua, error) {
 	}
 	if cloneTo(L, L2) {
 		return L2, nil
-	} else {
-		L2.Close()
-		return nil, errors.New("could not create Lua instance")
 	}
+	L2.Close()
+	return nil, errors.New("could not create Lua instance")
 }
