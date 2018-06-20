@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	WHICH_NOT_FOUND = 1
+	errnoWhichNotFound = 1
 )
 
 func envToList(first1 string, envs ...string) []string {
@@ -63,7 +63,7 @@ func cmdWhich(ctx context.Context, cmd Param) (int, error) {
 		} else {
 			path := dos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
 			if path == "" {
-				return WHICH_NOT_FOUND, fmt.Errorf("which %s: not found", name)
+				return errnoWhichNotFound, fmt.Errorf("which %s: not found", name)
 			}
 			fmt.Fprintln(cmd.Out(), filepath.Clean(path))
 		}
