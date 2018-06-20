@@ -2,13 +2,13 @@ package timecheck
 
 import "testing"
 
-type testlist_t struct {
+type testListT struct {
 	r bool
 	d []int
 }
 
 func TestIsOk(t *testing.T) {
-	testlist := []testlist_t{
+	testlist := []testListT{
 		{true, []int{2016, 5, 13, 17, 20, 0}},
 		{true, []int{2016, 2, 29, 17, 20, 0}},
 		{false, []int{2015, 2, 29, 17, 20, 0}},

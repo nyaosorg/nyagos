@@ -1,5 +1,6 @@
 package timecheck
 
+// DoesYearHave366Days returns true if the `year` has 366 days.
 func DoesYearHave366Days(year int) bool {
 	if year%400 == 0 {
 		return true
@@ -13,6 +14,7 @@ func DoesYearHave366Days(year int) bool {
 	return false
 }
 
+// IsOk returns true if year,month,mday,hour,min,sec isnot invalid.
 func IsOk(year, month, mday, hour, min, sec int) bool {
 	if sec < 0 || sec > 60 {
 		return false
@@ -26,22 +28,22 @@ func IsOk(year, month, mday, hour, min, sec int) bool {
 	if mday <= 0 {
 		return false
 	}
-	var mday_max int
+	var mdayMax int
 	switch month {
 	case 1, 3, 5, 7, 8, 10, 12:
-		mday_max = 31
+		mdayMax = 31
 	case 4, 6, 9, 11:
-		mday_max = 30
+		mdayMax = 30
 	case 2:
 		if DoesYearHave366Days(year) {
-			mday_max = 29
+			mdayMax = 29
 		} else {
-			mday_max = 28
+			mdayMax = 28
 		}
 	default:
 		return false
 	}
-	if mday > mday_max {
+	if mday > mdayMax {
 		return false
 	}
 	if year < 1900 {
