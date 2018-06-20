@@ -42,6 +42,7 @@ type optionT struct {
 	NoUsage string
 }
 
+// BoolOptions are the all global option list.
 var BoolOptions = map[string]*optionT{
 	"cleanup_buffer": {
 		V:       &readline.FlushBeforeReadline,
