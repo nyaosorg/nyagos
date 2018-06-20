@@ -10,15 +10,21 @@ var shell32 = syscall.NewLazyDLL("shell32")
 var shellExecute = shell32.NewProc("ShellExecuteW")
 
 const (
-	EDIT       = "edit"
-	EXPLORE    = "explore"
-	OPEN       = "open"
-	PRINT      = "print"
+	// EDIT is the action "edit" for ShellExecute
+	EDIT = "edit"
+	// EXPLORE is the action "explore" for ShellExecute
+	EXPLORE = "explore"
+	// OPEN is the action "open" for ShellExecute
+	OPEN = "open"
+	// PRINT is the action "print" for ShellExecute
+	PRINT = "print"
+	// PROPERTIES is the action "properties" for ShellExecute
 	PROPERTIES = "properties"
-	RUNAS      = "runas"
+	// RUNAS is the action "runas" for ShellExecute
+	RUNAS = "runas"
 )
 
-// Call ShellExecute-API: edit,explore,open and so on.
+// ShellExecute calls ShellExecute-API: edit,explore,open and so on.
 func ShellExecute(action string, path string, param string, directory string) error {
 	actionP, actionErr := syscall.UTF16PtrFromString(action)
 	if actionErr != nil {
