@@ -118,7 +118,6 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 		case rune('s' & 0x1F):
 			for i := lastFoundPos + 1; ; i++ {
 				if i >= this.History.Len() {
-					i = 0
 					break
 				}
 				if i == lastFoundPos {
