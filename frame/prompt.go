@@ -10,6 +10,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
+// Format2Prompt converts format-string to output-string
 func Format2Prompt(format string) string {
 	if format == "" {
 		format = "[$P]$_$$$S"
