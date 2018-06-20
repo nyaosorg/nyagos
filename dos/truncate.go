@@ -8,6 +8,7 @@ import (
 	"syscall"
 )
 
+// Truncate is same as os.RemoveAll but report files to remove.
 func Truncate(folder string, whenError func(string, error) bool, out io.Writer) error {
 	attr, err := GetFileAttributes(folder)
 	if err != nil {
