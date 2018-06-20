@@ -40,7 +40,7 @@ type optionT struct {
 }
 
 var optionMap = map[string]optionT{
-	"-k": optionT{
+	"-k": {
 		U: "\"COMMAND\"\nExecute \"COMMAND\" and continue the command-line.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
@@ -52,7 +52,7 @@ var optionMap = map[string]optionT{
 			}, nil
 		},
 	},
-	"-c": optionT{
+	"-c": {
 		U: "\"COMMAND\"\nExecute `COMMAND` and quit.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
@@ -64,7 +64,7 @@ var optionMap = map[string]optionT{
 			}, nil
 		},
 	},
-	"-b": optionT{
+	"-b": {
 		U: "\"BASE64edCOMMAND\"\nDecode and execute the command which is encoded with Base64.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
@@ -81,7 +81,7 @@ var optionMap = map[string]optionT{
 			}, nil
 		},
 	},
-	"-f": optionT{
+	"-f": {
 		U: "FILE ARG1 ARG2 ...\n" +
 			"If FILE's suffix is .lua, execute Lua-code on it.\n" +
 			"The script can refer arguments as `arg[]`.\n" +
@@ -112,7 +112,7 @@ var optionMap = map[string]optionT{
 			}
 		},
 	},
-	"-e": optionT{
+	"-e": {
 		U: "\"SCRIPTCODE\"\nExecute SCRIPTCODE with Lua interpretor and quit.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
@@ -129,7 +129,7 @@ var optionMap = map[string]optionT{
 			}, nil
 		},
 	},
-	"--lua-file": optionT{
+	"--lua-file": {
 		U: "FILE ARG1 ARG2...\n" +
 			"Execute FILE as Lua Script even if FILE's suffix is not .lua .\n" +
 			"The script can refer arguments as `arg[]`.\n" +
@@ -149,7 +149,7 @@ var optionMap = map[string]optionT{
 			}, nil
 		},
 	},
-	"--show-version-only": optionT{
+	"--show-version-only": {
 		U: "\nshow version only",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			OptionNorc = true
@@ -159,49 +159,49 @@ var optionMap = map[string]optionT{
 			}, nil
 		},
 	},
-	"--disable-virtual-terminal-processing": optionT{
+	"--disable-virtual-terminal-processing": {
 		U: "\nDo not use Windows10's native ESCAPE SEQUENCE.",
 		F: func() {
 			OptionEnableVirtualTerminalProcessing = false
 		},
 	},
-	"--enable-virtual-terminal-processing": optionT{
+	"--enable-virtual-terminal-processing": {
 		U: "\nEnable Windows10's native ESCAPE SEQUENCE.\nIt should be used with `--no-go-colorable`.",
 		F: func() {
 			OptionEnableVirtualTerminalProcessing = true
 		},
 	},
-	"--no-go-colorable": optionT{
+	"--no-go-colorable": {
 		U: "\nDo not use the ESCAPE SEQUENCE emulation with go-colorable library.",
 		F: func() {
 			OptionGoColorable = false
 		},
 	},
-	"--go-colorable": optionT{
+	"--go-colorable": {
 		U: "\nUse the ESCAPE SEQUENCE emulation with go-colorable library.",
 		F: func() {
 			OptionGoColorable = true
 		},
 	},
-	"--norc": optionT{
+	"--norc": {
 		U: "\nDo not load the startup-scripts: `~\\.nyagos` , `~\\_nyagos`\nand `(BINDIR)\\nyagos.d\\*`.",
 		F: func() {
 			OptionNorc = true
 		},
 	},
-	"--look-curdir-first": optionT{
+	"--look-curdir-first": {
 		U: "\nSearch for the executable from the current directory before %PATH%.\n(compatible with CMD.EXE)",
 		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirFirst
 		},
 	},
-	"--look-curdir-last": optionT{
+	"--look-curdir-last": {
 		U: "\nSearch for the executable from the current directory after %PATH%.\n(compatible with PowerShell)",
 		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirLast
 		},
 	},
-	"--look-curdir-never": optionT{
+	"--look-curdir-never": {
 		U: "\nNever search for the executable from the current directory\nunless %PATH% contains.\n(compatible with UNIX Shells)",
 		F: func() {
 			shell.LookCurdirOrder = dos.LookCurdirNever

@@ -43,32 +43,32 @@ type optionT struct {
 }
 
 var BoolOptions = map[string]*optionT{
-	"cleanup_buffer": &optionT{
+	"cleanup_buffer": {
 		V:       &readline.FlushBeforeReadline,
 		Usage:   "Clean up key buffer at prompt",
 		NoUsage: "Do not clean up key buffer at prompt",
 	},
-	"completion_hidden": &optionT{
+	"completion_hidden": {
 		V:       &completion.IncludeHidden,
 		Usage:   "Include hidden files on completion",
 		NoUsage: "Do not include hidden files on completion",
 	},
-	"completion_slash": &optionT{
+	"completion_slash": {
 		V:       &completion.UseSlash,
 		Usage:   "use forward slash on completion",
 		NoUsage: "Do not use slash on completion",
 	},
-	"glob": &optionT{
+	"glob": {
 		V:       &shell.WildCardExpansionAlways,
 		Usage:   "Enable to expand wildcards",
 		NoUsage: "Disable to expand wildcards",
 	},
-	"noclobber": &optionT{
+	"noclobber": {
 		V:       &shell.NoClobber,
 		Usage:   "forbide to overwrite files on redirect",
 		NoUsage: "Do not forbide to overwrite files no redirect",
 	},
-	"usesource": &optionT{
+	"usesource": {
 		V:       &shell.UseSourceRunBatch,
 		Usage:   "allow batchfile to change environment variables of nyagos",
 		NoUsage: "forbide batchfile to change environment variables of nyagos",
