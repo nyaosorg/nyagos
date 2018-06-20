@@ -25,7 +25,7 @@ func correct(path string) (string, string, error) {
 var rxRoot1 = regexp.MustCompile(`^[a-zA-Z]:\\?$`)
 var rxRoot2 = regexp.MustCompile(`^\\\\\w+\\\w+$`)
 
-// correct path's case.
+// CorrectCase corrects `path`'s case.
 func CorrectCase(path string) (string, error) {
 	if rxRoot1.MatchString(path) {
 		return strings.ToUpper(path), nil
