@@ -9,18 +9,18 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-type LuaFilterStream struct {
+type luaFilterStream struct {
 	shell.Stream
 	L Lua
 }
 
-func (this *LuaFilterStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx, line, err := this.Stream.ReadLine(ctx)
+func (lfs *luaFilterStream) ReadLine(ctx context.Context) (context.Context, string, error) {
+	ctx, line, err := lfs.Stream.ReadLine(ctx)
 	if err != nil {
 		return ctx, "", err
 	}
 
-	L := this.L
+	L := lfs.L
 
 	stackPos := L.GetTop()
 	defer L.SetTop(stackPos)

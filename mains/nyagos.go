@@ -188,7 +188,7 @@ func Main() error {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
 	if L != nil {
-		sh.ForEver(ctx, &LuaFilterStream{Stream: stream1, L: L})
+		sh.ForEver(ctx, &luaFilterStream{Stream: stream1, L: L})
 	} else {
 		sh.ForEver(ctx, stream1)
 	}
