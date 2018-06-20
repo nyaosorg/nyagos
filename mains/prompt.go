@@ -25,9 +25,8 @@ func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
 		L.Pop(1)
 		if ok {
 			return int(length), nil
-		} else {
-			return 0, errors.New("nyagos.prompt: return-value(length) is not a number")
 		}
+		return 0, errors.New("nyagos.prompt: return-value(length) is not a number")
 	}
 	var promptStr string
 	if promptLStr, ok := prompt.(lua.LString); ok {
