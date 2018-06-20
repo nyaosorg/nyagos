@@ -8,9 +8,9 @@ import (
 	"path/filepath"
 )
 
-var ErrCtrlC = errors.New("^C")
+var errCtrlC = errors.New("^C")
 
-func du_(path string, output func(string, int64) error, blocksize int64) (int64, error) {
+func _du(path string, output func(string, int64) error, blocksize int64) (int64, error) {
 	fd, err := os.Open(path)
 	if err != nil {
 		return 0, err
@@ -28,7 +28,7 @@ func du_(path string, output func(string, int64) error, blocksize int64) (int64,
 		fd.Close()
 		return 0, err
 	}
-	var diskuse int64 = 0
+	var diskuse int64
 	dirs := make([]string, 0, len(files))
 	for _, file1 := range files {
 		if file1.IsDir() {
@@ -42,7 +42,7 @@ func du_(path string, output func(string, int64) error, blocksize int64) (int64,
 	}
 	for _, dir1 := range dirs {
 		fullpath := filepath.Join(path, dir1)
-		diskuse1, err := du_(fullpath, output, blocksize)
+		diskuse1, err := _du(fullpath, output, blocksize)
 		if err != nil {
 			return diskuse, err
 		}
@@ -60,7 +60,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
-				return ErrCtrlC
+				return errCtrlC
 			default:
 			}
 		}
@@ -73,7 +73,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 				if ctx != nil {
 					select {
 					case <-ctx.Done():
-						return ErrCtrlC
+						return errCtrlC
 					default:
 					}
 				}
@@ -81,7 +81,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 			}
 			continue
 		}
-		size, err := du_(arg1, output, 4096)
+		size, err := _du(arg1, output, 4096)
 		count++
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
@@ -90,7 +90,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, arg1)
 	}
 	if count <= 0 {
-		size, err := du_(".", output, 4096)
+		size, err := _du(".", output, 4096)
 		if err != nil {
 			return 1, err
 		}
