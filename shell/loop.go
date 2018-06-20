@@ -8,29 +8,31 @@ import (
 	"os/signal"
 )
 
+// Stream is the inteface which can read command-line
 type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
 }
 
-func (this *session) push(lines []string) {
+func (ses *session) push(lines []string) {
 	if lines != nil && len(lines) >= 1 {
-		this.unreadline = append(this.unreadline, lines...)
+		ses.unreadline = append(ses.unreadline, lines...)
 	}
 }
 
-func (this *session) pop() (string, bool) {
-	if this.unreadline == nil || len(this.unreadline) <= 0 {
+func (ses *session) pop() (string, bool) {
+	if ses.unreadline == nil || len(ses.unreadline) <= 0 {
 		return "", false
 	}
-	line := this.unreadline[0]
-	if len(this.unreadline) >= 2 {
-		this.unreadline = this.unreadline[1:]
+	line := ses.unreadline[0]
+	if len(ses.unreadline) >= 2 {
+		ses.unreadline = ses.unreadline[1:]
 	} else {
-		this.unreadline = nil
+		ses.unreadline = nil
 	}
 	return line, true
 }
 
+// ReadCommand reads completed one command from `stream`.
 func (sh *Shell) ReadCommand(ctx context.Context, stream Stream) (context.Context, string, error) {
 	var line string
 	var err error
@@ -49,10 +51,12 @@ func (sh *Shell) ReadCommand(ctx context.Context, stream Stream) (context.Contex
 	return ctx, line, nil
 }
 
-type streamIdT struct{}
+type streamIDT struct{}
 
-var StreamId streamIdT
+// StreamID is the key-object to find the last stream in the context object.
+var StreamID streamIDT
 
+// Loop executes commands from `stream` until any errors are found.
 func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 	sigint := make(chan os.Signal, 1)
 	defer close(sigint)
@@ -61,16 +65,15 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 
 	for {
 		ctx, cancel := context.WithCancel(ctx0)
-		ctx = context.WithValue(ctx, StreamId, stream)
+		ctx = context.WithValue(ctx, StreamID, stream)
 
 		ctx, line, err := sh.ReadCommand(ctx, stream)
 		if err != nil {
 			cancel()
 			if err == io.EOF {
 				return 0, err
-			} else {
-				return 1, err
 			}
+			return 1, err
 		}
 		signal.Notify(sigint, os.Interrupt)
 
@@ -106,6 +109,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 	}
 }
 
+// ForEver executes commands from `stream` until EOF are found.
 func (sh *Shell) ForEver(ctx context.Context, stream Stream) {
 	for {
 		_, err := sh.Loop(ctx, stream)

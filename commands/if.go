@@ -87,7 +87,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 
 	// block `then` / `else`
 
-	stream, ok := ctx.Value(shell.StreamId).(shell.Stream)
+	stream, ok := ctx.Value(shell.StreamID).(shell.Stream)
 	if !ok {
 		return 1, errors.New("not found stream")
 	}
