@@ -15,20 +15,21 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-type ScriptEngineForOptionImpl struct{}
+type scriptEngineForOptionImpl struct{}
 
-func (this *ScriptEngineForOptionImpl) SetArg(args []string) {}
+func (*scriptEngineForOptionImpl) SetArg(args []string) {}
 
-func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
+func (*scriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
 	println("Script is not supported.")
 	return nil, nil
 }
 
-func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
+func (*scriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
 	println("Script is not supported.")
 	return nil
 }
 
+// Main is the main routine on the build without Lua
 func Main() error {
 	sh := shell.New()
 	defer sh.Close()
@@ -49,12 +50,11 @@ func Main() error {
 		fd.Close()
 		if err == io.EOF {
 			return nil
-		} else {
-			return err
 		}
+		return err
 	}
 
-	script, err := frame.OptionParse(sh, &ScriptEngineForOptionImpl{})
+	script, err := frame.OptionParse(sh, &scriptEngineForOptionImpl{})
 	if err != nil {
 		return err
 	}
@@ -80,9 +80,8 @@ func Main() error {
 		if err := script(ctx); err != nil {
 			if err != io.EOF {
 				return err
-			} else {
-				return nil
 			}
+			return nil
 		}
 	}
 
