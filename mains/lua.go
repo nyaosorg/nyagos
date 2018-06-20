@@ -155,8 +155,8 @@ func NewLua() (Lua, error) {
 	shareTable := L.NewTable()
 	L.SetGlobal("share", shareTable)
 
-	SetupUtf8Table(L)
-	SetupBit32Table(L)
+	setupUtf8Table(L)
+	setupBit32Table(L)
 
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
 
@@ -217,6 +217,7 @@ func luaArgsToInterfaces(L Lua) []interface{} {
 	return param
 }
 
+// ToLValueT is the type which can get lua.LValue
 type ToLValueT interface {
 	ToLValue(Lua) lua.LValue
 }
@@ -255,9 +256,8 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 	case bool:
 		if value {
 			return lua.LTrue
-		} else {
-			return lua.LFalse
 		}
+		return lua.LFalse
 	case func([]interface{}) []interface{}:
 		return L.NewFunction(lua2cmd(value))
 	case func(*functions.Param) []interface{}:
@@ -271,9 +271,8 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		case reflect.Bool:
 			if value.Bool() {
 				return lua.LTrue
-			} else {
-				return lua.LFalse
 			}
+			return lua.LFalse
 		case reflect.String:
 			return lua.LString(value.String())
 		case reflect.Interface:
@@ -292,16 +291,15 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 					buffer[i] = byte(reflectValue.Index(i).Uint())
 				}
 				return lua.LString(string(buffer))
-			} else {
-				array1 := L.NewTable()
-				for i, end := 0, reflectValue.Len(); i < end; i++ {
-					val := reflectValue.Index(i)
-					L.SetTable(array1,
-						interfaceToLValue(L, i+1),
-						interfaceToLValue(L, val))
-				}
-				return array1
 			}
+			array1 := L.NewTable()
+			for i, end := 0, reflectValue.Len(); i < end; i++ {
+				val := reflectValue.Index(i)
+				L.SetTable(array1,
+					interfaceToLValue(L, i+1),
+					interfaceToLValue(L, val))
+			}
+			return array1
 		case reflect.Map:
 			map1 := L.NewTable()
 			for _, key := range reflectValue.MapKeys() {
