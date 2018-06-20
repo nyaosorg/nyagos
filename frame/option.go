@@ -113,7 +113,7 @@ var optionMap = map[string]optionT{
 		},
 	},
 	"-e": {
-		U: "\"SCRIPTCODE\"\nExecute SCRIPTCODE with Lua interpretor and quit.",
+		U: "\"SCRIPTCODE\"\nExecute SCRIPTCODE with Lua interpreter and quit.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			if len(p.args) <= 0 {
 				return nil, errors.New("-e: requires parameters")
