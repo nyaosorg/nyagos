@@ -17,21 +17,18 @@ func lerror(L Lua, s string) int {
 	return 2
 }
 
-type capsule_t struct {
+type capsuleT struct {
 	Data *ole.IDispatch
 }
 
-type method_t struct {
+type methodT struct {
 	Name string
 	Data *ole.IDispatch
 }
 
-const OBJECT_T = "OLE_OBJECT"
-const METHOD_T = "OLE_METHOD"
-
-func (this capsule_t) ToLValue(L Lua) lua.LValue {
+func (c capsuleT) ToLValue(L Lua) lua.LValue {
 	ud := L.NewUserData()
-	ud.Value = &this
+	ud.Value = &c
 	meta := L.NewTable()
 	L.SetField(meta, "__gc", L.NewFunction(gc))
 	L.SetField(meta, "__index", L.NewFunction(index))
@@ -42,7 +39,7 @@ func (this capsule_t) ToLValue(L Lua) lua.LValue {
 
 func gc(L Lua) int {
 	ud := L.ToUserData(1)
-	p, ok := ud.Value.(*capsule_t)
+	p, ok := ud.Value.(*capsuleT)
 	if !ok {
 		return lerror(L, "gc: not capsult_t instance")
 	}
@@ -70,7 +67,7 @@ func lua2interface(L Lua, index int) (interface{}, error) {
 	case lua.LNumber:
 		return int(value), nil
 	case *lua.LUserData:
-		c, ok := value.Value.(*capsule_t)
+		c, ok := value.Value.(*capsuleT)
 		if !ok {
 			return nil, errors.New("lua2interface: not a OBJECT")
 		}
@@ -96,57 +93,57 @@ func call1(L Lua) int {
 	if !ok { // OBJECT_T
 		return lerror(L, "call1: not found object")
 	}
-	p, ok := ud.Value.(*capsule_t)
+	p, ok := ud.Value.(*capsuleT)
 	if !ok {
-		return lerror(L, "call1: not found capsule_t")
+		return lerror(L, "call1: not found capsuleT")
 	}
 	name, ok := L.Get(2).(lua.LString)
 	if !ok {
 		return lerror(L, "call1: not found methodname")
 	}
-	return call_common(L, p.Data, string(name))
+	return callCommon(L, p.Data, string(name))
 }
 
 // this:METHODNAME(params...)
 func call2(L Lua) int {
 	ud, ok := L.Get(1).(*lua.LUserData)
 	if !ok {
-		return lerror(L, "call2: not found userdata for method_t")
+		return lerror(L, "call2: not found userdata for methodT")
 	}
-	method, ok := ud.Value.(*method_t)
+	method, ok := ud.Value.(*methodT)
 	if !ok || method.Name == "" {
-		return lerror(L, "call2: not found method_t")
+		return lerror(L, "call2: not found methodT")
 	}
 	ud, ok = L.Get(2).(*lua.LUserData)
 	if !ok {
 		return lerror(L, "call2: not found userdata for object_t")
 	}
-	obj, ok := ud.Value.(*capsule_t)
+	obj, ok := ud.Value.(*capsuleT)
 	if !ok {
 		if method.Data == nil {
 			return lerror(L, "call2: receiver is not found")
 		}
-		return call_common(L, method.Data, method.Name)
+		return callCommon(L, method.Data, method.Name)
 		// this code enables `OLEOBJ.PROPERTY.PROPERTY:METHOD()`
 	}
 	if obj.Data == nil {
 		return lerror(L, "call2: OLEOBJECT(): the receiver is null")
 	}
-	return call_common(L, obj.Data, method.Name)
+	return callCommon(L, obj.Data, method.Name)
 }
 
-func call_common(L Lua, com1 *ole.IDispatch, name string) int {
+func callCommon(L Lua, com1 *ole.IDispatch, name string) int {
 	count := L.GetTop()
 	params, err := lua2interfaceS(L, 3, count)
 	if err != nil {
-		return lerror(L, fmt.Sprintf("call_common: %s", err.Error()))
+		return lerror(L, fmt.Sprintf("callCommon: %s", err.Error()))
 	}
 	result, err := oleutil.CallMethod(com1, name, params...)
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.CallMethod(%s): %s", name, err.Error()))
 	}
 	if result.VT == ole.VT_DISPATCH {
-		L.Push(capsule_t{result.ToIDispatch()}.ToLValue(L))
+		L.Push(capsuleT{result.ToIDispatch()}.ToLValue(L))
 	} else {
 		L.Push(interfaceToLValue(L, result.Value()))
 	}
@@ -158,9 +155,9 @@ func set(L Lua) int {
 	if !ok {
 		return lerror(L, "set: the 1st argument is not usedata")
 	}
-	p, ok := ud.Value.(*capsule_t)
+	p, ok := ud.Value.(*capsuleT)
 	if !ok {
-		return lerror(L, "set: the 1st argument is not *capsule_t")
+		return lerror(L, "set: the 1st argument is not *capsuleT")
 	}
 	name, ok := L.Get(2).(lua.LString)
 	if !ok {
@@ -181,9 +178,9 @@ func get(L Lua) int {
 	if !ok {
 		return lerror(L, "get: 1st argument is not a userdata.")
 	}
-	p, ok := ud.Value.(*capsule_t)
+	p, ok := ud.Value.(*capsuleT)
 	if !ok {
-		return lerror(L, "get: 1st argument is not *capsule_t")
+		return lerror(L, "get: 1st argument is not *capsuleT")
 	}
 
 	name, ok := L.Get(2).(lua.LString)
@@ -200,7 +197,7 @@ func get(L Lua) int {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
 	if result.VT == ole.VT_DISPATCH {
-		L.Push(capsule_t{result.ToIDispatch()}.ToLValue(L))
+		L.Push(capsuleT{result.ToIDispatch()}.ToLValue(L))
 	} else {
 		L.Push(interfaceToLValue(L, result.Value()))
 	}
@@ -226,9 +223,9 @@ func indexSub(L Lua, thisIndex int, nameIndex int) int {
 		L.Push(lua.LNil)
 		return 2
 	default:
-		m := &method_t{Name: string(name)}
+		m := &methodT{Name: string(name)}
 		if ud, ok := L.Get(thisIndex).(*lua.LUserData); ok {
-			if p, ok := ud.Value.(*capsule_t); ok {
+			if p, ok := ud.Value.(*capsuleT); ok {
 				m.Data = p.Data
 			}
 		}
@@ -256,22 +253,23 @@ func get2(L Lua) int {
 	if !ok {
 		return lerror(L, "get2: not a userdata")
 	}
-	m, ok := ud.Value.(*method_t)
+	m, ok := ud.Value.(*methodT)
 	if !ok {
-		return lerror(L, "get: not a method_t")
+		return lerror(L, "get: not a methodT")
 	}
 	result, err := oleutil.GetProperty(m.Data, m.Name)
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
 	if result.VT == ole.VT_DISPATCH {
-		L.Push(capsule_t{result.ToIDispatch()}.ToLValue(L))
+		L.Push(capsuleT{result.ToIDispatch()}.ToLValue(L))
 	} else {
 		L.Push(interfaceToLValue(L, result.Value()))
 	}
 	return indexSub(L, 3, 2)
 }
 
+// CreateObject creates Lua-Object to access COM
 func CreateObject(L Lua) int {
 	if initializedRequired {
 		ole.CoInitialize(0)
@@ -289,6 +287,6 @@ func CreateObject(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("unknown.QueryInterfce: %s", err.Error()))
 	}
-	L.Push(capsule_t{obj}.ToLValue(L))
+	L.Push(capsuleT{obj}.ToLValue(L))
 	return 1
 }
