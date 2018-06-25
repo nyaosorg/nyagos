@@ -13,11 +13,11 @@ func getErrorLevel(processState *os.ProcessState) (int, bool) {
 		return 0, true
 	} else if t, ok := processState.Sys().(syscall.WaitStatus); ok {
 		return t.ExitStatus(), true
-	} else {
-		return 255, false
 	}
+	return 255, false
 }
 
+// GetErrorLevel returns %ERRORLEVEL% and boolean for succeeded or not from exec.Cmd
 func GetErrorLevel(cmd *exec.Cmd) (int, bool) {
 	return getErrorLevel(cmd.ProcessState)
 }

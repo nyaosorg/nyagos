@@ -18,7 +18,7 @@ func chDriveSub(n rune) uintptr {
 	return rc
 }
 
-// Change drive without changing the working directory there.
+// Chdrive changes drive without changing the working directory there.
 func Chdrive(drive string) error {
 	for _, c := range drive {
 		chDriveSub(unicode.ToUpper(c))
@@ -29,15 +29,15 @@ func Chdrive(drive string) error {
 
 var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
 
-// Change the current working directory
+// Chdir changes the current working directory
 // without changeing the working directory
 // in the last drive.
-func Chdir(folder_ string) error {
-	folder := folder_
-	if m := rxPath.FindStringSubmatch(folder_); m != nil {
+func Chdir(_folder string) error {
+	folder := _folder
+	if m := rxPath.FindStringSubmatch(_folder); m != nil {
 		status := chDriveSub(rune(m[1][0]))
 		if status != 0 {
-			return fmt.Errorf("%s: no such directory", folder_)
+			return fmt.Errorf("%s: no such directory", _folder)
 		}
 		folder = m[2]
 		if len(folder) <= 0 {
@@ -48,7 +48,7 @@ func Chdir(folder_ string) error {
 	if err == nil {
 		status, _, _ := _wchdir.Call(uintptr(unsafe.Pointer(utf16)))
 		if status != 0 {
-			err = fmt.Errorf("%s: no such directory", folder_)
+			err = fmt.Errorf("%s: no such directory", _folder)
 		}
 	}
 	return err

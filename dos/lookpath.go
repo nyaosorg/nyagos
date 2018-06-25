@@ -48,14 +48,20 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 	return
 }
 
+// LookCurdirT is the type for constant meaning the current directory should be looked.
 type LookCurdirT int
 
 const (
+	// LookCurdirFirst means that the current directory should be looked at first.
 	LookCurdirFirst LookCurdirT = iota
+	// LookCurdirLast  means that the current directory should be looked at last.
 	LookCurdirLast
+	// LookCurdirNever menas that the current directory should be never looked.
 	LookCurdirNever
 )
 
+// LookPath search `name` from %PATH% and the directories listed by
+// the environment variables `envnames`.
 func LookPath(where LookCurdirT, name string, envnames ...string) string {
 	if strings.ContainsAny(name, "\\/:") {
 		return lookPath(filepath.Dir(name), name)

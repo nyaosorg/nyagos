@@ -19,7 +19,7 @@ func WNetGetConnection(localName string) (string, error) {
 		return "", localNameErr
 	}
 	var buffer [1024]uint16
-	var size uintptr = uintptr(len(buffer))
+	size := uintptr(len(buffer))
 
 	rc, _, err := wNetGetConnectionW.Call(
 		uintptr(unsafe.Pointer(localNamePtr)),
@@ -35,16 +35,16 @@ func WNetGetConnection(localName string) (string, error) {
 func NetDriveToUNC(path string) string {
 	if path[1] == ':' {
 		// print("'", path[:2], "'\n")
-		path_, err := WNetGetConnection(path[:2])
+		_path, err := WNetGetConnection(path[:2])
 		if err == nil {
-			return filepath.Join(path_, path[2:])
+			return filepath.Join(_path, path[2:])
 		}
 		// print(err.Error(), "\n")
 	}
 	return path
 }
 
-type netresource_t struct {
+type netresourceT struct {
 	Scope       uint32
 	Type        uint32
 	DisplayType uint32
@@ -79,7 +79,7 @@ func WNetEnum(handler func(localName string, remoteName string)) error {
 	}
 	defer wNetCloseEnum.Call(handle)
 	for {
-		buffer := netresource_t{
+		buffer := netresourceT{
 			Scope:       RESOURCE_GLOBALNET,
 			Type:        RESOURCETYPE_DISK,
 			DisplayType: RESOURCEDISPLAYTYPE_NETWORK,
@@ -89,7 +89,7 @@ func WNetEnum(handler func(localName string, remoteName string)) error {
 			Comment:     nil,
 			Provider:    nil,
 		}
-		var size uintptr = unsafe.Sizeof(buffer)
+		size := unsafe.Sizeof(buffer)
 		rc, _, err := wNetEnumResource.Call(
 			handle,
 			1,

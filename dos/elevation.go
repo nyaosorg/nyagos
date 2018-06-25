@@ -12,38 +12,39 @@ var procGetTokenInformation = advapi32.NewProc("GetTokenInformation")
 var procGetCurrentProcess = kernel32.NewProc("GetCurrentProcess")
 
 const ( // from winnt.h
-	TokenElevationType = 18
-	TokenElevation     = 20
+	cTokenElevationType = 18
+	cTokenElevation     = 20
 
-	TOKEN_QUERY = 8
+	cTokenQuery = 8
 )
 
-type token_elevation_t struct {
+type tokenElevationT struct {
 	TokenIsElevated uint32
 }
 
+// IsElevated returns true if the current process runs as Administrator
 func IsElevated() (bool, error) {
 	var hToken uintptr
 
 	currentProcess, _, _ := procGetCurrentProcess.Call()
 
 	rc, _, err := procOpenProcessToken.Call(uintptr(currentProcess),
-		uintptr(TOKEN_QUERY),
+		uintptr(cTokenQuery),
 		uintptr(unsafe.Pointer(&hToken)))
 	if rc == 0 {
 		return false, fmt.Errorf("OpenProcessToken: %s", err.Error())
 	}
 
-	var token_elevation token_elevation_t
-	var dwSize uintptr = unsafe.Sizeof(token_elevation)
+	var tokenElevation tokenElevationT
+	dwSize := unsafe.Sizeof(tokenElevation)
 
 	rc, _, err = procGetTokenInformation.Call(uintptr(hToken),
-		uintptr(TokenElevation),
-		uintptr(unsafe.Pointer(&token_elevation)),
+		uintptr(cTokenElevation),
+		uintptr(unsafe.Pointer(&tokenElevation)),
 		uintptr(dwSize),
 		uintptr(unsafe.Pointer(&dwSize)))
 	if rc == 0 {
 		return false, fmt.Errorf("GetTokenInformation: %s", err.Error())
 	}
-	return token_elevation.TokenIsElevated != 0, nil
+	return tokenElevation.TokenIsElevated != 0, nil
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/go-ole/go-ole/oleutil"
 )
 
+// WScriptShell create OLE Object for "WScript.Shell"
 func WScriptShell() (*ole.IUnknown, *ole.IDispatch, error) {
 	agent, err := oleutil.CreateObject("WScript.Shell")
 	if err != nil {
@@ -18,6 +19,7 @@ func WScriptShell() (*ole.IUnknown, *ole.IDispatch, error) {
 	return agent, agentDis, nil
 }
 
+// ReadShortcut reads *.lnk file.
 func ReadShortcut(path string) (string, string, error) {
 	agent, agentDis, err := WScriptShell()
 	if err != nil {
@@ -42,6 +44,7 @@ func ReadShortcut(path string) (string, string, error) {
 	return targetPath.ToString(), workingDir.ToString(), err
 }
 
+// MakeShortcut makes *.lnk file
 func MakeShortcut(from, to, dir string) error {
 	agent, agentDis, err := WScriptShell()
 	if err != nil {
