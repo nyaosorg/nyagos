@@ -17,11 +17,11 @@ func cmdPwd(ctx context.Context, cmd Param) (int, error) {
 		} else if cmd.Arg(1) == "-L" || cmd.Arg(1) == "-l" {
 			physical = false
 		} else if i, err := strconv.ParseInt(cmd.Arg(1), 10, 0); err == nil && i < 0 {
-			i += int64(len(cd_history))
+			i += int64(len(cdHistory))
 			if i < 0 {
-				return NO_HISTORY, fmt.Errorf("pwd %s: too old history", cmd.Arg(1))
+				return errnoNoHistory, fmt.Errorf("pwd %s: too old history", cmd.Arg(1))
 			}
-			fmt.Fprintln(cmd.Out(), cd_history[i])
+			fmt.Fprintln(cmd.Out(), cdHistory[i])
 			return 0, nil
 		}
 	}

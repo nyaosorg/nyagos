@@ -19,7 +19,7 @@ func correct(path string) (string, string, error) {
 			return dirname, fi1.Name(), nil
 		}
 	}
-	return dirname, fname, fmt.Errorf("%s: not found.", path)
+	return dirname, fname, fmt.Errorf("%s: not found", path)
 }
 
 var rxRoot1 = regexp.MustCompile(`^[a-zA-Z]:\\?$`)

@@ -36,7 +36,7 @@ func cmdPopd(ctx context.Context, cmd Param) (int, error) {
 	}
 	err := dos.Chdir(dirstack[len(dirstack)-1])
 	if err != nil {
-		return CHDIR_FAIL, err
+		return errnoChdirFail, err
 	}
 	dirstack = dirstack[:len(dirstack)-1]
 	return cmdDirs(ctx, cmd)
@@ -49,9 +49,9 @@ func cmdPushd(ctx context.Context, cmd Param) (int, error) {
 	}
 	if len(cmd.Args()) >= 2 {
 		dirstack = append(dirstack, wd)
-		_, err := cmd_cd_sub(cmd.Arg(1))
+		_, err := cmdCdSub(cmd.Arg(1))
 		if err != nil {
-			return CHDIR_FAIL, err
+			return errnoChdirFail, err
 		}
 	} else {
 		if len(dirstack) <= 0 {
@@ -59,7 +59,7 @@ func cmdPushd(ctx context.Context, cmd Param) (int, error) {
 		}
 		err := dos.Chdir(dirstack[len(dirstack)-1])
 		if err != nil {
-			return CHDIR_FAIL, err
+			return errnoChdirFail, err
 		}
 		dirstack[len(dirstack)-1] = wd
 	}

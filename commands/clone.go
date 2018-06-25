@@ -16,7 +16,7 @@ func _getwd() string {
 	return dos.NetDriveToUNC(wd)
 }
 
-func clone_(action string, out io.Writer) (int, error) {
+func _clone(action string, out io.Writer) (int, error) {
 	wd := _getwd()
 	var err error
 	var me string
@@ -38,9 +38,9 @@ func clone_(action string, out io.Writer) (int, error) {
 }
 
 func cmdClone(ctx context.Context, cmd Param) (int, error) {
-	return clone_("open", cmd.Err())
+	return _clone("open", cmd.Err())
 }
 
 func cmdSu(ctx context.Context, cmd Param) (int, error) {
-	return clone_("runas", cmd.Err())
+	return _clone("runas", cmd.Err())
 }

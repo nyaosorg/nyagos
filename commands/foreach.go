@@ -11,7 +11,7 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
-var start_list = map[string]bool{
+var startList = map[string]bool{
 	"foreach": true,
 	"if":      true,
 }
@@ -24,9 +24,9 @@ func cmdForeach(ctx context.Context, cmd Param) (int, error) {
 	}
 
 	bufstream := shell.BufStream{}
-	save_prompt := os.Getenv("PROMPT")
+	savePrompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "foreach>")
-	defer os.Setenv("PROMPT", save_prompt)
+	defer os.Setenv("PROMPT", savePrompt)
 	nest := 1
 	for {
 		_, line, err := cmd.ReadCommand(ctx, stream)
@@ -37,7 +37,7 @@ func cmdForeach(ctx context.Context, cmd Param) (int, error) {
 			break
 		}
 		name := strings.ToLower(texts.FirstWord(line))
-		if _, ok := start_list[name]; ok {
+		if _, ok := startList[name]; ok {
 			nest++
 		} else if name == "end" {
 			nest--

@@ -21,28 +21,28 @@ func printShortcut(s, t, d string, out io.Writer) {
 }
 
 func makeShortcut(s, t, d string, out io.Writer) error {
-	s_, err := filepath.Abs(s)
+	sAbs, err := filepath.Abs(s)
 	if err != nil {
 		return err
 	}
-	t_, err := filepath.Abs(t)
+	tAbs, err := filepath.Abs(t)
 	if err != nil {
 		return err
 	}
-	stat1, err := os.Stat(t_)
+	stat1, err := os.Stat(tAbs)
 	if err == nil && stat1 != nil {
 		if stat1.IsDir() {
-			t_ = filepath.Join(t_, filepath.Base(s_))
+			tAbs = filepath.Join(tAbs, filepath.Base(sAbs))
 		} else {
 			return fmt.Errorf("%s: file already exists", t)
 		}
 	}
-	if !strings.EqualFold(filepath.Ext(t_), ".lnk") {
-		t_ = t_ + ".lnk"
+	if !strings.EqualFold(filepath.Ext(tAbs), ".lnk") {
+		tAbs = tAbs + ".lnk"
 	}
-	err = dos.MakeShortcut(s_, t_, d)
+	err = dos.MakeShortcut(sAbs, tAbs, d)
 	if err == nil {
-		printShortcut(s_, t_, d, out)
+		printShortcut(sAbs, tAbs, d, out)
 	}
 	return err
 }

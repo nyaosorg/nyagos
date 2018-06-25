@@ -13,6 +13,7 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
+// Param is the interface for built-in command
 type Param interface {
 	Arg(int) string
 	Args() []string
@@ -30,6 +31,7 @@ type Param interface {
 var buildInCommand map[string]func(context.Context, Param) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 
+// Exec is the entry function to call built-in functions from Shell
 func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	name := strings.ToLower(cmd.Arg(0))
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
@@ -53,6 +55,7 @@ func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	return next, true, err
 }
 
+// AllNames returns all command-names for completion package.
 func AllNames() []completion.Element {
 	names := make([]completion.Element, 0, len(buildInCommand))
 	for name1 := range buildInCommand {

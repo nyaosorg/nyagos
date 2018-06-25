@@ -61,5 +61,5 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 		}
 		return 0, nil
 	}
-	return 1, errors.New("source: Could not find shell instance.")
+	return 1, errors.New("source: Could not find shell instance")
 }

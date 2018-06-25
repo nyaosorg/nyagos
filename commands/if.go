@@ -112,7 +112,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 			continue
 		}
 		name := strings.ToLower(args[0])
-		if _, ok := start_list[name]; ok {
+		if _, ok := startList[name]; ok {
 			nest++
 		} else if name == "end" || name == "endif" {
 			nest--

@@ -29,9 +29,8 @@ func getbit(c byte) uint32 {
 func bit2flg(bits uint32, flag uint32, r rune) rune {
 	if (bits & flag) != 0 {
 		return r
-	} else {
-		return ' '
 	}
+	return ' '
 }
 
 func globfile(pattern string) (result []string) {
@@ -46,22 +45,22 @@ func globfile(pattern string) (result []string) {
 }
 
 func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
-	var set_bits uint32 = 0
-	var reset_bits uint32 = 0
+	var setBits uint32
+	var resetBits uint32
 	files := make([]string, 0, len(cmd.Args())-1)
 
 	for _, arg1 := range cmd.Args()[1:] {
 		if len(arg1) == 2 && arg1[0] == '+' {
 			bits := getbit(arg1[1])
 			if bits != 0 {
-				set_bits |= bits
+				setBits |= bits
 				continue
 			}
 		}
 		if len(arg1) == 2 && arg1[0] == '-' {
 			bits := getbit(arg1[1])
 			if bits != 0 {
-				reset_bits |= bits
+				resetBits |= bits
 				continue
 			}
 		}
@@ -83,7 +82,7 @@ func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 		if err != nil {
 			return 1, err
 		}
-		if set_bits == 0 && reset_bits == 0 {
+		if setBits == 0 && resetBits == 0 {
 			fullpath, err := filepath.Abs(arg1)
 			if err != nil {
 				fullpath = arg1
@@ -95,7 +94,7 @@ func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 				bit2flg(bits, dos.FILE_ATTRIBUTE_READONLY, 'R'),
 				fullpath)
 		} else {
-			bits = (bits | set_bits) &^ reset_bits
+			bits = (bits | setBits) &^ resetBits
 			err = dos.SetFileAttributes(arg1, bits)
 			if err != nil {
 				return 2, err
