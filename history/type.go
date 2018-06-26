@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// Line has one history data
 type Line struct {
 	Text  string
 	Dir   string
@@ -13,33 +14,40 @@ type Line struct {
 	Pid   int
 }
 
+// Container has all history data.
 type Container struct {
 	rows []Line
 }
 
 type packageIdT struct{}
 
+// PackageId is the unique mark to use as Context key
 var PackageId packageIdT
 
-func (this *Container) Len() int {
-	return len(this.rows)
+// Len returns size of history
+func (c *Container) Len() int {
+	return len(c.rows)
 }
 
-func (this *Container) At(n int) string {
+// At returns n-th history-text
+func (c *Container) At(n int) string {
 	for n < 0 {
-		n += len(this.rows)
+		n += len(c.rows)
 	}
-	return this.rows[n%len(this.rows)].Text
+	return c.rows[n%len(c.rows)].Text
 }
 
-func (this *Container) Push(line string) {
-	this.rows = append(this.rows, Line{Text: line})
+// Push appends a new history line to self with string
+func (c *Container) Push(line string) {
+	c.rows = append(c.rows, Line{Text: line})
 }
 
-func (this *Container) PushLine(row Line) {
-	this.rows = append(this.rows, row)
+// PushLine appends a new history line to self with Line object
+func (c *Container) PushLine(row Line) {
+	c.rows = append(c.rows, row)
 }
 
+// String returns self as printable text
 func (row *Line) String() string {
 	return fmt.Sprintf("%s\t%s\t%s\t%d",
 		row.Text,
@@ -48,6 +56,7 @@ func (row *Line) String() string {
 		row.Pid)
 }
 
+// NewHistoryLine returns new Line object with history-text
 func NewHistoryLine(text string) Line {
 	wd, err := os.Getwd()
 	if err != nil {
