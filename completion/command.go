@@ -72,7 +72,7 @@ func listUpCommands(ctx context.Context, str string) ([]Element, error) {
 		return nil, listErr
 	}
 	strUpr := strings.ToUpper(str)
-	for _, f := range command_listupper {
+	for _, f := range commandListUpper {
 		for _, element := range f() {
 			name1Upr := strings.ToUpper(element.String())
 			if strings.HasPrefix(name1Upr, strUpr) {
