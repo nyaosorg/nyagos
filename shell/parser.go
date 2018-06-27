@@ -17,7 +17,7 @@ import (
 type StatementT struct {
 	Args     []string
 	RawArgs  []string
-	Redirect []*Redirecter
+	Redirect []*_Redirecter
 	Term     string
 }
 
@@ -186,7 +186,7 @@ func parse1(text string) ([]*StatementT, error) {
 	lastchar := ' '
 	var buffer strings.Builder
 	isNextRedirect := false
-	redirect := make([]*Redirecter, 0, 3)
+	redirect := make([]*_Redirecter, 0, 3)
 
 	term_line := func(term string) {
 		statement1 := new(StatementT)
@@ -208,7 +208,7 @@ func parse1(text string) ([]*StatementT, error) {
 			statement1.Args = args
 		}
 		statement1.Redirect = redirect
-		redirect = make([]*Redirecter, 0, 3)
+		redirect = make([]*_Redirecter, 0, 3)
 		rawArgs = make([]string, 0)
 		args = make([]string, 0)
 		statement1.Term = term
@@ -307,12 +307,12 @@ func parse1(text string) ([]*StatementT, error) {
 				// 1>
 				chomp(&buffer)
 				term_word()
-				redirect = append(redirect, NewRedirecter(1))
+				redirect = append(redirect, newRedirecter(1))
 			case '2':
 				// 2>
 				chomp(&buffer)
 				term_word()
-				redirect = append(redirect, NewRedirecter(2))
+				redirect = append(redirect, newRedirecter(2))
 			case '>':
 				// >>
 				term_word()
@@ -322,12 +322,12 @@ func parse1(text string) ([]*StatementT, error) {
 			default:
 				// >
 				term_word()
-				redirect = append(redirect, NewRedirecter(1))
+				redirect = append(redirect, newRedirecter(1))
 			}
 			isNextRedirect = true
 		} else if ch == '<' {
 			term_word()
-			redirect = append(redirect, NewRedirecter(0))
+			redirect = append(redirect, newRedirecter(0))
 			isNextRedirect = true
 		} else {
 			buffer.WriteRune(ch)
