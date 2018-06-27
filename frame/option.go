@@ -17,8 +17,15 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
+// OptionNorc is true, then rcfiles are not executed.
 var OptionNorc = false
+
+// OptionGoColorable is true,
+// then escape sequences are interpreted by go-colorable library.
 var OptionGoColorable = true
+
+// OptionEnableVirtualTerminalProcessing is true,
+// then Windows10's ENABLE_VIRTUAL_TERMINAL_PROCESSING is enabled.
 var OptionEnableVirtualTerminalProcessing = false
 
 type ScriptEngineForOption interface {
@@ -97,19 +104,17 @@ var optionMap = map[string]optionT{
 					_, err := p.e.RunFile(ctx, p.args[0])
 					if err != nil {
 						return err
-					} else {
-						return io.EOF
-					}
-				}, nil
-			} else {
-				return func(ctx context.Context) error {
-					// command script
-					if err := p.sh.Source(ctx, p.args[0]); err != nil {
-						return err
 					}
 					return io.EOF
 				}, nil
 			}
+			return func(ctx context.Context) error {
+				// command script
+				if err := p.sh.Source(ctx, p.args[0]); err != nil {
+					return err
+				}
+				return io.EOF
+			}, nil
 		},
 	},
 	"-e": {
@@ -123,9 +128,8 @@ var optionMap = map[string]optionT{
 				err := p.e.RunString(ctx, p.args[0])
 				if err != nil {
 					return err
-				} else {
-					return io.EOF
 				}
+				return io.EOF
 			}, nil
 		},
 	},
@@ -143,9 +147,8 @@ var optionMap = map[string]optionT{
 				_, err := p.e.RunFile(ctx, p.args[0])
 				if err != nil {
 					return err
-				} else {
-					return io.EOF
 				}
+				return io.EOF
 			}, nil
 		},
 	},
@@ -230,8 +233,8 @@ func help(p *optionArg) (func(context.Context) error, error) {
 		fmt.Println("\nThese script are called on startup")
 		if me, err := os.Executable(); err == nil {
 			binDir := filepath.Dir(me)
-			nyagos_d := filepath.Join(binDir, "nyagos.d")
-			fmt.Printf("  %s\\*.lua\n", nyagos_d)
+			nyagosD := filepath.Join(binDir, "nyagos.d")
+			fmt.Printf("  %s\\*.lua\n", nyagosD)
 			file1 := filepath.Join(binDir, ".nyagos")
 			fmt.Printf("  %s (Lua)\n", file1)
 			file1 = filepath.Join(binDir, "_nyagos")
@@ -254,9 +257,8 @@ func help(p *optionArg) (func(context.Context) error, error) {
 func isDefault(value bool) string {
 	if value {
 		return " [default]"
-	} else {
-		return ""
 	}
+	return ""
 }
 
 func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
@@ -265,25 +267,25 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
 
 	for key, val := range commands.BoolOptions {
-		key_ := strings.Replace(key, "_", "-", -1)
-		val_ := val
-		optionMap["--"+key_] = optionT{
+		_key := strings.Replace(key, "_", "-", -1)
+		_val := val
+		optionMap["--"+_key] = optionT{
 			F: func() {
-				*val_.V = true
+				*_val.V = true
 			},
 			U: fmt.Sprintf("(lua: nyagos.option.%s=true)%s\n%s",
 				key,
 				isDefault(*val.V),
-				val_.Usage),
+				_val.Usage),
 		}
-		optionMap["--no-"+key_] = optionT{
+		optionMap["--no-"+_key] = optionT{
 			F: func() {
-				*val_.V = false
+				*_val.V = false
 			},
 			U: fmt.Sprintf("(lua: nyagos.option.%s=false)%s\n%s",
 				key,
 				isDefault(!*val.V),
-				val_.NoUsage),
+				_val.NoUsage),
 		}
 	}
 
