@@ -138,7 +138,7 @@ func callCommon(L Lua, com1 *ole.IDispatch, name string) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("callCommon: %s", err.Error()))
 	}
-	result, err := oleutil.CallMethod(com1, name, params...)
+	result, err := com1.CallMethod(name, params...)
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.CallMethod(%s): %s", name, err.Error()))
 	}
@@ -167,7 +167,7 @@ func set(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("set: %s", err.Error()))
 	}
-	oleutil.PutProperty(p.Data, string(name), key...)
+	p.Data.PutProperty(string(name), key...)
 	L.Push(lua.LTrue)
 	L.Push(lua.LNil)
 	return 2
@@ -192,7 +192,7 @@ func get(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("get: %s", err.Error()))
 	}
-	result, err := oleutil.GetProperty(p.Data, string(name), key...)
+	result, err := p.Data.GetProperty(string(name), key...)
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
@@ -257,7 +257,7 @@ func get2(L Lua) int {
 	if !ok {
 		return lerror(L, "get: not a methodT")
 	}
-	result, err := oleutil.GetProperty(m.Data, m.Name)
+	result, err := m.Data.GetProperty(m.Name)
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
