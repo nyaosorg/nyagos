@@ -65,6 +65,18 @@ function ForEach-GoDir{
     Get-Unique
 }
 
+function Get-Imports {
+    Get-ChildItem . -Recurse |
+    Where-Object{ $_.Extension -eq '.go' } |
+    ForEach-Object{ Get-Content $_.FullName  } |
+    ForEach-Object{ ($_ -replace '\s*//.*$','').Split()[-1] <# remove comment #>} |
+    ?{ ($_ -match 'github.com/' -and $_ -notmatch '/nyagos/') `
+        -or $_ -match 'golang.org/' } |
+    %{ $_ -replace '"','' } |
+    Sort-Object |
+    Get-Unique
+}
+
 function Go-Generate{
     Get-ChildItem "." -Recurse |
     Where-Object{ $_.Name -eq "make.xml" } |
@@ -491,7 +503,7 @@ switch( $args[0] ){
     }
     "get" {
         Go-Generate
-        & $GO get -u -v ./...
+        Get-Imports | ForEach-Object{ Write-Output $_ ; & $GO get -u $_ }
     }
     "fmt" {
         Go-Fmt | Out-Null
