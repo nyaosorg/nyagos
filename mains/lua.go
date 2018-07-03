@@ -9,6 +9,7 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/BixData/gluabit32"
 	"github.com/yuin/gopher-lua"
 
 	"github.com/zetamatta/nyagos/completion"
@@ -159,7 +160,15 @@ func NewLua() (Lua, error) {
 	L.SetGlobal("share", shareTable)
 
 	setupUtf8Table(L)
-	setupBit32Table(L)
+	gluabit32.Preload(L)
+	L.Push(L.GetGlobal("require"))
+	L.Push(lua.LString("bit32"))
+	if err := L.PCall(1, 1, nil); err == nil {
+		L.SetGlobal("bit32", L.Get(-1))
+		L.Pop(1)
+	} else {
+		fmt.Fprintf(os.Stderr, "bit32: %s\n", err.Error())
+	}
 
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
 
