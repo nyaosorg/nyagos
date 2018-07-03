@@ -2,6 +2,7 @@ package mains
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"os"
 
@@ -39,7 +40,24 @@ func ioLinesIter(L *lua.LState) int {
 func ioLines(L *lua.LState) int {
 	ud := L.NewUserData()
 	_, sh := getRegInt(L)
-	if sh != nil {
+	if L.GetTop() >= 1 {
+		if filename, ok := L.Get(1).(lua.LString); ok {
+			if fd, err := os.Open(string(filename)); err == nil {
+				ud.Value = &fileHandleT{
+					scanner: bufio.NewScanner(fd),
+					closer:  fd,
+				}
+			} else {
+				L.Push(lua.LNil)
+				L.Push(lua.LString(fmt.Sprintf("%s: can not open", filename)))
+				return 2
+			}
+		} else {
+			L.Push(lua.LNil)
+			L.Push(lua.LString(fmt.Sprintf("io.lines: not a string")))
+			return 2
+		}
+	} else if sh != nil {
 		ud.Value = &fileHandleT{
 			scanner: bufio.NewScanner(sh.In()),
 			closer:  nil,
