@@ -122,6 +122,7 @@ func NewLua() (Lua, error) {
 	ioTable := L.GetGlobal("io")
 	ioLinesPtr := L.NewFunction(ioLines)
 	L.SetField(ioTable, "lines", ioLinesPtr)
+	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
 	L.SetField(nyagosTable, "lines", ioLinesPtr)
 	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))

@@ -72,3 +72,12 @@ func ioLines(L *lua.LState) int {
 	L.Push(lua.LNil)
 	return 3
 }
+
+func ioWrite(L *lua.LState) int {
+	_, sh := getRegInt(L)
+	out := sh.Out()
+	for i, end := 1, L.GetTop(); i <= end; i++ {
+		fmt.Fprint(out, L.Get(i).String())
+	}
+	return 0
+}
