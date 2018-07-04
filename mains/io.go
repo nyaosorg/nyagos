@@ -28,13 +28,12 @@ func ioLinesIter(L *lua.LState) int {
 	if fh.scanner.Scan() {
 		L.Push(lua.LString(fh.scanner.Text()))
 		return 1
-	} else {
-		L.Push(lua.LNil)
-		if fh.closer != nil {
-			fh.closer.Close()
-		}
-		return 1
 	}
+	L.Push(lua.LNil)
+	if fh.closer != nil {
+		fh.closer.Close()
+	}
+	return 1
 }
 
 func ioLines(L *lua.LState) int {
@@ -54,7 +53,7 @@ func ioLines(L *lua.LState) int {
 			}
 		} else {
 			L.Push(lua.LNil)
-			L.Push(lua.LString(fmt.Sprintf("io.lines: not a string")))
+			L.Push(lua.LString("io.lines: not a string"))
 			return 2
 		}
 	} else if sh != nil {
