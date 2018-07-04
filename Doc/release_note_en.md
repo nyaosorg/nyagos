@@ -1,7 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * #319 Support lua `bit32.*` all by github.com/BixData/gluabit32
-* #323 Fix io.lines() could not read from stdin
+* #323 Fix io.lines(), nyagos.lines() could not read from redirected stdin
 
 NYAGOS 4.3.1\_3
 ===============
