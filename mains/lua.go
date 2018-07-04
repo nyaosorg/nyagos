@@ -120,10 +120,11 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "option", optionTable)
 
 	ioTable := L.GetGlobal("io")
+	ioLinesPtr := L.NewFunction(ioLines)
+	L.SetField(ioTable, "lines", ioLinesPtr)
+	L.SetField(nyagosTable, "lines", ioLinesPtr)
 	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
-	L.SetField(nyagosTable, "lines", L.GetField(ioTable, "lines"))
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))
-	L.SetField(ioTable, "lines", L.NewFunction(ioLines))
 
 	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
 	L.SetField(nyagosTable, "key", keyTable)
