@@ -15,6 +15,47 @@ type ioLuaReader struct {
 	closer io.Closer
 }
 
+func (io *ioLuaReader) Close() error {
+	if io.closer != nil {
+		err := io.closer.Close()
+		io.closer = nil
+		return err
+	}
+	return nil
+}
+
+type ioLuaWriter struct {
+	writer *bufio.Writer
+	closer io.Closer
+}
+
+func (io *ioLuaWriter) Close() error {
+	if io.closer != nil {
+		err := io.closer.Close()
+		io.closer = nil
+		return err
+	}
+	return nil
+}
+
+func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer) *lua.LUserData {
+	ud := L.NewUserData()
+	ud.Value = &ioLuaReader{
+		reader: bufio.NewReader(r),
+		closer: c,
+	}
+	return ud
+}
+
+func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) *lua.LUserData {
+	ud := L.NewUserData()
+	ud.Value = &ioLuaWriter{
+		writer: bufio.NewWriter(w),
+		closer: c,
+	}
+	return ud
+}
+
 func ioLinesIter(L *lua.LState) int {
 	ud, ok := L.Get(1).(*lua.LUserData)
 	if !ok {
@@ -41,13 +82,9 @@ func ioLinesIter(L *lua.LState) int {
 func ioLines(L *lua.LState) int {
 	var ud *lua.LUserData
 	if L.GetTop() >= 1 {
-		ud = L.NewUserData()
 		if filename, ok := L.Get(1).(lua.LString); ok {
 			if fd, err := os.Open(string(filename)); err == nil {
-				ud.Value = &ioLuaReader{
-					reader: bufio.NewReader(fd),
-					closer: fd,
-				}
+				ud = newIoLuaReader(L, fd, fd)
 			} else {
 				L.Push(lua.LNil)
 				L.Push(lua.LString(fmt.Sprintf("%s: can not open", filename)))
