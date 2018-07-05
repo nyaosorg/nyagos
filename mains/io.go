@@ -5,13 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/yuin/gopher-lua"
 )
 
 type ioLuaReader struct {
-	scanner *bufio.Scanner
-	closer  io.Closer
+	reader *bufio.Reader
+	closer io.Closer
 }
 
 func ioLinesIter(L *lua.LState) int {
@@ -25,14 +26,14 @@ func ioLinesIter(L *lua.LState) int {
 		L.Push(lua.LNil)
 		return 1
 	}
-	if r.scanner.Scan() {
-		L.Push(lua.LString(r.scanner.Text()))
-		return 1
-	}
-	L.Push(lua.LNil)
-	if r.closer != nil {
-		r.closer.Close()
-		r.closer = nil
+	if text, err := r.reader.ReadString('\n'); err == nil {
+		L.Push(lua.LString(strings.TrimSuffix(text, "\n")))
+	} else {
+		L.Push(lua.LNil)
+		if r.closer != nil {
+			r.closer.Close()
+			r.closer = nil
+		}
 	}
 	return 1
 }
@@ -44,8 +45,8 @@ func ioLines(L *lua.LState) int {
 		if filename, ok := L.Get(1).(lua.LString); ok {
 			if fd, err := os.Open(string(filename)); err == nil {
 				ud.Value = &ioLuaReader{
-					scanner: bufio.NewScanner(fd),
-					closer:  fd,
+					reader: bufio.NewReader(fd),
+					closer: fd,
 				}
 			} else {
 				L.Push(lua.LNil)
@@ -59,13 +60,13 @@ func ioLines(L *lua.LState) int {
 		}
 	} else if sh != nil {
 		ud.Value = &ioLuaReader{
-			scanner: bufio.NewScanner(sh.In()),
-			closer:  nil,
+			reader: bufio.NewReader(sh.In()),
+			closer: nil,
 		}
 	} else {
 		ud.Value = &ioLuaReader{
-			scanner: bufio.NewScanner(os.Stdin),
-			closer:  nil,
+			reader: bufio.NewReader(os.Stdin),
+			closer: nil,
 		}
 	}
 	L.Push(L.NewFunction(ioLinesIter))
