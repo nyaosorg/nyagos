@@ -39,9 +39,9 @@ func ioLinesIter(L *lua.LState) int {
 }
 
 func ioLines(L *lua.LState) int {
-	ud := L.NewUserData()
-	_, sh := getRegInt(L)
+	var ud *lua.LUserData
 	if L.GetTop() >= 1 {
+		ud = L.NewUserData()
 		if filename, ok := L.Get(1).(lua.LString); ok {
 			if fd, err := os.Open(string(filename)); err == nil {
 				ud.Value = &ioLuaReader{
@@ -58,16 +58,9 @@ func ioLines(L *lua.LState) int {
 			L.Push(lua.LString("io.lines: not a string"))
 			return 2
 		}
-	} else if sh != nil {
-		ud.Value = &ioLuaReader{
-			reader: bufio.NewReader(sh.In()),
-			closer: nil,
-		}
 	} else {
-		ud.Value = &ioLuaReader{
-			reader: bufio.NewReader(os.Stdin),
-			closer: nil,
-		}
+		nyagosTbl := L.GetGlobal("nyagos")
+		ud = L.GetField(nyagosTbl, "stdin").(*lua.LUserData)
 	}
 	L.Push(L.NewFunction(ioLinesIter))
 	L.Push(ud)

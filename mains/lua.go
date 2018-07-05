@@ -1,6 +1,7 @@
 package mains
 
 import (
+	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -419,6 +420,15 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (e
 	defer setContext(L, getContext(L))
 	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(L, ctx)
+
+	in := sh.In()
+	nyagosTbl := L.GetGlobal("nyagos")
+	ud := L.NewUserData()
+	ud.Value = &ioLuaReader{
+		reader: bufio.NewReader(in),
+		closer: nil,
+	}
+	L.SetField(nyagosTbl, "stdin", ud)
 	return L.PCall(nargs, nresult, nil)
 }
 
