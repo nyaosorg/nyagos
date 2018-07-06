@@ -123,8 +123,10 @@ func NewLua() (Lua, error) {
 	ioLinesPtr := L.NewFunction(ioLines)
 	L.SetField(ioTable, "lines", ioLinesPtr)
 	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
+	ioOpenPtr := L.NewFunction(ioOpen)
+	L.SetField(ioTable, "open", ioOpenPtr)
 	L.SetField(nyagosTable, "lines", ioLinesPtr)
-	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
+	L.SetField(nyagosTable, "open", ioOpenPtr)
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))
 
 	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
@@ -415,6 +417,15 @@ func getContext(L Lua) context.Context {
 	return ctx
 }
 
+func dispose(L *lua.LState, val lua.LValue) {
+	gc := L.GetMetaField(val, "__gc")
+	if f, ok := gc.(*lua.LFunction); ok {
+		L.Push(f)
+		L.Push(val)
+		L.PCall(1, 0, nil)
+	}
+}
+
 func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	defer setContext(L, getContext(L))
 	ctx = context.WithValue(ctx, shellKey, sh)
@@ -422,14 +433,16 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) er
 
 	nyagosTbl := L.GetGlobal("nyagos")
 	stdin := newIoLuaReader(L, sh.In(), nil)
-	stdout, bstdout := newIoLuaWriter(L, sh.Out(), nil)
-	stderr, bstderr := newIoLuaWriter(L, sh.Err(), nil)
+	stdout := newIoLuaWriter(L, sh.Out(), nil)
+	stderr := newIoLuaWriter(L, sh.Err(), nil)
 	L.SetField(nyagosTbl, "stdin", stdin)
 	L.SetField(nyagosTbl, "stdout", stdout)
 	L.SetField(nyagosTbl, "stderr", stderr)
 	err := L.PCall(nargs, nresult, nil)
-	bstdout.Flush()
-	bstderr.Flush()
+
+	dispose(L, stdin)
+	dispose(L, stdout)
+	dispose(L, stderr)
 	return err
 }
 
