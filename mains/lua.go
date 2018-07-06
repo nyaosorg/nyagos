@@ -95,7 +95,21 @@ var isHookSetup = false
 
 // NewLua sets up the lua instance with NYAOGS' environment.
 func NewLua() (Lua, error) {
-	L := lua.NewState(lua.Options{IncludeGoStackTrace: true})
+	L := lua.NewState(
+		lua.Options{
+			IncludeGoStackTrace: true,
+			SkipOpenLibs:        true,
+		})
+	lua.OpenBase(L)
+	lua.OpenChannel(L)
+	lua.OpenCoroutine(L)
+	lua.OpenDebug(L)
+	// skip lua.OpenIo(L)
+	lua.OpenMath(L)
+	lua.OpenOs(L)
+	lua.OpenPackage(L)
+	lua.OpenString(L)
+	lua.OpenTable(L)
 
 	nyagosTable := L.NewTable()
 
@@ -120,6 +134,10 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "option", optionTable)
 
 	ioTable := L.GetGlobal("io")
+	if _, ok := ioTable.(*lua.LTable); !ok {
+		ioTable = L.NewTable()
+		L.SetGlobal("io", ioTable)
+	}
 	ioLinesPtr := L.NewFunction(ioLines)
 	L.SetField(ioTable, "lines", ioLinesPtr)
 	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
