@@ -143,6 +143,7 @@ func NewLua() (Lua, error) {
 	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
 	ioOpenPtr := L.NewFunction(ioOpen)
 	L.SetField(ioTable, "open", ioOpenPtr)
+	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
 	L.SetField(nyagosTable, "lines", ioLinesPtr)
 	L.SetField(nyagosTable, "open", ioOpenPtr)
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))

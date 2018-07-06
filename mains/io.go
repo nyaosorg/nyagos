@@ -5,9 +5,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/yuin/gopher-lua"
+	"github.com/zetamatta/nyagos/texts"
 )
 
 type ioLuaReader struct {
@@ -48,6 +50,12 @@ func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer) *lua.LUserData {
 		reader: bufio.NewReader(r),
 		closer: c,
 	}
+	index := L.NewTable()
+	L.SetField(index, "lines", L.NewFunction(fileLines))
+	L.SetField(index, "close", L.NewFunction(fileClose))
+	meta := L.NewTable()
+	L.SetField(meta, "__index", index)
+	L.SetMetatable(ud, meta)
 	return ud
 }
 
@@ -99,6 +107,10 @@ func ioLinesIter(L *lua.LState) int {
 	if text, err := r.reader.ReadString('\n'); err == nil {
 		L.Push(lua.LString(strings.TrimSuffix(text, "\n")))
 	} else {
+		if err == io.EOF && text != "" {
+			L.Push(lua.LString(text))
+			return 1
+		}
 		L.Push(lua.LNil)
 		if r.closer != nil {
 			r.closer.Close()
@@ -212,4 +224,67 @@ func fileWrite(L *lua.LState) int {
 	L.Push(lua.LNil)
 	L.Push(lua.LString("(file)write: not a file-handle object"))
 	return 2
+}
+
+func ioPOpen(L *lua.LState) int {
+	command, ok := L.Get(1).(lua.LString)
+	if !ok {
+		L.Push(lua.LNil)
+		L.Push(lua.LString("io.popen: command is not a string"))
+		return 2
+	}
+	mode, ok := L.Get(2).(lua.LString)
+	if !ok {
+		L.Push(lua.LNil)
+		L.Push(lua.LString("io.popen: mode is not a string"))
+		return 2
+	}
+	args := texts.SplitLikeShellString(string(command))
+	for i, s := range args {
+		args[i] = strings.Replace(s, "\"", "", -1)
+	}
+	xcmd := exec.Command(args[0], args[1:]...)
+
+	if m := string(mode); m == "r" {
+		in, err := xcmd.StdoutPipe()
+		if err != nil {
+			L.Push(lua.LNil)
+			L.Push(lua.LString(err.Error()))
+			return 2
+		}
+		if err := xcmd.Start(); err != nil {
+			in.Close()
+			L.Push(lua.LNil)
+			L.Push(lua.LString(err.Error()))
+			return 2
+		}
+		L.Push(newIoLuaReader(L, in, in))
+		return 1
+	} else if m == "w" {
+		out, err := xcmd.StdinPipe()
+		if err != nil {
+			L.Push(lua.LNil)
+			L.Push(lua.LString(err.Error()))
+			return 2
+		}
+		if err := xcmd.Start(); err != nil {
+			out.Close()
+			L.Push(lua.LNil)
+			L.Push(lua.LString(err.Error()))
+			return 2
+		}
+		L.Push(newIoLuaWriter(L, out, out))
+		return 1
+	} else {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(fmt.Sprintf("io.popen(...,\"%s\") is not supported yet", m)))
+		return 2
+	}
+}
+
+func fileLines(L *lua.LState) int {
+	L.Push(L.NewFunction(ioLinesIter))
+	L.Push(L.Get(1))
+	L.Push(lua.LNil)
+	return 3
 }
