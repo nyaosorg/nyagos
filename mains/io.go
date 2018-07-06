@@ -47,13 +47,14 @@ func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer) *lua.LUserData {
 	return ud
 }
 
-func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) *lua.LUserData {
+func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) (*lua.LUserData, *bufio.Writer) {
 	ud := L.NewUserData()
+	bw := bufio.NewWriter(w)
 	ud.Value = &ioLuaWriter{
-		writer: bufio.NewWriter(w),
+		writer: bw,
 		closer: c,
 	}
-	return ud
+	return ud, bw
 }
 
 func ioLinesIter(L *lua.LState) int {
@@ -106,10 +107,15 @@ func ioLines(L *lua.LState) int {
 }
 
 func ioWrite(L *lua.LState) int {
-	_, sh := getRegInt(L)
-	out := sh.Out()
-	for i, end := 1, L.GetTop(); i <= end; i++ {
-		fmt.Fprint(out, L.Get(i).String())
+	nyagosTbl := L.GetGlobal("nyagos")
+	if stdout, ok := L.GetField(nyagosTbl, "stdout").(*lua.LUserData); ok {
+		if w, ok := stdout.Value.(*ioLuaWriter); ok {
+			for i := 1; i <= L.GetTop(); i++ {
+				fmt.Fprint(w.writer, L.Get(i).String())
+			}
+			return 0
+		}
 	}
+	fmt.Fprintln(os.Stderr, "nyagos.stdout is not filehandle")
 	return 0
 }

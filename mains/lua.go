@@ -415,16 +415,22 @@ func getContext(L Lua) context.Context {
 	return ctx
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) (err error) {
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	defer setContext(L, getContext(L))
 	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(L, ctx)
 
 	nyagosTbl := L.GetGlobal("nyagos")
-	L.SetField(nyagosTbl, "stdin", newIoLuaReader(L, sh.In(), nil))
-	L.SetField(nyagosTbl, "stdout", newIoLuaWriter(L, sh.Out(), nil))
-	L.SetField(nyagosTbl, "stderr", newIoLuaWriter(L, sh.Err(), nil))
-	return L.PCall(nargs, nresult, nil)
+	stdin := newIoLuaReader(L, sh.In(), nil)
+	stdout, bstdout := newIoLuaWriter(L, sh.Out(), nil)
+	stderr, bstderr := newIoLuaWriter(L, sh.Err(), nil)
+	L.SetField(nyagosTbl, "stdin", stdin)
+	L.SetField(nyagosTbl, "stdout", stdout)
+	L.SetField(nyagosTbl, "stderr", stderr)
+	err := L.PCall(nargs, nresult, nil)
+	bstdout.Flush()
+	bstderr.Flush()
+	return err
 }
 
 func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
