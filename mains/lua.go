@@ -450,18 +450,22 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) er
 	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(L, ctx)
 
-	nyagosTbl := L.GetGlobal("nyagos")
+	ioTbl := L.GetGlobal("io")
 	stdin := newIoLuaReader(L, sh.In(), nil)
 	stdout := newIoLuaWriter(L, sh.Out(), nil)
 	stderr := newIoLuaWriter(L, sh.Err(), nil)
-	L.SetField(nyagosTbl, "stdin", stdin)
-	L.SetField(nyagosTbl, "stdout", stdout)
-	L.SetField(nyagosTbl, "stderr", stderr)
+	L.SetField(ioTbl, "stdin", stdin)
+	L.SetField(ioTbl, "stdout", stdout)
+	L.SetField(ioTbl, "stderr", stderr)
+
 	err := L.PCall(nargs, nresult, nil)
 
 	dispose(L, stdin)
 	dispose(L, stdout)
 	dispose(L, stderr)
+	L.SetField(ioTbl, "stdin", lua.LNil)
+	L.SetField(ioTbl, "stdout", lua.LNil)
+	L.SetField(ioTbl, "stderr", lua.LNil)
 	return err
 }
 

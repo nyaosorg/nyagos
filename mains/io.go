@@ -12,6 +12,8 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
+const ioTblName = "io"
+
 type ioLuaReader struct {
 	reader *bufio.Reader
 	closer io.Closer
@@ -137,8 +139,8 @@ func ioLines(L *lua.LState) int {
 			return 2
 		}
 	} else {
-		nyagosTbl := L.GetGlobal("nyagos")
-		ud = L.GetField(nyagosTbl, "stdin").(*lua.LUserData)
+		ioTbl := L.GetGlobal(ioTblName)
+		ud = L.GetField(ioTbl, "stdin").(*lua.LUserData)
 	}
 	L.Push(L.NewFunction(ioLinesIter))
 	L.Push(ud)
@@ -147,8 +149,8 @@ func ioLines(L *lua.LState) int {
 }
 
 func ioWrite(L *lua.LState) int {
-	nyagosTbl := L.GetGlobal("nyagos")
-	if stdout, ok := L.GetField(nyagosTbl, "stdout").(*lua.LUserData); ok {
+	ioTbl := L.GetGlobal(ioTblName)
+	if stdout, ok := L.GetField(ioTbl, "stdout").(*lua.LUserData); ok {
 		if w, ok := stdout.Value.(*ioLuaWriter); ok {
 			for i := 1; i <= L.GetTop(); i++ {
 				fmt.Fprint(w.writer, L.Get(i).String())
@@ -156,7 +158,7 @@ func ioWrite(L *lua.LState) int {
 			return 0
 		}
 	}
-	fmt.Fprintln(os.Stderr, "io.write: nyagos.stdout is not filehandle")
+	fmt.Fprintf(os.Stderr, "io.write: %s.stdout is not filehandle\n", ioTblName)
 	return 0
 }
 
