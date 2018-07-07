@@ -2,6 +2,7 @@ local tmpfn = nyagos.env.temp .. "\\tmp.txt"
 
 local fd = assert(io.open(tmpfn,"w"))
 assert(fd:write('HOGEHOGE\n'))
+assert(fd:flush())
 fd:close()
 
 local ok=true
@@ -11,9 +12,9 @@ for line in io.lines(tmpfn) do
     end
 end
 if ok then
-    print("OK: write-open,write-close,io-lines")
+    print("OK: write-open,write-flush,write-close,io-lines")
 else
-    print("NG: write-open,write-close,io-lines")
+    print("NG: write-open,write-flush,write-close,io-lines")
 end
 
 local fd,err = io.open(":::","w")
