@@ -68,16 +68,12 @@ func fileClose(L *lua.LState) int {
 		if this, ok := ud.Value.(io.Closer); ok {
 			err := this.Close()
 			if err != nil {
-				L.Push(lua.LNil)
-				L.Push(lua.LString(err.Error()))
-				return 2
+				return lerror(L, err.Error())
 			}
 			return 1
 		}
 	}
-	L.Push(lua.LNil)
-	L.Push(lua.LString("(file)close: not a file-handle"))
-	return 2
+	return lerror(L, "(file)close: not a file-handle")
 }
 
 func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) *lua.LUserData {
@@ -132,14 +128,10 @@ func ioLines(L *lua.LState) int {
 			if fd, err := os.Open(string(filename)); err == nil {
 				ud = newIoLuaReader(L, fd, fd)
 			} else {
-				L.Push(lua.LNil)
-				L.Push(lua.LString(fmt.Sprintf("%s: can not open", filename)))
-				return 2
+				return lerror(L, fmt.Sprintf("%s: can not open", filename))
 			}
 		} else {
-			L.Push(lua.LNil)
-			L.Push(lua.LString("io.lines: not a string"))
-			return 2
+			return lerror(L, "io.lines: not a string")
 		}
 	} else {
 		ioTbl := L.GetGlobal(ioTblName)
@@ -167,9 +159,7 @@ func ioWrite(L *lua.LState) int {
 
 func _ioOpenWriter(L *lua.LState, fd *os.File, err error) int {
 	if err != nil {
-		L.Push(lua.LNil)
-		L.Push(lua.LString(err.Error()))
-		return 2
+		return lerror(L, err.Error())
 	}
 	L.Push(newIoLuaWriter(L, fd, fd))
 	return 1
@@ -178,9 +168,7 @@ func _ioOpenWriter(L *lua.LState, fd *os.File, err error) int {
 func ioOpen(L *lua.LState) int {
 	fname, ok := L.Get(1).(lua.LString)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("io.open: filename is not a string"))
-		return 2
+		return lerror(L, "io.open: filename is not a string")
 	}
 	mode, ok := L.Get(2).(lua.LString)
 	if !ok {
@@ -189,9 +177,7 @@ func ioOpen(L *lua.LState) int {
 	if mode == "r" {
 		fd, err := os.Open(string(fname))
 		if err != nil {
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		}
 		L.Push(newIoLuaReader(L, fd, fd))
 		return 1
@@ -204,20 +190,14 @@ func ioOpen(L *lua.LState) int {
 		fd, err := os.OpenFile(string(fname), os.O_APPEND, 0755)
 		return _ioOpenWriter(L, fd, err)
 	}
-	errmsg := fmt.Sprintf("io.open (nyagos compatible version) does not support mode=\"%s\" yet.", string(mode))
-	L.Push(lua.LNil)
-	L.Push(lua.LString(errmsg))
-	fmt.Fprintln(os.Stderr, errmsg)
-	return 2
+	return lerror(L, fmt.Sprintf("io.open (nyagos compatible version) does not support mode=\"%s\" yet.", string(mode)))
 }
 
 func fileWrite(L *lua.LState) int {
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
 		if f, ok := ud.Value.(*ioLuaWriter); ok {
 			if f.writer == nil {
-				L.Push(lua.LNil)
-				L.Push(lua.LString("file:write: handle has already closed"))
-				return 2
+				return lerror(L, "file:write: handle has already closed")
 			}
 			for i := 2; i <= L.GetTop(); i++ {
 				io.WriteString(f.writer, L.Get(i).String())
@@ -226,23 +206,17 @@ func fileWrite(L *lua.LState) int {
 			return 1
 		}
 	}
-	L.Push(lua.LNil)
-	L.Push(lua.LString("(file)write: not a file-handle object"))
-	return 2
+	return lerror(L, "(file)write: not a file-handle object")
 }
 
 func ioPOpen(L *lua.LState) int {
 	command, ok := L.Get(1).(lua.LString)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("io.popen: command is not a string"))
-		return 2
+		return lerror(L, "io.popen: command is not a string")
 	}
 	mode, ok := L.Get(2).(lua.LString)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("io.popen: mode is not a string"))
-		return 2
+		return lerror(L, "io.popen: mode is not a string")
 	}
 	args := texts.SplitLikeShellString(string(command))
 	for i, s := range args {
@@ -253,37 +227,27 @@ func ioPOpen(L *lua.LState) int {
 	if m := string(mode); m == "r" {
 		in, err := xcmd.StdoutPipe()
 		if err != nil {
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		}
 		if err := xcmd.Start(); err != nil {
 			in.Close()
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		}
 		L.Push(newIoLuaReader(L, in, in))
 		return 1
 	} else if m == "w" {
 		out, err := xcmd.StdinPipe()
 		if err != nil {
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		}
 		if err := xcmd.Start(); err != nil {
 			out.Close()
-			L.Push(lua.LNil)
-			L.Push(lua.LString(err.Error()))
-			return 2
+			return lerror(L, err.Error())
 		}
 		L.Push(newIoLuaWriter(L, out, out))
 		return 1
 	} else {
-		L.Push(lua.LNil)
-		L.Push(lua.LString(fmt.Sprintf("io.popen(...,\"%s\") is not supported yet", m)))
-		return 2
+		return lerror(L, fmt.Sprintf("io.popen(...,\"%s\") is not supported yet", m))
 	}
 }
 
@@ -329,9 +293,7 @@ func fileRead(L *lua.LState) int {
 					for len(data) < cap(data) {
 						b, err := r.ReadByte()
 						if err != nil {
-							L.Push(lua.LNil)
-							L.Push(lua.LString(err.Error()))
-							return 2
+							return lerror(L, err.Error())
 						}
 						if b != '\r' {
 							data = append(data, b)
@@ -343,9 +305,7 @@ func fileRead(L *lua.LState) int {
 					case "*l":
 						line, err := r.ReadString('\n')
 						if err != nil {
-							L.Push(lua.LNil)
-							L.Push(lua.LString(err.Error()))
-							return 2
+							return lerror(L, err.Error())
 						}
 						line = strings.TrimSuffix(line, "\n")
 						line = strings.TrimSuffix(line, "\r")
@@ -354,9 +314,7 @@ func fileRead(L *lua.LState) int {
 					case "*a":
 						all, err := ioutil.ReadAll(r)
 						if err != nil {
-							L.Push(lua.LNil)
-							L.Push(lua.LString(err.Error()))
-							return 2
+							return lerror(L, err.Error())
 						}
 						text := strings.Replace(string(all), "\r\n", "\n", -1)
 						result = append(result, lua.LString(text))
@@ -364,20 +322,14 @@ func fileRead(L *lua.LState) int {
 					case "*n":
 						var n int
 						if _, err := fmt.Fscan(r, &n); err != nil {
-							L.Push(lua.LNil)
-							L.Push(lua.LString(err.Error()))
-							return 2
+							return lerror(L, err.Error())
 						}
 						result = append(result, lua.LNumber(n))
 					default:
-						L.Push(lua.LNil)
-						L.Push(lua.LString("(file)read: invalid argument"))
-						return 2
+						return lerror(L, "(file)read: invalid argument")
 					}
 				} else {
-					L.Push(lua.LNil)
-					L.Push(lua.LString("(file)read: invalid argument"))
-					return 2
+					return lerror(L, "(file)read: invalid argument")
 				}
 			}
 			for _, v := range result {
@@ -386,7 +338,5 @@ func fileRead(L *lua.LState) int {
 			return len(result)
 		}
 	}
-	L.Push(lua.LNil)
-	L.Push(lua.LString("(file).read: not a file-handle"))
-	return 2
+	return lerror(L, "(file).read: not a file-handle")
 }

@@ -153,15 +153,11 @@ func cmdExec(L Lua) int {
 func cmdEval(L Lua) int {
 	statement, ok := L.Get(1).(lua.LString)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("nyagos.eval: an argument is not string"))
-		return 2
+		return lerror(L, "nyagos.eval: an argument is not string")
 	}
 	r, w, err := os.Pipe()
 	if err != nil {
-		L.Push(lua.LNil)
-		L.Push(lua.LString(err.Error()))
-		return 2
+		return lerror(L, err.Error())
 	}
 	go func(statement string, w *os.File) {
 		ctx, sh := getRegInt(L)

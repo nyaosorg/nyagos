@@ -11,9 +11,7 @@ func utf8char(L *lua.LState) int {
 	for i, n := 1, L.GetTop(); i <= n; i++ {
 		number, ok := L.Get(i).(lua.LNumber)
 		if !ok {
-			L.Push(lua.LNil)
-			L.Push(lua.LString("NaN"))
-			return 2
+			return lerror(L, "NaN")
 		}
 		buffer.WriteRune(rune(number))
 	}
@@ -24,9 +22,7 @@ func utf8char(L *lua.LState) int {
 func utf8codes(L *lua.LState) int {
 	lstr, ok := L.Get(-1).(lua.LString)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("invalid utf8"))
-		return 2
+		return lerror(L, "invalid utf8")
 	}
 
 	p := strings.NewReader(string(lstr))

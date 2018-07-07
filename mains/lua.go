@@ -93,6 +93,12 @@ func nyagosSetter(L Lua) int {
 
 var isHookSetup = false
 
+func lerror(L Lua, s string) int {
+	L.Push(lua.LNil)
+	L.Push(lua.LString(s))
+	return 2
+}
+
 // NewLua sets up the lua instance with NYAOGS' environment.
 func NewLua() (Lua, error) {
 	L := lua.NewState(

@@ -10,13 +10,6 @@ import (
 
 var initializedRequired = true
 
-func lerror(L Lua, s string) int {
-	println(s)
-	L.Push(lua.LNil)
-	L.Push(lua.LString(s))
-	return 2
-}
-
 type capsuleT struct {
 	Data *ole.IDispatch
 }

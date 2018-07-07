@@ -21,21 +21,15 @@ type KeyLuaFuncT struct {
 func getBufferForCallBack(L Lua) (*readline.Buffer, int) {
 	table, ok := L.Get(1).(*lua.LTable)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("bindKeyExec: call with : not ."))
-		return nil, 2
+		return nil, lerror(L, "bindKeyExec: call with : not .")
 	}
 	userdata, ok := L.GetField(table, "buffer").(*lua.LUserData)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("bindKey.Call: invalid object"))
-		return nil, 2
+		return nil, lerror(L, "bindKey.Call: invalid object")
 	}
 	buffer, ok := userdata.Value.(*readline.Buffer)
 	if !ok {
-		L.Push(lua.LNil)
-		L.Push(lua.LString("can not find readline.Buffer"))
-		return nil, 2
+		return nil, lerror(L, "can not find readline.Buffer")
 	}
 	return buffer, 0
 }
