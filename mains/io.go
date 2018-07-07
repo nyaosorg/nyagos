@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -55,6 +56,7 @@ func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer) *lua.LUserData {
 	index := L.NewTable()
 	L.SetField(index, "lines", L.NewFunction(fileLines))
 	L.SetField(index, "close", L.NewFunction(fileClose))
+	L.SetField(index, "read", L.NewFunction(fileRead))
 	meta := L.NewTable()
 	L.SetField(meta, "__index", index)
 	L.SetMetatable(ud, meta)
@@ -312,4 +314,79 @@ func openIo(L *lua.LState) *lua.LTable {
 	L.SetField(ioTable, "open", L.NewFunction(ioOpen))
 	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
 	return ioTable
+}
+
+func fileRead(L *lua.LState) int {
+	if ud, ok := L.Get(1).(*lua.LUserData); ok {
+		if f, ok := ud.Value.(*ioLuaReader); ok {
+			r := f.reader
+			end := L.GetTop()
+			result := make([]lua.LValue, 0, end-1)
+			for i := 2; i <= end; i++ {
+				val := L.Get(i)
+				if num, ok := val.(lua.LNumber); ok {
+					data := make([]byte, 0, int(num))
+					for len(data) < cap(data) {
+						b, err := r.ReadByte()
+						if err != nil {
+							L.Push(lua.LNil)
+							L.Push(lua.LString(err.Error()))
+							return 2
+						}
+						if b != '\r' {
+							data = append(data, b)
+						}
+					}
+					result = append(result, lua.LString(string(data)))
+				} else if s, ok := val.(lua.LString); ok {
+					switch s {
+					case "*l":
+						line, err := r.ReadString('\n')
+						if err != nil {
+							L.Push(lua.LNil)
+							L.Push(lua.LString(err.Error()))
+							return 2
+						}
+						line = strings.TrimSuffix(line, "\n")
+						line = strings.TrimSuffix(line, "\r")
+						result = append(result, lua.LString(line))
+						break
+					case "*a":
+						all, err := ioutil.ReadAll(r)
+						if err != nil {
+							L.Push(lua.LNil)
+							L.Push(lua.LString(err.Error()))
+							return 2
+						}
+						text := strings.Replace(string(all), "\r\n", "\n", -1)
+						result = append(result, lua.LString(text))
+						break
+					case "*n":
+						var n int
+						if _, err := fmt.Fscan(r, &n); err != nil {
+							L.Push(lua.LNil)
+							L.Push(lua.LString(err.Error()))
+							return 2
+						}
+						result = append(result, lua.LNumber(n))
+					default:
+						L.Push(lua.LNil)
+						L.Push(lua.LString("(file)read: invalid argument"))
+						return 2
+					}
+				} else {
+					L.Push(lua.LNil)
+					L.Push(lua.LString("(file)read: invalid argument"))
+					return 2
+				}
+			}
+			for _, v := range result {
+				L.Push(v)
+			}
+			return len(result)
+		}
+	}
+	L.Push(lua.LNil)
+	L.Push(lua.LString("(file).read: not a file-handle"))
+	return 2
 }
