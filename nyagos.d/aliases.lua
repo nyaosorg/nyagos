@@ -12,13 +12,20 @@ nyagos.alias.lua_e=function(args)
     end
 end
 nyagos.alias.lua_f=function(args)
-    local path=table.remove(args,1)
-    local f, err = loadfile(path)
+    local save=_G["arg"]
+    local script = args[1]
+    local param = {}
+    for i=1,#args do
+        param[i-1] = args[i]
+    end
+    local f, err = loadfile(script)
+    _G["arg"] = param
     if f then
-        f(args)
+        f()
     else
         io.stderr:write(err,"\n")
     end
+    _G["arg"] = save
 end
 
 nyagos.alias["for"]=function(args)
