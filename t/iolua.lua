@@ -1,4 +1,6 @@
-local tmpfn = nyagos.env.temp .. "\\tmp.txt"
+-- This script runs on both lua.exe and nyagos' lua_f
+
+local tmpfn = os.getenv("TEMP") .. "\\tmp.txt"
 
 local fd = assert(io.open(tmpfn,"w"))
 assert(fd:write('HOGEHOGE\n'))
@@ -42,4 +44,30 @@ if fd then
     fd:close()
 else
     print("NG: ",err)
+end
+
+local sample=string.gsub(arg[0],"%.lua$",".txt")
+print(sample)
+local fd,err = io.open(sample,"r")
+local line,num,crlf,rest = fd:read("*l","*n",1,"*a")
+fd:close()
+if line == "ONELINE" then
+    print"OK: read('*l')"
+else
+    print("NG: read('*l'):["..line.."]")
+end
+if num == 4 then
+    print "OK: read('*n')"
+else
+    print("NG: read('*n')",num)
+end
+if crlf == "\n" then
+    print "OK: read(1)"
+else
+    print ("NG: read(1):"..crlf)
+end
+if rest == "AHAHA\nIHIHI\nUFUFU\n" then
+    print "OK: read('*a')"
+else
+    print("NG: read('*a'):["..rest.."]")
 end
