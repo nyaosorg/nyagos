@@ -90,6 +90,7 @@ func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) *lua.LUserData {
 	index := L.NewTable()
 	L.SetField(index, "close", L.NewFunction(fileClose))
 	L.SetField(index, "write", L.NewFunction(fileWrite))
+	L.SetField(index, "flush", L.NewFunction(fileFlush))
 	L.SetField(meta, "__index", index)
 	L.SetMetatable(ud, meta)
 	return ud
@@ -289,4 +290,17 @@ func fileLines(L *lua.LState) int {
 	L.Push(L.Get(1))
 	L.Push(lua.LNil)
 	return 3
+}
+
+func fileFlush(L *lua.LState) int {
+	if ud, ok := L.Get(1).(*lua.LUserData); ok {
+		if f, ok := ud.Value.(*ioLuaWriter); ok {
+			f.writer.Flush()
+			L.Push(ud)
+			return 1
+		}
+	}
+	L.Push(lua.LNil)
+	L.Push(lua.LString("(file):flush: not a file-handle object"))
+	return 2
 }
