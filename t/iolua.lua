@@ -50,7 +50,24 @@ local sample=string.gsub(arg[0],"%.lua$",".txt")
 print(sample)
 local fd,err = io.open(sample,"r")
 local line,num,crlf,rest = fd:read("*l","*n",1,"*a")
+if io.type(fd) == "file" then
+    print "OK: iotype()==\"file\""
+else
+    print("NG: iotype()==\""..io.type(fd).."\"")
+end
 fd:close()
+if io.type(fd) == "closed file" then
+    print "OK: iotype()==\"closed file\""
+else
+    print("NG: iotype()==\""..io.type(fd).."\"")
+end
+
+if io.type("") == nil then
+    print "OK: iotype()==nil"
+else
+    print("NG: iotype()==\""..io.type("").."\"")
+end
+
 if line == "ONELINE" then
     print"OK: read('*l')"
 else
