@@ -5,17 +5,22 @@ end
 
 nyagos.alias.lua_e=function(args)
     if #args >= 1 then
-        if _VERSION == "Lua 5.3" then
-            assert(load(args[1]))()
-        else
-            assert(loadstring(args[1]))()
+        local ok,err =loadstring(args[1])
+        if not ok then
+            io.stderr:write(err,"\n")
         end
     end
 end
 nyagos.alias.lua_f=function(args)
     local path=table.remove(args,1)
-    assert(loadfile(path))(args)
+    local f, err = loadfile(path)
+    if f then
+        f(args)
+    else
+        io.stderr:write(err,"\n")
+    end
 end
+
 nyagos.alias["for"]=function(args)
     local batchpathu = nyagos.env.temp .. os.tmpname() .. ".cmd"
     local batchpatha = nyagos.utoa(batchpathu)
