@@ -111,6 +111,9 @@ func NewLua() (Lua, error) {
 	lua.OpenString(L)
 	lua.OpenTable(L)
 
+	ioTable := openIo(L)
+	L.SetGlobal("io", ioTable)
+
 	nyagosTable := L.NewTable()
 
 	for name, function := range functions.Table {
@@ -133,19 +136,8 @@ func NewLua() (Lua, error) {
 	optionTable := makeVirtualTable(L, lua2cmd(functions.GetOption), lua2cmd(functions.SetOption))
 	L.SetField(nyagosTable, "option", optionTable)
 
-	ioTable := L.GetGlobal("io")
-	if _, ok := ioTable.(*lua.LTable); !ok {
-		ioTable = L.NewTable()
-		L.SetGlobal("io", ioTable)
-	}
-	ioLinesPtr := L.NewFunction(ioLines)
-	L.SetField(ioTable, "lines", ioLinesPtr)
-	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
-	ioOpenPtr := L.NewFunction(ioOpen)
-	L.SetField(ioTable, "open", ioOpenPtr)
-	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
-	L.SetField(nyagosTable, "lines", ioLinesPtr)
-	L.SetField(nyagosTable, "open", ioOpenPtr)
+	L.SetField(nyagosTable, "lines", L.GetField(ioTable, "lines"))
+	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))
 
 	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)

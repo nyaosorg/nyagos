@@ -304,3 +304,12 @@ func fileFlush(L *lua.LState) int {
 	L.Push(lua.LString("(file):flush: not a file-handle object"))
 	return 2
 }
+
+func openIo(L *lua.LState) *lua.LTable {
+	ioTable := L.NewTable()
+	L.SetField(ioTable, "lines", L.NewFunction(ioLines))
+	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
+	L.SetField(ioTable, "open", L.NewFunction(ioOpen))
+	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
+	return ioTable
+}
