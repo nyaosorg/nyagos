@@ -24,6 +24,7 @@ func (io *ioLuaReader) Close() error {
 	if io.closer != nil {
 		err := io.closer.Close()
 		io.closer = nil
+		io.reader = nil
 		return err
 	}
 	return nil
@@ -271,12 +272,36 @@ func fileFlush(L *lua.LState) int {
 	return 2
 }
 
+func ioType(L *lua.LState) int {
+	if ud, ok := L.Get(1).(*lua.LUserData); ok {
+		if f, ok := ud.Value.(*ioLuaWriter); ok {
+			if f.writer != nil {
+				L.Push(lua.LString("file"))
+			} else {
+				L.Push(lua.LString("closed file"))
+			}
+			return 1
+		}
+		if f, ok := ud.Value.(*ioLuaReader); ok {
+			if f.reader != nil {
+				L.Push(lua.LString("file"))
+			} else {
+				L.Push(lua.LString("closed file"))
+			}
+			return 1
+		}
+	}
+	L.Push(lua.LNil)
+	return 1
+}
+
 func openIo(L *lua.LState) *lua.LTable {
 	ioTable := L.NewTable()
 	L.SetField(ioTable, "lines", L.NewFunction(ioLines))
 	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
 	L.SetField(ioTable, "open", L.NewFunction(ioOpen))
 	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
+	L.SetField(ioTable, "type", L.NewFunction(ioType))
 	return ioTable
 }
 
