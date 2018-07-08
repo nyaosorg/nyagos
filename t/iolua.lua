@@ -95,3 +95,5 @@ if rest == "AHAHA\nIHIHI\nUFUFU\n" then
 else
     print("NG: read('*a'):["..rest.."]")
 end
+
+io.stdout:setvbuf("no")
