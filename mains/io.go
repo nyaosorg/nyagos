@@ -96,6 +96,7 @@ func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer, s io.Seeker) *lua.L
 	L.SetField(index, "write", L.NewFunction(fileWrite))
 	L.SetField(index, "flush", L.NewFunction(fileFlush))
 	L.SetField(index, "seek", L.NewFunction(fileSeek))
+	L.SetField(index, "setvbuf", L.NewFunction(fileSetVBuf))
 	L.SetField(meta, "__index", index)
 	L.SetMetatable(ud, meta)
 	return ud
@@ -418,4 +419,10 @@ func fileSeek(L *lua.LState) int {
 	}
 	L.Push(lua.LNumber(result))
 	return 1
+}
+
+func fileSetVBuf(L *lua.LState) int {
+	const msg = "file:setvbuf is not implemented yet"
+	println(msg)
+	return lerror(L, msg)
 }
