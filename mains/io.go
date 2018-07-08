@@ -18,6 +18,7 @@ const ioTblName = "io"
 type ioLuaReader struct {
 	reader *bufio.Reader
 	closer io.Closer
+	seeker io.Seeker
 }
 
 func (io *ioLuaReader) Close() error {
@@ -33,6 +34,7 @@ func (io *ioLuaReader) Close() error {
 type ioLuaWriter struct {
 	writer *bufio.Writer
 	closer io.Closer
+	seeker io.Seeker
 }
 
 func (io *ioLuaWriter) Close() error {
@@ -48,16 +50,18 @@ func (io *ioLuaWriter) Close() error {
 	return nil
 }
 
-func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer) *lua.LUserData {
+func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer, s io.Seeker) *lua.LUserData {
 	ud := L.NewUserData()
 	ud.Value = &ioLuaReader{
 		reader: bufio.NewReader(r),
+		seeker: s,
 		closer: c,
 	}
 	index := L.NewTable()
 	L.SetField(index, "lines", L.NewFunction(fileLines))
 	L.SetField(index, "close", L.NewFunction(fileClose))
 	L.SetField(index, "read", L.NewFunction(fileRead))
+	L.SetField(index, "seek", L.NewFunction(fileSeek))
 	meta := L.NewTable()
 	L.SetField(meta, "__index", index)
 	L.SetMetatable(ud, meta)
@@ -77,11 +81,12 @@ func fileClose(L *lua.LState) int {
 	return lerror(L, "(file)close: not a file-handle")
 }
 
-func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) *lua.LUserData {
+func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer, s io.Seeker) *lua.LUserData {
 	ud := L.NewUserData()
 	bw := bufio.NewWriter(w)
 	ud.Value = &ioLuaWriter{
 		writer: bw,
+		seeker: s,
 		closer: c,
 	}
 	meta := L.NewTable()
@@ -90,6 +95,7 @@ func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer) *lua.LUserData {
 	L.SetField(index, "close", L.NewFunction(fileClose))
 	L.SetField(index, "write", L.NewFunction(fileWrite))
 	L.SetField(index, "flush", L.NewFunction(fileFlush))
+	L.SetField(index, "seek", L.NewFunction(fileSeek))
 	L.SetField(meta, "__index", index)
 	L.SetMetatable(ud, meta)
 	return ud
@@ -127,7 +133,7 @@ func ioLines(L *lua.LState) int {
 	if L.GetTop() >= 1 {
 		if filename, ok := L.Get(1).(lua.LString); ok {
 			if fd, err := os.Open(string(filename)); err == nil {
-				ud = newIoLuaReader(L, fd, fd)
+				ud = newIoLuaReader(L, fd, fd, fd)
 			} else {
 				return lerror(L, fmt.Sprintf("%s: can not open", filename))
 			}
@@ -162,7 +168,7 @@ func _ioOpenWriter(L *lua.LState, fd *os.File, err error) int {
 	if err != nil {
 		return lerror(L, err.Error())
 	}
-	L.Push(newIoLuaWriter(L, fd, fd))
+	L.Push(newIoLuaWriter(L, fd, fd, fd))
 	return 1
 }
 
@@ -180,7 +186,7 @@ func ioOpen(L *lua.LState) int {
 		if err != nil {
 			return lerror(L, err.Error())
 		}
-		L.Push(newIoLuaReader(L, fd, fd))
+		L.Push(newIoLuaReader(L, fd, fd, nil))
 		return 1
 	}
 	if mode == "w" {
@@ -234,7 +240,7 @@ func ioPOpen(L *lua.LState) int {
 			in.Close()
 			return lerror(L, err.Error())
 		}
-		L.Push(newIoLuaReader(L, in, in))
+		L.Push(newIoLuaReader(L, in, in, nil))
 		return 1
 	} else if m == "w" {
 		out, err := xcmd.StdinPipe()
@@ -245,7 +251,7 @@ func ioPOpen(L *lua.LState) int {
 			out.Close()
 			return lerror(L, err.Error())
 		}
-		L.Push(newIoLuaWriter(L, out, out))
+		L.Push(newIoLuaWriter(L, out, out, nil))
 		return 1
 	} else {
 		return lerror(L, fmt.Sprintf("io.popen(...,\"%s\") is not supported yet", m))
@@ -364,4 +370,52 @@ func fileRead(L *lua.LState) int {
 		}
 	}
 	return lerror(L, "(file).read: not a file-handle")
+}
+
+func fileSeek(L *lua.LState) int {
+	ud, ok := L.Get(1).(*lua.LUserData)
+	if !ok {
+		return lerror(L, "(file)seek: not file-handle")
+	}
+	var seeker io.Seeker
+	if f, ok := ud.Value.(*ioLuaReader); ok {
+		seeker = f.seeker
+	} else if f, ok := ud.Value.(*ioLuaWriter); ok {
+		seeker = f.seeker
+	}
+	if seeker == nil {
+		return lerror(L, "(file)seek: not seekable file handle")
+	}
+
+	whence := 1
+	offset := int64(0)
+	if L.GetTop() >= 2 {
+		_whence, ok := L.Get(2).(lua.LString)
+		if !ok {
+			return lerror(L, "(file)seek: invalid whence string")
+		}
+		switch strings.ToLower(string(_whence)) {
+		case "set":
+			whence = 0
+		case "cur":
+			whence = 1
+		case "end":
+			whence = 2
+		default:
+			return lerror(L, "(file)seek: invalid whence string")
+		}
+		if L.GetTop() >= 3 {
+			_offset, ok := L.Get(3).(lua.LNumber)
+			if !ok {
+				return lerror(L, "(file)seek: invalid offset number")
+			}
+			offset = int64(_offset)
+		}
+	}
+	result, err := seeker.Seek(offset, whence)
+	if err != nil {
+		return lerror(L, err.Error())
+	}
+	L.Push(lua.LNumber(result))
+	return 1
 }

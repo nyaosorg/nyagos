@@ -449,9 +449,9 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) er
 	setContext(L, ctx)
 
 	ioTbl := L.GetGlobal("io")
-	stdin := newIoLuaReader(L, sh.In(), nil)
-	stdout := newIoLuaWriter(L, sh.Out(), nil)
-	stderr := newIoLuaWriter(L, sh.Err(), nil)
+	stdin := newIoLuaReader(L, sh.In(), nil, nil)
+	stdout := newIoLuaWriter(L, sh.Out(), nil, nil)
+	stderr := newIoLuaWriter(L, sh.Err(), nil, nil)
 	L.SetField(ioTbl, "stdin", stdin)
 	L.SetField(ioTbl, "stdout", stdout)
 	L.SetField(ioTbl, "stderr", stderr)
