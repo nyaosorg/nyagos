@@ -27,11 +27,18 @@ else
 end
 
 local fd,err = io.open(tmpfn,"r")
+local line = fd:read("*l")
+if line == "HOGEHOGE" then
+    print("OK: io.read('*l')",line)
+else
+    print("NG: io.read('*l')",line)
+end
+fd:seek("set",0)
 for line in fd:lines() do
     if line == "HOGEHOGE" then
-        print("OK: ",line)
+        print("OK: io.open: ",line)
     else
-        print("NG: ",line)
+        print("NG: io.open: ",line)
     end
 end
 fd:close()
