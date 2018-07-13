@@ -5,8 +5,10 @@ end
 
 nyagos.alias.lua_e=function(args)
     if #args >= 1 then
-        local ok,err =loadstring(args[1])
-        if not ok then
+        local f,err =loadstring(args[1])
+        if f then
+            f()
+        else
             io.stderr:write(err,"\n")
         end
     end
