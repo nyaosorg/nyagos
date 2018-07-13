@@ -25,9 +25,10 @@ type CmdStreamConsole struct {
 }
 
 var console io.Writer
+var prevOptionGoColorable bool = false
 
 func GetConsole() io.Writer {
-	if console == nil {
+	if console == nil || prevOptionGoColorable != OptionGoColorable {
 		if OptionGoColorable {
 			console = colorable.NewColorableStdout()
 		} else {
@@ -36,6 +37,7 @@ func GetConsole() io.Writer {
 				dos.EnableStdoutVirtualTerminalProcessing()
 			}
 		}
+		prevOptionGoColorable = OptionGoColorable
 	}
 	return console
 }
