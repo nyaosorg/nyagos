@@ -4,6 +4,7 @@
 * #323 io.lines() , nyagos.lines() がリダイレクトされた標準入力から読み込めない問題を修正
 * io.write() がリダイレクトされた標準出力に出力できなかった
 * `io.*` を NYAGOS の自前バージョンに置き変えた
+* #324 Lua の print で --no-go-colorable が効いていなかった不具合を修正 (Thx @tignear)
 
 NYAGOS 4.3.1\_3
 ===============
