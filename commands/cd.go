@@ -88,7 +88,7 @@ func cmdCd(ctx context.Context, cmd Param) (int, error) {
 				i = 0
 			}
 			for ; i < len(cdHistory); i++ {
-				fmt.Fprintf(cmd.Out(), "%d %s\n", i-len(cdHistory), cdHistory[i])
+				fmt.Fprintf(cmd.Out(), "cd %d => cd \"%s\"\n", i-len(cdHistory), cdHistory[i])
 			}
 			return 0, nil
 		} else if i, err := strconv.ParseInt(args[1], 10, 0); err == nil && i < 0 {
