@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: io.write() did not write to redirected stdout
 * Replace `io.*` all with nyagos' own functions
 * #324 Fix: Lua's print ignored --no-go-colorable (Thx @tignear)
+* #325 Fix: `source` could not load the path which contains spaces.
 
 NYAGOS 4.3.1\_3
 ===============
