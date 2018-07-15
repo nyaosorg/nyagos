@@ -38,6 +38,7 @@ type optionArg struct {
 	args []string
 	sh   *shell.Shell
 	e    ScriptEngineForOption
+	ctx  context.Context // ctx is the Context object at parsing
 }
 
 type optionT struct {
@@ -47,6 +48,28 @@ type optionT struct {
 }
 
 var optionMap = map[string]optionT{
+	"--lua-first": {
+		U: "\"LUACODE\"\nExecute \"LUACODE\" before processing any rcfiles and continue shell",
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
+				return nil, errors.New("--lua-first: requires parameters")
+			}
+			if err := p.e.RunString(p.ctx, p.args[0]); err != nil {
+				fmt.Fprintln(os.Stderr, err.Error())
+			}
+			return nil, nil
+		},
+	},
+	"--cmd-first": {
+		U: "\"COMMAND\"\nExecute \"COMMAND\" before processing any rcfiles and continue shell",
+		V: func(p *optionArg) (func(context.Context) error, error) {
+			if len(p.args) <= 0 {
+				return nil, errors.New("--cmd-first: requires parameters")
+			}
+			p.sh.Interpret(p.ctx, p.args[0])
+			return nil, nil
+		},
+	},
 	"-k": {
 		U: "\"COMMAND\"\nExecute \"COMMAND\" and continue the command-line.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
@@ -261,7 +284,7 @@ func isDefault(value bool) string {
 	return ""
 }
 
-func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
+func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
 	args := os.Args[1:]
 	optionMap["-h"] = optionT{V: help, U: "\nPrint this usage"}
 	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
@@ -299,6 +322,7 @@ func OptionParse(sh *shell.Shell, e ScriptEngineForOption) (func(context.Context
 					args: args[i+1:],
 					sh:   sh,
 					e:    e,
+					ctx:  _ctx,
 				})
 			}
 		} else {

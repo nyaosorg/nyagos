@@ -134,7 +134,7 @@ func Main() error {
 		return sh.Source(ctx, fname)
 	}
 
-	script, err := frame.OptionParse(sh, &ScriptEngineForOptionImpl{L: L, Sh: sh})
+	script, err := frame.OptionParse(ctx, sh, &ScriptEngineForOptionImpl{L: L, Sh: sh})
 	if err != nil {
 		return err
 	}
