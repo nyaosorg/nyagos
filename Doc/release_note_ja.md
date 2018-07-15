@@ -6,6 +6,7 @@
 * `io.*` を NYAGOS の自前バージョンに置き変えた
 * #324 Lua の print で --no-go-colorable が効いていなかった不具合を修正 (Thx @tignear)
 * #325 Source 文で空白を含むパスをロードできなかった不具合を修正 (Thx @tignear)
+* オプション `--lua-first` and `--cmd-first` を追加
 
 NYAGOS 4.3.1\_3
 ===============

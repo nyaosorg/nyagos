@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * Replace `io.*` all with nyagos' own functions
 * #324 Fix: Lua's print ignored --no-go-colorable (Thx @tignear)
 * #325 Fix: `source` could not load the path which contains spaces.
+* Add options: `--lua-first` and `--cmd-first`
 
 NYAGOS 4.3.1\_3
 ===============
