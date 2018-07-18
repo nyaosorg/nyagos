@@ -1,61 +1,108 @@
 English / [Japanese](./02-Options_ja.md)
 
+
 ## Option for NYAGOS.EXE
 
-### `-h`
 
-Print Usage.
+### --cleanup-buffer (lua: `nyagos.option.cleanup_buffer=true`)
+Clean up key buffer at prompt
 
-### `-c "COMMAND"`
+### --cmd-first "COMMAND"
+Execute "COMMAND" before processing any rcfiles and continue shell
 
-Execute `COMMAND` and quit.
+### --completion-hidden (lua: `nyagos.option.completion_hidden=true`)
+Include hidden files on completion
 
-### `-k "COMMAND"`
+### --completion-slash (lua: `nyagos.option.completion_slash=true`)
+use forward slash on completion
 
-Execute `COMMAND` and continue the command-line.
+### --disable-virtual-terminal-processing
+Do not use Windows10's native ESCAPE SEQUENCE.
 
-### `-b "BASE64edCOMMAND"`
+### --enable-virtual-terminal-processing
+Enable Windows10's native ESCAPE SEQUENCE.
+It should be used with `--no-go-colorable`.
 
-Decode and execute the command which is encoded with Base64.
+### --glob (lua: `nyagos.option.glob=true`)
+Enable to expand wildcards
 
-### `-f FILE ARG1 ARG2 ...`
+### --go-colorable
+Use the ESCAPE SEQUENCE emulation with go-colorable library.
 
-If FILE's suffix is .lua, execute Lua-code on it.
-(The script can refer arguments as `arg[]`)
+### --help
+Print this usage
 
-Otherwise, read and execute commands on it.
-
-### `--lua-file FILE ARG1 ARG2 ...`
-
-Execute FILE as Lua Script.
-
-### `-e "SCRIPTCODE"`
-
-Execute SCRIPTCODE with Lua interpretor and quit.
-
-### `--norc`
-
-Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*`.
-
-### `--no-go-colorable`
-
-Do not use the ESCAPE SEQUENCE emulation with go-colorable library.
-
-### `--enable-virtual-terminal-processing`
-
-Enable Windows10's native ESCAPE SEQUENCE. It should be used with `--no-go-colorable`.
-
-### `--look-curdir-first`
-
+### --look-curdir-first
 Search for the executable from the current directory before %PATH%.
 (compatible with CMD.EXE)
 
-### `--look-curdir-last`
-
+### --look-curdir-last
 Search for the executable from the current directory after %PATH%.
 (compatible with PowerShell)
 
-### `--look-curdir-never`
+### --look-curdir-never
+Never search for the executable from the current directory
+unless %PATH% contains.
+(compatible with UNIX Shells)
 
-Never search for the executable from the current directory unless %PATH%
-contains. (compatible with UNIX Shells)
+### --lua-file FILE ARG1 ARG2...
+Execute FILE as Lua Script even if FILE's suffix is not .lua .
+The script can refer arguments as `arg[]`.
+Lines starting with `@` are ignored to embed into batchfile.
+
+### --lua-first "LUACODE"
+Execute "LUACODE" before processing any rcfiles and continue shell
+
+### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
+Do not clean up key buffer at prompt
+
+### --no-completion-hidden (lua: `nyagos.option.completion_hidden=false`) [default]
+Do not include hidden files on completion
+
+### --no-completion-slash (lua: `nyagos.option.completion_slash=false`) [default]
+Do not use slash on completion
+
+### --no-glob (lua: `nyagos.option.glob=false`) [default]
+Disable to expand wildcards
+
+### --no-go-colorable
+Do not use the ESCAPE SEQUENCE emulation with go-colorable library.
+
+### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
+Do not forbide to overwrite files no redirect
+
+### --no-usesource (lua: `nyagos.option.usesource=false`)
+forbide batchfile to change environment variables of nyagos
+
+### --noclobber (lua: `nyagos.option.noclobber=true`)
+forbide to overwrite files on redirect
+
+### --norc
+Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos`
+and `(BINDIR)\nyagos.d\*`.
+
+### --show-version-only
+show version only
+
+### --usesource (lua: `nyagos.option.usesource=true`) [default]
+allow batchfile to change environment variables of nyagos
+
+### -b "BASE64edCOMMAND"
+Decode and execute the command which is encoded with Base64.
+
+### -c "COMMAND"
+Execute `COMMAND` and quit.
+
+### -e "SCRIPTCODE"
+Execute SCRIPTCODE with Lua interpreter and quit.
+
+### -f FILE ARG1 ARG2 ...
+If FILE's suffix is .lua, execute Lua-code on it.
+The script can refer arguments as `arg[]`.
+Otherwise, read and execute commands on it.
+
+### -h
+Print this usage
+
+### -k "COMMAND"
+Execute "COMMAND" and continue the command-line.
