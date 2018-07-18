@@ -296,7 +296,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 			F: func() {
 				*_val.V = true
 			},
-			U: fmt.Sprintf("(lua: nyagos.option.%s=true)%s\n%s",
+			U: fmt.Sprintf("(lua: `nyagos.option.%s=true`)%s\n%s",
 				key,
 				isDefault(*val.V),
 				_val.Usage),
@@ -305,7 +305,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 			F: func() {
 				*_val.V = false
 			},
-			U: fmt.Sprintf("(lua: nyagos.option.%s=false)%s\n%s",
+			U: fmt.Sprintf("(lua: `nyagos.option.%s=false`)%s\n%s",
 				key,
 				isDefault(!*val.V),
 				_val.NoUsage),
