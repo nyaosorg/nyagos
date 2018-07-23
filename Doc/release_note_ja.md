@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.2\_0
+===============
+(2018.07.23)
+
 * #319 github.com/BixData/gluabit32 で、Lua関数 `bit32.*` を全てサポート
 * #323 io.lines() , nyagos.lines() がリダイレクトされた標準入力から読み込めない問題を修正
 * io.write() がリダイレクトされた標準出力に出力できなかった

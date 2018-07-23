@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.2\_0
+===============
+on Jul.23,2018
+
 * #319 Support lua `bit32.*` all by github.com/BixData/gluabit32
 * #323 Fix io.lines(), nyagos.lines() could not read from redirected stdin
 * Fix: io.write() did not write to redirected stdout
