@@ -68,6 +68,9 @@ Go言語のカラーライブラリによるエスケープシーケンスのエ
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 リダイレクトでの上書きを許可します。
 
+### --no-tilde-expansion (lua: `nyagos.option.tilde_expansion=false`)
+~ の置換を無効にする
+
 ### --no-usesource (lua: `nyagos.option.usesource=false`)
 バッチファイルに、NYAGOS側の環境変数の変更させるのを禁止します。
 
@@ -79,6 +82,9 @@ Go言語のカラーライブラリによるエスケープシーケンスのエ
 
 ### --show-version-only
 バージョンを表示します(ビルド用です)
+
+### --tilde-expansion (lua: `nyagos.option.tilde_expansion=true`) [default]
+~ 置換を有効にします
 
 ### --usesource (lua: `nyagos.option.usesource=true`) [default]
 バッチファイルに、NYAGOS側の環境変数の変更させるのを許可します。

@@ -71,6 +71,9 @@ Do not use the ESCAPE SEQUENCE emulation with go-colorable library.
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 Do not forbide to overwrite files no redirect
 
+### --no-tilde-expansion (lua: `nyagos.option.tilde_expansion=false`)
+Disable Tilde Expansion
+
 ### --no-usesource (lua: `nyagos.option.usesource=false`)
 forbide batchfile to change environment variables of nyagos
 
@@ -83,6 +86,9 @@ and `(BINDIR)\nyagos.d\*`.
 
 ### --show-version-only
 show version only
+
+### --tilde-expansion (lua: `nyagos.option.tilde_expansion=true`) [default]
+Enable Tilde Expansion
 
 ### --usesource (lua: `nyagos.option.usesource=true`) [default]
 allow batchfile to change environment variables of nyagos
