@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* #283 Omit the directory of path on completion by Ctrl-O
+
 NYAGOS 4.3.2\_0
 ===============
 on Jul.23,2018

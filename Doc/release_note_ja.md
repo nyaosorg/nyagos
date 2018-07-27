@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* #283 Ctrl-O での補完で、パスでディレクトリを省略するようにした。
+
 NYAGOS 4.3.2\_0
 ===============
 (2018.07.23)
