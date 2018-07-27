@@ -1,6 +1,8 @@
 [English](release_note_en.md) / Japanese
 
 * #283 Ctrl-O での補完で、パスでディレクトリを省略するようにした。
+* #326 オプション `nyagos.option.tilde_expansion` を追加
+* Fix: `nyagos.option.xxxxxx = true` が機能していなかった
 
 NYAGOS 4.3.2\_0
 ===============
