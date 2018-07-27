@@ -11,8 +11,29 @@ nyagos.key.C_o = function(this)
     if #list == 1 and list[1] == wildcard then
         return
     end
+    local dict = {}
+    local array = {}
+    for _,path in ipairs(list) do
+        local index=string.find(path,"[^\\]+$")
+        local fname
+        if index then
+            fname=string.sub(path,index)
+        else
+            fname=path
+        end
+        array[1+#array] = fname
+        dict[fname] = path
+    end
     nyagos.write("\n")
-    local result=nyagos.box(list) or word
+    local result=nyagos.box(array)
+    if result then
+        result = dict[result]
+        if not result then
+            result = word
+        end
+    else
+        result = word
+    end
     this:call("REPAINT_ON_NEWLINE")
     if string.find(result," ",1,true) then
         if string.find(result,"^~[\\/]") then
