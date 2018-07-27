@@ -85,6 +85,8 @@ const NOTQUOTED = '\000'
 
 const EMPTY_COMMAND_FOUND = "Empty command found"
 
+var TildeExpansion = true
+
 func string2word(source_ string, removeQuote bool) string {
 	var buffer strings.Builder
 	source := strings.NewReader(source_)
@@ -97,7 +99,7 @@ func string2word(source_ string, removeQuote bool) string {
 		if err != nil {
 			break
 		}
-		if ch == '~' && unicode.IsSpace(lastchar) && quoteNow == NOTQUOTED {
+		if TildeExpansion && ch == '~' && unicode.IsSpace(lastchar) && quoteNow == NOTQUOTED {
 			if home := dos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {

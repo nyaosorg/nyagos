@@ -74,6 +74,11 @@ var BoolOptions = map[string]*optionT{
 		Usage:   "allow batchfile to change environment variables of nyagos",
 		NoUsage: "forbide batchfile to change environment variables of nyagos",
 	},
+	"tilde_expansion": {
+		V:       &shell.TildeExpansion,
+		Usage:   "Enable Tilde Expansion",
+		NoUsage: "Disable Tilde Expansion",
+	},
 }
 
 func dumpBoolOptions(out io.Writer) {
