@@ -477,7 +477,15 @@ func SetOption(args []any_t) []any_t {
 		return []any_t{nil, "key: %s: not found"}
 	}
 	val := args[2]
-	*ptr.V = (val != nil && val != false && val == "")
+	if val == nil {
+		*ptr.V = false
+	} else if s, ok := val.(string); ok && s == "" {
+		*ptr.V = false
+	} else if b, ok := val.(bool); ok {
+		*ptr.V = b
+	} else {
+		*ptr.V = true
+	}
 	return []any_t{true}
 }
 
