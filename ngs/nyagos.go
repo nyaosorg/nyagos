@@ -54,7 +54,7 @@ func Main() error {
 		return err
 	}
 
-	script, err := frame.OptionParse(sh, &scriptEngineForOptionImpl{})
+	script, err := frame.OptionParse(ctx, sh, &scriptEngineForOptionImpl{})
 	if err != nil {
 		return err
 	}
