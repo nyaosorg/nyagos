@@ -71,6 +71,9 @@ Do not use the ESCAPE SEQUENCE emulation with go-colorable library.
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 Do not forbide to overwrite files no redirect
 
+### --no-read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=false`) [default]
+Read commands from stdin as Windows Console(tty). (Enable to edit line)
+
 ### --no-tilde-expansion (lua: `nyagos.option.tilde_expansion=false`)
 Disable Tilde Expansion
 
@@ -83,6 +86,9 @@ forbide to overwrite files on redirect
 ### --norc
 Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos`
 and `(BINDIR)\nyagos.d\*`.
+
+### --read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=true`)
+Read commands from stdin as a file stream (Disable to edit line)
 
 ### --show-version-only
 show version only

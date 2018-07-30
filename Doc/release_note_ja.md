@@ -4,6 +4,7 @@
 * #326 オプション `nyagos.option.tilde_expansion` を追加
 * Fix: `nyagos.option.xxxxxx = true` が機能していなかった
 * Fix #328 `start https://...` で URL をブラウザで開けなかった
+* #327 のために --read-stdin-as-file を実装(標準入力からファイル扱いでコマンドを読み込む)
 
 NYAGOS 4.3.2\_0
 ===============

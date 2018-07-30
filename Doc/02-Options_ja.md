@@ -68,6 +68,10 @@ Go言語のカラーライブラリによるエスケープシーケンスのエ
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 リダイレクトでの上書きを許可します。
 
+### --no-read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=false`) [default]
+標準入力からコンソール扱いでコマンドを読み込みます。
+(編集機能が有効になります)
+
 ### --no-tilde-expansion (lua: `nyagos.option.tilde_expansion=false`)
 ~ の置換を無効にする
 
@@ -79,6 +83,10 @@ Go言語のカラーライブラリによるエスケープシーケンスのエ
 
 ### --norc
 `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*` といった起動スクリプトをロードしないようにします。
+
+### --read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=true`)
+標準入力からファイル扱いでコマンドを読み込みます。
+(編集機能が無効になります)
 
 ### --show-version-only
 バージョンを表示します(ビルド用です)
