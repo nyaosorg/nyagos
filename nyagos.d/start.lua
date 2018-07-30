@@ -34,5 +34,9 @@ nyagos.alias.start = function(args)
     if #args >= 2 then
         param = table.concat(args.rawargs," ",2)
     end
-    assert(nyagos.shellexecute("open",progname,param,dir))
+    if string.match(progname,"^https?:") then
+        os.execute("rundll32.exe url.dll,FileProtocolHandler " .. progname)
+    else
+        assert(nyagos.shellexecute("open",progname,param,dir))
+    end
 end
