@@ -11,6 +11,7 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
@@ -103,6 +104,8 @@ func (this *luaWrapper) Close() error {
 	return nil
 }
 
+var optionStdinIsNotTerminal = false
+
 func Main() error {
 	ctx := context.Background()
 
@@ -163,7 +166,7 @@ func Main() error {
 	}
 
 	var stream1 shell.Stream
-	if isatty.IsTerminal(os.Stdin.Fd()) {
+	if !commands.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
 			func() (int, error) {
 				if L != nil {

@@ -36,6 +36,8 @@ func shrink(values ...string) string {
 	return buffer.String()
 }
 
+var ReadStdinAsFile = false
+
 type optionT struct {
 	V       *bool
 	Usage   string
@@ -78,6 +80,11 @@ var BoolOptions = map[string]*optionT{
 		V:       &shell.TildeExpansion,
 		Usage:   "Enable Tilde Expansion",
 		NoUsage: "Disable Tilde Expansion",
+	},
+	"read_stdin_as_file": {
+		V:       &ReadStdinAsFile,
+		Usage:   "Read commands from stdin as a file stream. Disable to edit line",
+		NoUsage: "Read commands from stdin as Windows Console(tty). Enable to edit line",
 	},
 }
 
