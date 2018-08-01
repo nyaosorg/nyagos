@@ -4,9 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
-
-	"github.com/zetamatta/nyagos/dos"
 )
 
 func cmdPwd(ctx context.Context, cmd Param) (int, error) {
@@ -27,7 +26,9 @@ func cmdPwd(ctx context.Context, cmd Param) (int, error) {
 	}
 	wd, _ := os.Getwd()
 	if physical {
-		wd = dos.TruePath(wd)
+		if _wd, err := filepath.EvalSymlinks(wd); err == nil {
+			wd = _wd
+		}
 	}
 	fmt.Fprintln(cmd.Out(), wd)
 	return 0, nil
