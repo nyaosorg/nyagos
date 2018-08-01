@@ -98,7 +98,7 @@ func CmdNetDriveToUNC(args []any_t) []any_t {
 func CmdShellExecute(args []any_t) []any_t {
 	err := dos.ShellExecute(
 		toStr(args, 0),
-		dos.TruePath(toStr(args, 1)),
+		toStr(args, 1),
 		toStr(args, 2),
 		toStr(args, 3))
 	if err != nil {

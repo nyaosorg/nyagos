@@ -2,12 +2,13 @@ package dos
 
 import (
 	"fmt"
+	"path/filepath"
 	"syscall"
 	"unsafe"
 )
 
 var shell32 = syscall.NewLazyDLL("shell32")
-var shellExecute = shell32.NewProc("ShellExecuteW")
+var procShellExecute = shell32.NewProc("ShellExecuteW")
 
 const (
 	// EDIT is the action "edit" for ShellExecute
@@ -25,7 +26,7 @@ const (
 )
 
 // ShellExecute calls ShellExecute-API: edit,explore,open and so on.
-func ShellExecute(action string, path string, param string, directory string) error {
+func shellExecute(action string, path string, param string, directory string) error {
 	actionP, actionErr := syscall.UTF16PtrFromString(action)
 	if actionErr != nil {
 		return actionErr
@@ -42,7 +43,7 @@ func ShellExecute(action string, path string, param string, directory string) er
 	if directoryErr != nil {
 		return directoryErr
 	}
-	status, _, err := shellExecute.Call(
+	status, _, err := procShellExecute.Call(
 		uintptr(0),
 		uintptr(unsafe.Pointer(actionP)),
 		uintptr(unsafe.Pointer(pathP)),
@@ -60,4 +61,17 @@ func ShellExecute(action string, path string, param string, directory string) er
 		}
 	}
 	return nil
+}
+
+const haveToEvalSymlinkError = syscall.Errno(4294967294)
+
+func ShellExecute(action string, path string, param string, directory string) error {
+	err := shellExecute(action, path, param, directory)
+	if err == haveToEvalSymlinkError {
+		path, err = filepath.EvalSymlinks(path)
+		if err == nil {
+			err = shellExecute(action, path, param, directory)
+		}
+	}
+	return err
 }

@@ -13,11 +13,6 @@ func open1(fname string, out io.Writer) {
 	err1 := dos.ShellExecute("open", fname, "", "")
 	if err1 != nil {
 		fmt.Fprintf(out, "%s: %s\n", fname, err1.Error())
-		truepath := dos.TruePath(fname)
-		err2 := dos.ShellExecute("open", truepath, "", "")
-		if err2 != nil {
-			fmt.Fprintf(out, "%s: %s\n", truepath, err2.Error())
-		}
 	}
 }
 
