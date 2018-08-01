@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"sync"
@@ -17,6 +18,8 @@ import (
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
 )
+
+const haveToEvalSymlinkError = syscall.Errno(4294967294)
 
 var WildCardExpansionAlways = false
 
@@ -214,6 +217,12 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
 		err := dos.ShellExecute("open", fullpath, cmdline, "")
+		if err == haveToEvalSymlinkError {
+			fullpath, err = filepath.EvalSymlinks(fullpath)
+			if err == nil {
+				err = dos.ShellExecute("open", fullpath, cmdline, "")
+			}
+		}
 		return 0, err
 	}
 	if UseSourceRunBatch {
