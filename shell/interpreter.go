@@ -369,7 +369,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				if err != nil {
 					return 0, err
 				}
-				defer fd.Close()
+				cmd.Closers = append(cmd.Closers, fd)
 			}
 
 			cmd.args = state.Args
