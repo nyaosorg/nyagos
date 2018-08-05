@@ -50,6 +50,10 @@ share[] はユーザが自由に使用可能ですが、全てのインスタン
 
 環境変数にリンクしています。参照・変更が可能です。
 
+### `nyagos.fields(TEXT)`
+
+TEXT を空白で分割して、文字列のテーブルとして返します
+
 ### `errorlevel,errormessage = nyagos.exec("シェルコマンド")`
 ### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2"...}`
 

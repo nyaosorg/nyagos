@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * Impl --read-stdin-as-file to read commands from stdin as a file for #327
 * Fix: it sometimes failed to execute GUI application on symblic linked folder
 * Fix: Commands with redirect (not pipeline) could not run on background
+* Add lua-function: nyagos.fields(TEXT) which splits TEXT with spaces.
 
 NYAGOS 4.3.2\_0
 ===============

@@ -59,6 +59,10 @@ completion list.
 It is linked to the the environment variable, which are able
 to be refered and assigned.
 
+### `nyagos.fields(TEXT)`
+
+It splits TEXT with white-spaces and returns them as table of strings.
+
 ### `errorlevel,errormessage = nyagos.exec("COMMAND")`
 ### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2",...}`
 
