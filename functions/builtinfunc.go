@@ -8,6 +8,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/msgbox"
@@ -510,4 +511,12 @@ func CmdBitOr(args []any_t) []any_t {
 
 func CmdBitXor(args []any_t) []any_t {
 	return bitOperators(args, 0, func(r, v int) int { return r ^ v })
+}
+
+func CmdFields(args []any_t) []any_t {
+	if len(args) <= 0 {
+		return []any_t{nil}
+	}
+	fields := strings.Fields(fmt.Sprint(args[0]))
+	return []any_t{fields}
 }

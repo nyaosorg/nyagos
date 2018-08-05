@@ -8,6 +8,7 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"chdir":          CmdChdir,
 	"commonprefix":   CmdCommonPrefix,
 	"elevated":       CmdElevated,
+	"fields":         CmdFields,
 	"getenv":         CmdGetEnv,
 	"gethistory":     CmdGetHistory,
 	"getkey":         CmdGetKey,
