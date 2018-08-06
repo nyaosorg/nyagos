@@ -45,26 +45,6 @@ nyagos.alias["for"]=function(args)
     nyagos.rawexec(nyagos.env.comspec,"/c",batchpathu)
     os.remove(batchpatha)
 end
-nyagos.alias.kill = function(args)
-    local command="taskkill.exe"
-    for i=1,#args do
-        if args[i] == "-f" then
-            command="taskkill.exe /F"
-        else
-            nyagos.exec(command .. " /PID " .. args[i])
-        end
-    end
-end
-nyagos.alias.killall = function(args)
-    local command="taskkill.exe"
-    for i=1,#args do
-        if args[i] == "-f" then
-            command="taskkill.exe /F"
-        else
-            nyagos.exec(command .. " /IM " .. args[i])
-        end
-    end
-end
 
 -- on chcp, font-width is changed.
 nyagos.alias.chcp = function(args)
