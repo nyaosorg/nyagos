@@ -115,6 +115,10 @@ List the directory. Supported options are below:
 
 Support both UTF8 and ANSI-text (auto detected)
 
+### `ps`
+
+Show a list of processes running.
+
 ### `pwd`
 
 Print the current woking drive and directory.
