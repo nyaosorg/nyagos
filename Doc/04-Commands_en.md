@@ -83,6 +83,9 @@ Display the history. No arguments, the last ten are displayed.
 * if *COND* is true, execute *THEN-BLOCK* or *THEN-STATEMENT*
 * if *COND* is false, execute *ELSE-BLOCK* or nothing.
 
+### `kill PID`
+
+Kill process specified by PID
 
 ### `ln [-s] SRC DST`
 

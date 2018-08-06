@@ -90,6 +90,10 @@ NYAGOS を終了します。
 * if *COND* is true, execute *THEN-BLOCK* or *THEN-STATEMENT*
 * if *COND* is false, execute *ELSE-BLOCK* or nothing.
 
+### `kill PID`
+
+PID で示されるプロセスを強制終了します
+
 ### `ln [-s] SRC DST`
 
 ハードリンク、もしくは、シンボリックリンクを作成します。

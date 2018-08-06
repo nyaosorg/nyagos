@@ -8,7 +8,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: it sometimes failed to execute GUI application on symblic linked folder
 * Fix: Commands with redirect (not pipeline) could not run on background
 * Add lua-function: nyagos.fields(TEXT) which splits TEXT with spaces.
-* #185 Add `ps` command
+* #185 Add `ps` and `kill` command
 
 NYAGOS 4.3.2\_0
 ===============
