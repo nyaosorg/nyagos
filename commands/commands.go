@@ -90,6 +90,7 @@ func init() {
 		"if":       cmdIf,
 		"ln":       cmdLn,
 		"lnk":      cmdLnk,
+		"kill":     cmdKill,
 		"ls":       cmdLs,
 		"md":       cmdMkdir,
 		"mkdir":    cmdMkdir,
