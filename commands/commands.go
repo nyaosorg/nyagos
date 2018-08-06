@@ -97,6 +97,7 @@ func init() {
 		"move":     cmdMove,
 		"open":     cmdOpen,
 		"popd":     cmdPopd,
+		"ps":       cmdPs,
 		"pushd":    cmdPushd,
 		"pwd":      cmdPwd,
 		"rd":       cmdRmdir,
