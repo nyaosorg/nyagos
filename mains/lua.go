@@ -284,6 +284,10 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		return lua.LNumber(value)
 	case uintptr:
 		return lua.LNumber(value)
+	case float32:
+		return lua.LNumber(value)
+	case float64:
+		return lua.LNumber(value)
 	case time.Month:
 		return lua.LNumber(value)
 	case bool:
@@ -301,6 +305,8 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 			return lua.LNumber(value.Int())
 		case reflect.Uint, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
 			return lua.LNumber(value.Uint())
+		case reflect.Float32, reflect.Float64:
+			return lua.LNumber(value.Float())
 		case reflect.Bool:
 			if value.Bool() {
 				return lua.LTrue
