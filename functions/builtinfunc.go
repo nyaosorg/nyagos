@@ -29,6 +29,13 @@ import (
 
 type any_t = interface{}
 
+func toNumber(value any_t) (int, bool) {
+	if f, ok := value.(float64); ok {
+		return int(f), true
+	}
+	return 0, false
+}
+
 const TooFewArguments = "Too few arguments"
 
 func toStr(arr []any_t, n int) string {
@@ -145,7 +152,7 @@ func CmdAccess(args []any_t) []any_t {
 		return []any_t{nil, "nyagos.access requilres two arguments"}
 	}
 	path := fmt.Sprint(args[0])
-	mode, mode_ok := args[1].(int)
+	mode, mode_ok := toNumber(args[1])
 	if !mode_ok {
 		return []any_t{nil, "mode value must be interger"}
 	}
@@ -306,7 +313,7 @@ func CmdGetHistory(args []any_t) []any_t {
 		return []any_t{}
 	}
 	if len(args) >= 1 {
-		if n, ok := args[len(args)-1].(int); ok {
+		if n, ok := toNumber(args[len(args)-1]); ok {
 			return []any_t{frame.DefaultHistory.At(n)}
 		}
 	}
@@ -348,11 +355,11 @@ func CmdSetRuneWidth(args []any_t) []any_t {
 	if len(args) < 2 {
 		return []any_t{nil, "too few aruments"}
 	}
-	char, ok := args[0].(int)
+	char, ok := toNumber(args[0])
 	if !ok {
 		return []any_t{nil, "not a number"}
 	}
-	width, ok := args[1].(int)
+	width, ok := toNumber(args[1])
 	if !ok {
 		return []any_t{nil, "not a number"}
 	}
@@ -492,7 +499,7 @@ func SetOption(args []any_t) []any_t {
 
 func bitOperators(args []any_t, result int, f func(int, int) int) []any_t {
 	for _, arg1tmp := range args {
-		if arg1, ok := arg1tmp.(int); ok {
+		if arg1, ok := toNumber(arg1tmp); ok {
 			result = f(result, arg1)
 		} else {
 			return []any_t{nil, fmt.Sprintf("%s : not a number", arg1tmp)}

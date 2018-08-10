@@ -216,7 +216,7 @@ func lvalueToInterface(L Lua, valueTmp lua.LValue) interface{} {
 	case lua.LString:
 		return string(value)
 	case lua.LNumber:
-		return int(value)
+		return float64(value)
 	case *lua.LUserData:
 		return value.Value
 	case *lua.LFunction:
