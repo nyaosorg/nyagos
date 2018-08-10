@@ -63,14 +63,14 @@ nyagos.key.C_x = function(this)
     local ch = nyagos.getkey()
     local c = string.lower(string.char(ch))
     local result
-    if c == 'r' or ch == nyagos.bitand(string.byte('r'),0x1F) then
+    if c == 'r' or ch == bit32.band(string.byte('r'),0x1F) then
         result = nyagos.box(share.__dump_history())
-    elseif ch == 'h' or ch == nyagos.bitand(string.byte('h') , 0x1F) then
+    elseif ch == 'h' or ch == bit32.band(string.byte('h') , 0x1F) then
         result = nyagos.eval('cd --history | box')
         if string.find(result,' ') then
             result = '"'..result..'"'
         end
-    elseif c == 'g' or ch == nyagos.bitand(string.byte('g'),0x1F) then
+    elseif c == 'g' or ch == bit32.band(string.byte('g'),0x1F) then
         result = nyagos.eval('git log --pretty="format:%h %s" | box')
         result = string.match(result,"^%S+") or ""
     end
