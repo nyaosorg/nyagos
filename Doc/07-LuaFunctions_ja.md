@@ -223,14 +223,6 @@ C言語の access 関数と同じです。
 
 ユーザがカーソルキーなどで選択した結果を得ます
 
-### `nyagos.bitand(a,b...)`
-
-a,b… の bit-and の結果を返します。本関数は Lua 5.1 向けです。
-
-### `nyagos.bitor(a,b...)`
-
-a,b… の bit-or の結果を返します。本関数は Lua 5.1 向けです。
-
 ### `nyagos.completion_hook = function(c) ... end`
 
 補完のフックです。関数を代入してください。
