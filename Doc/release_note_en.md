@@ -9,6 +9,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: Commands with redirect (not pipeline) could not run on background
 * Add lua-function: nyagos.fields(TEXT) which splits TEXT with spaces.
 * #185 Add `ps` and `kill` command
+* #329 Use `float64` instead of `int` for the number-type of Lua
 
 NYAGOS 4.3.2\_0
 ===============
