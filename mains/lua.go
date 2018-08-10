@@ -226,7 +226,11 @@ func lvalueToInterface(L Lua, valueTmp lua.LValue) interface{} {
 		L.ForEach(value, func(keyTmp, valTmp lua.LValue) {
 			key := lvalueToInterface(L, keyTmp)
 			val := lvalueToInterface(L, valTmp)
-			table[key] = val
+			if f, ok := key.(float64); ok {
+				table[int(f)] = val
+			} else {
+				table[key] = val
+			}
 		})
 		return table
 	default:
