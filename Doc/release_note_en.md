@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.3\_0
+===============
+on Aug.14,2018
+
 * #283 Omit the directory of path on completion by Ctrl-O
 * #326 New option: `nyagos.option.tilde_expansion`
 * Fix: `nyagos.option.xxxxxx = true` did not work
