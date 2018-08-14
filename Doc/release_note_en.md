@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* #330 Fix the original version of file:read incompatible behavior (Thx! @erw7)
+
 NYAGOS 4.3.3\_0
 ===============
 on Aug.14,2018

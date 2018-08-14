@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* #330 オリジナル版のfile:readの非互換な動作を修正 (Thx! @erw7)
+
 NYAGOS 4.3.3\_0
 ===============
 (2018.08.14)
