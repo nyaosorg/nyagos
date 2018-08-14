@@ -317,6 +317,10 @@ func fileRead(L *lua.LState) int {
 		if f, ok := ud.Value.(*ioLuaReader); ok {
 			r := f.reader
 			end := L.GetTop()
+			if end == 1 {
+				L.Push(lua.LString("*l"))
+				end++
+			}
 			result := make([]lua.LValue, 0, end-1)
 			for i := 2; i <= end; i++ {
 				val := L.Get(i)
@@ -336,7 +340,7 @@ func fileRead(L *lua.LState) int {
 					switch s {
 					case "*l":
 						line, err := r.ReadString('\n')
-						if err != nil {
+						if (err != nil && err != io.EOF) || (err == io.EOF && line == "") {
 							return lerror(L, err.Error())
 						}
 						line = strings.TrimSuffix(line, "\n")
