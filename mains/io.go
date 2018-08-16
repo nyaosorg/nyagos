@@ -313,6 +313,7 @@ func openIo(L *lua.LState) *lua.LTable {
 }
 
 func fileRead(L *lua.LState) int {
+	var err error
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
 		if f, ok := ud.Value.(*ioLuaReader); ok {
 			r := f.reader
@@ -325,11 +326,28 @@ func fileRead(L *lua.LState) int {
 			for i := 2; i <= end; i++ {
 				val := L.Get(i)
 				if num, ok := val.(lua.LNumber); ok {
+					if num == 0 {
+						_, err = r.ReadByte()
+						if err == io.EOF {
+							result = append(result, lua.LNil)
+							goto normalreturn
+						}
+						r.UnreadByte()
+					}
 					data := make([]byte, 0, int(num))
 					for len(data) < cap(data) {
-						b, err := r.ReadByte()
+						var b byte
+						b, err = r.ReadByte()
+						if err == io.EOF {
+							if len(data) == 0 {
+								result = append(result, lua.LNil)
+							} else {
+								result = append(result, lua.LString(string(data)))
+							}
+							goto normalreturn
+						}
 						if err != nil {
-							return lerror(L, err.Error())
+							goto errreturn
 						}
 						if b != '\r' {
 							data = append(data, b)
@@ -339,42 +357,62 @@ func fileRead(L *lua.LState) int {
 				} else if s, ok := val.(lua.LString); ok {
 					switch s {
 					case "*l":
-						line, err := r.ReadString('\n')
-						if (err != nil && err != io.EOF) || (err == io.EOF && line == "") {
-							return lerror(L, err.Error())
+						var line string
+						line, err = r.ReadString('\n')
+						if err == io.EOF && line == "" {
+							result = append(result, lua.LNil)
+							goto normalreturn
+						}
+						if err != nil {
+							goto errreturn
 						}
 						line = strings.TrimSuffix(line, "\n")
 						line = strings.TrimSuffix(line, "\r")
 						result = append(result, lua.LString(line))
 						break
 					case "*a":
-						all, err := ioutil.ReadAll(r)
+						var all []byte
+						all, err = ioutil.ReadAll(r)
+						if err == io.EOF {
+							result = append(result, lua.LString(""))
+							goto normalreturn
+						}
 						if err != nil {
-							return lerror(L, err.Error())
+							goto errreturn
 						}
 						text := strings.Replace(string(all), "\r\n", "\n", -1)
 						result = append(result, lua.LString(text))
 						break
 					case "*n":
 						var n int
-						if _, err := fmt.Fscan(r, &n); err != nil {
-							return lerror(L, err.Error())
+						if _, err = fmt.Fscan(r, &n); err != nil {
+							if err == io.EOF ||
+								(err != nil && err.Error() == "expected integer") {
+								result = append(result, lua.LNil)
+								goto normalreturn
+							}
+							goto errreturn
 						}
 						result = append(result, lua.LNumber(n))
 					default:
-						return lerror(L, "(file)read: invalid argument")
+						L.ArgError(i, "invalid format")
 					}
 				} else {
-					return lerror(L, "(file)read: invalid argument")
+					L.ArgError(i, "invalid argument")
 				}
 			}
+		normalreturn:
 			for _, v := range result {
 				L.Push(v)
 			}
 			return len(result)
+		errreturn:
+			L.RaiseError(err.Error())
+			return 2
 		}
 	}
-	return lerror(L, "(file).read: not a file-handle")
+	L.ArgError(1, "not a file-handle")
+	return 0
 }
 
 func fileSeek(L *lua.LState) int {
