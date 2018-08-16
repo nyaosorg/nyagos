@@ -27,6 +27,11 @@ NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェ�
   * コードページ文字列とUTF8とのコンバート関数
   * COM サポート
 
+ダウンロード
+------------
+
+* https://github.com/zetamatta/nyagos/releases
+
 目次
 ----
 

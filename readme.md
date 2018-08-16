@@ -29,6 +29,11 @@ Programming Language GO and Lua.
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
   * Support to call COM(OLE)
 
+Download Binary
+---------------
+
+* https://github.com/zetamatta/nyagos/releases
+
 Contents
 --------
 
