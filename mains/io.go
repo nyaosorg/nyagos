@@ -187,7 +187,7 @@ func ioOpen(L *lua.LState) int {
 		if err != nil {
 			return lerror(L, err.Error())
 		}
-		L.Push(newIoLuaReader(L, fd, fd, nil))
+		L.Push(newIoLuaReader(L, fd, fd, fd))
 		return 1
 	}
 	if mode == "w" {
@@ -423,6 +423,17 @@ func fileSeek(L *lua.LState) int {
 	var seeker io.Seeker
 	if f, ok := ud.Value.(*ioLuaReader); ok {
 		seeker = f.seeker
+		buffered := f.reader.Buffered()
+		if seeker != nil {
+			_, err := seeker.Seek(-int64(buffered), 1)
+			if err != nil {
+				return lerror(L, err.Error())
+			}
+			_, err = f.reader.Discard(buffered)
+			if err != nil {
+				return lerror(L, "(file)seek: failed discard buffered data")
+			}
+		}
 	} else if f, ok := ud.Value.(*ioLuaWriter); ok {
 		seeker = f.seeker
 	}
