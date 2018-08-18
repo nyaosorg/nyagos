@@ -363,7 +363,7 @@ func fileRead(L *lua.LState) int {
 							result = append(result, lua.LNil)
 							goto normalreturn
 						}
-						if err != nil {
+						if err != nil && err != io.EOF {
 							goto errreturn
 						}
 						line = strings.TrimSuffix(line, "\n")
