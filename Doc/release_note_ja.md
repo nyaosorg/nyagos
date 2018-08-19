@@ -2,6 +2,8 @@
 
 * #330,#331 オリジナル版のfile:readの非互換な動作を修正 (Thx! @erw7)
 * #332 io.open("w") でバッファリングしないようにした (Thx! @spiegel-im-spiegel)
+* #333 Fix file:seek() が読み取り時に期待どおり同しなかった点を修正 (Thx! @erw7)
+* #333 Fix file:close() の戻り値がおかしかった点を修正 (Thx! @erw7)
 
 NYAGOS 4.3.3\_0
 ===============
