@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * #330,#331 Fix the original version of file:read incompatible behavior (Thx! @erw7)
+* #332 stop buffering on io.open("w") (Thx! @spiegel-im-spiegel)
 
 NYAGOS 4.3.3\_0
 ===============
