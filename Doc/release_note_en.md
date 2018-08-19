@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * #332 stop buffering on io.open("w") (Thx! @spiegel-im-spiegel)
 * #333 Fix file:seek() did not work on reading as expected (Thx! @erw7)
 * #333 Fix file:close()'s return value was invalid. (Thx! @erw7)
+* #319 Impl utf8.len()
 
 NYAGOS 4.3.3\_0
 ===============
