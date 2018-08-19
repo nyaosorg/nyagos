@@ -72,7 +72,7 @@ func fileClose(L *lua.LState) int {
 			if err != nil {
 				return lerror(L, err.Error())
 			}
-      L.Push(lua.LTrue)
+			L.Push(lua.LTrue)
 			return 1
 		}
 	}
