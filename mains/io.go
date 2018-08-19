@@ -32,15 +32,12 @@ func (io *ioLuaReader) Close() error {
 }
 
 type ioLuaWriter struct {
-	writer *bufio.Writer
+	writer io.Writer
 	closer io.Closer
 	seeker io.Seeker
 }
 
 func (io *ioLuaWriter) Close() error {
-	if io.writer != nil {
-		io.writer.Flush()
-	}
 	if io.closer != nil {
 		err := io.closer.Close()
 		io.closer = nil
@@ -83,9 +80,8 @@ func fileClose(L *lua.LState) int {
 
 func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer, s io.Seeker) *lua.LUserData {
 	ud := L.NewUserData()
-	bw := bufio.NewWriter(w)
 	ud.Value = &ioLuaWriter{
-		writer: bw,
+		writer: w,
 		seeker: s,
 		closer: c,
 	}
@@ -269,7 +265,9 @@ func fileLines(L *lua.LState) int {
 func fileFlush(L *lua.LState) int {
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
 		if f, ok := ud.Value.(*ioLuaWriter); ok {
-			f.writer.Flush()
+			if fd, okok := f.writer.(*os.File); okok {
+				fd.Sync()
+			}
 			L.Push(ud)
 			return 1
 		}
