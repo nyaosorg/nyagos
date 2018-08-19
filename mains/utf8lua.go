@@ -98,11 +98,55 @@ func utf8len(L *lua.LState) int {
 	return 1
 }
 
+func utf8offset(L *lua.LState) int {
+	_s, ok := L.Get(1).(lua.LString)
+	if !ok {
+		return lerror(L, "utf8.offset: not string")
+	}
+	s := string(_s)
+	_n, ok := L.Get(2).(lua.LNumber)
+	if !ok {
+		return lerror(L, "utf8.offset: not a number")
+	}
+	n := int(_n)
+
+	_i, ok := L.Get(3).(lua.LNumber)
+	i := 1
+	if ok {
+		i = int(_i)
+	}
+	if i == 0 {
+		i = 1
+	} else if i < 0 {
+		i += len(s) + 1
+	}
+	for i > 0 && i < len(s) && !utf8.RuneStart(s[i-1]) {
+		i++
+	}
+	s = s[i-1:]
+
+	if n < 0 {
+		n = utf8.RuneCountInString(s) + n
+	} else if n > 0 {
+		n--
+	}
+	for pos := range s {
+		if n <= 0 {
+			L.Push(lua.LNumber(pos + 1 + i - 1))
+			return 1
+		}
+		n--
+	}
+	L.Push(lua.LNumber(len(s)))
+	return 1
+}
+
 func setupUtf8Table(L *lua.LState) {
 	table := L.NewTable()
 	L.SetField(table, "codes", L.NewFunction(utf8codes))
 	L.SetField(table, "charpattern", lua.LString("[\000-\x7F\xC2-\xF4][\x80-\xBF]*"))
 	L.SetField(table, "char", L.NewFunction(utf8char))
 	L.SetField(table, "len", L.NewFunction(utf8len))
+	L.SetField(table, "offset", L.NewFunction(utf8offset))
 	L.SetGlobal("utf8", table)
 }
