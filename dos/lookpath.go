@@ -23,6 +23,9 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 		if f.IsDir() {
 			return true
 		}
+		if filepath.Ext(f.Name()) == "" {
+			return true
+		}
 		for _, name1 := range names {
 			if strings.EqualFold(f.Name(), name1) {
 				foundpath = filepath.Join(dir1, f.Name())
