@@ -14,7 +14,6 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	var searchBuf strings.Builder
 	foundStr := ""
 	searchStr := ""
-	lastDrawWidth := 0
 	lastFoundPos := this.History.Len() - 1
 	this.Backspace(this.Cursor - this.ViewStart)
 
@@ -43,12 +42,7 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			this.PutRune(ch)
 			drawWidth += w1
 		}
-		if lastDrawWidth > drawWidth {
-			n := lastDrawWidth - drawWidth
-			this.PutRunes(' ', n)
-			this.Backspace(n)
-		}
-		lastDrawWidth = drawWidth
+		this.Eraseline()
 		io.WriteString(this.Writer, CURSOR_ON)
 		this.Writer.Flush()
 		charcode := getch.Rune()
