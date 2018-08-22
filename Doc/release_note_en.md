@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * #319 Impl utf8.len()
 * Fix: `which` reported files which has no suffixes
 * `pwd` shows logical-path (=pwd -l) as default rather than phisical-path (=pwd -p)
+* Fix: trash was left when incremental-search starts and some string exists on command-line.
 
 NYAGOS 4.3.3\_0
 ===============
