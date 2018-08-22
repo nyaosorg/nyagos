@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * #333 Fix file:close()'s return value was invalid. (Thx! @erw7)
 * #319 Impl utf8.len()
 * Fix: `which` reported files which has no suffixes
+* `pwd` shows logical-path (=pwd -l) as default rather than phisical-path (=pwd -p)
 
 NYAGOS 4.3.3\_0
 ===============

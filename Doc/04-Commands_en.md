@@ -127,8 +127,8 @@ Show a list of processes running.
 Print the current woking drive and directory.
 
 * `pwd -N` (N:digit) : print the N-previous directory.
-* `pwd -L` : use PWD from environment, even if it contains symlinks.
-* `pwd -P` : avoid symlinks. (default)
+* `pwd -L` : use PWD from environment, even if it contains symlinks.(default)
+* `pwd -P` : avoid symlinks.
 
 ### `set ENV=VAL`
 
