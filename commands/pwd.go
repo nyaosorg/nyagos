@@ -9,7 +9,7 @@ import (
 )
 
 func cmdPwd(ctx context.Context, cmd Param) (int, error) {
-	physical := true
+	physical := false
 	if len(cmd.Args()) >= 2 {
 		if cmd.Arg(1) == "-P" || cmd.Arg(1) == "-p" {
 			physical = true
