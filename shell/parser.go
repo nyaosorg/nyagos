@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -69,16 +70,8 @@ func OurGetEnv(name string) (string, bool) {
 	}
 }
 
-func chomp(buffer *strings.Builder) {
-	original := buffer.String()
-	buffer.Reset()
-	var lastchar rune
-	for i, ch := range original {
-		if i > 0 {
-			buffer.WriteRune(lastchar)
-		}
-		lastchar = ch
-	}
+func chomp(buffer *bytes.Buffer) {
+	buffer.Truncate(buffer.Len() - 1)
 }
 
 const NOTQUOTED = '\000'
@@ -186,7 +179,7 @@ func parse1(text string) ([]*StatementT, error) {
 	args := make([]string, 0)
 	rawArgs := make([]string, 0)
 	lastchar := ' '
-	var buffer strings.Builder
+	var buffer bytes.Buffer
 	isNextRedirect := false
 	redirect := make([]*_Redirecter, 0, 3)
 
