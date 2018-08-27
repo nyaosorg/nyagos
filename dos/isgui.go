@@ -1,8 +1,9 @@
 package dos
 
 import (
-	"github.com/hillu/go-pefile"
 	"io/ioutil"
+
+	"github.com/H5eye/go-pefile"
 )
 
 func isGui(fname string) (bool, error) {
