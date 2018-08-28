@@ -3,7 +3,7 @@ package dos
 import (
 	"io/ioutil"
 
-	"github.com/H5eye/go-pefile"
+	"github.com/hillu/go-pefile"
 )
 
 func isGui(fname string) (bool, error) {
