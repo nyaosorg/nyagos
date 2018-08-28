@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: `which` reported files which has no suffixes
 * `pwd` shows logical-path (=pwd -l) as default rather than phisical-path (=pwd -p)
 * Fix: trash was left when incremental-search starts and some string exists on command-line.
+* Reduced the size of executable with -lfdflags="-s -w"
 
 NYAGOS 4.3.3\_0
 ===============
