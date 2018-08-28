@@ -253,7 +253,7 @@ function Build($version,$tags) {
     Make-SysO $version
 
     Write-Verbose "$ $GO build -o '$target'"
-    & $GO build "-o" $target -ldflags "-X main.version=$version" $tags
+    & $GO build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
         Do-Copy $target ".\nyagos.exe"
     }
