@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.3\_1
+===============
+on Aug.29,2018
+
 * #330,#331 Fix the original version of file:read incompatible behavior (Thx! @erw7)
 * #332 stop buffering on io.open("w") (Thx! @spiegel-im-spiegel)
 * #333 Fix file:seek() did not work on reading as expected (Thx! @erw7)

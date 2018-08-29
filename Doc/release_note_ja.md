@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.3\_1
+===============
+(2018.08.29)
+
 * #330,#331 オリジナル版のfile:readの非互換な動作を修正 (Thx! @erw7)
 * #332 io.open("w") でバッファリングしないようにした (Thx! @spiegel-im-spiegel)
 * #333 Fix file:seek() が読み取り時に期待どおり同しなかった点を修正 (Thx! @erw7)
