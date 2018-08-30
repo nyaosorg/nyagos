@@ -1,5 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
+* Append error message the filename on overwriting to existing file on redirect.
+* Fix error for overwriting on redirect to `nul` when `noclobber` is set.
+
 NYAGOS 4.3.3\_1
 ===============
 on Aug.29,2018
