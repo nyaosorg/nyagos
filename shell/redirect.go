@@ -2,6 +2,7 @@ package shell
 
 import (
 	"errors"
+	"fmt"
 	"os"
 )
 
@@ -52,7 +53,7 @@ func (r *_Redirecter) open() (*os.File, error) {
 		if NoClobber && !r.force {
 			_, err := os.Stat(r.path)
 			if err == nil {
-				return nil, os.ErrExist
+				return nil, fmt.Errorf("%s: cannot overwrite existing file", r.path)
 			}
 		}
 		return os.Create(r.path)
