@@ -4,13 +4,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 )
 
 var errCtrlC = errors.New("^C")
 
-func _du(path string, output func(string, int64) error, blocksize int64) (int64, error) {
+// _du returns the sum (bytes) of path
+func _du(path string, output func(string, int64) error, stderr io.Writer, blocksize int64) (int64, error) {
 	fd, err := os.Open(path)
 	if err != nil {
 		return 0, err
@@ -42,14 +44,14 @@ func _du(path string, output func(string, int64) error, blocksize int64) (int64,
 	}
 	for _, dir1 := range dirs {
 		fullpath := filepath.Join(path, dir1)
-		diskuse1, err := _du(fullpath, output, blocksize)
-		if err != nil {
-			return diskuse, err
+		diskuse1, err := _du(fullpath, output, stderr, blocksize)
+		if err == nil {
+			if err = output(fullpath, diskuse1); err == nil {
+				diskuse += diskuse1
+				continue
+			}
 		}
-		if err1 := output(fullpath, diskuse1); err1 != nil {
-			return diskuse, err1
-		}
-		diskuse += diskuse1
+		fmt.Fprintf(stderr, "%s: %s\n", fullpath, err)
 	}
 	return diskuse, nil
 }
@@ -81,7 +83,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 			}
 			continue
 		}
-		size, err := _du(arg1, output, 4096)
+		size, err := _du(arg1, output, cmd.Err(), 4096)
 		count++
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
@@ -90,7 +92,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, arg1)
 	}
 	if count <= 0 {
-		size, err := _du(".", output, 4096)
+		size, err := _du(".", output, cmd.Err(), 4096)
 		if err != nil {
 			return 1, err
 		}
