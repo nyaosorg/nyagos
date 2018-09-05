@@ -2,6 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * Append error message the filename on overwriting to existing file on redirect.
 * Fix error for overwriting on redirect to `nul` when `noclobber` is set.
+* diskused: continue counting how bytes disk used even if errors are found.
 
 NYAGOS 4.3.3\_1
 ===============
