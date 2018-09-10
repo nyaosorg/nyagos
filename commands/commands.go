@@ -30,6 +30,7 @@ type Param interface {
 
 var buildInCommand map[string]func(context.Context, Param) (int, error)
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
+var backslashPattern = regexp.MustCompile(`^\\(\w*)$`)
 
 // Exec is the entry function to call built-in functions from Shell
 func Exec(ctx context.Context, cmd Param) (int, bool, error) {
@@ -41,13 +42,22 @@ func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	function, ok := buildInCommand[name]
 	if !ok {
 		m := unscoNamePattern.FindStringSubmatch(name)
-		if m == nil {
-			return 0, false, nil
-		}
-		name = m[1]
-		function, ok = buildInCommand[name]
-		if !ok {
-			return 0, false, nil
+		if m != nil {
+			name = m[1]
+			function, ok = buildInCommand[name]
+			if !ok {
+				return 0, false, nil
+			}
+		} else {
+			n := backslashPattern.FindStringSubmatch(name)
+			if n == nil {
+				return 0, false, nil
+			}
+			name = n[1]
+			function, ok = buildInCommand[name]
+			if !ok {
+				return 0, false, nil
+			}
 		}
 	}
 	cmd.SetArgs(findfile.Globs(cmd.Args()))
