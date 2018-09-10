@@ -13,9 +13,10 @@ import (
 	"time"
 
 	"github.com/dustin/go-humanize"
+	"github.com/mattn/go-isatty"
+
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
-
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -574,6 +575,9 @@ func Main(ctx context.Context, args []string, out io.Writer, err io.Writer) erro
 	}
 	if (flag & O_COLOR) != 0 {
 		io.WriteString(out, ANSI_END)
+	}
+	if file, ok := out.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
+		flag |= O_ONE
 	}
 	return lsCore(ctx, paths, flag, out, err)
 }
