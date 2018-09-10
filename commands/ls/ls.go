@@ -378,10 +378,10 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	var err error
-	if (flag & O_ONE) != 0 {
-		err = lsSimple(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
-	} else if (flag & O_LONG) != 0 {
+	if (flag & O_LONG) != 0 {
 		err = lsLong(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+	} else if (flag & O_ONE) != 0 {
+		err = lsSimple(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
 		err = lsBox(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	}
@@ -448,10 +448,10 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 		nodesArray := fileInfoCollection{flag: flag, nodes: files}
 		sort.Sort(nodesArray)
 		var err error
-		if (flag & O_ONE) != 0 {
-			err = lsSimple(ctx, ".", files, flag, out)
-		} else if (flag & O_LONG) != 0 {
+		if (flag & O_LONG) != 0 {
 			err = lsLong(ctx, ".", files, flag, out)
+		} else if (flag & O_ONE) != 0 {
+			err = lsSimple(ctx, ".", files, flag, out)
 		} else {
 			err = lsBox(ctx, ".", files, flag, out)
 		}
