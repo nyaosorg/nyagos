@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * Fix error for overwriting on redirect to `nul` when `noclobber` is set.
 * diskused: continue counting how bytes disk used even if errors are found.
 * ls: fixed `-l` option did not work with `-1` option
+* ls: fixed: did not show one file per a line when output is not terminal.
 
 NYAGOS 4.3.3\_1
 ===============
