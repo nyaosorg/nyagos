@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * ls: fixed `-l` option did not work with `-1` option
 * ls: fixed: did not show one file per a line when output is not terminal.
 * Not aliased builtin commands are able to be called as `\ls` like bash
+* Fix the broken alias "for"
 
 NYAGOS 4.3.3\_1
 ===============
