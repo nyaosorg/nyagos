@@ -31,19 +31,10 @@ nyagos.alias.lua_f=function(args)
 end
 
 nyagos.alias["for"]=function(args)
-    local batchpathu = nyagos.env.temp .. os.tmpname() .. ".cmd"
-    local batchpatha = nyagos.utoa(batchpathu)
-    local fd,fd_err = nyagos.open(batchpathu,"w")
-    if not fd then
-        nyagos.writerr(fd_err.."\n")
-        return
-    end
-    local cmdline = "@for "..table.concat(args.rawargs," ").."\n"
-    fd:write("@set prompt=$G\n")
-    fd:write(cmdline)
-    fd:close()
-    nyagos.rawexec(nyagos.env.comspec,"/c",batchpathu)
-    os.remove(batchpatha)
+    local origenv = os.getenv("CMDARG")
+    nyagos.env.CMDARG = "for "..table.concat(args.rawargs," ").."\n"
+    nyagos.rawexec(nyagos.env.comspec,"/c","%CMDARG%")
+    nyagos.env.CMDARG = origenv
 end
 
 -- on chcp, font-width is changed.
