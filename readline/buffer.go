@@ -7,8 +7,6 @@ import (
 	"unicode"
 )
 
-var hasCache = map[rune]struct{}{}
-
 func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
 		this.Writer.WriteByte('^')

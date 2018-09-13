@@ -104,8 +104,6 @@ func (this *luaWrapper) Close() error {
 	return nil
 }
 
-var optionStdinIsNotTerminal = false
-
 func Main() error {
 	ctx := context.Background()
 

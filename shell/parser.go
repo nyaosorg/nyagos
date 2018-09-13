@@ -22,8 +22,6 @@ type StatementT struct {
 	Term     string
 }
 
-var prefix []string = []string{" 0<", " 1>", " 2>"}
-
 var PercentFunc = map[string]func() string{
 	"CD": func() string {
 		wd, err := os.Getwd()
