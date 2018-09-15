@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * ls: fixed: did not show one file per a line when output is not terminal.
 * Not aliased builtin commands are able to be called as `\ls` like bash
 * Fix the broken alias "for"
+* Fix on completion the path separating characters were replaced to default one even if the word was not filepath for #334
 
 NYAGOS 4.3.3\_1
 ===============
