@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"unicode"
 
@@ -187,20 +186,6 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		return readline.CONTINUE
 	}
 
-	slashToBackSlash := true
-	firstFoundSlashPos := strings.IndexRune(comp.Word, '/')
-	firstFoundBackSlashPos := strings.IndexRune(comp.Word, os.PathSeparator)
-	if UseSlash {
-		slashToBackSlash = false
-		if firstFoundBackSlashPos >= 0 && (firstFoundSlashPos == -1 || firstFoundBackSlashPos < firstFoundSlashPos) {
-			slashToBackSlash = true
-		}
-	} else {
-		if firstFoundSlashPos >= 0 && (firstFoundBackSlashPos == -1 || firstFoundSlashPos < firstFoundBackSlashPos) {
-			slashToBackSlash = false
-		}
-	}
-
 	complete_list := toComplete(comp.List)
 	commonStr := CommonPrefix(complete_list)
 	quotechar := byte(0)
@@ -232,9 +217,6 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 	}
 	if len(comp.List) == 1 && !endWithRoot(commonStr) && !strings.HasSuffix(commonStr, `%`) {
 		commonStr += " "
-	}
-	if slashToBackSlash {
-		commonStr = filepath.FromSlash(commonStr)
 	}
 	if comp.RawWord == commonStr {
 		this.Writer.WriteByte('\n')
