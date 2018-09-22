@@ -13,7 +13,7 @@ var procGetCurrentProcess = kernel32.NewProc("GetCurrentProcess")
 
 const ( // from winnt.h
 	// cTokenElevationType = 18
-	cTokenElevation     = 20
+	cTokenElevation = 20
 
 	cTokenQuery = 8
 )

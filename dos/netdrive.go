@@ -53,7 +53,7 @@ type netresourceT struct {
 	RemoteName  *uint16
 	Comment     *uint16
 	Provider    *uint16
-	_        [16 * 1024]byte
+	_           [16 * 1024]byte
 }
 
 func u2str(u *uint16) string {
