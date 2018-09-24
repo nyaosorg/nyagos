@@ -19,7 +19,7 @@ func WScriptShell() (*ole.IUnknown, *ole.IDispatch, error) {
 	return agent, agentDis, nil
 }
 
-// ReadShortcut reads *.lnk file.
+// ReadShortcut reads *.lnk file and returns targetpath and working-directory.
 func ReadShortcut(path string) (string, string, error) {
 	agent, agentDis, err := WScriptShell()
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"unicode"
 
 	"github.com/zetamatta/go-getch"
@@ -88,14 +89,22 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 			cm.Arg(0), cm.Arg(0))
 		return 0, nil
 	}
-	isDir := judgeDir(args[len(args)-1])
+
+	_dst := args[len(args)-1]
+	if strings.ToLower(filepath.Ext(_dst)) == ".lnk" {
+		if __dst, _, err := dos.ReadShortcut(_dst); err == nil {
+			_dst = __dst
+		}
+	}
+
+	isDir := judgeDir(_dst)
 	srcs := args[0 : len(args)-1]
 	for i, src := range srcs {
 		if getch.IsCtrlCPressed() {
 			fmt.Fprintln(cm.Err(), "^C")
 			return 0, nil
 		}
-		dst := args[len(args)-1]
+		dst := _dst
 		if isDir {
 			dst = filepath.Join(dst, filepath.Base(src))
 		}
