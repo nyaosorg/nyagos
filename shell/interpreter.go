@@ -387,13 +387,19 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				cmd.Close()
 			} else {
 				// background
-				if !isBackGround {
+				var newctx context.Context
+				if isBackGround {
+					// let Context not terminate background-work (#313's 2nd)
+					// for the problem gvim starts with empty buffer
+					// executing `git blame FILE | type | gvim - &`.
+					newctx = context.Background()
+				} else {
 					wg.Add(1)
+					newctx = ctx
 				}
-				newctx := ctx
 				if tag := cmd.Tag(); tag != nil {
 					var newtag CloneCloser
-					if newctx, newtag, err = tag.Clone(ctx); err != nil {
+					if newctx, newtag, err = tag.Clone(newctx); err != nil {
 						fmt.Fprintln(os.Stderr, err.Error())
 						return -1, err
 					} else {
