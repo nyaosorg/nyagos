@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#310) copy and move support shortcut files(`*.lnk`) as destination.
+* (#313 reopened) Fix problem when `git blame FILES | type | gvim - &`, gvim starts with empty buffer.
 
 NYAGOS 4.3.3\_2
 ===============

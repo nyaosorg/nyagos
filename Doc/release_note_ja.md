@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * (#310) copy と move の宛先でショートカットをサポート
+* (#313 reopened) `git blame FILES | type | gvim - &` で gvim が空バッファで始まってしまう問題を修正
 
 NYAGOS 4.3.3\_2
 ===============
