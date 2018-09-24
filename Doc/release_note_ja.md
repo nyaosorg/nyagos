@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* (#310) copy と move の宛先でショートカットをサポート
+
 NYAGOS 4.3.3\_2
 ===============
 (2018.09.22)

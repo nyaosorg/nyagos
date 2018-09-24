@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#310) copy and move support shortcut files(`*.lnk`) as destination.
+
 NYAGOS 4.3.3\_2
 ===============
 on Sep.22,2018

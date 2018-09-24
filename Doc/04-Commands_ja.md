@@ -168,8 +168,10 @@ PID で示されるプロセスを強制終了します
 
 ### `copy SOURCE-FILENAME DESTINATE-FILENAME`
 ### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
+### `copy SOURCE-FILENAME(S)... SHORTCUT(*.lnk)`
 ### `move OLD-FILENAME NEW-FILENAME`
 ### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
+### `move SOURCE-FILENAME(S)... SHORTCUT(*.lnk)`
 ### `del FILE(S)...`
 ### `erase FILE(S)...`
 ### `mkdir [/p] NEWDIR(S)...`

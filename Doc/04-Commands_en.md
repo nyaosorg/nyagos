@@ -161,8 +161,10 @@ Report which file is executed.
 
 ### `copy SOURCE-FILENAME DESTINATE-FILENAME`
 ### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
+### `copy SOURCE-FILENAME(S)... SHORT-CUT(*.lnk)`
 ### `move OLD-FILENAME NEW-FILENAME`
 ### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
+### `move SOURCE-FILENAME(S)... SHORT-CUT(*.lnk)`
 ### `del FILE(S)...`
 ### `erase FILE(S)...`
 ### `mkdir [/p] NEWDIR(S)...`
