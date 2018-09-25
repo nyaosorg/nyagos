@@ -418,16 +418,18 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 const ctxkey = "github.com/zetamatta/nyagos"
 
 // setContext
-// We does not use (lua.LState)SetContext.
-// Because sometimes cancel is requrested on unexpected timing.
 func setContext(L Lua, ctx context.Context) {
 	reg := L.Get(lua.RegistryIndex)
 	if ctx != nil {
 		u := L.NewUserData()
 		u.Value = ctx
 		L.SetField(reg, ctxkey, u)
+
+		L.SetContext(ctx)
 	} else {
 		L.SetField(reg, ctxkey, lua.LNil)
+
+		L.SetContext(context.Background())
 	}
 }
 
