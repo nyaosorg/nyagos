@@ -51,14 +51,9 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 			quiet = true
 			continue
 		}
-		stat, err := os.Stat(arg1)
+		stat, err := os.Lstat(arg1)
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
-			errorcount++
-			continue
-		}
-		if !stat.IsDir() {
-			fmt.Fprintf(cmd.Err(), "%s: not directory\n", arg1)
 			errorcount++
 			continue
 		}
@@ -78,6 +73,11 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 			}
 		}
 		if sOption {
+			if !stat.IsDir() {
+				fmt.Fprintf(cmd.Err(), "%s: not directory\n", arg1)
+				errorcount++
+				continue
+			}
 			if !quiet {
 				fmt.Fprintln(cmd.Out())
 			}
