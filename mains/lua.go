@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"reflect"
 	"runtime"
@@ -455,20 +456,16 @@ func dispose(L *lua.LState, val lua.LValue) {
 	}
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
-	defer setContext(L, getContext(L))
-	ctx = context.WithValue(ctx, shellKey, sh)
-	setContext(L, ctx)
-
+func luaRedirect(ctx context.Context, _stdin io.Reader, _stdout, _stderr io.Writer, L Lua, callback func() error) error {
 	ioTbl := L.GetGlobal("io")
-	stdin := newIoLuaReader(L, sh.In(), nil, nil)
-	stdout := newIoLuaWriter(L, sh.Out(), nil, nil)
-	stderr := newIoLuaWriter(L, sh.Err(), nil, nil)
+	stdin := newIoLuaReader(L, _stdin, nil, nil)
+	stdout := newIoLuaWriter(L, _stdout, nil, nil)
+	stderr := newIoLuaWriter(L, _stderr, nil, nil)
 	L.SetField(ioTbl, "stdin", stdin)
 	L.SetField(ioTbl, "stdout", stdout)
 	L.SetField(ioTbl, "stderr", stderr)
 
-	err := L.PCall(nargs, nresult, nil)
+	err := callback()
 
 	dispose(L, stdin)
 	dispose(L, stdout)
@@ -477,6 +474,16 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) er
 	L.SetField(ioTbl, "stdout", lua.LNil)
 	L.SetField(ioTbl, "stderr", lua.LNil)
 	return err
+}
+
+func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
+	defer setContext(L, getContext(L))
+	ctx = context.WithValue(ctx, shellKey, sh)
+	setContext(L, ctx)
+
+	return luaRedirect(ctx, sh.In(), sh.Out(), sh.Err(), L, func() error {
+		return L.PCall(nargs, nresult, nil)
+	})
 }
 
 func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {

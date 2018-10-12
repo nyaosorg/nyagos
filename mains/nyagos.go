@@ -72,7 +72,9 @@ func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string
 	}
 	defer setContext(L, getContext(L))
 	setContext(L, ctx)
-	return nil, DoFileExceptForAtmarkLines(L, fname)
+	return nil, luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
+		return DoFileExceptForAtmarkLines(L, fname)
+	})
 }
 
 func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
@@ -83,7 +85,9 @@ func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code strin
 	ctx = context.WithValue(ctx, shellKey, this.Sh)
 	defer setContext(L, getContext(L))
 	setContext(L, ctx)
-	return L.DoString(code)
+	return luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
+		return L.DoString(code)
+	})
 }
 
 type luaWrapper struct {
