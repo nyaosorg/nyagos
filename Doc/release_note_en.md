@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: rmdir could not remove the broken junction
 * Fix: Ctrl-C did not work in Lua-Script and some extern process
 * (#267) `type` and `more` support UTF16 (requires go-texts package)
+* (#336) Fix `io.write` did not work with -e and --lua-file
 
 NYAGOS 4.3.3\_2
 ===============
