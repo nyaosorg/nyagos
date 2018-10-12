@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/atotto/clipboard"
-	"github.com/zetamatta/go-mbcs"
+	"github.com/zetamatta/go-texts/mbcs"
 )
 
 func cmdClip(ctx context.Context, cmd Param) (int, error) {
@@ -17,7 +17,7 @@ func cmdClip(ctx context.Context, cmd Param) (int, error) {
 	if utf8.Valid(data) {
 		clipboard.WriteAll(string(data))
 	} else {
-		str, err := mbcs.AtoU(data)
+		str, err := mbcs.AtoU(data, mbcs.ConsoleCP())
 		if err == nil {
 			clipboard.WriteAll(str)
 		} else {
