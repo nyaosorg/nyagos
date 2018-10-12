@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * (#313 reopened) Fix problem when `git blame FILES | type | gvim - &`, gvim starts with empty buffer.
 * Fix: rmdir could not remove the broken junction
 * Fix: Ctrl-C did not work in Lua-Script and some extern process
+* (#267) `type` and `more` support UTF16 (requires go-texts package)
 
 NYAGOS 4.3.3\_2
 ===============
