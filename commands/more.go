@@ -8,13 +8,11 @@ import (
 	"io"
 	"os"
 	"regexp"
-	"strings"
-	"unicode/utf8"
 
 	"github.com/mattn/go-runewidth"
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-getch"
-	"github.com/zetamatta/go-mbcs"
+	"github.com/zetamatta/go-texts/mbcs"
 )
 
 var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
@@ -23,22 +21,12 @@ var bold = false
 var screenWidth int
 var screenHeight int
 
-func more(r io.Reader, cmd Param) bool {
+func more(_r io.Reader, cmd Param) bool {
+	r := mbcs.NewAutoDetectReader(_r, mbcs.ConsoleCP())
 	scanner := bufio.NewScanner(r)
 	count := 0
 	for scanner.Scan() {
-		line := scanner.Bytes()
-		var text string
-		if utf8.Valid(line) {
-			text = string(line)
-		} else {
-			var err error
-			text, err = mbcs.AtoU(line)
-			if err != nil {
-				text = err.Error()
-			}
-		}
-		text = strings.Replace(text, "\xEF\xBB\xBF", "", 1)
+		text := scanner.Text()
 		width := runewidth.StringWidth(ansiStrip.ReplaceAllString(text, ""))
 		lines := (width + screenWidth) / screenWidth
 		for count+lines >= screenHeight {
