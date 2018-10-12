@@ -16,7 +16,7 @@ import (
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-getch"
-	"github.com/zetamatta/go-mbcs"
+	"github.com/zetamatta/go-texts/mbcs"
 
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
@@ -253,7 +253,7 @@ func CmdAtoU(args []any_t) []any_t {
 		return []any_t{nil, TooFewArguments}
 	}
 	if s, ok := args[0].(string); ok {
-		if val, err := mbcs.AtoU([]byte(s)); err == nil {
+		if val, err := mbcs.AtoU([]byte(s), mbcs.ConsoleCP()); err == nil {
 			return []any_t{val}
 		} else {
 			return []any_t{nil, err}
@@ -268,16 +268,11 @@ func CmdUtoA(args []any_t) []any_t {
 		return []any_t{nil, TooFewArguments}
 	}
 	utf8 := fmt.Sprint(args[0])
-	bin, err := mbcs.UtoA(utf8)
+	bin, err := mbcs.UtoA(utf8, mbcs.ConsoleCP(), true)
 	if err != nil {
 		return []any_t{nil, err}
 	}
-	if len(bin) >= 1 {
-		// trim the last zero byte from SJIS string
-		return []any_t{bin[:len(bin)-1], nil}
-	} else {
-		return []any_t{"", nil}
-	}
+	return []any_t{bin, nil}
 }
 
 func CmdWhich(args []any_t) []any_t {
