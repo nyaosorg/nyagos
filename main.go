@@ -17,7 +17,7 @@ func main() {
 	frame.Version = version
 
 	if err := frame.Start(mains.Main); err != nil && err != io.EOF {
-		fmt.Fprintln(os.Stderr, err.Error())
+		fmt.Fprintln(os.Stderr, err)
 		if defined.DBG {
 			os.Stdin.Read(dummy[:])
 		}
@@ -26,5 +26,4 @@ func main() {
 	if defined.DBG {
 		os.Stdin.Read(dummy[:])
 	}
-	os.Exit(0)
 }
