@@ -7,12 +7,12 @@ import (
 	"io"
 	"os"
 	"strings"
-	"unicode/utf8"
 
-	"github.com/zetamatta/go-mbcs"
+	"github.com/zetamatta/go-texts/mbcs"
 )
 
-func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
+func cat(ctx context.Context, _r io.Reader, w io.Writer) bool {
+	r := mbcs.NewAutoDetectReader(_r, mbcs.ConsoleCP())
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		if done := ctx.Done(); done != nil {
@@ -23,17 +23,7 @@ func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
 
 			}
 		}
-		line := scanner.Bytes()
-		var text string
-		if utf8.Valid(line) {
-			text = string(line)
-		} else {
-			var err error
-			text, err = mbcs.AtoU(line)
-			if err != nil {
-				text = err.Error()
-			}
-		}
+		text := scanner.Text()
 		text = strings.Replace(text, "\xEF\xBB\xBF", "", 1)
 		fmt.Fprintln(w, text)
 	}
