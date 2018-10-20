@@ -29,7 +29,9 @@ func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
 			if left == "ERRORLEVEL_" {
 				value, err := strconv.ParseUint(right, 10, 32)
 				if err != nil {
-					fmt.Fprintf(verbose, "Could not read ERRORLEVEL(%s)\n", right)
+					if verbose != nil {
+						fmt.Fprintf(verbose, "Could not read ERRORLEVEL(%s)\n", right)
+					}
 				} else {
 					errorlevel = int(value)
 				}
