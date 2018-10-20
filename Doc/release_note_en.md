@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: Ctrl-C did not work in Lua-Script and some extern process
 * (#267) `type` and `more` support UTF16 (requires go-texts package)
 * (#336) Fix `io.write` did not work with -e and --lua-file
+* (#337) Fix the crash the batchfile exit with -1 (Thx! @hogewest)
 
 NYAGOS 4.3.3\_2
 ===============
