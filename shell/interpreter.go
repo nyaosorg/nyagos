@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/exec"
 	"reflect"
@@ -225,7 +226,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 				args[i] = rawargs[i]
 			}
 			// Batch files
-			return RawSource(args, nil, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+			return RawSource(args, ioutil.Discard, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
 		}
 	}
 	// Do not use exec.CommandContext because it cancels background process.
