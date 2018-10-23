@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.3\_3
+===============
+on Oct.23,2018
+
 * (#310) copy and move support shortcut files(`*.lnk`) as destination.
 * (#313 reopened) Fix problem when `git blame FILES | type | gvim - &`, gvim starts with empty buffer.
 * Fix: rmdir could not remove the broken junction

@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.3\_3
+===============
+(2018.10.23)
+
 * (#310) copy と move の宛先でショートカットをサポート
 * (#313 reopened) `git blame FILES | type | gvim - &` で gvim が空バッファで始まってしまう問題を修正
 * 壊れたジャンクションに対する rmdir ができなかった問題を修正
