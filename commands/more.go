@@ -6,10 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"math"
 	"os"
 	"regexp"
 
+	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
+
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-texts/mbcs"
@@ -25,6 +28,11 @@ func more(_r io.Reader, cmd Param) bool {
 	r := mbcs.NewAutoDetectReader(_r, mbcs.ConsoleCP())
 	scanner := bufio.NewScanner(r)
 	count := 0
+
+	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {
+		screenHeight = math.MaxInt32
+	}
+
 	for scanner.Scan() {
 		text := scanner.Text()
 		width := runewidth.StringWidth(ansiStrip.ReplaceAllString(text, ""))
