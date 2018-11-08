@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* If stdin is not terminal, `more` command runs as `type`.
+
 NYAGOS 4.3.3\_3
 ===============
 on Oct.23,2018

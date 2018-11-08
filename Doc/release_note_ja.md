@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* 出力先が端末でない場合、more を type と等価に
+
 NYAGOS 4.3.3\_3
 ===============
 (2018.10.23)
