@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * 出力先が端末でない場合、more を type と等価に
+* バッチ実行時に作成する踏み台の一時バッチを廃止。環境変数を利用するようにした
 
 NYAGOS 4.3.3\_3
 ===============
