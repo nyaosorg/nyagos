@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/zetamatta/go-texts/mbcs"
 
@@ -88,32 +89,21 @@ func callBatch(
 
 	var cmdline strings.Builder
 
-	cmdline.WriteString("call")
+	cmdline.WriteString(`/V:ON /S /C "call`)
 	for _, arg1 := range args {
 		cmdline.WriteByte(' ')
 		cmdline.WriteString(arg1)
 	}
 	cmdline.WriteString(` & set "ERRORLEVEL_=!ERRORLEVEL!" & (cd & set) > "`)
 	cmdline.WriteString(tmpfile)
-	cmdline.WriteString(`"`)
-
-	backup := os.Getenv("NYAGOSCMDLINE")
-	os.Setenv("NYAGOSCMDLINE", cmdline.String())
-	defer os.Setenv("NYAGOSCMDLINE", backup)
-
-	params := []string{
-		os.Getenv("COMSPEC"),
-		"/V:ON",
-		"/C",
-		"%NYAGOSCMDLINE%",
-	}
+	cmdline.WriteString(`" "`)
 
 	cmd := exec.Cmd{
-		Path:   params[0],
-		Args:   params,
-		Stdin:  stdin,
-		Stdout: stdout,
-		Stderr: stderr,
+		Path:        os.Getenv("COMSPEC"),
+		Stdin:       stdin,
+		Stdout:      stdout,
+		Stderr:      stderr,
+		SysProcAttr: &syscall.SysProcAttr{CmdLine: cmdline.String()},
 	}
 	if err := cmd.Run(); err != nil {
 		return 1, err
