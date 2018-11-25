@@ -6,8 +6,7 @@ import (
 	"io"
 	"strings"
 	"unicode"
-
-	"github.com/zetamatta/go-getch"
+	"unicode/utf8"
 )
 
 func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
@@ -45,11 +44,15 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 		this.Eraseline()
 		io.WriteString(this.Writer, CURSOR_ON)
 		this.Writer.Flush()
-		charcode := getch.Rune()
+		key, err := getKey(this.TTY)
+		if err != nil {
+			println(err.Error())
+			return CONTINUE
+		}
 		io.WriteString(this.Writer, CURSOR_OFF)
 		this.Backspace(drawWidth)
-		switch charcode {
-		case '\b':
+		switch key {
+		case "\b":
 			searchBuf.Reset()
 			// chop last char
 			var lastchar rune
@@ -61,13 +64,13 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			}
 			searchStr = searchBuf.String()
 			update()
-		case '\r': // ENTER
+		case "\r":
 			this.ViewStart = 0
 			this.Length = 0
 			this.Cursor = 0
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
-		case rune('c' & 0x1F), rune('g' & 0x1F), rune(0x1B):
+		case "\x03", "\x07", "\x1B":
 			w := 0
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
@@ -94,7 +97,7 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			}
 			this.Backspace(bs)
 			return CONTINUE
-		case rune('r' & 0x1F):
+		case "\x12":
 			for i := lastFoundPos - 1; ; i-- {
 				if i < 0 {
 					i = this.History.Len() - 1
@@ -109,7 +112,7 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 					break
 				}
 			}
-		case rune('s' & 0x1F):
+		case "\x13":
 			for i := lastFoundPos + 1; ; i++ {
 				if i >= this.History.Len() {
 					break
@@ -125,6 +128,7 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 				}
 			}
 		default:
+			charcode, _ := utf8.DecodeRuneInString(key)
 			if unicode.IsControl(charcode) {
 				break
 			}

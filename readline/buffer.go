@@ -5,6 +5,8 @@ import (
 	"io"
 	"strings"
 	"unicode"
+
+	"github.com/mattn/go-tty"
 )
 
 func (this *Buffer) PutRune(ch rune) {
@@ -44,6 +46,7 @@ type Buffer struct {
 	*Editor
 	Buffer         []rune
 	Length         int
+	TTY            *tty.TTY
 	Unicode        rune
 	Keycode        uint16
 	ShiftState     uint32

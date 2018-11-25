@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"sync"
+
+	"github.com/mattn/go-tty"
 
 	"github.com/zetamatta/go-box"
-	"github.com/zetamatta/go-getch"
 )
 
 var FlushBeforeReadline = false
@@ -57,7 +59,7 @@ func (this KeyGoFuncT) String() string {
 	return this.Name
 }
 
-var keyMap = map[rune]KeyFuncT{
+var keyMap = map[string]KeyFuncT{
 	name2char[K_CTRL_A]: name2func(F_BEGINNING_OF_LINE),
 	name2char[K_CTRL_B]: name2func(F_BACKWARD_CHAR),
 	name2char[K_CTRL_C]: name2func(F_INTR),
@@ -80,23 +82,17 @@ var keyMap = map[rune]KeyFuncT{
 	name2char[K_CTRL_T]: name2func(F_SWAPCHAR),
 	name2char[K_CTRL_V]: name2func(F_QUOTED_INSERT),
 	name2char[K_CTRL_W]: name2func(F_UNIX_WORD_RUBOUT),
-}
-
-var scanMap = map[uint16]KeyFuncT{
-	name2scan[K_CTRL]:   name2func(F_PASS),
-	name2scan[K_DELETE]: name2func(F_DELETE_CHAR),
-	name2scan[K_END]:    name2func(F_END_OF_LINE),
-	name2scan[K_HOME]:   name2func(F_BEGINNING_OF_LINE),
-	name2scan[K_LEFT]:   name2func(F_BACKWARD_CHAR),
-	name2scan[K_RIGHT]:  name2func(F_FORWARD_CHAR),
-	name2scan[K_SHIFT]:  name2func(F_PASS),
-	name2scan[K_DOWN]:   name2func(F_HISTORY_DOWN),
-	name2scan[K_UP]:     name2func(F_HISTORY_UP),
-}
-
-var altMap = map[uint16]KeyFuncT{
-	name2alt[K_ALT_V]: name2func(F_YANK),
-	name2alt[K_ALT_Y]: name2func(F_YANK_WITH_QUOTE),
+	name2char[K_CTRL]:   name2func(F_PASS),
+	name2char[K_DELETE]: name2func(F_DELETE_CHAR),
+	name2char[K_END]:    name2func(F_END_OF_LINE),
+	name2char[K_HOME]:   name2func(F_BEGINNING_OF_LINE),
+	name2char[K_LEFT]:   name2func(F_BACKWARD_CHAR),
+	name2char[K_RIGHT]:  name2func(F_FORWARD_CHAR),
+	name2char[K_SHIFT]:  name2func(F_PASS),
+	name2char[K_DOWN]:   name2func(F_HISTORY_DOWN),
+	name2char[K_UP]:     name2func(F_HISTORY_UP),
+	name2char[K_ALT_V]:  name2func(F_YANK),
+	name2char[K_ALT_Y]:  name2func(F_YANK_WITH_QUOTE),
 }
 
 func normWord(src string) string {
@@ -105,18 +101,11 @@ func normWord(src string) string {
 
 func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	keyName_ := normWord(keyName)
-	if altValue, altOk := name2alt[keyName_]; altOk {
-		altMap[altValue] = funcValue
-		return nil
-	} else if charValue, charOk := name2char[keyName_]; charOk {
+	if charValue, charOk := name2char[keyName_]; charOk {
 		keyMap[charValue] = funcValue
 		return nil
-	} else if scanValue, scanOk := name2scan[keyName_]; scanOk {
-		scanMap[scanValue] = funcValue
-		return nil
-	} else {
-		return fmt.Errorf("%s: no such keyname", keyName)
 	}
+	return fmt.Errorf("%s: no such keyname", keyName)
 }
 
 func BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
@@ -125,12 +114,8 @@ func BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error 
 
 func GetBindKey(keyName string) KeyFuncT {
 	keyName_ := normWord(keyName)
-	if altValue, altOk := name2alt[keyName_]; altOk {
-		return altMap[altValue]
-	} else if charValue, charOk := name2char[keyName_]; charOk {
+	if charValue, charOk := name2char[keyName_]; charOk {
 		return keyMap[charValue]
-	} else if scanValue, scanOk := name2scan[keyName_]; scanOk {
-		return scanMap[scanValue]
 	} else {
 		return nil
 	}
@@ -164,6 +149,25 @@ const (
 )
 
 var CtrlC = errors.New("^C")
+
+func getKey(tty1 *tty.TTY) (string, error) {
+	var buffer strings.Builder
+	for {
+		r, err := tty1.ReadRune()
+		if err != nil {
+			return "", err
+		}
+		if r == 0 {
+			continue
+		}
+		buffer.WriteRune(r)
+		if !tty1.Buffered() {
+			return buffer.String(), nil
+		}
+	}
+}
+
+var mu sync.Mutex
 
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
@@ -212,52 +216,53 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this.RepaintAfterPrompt()
 
-	if FlushBeforeReadline {
-		getch.Flush()
-	}
-
 	cursorOnSwitch := false
+	tty1, err := tty.Open()
+	if err != nil {
+		return "", err
+	}
+	this.TTY = tty1
+	defer tty1.Close()
+
+	ws := tty1.SIGWINCH()
+	go func(lastw int) {
+		for ws1 := range ws {
+			w := ws1.W
+			if lastw != w {
+				mu.Lock()
+				this.TermWidth = w
+				fmt.Fprintf(this.Writer, "\x1B[%dG", this.TopColumn+1)
+				this.RepaintAfterPrompt()
+				mu.Unlock()
+				lastw = w
+			}
+		}
+	}(this.TermWidth)
+
 	for {
-		var e getch.Event
+		mu.Lock()
 		if !cursorOnSwitch {
 			io.WriteString(this.Writer, CURSOR_ON)
 			cursorOnSwitch = true
 		}
 		this.Writer.Flush()
-		for e.Key == nil {
-			e = getch.All()
-			if e.Resize != nil {
-				w := int(e.Resize.Width)
-				if this.TermWidth != w {
-					this.TermWidth = w
-					fmt.Fprintf(this.Writer, "\x1B[%dG", this.TopColumn+1)
-					this.RepaintAfterPrompt()
-				}
+
+		mu.Unlock()
+		key1, err := getKey(tty1)
+		if err != nil {
+			return "", err
+		}
+		mu.Lock()
+		f, ok := keyMap[key1]
+		if !ok {
+			f = &KeyGoFuncT{
+				Func: func(ctx context.Context, this *Buffer) Result {
+					return KeyFuncInsertSelf(ctx, this, key1)
+				},
+				Name: key1,
 			}
 		}
-		this.Unicode = e.Key.Rune
-		this.Keycode = e.Key.Scan
-		this.ShiftState = e.Key.Shift
-		var f KeyFuncT
-		var ok bool
-		if (this.ShiftState&getch.ALT_PRESSED) != 0 &&
-			(this.ShiftState&getch.CTRL_PRESSED) == 0 {
-			f, ok = altMap[this.Keycode]
-			if !ok {
-				continue
-			}
-		} else if this.Unicode != 0 {
-			f, ok = keyMap[this.Unicode]
-			if !ok {
-				//f = KeyFuncInsertReport
-				f = &KeyGoFuncT{Func: KeyFuncInsertSelf, Name: fmt.Sprintf("%v", this.Unicode)}
-			}
-		} else {
-			f, ok = scanMap[this.Keycode]
-			if !ok {
-				f = &KeyGoFuncT{Func: nil, Name: ""}
-			}
-		}
+
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
 			io.WriteString(this.Writer, CURSOR_OFF)
 			cursorOnSwitch = false
@@ -270,6 +275,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			}
 			this.Writer.Flush()
 			result := this.String()
+			mu.Unlock()
 			if rc == ENTER {
 				return result, nil
 			} else if rc == INTR {
@@ -278,5 +284,6 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 				return result, io.EOF
 			}
 		}
+		mu.Unlock()
 	}
 }

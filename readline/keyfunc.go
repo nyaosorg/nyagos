@@ -8,7 +8,6 @@ import (
 	"unicode"
 
 	"github.com/atotto/clipboard"
-	"github.com/zetamatta/go-getch"
 )
 
 func KeyFuncEnter(ctx context.Context, this *Buffer) Result { // Ctrl-M
@@ -125,12 +124,11 @@ func KeyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
 	}
 }
 
-func KeyFuncInsertSelf(ctx context.Context, this *Buffer) Result {
-	ch := this.Unicode
-	this.Insert(this.Cursor, []rune{ch})
+func KeyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
+	this.Insert(this.Cursor, []rune(keys))
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := GetCharWidth(ch)
+	w1 := GetStringWidth(keys)
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		this.Backspace(w)
@@ -214,13 +212,12 @@ func KeyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
 func KeyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
 	io.WriteString(this.Writer, CURSOR_ON)
 	defer io.WriteString(this.Writer, CURSOR_OFF)
-	for {
-		this.Writer.Flush()
-		e := getch.All()
-		if e.Key != nil && e.Key.Rune != 0 {
-			this.Unicode = e.Key.Rune
-			return KeyFuncInsertSelf(ctx, this)
-		}
+
+	this.Writer.Flush()
+	if key, err := getKey(this.TTY); err == nil {
+		return KeyFuncInsertSelf(ctx, this, key)
+	} else {
+		return CONTINUE
 	}
 }
 
