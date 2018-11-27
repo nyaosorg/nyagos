@@ -11,11 +11,11 @@ import (
 	"strings"
 
 	"github.com/mattn/go-isatty"
+	"github.com/mattn/go-tty"
 	"github.com/mattn/msgbox"
 
 	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-findfile"
-	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/go-texts/mbcs"
 
 	"github.com/zetamatta/nyagos/commands"
@@ -126,8 +126,20 @@ func CmdGetwd(args []any_t) []any_t {
 }
 
 func CmdGetKey(args []any_t) []any_t {
-	keycode, scancode, shiftstatus := getch.Full()
-	return []any_t{keycode, scancode, shiftstatus}
+	tty1, err := tty.Open()
+	if err != nil {
+		return []any_t{nil, err.Error()}
+	}
+	defer tty1.Close()
+	for {
+		r, err := tty1.ReadRune()
+		if err != nil {
+			return []any_t{nil, err.Error()}
+		}
+		if r != 0 {
+			return []any_t{r, 0, 0}
+		}
+	}
 }
 
 func CmdGetViewWidth(args []any_t) []any_t {
