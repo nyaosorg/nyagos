@@ -191,6 +191,10 @@ Get the n-th command-line history. When N < 0, last (-N)-th history.
 
 Get the count of the command-line history.
 
+### `nyagos.histsize`
+
+The max number of entries of history to save to disk.
+
 ### `nyagos.access(PATH,MODE)`
 
 Returns the boolean value whether the PATH can be access with MODE.

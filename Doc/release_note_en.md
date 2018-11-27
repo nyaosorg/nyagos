@@ -2,6 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * If stdin is not terminal, `more` command runs as `type`.
 * On calling a batch file, `use CMD.EXE /V:ON /S /C "..."` for boosting code instead of temporary batchfile.
+* (#340) Add lua variable `nyagos.histsize` to set the number of entries for history to save disk.
 
 NYAGOS 4.3.3\_3
 ===============
