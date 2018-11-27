@@ -33,6 +33,10 @@ func makeVirtualTable(L Lua, getter, setter func(Lua) int) lua.LValue {
 	return table
 }
 
+var numberProperty = map[string]*int{
+	"histsize": &history.MaxSaveHistory,
+}
+
 var stringProperty = map[string]*string{
 	"antihistquot": &history.DisableMarks,
 	"histchar":     &history.Mark,
@@ -52,7 +56,9 @@ func nyagosGetter(L Lua) int {
 		return lerror(L, "nyagos[]: too few arguments")
 	}
 	key := string(keyTmp)
-	if ptr, ok := stringProperty[key]; ok {
+	if ptr, ok := numberProperty[key]; ok {
+		L.Push(lua.LNumber(*ptr))
+	} else if ptr, ok := stringProperty[key]; ok {
 		L.Push(lua.LString(*ptr))
 	} else if ptr, ok := boolProperty[key]; ok {
 		if *ptr {
@@ -72,7 +78,13 @@ func nyagosSetter(L Lua) int {
 		return lerror(L, "nyagos[]: too few arguments")
 	}
 	key := string(keyTmp)
-	if ptr, ok := stringProperty[key]; ok {
+	if ptr, ok := numberProperty[key]; ok {
+		val, ok := L.Get(3).(lua.LNumber)
+		if !ok {
+			return lerror(L, fmt.Sprintf("nyagos[]: val is not a number"))
+		}
+		*ptr = int(val)
+	} else if ptr, ok := stringProperty[key]; ok {
 		val, ok := L.Get(3).(lua.LString)
 		if !ok {
 			return lerror(L, fmt.Sprintf("nyagos[]: val is not a string"))

@@ -256,12 +256,12 @@ func CmdHistory(ctx context.Context, cmd Param) (int, error) {
 	return 0, nil
 }
 
-const max_histories = 1000
+var MaxSaveHistory = 1000
 
 func (hisObj *Container) SaveViaWriter(w io.Writer) {
 	i := 0
-	if len(hisObj.rows) > max_histories {
-		i = len(hisObj.rows) - max_histories
+	if len(hisObj.rows) > MaxSaveHistory {
+		i = len(hisObj.rows) - MaxSaveHistory
 	}
 	bw := bufio.NewWriter(w)
 	for ; i < len(hisObj.rows); i++ {
