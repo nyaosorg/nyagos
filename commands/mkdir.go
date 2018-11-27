@@ -6,8 +6,6 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/zetamatta/go-getch"
-
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -59,7 +57,10 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 		}
 		if !quiet {
 			fmt.Fprintf(cmd.Err(), message, arg1)
-			ch := getch.Rune()
+			ch, err := getkey()
+			if err != nil {
+				return 1, err
+			}
 			fmt.Fprintf(cmd.Err(), "%c ", ch)
 			switch ch {
 			case 'y', 'Y':

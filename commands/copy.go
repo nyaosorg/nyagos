@@ -123,7 +123,10 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 				fmt.Fprintf(cm.Err(),
 					"%s: override? [Yes/No/All/Quit] ",
 					dst)
-				ch := getch.Rune()
+				ch, err := getkey()
+				if err != nil {
+					return 1, err
+				}
 				if unicode.IsPrint(ch) {
 					fmt.Fprintf(cm.Err(), "%c\n", ch)
 				} else {
@@ -154,7 +157,10 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 				return 1, err
 			}
 			fmt.Fprintf(cm.Err(), "%s\nContinue? [Yes/No] ", err.Error())
-			ch := getch.Rune()
+			ch, err := getkey()
+			if err != nil {
+				return 1, err
+			}
 			if unicode.IsPrint(ch) {
 				fmt.Fprintf(cm.Err(), "%c\n", ch)
 			} else {

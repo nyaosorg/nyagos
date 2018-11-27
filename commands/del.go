@@ -7,8 +7,6 @@ import (
 	"syscall"
 	"unicode"
 
-	"github.com/zetamatta/go-getch"
-
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -73,7 +71,10 @@ func cmdDel(ctx context.Context, cmd Param) (int, error) {
 			fmt.Fprintf(cmd.Out(),
 				"(%d/%d) %s: Remove ? [Yes/No/All/Quit] ",
 				i, n-1, path)
-			ch := getch.Rune()
+			ch, err := getkey()
+			if err != nil {
+				return 1, err
+			}
 			if unicode.IsPrint(ch) {
 				fmt.Fprintf(cmd.Out(), "%c ", ch)
 			}
