@@ -281,38 +281,25 @@ func (hisObj *Container) Save(path string) error {
 
 func (hisObj *Container) LoadViaReader(reader io.Reader) {
 	sc := bufio.NewScanner(reader)
-	list := make([][]string, 0, 2000)
-	hash := make(map[string]int)
 	for sc.Scan() {
 		line := sc.Text()
-		if lnum, ok := hash[line]; ok {
-			// delete duplicated record (marking)
-			list[lnum] = nil
-		}
-		hash[line] = len(list)
-
 		p := strings.Split(line, "\t")
-		list = append(list, p)
-	}
-	for _, p := range list {
-		// push only not duplicated record.
-		if p != nil {
-			var stamp time.Time
-			var dir string
-			pid := 0
-			if len(p) >= 3 {
-				dir = p[1]
-				stamp, _ = time.Parse("2006-01-02 15:04:05", p[2])
-				if len(p) >= 4 {
-					pid, _ = strconv.Atoi(p[3])
-				}
+
+		var stamp time.Time
+		var dir string
+		pid := 0
+		if len(p) >= 3 {
+			dir = p[1]
+			stamp, _ = time.Parse("2006-01-02 15:04:05", p[2])
+			if len(p) >= 4 {
+				pid, _ = strconv.Atoi(p[3])
 			}
-			hisObj.PushLine(Line{
-				Text:  p[0],
-				Dir:   dir,
-				Stamp: stamp,
-				Pid:   pid})
 		}
+		hisObj.PushLine(Line{
+			Text:  p[0],
+			Dir:   dir,
+			Stamp: stamp,
+			Pid:   pid})
 	}
 	sort.Slice(hisObj.rows, func(i, j int) bool {
 		p := hisObj.rows[i]
