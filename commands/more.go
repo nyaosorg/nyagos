@@ -60,6 +60,10 @@ func more(_r io.Reader, cmd Param) error {
 			if err != nil {
 				return err
 			}
+			if ch == '\x03' {
+				fmt.Fprintln(cmd.Err(), "^C")
+				return io.EOF
+			}
 			io.WriteString(cmd.Err(), "\r     \b\b\b\b\b")
 			if ch == 'q' {
 				return io.EOF
@@ -75,7 +79,7 @@ func more(_r io.Reader, cmd Param) error {
 		fmt.Fprintln(cmd.Out(), text)
 		count += lines
 	}
-	return nil
+	return scanner.Err()
 }
 
 func cmdMore(ctx context.Context, cmd Param) (int, error) {

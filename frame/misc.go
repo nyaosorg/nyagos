@@ -7,9 +7,10 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/signal"
 	"runtime/debug"
+	"syscall"
 
-	"github.com/zetamatta/go-getch"
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
@@ -33,7 +34,10 @@ func Start(mainHandler func() error) error {
 	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
 	defer dos.CoUninitialize()
 
-	getch.DisableCtrlC()
+	signal.Ignore(os.Interrupt)
+	signal.Ignore(os.Kill)
+	signal.Ignore(syscall.SIGINT)
+	signal.Ignore(syscall.SIGTERM)
 	alias.Init()
 
 	return mainHandler()

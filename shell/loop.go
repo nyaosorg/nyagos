@@ -58,6 +58,7 @@ var StreamID streamIDT
 
 // Loop executes commands from `stream` until any errors are found.
 func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
+	signal_ignored := signal.Ignored(os.Interrupt)
 	for {
 		ctx, cancel := context.WithCancel(ctx0)
 		ctx = context.WithValue(ctx, StreamID, stream)
@@ -73,6 +74,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 
 		sigint := make(chan os.Signal, 1)
 		signal.Notify(sigint, os.Interrupt)
+		// signal.Ignore(os.Interrupt)
 		quit := make(chan struct{}, 1)
 
 		go func(sigint_ chan os.Signal, quit_ chan struct{}, cancel_ func()) {
@@ -90,7 +92,9 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		}(sigint, quit, cancel)
 		rc, err := sh.Interpret(ctx, line)
 		signal.Stop(sigint)
-
+		if signal_ignored {
+			signal.Ignore(os.Interrupt)
+		}
 		quit <- struct{}{}
 		close(quit)
 		close(sigint)
