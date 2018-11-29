@@ -9,8 +9,6 @@ import (
 	"sync"
 
 	"github.com/mattn/go-tty"
-
-	"github.com/zetamatta/go-box"
 )
 
 var FlushBeforeReadline = false
@@ -197,7 +195,17 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		HistoryPointer: session.History.Len(),
 	}
 
-	this.TermWidth, _ = box.GetScreenBufferInfo().ViewSize()
+	tty1, err := tty.Open()
+	if err != nil {
+		return "", fmt.Errorf("go-tty.Open: %s", err.Error())
+	}
+	this.TTY = tty1
+	defer tty1.Close()
+
+	this.TermWidth, _, err = tty1.Size()
+	if err != nil {
+		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
+	}
 
 	var err1 error
 	this.TopColumn, err1 = session.Prompt()
@@ -217,12 +225,6 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	this.RepaintAfterPrompt()
 
 	cursorOnSwitch := false
-	tty1, err := tty.Open()
-	if err != nil {
-		return "", err
-	}
-	this.TTY = tty1
-	defer tty1.Close()
 
 	ws := tty1.SIGWINCH()
 	go func(lastw int) {

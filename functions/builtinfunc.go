@@ -143,7 +143,15 @@ func CmdGetKey(args []any_t) []any_t {
 }
 
 func CmdGetViewWidth(args []any_t) []any_t {
-	width, height := box.GetScreenBufferInfo().ViewSize()
+	tty1, err := tty.Open()
+	if err != nil {
+		return []any_t{nil, err.Error()}
+	}
+	defer tty1.Close()
+	width, height, err := tty1.Size()
+	if err != nil {
+		return []any_t{nil, err.Error()}
+	}
 	return []any_t{width, height}
 }
 

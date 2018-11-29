@@ -14,7 +14,6 @@ import (
 	"github.com/mattn/go-runewidth"
 	"github.com/mattn/go-tty"
 
-	"github.com/zetamatta/go-box"
 	"github.com/zetamatta/go-texts/mbcs"
 )
 
@@ -84,7 +83,16 @@ func more(_r io.Reader, cmd Param) error {
 
 func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
-	screenWidth, screenHeight = box.GetScreenBufferInfo().ViewSize()
+
+	tty1, err := tty.Open()
+	if err != nil {
+		return 1, err
+	}
+	screenWidth, screenHeight, err = tty1.Size()
+	tty1.Close()
+	if err != nil {
+		return 1, err
+	}
 	for _, arg1 := range cmd.Args()[1:] {
 		if arg1 == "-b" {
 			bold = true
