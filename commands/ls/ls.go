@@ -15,7 +15,7 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/mattn/go-isatty"
 
-	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/nyagos/dos"
 )

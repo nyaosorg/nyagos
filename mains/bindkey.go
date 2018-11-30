@@ -8,7 +8,7 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
-	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-box/v2"
 
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/texts"

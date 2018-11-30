@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-box/v2"
 )
 
 func cmdBox(ctx context.Context, cmd Param) (int, error) {

@@ -14,7 +14,7 @@ import (
 	"github.com/mattn/go-tty"
 	"github.com/mattn/msgbox"
 
-	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-texts/mbcs"
 
