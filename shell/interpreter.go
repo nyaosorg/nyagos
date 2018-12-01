@@ -7,7 +7,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"reflect"
 	"strings"
 	"sync"
@@ -229,27 +228,30 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 			return RawSource(args, ioutil.Discard, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
 		}
 	}
-	// Do not use exec.CommandContext because it cancels background process.
-	xcmd := exec.CommandContext(ctx, cmd.args[0], cmd.args[1:]...)
-	xcmd.Stdin = cmd.Stdin
-	xcmd.Stdout = cmd.Stdout
-	xcmd.Stderr = cmd.Stderr
 
-	if xcmd.SysProcAttr == nil {
-		xcmd.SysProcAttr = new(syscall.SysProcAttr)
+	cmdline := makeCmdline(cmd.args, cmd.rawArgs)
+
+	procAttr := &os.ProcAttr{
+		Env:   os.Environ(),
+		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
+		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}
-	cmdline := makeCmdline(xcmd.Args, cmd.rawArgs)
-	if defined.DBG {
-		println(cmdline)
-	}
-	xcmd.SysProcAttr.CmdLine = cmdline
-	err := xcmd.Run()
-	errorlevel, errorlevelOk := dos.GetErrorLevel(xcmd)
-	if errorlevelOk {
-		return errorlevel, err
-	} else {
+
+	process, err := os.StartProcess(cmd.args[0], cmd.args[1:], procAttr)
+	if err != nil {
 		return 255, err
 	}
+	processState, err := process.Wait()
+	if err != nil {
+		return 254, err
+	}
+	if processState.Success() {
+		return 0, nil
+	}
+	if t, ok := processState.Sys().(syscall.WaitStatus); ok {
+		return t.ExitStatus(), nil
+	}
+	return 253, nil
 }
 
 type AlreadyReportedError struct {
