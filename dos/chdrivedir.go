@@ -1,30 +1,31 @@
 package dos
 
 import (
-	"errors"
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
-	"syscall"
-	"unicode"
-	"unsafe"
+	"unicode/utf8"
 )
 
-var msvcrt = syscall.NewLazyDLL("msvcrt")
-var _chdrive = msvcrt.NewProc("_chdrive")
-var _wchdir = msvcrt.NewProc("_wchdir")
+func chDriveRune(n rune) error {
+	lastDir, lastDirErr := os.Getwd()
 
-func chDriveSub(n rune) uintptr {
-	rc, _, _ := _chdrive.Call(uintptr(n & 0x1F))
-	return rc
+	newDir := os.Getenv(fmt.Sprintf("=%c:", n))
+	if newDir == "" {
+		newDir = fmt.Sprintf("%c:%c", n, os.PathSeparator)
+	}
+	err := os.Chdir(newDir)
+	if err == nil && lastDirErr == nil {
+		os.Setenv("="+filepath.VolumeName(lastDir), lastDir)
+	}
+	return err
 }
 
 // Chdrive changes drive without changing the working directory there.
 func Chdrive(drive string) error {
-	for _, c := range drive {
-		chDriveSub(unicode.ToUpper(c))
-		return nil
-	}
-	return errors.New("Chdrive: driveletter not found")
+	c, _ := utf8.DecodeRuneInString(drive)
+	return chDriveRune(c)
 }
 
 var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
@@ -32,24 +33,23 @@ var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
 // Chdir changes the current working directory
 // without changeing the working directory
 // in the last drive.
-func Chdir(_folder string) error {
-	folder := _folder
-	if m := rxPath.FindStringSubmatch(_folder); m != nil {
-		status := chDriveSub(rune(m[1][0]))
-		if status != 0 {
-			return fmt.Errorf("%s: no such directory", _folder)
+func Chdir(folder string) error {
+	if m := rxPath.FindStringSubmatch(folder); m != nil {
+		err := chDriveRune(rune(m[1][0]))
+		if err != nil {
+			return err
 		}
 		folder = m[2]
 		if len(folder) <= 0 {
 			return nil
 		}
 	}
-	utf16, err := syscall.UTF16PtrFromString(folder)
+	err := os.Chdir(folder)
 	if err == nil {
-		status, _, _ := _wchdir.Call(uintptr(unsafe.Pointer(utf16)))
-		if status != 0 {
-			err = fmt.Errorf("%s: no such directory", _folder)
+		if absFolder, err := filepath.Abs(folder); err == nil {
+			folder = absFolder
 		}
+		os.Setenv("="+filepath.VolumeName(folder), folder)
 	}
 	return err
 }
