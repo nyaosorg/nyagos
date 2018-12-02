@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -45,7 +44,7 @@ func cmdCdSub(dir string) (int, error) {
 		dir = dir[len(fileHead):]
 	}
 	if strings.HasSuffix(strings.ToLower(dir), ".lnk") {
-		newdir, _, err := dos.ReadShortcut(dir)
+		newdir, err := readShortCut(dir)
 		if err == nil && newdir != "" {
 			dir = newdir
 		}
