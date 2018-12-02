@@ -16,8 +16,12 @@ func chDriveRune(n rune) error {
 		newDir = fmt.Sprintf("%c:%c", n, os.PathSeparator)
 	}
 	err := os.Chdir(newDir)
-	if err == nil && lastDirErr == nil {
-		os.Setenv("="+filepath.VolumeName(lastDir), lastDir)
+	if err == nil {
+		if lastDirErr == nil {
+			os.Setenv("="+filepath.VolumeName(lastDir), lastDir)
+		}
+	} else {
+		err = os.Chdir(fmt.Sprintf("%c:%c", n, os.PathSeparator))
 	}
 	return err
 }
