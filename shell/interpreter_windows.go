@@ -42,7 +42,7 @@ func (cmd *Cmd) startProcess() (int, error) {
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}
 
-	process, err := os.StartProcess(cmd.args[0], cmd.args[1:], procAttr)
+	process, err := os.StartProcess(cmd.args[0], cmd.args, procAttr)
 	if err != nil {
 		return 255, err
 	}
