@@ -10,7 +10,6 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -34,7 +33,7 @@ func GetConsole() io.Writer {
 		} else {
 			console = os.Stdout
 			if OptionEnableVirtualTerminalProcessing {
-				dos.EnableStdoutVirtualTerminalProcessing()
+				enableVirtualTerminalProcessing()
 			}
 		}
 		prevOptionGoColorable = OptionGoColorable

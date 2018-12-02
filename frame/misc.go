@@ -14,7 +14,6 @@ import (
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -31,8 +30,8 @@ func Start(mainHandler func() error) error {
 	completion.AppendCommandLister(commands.AllNames)
 	completion.AppendCommandLister(alias.AllNames)
 
-	dos.CoInitializeEx(0, dos.COINIT_MULTITHREADED)
-	defer dos.CoUninitialize()
+	coInitialize()
+	defer coUnInitialize()
 
 	signal.Ignore(os.Interrupt)
 	signal.Ignore(os.Kill)
