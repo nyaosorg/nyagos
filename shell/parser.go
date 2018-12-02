@@ -11,7 +11,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/texts"
 )
 
@@ -91,7 +91,7 @@ func string2word(source_ string, removeQuote bool) string {
 			break
 		}
 		if TildeExpansion && ch == '~' && unicode.IsSpace(lastchar) && quoteNow == NOTQUOTED {
-			if home := dos.GetHome(); home != "" {
+			if home := nodos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
 				buffer.WriteRune('~')

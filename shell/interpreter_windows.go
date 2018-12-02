@@ -53,3 +53,7 @@ func (cmd *Cmd) startProcess() (int, error) {
 	}
 	return 253, nil
 }
+
+func isGui(path string) bool {
+	return dos.IsGui(path)
+}

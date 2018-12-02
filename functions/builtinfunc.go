@@ -23,6 +23,7 @@ import (
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/frame"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -59,7 +60,7 @@ func CmdElevated([]any_t) []any_t {
 
 func CmdChdir(args []any_t) []any_t {
 	if len(args) >= 1 {
-		dos.Chdir(fmt.Sprint(args[0]))
+		nodos.Chdir(fmt.Sprint(args[0]))
 		return []any_t{true}
 	}
 	return []any_t{nil, "directory is required"}
@@ -300,7 +301,7 @@ func CmdWhich(args []any_t) []any_t {
 		return []any_t{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[0])
-	path := dos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
+	path := nodos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
 	if path != "" {
 		return []any_t{path}
 	} else {

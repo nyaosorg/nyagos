@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 	"github.com/zetamatta/nyagos/texts"
 )
@@ -218,19 +218,19 @@ var optionMap = map[string]optionT{
 	"--look-curdir-first": {
 		U: "\nSearch for the executable from the current directory before %PATH%.\n(compatible with CMD.EXE)",
 		F: func() {
-			shell.LookCurdirOrder = dos.LookCurdirFirst
+			shell.LookCurdirOrder = nodos.LookCurdirFirst
 		},
 	},
 	"--look-curdir-last": {
 		U: "\nSearch for the executable from the current directory after %PATH%.\n(compatible with PowerShell)",
 		F: func() {
-			shell.LookCurdirOrder = dos.LookCurdirLast
+			shell.LookCurdirOrder = nodos.LookCurdirLast
 		},
 	},
 	"--look-curdir-never": {
 		U: "\nNever search for the executable from the current directory\nunless %PATH% contains.\n(compatible with UNIX Shells)",
 		F: func() {
-			shell.LookCurdirOrder = dos.LookCurdirNever
+			shell.LookCurdirOrder = nodos.LookCurdirNever
 		},
 	},
 }

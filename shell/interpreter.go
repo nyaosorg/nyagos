@@ -13,7 +13,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/defined"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var WildCardExpansionAlways = false
@@ -73,14 +73,14 @@ func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
 
-var LookCurdirOrder = dos.LookCurdirFirst
+var LookCurdirOrder = nodos.LookCurdirFirst
 
 func (cmd *Cmd) FullPath() string {
 	if cmd.args == nil || len(cmd.args) <= 0 {
 		return ""
 	}
 	if cmd.fullPath == "" {
-		cmd.fullPath = dos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
+		cmd.fullPath = nodos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
 	}
 	return cmd.fullPath
 }
@@ -338,7 +338,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
-			if len(pipeline) == 1 && dos.IsGui(cmd.FullPath()) {
+			if len(pipeline) == 1 && isGui(cmd.FullPath()) {
 				cmd.UseShellExecute = true
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {

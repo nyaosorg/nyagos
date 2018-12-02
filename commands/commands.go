@@ -9,7 +9,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -36,7 +36,7 @@ var backslashPattern = regexp.MustCompile(`^\\(\w*)$`)
 func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	name := strings.ToLower(cmd.Arg(0))
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
-		err := dos.Chdrive(name)
+		err := nodos.Chdrive(name)
 		return 0, true, err
 	}
 	function, ok := buildInCommand[name]

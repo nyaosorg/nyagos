@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var dirstack = make([]string, 0, 20)
@@ -34,7 +34,7 @@ func cmdPopd(ctx context.Context, cmd Param) (int, error) {
 	if len(dirstack) <= 0 {
 		return noDirStack, errors.New("popd: directory stack empty")
 	}
-	err := dos.Chdir(dirstack[len(dirstack)-1])
+	err := nodos.Chdir(dirstack[len(dirstack)-1])
 	if err != nil {
 		return errnoChdirFail, err
 	}
@@ -57,7 +57,7 @@ func cmdPushd(ctx context.Context, cmd Param) (int, error) {
 		if len(dirstack) <= 0 {
 			return noDirStack, errors.New("pushd: directory stack empty")
 		}
-		err := dos.Chdir(dirstack[len(dirstack)-1])
+		err := nodos.Chdir(dirstack[len(dirstack)-1])
 		if err != nil {
 			return errnoChdirFail, err
 		}

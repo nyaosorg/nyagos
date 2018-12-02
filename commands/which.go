@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -61,7 +61,7 @@ func cmdWhich(ctx context.Context, cmd Param) (int, error) {
 			}
 
 		} else {
-			path := dos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
+			path := nodos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
 			if path == "" {
 				return errnoWhichNotFound, fmt.Errorf("which %s: not found", name)
 			}

@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var Version string
@@ -59,12 +59,12 @@ func LoadScripts(shellEngine func(string) error,
 	if err := dotNyagos(langEngine); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(shellEngine, dos.GetHome())
+	barNyagos(shellEngine, nodos.GetHome())
 	return nil
 }
 
 func dotNyagos(langEngine func(string) ([]byte, error)) error {
-	dot_nyagos := filepath.Join(dos.GetHome(), ".nyagos")
+	dot_nyagos := filepath.Join(nodos.GetHome(), ".nyagos")
 	dotStat, err := os.Stat(dot_nyagos)
 	if err != nil {
 		return nil
