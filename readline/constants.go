@@ -131,7 +131,7 @@ const (
 )
 
 var name2char = map[string]string{
-	K_BACKSPACE: "\b",
+	K_BACKSPACE: "\x7F",
 	K_CTRL_A:    "\x01",
 	K_CTRL_B:    "\x02",
 	K_CTRL_C:    "\x03",
