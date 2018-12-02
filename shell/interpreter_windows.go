@@ -7,7 +7,12 @@ import (
 	"syscall"
 
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
+
+func (cmd *Cmd) lookpath() string {
+	return nodos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
+}
 
 func (cmd *Cmd) startProcess() (int, error) {
 	if cmd.UseShellExecute {

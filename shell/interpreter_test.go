@@ -8,8 +8,12 @@ import (
 
 func TestInterpret(t *testing.T) {
 	ctx := context.Background()
-	_, err := New().Interpret(ctx, "ls.exe | cat.exe -n > hogehoge")
-	fmt.Println(err)
+	_, err := New().Interpret(ctx, "ls | cat -n > hogehoge")
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("no error")
+	}
 }
 
 func TestMain(t *testing.T) {

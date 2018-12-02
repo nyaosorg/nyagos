@@ -80,7 +80,7 @@ func (cmd *Cmd) FullPath() string {
 		return ""
 	}
 	if cmd.fullPath == "" {
-		cmd.fullPath = nodos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
+		cmd.fullPath = cmd.lookpath()
 	}
 	return cmd.fullPath
 }
