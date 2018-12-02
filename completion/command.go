@@ -7,13 +7,7 @@ import (
 	"path"
 	"path/filepath"
 	"strings"
-
-	"github.com/zetamatta/nyagos/dos"
 )
-
-func isExecutable(path string) bool {
-	return dos.IsExecutableSuffix(filepath.Ext(path))
-}
 
 func listUpAllExecutableOnEnv(envName string) []Element {
 	list := make([]Element, 0, 100)

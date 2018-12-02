@@ -7,8 +7,6 @@ import (
 	"strings"
 
 	"github.com/zetamatta/go-findfile"
-
-	"github.com/zetamatta/nyagos/dos"
 )
 
 var ErrCtrlC = errors.New("C-c")
@@ -30,7 +28,7 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 	}
 	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), `"`, "", -1)
 	directory := DirName(str)
-	wildcard := dos.Join(findfile.ExpandEnv(directory), "*")
+	wildcard := join(findfile.ExpandEnv(directory), "*")
 
 	// Drive letter
 	cutprefix := 0
@@ -58,7 +56,7 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 			return true
 		}
 		listname := fd.Name()
-		name := dos.Join(directory, fd.Name())
+		name := join(directory, fd.Name())
 		if fd.IsDir() {
 			name += STD_SLASH
 			listname += OPT_SLASH
