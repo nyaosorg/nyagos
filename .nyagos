@@ -2,7 +2,7 @@
 -- Edit and put it on %USERPROFILE%, %HOME% or the same folder with nyagos.exe
 
 -- Simple Prompt for CMD.EXE
-nyagos.env.prompt='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
+nyagos.env.prompt='$L'.. (nyagos.env.COMPUTERNAME or "") .. ':$P$G$_$$$s'
 
 -- Coloring Prompt for NYAGOS.exe
 -- Sample 1: simple prompt string
@@ -13,7 +13,7 @@ nyagos.env.prompt='$L'.. nyagos.getenv('COMPUTERNAME') .. ':$P$G$_$$$s'
 nyagos.prompt = function(this)
     local wd = nyagos.getwd()
     local env = nyagos.env
-    local home = env.home or env.userprofile
+    local home = env.HOME or env.USERPROFILE
     local home_len = home:len()
     if wd:sub(1,home_len) == home then
         wd = "~" .. wd:sub(home_len+1)

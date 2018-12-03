@@ -11,10 +11,14 @@ share._setsuffix = function(suffix,cmdline)
         suffix = string.sub(suffix,2)
     end
     if not share._suffixes[suffix] then
-        local orgpathext = nyagos.getenv("PATHEXT")
         local newext="."..suffix
-        if not string.find(";"..orgpathext..";",";"..newext..";",1,true) then
-            nyagos.setenv("PATHEXT",orgpathext..";"..newext)
+        local orgpathext = nyagos.env.PATHEXT
+        if orgpathext then
+            if not string.find(";"..orgpathext..";",";"..newext..";",1,true) then
+                nyagos.env.PATHEXT = orgpathext..";"..newext
+            end
+        else
+            nyagos.env.PATHEXT = newext
         end
     end
     local table = share._suffixes
