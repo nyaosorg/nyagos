@@ -320,6 +320,10 @@ Go-version string to build nyagos.exe
 The string compilation architecture of nyagos.exe.
 (for example, "386" or "amd64" )
 
+### `nyagos.goos`
+
+The string indicating OS name (`windows` or `linux`)
+
 ### `nyagos.msgbox(MESSAGE,TITLE)`
 
 Show message-box
