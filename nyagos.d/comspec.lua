@@ -3,7 +3,7 @@ if not nyagos then
     os.exit()
 end
 
-if nyagos.env.COMSPEC then
+if nyagos.goos == "windows" then
     for _,name in pairs{
         "assoc",
         "dir",
