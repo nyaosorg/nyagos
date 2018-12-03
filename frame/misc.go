@@ -7,9 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/signal"
 	"runtime/debug"
-	"syscall"
 
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
@@ -33,10 +31,6 @@ func Start(mainHandler func() error) error {
 	coInitialize()
 	defer coUnInitialize()
 
-	signal.Ignore(os.Interrupt)
-	signal.Ignore(os.Kill)
-	signal.Ignore(syscall.SIGINT)
-	signal.Ignore(syscall.SIGTERM)
 	alias.Init()
 
 	return mainHandler()
