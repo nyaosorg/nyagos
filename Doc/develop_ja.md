@@ -2,3 +2,5 @@
 - ドライブ毎のカレントディレクトリが子プロセスに継承されなかった問題を修正
 - ライブラリ "zetamatta/go-getch" のかわりに "mattn/go-tty" を使うようにした
 - msvcrt.dll を直接syscall経由で使わないようにした。
+- Linux でも NUL を /dev/null 相当へ
+- Lua変数 nyagos.goos を追加

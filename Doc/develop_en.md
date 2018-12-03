@@ -2,3 +2,5 @@
 - Fix the problem that current directories per drive were not inherited to child processes.
 - Use the library "mattn/go-tty" instead of "zetamatta/go-getch"
 - Stop using msvcrt.dll via "syscall" directly
+- On linux, the filename NUL equals /dev/null
+- Add lua-variable nyagos.goos
