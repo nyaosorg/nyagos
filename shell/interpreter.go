@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"syscall"
 
 	"github.com/zetamatta/go-findfile"
 
@@ -209,7 +210,40 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	if WildCardExpansionAlways {
 		cmd.args = findfile.Globs(cmd.args)
 	}
-	return cmd.startProcess()
+	return cmd.startProcess(ctx)
+}
+
+func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr) (int, error) {
+	process, err := os.StartProcess(name, args, procAttr)
+	if err != nil {
+		return 255, err
+	}
+
+	if ctx != nil {
+		done := make(chan struct{})
+		go func() {
+			select {
+			case <-ctx.Done():
+				os.Stderr.WriteString("^C\n")
+				process.Kill()
+			case <-done:
+			}
+		}()
+		defer func() {
+			close(done)
+		}()
+	}
+	processState, err := process.Wait()
+	if err != nil {
+		return 254, err
+	}
+	if processState.Success() {
+		return 0, nil
+	}
+	if t, ok := processState.Sys().(syscall.WaitStatus); ok {
+		return t.ExitStatus(), nil
+	}
+	return 253, nil
 }
 
 type AlreadyReportedError struct {

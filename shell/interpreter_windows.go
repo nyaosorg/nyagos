@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"context"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -14,7 +15,7 @@ func (cmd *Cmd) lookpath() string {
 	return nodos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
 }
 
-func (cmd *Cmd) startProcess() (int, error) {
+func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if cmd.UseShellExecute {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
@@ -41,22 +42,7 @@ func (cmd *Cmd) startProcess() (int, error) {
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}
-
-	process, err := os.StartProcess(cmd.args[0], cmd.args, procAttr)
-	if err != nil {
-		return 255, err
-	}
-	processState, err := process.Wait()
-	if err != nil {
-		return 254, err
-	}
-	if processState.Success() {
-		return 0, nil
-	}
-	if t, ok := processState.Sys().(syscall.WaitStatus); ok {
-		return t.ExitStatus(), nil
-	}
-	return 253, nil
+	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr)
 }
 
 func isGui(path string) bool {

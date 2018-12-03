@@ -3,9 +3,9 @@
 package shell
 
 import (
+	"context"
 	"os"
 	"os/exec"
-	"syscall"
 )
 
 func (cmd *Cmd) lookpath() string {
@@ -16,26 +16,12 @@ func (cmd *Cmd) lookpath() string {
 	return path
 }
 
-func (cmd *Cmd) startProcess() (int, error) {
+func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	procAttr := &os.ProcAttr{
 		Env:   os.Environ(),
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 	}
-	process, err := os.StartProcess(cmd.args[0], cmd.args, procAttr)
-	if err != nil {
-		return 255, err
-	}
-	processState, err := process.Wait()
-	if err != nil {
-		return 254, err
-	}
-	if processState.Success() {
-		return 0, nil
-	}
-	if t, ok := processState.Sys().(syscall.WaitStatus); ok {
-		return t.ExitStatus(), nil
-	}
-	return 253, nil
+	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr)
 }
 
 func isGui(path string) bool {
