@@ -2,7 +2,6 @@ package readline
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"strings"
 	"unicode"
@@ -142,11 +141,6 @@ func KeyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		this.Repaint(this.Cursor, -w1)
 		this.Cursor++
 	}
-	return CONTINUE
-}
-
-func KeyFuncInsertReport(ctx context.Context, this *Buffer) Result {
-	this.InsertAndRepaint(fmt.Sprintf("[%X]", this.Unicode))
 	return CONTINUE
 }
 

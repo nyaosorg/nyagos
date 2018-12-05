@@ -47,9 +47,6 @@ type Buffer struct {
 	Buffer         []rune
 	Length         int
 	TTY            *tty.TTY
-	Unicode        rune
-	Keycode        uint16
-	ShiftState     uint32
 	ViewStart      int
 	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
 	TopColumn      int // == width of Prompt
