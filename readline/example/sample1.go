@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 
@@ -14,7 +13,7 @@ func main() {
 	editor := readline.Editor{
 		Default: "InitialValue",
 		Cursor:  3,
-		Writer:  bufio.NewWriter(colorable.NewColorableStdout()),
+		Writer:  colorable.NewColorableStdout(),
 	}
 	text, err := editor.ReadLine(context.Background())
 

@@ -49,7 +49,7 @@ func KeyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 			this.PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
-		io.WriteString(this.Writer, "\a")
+		io.WriteString(this.Out, "\a")
 		this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
@@ -192,22 +192,22 @@ func KeyFuncClearBefore(ctx context.Context, this *Buffer) Result {
 }
 
 func KeyFuncCLS(ctx context.Context, this *Buffer) Result {
-	io.WriteString(this.Writer, "\x1B[1;1H\x1B[2J")
+	io.WriteString(this.Out, "\x1B[1;1H\x1B[2J")
 	this.RepaintAll()
 	return CONTINUE
 }
 
 func KeyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
-	this.Writer.WriteByte('\n')
+	this.Out.WriteByte('\n')
 	this.RepaintAll()
 	return CONTINUE
 }
 
 func KeyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
-	io.WriteString(this.Writer, CURSOR_ON)
-	defer io.WriteString(this.Writer, CURSOR_OFF)
+	io.WriteString(this.Out, CURSOR_ON)
+	defer io.WriteString(this.Out, CURSOR_OFF)
 
-	this.Writer.Flush()
+	this.Out.Flush()
 	if key, err := getKey(this.TTY); err == nil {
 		return KeyFuncInsertSelf(ctx, this, key)
 	} else {

@@ -1,7 +1,6 @@
 package frame
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"io"
@@ -48,7 +47,7 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 		Editor: &readline.Editor{
 			History: history1,
 			Prompt:  doPrompt,
-			Writer:  bufio.NewWriter(GetConsole())},
+			Writer:  GetConsole()},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},

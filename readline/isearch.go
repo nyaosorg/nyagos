@@ -42,14 +42,14 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			drawWidth += w1
 		}
 		this.Eraseline()
-		io.WriteString(this.Writer, CURSOR_ON)
-		this.Writer.Flush()
+		io.WriteString(this.Out, CURSOR_ON)
+		this.Out.Flush()
 		key, err := getKey(this.TTY)
 		if err != nil {
 			println(err.Error())
 			return CONTINUE
 		}
-		io.WriteString(this.Writer, CURSOR_OFF)
+		io.WriteString(this.Out, CURSOR_OFF)
 		this.Backspace(drawWidth)
 		switch key {
 		case "\b":

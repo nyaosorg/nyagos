@@ -5,7 +5,6 @@ package main
 // Example to use readline
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 
@@ -18,7 +17,7 @@ func main() {
 	readline1 := readline.Editor{
 		Default: "AHAHA",
 		Cursor:  3,
-		Writer:  bufio.NewWriter(colorable.NewColorableStdout()),
+		Writer:  colorable.NewColorableStdout(),
 	}
 
 	enter_status := 0

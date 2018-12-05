@@ -1,6 +1,7 @@
 package readline
 
 import (
+	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -176,14 +177,17 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Writer == nil {
 		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
 	}
+	if session.Out == nil {
+		session.Out = bufio.NewWriter(session.Writer)
+	}
 	defer func() {
-		session.Writer.WriteString(CURSOR_ON)
-		session.Writer.Flush()
+		session.Out.WriteString(CURSOR_ON)
+		session.Out.Flush()
 	}()
 
 	if session.Prompt == nil {
 		session.Prompt = func() (int, error) {
-			session.Writer.WriteString("\n> ")
+			session.Out.WriteString("\n> ")
 			return 2, nil
 		}
 	}
@@ -212,11 +216,11 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	this.TopColumn, err1 = session.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(this.Writer, "%s\n$ ", err1.Error())
+		fmt.Fprintf(this.Out, "%s\n$ ", err1.Error())
 		this.TopColumn = 2
 	} else if this.TopColumn >= this.TermWidth-3 {
 		// ViewWidth is too narrow to edit.
-		io.WriteString(this.Writer, "\n")
+		io.WriteString(this.Out, "\n")
 		this.TopColumn = 0
 	}
 	this.InsertString(0, session.Default)
@@ -234,7 +238,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			if lastw != w {
 				mu.Lock()
 				this.TermWidth = w
-				fmt.Fprintf(this.Writer, "\x1B[%dG", this.TopColumn+1)
+				fmt.Fprintf(this.Out, "\x1B[%dG", this.TopColumn+1)
 				this.RepaintAfterPrompt()
 				mu.Unlock()
 				lastw = w
@@ -245,10 +249,10 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	for {
 		mu.Lock()
 		if !cursorOnSwitch {
-			io.WriteString(this.Writer, CURSOR_ON)
+			io.WriteString(this.Out, CURSOR_ON)
 			cursorOnSwitch = true
 		}
-		this.Writer.Flush()
+		this.Out.Flush()
 
 		mu.Unlock()
 		key1, err := getKey(tty1)
@@ -267,16 +271,16 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
-			io.WriteString(this.Writer, CURSOR_OFF)
+			io.WriteString(this.Out, CURSOR_OFF)
 			cursorOnSwitch = false
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
-			this.Writer.WriteByte('\n')
+			this.Out.WriteByte('\n')
 			if !cursorOnSwitch {
-				io.WriteString(this.Writer, CURSOR_ON)
+				io.WriteString(this.Out, CURSOR_ON)
 			}
-			this.Writer.Flush()
+			this.Out.Flush()
 			result := this.String()
 			mu.Unlock()
 			if rc == ENTER {
