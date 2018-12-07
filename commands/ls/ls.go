@@ -18,6 +18,7 @@ import (
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 const (
@@ -171,7 +172,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		fmt.Fprintf(out, " -> %s", linkTo)
 	}
 	if strings.HasSuffix(name, ".lnk") {
-		path := dos.Join(folder, name)
+		path := nodos.Join(folder, name)
 		shortcut, workdir, err := dos.ReadShortcut(path)
 		if err == nil && shortcut != "" {
 			fmt.Fprintf(out, " -> %s", shortcut)
@@ -349,7 +350,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	if folder == "" {
 		wildcard = "*"
 	} else {
-		wildcard = dos.Join(folder, "*")
+		wildcard = nodos.Join(folder, "*")
 	}
 	canceled := false
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
@@ -394,7 +395,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 			if isCancel(ctx) {
 				return ErrCtrlC
 			}
-			f1fullpath := dos.Join(folder, f1)
+			f1fullpath := nodos.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
 			if err := lsFolder(ctx, f1fullpath, flag, out); err != nil {
 				return err

@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/go-findfile"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var ErrCtrlC = errors.New("C-c")
@@ -78,4 +79,8 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 		return commons, ErrCtrlC
 	}
 	return commons, fdErr
+}
+
+func join(dir, name string) string {
+	return nodos.Join(dir, name)
 }

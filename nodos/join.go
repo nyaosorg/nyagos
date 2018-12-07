@@ -1,6 +1,8 @@
-package dos
+package nodos
 
 import (
+	"fmt"
+	"os"
 	"regexp"
 	"strings"
 )
@@ -21,7 +23,7 @@ func joinPath2(a, b string) string {
 	case '\\', '/', ':':
 		return a + b
 	default:
-		return a + "\\" + b
+		return fmt.Sprintf("%s%c%s", a, os.PathSeparator, b)
 	}
 }
 
