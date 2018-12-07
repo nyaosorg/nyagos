@@ -11,5 +11,6 @@ func isExecutable(path string) bool {
 	if err != nil {
 		return false
 	}
-	return (stat.Mode().Perm() & 0555) != 0
+	mode := stat.Mode()
+	return mode.IsRegular() && (mode.Perm()&0111) != 0
 }
