@@ -20,7 +20,7 @@ type Editor struct {
 	Cursor  int
 }
 
-func KeyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
+func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 	if this.History.Len() <= 0 {
 		return CONTINUE
 	}
@@ -28,17 +28,17 @@ func KeyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
 		this.HistoryPointer = this.History.Len()
 	}
 	this.HistoryPointer -= 1
-	KeyFuncClear(ctx, this)
+	keyFuncClear(ctx, this)
 	if this.HistoryPointer >= 0 {
 		this.InsertString(0, this.History.At(this.HistoryPointer))
 		this.ViewStart = 0
 		this.Cursor = 0
-		KeyFuncTail(ctx, this)
+		keyFuncTail(ctx, this)
 	}
 	return CONTINUE
 }
 
-func KeyFuncHistoryDown(ctx context.Context, this *Buffer) Result {
+func keyFuncHistoryDown(ctx context.Context, this *Buffer) Result {
 	if this.History.Len() <= 0 {
 		return CONTINUE
 	}
@@ -46,12 +46,12 @@ func KeyFuncHistoryDown(ctx context.Context, this *Buffer) Result {
 		return CONTINUE
 	}
 	this.HistoryPointer += 1
-	KeyFuncClear(ctx, this)
+	keyFuncClear(ctx, this)
 	if this.HistoryPointer < this.History.Len() {
 		this.InsertString(0, this.History.At(this.HistoryPointer))
 		this.ViewStart = 0
 		this.Cursor = 0
-		KeyFuncTail(ctx, this)
+		keyFuncTail(ctx, this)
 	}
 	return CONTINUE
 }

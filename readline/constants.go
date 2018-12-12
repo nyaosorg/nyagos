@@ -231,31 +231,31 @@ var name2char = map[string]string{
 // http://msdn.microsoft.com/ja-jp/library/windows/desktop/dd375731(v=vs.85).aspx
 
 var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
-	F_ACCEPT_LINE:          KeyFuncEnter,
-	F_BACKWARD_CHAR:        KeyFuncBackword,
-	F_BACKWARD_DELETE_CHAR: KeyFuncBackSpace,
-	F_BEGINNING_OF_LINE:    KeyFuncHead,
-	F_CLEAR_SCREEN:         KeyFuncCLS,
-	F_DELETE_CHAR:          KeyFuncDelete,
-	F_DELETE_OR_ABORT:      KeyFuncDeleteOrAbort,
-	F_END_OF_LINE:          KeyFuncTail,
-	F_FORWARD_CHAR:         KeyFuncForward,
-	F_HISTORY_DOWN:         KeyFuncHistoryDown, // for compatible
-	F_HISTORY_UP:           KeyFuncHistoryUp,   // for compatible
-	F_NEXT_HISTORY:         KeyFuncHistoryDown,
-	F_PREVIOUS_HISTORY:     KeyFuncHistoryUp,
-	F_INTR:                 KeyFuncIntr,
-	F_ISEARCH_BACKWARD:     KeyFuncIncSearch,
-	F_KILL_LINE:            KeyFuncClearAfter,
-	F_KILL_WHOLE_LINE:      KeyFuncClear,
+	F_ACCEPT_LINE:          keyFuncEnter,
+	F_BACKWARD_CHAR:        keyFuncBackword,
+	F_BACKWARD_DELETE_CHAR: keyFuncBackSpace,
+	F_BEGINNING_OF_LINE:    keyFuncHead,
+	F_CLEAR_SCREEN:         keyFuncCLS,
+	F_DELETE_CHAR:          keyFuncDelete,
+	F_DELETE_OR_ABORT:      keyFuncDeleteOrAbort,
+	F_END_OF_LINE:          keyFuncTail,
+	F_FORWARD_CHAR:         keyFuncForward,
+	F_HISTORY_DOWN:         keyFuncHistoryDown, // for compatible
+	F_HISTORY_UP:           keyFuncHistoryUp,   // for compatible
+	F_NEXT_HISTORY:         keyFuncHistoryDown,
+	F_PREVIOUS_HISTORY:     keyFuncHistoryUp,
+	F_INTR:                 keyFuncIntr,
+	F_ISEARCH_BACKWARD:     keyFuncIncSearch,
+	F_KILL_LINE:            keyFuncClearAfter,
+	F_KILL_WHOLE_LINE:      keyFuncClear,
 	F_PASS:                 nil,
-	F_QUOTED_INSERT:        KeyFuncQuotedInsert,
-	F_UNIX_LINE_DISCARD:    KeyFuncClearBefore,
-	F_UNIX_WORD_RUBOUT:     KeyFuncWordRubout,
-	F_YANK:                 KeyFuncPaste,
-	F_YANK_WITH_QUOTE:      KeyFuncPasteQuote,
-	F_SWAPCHAR:             KeyFuncSwapChar,
-	F_REPAINT_ON_NEWLINE:   KeyFuncRepaintOnNewline,
+	F_QUOTED_INSERT:        keyFuncQuotedInsert,
+	F_UNIX_LINE_DISCARD:    keyFuncClearBefore,
+	F_UNIX_WORD_RUBOUT:     keyFuncWordRubout,
+	F_YANK:                 keyFuncPaste,
+	F_YANK_WITH_QUOTE:      keyFuncPasteQuote,
+	F_SWAPCHAR:             keyFuncSwapChar,
+	F_REPAINT_ON_NEWLINE:   keyFuncRepaintOnNewline,
 }
 
 func name2func(keyName string) KeyFuncT {

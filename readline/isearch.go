@@ -9,7 +9,7 @@ import (
 	"unicode/utf8"
 )
 
-func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
+func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	var searchBuf strings.Builder
 	foundStr := ""
 	searchStr := ""
@@ -42,14 +42,14 @@ func KeyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			drawWidth += w1
 		}
 		this.Eraseline()
-		io.WriteString(this.Out, CURSOR_ON)
+		io.WriteString(this.Out, ansiCursorOn)
 		this.Out.Flush()
 		key, err := getKey(this.TTY)
 		if err != nil {
 			println(err.Error())
 			return CONTINUE
 		}
-		io.WriteString(this.Out, CURSOR_OFF)
+		io.WriteString(this.Out, ansiCursorOff)
 		this.Backspace(drawWidth)
 		switch key {
 		case "\b":

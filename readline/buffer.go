@@ -40,7 +40,7 @@ func (this *Buffer) Eraseline() {
 	io.WriteString(this.Out, "\x1B[0K")
 }
 
-const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
+const forbiddenWidth = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
 	*Editor
@@ -48,13 +48,13 @@ type Buffer struct {
 	Length         int
 	TTY            *tty.TTY
 	ViewStart      int
-	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
+	TermWidth      int // == TopColumn + ViewWidth + forbiddenWidth
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
 }
 
 func (this *Buffer) ViewWidth() int {
-	return this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
+	return this.TermWidth - this.TopColumn - forbiddenWidth
 }
 
 func (this *Buffer) Insert(csrPos int, insStr []rune) {

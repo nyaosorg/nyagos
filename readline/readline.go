@@ -144,8 +144,8 @@ func (this *EmptyHistory) Len() int      { return 0 }
 func (this *EmptyHistory) At(int) string { return "" }
 
 const (
-	CURSOR_OFF = "\x1B[?25l"
-	CURSOR_ON  = "\x1B[?25h\x1B[s\x1B[u"
+	ansiCursorOff = "\x1B[?25l"
+	ansiCursorOn  = "\x1B[?25h\x1B[s\x1B[u"
 )
 
 var CtrlC = errors.New("^C")
@@ -181,7 +181,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		session.Out = bufio.NewWriter(session.Writer)
 	}
 	defer func() {
-		session.Out.WriteString(CURSOR_ON)
+		session.Out.WriteString(ansiCursorOn)
 		session.Out.Flush()
 	}()
 
@@ -249,7 +249,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	for {
 		mu.Lock()
 		if !cursorOnSwitch {
-			io.WriteString(this.Out, CURSOR_ON)
+			io.WriteString(this.Out, ansiCursorOn)
 			cursorOnSwitch = true
 		}
 		this.Out.Flush()
@@ -264,21 +264,21 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		if !ok {
 			f = &KeyGoFuncT{
 				Func: func(ctx context.Context, this *Buffer) Result {
-					return KeyFuncInsertSelf(ctx, this, key1)
+					return keyFuncInsertSelf(ctx, this, key1)
 				},
 				Name: key1,
 			}
 		}
 
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
-			io.WriteString(this.Out, CURSOR_OFF)
+			io.WriteString(this.Out, ansiCursorOff)
 			cursorOnSwitch = false
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
 			this.Out.WriteByte('\n')
 			if !cursorOnSwitch {
-				io.WriteString(this.Out, CURSOR_ON)
+				io.WriteString(this.Out, ansiCursorOn)
 			}
 			this.Out.Flush()
 			result := this.String()
