@@ -98,8 +98,14 @@ func callBatch(
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`" "`)
 
+	cmdexe := os.Getenv("COMSPEC")
+
+	if cmdexe == "" {
+		cmdexe = "cmd.exe"
+	}
+
 	cmd := exec.Cmd{
-		Path:        os.Getenv("COMSPEC"),
+		Path:        cmdexe,
 		Stdin:       stdin,
 		Stdout:      stdout,
 		Stderr:      stderr,
