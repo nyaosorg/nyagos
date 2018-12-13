@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.3\_4
+===============
+(2018.12.13)
+
 * 出力先が端末でない場合、more を type と等価に
 * バッチ実行時に作成する踏み台の一時バッチを廃止。`CMD /V:ON /S /C "..."` を使うようにした
 * (#340) 最大ヒストリ保存数を指定する `nyagos.histsize` を追加
