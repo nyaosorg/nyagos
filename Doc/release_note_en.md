@@ -6,8 +6,8 @@ on Dec.13,2018
 
 * If stdin is not terminal, `more` command runs as `type`.
 * On calling a batch file, `use CMD.EXE /V:ON /S /C "..."` for boosting code instead of temporary batchfile.
-* (#340) Add lua variable `nyagos.histsize` to set the number of entries for history to save disk.
-* (#343) When %COMSPEC% is empty, use CMD.EXE
+* (#340) Add lua variable `nyagos.histsize` to set the number of entries for history to save disk. (Thx! @crile)
+* (#343) When %COMSPEC% is empty, use CMD.EXE (Thx! @orz--)
 
 NYAGOS 4.3.3\_3
 ===============
