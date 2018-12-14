@@ -99,6 +99,7 @@ Acknowledgement
 * [hazychill](https://github.com/hazychill)
 * [erw7](https://github.com/erw7)
 * [tignear](https://github.com/tignear)
+* [crile](https://github.com/crile)
 
 Author
 ------
