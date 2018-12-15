@@ -66,3 +66,11 @@ func readShortCut(dir string) (string, error) {
 	newdir, _, err := dos.ReadShortcut(dir)
 	return newdir, err
 }
+
+func setWritable(path string) error {
+	perm, err := dos.GetFileAttributes(path)
+	if err != nil {
+		return err
+	}
+	return dos.SetFileAttributes(path, perm&^dos.FILE_ATTRIBUTE_READONLY)
+}

@@ -5,7 +5,9 @@ package commands
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
+	"os"
 )
 
 func init() {
@@ -17,6 +19,7 @@ func init() {
 		"clip":     cmdClip,
 		"cls":      cmdCls,
 		"chmod":    cmdChmod,
+		"del":      cmdDel,
 		"dirs":     cmdDirs,
 		"diskused": cmdDiskUsed,
 		"echo":     cmdEcho,
@@ -45,4 +48,13 @@ func newMbcsReader(r io.Reader) io.Reader {
 
 func readShortCut(dir string) (string, error) {
 	return "", errors.New("not support shortcut")
+}
+
+func setWritable(path string) error {
+	stat, err := os.Stat(path)
+	if err != nil {
+		return fmt.Errorf("os.Stat('%s'): %s", path, err)
+	}
+	mode := stat.Mode() | 0x600
+	return os.Chmod(path, mode)
 }
