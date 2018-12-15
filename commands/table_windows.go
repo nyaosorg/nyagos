@@ -5,6 +5,8 @@ import (
 	"io"
 
 	"github.com/zetamatta/go-texts/mbcs"
+
+	"github.com/zetamatta/nyagos/dos"
 )
 
 func init() {
@@ -58,4 +60,9 @@ func init() {
 
 func newMbcsReader(r io.Reader) io.Reader {
 	return mbcs.NewAutoDetectReader(r, mbcs.ConsoleCP())
+}
+
+func readShortCut(dir string) (string, error) {
+	newdir, _, err := dos.ReadShortcut(dir)
+	return newdir, err
 }
