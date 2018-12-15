@@ -1,6 +1,11 @@
 package commands
 
-import "context"
+import (
+	"context"
+	"io"
+
+	"github.com/zetamatta/go-texts/mbcs"
+)
 
 func init() {
 	buildInCommand = map[string]func(context.Context, Param) (int, error){
@@ -49,4 +54,8 @@ func init() {
 		"type":     cmdType,
 		"which":    cmdWhich,
 	}
+}
+
+func newMbcsReader(r io.Reader) io.Reader {
+	return mbcs.NewAutoDetectReader(r, mbcs.ConsoleCP())
 }

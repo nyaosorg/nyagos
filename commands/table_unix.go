@@ -2,7 +2,10 @@
 
 package commands
 
-import "context"
+import (
+	"context"
+	"io"
+)
 
 func init() {
 	buildInCommand = map[string]func(context.Context, Param) (int, error){
@@ -29,6 +32,11 @@ func init() {
 		"rem":      cmdRem,
 		"set":      cmdSet,
 		"touch":    cmdTouch,
+		"type":     cmdType,
 		"which":    cmdWhich,
 	}
+}
+
+func newMbcsReader(r io.Reader) io.Reader {
+	return r
 }
