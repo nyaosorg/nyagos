@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"os"
 	"syscall"
-
-	"github.com/zetamatta/nyagos/dos"
 )
 
 func cmdMkdir(ctx context.Context, cmd Param) (int, error) {
@@ -82,7 +80,7 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 			if !quiet {
 				fmt.Fprintln(cmd.Out())
 			}
-			err = dos.Truncate(arg1, func(path string, err error) bool {
+			err = truncate(arg1, func(path string, err error) bool {
 				fmt.Fprintf(cmd.Err(), "%s -> %s\n", path, err)
 				return true
 			}, cmd.Out())

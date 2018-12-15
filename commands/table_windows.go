@@ -74,3 +74,7 @@ func setWritable(path string) error {
 	}
 	return dos.SetFileAttributes(path, perm&^dos.FILE_ATTRIBUTE_READONLY)
 }
+
+func truncate(path string, f func(path string, err error) bool, out io.Writer) error {
+	return dos.Truncate(path, f, out)
+}
