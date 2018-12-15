@@ -10,6 +10,7 @@ func init() {
 		"bindkey":  cmdBindkey,
 		"box":      cmdBox,
 		"cd":       cmdCd,
+		"clip":     cmdClip,
 		"cls":      cmdCls,
 		"chmod":    cmdChmod,
 		"dirs":     cmdDirs,
