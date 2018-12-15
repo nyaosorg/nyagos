@@ -25,6 +25,7 @@ func init() {
 		"history":  cmdHistory,
 		"if":       cmdIf,
 		"kill":     cmdKill,
+		"more":     cmdMore,
 		"popd":     cmdPopd,
 		"ps":       cmdPs,
 		"pushd":    cmdPushd,

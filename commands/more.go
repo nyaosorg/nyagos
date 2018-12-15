@@ -13,8 +13,6 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
 	"github.com/mattn/go-tty"
-
-	"github.com/zetamatta/go-texts/mbcs"
 )
 
 var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
@@ -40,9 +38,8 @@ func getkey() (rune, error) {
 	}
 }
 
-func more(_r io.Reader, cmd Param) error {
-	r := mbcs.NewAutoDetectReader(_r, mbcs.ConsoleCP())
-	scanner := bufio.NewScanner(r)
+func more(r io.Reader, cmd Param) error {
+	scanner := bufio.NewScanner(newMbcsReader(r))
 	count := 0
 
 	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {
