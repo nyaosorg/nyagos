@@ -42,7 +42,6 @@ var (
 
 	procCopyFileW           = modkernel32.NewProc("CopyFileW")
 	procGetDiskFreeSpaceExW = modkernel32.NewProc("GetDiskFreeSpaceExW")
-	procGetLogicalDrives    = modkernel32.NewProc("GetLogicalDrives")
 	procCoInitializeEx      = modole32.NewProc("CoInitializeEx")
 	procCoUninitialize      = modole32.NewProc("CoUninitialize")
 )
@@ -91,19 +90,6 @@ func getDiskFreeSpaceEx(rootPathName string, free *uint64, total *uint64, totalF
 
 func _getDiskFreeSpaceEx(rootPathName *uint16, free *uint64, total *uint64, totalFree *uint64) (n uint32, err error) {
 	r0, _, e1 := syscall.Syscall6(procGetDiskFreeSpaceExW.Addr(), 4, uintptr(unsafe.Pointer(rootPathName)), uintptr(unsafe.Pointer(free)), uintptr(unsafe.Pointer(total)), uintptr(unsafe.Pointer(totalFree)), 0, 0)
-	n = uint32(r0)
-	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func GetLogicalDrives() (n uint32, err error) {
-	r0, _, e1 := syscall.Syscall(procGetLogicalDrives.Addr(), 0, 0, 0, 0)
 	n = uint32(r0)
 	if n == 0 {
 		if e1 != 0 {

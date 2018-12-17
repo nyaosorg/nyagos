@@ -47,7 +47,7 @@ func df(rootPathName string, w io.Writer) (err error) {
 }
 
 func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
-	bits, err := dos.GetLogicalDrives()
+	bits, err := windows.GetLogicalDrives()
 	if err != nil {
 		return 0, err
 	}
