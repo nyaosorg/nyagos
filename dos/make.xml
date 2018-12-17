@@ -21,9 +21,6 @@
         <li><nm>FILE_ATTRIBUTE_SYSTEM</nm></li>
         <li><nm>FILE_ATTRIBUTE_ARCHIVE</nm></li>
         <li><nm>CP_THREAD_ACP</nm></li>
-        <li><nm>MOVEFILE_REPLACE_EXISTING</nm></li>
-        <li><nm>MOVEFILE_COPY_ALLOWED</nm></li>
-        <li><nm>MOVEFILE_WRITE_THROUGH</nm></li>
         <li><nm>SW_HIDE</nm></li>
         <li><nm>SW_MAXIMIZE</nm></li>
         <li><nm>SW_MINIMIZE</nm></li>

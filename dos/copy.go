@@ -1,5 +1,7 @@
 package dos
 
+import "golang.org/x/sys/windows"
+
 // Copy calls Win32's CopyFile API.
 func Copy(src, dst string, isFailIfExists bool) error {
 	rc, err := copyFile(src, dst, isFailIfExists)
@@ -11,10 +13,18 @@ func Copy(src, dst string, isFailIfExists bool) error {
 
 // Move calls Win32's MoveFileEx API.
 func Move(src, dst string) error {
-	rc, err := moveFileEx(src, dst,
-		MOVEFILE_REPLACE_EXISTING|MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH)
-	if rc == 0 {
+	_src, err := windows.UTF16PtrFromString(src)
+	if err != nil {
 		return err
 	}
-	return nil
+	_dst, err := windows.UTF16PtrFromString(dst)
+	if err != nil {
+		return err
+	}
+	return windows.MoveFileEx(
+		_src,
+		_dst,
+		windows.MOVEFILE_REPLACE_EXISTING|
+			windows.MOVEFILE_COPY_ALLOWED|
+			windows.MOVEFILE_WRITE_THROUGH)
 }

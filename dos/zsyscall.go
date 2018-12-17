@@ -41,7 +41,6 @@ var (
 	modole32    = windows.NewLazySystemDLL("ole32.dll")
 
 	procCopyFileW           = modkernel32.NewProc("CopyFileW")
-	procMoveFileExW         = modkernel32.NewProc("MoveFileExW")
 	procGetDiskFreeSpaceExW = modkernel32.NewProc("GetDiskFreeSpaceExW")
 	procGetLogicalDrives    = modkernel32.NewProc("GetLogicalDrives")
 	procGetDriveTypeW       = modkernel32.NewProc("GetDriveTypeW")
@@ -71,33 +70,6 @@ func _copyFile(src *uint16, dst *uint16, isFailIfExist bool) (n uint32, err erro
 		_p2 = 0
 	}
 	r0, _, e1 := syscall.Syscall(procCopyFileW.Addr(), 3, uintptr(unsafe.Pointer(src)), uintptr(unsafe.Pointer(dst)), uintptr(_p2))
-	n = uint32(r0)
-	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func moveFileEx(src string, dst string, flag uintptr) (n uint32, err error) {
-	var _p0 *uint16
-	_p0, err = syscall.UTF16PtrFromString(src)
-	if err != nil {
-		return
-	}
-	var _p1 *uint16
-	_p1, err = syscall.UTF16PtrFromString(dst)
-	if err != nil {
-		return
-	}
-	return _moveFileEx(_p0, _p1, flag)
-}
-
-func _moveFileEx(src *uint16, dst *uint16, flag uintptr) (n uint32, err error) {
-	r0, _, e1 := syscall.Syscall(procMoveFileExW.Addr(), 3, uintptr(unsafe.Pointer(src)), uintptr(unsafe.Pointer(dst)), uintptr(flag))
 	n = uint32(r0)
 	if n == 0 {
 		if e1 != 0 {
