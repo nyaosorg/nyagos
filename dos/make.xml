@@ -37,13 +37,6 @@
         <li><nm>COINIT_MULTITHREADED</nm><type>uintptr</type></li>
         <li><nm>COINIT_DISABLE_OLE1DDE</nm><type>uintptr</type></li>
         <li><nm>COINIT_SPEED_OVER_MEMORY</nm><type>uintptr</type></li>
-        <li><nm>DRIVE_UNKNOWN</nm></li>
-        <li><nm>DRIVE_NO_ROOT_DIR</nm></li>
-        <li><nm>DRIVE_REMOVABLE</nm></li>
-        <li><nm>DRIVE_FIXED</nm></li>
-        <li><nm>DRIVE_REMOTE</nm></li>
-        <li><nm>DRIVE_CDROM</nm></li>
-        <li><nm>DRIVE_RAMDISK</nm>/nm></li>
         <!-- https://msdn.microsoft.com/ja-jp/library/cc447078.aspx -->
         <!-- dwScope -->
         <li><nm>RESOURCE_CONNECTED</nm></li>

@@ -5,6 +5,5 @@ package dos
 //sys copyFile(src string,dst string,isFailIfExist bool)(n uint32,err error) = kernel32.CopyFileW
 //sys getDiskFreeSpaceEx(rootPathName string,free *uint64,total *uint64,totalFree *uint64)(n uint32,err error) = kernel32.GetDiskFreeSpaceExW
 //sys GetLogicalDrives()(n uint32,err error) = kernel32.GetLogicalDrives
-//sys GetDriveType(rootPathName string)(rc uintptr,err error) = kernel32.GetDriveTypeW
 //sys CoInitializeEx(res uintptr,opt uintptr) = ole32.CoInitializeEx
 //sys CoUninitialize() = ole32.CoUninitialize

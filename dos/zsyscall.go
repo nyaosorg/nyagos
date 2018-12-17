@@ -43,7 +43,6 @@ var (
 	procCopyFileW           = modkernel32.NewProc("CopyFileW")
 	procGetDiskFreeSpaceExW = modkernel32.NewProc("GetDiskFreeSpaceExW")
 	procGetLogicalDrives    = modkernel32.NewProc("GetLogicalDrives")
-	procGetDriveTypeW       = modkernel32.NewProc("GetDriveTypeW")
 	procCoInitializeEx      = modole32.NewProc("CoInitializeEx")
 	procCoUninitialize      = modole32.NewProc("CoUninitialize")
 )
@@ -107,28 +106,6 @@ func GetLogicalDrives() (n uint32, err error) {
 	r0, _, e1 := syscall.Syscall(procGetLogicalDrives.Addr(), 0, 0, 0, 0)
 	n = uint32(r0)
 	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func GetDriveType(rootPathName string) (rc uintptr, err error) {
-	var _p0 *uint16
-	_p0, err = syscall.UTF16PtrFromString(rootPathName)
-	if err != nil {
-		return
-	}
-	return _GetDriveType(_p0)
-}
-
-func _GetDriveType(rootPathName *uint16) (rc uintptr, err error) {
-	r0, _, e1 := syscall.Syscall(procGetDriveTypeW.Addr(), 1, uintptr(unsafe.Pointer(rootPathName)), 0, 0)
-	rc = uintptr(r0)
-	if rc == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
