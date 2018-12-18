@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#345) Fix subcomplete.lua don't work git (Thx! @tsuyoshicho)
+
 NYAGOS 4.3.3\_4
 ===============
 on Dec.13,2018
