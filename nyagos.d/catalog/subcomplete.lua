@@ -10,10 +10,9 @@ local githelp=io.popen("git help -a 2>nul","r")
 if githelp then
     local gitcmds={}
     for line in githelp:lines() do
-        if string.match(line,"^  %S") then
-            for word in string.gmatch(line,"%S+") do
-                gitcmds[ #gitcmds+1 ] = word
-            end
+        local word = string.match(line,"^ +(%S+)")
+        if nil ~= word then
+          gitcmds[ #gitcmds+1 ] = word
         end
     end
     githelp:close()
@@ -30,7 +29,7 @@ local svnhelp=io.popen("svn help 2>nul","r")
 if svnhelp then
     local svncmds={}
     for line in svnhelp:lines() do
-        local m=string.match(line,"^   ([a-z]+)")
+        local m=string.match(line,"^ +([a-z]+)")
         if m then
             svncmds[ #svncmds+1 ] = m
         end
