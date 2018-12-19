@@ -3,6 +3,7 @@ package shell
 import (
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -97,22 +98,31 @@ func (r *_Redirecter) open() (*os.File, error) {
 	}
 }
 
-func (r *_Redirecter) OpenOn(cmd *Cmd) (*os.File, error) {
+type dontCloseHandle struct{}
+
+func (this dontCloseHandle) Close() error {
+	return nil
+}
+
+func (r *_Redirecter) OpenOn(cmd *Cmd) (closer io.Closer, err error) {
 	var fd *os.File
-	var err error
 
 	switch r.dupFrom {
 	case 0:
 		fd = cmd.Stdin
+		closer = &dontCloseHandle{}
 	case 1:
 		fd = cmd.Stdout
+		closer = &dontCloseHandle{}
 	case 2:
 		fd = cmd.Stderr
+		closer = &dontCloseHandle{}
 	default:
 		fd, err = r.open()
 		if err != nil {
 			return nil, err
 		}
+		closer = fd
 	}
 	switch r.FileNo() {
 	case 0:
@@ -124,5 +134,5 @@ func (r *_Redirecter) OpenOn(cmd *Cmd) (*os.File, error) {
 	default:
 		panic("Assertion failed: _Redirecter.OpenAs: r.no not in (0,1,2)")
 	}
-	return fd, nil
+	return
 }

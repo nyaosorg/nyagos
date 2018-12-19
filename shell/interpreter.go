@@ -359,12 +359,12 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			}
 
 			for _, red := range state.Redirect {
-				var fd *os.File
-				fd, err = red.OpenOn(cmd)
+				var closer io.Closer
+				closer, err = red.OpenOn(cmd)
 				if err != nil {
 					return 0, err
 				}
-				cmd.Closers = append(cmd.Closers, fd)
+				cmd.Closers = append(cmd.Closers, closer)
 			}
 
 			cmd.args = state.Args
