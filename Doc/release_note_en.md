@@ -1,7 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#345) Fix subcomplete.lua don't work git (Thx! @tsuyoshicho)
-* (#347) Fix the bug that STDOUT was closed after `dir 2>&1`.
+* (#347) Fix the bug that STDOUT was closed after `dir 2>&1`.(Thx! @Matsuyanagi)
 
 NYAGOS 4.3.3\_4
 ===============
