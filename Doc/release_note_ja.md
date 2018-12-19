@@ -1,7 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * (#345) subcomplete.lua が git 補完で動作しない問題を修正 (Thx! @tsuyoshicho)
-* (#347) `dir 2>&1`実行後、dup元の標準出力までクローズされていた不具合を修正
+* (#347) `dir 2>&1`実行後、dup元の標準出力までクローズされていた不具合を修正(Thx! @Matsuyanagi)
 
 NYAGOS 4.3.3\_4
 ===============
