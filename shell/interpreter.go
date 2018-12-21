@@ -214,6 +214,14 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 }
 
 func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr) (int, error) {
+	if ctx != nil {
+		select {
+		case <-ctx.Done():
+			return 252, ctx.Err()
+		default:
+		}
+	}
+
 	process, err := os.StartProcess(name, args, procAttr)
 	if err != nil {
 		return 255, err
