@@ -7,6 +7,8 @@ import (
 	"strings"
 	"syscall"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
@@ -20,6 +22,9 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
 		return 0, dos.ShellExecute("open", cmd.args[0], cmdline, "")
+	}
+	if closer, err := dos.ChangeConsoleMode(windows.Stdin, dos.ModeSet(0x7)); err == nil {
+		defer closer()
 	}
 	if UseSourceRunBatch {
 		lowerName := strings.ToLower(cmd.args[0])
