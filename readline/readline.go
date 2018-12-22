@@ -152,6 +152,7 @@ var CtrlC = errors.New("^C")
 
 func getKey(tty1 *tty.TTY) (string, error) {
 	var buffer strings.Builder
+	escape := false
 	for {
 		r, err := tty1.ReadRune()
 		if err != nil {
@@ -161,7 +162,10 @@ func getKey(tty1 *tty.TTY) (string, error) {
 			continue
 		}
 		buffer.WriteRune(r)
-		if !tty1.Buffered() {
+		if r == '\x1B' {
+			escape = true
+		}
+		if !(escape && tty1.Buffered()) {
 			return buffer.String(), nil
 		}
 	}
