@@ -1,9 +1,13 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.3.3\_5
+===============
+(2018.12.24)
+
 * (#345) subcomplete.lua が git 補完で動作しない問題を修正 (Thx! @tsuyoshicho)
 * (#347) `dir 2>&1`実行後、dup元の標準出力までクローズされていた不具合を修正(Thx! @Matsuyanagi)
 * (#348) ls 後マウスのスクロールが効きにくくなる問題に対応 (Thx! @tyochiai)
-    * 要 github.com/zetamatta/go-getch 20181223
+    * 要 github.com/zetamatta/go-getch tagged:20181223
 
 NYAGOS 4.3.3\_4
 ===============

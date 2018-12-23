@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.3.3\_5
+===============
+on Dec.24,2018
+
 * (#345) Fix subcomplete.lua don't work git (Thx! @tsuyoshicho)
 * (#347) Fix the bug that STDOUT was closed after `dir 2>&1`.(Thx! @Matsuyanagi)
 * (#348) Scrolling by mouse-wheel did not worked. (Thx! @tyochiai)
