@@ -27,9 +27,9 @@ var prevOptionGoColorable bool = false
 
 func GetConsole() io.Writer {
 	if console == nil || prevOptionGoColorable != OptionGoColorable {
-		if dos.IsEscapeSequenceAvailable() {
+		if isEscapeSequenceAvailable() {
 			console = os.Stdout
-			dos.EnableStdoutVirtualTerminalProcessing()
+			enableVirtualTerminalProcessing()
 		} else if OptionGoColorable {
 			console = colorable.NewColorableStdout()
 		} else {
