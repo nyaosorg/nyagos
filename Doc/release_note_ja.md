@@ -1,5 +1,8 @@
 [English](release_note_en.md) / Japanese
 
+* (#341) Windows10で全角文字の前に文字を挿入すると、不要な空白が入る不具合を修正
+    * それに伴い、Windows10 では virtual terminal processing を常に有効に
+
 NYAGOS 4.3.3\_5
 ===============
 (2018.12.24)
