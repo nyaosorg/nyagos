@@ -2,6 +2,8 @@ English / [Japanese](release_note_ja.md)
 
 * (#341) Fix an unexpected space is inserted after wide characters
     * On Windows10, enable stdout virtual terminal processing always
+* (#339) Fix that wildcard pattern `.??*` matches `..`
+    * It requires github.com/zetamatta/go-findfirst tagged 20181213
 
 NYAGOS 4.3.3\_5
 ===============
