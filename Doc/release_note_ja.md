@@ -2,8 +2,9 @@
 
 * (#341) Windows10で全角文字の前に文字を挿入すると、不要な空白が入る不具合を修正
     * それに伴い、Windows10 では virtual terminal processing を常に有効に
+    * `git.exe push`が無効にしても再び有効にする
 * (#339) ワイルドカード `.??*` が `..` にマッチする問題を修正
-    * 要 github.com/zetamatta/go-findfirst tagged 20181230
+    * 要 github.com/zetamatta/go-findfile tagged 20181230-2
 
 NYAGOS 4.3.3\_5
 ===============
