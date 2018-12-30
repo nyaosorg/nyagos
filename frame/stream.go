@@ -27,11 +27,17 @@ type CmdStreamConsole struct {
 var console io.Writer
 var prevOptionGoColorable bool = false
 
+var isEscapeSequenceAvailable = false
+
 func GetConsole() io.Writer {
-	if console == nil || prevOptionGoColorable != OptionGoColorable {
+	if isEscapeSequenceAvailable {
+		dos.EnableStdoutVirtualTerminalProcessing()
+		console = os.Stdout
+	} else if console == nil || prevOptionGoColorable != OptionGoColorable {
 		if dos.IsEscapeSequenceAvailable() {
 			console = os.Stdout
 			dos.EnableStdoutVirtualTerminalProcessing()
+			isEscapeSequenceAvailable = true
 		} else if OptionGoColorable {
 			console = colorable.NewColorableStdout()
 		} else {
