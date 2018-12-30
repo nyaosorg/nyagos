@@ -11,8 +11,14 @@ import (
 )
 
 func lookPath(dir1, patternBase string) (foundpath string) {
-	pattern := patternBase + ".*"
 	pathExtList := filepath.SplitList(os.Getenv("PATHEXT"))
+	ext := filepath.Ext(patternBase)
+	var pattern string
+	if ext == "" {
+		pattern = patternBase + ".*"
+	} else {
+		pattern = patternBase
+	}
 	names := make([]string, len(pathExtList)+1)
 	basename := filepath.Base(patternBase)
 	names[0] = basename
