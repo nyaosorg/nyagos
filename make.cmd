@@ -45,16 +45,6 @@ function Ask-Copy($src,$dst){
     Do-Copy $src $dst
 }
 
-function Get-GoArch{
-    if( (Test-Path env:GOARCH) -and $env:GOARCH ){
-        $arch = $env:GOARCH
-    }else{
-        $arch = (& $GO version | %{ $_.Split()[-1].Split("/")[-1] } )
-    }
-    Write-Verbose ("Found GOARCH="+$arch)
-    return $arch
-}
-
 function ForEach-GoDir{
     Get-ChildItem . -Recurse |
     Where-Object{ $_.Extension -eq '.go' } |
@@ -183,7 +173,7 @@ function Build($version,$tags) {
         return
     }
     $saveGOARCH = $env:GOARCH
-    $env:GOARCH = (Get-GoArch)
+    $env:GOARCH = (& $go env GOARCH)
 
     Make-Dir $CMD
     $binDir = (Join-Path $CMD $env:GOARCH)
@@ -367,7 +357,7 @@ switch( $args[0] ){
         }
     }
     "package" {
-        $goarch = if( $args[1] ){ $args[1] }else{ (Get-GoArch) }
+        $goarch = if( $args[1] ){ $args[1] }else{ (& $go env GOARCH) }
         Make-Package $goarch
     }
     "install" {
