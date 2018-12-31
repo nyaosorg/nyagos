@@ -190,59 +190,6 @@ function Build($version,$tags) {
     $env:GOARCH = $saveGOARCH
 }
 
-function Make-CSource($xml){
-    $const = $xml.make.const
-    $package = $const.package
-
-    foreach( $h in $const.include ){
-        Write-Output "#include $h"
-    }
-    Write-Output '#define X(x) #x'
-    Write-Output ''
-    Write-Output 'int main()'
-    Write-Output '{'
-    Write-Output ('    printf("package {0}\n\n");' -f $package )
-
-    foreach( $p in $const.li ){
-        $name1 = $p.nm
-        $type  = $p.type
-        $fmt   = $p.fmt
-        if( $fmt ){
-            Write-Output ('     printf("const " X({0}) "={1}\n",{0});' `
-                -f $name1,$fmt)
-        }elseif( $type ){
-            Write-Output ('     printf("const " X({0}) "={1}(%d)\n",{0});' `
-                -f $name1,$type)
-        }else{
-            Write-Output ('     printf("const " X({0}) "=%d\n",{0});' `
-                -f $name1)
-        }
-    }
-    Write-Output '    return 0;'
-    Write-Output '}'
-}
-
-function Make-ConstGo($makexml){
-    Make-CSource $makexml |
-        Out-File "makeconst.c" -Encoding Default
-
-    Write-Verbose -Message '$ gcc makeconst.c'
-    gcc "makeconst.c"
-
-    if( -not (Test-Path "a.exe") ){
-        Write-Error -Message "a.exe not found"
-        return
-    }
-    Write-Verbose -Message '$ .\a.exe > const.go'
-    & ".\a.exe" | Out-File const.go -Encoding default
-    Write-Verbose -Message "$ $GO fmt const.go"
-    & $GO fmt const.go
-
-    Do-Remove "makeconst.o"
-    Do-Remove "makeconst.c"
-    Do-Remove "a.exe"
-}
-
 function Byte2DWord($a,$b,$c,$d){
     return ($a+256*($b+256*($c+256*$d)))
 }
@@ -342,20 +289,6 @@ switch( $args[0] ){
             popd
         }
     }
-    "const" {
-        Get-ChildItem . -Recurse |
-        ?{ $_.Name -eq "make.xml" } |
-        %{
-            $makexml = [xml](Get-Content $_.FullName)
-            $private:cwd = (Split-Path $_.FullName -Parent)
-            pushd $cwd
-            Write-Verbose "$ chdir $cwd"
-            $private:pkg = (Split-Path $cwd -Leaf)
-            Write-Verbose "for package $pkg"
-            Make-ConstGo $makexml
-            popd
-        }
-    }
     "package" {
         $goarch = if( $args[1] ){ $args[1] }else{ (& $go env GOARCH) }
         Make-Package $goarch
@@ -418,7 +351,6 @@ make                     build as snapshot
 make debug   [386|amd64] build as debug version     (tagged as `debug`)
 make release [386|amd64] build as release version
 make clean               remove all work files
-make const               make `const.go`. gcc is required
 make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
 make install [FOLDER]    copy executables to FOLDER or last folder
 make fmt                 `go fmt`
