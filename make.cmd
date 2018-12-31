@@ -80,15 +80,6 @@ function Go-Fmt{
     return $status
 }
 
-function Get-Go1stPath {
-    if( $env:gopath -ne $null -and $env:gopath -ne "" ){
-        $gopath = $env:gopath
-    }else{
-        $gopath = (Join-Path $env:userprofile "go")
-    }
-    $gopath.Split(";")[0]
-}
-
 function Make-SysO($version) {
     Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
     if( $version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$" ){
@@ -126,7 +117,7 @@ function Download-Exe($url,$exename){
     Write-Verbose -Message ("{0} not found." -f $exename)
     Write-Verbose -Message ("$ $GO get -d " + $url)
     & $GO get -d $url
-    $workdir = (Join-Path (Join-Path (Get-Go1stPath) "src") $url)
+    $workdir = (Join-Path (Join-Path (& $GO env GOPATH).Split(";")[0] "src") $url)
     $cwd = (Get-Location)
     Set-Location $workdir
     Write-Verbose -Message ("$ $GO build {0} on {1}" -f $exename,$workdir)
