@@ -354,14 +354,6 @@ switch( $args[0] ){
     "status" {
         Show-Version ".\nyagos.exe"
     }
-    "vet" {
-        ForEach-GoDir | ForEach-Object{
-            pushd $_
-            Write-Verbose "$ $GO vet on $_"
-            & $GO vet
-            popd
-        }
-    }
     "clean" {
         foreach( $p in @(`
             (Join-Path $CMD "amd64\nyagos.exe"),`
@@ -396,11 +388,6 @@ switch( $args[0] ){
             & $GO clean
             popd
         }
-    }
-    "sweep" {
-        Get-ChildItem .  -Recurse |
-        ?{ $_.Name -like "*~" -or $_.Name -like "*.bak" } |
-        %{ Do-Remove $_.FullName }
     }
     "const" {
         Get-ChildItem . -Recurse |
@@ -478,9 +465,7 @@ make                     build as snapshot
 make debug   [386|amd64] build as debug version     (tagged as `debug`)
 make release [386|amd64] build as release version
 make status              show version information 
-make vet                 do `go vet` on each folder
 make clean               remove all work files
-make sweep               remove *.bak and *.~
 make const               make `const.go`. gcc is required
 make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
 make install [FOLDER]    copy executables to FOLDER or last folder
