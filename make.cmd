@@ -502,34 +502,6 @@ switch( $args[0] ){
     "fmt" {
         Go-Fmt | Out-Null
     }
-    "check-case" {
-        $private:dic = @{}
-        $private:regex = [regex]"\w+(\-\w+)?"
-        $private:done = @{}
-        $private:fname = if( $args[1] -ne $null -and $args[1] -ne "" ){
-            $args[1]
-        }else{
-            "make.cmd"
-        }
-        Get-Content $fname | %{
-            $regex.Matches( $_ ) | %{
-                $private:one = $_.Value
-                $private:key = $one.ToUpper()
-                if( $dic.ContainsKey( $key ) ){
-                    $private:other = $dic[$key]
-                    if( $other -cne $one ){
-                        $private:output = "$one,$other"
-                        if( -not $done.ContainsKey($output) ){
-                            Write-Output $output
-                            $done[ $output ] = $true
-                        }
-                    }
-                }else{
-                    $dic.Add($key,$one)
-                }
-            }
-        }
-    }
     "help" {
         Write-Output @'
 make                     build as snapshot
@@ -544,7 +516,6 @@ make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
 make install [FOLDER]    copy executables to FOLDER or last folder
 make generate            execute `go generate` on the folder it required
 make fmt                 `go fmt`
-make check-case [FILE]
 make help                show this
 '@
     }
