@@ -127,38 +127,6 @@ function Make-SysO($version) {
         versioninfo.json
 }
 
-function Show-Version($fname) {
-    if( -not (Test-Path $fname) ){
-        Write-Error ("{0} not found" -f $fname)
-        return
-    }
-    Write-Output $fname
-    $data = [System.IO.File]::ReadAllBytes($fname)
-    $bits = switch( (Get-Architecture $data) ){
-        32 { "32bit or AnyCPU" }
-        64 { "64bit" }
-        $null { "unknown"}
-    }
-    Write-Output ("  Architecture:   {0}" -f $bits)
-    $v = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($fname)
-    if( $v ){
-        Write-Output ("  FileVersion:    `"{0}`" ({1},{2},{3},{4})" -f
-            $v.FileVersion,
-            $v.FileMajorPart,
-            $v.FileMinorPart,
-            $v.FileBuildPart,
-            $v.FilePrivatePart)
-        Write-Output ("  ProductVersion: `"{0}`" ({1},{2},{3},{4})" -f
-            $v.ProductVersion,
-            $v.ProductMajorPart,
-            $v.ProductMinorPart,
-            $v.ProductBuildPart,
-            $v.ProductPrivatePart)
-    }
-    $md5 = New-Object System.Security.Cryptography.MD5CryptoServiceProvider
-    $bs = $md5.ComputeHash($data)
-    Write-Output ("  md5sum:         {0}" -f ([System.BitConverter]::ToString($bs).ToLower() -replace "-",""))
-}
 
 function Download-Exe($url,$exename){
     if( Test-Path $exename ){
@@ -349,9 +317,6 @@ switch( $args[0] ){
         Build (Get-Content Misc\version.txt) ""
         $env:GOARCH = $save
     }
-    "status" {
-        Show-Version ".\nyagos.exe"
-    }
     "clean" {
         foreach( $p in @(`
             (Join-Path $CMD "amd64\nyagos.exe"),`
@@ -462,7 +427,6 @@ switch( $args[0] ){
 make                     build as snapshot
 make debug   [386|amd64] build as debug version     (tagged as `debug`)
 make release [386|amd64] build as release version
-make status              show version information 
 make clean               remove all work files
 make const               make `const.go`. gcc is required
 make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
