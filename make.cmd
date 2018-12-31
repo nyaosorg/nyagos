@@ -159,23 +159,6 @@ function Build($version,$tags) {
     $env:GOARCH = $saveGOARCH
 }
 
-function Byte2DWord($a,$b,$c,$d){
-    return ($a+256*($b+256*($c+256*$d)))
-}
-
-function Get-Architecture($bin){
-    $addr = (Byte2DWord $bin[60] $bin[61] $bin[62] $bin[63])
-    if( $bin[$addr] -eq 0x50 -and $bin[$addr+1] -eq 0x45 ){
-        if( $bin[$addr+4] -eq 0x4C -and $bin[$addr+5 ] -eq 0x01 ){
-            return 32
-        }
-        if( $bin[$addr+4] -eq 0x64 -and $bin[$addr+5] -eq 0x86 ){
-            return 64
-        }
-    }
-    return $null
-}
-
 function Make-Package($arch){
     $zipname = ("nyagos-{0}.zip" -f (& cmd\$arch\nyagos.exe --show-version-only))
     Write-Verbose "$ zip -9 $zipname ...."
