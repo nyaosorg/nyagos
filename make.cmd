@@ -65,31 +65,6 @@ function ForEach-GoDir{
     Get-Unique
 }
 
-function Go-Generate{
-    Get-ChildItem "." -Recurse |
-    Where-Object{ $_.Name -eq "make.xml" } |
-    ForEach-Object{
-        $dir = (Split-Path $_.FullName -Parent)
-        pushd $dir
-        $xml = [xml](Get-Content $_.FullName)
-        :allloop foreach( $li in $xml.make.generate.li ){
-            foreach( $target in $li.target ){
-                if( -not $target ){ continue }
-                foreach( $source in $li.source ){
-                    if( -not $source ){ continue }
-                    if( (Newer-Than $source $target) ){
-                        Write-Verbose ("$ $GO generate for {0}" -f
-                            (Join-Path $dir $target) )
-                        & $GO generate
-                        break allloop
-                    }
-                }
-            }
-        }
-        popd
-    }
-}
-
 function Go-Fmt{
     $status = $true
     git status -s | %{
@@ -238,7 +213,6 @@ function Newer-Than($source,$target){
 function Build($version,$tags) {
     Write-Verbose "Build as version='$version' tags='$tags'"
 
-    Go-Generate
     if( -not (Go-Fmt) ){
         return
     }
@@ -486,11 +460,7 @@ switch( $args[0] ){
             timeout /T 3
         }
     }
-    "generate" {
-        Go-Generate
-    }
     "get" {
-        Go-Generate
         if( (git branch --contains) -eq "* master" ){
             Write-Verbose "$GO get -u -v ./..."
             & $GO get -u -v ./...
@@ -514,7 +484,6 @@ make sweep               remove *.bak and *.~
 make const               make `const.go`. gcc is required
 make package [386|amd64] make `nyagos-(VERSION)-(ARCH).zip`
 make install [FOLDER]    copy executables to FOLDER or last folder
-make generate            execute `go generate` on the folder it required
 make fmt                 `go fmt`
 make help                show this
 '@
