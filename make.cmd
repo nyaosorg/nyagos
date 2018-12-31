@@ -217,23 +217,6 @@ switch( $args[0] ){
         {
             Do-Remove $p
         }
-        Get-ChildItem "." -Recurse |
-        Where-Object { $_.Name -eq "make.xml" } |
-        ForEach-Object {
-            $dir = (Split-Path $_.FullName -Parent)
-            $xml = [xml](Get-Content $_.FullName)
-            foreach($li in $xml.make.generate.li){
-                if( -not $li ){ continue }
-                foreach($target in $xml.make.generate.li.target){
-                    if( -not $target ){ continue }
-                    $path = (Join-Path $dir $target)
-                    if( Test-Path $path ){
-                        Do-Remove $path
-                    }
-                }
-            }
-        }
-
         ForEach-GoDir | %{
             Write-Verbose "$ $GO clean on $_"
             pushd $_
