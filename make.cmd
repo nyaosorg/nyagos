@@ -135,37 +135,6 @@ function Download-Exe($url,$exename){
     Set-Location $cwd
 }
 
-function Newer-Than($source,$target){
-    if( -not $target ){
-        Write-Warning ('Newer-Than: $target is null')
-        if( $source ){
-            Write-Verbose ('Newer-Than: $source={0}' -f $source)
-        }else{
-            Write-Warning 'Newer-Than: $source is null'
-        }
-        return
-    }
-    if( -not (Test-Path $target) ){
-        Write-Verbose ("{0} not found." -f $target)
-        return $true
-    }
-    $stamp = (Get-ItemProperty $target).LastWriteTime
-
-    $prop = (Get-ItemProperty $source)
-    if( $prop.Mode -like 'd*' ){
-        Get-ChildItem $source -Recurse | %{
-            if( $_.LastWriteTime -gt $stamp ){
-                Write-Verbose ("{0} is newer than {1}" -f $_.FullName,$target)
-                return $true
-            }
-        }
-        return $false
-    }else{
-        return $prop.LastWriteTime -gt $stamp
-    }
-}
-
-
 function Build($version,$tags) {
     Write-Verbose "Build as version='$version' tags='$tags'"
 
