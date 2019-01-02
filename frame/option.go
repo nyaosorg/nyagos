@@ -180,7 +180,7 @@ var optionMap = map[string]optionT{
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			OptionNorc = true
 			return func(context.Context) error {
-				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
+				fmt.Printf("%s-%s-%s\n", Version, runtime.GOOS, runtime.GOARCH)
 				return io.EOF
 			}, nil
 		},
