@@ -6,6 +6,8 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"syscall"
+
+	"golang.org/x/sys/windows"
 )
 
 // Truncate is same as os.RemoveAll but report files to remove.
@@ -14,7 +16,7 @@ func Truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 	if err != nil {
 		return fmt.Errorf("%s: %s", folder, err)
 	}
-	if (attr & FILE_ATTRIBUTE_REPARSE_POINT) == 0 {
+	if (attr & windows.FILE_ATTRIBUTE_REPARSE_POINT) == 0 {
 		// Only not junction, delete files under folder.
 		files, err := ioutil.ReadDir(folder)
 		if err != nil {
@@ -31,7 +33,7 @@ func Truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 				err = Truncate(fullpath, whenError, out)
 			} else {
 				fmt.Fprintln(out, fullpath)
-				SetFileAttributes(fullpath, FILE_ATTRIBUTE_NORMAL)
+				SetFileAttributes(fullpath, windows.FILE_ATTRIBUTE_NORMAL)
 				err = syscall.Unlink(fullpath)
 			}
 			if err != nil {

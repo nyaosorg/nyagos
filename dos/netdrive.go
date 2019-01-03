@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 var mpr = syscall.NewLazyDLL("mpr")
@@ -74,7 +76,7 @@ func WNetEnum(handler func(localName string, remoteName string)) error {
 		RESOURCEUSAGE_CONTAINER,
 		0,
 		uintptr(unsafe.Pointer(&handle)))
-	if rc != NO_ERROR {
+	if rc != windows.NO_ERROR {
 		return fmt.Errorf("NetOpenEnum: %s", err)
 	}
 	defer wNetCloseEnum.Call(handle)
@@ -96,7 +98,7 @@ func WNetEnum(handler func(localName string, remoteName string)) error {
 			uintptr(unsafe.Pointer(&buffer)),
 			uintptr(unsafe.Pointer(&size)))
 
-		if rc == NO_ERROR {
+		if rc == windows.NO_ERROR {
 			handler(u2str(buffer.LocalName), u2str(buffer.RemoteName))
 		} else if rc == ERROR_NO_MORE_ITEMS {
 			return nil
