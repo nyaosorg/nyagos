@@ -1,3 +1,8 @@
+- To call a batchfile, stop to use `/V:ON` for CMD.EXE
+
+4.4.0\_beta
+===========
+
 - Support Linux (experimental)
 - Fix the problem that current directories per drive were not inherited to child processes.
 - Use the library "mattn/go-tty" instead of "zetamatta/go-getch"
