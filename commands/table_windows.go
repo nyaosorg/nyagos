@@ -4,6 +4,8 @@ import (
 	"context"
 	"io"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/zetamatta/go-texts/mbcs"
 
 	"github.com/zetamatta/nyagos/dos"
@@ -72,7 +74,7 @@ func setWritable(path string) error {
 	if err != nil {
 		return err
 	}
-	return dos.SetFileAttributes(path, perm&^dos.FILE_ATTRIBUTE_READONLY)
+	return dos.SetFileAttributes(path, perm&^windows.FILE_ATTRIBUTE_READONLY)
 }
 
 func truncate(path string, f func(path string, err error) bool, out io.Writer) error {
