@@ -31,20 +31,14 @@ func GetConsole() io.Writer {
 	if isEscapeSequenceAvailableFlag {
 		enableVirtualTerminalProcessing()
 		console = os.Stdout
-	} else if console == nil || prevOptionGoColorable != OptionGoColorable {
+	} else if console == nil {
 		if isEscapeSequenceAvailable() {
 			console = os.Stdout
 			enableVirtualTerminalProcessing()
 			isEscapeSequenceAvailableFlag = true
-		} else if OptionGoColorable {
-			console = colorable.NewColorableStdout()
 		} else {
-			console = os.Stdout
-			if OptionEnableVirtualTerminalProcessing {
-				enableVirtualTerminalProcessing()
-			}
+			console = colorable.NewColorableStdout()
 		}
-		prevOptionGoColorable = OptionGoColorable
 	}
 	return console
 }

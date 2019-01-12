@@ -20,14 +20,6 @@ import (
 // OptionNorc is true, then rcfiles are not executed.
 var OptionNorc = false
 
-// OptionGoColorable is true,
-// then escape sequences are interpreted by go-colorable library.
-var OptionGoColorable = true
-
-// OptionEnableVirtualTerminalProcessing is true,
-// then Windows10's ENABLE_VIRTUAL_TERMINAL_PROCESSING is enabled.
-var OptionEnableVirtualTerminalProcessing = false
-
 type ScriptEngineForOption interface {
 	SetArg([]string)
 	RunFile(context.Context, string) ([]byte, error)
@@ -183,30 +175,6 @@ var optionMap = map[string]optionT{
 				fmt.Printf("%s-%s-%s\n", Version, runtime.GOOS, runtime.GOARCH)
 				return io.EOF
 			}, nil
-		},
-	},
-	"--disable-virtual-terminal-processing": {
-		U: "\nDo not use Windows10's native ESCAPE SEQUENCE.",
-		F: func() {
-			OptionEnableVirtualTerminalProcessing = false
-		},
-	},
-	"--enable-virtual-terminal-processing": {
-		U: "\nEnable Windows10's native ESCAPE SEQUENCE.\nIt should be used with `--no-go-colorable`.",
-		F: func() {
-			OptionEnableVirtualTerminalProcessing = true
-		},
-	},
-	"--no-go-colorable": {
-		U: "\nDo not use the ESCAPE SEQUENCE emulation with go-colorable library.",
-		F: func() {
-			OptionGoColorable = false
-		},
-	},
-	"--go-colorable": {
-		U: "\nUse the ESCAPE SEQUENCE emulation with go-colorable library.",
-		F: func() {
-			OptionGoColorable = true
 		},
 	},
 	"--norc": {
