@@ -7,7 +7,7 @@ The Nihongo Yet Another GOing Shell
 
 [English](./readme.md) / Japanese
 
-NYAGOS は Go と Lua で記述された Windows 用コマンドラインシェルです。
+NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 
 * UNIX風シェル
   * Emacs風キーバインド
