@@ -4,6 +4,10 @@ VER=`gawk '{ gsub(/\r/,"");print $1 }' ./Misc/version.txt`
 
 case "$1" in
     ""|build)
+        VER="$(git describe --tags)"
+        go build -ldflags "-s -w -X main.version=$VER"
+        ;;
+    release)
         go build -ldflags "-s -w -X main.version=$VER"
         ;;
     package)
