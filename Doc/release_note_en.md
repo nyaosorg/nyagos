@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.0\_0
+===============
+on Jan.12,2019
+
 * To call a batchfile, stop to use `/V:ON` for CMD.EXE
 
 NYAGOS 4.4.0\_beta

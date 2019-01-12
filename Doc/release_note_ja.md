@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.0\_0
+===============
+(2019.01.12)
+
 * バッチファイルを呼ぶ時に、`/V:ON` を CMD.EXE に使わないようにした
 
 NYAGOS 4.4.0\_beta
