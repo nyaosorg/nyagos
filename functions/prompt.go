@@ -7,7 +7,6 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/readline"
 )
@@ -28,13 +27,13 @@ func PromptCore(console io.Writer, args ...interface{}) int {
 	if len(args) >= 2 {
 		setTitle(console, fmt.Sprint(args[1]))
 	} else if wd, err := os.Getwd(); err == nil {
-		if flag, _ := dos.IsElevated(); flag {
+		if flag := isElevated(); flag {
 			setTitle(console, "(Admin) - "+wd)
 		} else {
 			setTitle(console, "NYAGOS - "+wd)
 		}
 	} else {
-		if flag, _ := dos.IsElevated(); flag {
+		if flag := isElevated(); flag {
 			setTitle(console, "(Admin)")
 		} else {
 			setTitle(console, "NYAGOS")

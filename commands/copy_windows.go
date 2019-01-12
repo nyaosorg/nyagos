@@ -10,8 +10,6 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/zetamatta/go-getch"
-
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -100,10 +98,6 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 	isDir := judgeDir(_dst)
 	srcs := args[0 : len(args)-1]
 	for i, src := range srcs {
-		if getch.IsCtrlCPressed() {
-			fmt.Fprintln(cm.Err(), "^C")
-			return 0, nil
-		}
 		dst := _dst
 		if isDir {
 			dst = filepath.Join(dst, filepath.Base(src))
@@ -123,7 +117,10 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 				fmt.Fprintf(cm.Err(),
 					"%s: override? [Yes/No/All/Quit] ",
 					dst)
-				ch := getch.Rune()
+				ch, err := getkey()
+				if err != nil {
+					return 1, err
+				}
 				if unicode.IsPrint(ch) {
 					fmt.Fprintf(cm.Err(), "%c\n", ch)
 				} else {
@@ -144,6 +141,7 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
+				fmt.Fprintln(cm.Err(), "^C")
 				return 0, nil
 			default:
 			}
@@ -154,7 +152,10 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 				return 1, err
 			}
 			fmt.Fprintf(cm.Err(), "%s\nContinue? [Yes/No] ", err.Error())
-			ch := getch.Rune()
+			ch, err := getkey()
+			if err != nil {
+				return 1, err
+			}
 			if unicode.IsPrint(ch) {
 				fmt.Fprintf(cm.Err(), "%c\n", ch)
 			} else {

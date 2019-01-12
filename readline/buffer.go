@@ -5,14 +5,16 @@ import (
 	"io"
 	"strings"
 	"unicode"
+
+	"github.com/mattn/go-tty"
 )
 
 func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
-		this.Writer.WriteByte('^')
-		this.Writer.WriteByte(byte('A' + (ch - 1)))
+		this.Out.WriteByte('^')
+		this.Out.WriteByte(byte('A' + (ch - 1)))
 	} else {
-		this.Writer.WriteRune(ch)
+		this.Out.WriteRune(ch)
 	}
 }
 
@@ -22,39 +24,37 @@ func (this *Buffer) PutRunes(ch rune, n int) {
 	}
 	this.PutRune(ch)
 	for i := 1; i < n; i++ {
-		this.Writer.WriteRune(ch)
+		this.Out.WriteRune(ch)
 	}
 }
 
 func (this *Buffer) Backspace(n int) {
 	if n > 1 {
-		fmt.Fprintf(this.Writer, "\x1B[%dD", n)
+		fmt.Fprintf(this.Out, "\x1B[%dD", n)
 	} else if n == 1 {
-		this.Writer.WriteByte('\b')
+		this.Out.WriteByte('\b')
 	}
 }
 
 func (this *Buffer) Eraseline() {
-	io.WriteString(this.Writer, "\x1B[0K")
+	io.WriteString(this.Out, "\x1B[0K")
 }
 
-const FORBIDDEN_WIDTH = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
+const forbiddenWidth = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
 	*Editor
 	Buffer         []rune
 	Length         int
-	Unicode        rune
-	Keycode        uint16
-	ShiftState     uint32
+	TTY            *tty.TTY
 	ViewStart      int
-	TermWidth      int // == TopColumn + ViewWidth + FORBIDDEN_WIDTH
+	TermWidth      int // == TopColumn + ViewWidth + forbiddenWidth
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
 }
 
 func (this *Buffer) ViewWidth() int {
-	return this.TermWidth - this.TopColumn - FORBIDDEN_WIDTH
+	return this.TermWidth - this.TopColumn - forbiddenWidth
 }
 
 func (this *Buffer) Insert(csrPos int, insStr []rune) {
@@ -189,7 +189,7 @@ func (this *Buffer) RepaintAfterPrompt() {
 }
 
 func (this *Buffer) RepaintAll() {
-	this.Writer.Flush()
+	this.Out.Flush()
 	this.TopColumn, _ = this.Prompt()
 	this.RepaintAfterPrompt()
 }

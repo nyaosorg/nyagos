@@ -89,12 +89,12 @@ func callBatch(
 
 	var cmdline strings.Builder
 
-	cmdline.WriteString(`/V:ON /S /C "call`)
+	cmdline.WriteString(`/S /C "call`)
 	for _, arg1 := range args {
 		cmdline.WriteByte(' ')
 		cmdline.WriteString(arg1)
 	}
-	cmdline.WriteString(` & set "ERRORLEVEL_=!ERRORLEVEL!" & (cd & set) > "`)
+	cmdline.WriteString(` & call set ERRORLEVEL_=%^ERRORLEVEL% & (cd & set) > "`)
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`" "`)
 

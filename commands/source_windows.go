@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -51,7 +51,7 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 		return 1, errors.New("source: too few arguments")
 	}
 	if !filepath.IsAbs(args[0]) {
-		args[0] = dos.LookPath(shell.LookCurdirOrder, args[0], "NYAGOSPATH")
+		args[0] = nodos.LookPath(shell.LookCurdirOrder, args[0], "NYAGOSPATH")
 	}
 	if tmp, ok := findBatch(args[0]); ok {
 		args[0] = tmp

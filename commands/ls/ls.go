@@ -12,12 +12,15 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/dustin/go-humanize"
 	"github.com/mattn/go-isatty"
 
-	"github.com/zetamatta/go-box"
+	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 const (
@@ -120,11 +123,11 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	} else {
 		io.WriteString(out, "-")
 	}
-	putFlag(attr, dos.FILE_ATTRIBUTE_ARCHIVE, "a", out)
-	putFlag(attr, dos.FILE_ATTRIBUTE_SYSTEM, "s", out)
-	putFlag(attr, dos.FILE_ATTRIBUTE_HIDDEN, "h", out)
+	putFlag(attr, windows.FILE_ATTRIBUTE_ARCHIVE, "a", out)
+	putFlag(attr, windows.FILE_ATTRIBUTE_SYSTEM, "s", out)
+	putFlag(attr, windows.FILE_ATTRIBUTE_HIDDEN, "h", out)
 
-	if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
+	if (attr&windows.FILE_ATTRIBUTE_HIDDEN) != 0 &&
 		(flag&O_COLOR) != 0 {
 		prefix = ANSI_HIDDEN
 		postfix = ANSI_END
@@ -149,7 +152,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	io.WriteString(out, postfix)
 
 	var linkTo string
-	if (attr & dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
+	if (attr & windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 		var err error
 		path := filepath.Join(folder, name)
 		linkTo, err = os.Readlink(path)
@@ -171,7 +174,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		fmt.Fprintf(out, " -> %s", linkTo)
 	}
 	if strings.HasSuffix(name, ".lnk") {
-		path := dos.Join(folder, name)
+		path := nodos.Join(folder, name)
 		shortcut, workdir, err := dos.ReadShortcut(path)
 		if err == nil && shortcut != "" {
 			fmt.Fprintf(out, " -> %s", shortcut)
@@ -218,12 +221,12 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 			}
 		}
 		attr := findfile.GetFileAttributes(val)
-		if (attr&dos.FILE_ATTRIBUTE_HIDDEN) != 0 &&
+		if (attr&windows.FILE_ATTRIBUTE_HIDDEN) != 0 &&
 			(flag&O_COLOR) != 0 {
 			prefix = ANSI_HIDDEN
 			postfix = ANSI_END
 		}
-		if (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
+		if (attr&windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
 			(flag&O_INDICATOR) != 0 &&
 			hasLink(folder, val.Name()) {
 
@@ -280,7 +283,7 @@ func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int,
 	for _, f := range nodes {
 		io.WriteString(out, f.Name())
 		if (flag & O_INDICATOR) != 0 {
-			if attr := findfile.GetFileAttributes(f); (attr&dos.FILE_ATTRIBUTE_REPARSE_POINT) != 0 && hasLink(folder, f.Name()) {
+			if attr := findfile.GetFileAttributes(f); (attr&windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 && hasLink(folder, f.Name()) {
 				io.WriteString(out, "@")
 			} else if f.IsDir() {
 				io.WriteString(out, "/")
@@ -349,7 +352,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	if folder == "" {
 		wildcard = "*"
 	} else {
-		wildcard = dos.Join(folder, "*")
+		wildcard = nodos.Join(folder, "*")
 	}
 	canceled := false
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
@@ -362,7 +365,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 				return true
 			}
 			attr := findfile.GetFileAttributes(f)
-			if (attr & dos.FILE_ATTRIBUTE_HIDDEN) != 0 {
+			if (attr & windows.FILE_ATTRIBUTE_HIDDEN) != 0 {
 				return true
 			}
 		}
@@ -394,7 +397,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 			if isCancel(ctx) {
 				return ErrCtrlC
 			}
-			f1fullpath := dos.Join(folder, f1)
+			f1fullpath := nodos.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
 			if err := lsFolder(ctx, f1fullpath, flag, out); err != nil {
 				return err

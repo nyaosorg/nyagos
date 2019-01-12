@@ -1,14 +1,15 @@
 package readline
 
 import (
+	"bufio"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"strings"
+	"sync"
 
-	"github.com/zetamatta/go-box"
-	"github.com/zetamatta/go-getch"
+	"github.com/mattn/go-tty"
 )
 
 var FlushBeforeReadline = false
@@ -57,46 +58,41 @@ func (this KeyGoFuncT) String() string {
 	return this.Name
 }
 
-var keyMap = map[rune]KeyFuncT{
-	name2char[K_CTRL_A]: name2func(F_BEGINNING_OF_LINE),
-	name2char[K_CTRL_B]: name2func(F_BACKWARD_CHAR),
-	name2char[K_CTRL_C]: name2func(F_INTR),
-	name2char[K_CTRL_D]: name2func(F_DELETE_OR_ABORT),
-	name2char[K_CTRL_E]: name2func(F_END_OF_LINE),
-	name2char[K_CTRL_F]: name2func(F_FORWARD_CHAR),
-	name2char[K_CTRL_H]: name2func(F_BACKWARD_DELETE_CHAR),
-	name2char[K_CTRL_K]: name2func(F_KILL_LINE),
-	name2char[K_CTRL_L]: name2func(F_CLEAR_SCREEN),
-	name2char[K_CTRL_M]: name2func(F_ACCEPT_LINE),
-	name2char[K_CTRL_R]: name2func(F_ISEARCH_BACKWARD),
-	name2char[K_CTRL_U]: name2func(F_UNIX_LINE_DISCARD),
-	name2char[K_CTRL_Y]: name2func(F_YANK),
-	name2char[K_DELETE]: name2func(F_DELETE_CHAR),
-	name2char[K_ENTER]:  name2func(F_ACCEPT_LINE),
-	name2char[K_ESCAPE]: name2func(F_KILL_WHOLE_LINE),
-	name2char[K_CTRL_N]: name2func(F_HISTORY_DOWN),
-	name2char[K_CTRL_P]: name2func(F_HISTORY_UP),
-	name2char[K_CTRL_Q]: name2func(F_QUOTED_INSERT),
-	name2char[K_CTRL_T]: name2func(F_SWAPCHAR),
-	name2char[K_CTRL_V]: name2func(F_QUOTED_INSERT),
-	name2char[K_CTRL_W]: name2func(F_UNIX_WORD_RUBOUT),
-}
-
-var scanMap = map[uint16]KeyFuncT{
-	name2scan[K_CTRL]:   name2func(F_PASS),
-	name2scan[K_DELETE]: name2func(F_DELETE_CHAR),
-	name2scan[K_END]:    name2func(F_END_OF_LINE),
-	name2scan[K_HOME]:   name2func(F_BEGINNING_OF_LINE),
-	name2scan[K_LEFT]:   name2func(F_BACKWARD_CHAR),
-	name2scan[K_RIGHT]:  name2func(F_FORWARD_CHAR),
-	name2scan[K_SHIFT]:  name2func(F_PASS),
-	name2scan[K_DOWN]:   name2func(F_HISTORY_DOWN),
-	name2scan[K_UP]:     name2func(F_HISTORY_UP),
-}
-
-var altMap = map[uint16]KeyFuncT{
-	name2alt[K_ALT_V]: name2func(F_YANK),
-	name2alt[K_ALT_Y]: name2func(F_YANK_WITH_QUOTE),
+var keyMap = map[string]KeyFuncT{
+	name2char[K_CTRL_A]:    name2func(F_BEGINNING_OF_LINE),
+	name2char[K_CTRL_B]:    name2func(F_BACKWARD_CHAR),
+	name2char[K_BACKSPACE]: name2func(F_BACKWARD_DELETE_CHAR),
+	name2char[K_CTRL_C]:    name2func(F_INTR),
+	name2char[K_CTRL_D]:    name2func(F_DELETE_OR_ABORT),
+	name2char[K_CTRL_E]:    name2func(F_END_OF_LINE),
+	name2char[K_CTRL_F]:    name2func(F_FORWARD_CHAR),
+	name2char[K_CTRL_H]:    name2func(F_BACKWARD_DELETE_CHAR),
+	name2char[K_CTRL_K]:    name2func(F_KILL_LINE),
+	name2char[K_CTRL_L]:    name2func(F_CLEAR_SCREEN),
+	name2char[K_CTRL_M]:    name2func(F_ACCEPT_LINE),
+	name2char[K_CTRL_R]:    name2func(F_ISEARCH_BACKWARD),
+	name2char[K_CTRL_U]:    name2func(F_UNIX_LINE_DISCARD),
+	name2char[K_CTRL_Y]:    name2func(F_YANK),
+	name2char[K_DELETE]:    name2func(F_DELETE_CHAR),
+	name2char[K_ENTER]:     name2func(F_ACCEPT_LINE),
+	name2char[K_ESCAPE]:    name2func(F_KILL_WHOLE_LINE),
+	name2char[K_CTRL_N]:    name2func(F_HISTORY_DOWN),
+	name2char[K_CTRL_P]:    name2func(F_HISTORY_UP),
+	name2char[K_CTRL_Q]:    name2func(F_QUOTED_INSERT),
+	name2char[K_CTRL_T]:    name2func(F_SWAPCHAR),
+	name2char[K_CTRL_V]:    name2func(F_QUOTED_INSERT),
+	name2char[K_CTRL_W]:    name2func(F_UNIX_WORD_RUBOUT),
+	name2char[K_CTRL]:      name2func(F_PASS),
+	name2char[K_DELETE]:    name2func(F_DELETE_CHAR),
+	name2char[K_END]:       name2func(F_END_OF_LINE),
+	name2char[K_HOME]:      name2func(F_BEGINNING_OF_LINE),
+	name2char[K_LEFT]:      name2func(F_BACKWARD_CHAR),
+	name2char[K_RIGHT]:     name2func(F_FORWARD_CHAR),
+	name2char[K_SHIFT]:     name2func(F_PASS),
+	name2char[K_DOWN]:      name2func(F_HISTORY_DOWN),
+	name2char[K_UP]:        name2func(F_HISTORY_UP),
+	name2char[K_ALT_V]:     name2func(F_YANK),
+	name2char[K_ALT_Y]:     name2func(F_YANK_WITH_QUOTE),
 }
 
 func normWord(src string) string {
@@ -105,18 +101,11 @@ func normWord(src string) string {
 
 func BindKeyFunc(keyName string, funcValue KeyFuncT) error {
 	keyName_ := normWord(keyName)
-	if altValue, altOk := name2alt[keyName_]; altOk {
-		altMap[altValue] = funcValue
-		return nil
-	} else if charValue, charOk := name2char[keyName_]; charOk {
+	if charValue, charOk := name2char[keyName_]; charOk {
 		keyMap[charValue] = funcValue
 		return nil
-	} else if scanValue, scanOk := name2scan[keyName_]; scanOk {
-		scanMap[scanValue] = funcValue
-		return nil
-	} else {
-		return fmt.Errorf("%s: no such keyname", keyName)
 	}
+	return fmt.Errorf("%s: no such keyname", keyName)
 }
 
 func BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error {
@@ -125,12 +114,8 @@ func BindKeyClosure(name string, f func(context.Context, *Buffer) Result) error 
 
 func GetBindKey(keyName string) KeyFuncT {
 	keyName_ := normWord(keyName)
-	if altValue, altOk := name2alt[keyName_]; altOk {
-		return altMap[altValue]
-	} else if charValue, charOk := name2char[keyName_]; charOk {
+	if charValue, charOk := name2char[keyName_]; charOk {
 		return keyMap[charValue]
-	} else if scanValue, scanOk := name2scan[keyName_]; scanOk {
-		return scanMap[scanValue]
 	} else {
 		return nil
 	}
@@ -159,11 +144,34 @@ func (this *EmptyHistory) Len() int      { return 0 }
 func (this *EmptyHistory) At(int) string { return "" }
 
 const (
-	CURSOR_OFF = "\x1B[?25l"
-	CURSOR_ON  = "\x1B[?25h\x1B[s\x1B[u"
+	ansiCursorOff = "\x1B[?25l"
+	ansiCursorOn  = "\x1B[?25h\x1B[s\x1B[u"
 )
 
 var CtrlC = errors.New("^C")
+
+func getKey(tty1 *tty.TTY) (string, error) {
+	var buffer strings.Builder
+	escape := false
+	for {
+		r, err := tty1.ReadRune()
+		if err != nil {
+			return "", err
+		}
+		if r == 0 {
+			continue
+		}
+		buffer.WriteRune(r)
+		if r == '\x1B' {
+			escape = true
+		}
+		if !(escape && tty1.Buffered()) {
+			return buffer.String(), nil
+		}
+	}
+}
+
+var mu sync.Mutex
 
 // Call LineEditor
 // - ENTER typed -> returns TEXT and nil
@@ -173,14 +181,17 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.Writer == nil {
 		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
 	}
+	if session.Out == nil {
+		session.Out = bufio.NewWriter(session.Writer)
+	}
 	defer func() {
-		session.Writer.WriteString(CURSOR_ON)
-		session.Writer.Flush()
+		session.Out.WriteString(ansiCursorOn)
+		session.Out.Flush()
 	}()
 
 	if session.Prompt == nil {
 		session.Prompt = func() (int, error) {
-			session.Writer.WriteString("\n> ")
+			session.Out.WriteString("\n> ")
 			return 2, nil
 		}
 	}
@@ -193,17 +204,27 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		HistoryPointer: session.History.Len(),
 	}
 
-	this.TermWidth, _ = box.GetScreenBufferInfo().ViewSize()
+	tty1, err := tty.Open()
+	if err != nil {
+		return "", fmt.Errorf("go-tty.Open: %s", err.Error())
+	}
+	this.TTY = tty1
+	defer tty1.Close()
+
+	this.TermWidth, _, err = tty1.Size()
+	if err != nil {
+		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
+	}
 
 	var err1 error
 	this.TopColumn, err1 = session.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
-		fmt.Fprintf(this.Writer, "%s\n$ ", err1.Error())
+		fmt.Fprintf(this.Out, "%s\n$ ", err1.Error())
 		this.TopColumn = 2
 	} else if this.TopColumn >= this.TermWidth-3 {
 		// ViewWidth is too narrow to edit.
-		io.WriteString(this.Writer, "\n")
+		io.WriteString(this.Out, "\n")
 		this.TopColumn = 0
 	}
 	this.InsertString(0, session.Default)
@@ -212,64 +233,60 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this.RepaintAfterPrompt()
 
-	if FlushBeforeReadline {
-		getch.Flush()
-	}
-
 	cursorOnSwitch := false
+
+	ws := tty1.SIGWINCH()
+	go func(lastw int) {
+		for ws1 := range ws {
+			w := ws1.W
+			if lastw != w {
+				mu.Lock()
+				this.TermWidth = w
+				fmt.Fprintf(this.Out, "\x1B[%dG", this.TopColumn+1)
+				this.RepaintAfterPrompt()
+				mu.Unlock()
+				lastw = w
+			}
+		}
+	}(this.TermWidth)
+
 	for {
-		var e getch.Event
+		mu.Lock()
 		if !cursorOnSwitch {
-			io.WriteString(this.Writer, CURSOR_ON)
+			io.WriteString(this.Out, ansiCursorOn)
 			cursorOnSwitch = true
 		}
-		this.Writer.Flush()
-		for e.Key == nil {
-			e = getch.All()
-			if e.Resize != nil {
-				w := int(e.Resize.Width)
-				if this.TermWidth != w {
-					this.TermWidth = w
-					fmt.Fprintf(this.Writer, "\x1B[%dG", this.TopColumn+1)
-					this.RepaintAfterPrompt()
-				}
+		this.Out.Flush()
+
+		mu.Unlock()
+		key1, err := getKey(tty1)
+		if err != nil {
+			return "", err
+		}
+		mu.Lock()
+		f, ok := keyMap[key1]
+		if !ok {
+			f = &KeyGoFuncT{
+				Func: func(ctx context.Context, this *Buffer) Result {
+					return keyFuncInsertSelf(ctx, this, key1)
+				},
+				Name: key1,
 			}
 		}
-		this.Unicode = e.Key.Rune
-		this.Keycode = e.Key.Scan
-		this.ShiftState = e.Key.Shift
-		var f KeyFuncT
-		var ok bool
-		if (this.ShiftState&getch.ALT_PRESSED) != 0 &&
-			(this.ShiftState&getch.CTRL_PRESSED) == 0 {
-			f, ok = altMap[this.Keycode]
-			if !ok {
-				continue
-			}
-		} else if this.Unicode != 0 {
-			f, ok = keyMap[this.Unicode]
-			if !ok {
-				//f = KeyFuncInsertReport
-				f = &KeyGoFuncT{Func: KeyFuncInsertSelf, Name: fmt.Sprintf("%v", this.Unicode)}
-			}
-		} else {
-			f, ok = scanMap[this.Keycode]
-			if !ok {
-				f = &KeyGoFuncT{Func: nil, Name: ""}
-			}
-		}
+
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
-			io.WriteString(this.Writer, CURSOR_OFF)
+			io.WriteString(this.Out, ansiCursorOff)
 			cursorOnSwitch = false
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
-			this.Writer.WriteByte('\n')
+			this.Out.WriteByte('\n')
 			if !cursorOnSwitch {
-				io.WriteString(this.Writer, CURSOR_ON)
+				io.WriteString(this.Out, ansiCursorOn)
 			}
-			this.Writer.Flush()
+			this.Out.Flush()
 			result := this.String()
+			mu.Unlock()
 			if rc == ENTER {
 				return result, nil
 			} else if rc == INTR {
@@ -278,5 +295,6 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 				return result, io.EOF
 			}
 		}
+		mu.Unlock()
 	}
 }

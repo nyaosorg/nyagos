@@ -12,7 +12,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 	"github.com/zetamatta/nyagos/texts"
 )
@@ -180,7 +180,7 @@ var optionMap = map[string]optionT{
 		V: func(p *optionArg) (func(context.Context) error, error) {
 			OptionNorc = true
 			return func(context.Context) error {
-				fmt.Printf("%s-%s\n", Version, runtime.GOARCH)
+				fmt.Printf("%s-%s-%s\n", Version, runtime.GOOS, runtime.GOARCH)
 				return io.EOF
 			}, nil
 		},
@@ -218,19 +218,19 @@ var optionMap = map[string]optionT{
 	"--look-curdir-first": {
 		U: "\nSearch for the executable from the current directory before %PATH%.\n(compatible with CMD.EXE)",
 		F: func() {
-			shell.LookCurdirOrder = dos.LookCurdirFirst
+			shell.LookCurdirOrder = nodos.LookCurdirFirst
 		},
 	},
 	"--look-curdir-last": {
 		U: "\nSearch for the executable from the current directory after %PATH%.\n(compatible with PowerShell)",
 		F: func() {
-			shell.LookCurdirOrder = dos.LookCurdirLast
+			shell.LookCurdirOrder = nodos.LookCurdirLast
 		},
 	},
 	"--look-curdir-never": {
 		U: "\nNever search for the executable from the current directory\nunless %PATH% contains.\n(compatible with UNIX Shells)",
 		F: func() {
-			shell.LookCurdirOrder = dos.LookCurdirNever
+			shell.LookCurdirOrder = nodos.LookCurdirNever
 		},
 	},
 }
@@ -240,7 +240,7 @@ func Title() {
 		VersionOrStamp(),
 		runtime.GOARCH,
 		runtime.Version())
-	fmt.Println("(c) 2014-2018 NYAOS.ORG <http://www.nyaos.org>")
+	fmt.Println("(c) 2014-2019 NYAOS.ORG <http://www.nyaos.org>")
 }
 
 func help(p *optionArg) (func(context.Context) error, error) {

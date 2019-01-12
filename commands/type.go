@@ -7,13 +7,10 @@ import (
 	"io"
 	"os"
 	"strings"
-
-	"github.com/zetamatta/go-texts/mbcs"
 )
 
-func cat(ctx context.Context, _r io.Reader, w io.Writer) bool {
-	r := mbcs.NewAutoDetectReader(_r, mbcs.ConsoleCP())
-	scanner := bufio.NewScanner(r)
+func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
+	scanner := bufio.NewScanner(newMbcsReader(r))
 	for scanner.Scan() {
 		if done := ctx.Done(); done != nil {
 			select {

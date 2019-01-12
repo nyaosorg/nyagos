@@ -12,10 +12,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
-
-	"github.com/zetamatta/go-box"
-	"github.com/zetamatta/go-getch"
-	"github.com/zetamatta/go-texts/mbcs"
+	"github.com/mattn/go-tty"
 )
 
 var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
@@ -24,9 +21,25 @@ var bold = false
 var screenWidth int
 var screenHeight int
 
-func more(_r io.Reader, cmd Param) bool {
-	r := mbcs.NewAutoDetectReader(_r, mbcs.ConsoleCP())
-	scanner := bufio.NewScanner(r)
+func getkey() (rune, error) {
+	tty1, err := tty.Open()
+	if err != nil {
+		return 0, err
+	}
+	defer tty1.Close()
+	for {
+		ch, err := tty1.ReadRune()
+		if err != nil {
+			return 0, err
+		}
+		if ch != 0 {
+			return ch, nil
+		}
+	}
+}
+
+func more(r io.Reader, cmd Param) error {
+	scanner := bufio.NewScanner(newMbcsReader(r))
 	count := 0
 
 	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {
@@ -39,10 +52,17 @@ func more(_r io.Reader, cmd Param) bool {
 		lines := (width + screenWidth) / screenWidth
 		for count+lines >= screenHeight {
 			io.WriteString(cmd.Err(), "more>")
-			ch := getch.Rune()
+			ch, err := getkey()
+			if err != nil {
+				return err
+			}
+			if ch == '\x03' {
+				fmt.Fprintln(cmd.Err(), "^C")
+				return io.EOF
+			}
 			io.WriteString(cmd.Err(), "\r     \b\b\b\b\b")
 			if ch == 'q' {
-				return false
+				return io.EOF
 			} else if ch == '\r' {
 				count--
 			} else {
@@ -55,12 +75,21 @@ func more(_r io.Reader, cmd Param) bool {
 		fmt.Fprintln(cmd.Out(), text)
 		count += lines
 	}
-	return true
+	return scanner.Err()
 }
 
 func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
-	screenWidth, screenHeight = box.GetScreenBufferInfo().ViewSize()
+
+	tty1, err := tty.Open()
+	if err != nil {
+		return 1, err
+	}
+	screenWidth, screenHeight, err = tty1.Size()
+	tty1.Close()
+	if err != nil {
+		return 1, err
+	}
 	for _, arg1 := range cmd.Args()[1:] {
 		if arg1 == "-b" {
 			bold = true
@@ -72,15 +101,21 @@ func cmdMore(ctx context.Context, cmd Param) (int, error) {
 		if err != nil {
 			return 1, err
 		}
-		if !more(r, cmd) {
+		if err := more(r, cmd); err != nil {
 			r.Close()
-			return 0, nil
+			if err != io.EOF {
+				return 0, nil
+			}
+			return 1, err
 		}
 		r.Close()
 		count++
 	}
 	if count <= 0 {
-		more(cmd.In(), cmd)
+		err := more(cmd.In(), cmd)
+		if err != nil && err != io.EOF {
+			return 1, err
+		}
 	}
 	return 0, nil
 }

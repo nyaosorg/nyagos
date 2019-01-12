@@ -1,7 +1,6 @@
 package frame
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"io"
@@ -10,7 +9,6 @@ import (
 
 	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -27,23 +25,23 @@ type CmdStreamConsole struct {
 var console io.Writer
 var prevOptionGoColorable bool = false
 
-var isEscapeSequenceAvailable = false
+var isEscapeSequenceAvailableFlag = false
 
 func GetConsole() io.Writer {
-	if isEscapeSequenceAvailable {
-		dos.EnableStdoutVirtualTerminalProcessing()
+	if isEscapeSequenceAvailableFlag {
+		enableVirtualTerminalProcessing()
 		console = os.Stdout
 	} else if console == nil || prevOptionGoColorable != OptionGoColorable {
-		if dos.IsEscapeSequenceAvailable() {
+		if isEscapeSequenceAvailable() {
 			console = os.Stdout
-			dos.EnableStdoutVirtualTerminalProcessing()
-			isEscapeSequenceAvailable = true
+			enableVirtualTerminalProcessing()
+			isEscapeSequenceAvailableFlag = true
 		} else if OptionGoColorable {
 			console = colorable.NewColorableStdout()
 		} else {
 			console = os.Stdout
 			if OptionEnableVirtualTerminalProcessing {
-				dos.EnableStdoutVirtualTerminalProcessing()
+				enableVirtualTerminalProcessing()
 			}
 		}
 		prevOptionGoColorable = OptionGoColorable
@@ -58,7 +56,7 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 		Editor: &readline.Editor{
 			History: history1,
 			Prompt:  doPrompt,
-			Writer:  bufio.NewWriter(GetConsole())},
+			Writer:  GetConsole()},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},

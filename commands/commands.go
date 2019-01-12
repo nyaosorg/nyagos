@@ -9,7 +9,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -36,7 +36,7 @@ var backslashPattern = regexp.MustCompile(`^\\(\w*)$`)
 func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	name := strings.ToLower(cmd.Arg(0))
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
-		err := dos.Chdrive(name)
+		err := nodos.Chdrive(name)
 		return 0, true, err
 	}
 	function, ok := buildInCommand[name]
@@ -72,53 +72,4 @@ func AllNames() []completion.Element {
 		names = append(names, completion.Element1(name1))
 	}
 	return names
-}
-
-func init() {
-	buildInCommand = map[string]func(context.Context, Param) (int, error){
-		".":        cmdSource,
-		"alias":    cmdAlias,
-		"attrib":   cmdAttrib,
-		"bindkey":  cmdBindkey,
-		"box":      cmdBox,
-		"cd":       cmdCd,
-		"clip":     cmdClip,
-		"clone":    cmdClone,
-		"cls":      cmdCls,
-		"chmod":    cmdChmod,
-		"copy":     cmdCopy,
-		"del":      cmdDel,
-		"dirs":     cmdDirs,
-		"diskfree": cmdDiskFree,
-		"diskused": cmdDiskUsed,
-		"echo":     cmdEcho,
-		"env":      cmdEnv,
-		"erase":    cmdDel,
-		"exit":     cmdExit,
-		"foreach":  cmdForeach,
-		"history":  cmdHistory,
-		"if":       cmdIf,
-		"ln":       cmdLn,
-		"lnk":      cmdLnk,
-		"kill":     cmdKill,
-		"ls":       cmdLs,
-		"md":       cmdMkdir,
-		"mkdir":    cmdMkdir,
-		"more":     cmdMore,
-		"move":     cmdMove,
-		"open":     cmdOpen,
-		"popd":     cmdPopd,
-		"ps":       cmdPs,
-		"pushd":    cmdPushd,
-		"pwd":      cmdPwd,
-		"rd":       cmdRmdir,
-		"rem":      cmdRem,
-		"rmdir":    cmdRmdir,
-		"set":      cmdSet,
-		"source":   cmdSource,
-		"su":       cmdSu,
-		"touch":    cmdTouch,
-		"type":     cmdType,
-		"which":    cmdWhich,
-	}
 }

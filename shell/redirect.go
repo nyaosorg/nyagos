@@ -74,6 +74,9 @@ func (r *_Redirecter) open() (*os.File, error) {
 	if r.path == "" {
 		return nil, errors.New("_Redirecter.open(): path=\"\"")
 	}
+	if strings.EqualFold(r.path, "nul") {
+		r.path = os.DevNull
+	}
 	if r.no == 0 {
 		return os.Open(r.path)
 	} else if r.isAppend {

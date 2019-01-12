@@ -168,6 +168,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
 	L.SetField(nyagosTable, "goversion", lua.LString(runtime.Version()))
+	L.SetField(nyagosTable, "goos", lua.LString(runtime.GOOS))
 	L.SetField(nyagosTable, "version", lua.LString(frame.Version))
 
 	if exePath, err := os.Executable(); err == nil {

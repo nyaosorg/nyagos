@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/signal"
+	"syscall"
 )
 
 // Stream is the inteface which can read command-line
@@ -71,9 +72,9 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			return 1, err
 		}
 
-		sigint := make(chan os.Signal, 1)
-		signal.Notify(sigint, os.Interrupt)
-		quit := make(chan struct{}, 1)
+		sigint := make(chan os.Signal)
+		signal.Notify(sigint, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+		quit := make(chan struct{})
 
 		go func(sigint_ chan os.Signal, quit_ chan struct{}, cancel_ func()) {
 			for {
@@ -90,8 +91,6 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		}(sigint, quit, cancel)
 		rc, err := sh.Interpret(ctx, line)
 		signal.Stop(sigint)
-
-		quit <- struct{}{}
 		close(quit)
 		close(sigint)
 

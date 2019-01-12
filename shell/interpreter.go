@@ -5,9 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
-	"os/exec"
 	"reflect"
 	"strings"
 	"sync"
@@ -16,7 +14,7 @@ import (
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/defined"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var WildCardExpansionAlways = false
@@ -76,14 +74,14 @@ func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
 
-var LookCurdirOrder = dos.LookCurdirFirst
+var LookCurdirOrder = nodos.LookCurdirFirst
 
 func (cmd *Cmd) FullPath() string {
 	if cmd.args == nil || len(cmd.args) <= 0 {
 		return ""
 	}
 	if cmd.fullPath == "" {
-		cmd.fullPath = dos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
+		cmd.fullPath = cmd.lookpath()
 	}
 	return cmd.fullPath
 }
@@ -208,48 +206,52 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	if defined.DBG {
 		print("exec.LookPath(", cmd.args[0], ")==", fullpath, "\n")
 	}
+
 	if WildCardExpansionAlways {
 		cmd.args = findfile.Globs(cmd.args)
 	}
-	if cmd.UseShellExecute {
-		// GUI Application
-		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
-		return 0, dos.ShellExecute("open", fullpath, cmdline, "")
-	}
-	if UseSourceRunBatch {
-		lowerName := strings.ToLower(cmd.args[0])
-		if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {
-			rawargs := cmd.RawArgs()
-			args := make([]string, len(rawargs))
-			args[0] = encloseWithQuote(fullpath)
-			for i, end := 1, len(rawargs); i < end; i++ {
-				args[i] = rawargs[i]
-			}
-			// Batch files
-			return RawSource(args, ioutil.Discard, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+	return cmd.startProcess(ctx)
+}
+
+func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr) (int, error) {
+	if ctx != nil {
+		select {
+		case <-ctx.Done():
+			return 252, ctx.Err()
+		default:
 		}
 	}
-	// Do not use exec.CommandContext because it cancels background process.
-	xcmd := exec.CommandContext(ctx, cmd.args[0], cmd.args[1:]...)
-	xcmd.Stdin = cmd.Stdin
-	xcmd.Stdout = cmd.Stdout
-	xcmd.Stderr = cmd.Stderr
 
-	if xcmd.SysProcAttr == nil {
-		xcmd.SysProcAttr = new(syscall.SysProcAttr)
-	}
-	cmdline := makeCmdline(xcmd.Args, cmd.rawArgs)
-	if defined.DBG {
-		println(cmdline)
-	}
-	xcmd.SysProcAttr.CmdLine = cmdline
-	err := xcmd.Run()
-	errorlevel, errorlevelOk := dos.GetErrorLevel(xcmd)
-	if errorlevelOk {
-		return errorlevel, err
-	} else {
+	process, err := os.StartProcess(name, args, procAttr)
+	if err != nil {
 		return 255, err
 	}
+
+	if ctx != nil {
+		done := make(chan struct{})
+		go func() {
+			select {
+			case <-ctx.Done():
+				os.Stderr.WriteString("^C\n")
+				process.Kill()
+			case <-done:
+			}
+		}()
+		defer func() {
+			close(done)
+		}()
+	}
+	processState, err := process.Wait()
+	if err != nil {
+		return 254, err
+	}
+	if processState.Success() {
+		return 0, nil
+	}
+	if t, ok := processState.Sys().(syscall.WaitStatus); ok {
+		return t.ExitStatus(), nil
+	}
+	return 253, nil
 }
 
 type AlreadyReportedError struct {
@@ -378,7 +380,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			if i > 0 {
 				cmd.IsBackGround = true
 			}
-			if len(pipeline) == 1 && dos.IsGui(cmd.FullPath()) {
+			if len(pipeline) == 1 && isGui(cmd.FullPath()) {
 				cmd.UseShellExecute = true
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {

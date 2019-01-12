@@ -343,6 +343,10 @@ true の場合、一行入力の前に入力バッファをクリアします。
 実行ファイルが想定している CPU アーキテクチャを示す文字列が格納されます。
 (例：「386」「amd64」)
 
+### `nyagos.goos`
+
+OS名 (`windows` or `linux`)
+
 ### `nyagos.msgbox(MESSAGE,TITLE)`
 
 メッセージボックスを表示します

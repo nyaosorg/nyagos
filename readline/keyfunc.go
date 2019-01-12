@@ -2,27 +2,25 @@ package readline
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"strings"
 	"unicode"
 
 	"github.com/atotto/clipboard"
-	"github.com/zetamatta/go-getch"
 )
 
-func KeyFuncEnter(ctx context.Context, this *Buffer) Result { // Ctrl-M
+func keyFuncEnter(ctx context.Context, this *Buffer) Result { // Ctrl-M
 	return ENTER
 }
 
-func KeyFuncIntr(ctx context.Context, this *Buffer) Result { // Ctrl-C
+func keyFuncIntr(ctx context.Context, this *Buffer) Result { // Ctrl-C
 	this.Length = 0
 	this.Cursor = 0
 	this.ViewStart = 0
 	return INTR
 }
 
-func KeyFuncHead(ctx context.Context, this *Buffer) Result { // Ctrl-A
+func keyFuncHead(ctx context.Context, this *Buffer) Result { // Ctrl-A
 	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 	this.Cursor = 0
 	this.ViewStart = 0
@@ -30,7 +28,7 @@ func KeyFuncHead(ctx context.Context, this *Buffer) Result { // Ctrl-A
 	return CONTINUE
 }
 
-func KeyFuncBackword(ctx context.Context, this *Buffer) Result { // Ctrl-B
+func keyFuncBackword(ctx context.Context, this *Buffer) Result { // Ctrl-B
 	if this.Cursor <= 0 {
 		return CONTINUE
 	}
@@ -44,14 +42,14 @@ func KeyFuncBackword(ctx context.Context, this *Buffer) Result { // Ctrl-B
 	return CONTINUE
 }
 
-func KeyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
+func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, this.Length)
 	if allength < this.ViewWidth() {
 		for ; this.Cursor < this.Length; this.Cursor++ {
 			this.PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
-		io.WriteString(this.Writer, "\a")
+		io.WriteString(this.Out, "\a")
 		this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = this.Length - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
@@ -73,7 +71,7 @@ func KeyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 	return CONTINUE
 }
 
-func KeyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
+func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	if this.Cursor >= this.Length {
 		return CONTINUE
 	}
@@ -97,7 +95,7 @@ func KeyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 	return CONTINUE
 }
 
-func KeyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
+func keyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 	if this.Cursor > 0 {
 		this.Cursor--
 		delw := this.Delete(this.Cursor, 1)
@@ -111,26 +109,25 @@ func KeyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 	return CONTINUE
 }
 
-func KeyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
+func keyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
 	delw := this.Delete(this.Cursor, 1)
 	this.Repaint(this.Cursor, delw)
 	return CONTINUE
 }
 
-func KeyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
+func keyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
 	if this.Length > 0 {
-		return KeyFuncDelete(ctx, this)
+		return keyFuncDelete(ctx, this)
 	} else {
 		return ABORT
 	}
 }
 
-func KeyFuncInsertSelf(ctx context.Context, this *Buffer) Result {
-	ch := this.Unicode
-	this.Insert(this.Cursor, []rune{ch})
+func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
+	this.Insert(this.Cursor, []rune(keys))
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	w1 := GetCharWidth(ch)
+	w1 := GetStringWidth(keys)
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		this.Backspace(w)
@@ -147,12 +144,7 @@ func KeyFuncInsertSelf(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncInsertReport(ctx context.Context, this *Buffer) Result {
-	this.InsertAndRepaint(fmt.Sprintf("[%X]", this.Unicode))
-	return CONTINUE
-}
-
-func KeyFuncClearAfter(ctx context.Context, this *Buffer) Result {
+func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	clipboard.WriteAll(this.SubString(this.Cursor, this.Length))
 
 	this.Eraseline()
@@ -160,7 +152,7 @@ func KeyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncClear(ctx context.Context, this *Buffer) Result {
+func keyFuncClear(ctx context.Context, this *Buffer) Result {
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	this.Backspace(width)
 	this.Eraseline()
@@ -170,7 +162,7 @@ func KeyFuncClear(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncWordRubout(ctx context.Context, this *Buffer) Result {
+func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	org_cursor := this.Cursor
 	for this.Cursor > 0 && unicode.IsSpace(this.Buffer[this.Cursor-1]) {
 		this.Cursor--
@@ -188,7 +180,7 @@ func KeyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncClearBefore(ctx context.Context, this *Buffer) Result {
+func keyFuncClearBefore(ctx context.Context, this *Buffer) Result {
 	keta := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	clipboard.WriteAll(this.SubString(0, this.Cursor))
 	this.Delete(0, this.Cursor)
@@ -199,32 +191,31 @@ func KeyFuncClearBefore(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncCLS(ctx context.Context, this *Buffer) Result {
-	io.WriteString(this.Writer, "\x1B[1;1H\x1B[2J")
+func keyFuncCLS(ctx context.Context, this *Buffer) Result {
+	io.WriteString(this.Out, "\x1B[1;1H\x1B[2J")
 	this.RepaintAll()
 	return CONTINUE
 }
 
-func KeyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
-	this.Writer.WriteByte('\n')
+func keyFuncRepaintOnNewline(ctx context.Context, this *Buffer) Result {
+	this.Out.WriteByte('\n')
 	this.RepaintAll()
 	return CONTINUE
 }
 
-func KeyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
-	io.WriteString(this.Writer, CURSOR_ON)
-	defer io.WriteString(this.Writer, CURSOR_OFF)
-	for {
-		this.Writer.Flush()
-		e := getch.All()
-		if e.Key != nil && e.Key.Rune != 0 {
-			this.Unicode = e.Key.Rune
-			return KeyFuncInsertSelf(ctx, this)
-		}
+func keyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
+	io.WriteString(this.Out, ansiCursorOn)
+	defer io.WriteString(this.Out, ansiCursorOff)
+
+	this.Out.Flush()
+	if key, err := getKey(this.TTY); err == nil {
+		return keyFuncInsertSelf(ctx, this, key)
+	} else {
+		return CONTINUE
 	}
 }
 
-func KeyFuncPaste(ctx context.Context, this *Buffer) Result {
+func keyFuncPaste(ctx context.Context, this *Buffer) Result {
 	text, err := clipboard.ReadAll()
 	if err != nil {
 		return CONTINUE
@@ -233,7 +224,7 @@ func KeyFuncPaste(ctx context.Context, this *Buffer) Result {
 	return CONTINUE
 }
 
-func KeyFuncPasteQuote(ctx context.Context, this *Buffer) Result {
+func keyFuncPasteQuote(ctx context.Context, this *Buffer) Result {
 	text, err := clipboard.ReadAll()
 	if err != nil {
 		return CONTINUE
@@ -254,7 +245,7 @@ func maxInt(a, b int) int {
 	}
 }
 
-func KeyFuncSwapChar(ctx context.Context, this *Buffer) Result {
+func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 	if this.Length == this.Cursor {
 		if this.Cursor < 2 {
 			return CONTINUE

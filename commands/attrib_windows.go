@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"sort"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/zetamatta/nyagos/dos"
@@ -14,13 +16,13 @@ import (
 func getbit(c byte) uint32 {
 	switch c {
 	case 'r', 'R':
-		return dos.FILE_ATTRIBUTE_READONLY
+		return windows.FILE_ATTRIBUTE_READONLY
 	case 'h', 'H':
-		return dos.FILE_ATTRIBUTE_HIDDEN
+		return windows.FILE_ATTRIBUTE_HIDDEN
 	case 's', 'S':
-		return dos.FILE_ATTRIBUTE_SYSTEM
+		return windows.FILE_ATTRIBUTE_SYSTEM
 	case 'a', 'A':
-		return dos.FILE_ATTRIBUTE_ARCHIVE
+		return windows.FILE_ATTRIBUTE_ARCHIVE
 	default:
 		return 0
 	}
@@ -88,10 +90,10 @@ func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 				fullpath = arg1
 			}
 			fmt.Fprintf(cmd.Out(), "%c  %c%c%c       %s\n",
-				bit2flg(bits, dos.FILE_ATTRIBUTE_ARCHIVE, 'A'),
-				bit2flg(bits, dos.FILE_ATTRIBUTE_SYSTEM, 'S'),
-				bit2flg(bits, dos.FILE_ATTRIBUTE_HIDDEN, 'H'),
-				bit2flg(bits, dos.FILE_ATTRIBUTE_READONLY, 'R'),
+				bit2flg(bits, windows.FILE_ATTRIBUTE_ARCHIVE, 'A'),
+				bit2flg(bits, windows.FILE_ATTRIBUTE_SYSTEM, 'S'),
+				bit2flg(bits, windows.FILE_ATTRIBUTE_HIDDEN, 'H'),
+				bit2flg(bits, windows.FILE_ATTRIBUTE_READONLY, 'R'),
 				fullpath)
 		} else {
 			bits = (bits | setBits) &^ resetBits

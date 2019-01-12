@@ -6,19 +6,7 @@ import (
 	"os"
 	"syscall"
 	"unicode"
-
-	"github.com/zetamatta/go-getch"
-
-	"github.com/zetamatta/nyagos/dos"
 )
-
-func setReadonly(path string) error {
-	perm, err := dos.GetFileAttributes(path)
-	if err != nil {
-		return err
-	}
-	return dos.SetFileAttributes(path, perm&^dos.FILE_ATTRIBUTE_READONLY)
-}
 
 func cmdDel(ctx context.Context, cmd Param) (int, error) {
 	n := len(cmd.Args())
@@ -73,7 +61,10 @@ func cmdDel(ctx context.Context, cmd Param) (int, error) {
 			fmt.Fprintf(cmd.Out(),
 				"(%d/%d) %s: Remove ? [Yes/No/All/Quit] ",
 				i, n-1, path)
-			ch := getch.Rune()
+			ch, err := getkey()
+			if err != nil {
+				return 1, err
+			}
 			if unicode.IsPrint(ch) {
 				fmt.Fprintf(cmd.Out(), "%c ", ch)
 			}
@@ -92,7 +83,7 @@ func cmdDel(ctx context.Context, cmd Param) (int, error) {
 		}
 		err = syscall.Unlink(path)
 		if err != nil && force {
-			if err1 := setReadonly(path); err1 == nil {
+			if err1 := setWritable(path); err1 == nil {
 				err = syscall.Unlink(path)
 			}
 		}

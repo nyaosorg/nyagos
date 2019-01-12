@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var cdHistory = make([]string, 0, 100)
@@ -44,7 +44,7 @@ func cmdCdSub(dir string) (int, error) {
 		dir = dir[len(fileHead):]
 	}
 	if strings.HasSuffix(strings.ToLower(dir), ".lnk") {
-		newdir, _, err := dos.ReadShortcut(dir)
+		newdir, err := readShortCut(dir)
 		if err == nil && newdir != "" {
 			dir = newdir
 		}
@@ -53,7 +53,7 @@ func cmdCdSub(dir string) (int, error) {
 		// println(dir, "->", dirTmp)
 		dir = dirTmp
 	}
-	err := dos.Chdir(dir)
+	err := nodos.Chdir(dir)
 	if err == nil {
 		return 0, nil
 	}
@@ -107,7 +107,7 @@ func cmdCd(ctx context.Context, cmd Param) (int, error) {
 		pushCdHistory()
 		return cmdCdSub(strings.Join(args[1:], " "))
 	}
-	home := dos.GetHome()
+	home := nodos.GetHome()
 	if home != "" {
 		pushCdHistory()
 		return cmdCdSub(home)

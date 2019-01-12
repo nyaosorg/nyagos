@@ -69,7 +69,7 @@ func compile() error {
 		CC,
 		CSource,
 	}
-	fn,err := exec.LookPath(CC)
+	fn, err := exec.LookPath(CC)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func gofmt() error {
 		"fmt",
 		GoSource,
 	}
-	fn,err := exec.LookPath("go")
+	fn, err := exec.LookPath("go")
 	if err != nil {
 		return err
 	}
@@ -150,7 +150,7 @@ func main() {
 
 	headers := []string{"<cstdio>"}
 	if runtime.GOOS == "windows" {
-		headers = append(headers,"<windows.h>")
+		headers = append(headers, "<windows.h>")
 	}
 	vars := make([]string, 0)
 

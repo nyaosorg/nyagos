@@ -41,10 +41,7 @@ var (
 	modole32    = windows.NewLazySystemDLL("ole32.dll")
 
 	procCopyFileW           = modkernel32.NewProc("CopyFileW")
-	procMoveFileExW         = modkernel32.NewProc("MoveFileExW")
 	procGetDiskFreeSpaceExW = modkernel32.NewProc("GetDiskFreeSpaceExW")
-	procGetLogicalDrives    = modkernel32.NewProc("GetLogicalDrives")
-	procGetDriveTypeW       = modkernel32.NewProc("GetDriveTypeW")
 	procCoInitializeEx      = modole32.NewProc("CoInitializeEx")
 	procCoUninitialize      = modole32.NewProc("CoUninitialize")
 )
@@ -82,33 +79,6 @@ func _copyFile(src *uint16, dst *uint16, isFailIfExist bool) (n uint32, err erro
 	return
 }
 
-func moveFileEx(src string, dst string, flag uintptr) (n uint32, err error) {
-	var _p0 *uint16
-	_p0, err = syscall.UTF16PtrFromString(src)
-	if err != nil {
-		return
-	}
-	var _p1 *uint16
-	_p1, err = syscall.UTF16PtrFromString(dst)
-	if err != nil {
-		return
-	}
-	return _moveFileEx(_p0, _p1, flag)
-}
-
-func _moveFileEx(src *uint16, dst *uint16, flag uintptr) (n uint32, err error) {
-	r0, _, e1 := syscall.Syscall(procMoveFileExW.Addr(), 3, uintptr(unsafe.Pointer(src)), uintptr(unsafe.Pointer(dst)), uintptr(flag))
-	n = uint32(r0)
-	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
 func getDiskFreeSpaceEx(rootPathName string, free *uint64, total *uint64, totalFree *uint64) (n uint32, err error) {
 	var _p0 *uint16
 	_p0, err = syscall.UTF16PtrFromString(rootPathName)
@@ -122,41 +92,6 @@ func _getDiskFreeSpaceEx(rootPathName *uint16, free *uint64, total *uint64, tota
 	r0, _, e1 := syscall.Syscall6(procGetDiskFreeSpaceExW.Addr(), 4, uintptr(unsafe.Pointer(rootPathName)), uintptr(unsafe.Pointer(free)), uintptr(unsafe.Pointer(total)), uintptr(unsafe.Pointer(totalFree)), 0, 0)
 	n = uint32(r0)
 	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func GetLogicalDrives() (n uint32, err error) {
-	r0, _, e1 := syscall.Syscall(procGetLogicalDrives.Addr(), 0, 0, 0, 0)
-	n = uint32(r0)
-	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
-
-func GetDriveType(rootPathName string) (rc uintptr, err error) {
-	var _p0 *uint16
-	_p0, err = syscall.UTF16PtrFromString(rootPathName)
-	if err != nil {
-		return
-	}
-	return _GetDriveType(_p0)
-}
-
-func _GetDriveType(rootPathName *uint16) (rc uintptr, err error) {
-	r0, _, e1 := syscall.Syscall(procGetDriveTypeW.Addr(), 1, uintptr(unsafe.Pointer(rootPathName)), 0, 0)
-	rc = uintptr(r0)
-	if rc == 0 {
 		if e1 != 0 {
 			err = errnoErr(e1)
 		} else {
