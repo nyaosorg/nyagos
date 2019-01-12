@@ -14,18 +14,8 @@
 ### --completion-slash (lua: `nyagos.option.completion_slash=true`)
 ファイル名補完で、スラッシュを使います。
 
-### --disable-virtual-terminal-processing
-Windows10 のエスケープシーケンス処理を有効にしません。(デフォルト)
-
-### --enable-virtual-terminal-processing
-Windows10 によるネイティブのエスケープシーケンス処理を有効にします。
-`--no-go-colorable` とセットで使います。
-
 ### --glob (lua: `nyagos.option.glob=true`)
 外部コマンドにおいても、ワイルドカード展開を有効にします。
-
-### --go-colorable
-Goライブラリによる、エスケープシーケンス処理を有効にします。(デフォルト)
 
 ### --help
 ヘルプを表示します。
@@ -61,9 +51,6 @@ Goライブラリによる、エスケープシーケンス処理を有効にし
 
 ### --no-glob (lua: `nyagos.option.glob=false`) [default]
 外部コマンドで、ワイルドカード展開をしません。
-
-### --no-go-colorable
-Go言語のカラーライブラリによるエスケープシーケンスのエミュレーションを使わないようにします。
 
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 リダイレクトでの上書きを許可します。

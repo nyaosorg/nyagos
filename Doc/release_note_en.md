@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Abolished "--go-colorable" and "--enable-virtual-terminal-processing"
+
 NYAGOS 4.4.0\_0
 ===============
 on Jan.12,2019

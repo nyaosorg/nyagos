@@ -16,18 +16,8 @@ Include hidden files on completion
 ### --completion-slash (lua: `nyagos.option.completion_slash=true`)
 use forward slash on completion
 
-### --disable-virtual-terminal-processing
-Do not use Windows10's native ESCAPE SEQUENCE.
-
-### --enable-virtual-terminal-processing
-Enable Windows10's native ESCAPE SEQUENCE.
-It should be used with `--no-go-colorable`.
-
 ### --glob (lua: `nyagos.option.glob=true`)
 Enable to expand wildcards
-
-### --go-colorable
-Use the ESCAPE SEQUENCE emulation with go-colorable library.
 
 ### --help
 Print this usage
@@ -64,9 +54,6 @@ Do not use slash on completion
 
 ### --no-glob (lua: `nyagos.option.glob=false`) [default]
 Disable to expand wildcards
-
-### --no-go-colorable
-Do not use the ESCAPE SEQUENCE emulation with go-colorable library.
 
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 Do not forbide to overwrite files no redirect
