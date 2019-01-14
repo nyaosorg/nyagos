@@ -1,10 +1,14 @@
-package dos
+package nodos
 
-import "golang.org/x/sys/windows"
+import (
+	"golang.org/x/sys/windows"
+
+	"github.com/zetamatta/nyagos/dos"
+)
 
 // Copy calls Win32's CopyFile API.
 func Copy(src, dst string, isFailIfExists bool) error {
-	rc, err := copyFile(src, dst, isFailIfExists)
+	rc, err := dos.CopyFile(src, dst, isFailIfExists)
 	if rc == 0 {
 		return err
 	}
@@ -27,4 +31,8 @@ func Move(src, dst string) error {
 		windows.MOVEFILE_REPLACE_EXISTING|
 			windows.MOVEFILE_COPY_ALLOWED|
 			windows.MOVEFILE_WRITE_THROUGH)
+}
+
+func ReadShortcut(path string) (string, string, error) {
+	return dos.ReadShortcut(path)
 }

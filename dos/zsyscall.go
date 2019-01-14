@@ -46,7 +46,7 @@ var (
 	procCoUninitialize      = modole32.NewProc("CoUninitialize")
 )
 
-func copyFile(src string, dst string, isFailIfExist bool) (n uint32, err error) {
+func CopyFile(src string, dst string, isFailIfExist bool) (n uint32, err error) {
 	var _p0 *uint16
 	_p0, err = syscall.UTF16PtrFromString(src)
 	if err != nil {
@@ -57,10 +57,10 @@ func copyFile(src string, dst string, isFailIfExist bool) (n uint32, err error) 
 	if err != nil {
 		return
 	}
-	return _copyFile(_p0, _p1, isFailIfExist)
+	return _CopyFile(_p0, _p1, isFailIfExist)
 }
 
-func _copyFile(src *uint16, dst *uint16, isFailIfExist bool) (n uint32, err error) {
+func _CopyFile(src *uint16, dst *uint16, isFailIfExist bool) (n uint32, err error) {
 	var _p2 uint32
 	if isFailIfExist {
 		_p2 = 1

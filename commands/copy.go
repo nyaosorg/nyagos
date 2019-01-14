@@ -10,7 +10,7 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 type copyMoveT struct {
@@ -23,7 +23,7 @@ func cmdCopy(ctx context.Context, cmd Param) (int, error) {
 	return copyMoveT{
 		Param: cmd,
 		Action: func(src, dst string) error {
-			return dos.Copy(src, dst, false)
+			return nodos.Copy(src, dst, false)
 		},
 	}.Run(ctx, cmd.Args())
 }
@@ -31,7 +31,7 @@ func cmdCopy(ctx context.Context, cmd Param) (int, error) {
 func cmdMove(ctx context.Context, cmd Param) (int, error) {
 	return copyMoveT{
 		Param:   cmd,
-		Action:  dos.Move,
+		Action:  nodos.Move,
 		IsDirOk: true,
 	}.Run(ctx, cmd.Args())
 }
@@ -90,7 +90,7 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 
 	_dst := args[len(args)-1]
 	if strings.ToLower(filepath.Ext(_dst)) == ".lnk" {
-		if __dst, _, err := dos.ReadShortcut(_dst); err == nil {
+		if __dst, _, err := nodos.ReadShortcut(_dst); err == nil {
 			_dst = __dst
 		}
 	}
