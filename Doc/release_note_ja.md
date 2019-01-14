@@ -2,6 +2,7 @@
 
 * "--go-colorable" と "--enable-virtual-terminal-processing" を廃止
 * `killall` コマンドを実装
+* Linux用の copy と move を実装
 
 NYAGOS 4.4.0\_0
 ===============
