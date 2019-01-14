@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * "--go-colorable" と "--enable-virtual-terminal-processing" を廃止
+* `killall` コマンドを実装
 
 NYAGOS 4.4.0\_0
 ===============

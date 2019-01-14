@@ -87,6 +87,10 @@ Display the history. No arguments, the last ten are displayed.
 
 Kill process specified by PID
 
+### `killall NAME...`
+
+Kill process by name
+
 ### `ln [-s] SRC DST`
 
 Make hardlink or symbolic-link.
