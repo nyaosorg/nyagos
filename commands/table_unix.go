@@ -29,6 +29,7 @@ func init() {
 		"history":  cmdHistory,
 		"if":       cmdIf,
 		"kill":     cmdKill,
+		"killall":  cmdKillAll,
 		"md":       cmdMkdir,
 		"mkdir":    cmdMkdir,
 		"more":     cmdMore,

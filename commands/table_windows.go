@@ -38,6 +38,7 @@ func init() {
 		"ln":       cmdLn,
 		"lnk":      cmdLnk,
 		"kill":     cmdKill,
+		"killall":  cmdKillAll,
 		"ls":       cmdLs,
 		"md":       cmdMkdir,
 		"mkdir":    cmdMkdir,
