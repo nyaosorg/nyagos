@@ -188,15 +188,9 @@ import the environment variables and working directory
 which CMD.exe changed.
 
 - We use `.` (one-period) as an alias of `source`.
-- `source` makes three temporari files.
-    - `%TEMP%\nyagos-(PID).cmd`
-        - CMD.EXE executes it. It calls the batch file the user want to call.
-    - `%TEMP%\nyagos-(PID).tmp`
-        - It contains the new values of the environemnt variables.
-        - `nyagos-(PID).cmd` made it and nyagos.exe reads it.
-    - `%TEMP%\nyagos_(PID).tmp`
-        - It contains the new current working directory.
-        - `nyagos-(PID).cmd` made it and nyagos.exe reads it.
+- `source` makes a temporary file: `%TEMP%\nyagos-(PID).tmp`
+    - It contains the new values of new current working directory and 
+       the environemnt variables.
 - With option -d, temporary files made by `source` is not to be removed.
 - With option -v, `source` shows the temporari files to STDERR.
 
