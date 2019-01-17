@@ -195,7 +195,7 @@ var name2char = map[string]string{
 	K_DOWN:          "\x1B[B",
 	K_END:           "\x1B[F",
 	K_F10:           "\x1B[21~",
-	K_F11:           "0x7A",
+	K_F11:           "\x1B[23~",
 	K_F12:           "\x1B[24~",
 	K_F13:           "0x7C",
 	K_F14:           "0x7D",
