@@ -3,7 +3,7 @@ English / [Japanese](release_note_ja.md)
 * Abolished "--go-colorable" and "--enable-virtual-terminal-processing"
 * Implemented `killall`
 * Implemented `copy` and `move` for Linux
-* (#351) Fix that `END` (and `F1`) key did not work 
+* (#351) Fix that `END` (and `F11`) key did not work 
 
 NYAGOS 4.4.0\_0
 ===============

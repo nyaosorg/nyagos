@@ -3,7 +3,7 @@
 * "--go-colorable" と "--enable-virtual-terminal-processing" を廃止
 * `killall` コマンドを実装
 * Linux用の copy と move を実装
-* (#351) `END` と `F1` キーが動作もキー割り当てもできなかった不具合を修正
+* (#351) `END` と `F11` キーが動作もキー割り当てもできなかった不具合を修正
 
 NYAGOS 4.4.0\_0
 ===============
