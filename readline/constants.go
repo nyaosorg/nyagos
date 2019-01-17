@@ -193,7 +193,7 @@ var name2char = map[string]string{
 	K_CTRL_BREAK:    "0x03",
 	K_DELETE:        "\x1B[3~",
 	K_DOWN:          "\x1B[B",
-	K_END:           "0x23",
+	K_END:           "\x1B[F",
 	K_F10:           "\x1B[21~",
 	K_F11:           "0x7A",
 	K_F12:           "\x1B[24~",
