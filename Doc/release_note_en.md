@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.0\_1
+===============
+on Jan.19,2019
+
 * Abolished "--go-colorable" and "--enable-virtual-terminal-processing"
 * Implemented `killall`
 * Implemented `copy` and `move` for Linux
