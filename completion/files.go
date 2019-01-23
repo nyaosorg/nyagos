@@ -23,7 +23,9 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 	return listUpWithFilter(ctx, str, func(*findfile.FileInfo) bool { return true })
 }
 func listUpDirs(ctx context.Context, str string) ([]Element, error) {
-	return listUpWithFilter(ctx, str, func(fd *findfile.FileInfo) bool { return fd.IsDir() })
+	return listUpWithFilter(ctx, str, func(fd *findfile.FileInfo) bool {
+		return fd.IsDir() || strings.HasSuffix(strings.ToLower(fd.Name()), ".lnk")
+	})
 }
 
 func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.FileInfo) bool) ([]Element, error) {
