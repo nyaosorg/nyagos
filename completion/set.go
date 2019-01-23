@@ -16,3 +16,7 @@ func completionSet(ctx context.Context, params []string) ([]Element, error) {
 	}
 	return result, nil
 }
+
+func completionCd(ctx context.Context, params []string) ([]Element, error) {
+	return listUpDirs(ctx, params[len(params)-1])
+}

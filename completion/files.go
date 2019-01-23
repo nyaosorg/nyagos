@@ -20,6 +20,13 @@ const (
 var IncludeHidden = false
 
 func listUpFiles(ctx context.Context, str string) ([]Element, error) {
+	return listUpWithFilter(ctx, str, func(*findfile.FileInfo) bool { return true })
+}
+func listUpDirs(ctx context.Context, str string) ([]Element, error) {
+	return listUpWithFilter(ctx, str, func(fd *findfile.FileInfo) bool { return fd.IsDir() })
+}
+
+func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.FileInfo) bool) ([]Element, error) {
 	orgSlash := STD_SLASH[0]
 	if UseSlash {
 		orgSlash = OPT_SLASH[0]
@@ -54,6 +61,9 @@ func listUpFiles(ctx context.Context, str string) ([]Element, error) {
 			return true
 		}
 		if !IncludeHidden && fd.IsHidden() {
+			return true
+		}
+		if !filter(fd) {
 			return true
 		}
 		listname := fd.Name()

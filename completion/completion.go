@@ -53,6 +53,7 @@ func isTop(s string, indexes [][]int) bool {
 
 var CustomCompletion = map[string]func(context.Context, []string) ([]Element, error){
 	"set": completionSet,
+	"cd":  completionCd,
 }
 
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
