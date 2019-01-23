@@ -13,17 +13,14 @@ import (
 var version string
 
 func main() {
-	var dummy [1]byte
 	frame.Version = version
-
+	rc := 0
 	if err := frame.Start(mains.Main); err != nil && err != io.EOF {
 		fmt.Fprintln(os.Stderr, err)
-		if defined.DBG {
-			os.Stdin.Read(dummy[:])
-		}
-		os.Exit(1)
+		rc = 1
 	}
 	if defined.DBG {
-		os.Stdin.Read(dummy[:])
+		os.Stdin.Read(make([]byte, 1))
 	}
+	os.Exit(rc)
 }
