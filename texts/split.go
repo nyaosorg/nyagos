@@ -14,11 +14,20 @@ var rxNonSpaces = regexp.MustCompile(`\S+`)
 // SplitLikeShell splits string with spaces not enclused with double-quotations. This version returns fields' indexes rather than themselves.
 func SplitLikeShell(line string) [][]int {
 	line = rxEscape.ReplaceAllString(line, "\001\001")
-	line = rxDoubleQuoted.ReplaceAllStringFunc(line, func(str string) string {
-		str = rxSpace.ReplaceAllString(str, "\001")
-		str = strings.Replace(str, `'`, "\001", -1)
-		return str
-	})
+
+	var buffer strings.Builder
+	quoted := false
+	for _, r := range line {
+		if r == '"' {
+			quoted = !quoted
+		}
+		if quoted && (r == ' ' || r == '\'') {
+			r = '\001'
+		}
+		buffer.WriteRune(r)
+	}
+	line = buffer.String()
+
 	line = rxSingleQuoted.ReplaceAllStringFunc(line, func(str string) string {
 		return rxSpace.ReplaceAllString(str, "\001")
 	})
