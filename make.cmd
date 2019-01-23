@@ -18,6 +18,11 @@ function Do-Copy($src,$dst){
     Copy-Item $src $dst
 }
 
+function Do-Rename($old,$new){
+    Write-Verbose "$ ren $old $new"
+    Rename-Item -path $old -newname $new
+}
+
 function Do-Remove($file){
     if( Test-Path $file ){
         Write-Verbose "$ del '$file'"
@@ -32,17 +37,13 @@ function Make-Dir($folder){
     }
 }
 
-Add-Type -Assembly System.Windows.Forms
 function Ask-Copy($src,$dst){
     $fname = (Join-Path $dst (Split-Path $src -Leaf))
     if( Test-Path $fname ){
-        if( "Yes" -ne [System.Windows.Forms.MessageBox]::Show(
-            'Override "{0}" by default ?' -f $fname,
-            "NYAGOS Install", "YesNo","Question","button2") ){
-            return
-        }
+        Write-Verbose "$fname already exists. Cancel to copy"
+    }else{
+        Do-Copy $src $dst
     }
-    Do-Copy $src $dst
 }
 
 function ForEach-GoDir{
@@ -251,14 +252,12 @@ switch( $args[0] ){
             $now = (Get-Date -Format "yyyyMMddHHmmss")
             try{
                 $old = (Join-Path $installDir "nyagos.exe")
-                Rename-Item -path $old -newname ($old + "-" + $now)
+                Do-Rename $old ($old + "-" + $now)
                 Do-Copy nyagos.exe $installDir
             }catch{
                 Write-Host "Could not update installed nyagos.exe"
                 Write-Host "Some processes holds nyagos.exe now"
             }
-            # [void]([System.Windows.Forms.MessageBox]::Show("Done"))
-            timeout /T 3
         }
     }
     "get" {
