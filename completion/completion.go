@@ -51,6 +51,10 @@ func isTop(s string, indexes [][]int) bool {
 	return prev == ";" || prev == "|" || prev == "&"
 }
 
+var CustomCompletion = map[string]func(context.Context, []string) ([]Element, error){
+	"set": completionSet,
+}
+
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
 	var err error
 	rv := &List{
@@ -89,16 +93,31 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
 
+	replace := false
 	if isTop(rv.Left, indexes) {
 		rv.List, err = listUpCommands(ctx, rv.Word[start:])
 	} else {
-		rv.List, err = listUpFiles(ctx, rv.Word[start:])
+		args := make([]string, 0, len(rv.Field))
+		for i, w := range rv.Field {
+			if indexes[i][0] > this.Cursor {
+				break
+			}
+			args = append(args, strings.Replace(w, `"`, ``, -1))
+		}
+		if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
+			rv.List, err = f(ctx, args)
+			replace = true
+		} else {
+			rv.List, err = listUpFiles(ctx, rv.Word[start:])
+		}
 	}
 
-	for i := 0; i < len(rv.List); i++ {
-		rv.List[i] = Element2{
-			rv.Word[:start] + rv.List[i].String(),
-			rv.List[i].Display(),
+	if !replace {
+		for i := 0; i < len(rv.List); i++ {
+			rv.List[i] = Element2{
+				rv.Word[:start] + rv.List[i].String(),
+				rv.List[i].Display(),
+			}
 		}
 	}
 	for _, f := range HookToList {
