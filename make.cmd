@@ -248,8 +248,10 @@ switch( $args[0] ){
         try{
             Do-Copy nyagos.exe $installDir
         }catch{
-            taskkill /F /im nyagos.exe
+            $now = (Get-Date -Format "yyyyMMddHHmmss")
             try{
+                $old = (Join-Path $installDir "nyagos.exe")
+                Rename-Item -path $old -newname ($old + "-" + $now)
                 Do-Copy nyagos.exe $installDir
             }catch{
                 Write-Host "Could not update installed nyagos.exe"
