@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Support completion for `set` command.
+
 NYAGOS 4.4.0\_1
 ===============
 on Jan.19,2019
