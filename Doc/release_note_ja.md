@@ -1,6 +1,6 @@
 [English](release_note_en.md) / Japanese
 
-* `set` コマンド向け補完
+* `set`,`cd` コマンド向け補完
 
 NYAGOS 4.4.0\_1
 ===============

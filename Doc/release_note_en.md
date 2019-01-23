@@ -1,6 +1,6 @@
 English / [Japanese](release_note_ja.md)
 
-* Support completion for `set` command.
+* Support completion for `set` and `cd` command.
 
 NYAGOS 4.4.0\_1
 ===============
