@@ -26,6 +26,9 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if closer, err := dos.ChangeConsoleMode(windows.Stdin, dos.ModeSet(0x7)); err == nil {
 		defer closer()
 	}
+	if closer, err := dos.ChangeConsoleMode(windows.Stdout); err == nil {
+		defer closer()
+	}
 	if UseSourceRunBatch {
 		lowerName := strings.ToLower(cmd.args[0])
 		if strings.HasSuffix(lowerName, ".cmd") || strings.HasSuffix(lowerName, ".bat") {

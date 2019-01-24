@@ -28,11 +28,13 @@ func ChangeConsoleMode(console windows.Handle, ops ...ModeOp) (func(), error) {
 	}
 	restore := func() { windows.SetConsoleMode(console, mode) }
 
-	newMode := mode
-	for _, op1 := range ops {
-		newMode = op1.Op(newMode)
+	if len(ops) > 0 {
+		newMode := mode
+		for _, op1 := range ops {
+			newMode = op1.Op(newMode)
+		}
+		err = windows.SetConsoleMode(console, newMode)
 	}
-	err = windows.SetConsoleMode(console, newMode)
 	return restore, err
 }
 
