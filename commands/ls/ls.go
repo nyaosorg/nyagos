@@ -227,9 +227,7 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 			postfix = ANSI_END
 		}
 		if (attr&windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
-			(flag&O_INDICATOR) != 0 &&
-			hasLink(folder, val.Name()) {
-
+			(flag&O_INDICATOR) != 0 {
 			indicator = "@"
 		}
 		nodes_[key] = prefix + val.Name() + postfix + indicator
@@ -269,21 +267,11 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 	return nil
 }
 
-func hasLink(folder, name string) bool {
-	origpath := filepath.Join(folder, name)
-	fullpath, err := os.Readlink(origpath)
-	if err != nil || fullpath == "" {
-		return false
-	}
-	origpath, err = filepath.Abs(origpath)
-	return err == nil && origpath != fullpath
-}
-
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
 		io.WriteString(out, f.Name())
 		if (flag & O_INDICATOR) != 0 {
-			if attr := findfile.GetFileAttributes(f); (attr&windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 && hasLink(folder, f.Name()) {
+			if attr := findfile.GetFileAttributes(f); (attr & windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 				io.WriteString(out, "@")
 			} else if f.IsDir() {
 				io.WriteString(out, "/")
