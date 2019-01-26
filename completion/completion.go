@@ -107,7 +107,11 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 		}
 		if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
 			rv.List, err = f(ctx, args)
-			replace = true
+			if rv.List != nil && err == nil {
+				replace = true
+			} else {
+				rv.List, err = listUpFiles(ctx, rv.Word[start:])
+			}
 		} else {
 			rv.List, err = listUpFiles(ctx, rv.Word[start:])
 		}
