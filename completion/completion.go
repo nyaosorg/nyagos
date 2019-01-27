@@ -51,9 +51,27 @@ func isTop(s string, indexes [][]int) bool {
 	return prev == ";" || prev == "|" || prev == "&"
 }
 
-var CustomCompletion = map[string]func(context.Context, []string) ([]Element, error){
-	"set": completionSet,
-	"cd":  completionCd,
+type CustomCompleter interface {
+	Complete(context.Context, []string) ([]Element, error)
+	String() string
+}
+
+type customComplete struct {
+	Func func(context.Context, []string) ([]Element, error)
+	Name string
+}
+
+func (f customComplete) Complete(ctx context.Context, args []string) ([]Element, error) {
+	return f.Func(ctx, args)
+}
+
+func (f customComplete) String() string {
+	return f.Name
+}
+
+var CustomCompletion = map[string]CustomCompleter{
+	"set": &customComplete{Func: completionSet, Name: "Built-in `set` completer"},
+	"cd":  &customComplete{Func: completionCd, Name: "Built-in `cd` completer"},
 }
 
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
@@ -106,7 +124,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			args = append(args, strings.Replace(w, `"`, ``, -1))
 		}
 		if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
-			rv.List, err = f(ctx, args)
+			rv.List, err = f.Complete(ctx, args)
 			if rv.List != nil && err == nil {
 				replace = true
 			} else {
