@@ -123,6 +123,10 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			}
 			args = append(args, strings.Replace(w, `"`, ``, -1))
 		}
+		if len(indexes) <= 0 || indexes[len(indexes)-1][1] < this.Cursor {
+			args = append(args, "")
+		}
+
 		if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
 			rv.List, err = f.Complete(ctx, args)
 			if rv.List != nil && err == nil {
