@@ -143,6 +143,11 @@ func NewLua() (Lua, error) {
 		lua2cmd(functions.CmdSetEnv))
 	L.SetField(nyagosTable, "env", envTable)
 
+	compTable := makeVirtualTable(L,
+		complete4getter,
+		complete4setter)
+	L.SetField(nyagosTable, "complete_for", compTable)
+
 	aliasTable := makeVirtualTable(L, cmdGetAlias, cmdSetAlias)
 	L.SetField(nyagosTable, "alias", aliasTable)
 	L.SetField(nyagosTable, "setalias", L.NewFunction(cmdSetAlias))
