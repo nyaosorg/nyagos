@@ -55,9 +55,16 @@ func (c *customCompleter) Complete(ctx context.Context, args []string) ([]comple
 	result := LL.Get(-1)
 	if rtbl, ok := result.(*lua.LTable); ok {
 		r := make([]completion.Element, 0, rtbl.Len())
+		var base string
+		if len(args) > 0 {
+			base = strings.ToUpper(args[len(args)-1])
+		}
 		rtbl.ForEach(func(_ lua.LValue, val lua.LValue) {
-			if s, ok := val.(lua.LString); ok {
-				r = append(r, completion.Element1(string(s)))
+			if _s, ok := val.(lua.LString); ok {
+				s := string(_s)
+				if strings.HasPrefix(strings.ToUpper(s), base) {
+					r = append(r, completion.Element1(s))
+				}
 			}
 		})
 		return r, nil
