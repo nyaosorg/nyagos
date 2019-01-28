@@ -4,6 +4,7 @@
 * (#353) OpenSSHでパスワード入力中に Ctrl-C で中断すると、画面表示がおかしくなる問題を修正 (コマンド実行後にコンソールモードを復旧するようにした)
 * (#350) `-l` なしの `ls -F` で os.Readlink を呼ぶのをやめた
 * `nyagos.complete_for["COMMANDNAME"] = function(args) ... end` 形式の補完
+* (#345) subcomplete.lua で git/svn/hg が効かない問題を修正
 
 NYAGOS 4.4.0\_1
 ===============
