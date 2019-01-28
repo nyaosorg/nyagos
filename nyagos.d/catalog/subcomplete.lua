@@ -25,16 +25,15 @@ if githelp then
 end
 
 -- Subversion
-local svnhelp=io.popen("svn help 2>nul","r")
-if svnhelp then
+local svnhelp=nyagos.eval("svn help 2>nul","r")
+if string.len(svnhelp) > 5 then
     local svncmds={}
-    for line in svnhelp:lines() do
+    for line in string.gmatch(svnhelp,"[^\n]+") do
         local m=string.match(line,"^ +([a-z]+)")
         if m then
             svncmds[ #svncmds+1 ] = m
         end
     end
-    svnhelp:close()
     if #svncmds > 1 then
         local maincmds = share.maincmds
         maincmds["svn"] = svncmds
