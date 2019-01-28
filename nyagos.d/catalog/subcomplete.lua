@@ -44,15 +44,14 @@ if svnhelp then
 end
 
 -- Mercurial
-local hghelp=io.popen("hg debugcomplete 2>nul","r")
-if hghelp then
+local hghelp=nyagos.eval("hg debugcomplete 2>nul","r")
+if string.len(hghelp) > 5 then
     local hgcmds={}
-    for line in hghelp:lines() do
+    for line in string.gmatch(hghelp,"[^\n]+") do
         for word in string.gmatch(line,"[a-z]+") do
             hgcmds[#hgcmds+1] = word
         end
     end
-    hghelp:close()
     if #hgcmds > 1 then
         local maincmds=share.maincmds
         maincmds["hg"] = hgcmds
