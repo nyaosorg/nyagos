@@ -224,14 +224,6 @@ Execute inline-lua-commands like 'lua.exe -e "..."'.
 
 Execute lua-script.
 
-### `kill [-f] PID(s)` (nyagos.d\aliases.lua)
-
-alias for `taskkill [/f] /pid PID`.
-
-### `killall [-f] IMAGE` (nyagos.d\aliases.lua)
-
-alias for `taskkill /f /im IMAGE`
-
 ### `trash FILE(S)` (nyagos.d\trash.lua)
 
 It throws files into trashbox of Windows.
