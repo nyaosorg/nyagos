@@ -10,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/yuin/gopher-lua"
-	"github.com/zetamatta/nyagos/texts"
 )
 
 const ioTblName = "io"
@@ -223,13 +222,12 @@ func ioPOpen(L *lua.LState) int {
 	if !ok {
 		return lerror(L, "io.popen: mode is not a string")
 	}
-	args := texts.SplitLikeShellString(string(command))
-	for i, s := range args {
-		args[i] = strings.Replace(s, "\"", "", -1)
-	}
-	xcmd := exec.Command(args[0], args[1:]...)
+	xcmd := exec.Command("cmd.exe", "/S", "/C", string(command+` `))
+	// Append one space to enclose with double quotation by exec.Command
+	xcmd.Stderr = os.Stderr
 
 	if m := string(mode); m == "r" {
+		xcmd.Stdin = os.Stdin
 		in, err := xcmd.StdoutPipe()
 		if err != nil {
 			return lerror(L, err.Error())
@@ -241,6 +239,7 @@ func ioPOpen(L *lua.LState) int {
 		L.Push(newIoLuaReader(L, in, in, nil))
 		return 1
 	} else if m == "w" {
+		xcmd.Stdout = os.Stdout
 		out, err := xcmd.StdinPipe()
 		if err != nil {
 			return lerror(L, err.Error())
