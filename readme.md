@@ -14,7 +14,10 @@ NYAGOS is the commandline-shell written with the Programming Language GO and Lua
   * Keybinding like Emacs.
   * History (Ctrl-P and !-mark)
   * Alias
-  * Filename/Command-name completion
+  * Filename/Command-name/Custom completion
+* DOS-Like Shell
+  * Drive Letters work on Windows. Each drive has its current directory.
+  * `copy`,`move` and some dos-like built-in commands work.
 * Support UNICODE
   * Can paste unicode character on clipboard and edit them.
   * Unicode-literal %U+XXXX%
@@ -27,6 +30,9 @@ NYAGOS is the commandline-shell written with the Programming Language GO and Lua
   * filtering command-line
   * useful functions: ANSI-String & UTF8 convert , eval and so on.
   * Support to call COM(OLE)
+* Support OS:
+  * Windows 7 or later
+  * Linux (experimental)
 
 Download Binary
 ---------------
