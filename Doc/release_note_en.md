@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * (#350) Stop calling os.Readlink on `ls -F` without `-l`
 * Support `nyagos.complete_for["COMMANDNAME"] = function(args) ... end`
 * Fix (#345) don't work git/svn/hg in subcomplete.lua
+* Fix io.popen(lua-function) did not work when redirect was used.
 
 NYAGOS 4.4.0\_1
 ===============
