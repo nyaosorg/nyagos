@@ -12,6 +12,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-tty"
+	"github.com/mattn/go-zglob"
 
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
@@ -253,7 +254,7 @@ func CmdGlob(args []any_t) []any_t {
 	result := make([]string, 0)
 	for _, arg1 := range args {
 		wildcard := fmt.Sprint(arg1)
-		list, err := findfile.Glob(wildcard)
+		list, err := zglob.Glob(wildcard)
 		if list == nil || err != nil {
 			result = append(result, wildcard)
 		} else {
