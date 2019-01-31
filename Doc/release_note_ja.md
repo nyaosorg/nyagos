@@ -1,11 +1,12 @@
 [English](release_note_en.md) / Japanese
 
-* `set`,`cd` コマンド向け補完
-* (#353) OpenSSHでパスワード入力中に Ctrl-C で中断すると、画面表示がおかしくなる問題を修正 (コマンド実行後にコンソールモードを復旧するようにした)
+* `set`,`cd` コマンド向け補完 (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
+* (#353) OpenSSHでパスワード入力中に Ctrl-C で中断すると、画面表示がおかしくなる問題を修正 (コマンド実行後にコンソールモードを復旧するようにした) (Thx! [beepcap](https://twitter.com/beepcap))
 * (#350) `-l` なしの `ls -F` で os.Readlink を呼ぶのをやめた
 * `nyagos.complete_for["COMMANDNAME"] = function(args) ... end` 形式の補完
-* (#345) subcomplete.lua で git/svn/hg が効かない問題を修正
-* リダイレクトが含まれている時、Lua関数 io.popen が機能しない不具合を修正
+* (#345) subcomplete.lua で git/svn/hg が効かない問題を修正(Thx! @tsuyoshicho)
+* リダイレクトが含まれている時、Lua関数 io.popen が機能しない不具合を修正(Thx! @tsuyoshicho)
+* (#354) box.lua のヒストリ補完が C-X h で起動していなかった不具合を修正 (Thx! @fushihara)
 
 NYAGOS 4.4.0\_1
 ===============

@@ -1,11 +1,12 @@
 English / [Japanese](release_note_ja.md)
 
-* Support completion for `set` and `cd` command.
-* Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command)
+* Support completion for `set` and `cd` command. (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
+* Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command) (Thx! [beepcap](https://twitter.com/beepcap))
 * (#350) Stop calling os.Readlink on `ls -F` without `-l`
 * Support `nyagos.complete_for["COMMANDNAME"] = function(args) ... end`
-* Fix (#345) don't work git/svn/hg in subcomplete.lua
-* Fix io.popen(lua-function) did not work when redirect was used.
+* Fix (#345) don't work git/svn/hg in subcomplete.lua (Thx! @tsuyoshicho)
+* Fix io.popen(lua-function) did not work when redirect was used. (Thx! @tsuyoshicho)
+* Fix (#354) box.lua: history completion did not start with C-X h (Thx! @fushihara)
 
 NYAGOS 4.4.0\_1
 ===============

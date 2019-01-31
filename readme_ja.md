@@ -103,6 +103,10 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 * [hazychill](https://github.com/hazychill)
 * [erw7](https://github.com/erw7)
 * [tignear](https://github.com/tignear)
+* [crile](https://github.com/crile)
+* [fushihara](https://github.com/fushihara)
+* [ChiyosukeF](https://twitter.com/ChiyosukeF)
+* [beepcap](https://twitter.com/beepcap)
 
 開発者
 ------
