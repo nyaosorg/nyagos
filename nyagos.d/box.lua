@@ -65,7 +65,7 @@ nyagos.key.C_x = function(this)
     local result
     if c == 'r' or ch == bit32.band(string.byte('r'),0x1F) then
         result = nyagos.box(share.__dump_history())
-    elseif ch == 'h' or ch == bit32.band(string.byte('h') , 0x1F) then
+    elseif c == 'h' or ch == bit32.band(string.byte('h') , 0x1F) then
         result = nyagos.eval('cd --history | box')
         if string.find(result,' ') then
             result = '"'..result..'"'
