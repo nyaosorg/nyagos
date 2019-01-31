@@ -7,8 +7,33 @@ share.maincmds = {}
 
 -- git
 local githelp=io.popen("git help -a 2>nul","r")
+local hubhelp=io.popen("hub help -a 2>nul","r")
 if githelp then
     local gitcmds={}
+    local hub=false
+    if hubhelp then
+      hub=true
+      local startflag = false
+      local found=false
+      for line in hubhelp:lines() do
+        if not found then
+          if startflag then
+            -- skip blank line
+            if string.match(line,"%S") then
+              -- found commands
+              for word in string.gmatch(line, "%S+") do
+                gitcmds[ #gitcmds+1 ] = word
+              end
+              found = true
+            end
+          end
+          if string.match(line,"hub custom") then
+            startflag = true
+          end
+        end
+      end
+      hubhelp:close()
+    end
     for line in githelp:lines() do
         local word = string.match(line,"^ +(%S+)")
         if nil ~= word then
@@ -20,6 +45,10 @@ if githelp then
         local maincmds = share.maincmds
         maincmds["git"] = gitcmds
         maincmds["git.exe"] = gitcmds
+        if hub then
+          maincmds["hub"] = gitcmds
+          maincmds["hub.exe"] = gitcmds
+        end
         share.maincmds = maincmds
     end
 end
