@@ -6,7 +6,6 @@
 * `nyagos.complete_for["COMMANDNAME"] = function(args) ... end` 形式の補完
 * (#345) subcomplete.lua で git/svn/hg が効かない問題を修正
 * リダイレクトが含まれている時、Lua関数 io.popen が機能しない不具合を修正
-* Lua関数(nyagos.glob) と wildcard (内蔵コマンド)で`**/*`のようなワイルドカードをサポート
 
 NYAGOS 4.4.0\_1
 ===============

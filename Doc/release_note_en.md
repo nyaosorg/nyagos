@@ -6,7 +6,6 @@ English / [Japanese](release_note_ja.md)
 * Support `nyagos.complete_for["COMMANDNAME"] = function(args) ... end`
 * Fix (#345) don't work git/svn/hg in subcomplete.lua
 * Fix io.popen(lua-function) did not work when redirect was used.
-* nyagos.glob(lua-function) and wildcard(built-in command) support wildcards like `**/*`
 
 NYAGOS 4.4.0\_1
 ===============
