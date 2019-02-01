@@ -204,6 +204,29 @@ It equals the access function of the programming language C.
 
 Returns the choice which user select with cursor-keys
 
+### `nyagos.complete_for["COMMAND"] = function(args) ... end`
+
+This is the tiny hook for completion per command.
+
+The function is called when the first word is `COMMAND` and
+`args` is set the array contains the words which exist before the cursor.
+
+Sample: go's sub command completion
+
+    nyagos.complete_for.go = function(args)
+        if #args == 2 then
+            return {
+                "build", "clean", "doc", "env", "fix", "fmt", "generate",
+                "get", "install", "list", "mod", "run", "test", "tool",
+                "version", "vet"
+            }
+        end
+        return nil
+    end
+
+The function can return not matching words. `nyagos.exe` removes them.
+When nil is returned, `nyagos.exe` completes the word as a filename.
+
 ### `nyagos.completion_hook = function(c) ... end`
 
 This is the Hook for completion. It should be assigned a function.

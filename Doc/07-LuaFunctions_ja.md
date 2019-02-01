@@ -227,6 +227,29 @@ C言語の access 関数と同じです。
 
 ユーザがカーソルキーなどで選択した結果を得ます
 
+### `nyagos.complete_for["COMMAND"] = function(args) ... end`
+
+コマンド毎の簡易補完フックです。
+
+最初の単語が `COMMAND` の時に関数が呼び出されます。
+`args` はカーソル前に存在する単語を格納する配列がセットされます。
+
+例: goコマンドのサブコマンド補完
+
+    nyagos.complete_for.go = function(args)
+        if #args == 2 then
+            return {
+                "build", "clean", "doc", "env", "fix", "fmt", "generate",
+                "get", "install", "list", "mod", "run", "test", "tool",
+                "version", "vet"
+            }
+        end
+        return nil
+    end
+
+関数はマッチしない単語を返すことができます。`nyagos.exe` が削除して
+くれます。nil を返した時、`nyagos.exe` は普通のファイル名補完を行います。
+
 ### `nyagos.completion_hook = function(c) ... end`
 
 補完のフックです。関数を代入してください。
