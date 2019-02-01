@@ -1,6 +1,6 @@
 English / [Japanese](release_note_ja.md)
 
-* Support completion for `set` and `cd` command. (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
+* Support completion for `set`,`cd` and `env` command. (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
 * Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command) (Thx! [beepcap](https://twitter.com/beepcap))
 * (#350) Stop calling os.Readlink on `ls -F` without `-l`
 * Support `nyagos.complete_for["COMMANDNAME"] = function(args) ... end`
