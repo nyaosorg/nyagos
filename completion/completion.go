@@ -72,6 +72,7 @@ func (f customComplete) String() string {
 var CustomCompletion = map[string]CustomCompleter{
 	"set": &customComplete{Func: completionSet, Name: "Built-in `set` completer"},
 	"cd":  &customComplete{Func: completionCd, Name: "Built-in `cd` completer"},
+	"env": &customComplete{Func: completionEnv, Name: "built-in `env` completer"},
 }
 
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
