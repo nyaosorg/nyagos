@@ -3,6 +3,12 @@ if not nyagos then
     os.exit()
 end
 
+-- hub exists, replace git command
+local hubpath=nyagos.which("hub.exe")
+if hubpath then
+  nyagos.alias.git = "hub.exe"
+end
+
 share.git = {}
 
 -- setup local branch listup
