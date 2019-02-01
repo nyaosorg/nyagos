@@ -7,6 +7,7 @@
 * (#345) subcomplete.lua で git/svn/hg が効かない問題を修正(Thx! @tsuyoshicho)
 * リダイレクトが含まれている時、Lua関数 io.popen が機能しない不具合を修正(Thx! @tsuyoshicho)
 * (#354) box.lua のヒストリ補完が C-X h で起動していなかった不具合を修正 (Thx! @fushihara)
+* nyagos.d/catalog/subcomplete.lua で `hub` コマンドの補完をサポート (Thx! @tsuyoshicho)
 
 NYAGOS 4.4.0\_1
 ===============

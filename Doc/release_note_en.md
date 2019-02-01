@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * Fix (#345) don't work git/svn/hg in subcomplete.lua (Thx! @tsuyoshicho)
 * Fix io.popen(lua-function) did not work when redirect was used. (Thx! @tsuyoshicho)
 * Fix (#354) box.lua: history completion did not start with C-X h (Thx! @fushihara)
+* nyagos.d/catalog/subcomplete.lua supports completion for `hub` command. (Thx! @tsuyoshicho)
 
 NYAGOS 4.4.0\_1
 ===============
