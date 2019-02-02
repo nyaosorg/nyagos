@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.1\_0
+===============
+(2019.02.02)
+
 * `which`,`set`,`cd`,`pushd`,`rmdir`,`env` コマンド向け補完 (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
 * (#353) OpenSSHでパスワード入力中に Ctrl-C で中断すると、画面表示がおかしくなる問題を修正 (コマンド実行後にコンソールモードを復旧するようにした) (Thx! [beepcap](https://twitter.com/beepcap))
 * (#350) `-l` なしの `ls -F` で os.Readlink を呼ぶのをやめた
