@@ -38,3 +38,10 @@ func completionEnv(ctx context.Context, param []string) ([]Element, error) {
 		return nil, nil
 	}
 }
+
+func completionWhich(ctx context.Context, param []string) ([]Element, error) {
+	if len(param) == 2 {
+		return listUpCommands(ctx, param[len(param)-1])
+	}
+	return nil, nil
+}
