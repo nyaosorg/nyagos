@@ -1,6 +1,6 @@
 [English](release_note_en.md) / Japanese
 
-* `set`,`cd`,`env` コマンド向け補完 (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
+* `which`,`set`,`cd`,`pushd`,`rmdir`,`env` コマンド向け補完 (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
 * (#353) OpenSSHでパスワード入力中に Ctrl-C で中断すると、画面表示がおかしくなる問題を修正 (コマンド実行後にコンソールモードを復旧するようにした) (Thx! [beepcap](https://twitter.com/beepcap))
 * (#350) `-l` なしの `ls -F` で os.Readlink を呼ぶのをやめた
 * `nyagos.complete_for["COMMANDNAME"] = function(args) ... end` 形式の補完
