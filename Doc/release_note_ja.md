@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* `print(nyagos.complete_for["COMMAND"])`が機能するようにした
+
 NYAGOS 4.4.1\_0
 ===============
 (2019.02.02)
