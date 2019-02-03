@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 * Made `print(nyagos.complete_for["COMMAND"])` work
 * Fix (#356) `type` could output the last line which does not contain LF. (Thx! @spiegel-im-spiegel)
     * [zetamatta/go-texts](https://github.com/zetamatta/go-texts) v1.0.1 or laster is required
+* Use `Go Modules` to build.
 
 NYAGOS 4.4.1\_0
 ===============
