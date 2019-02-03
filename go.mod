@@ -2,9 +2,11 @@ module github.com/zetamatta/nyagos
 
 require (
 	github.com/BixData/gluabit32 v0.0.0-20171213231653-fa1820b42f4b
+	github.com/akavel/rsrc v0.0.0-20170831122431-f6a15ece2cfd // indirect
 	github.com/atotto/clipboard v0.1.1
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.2
+	github.com/josephspurrier/goversioninfo v0.0.0-20190123074621-6dac90912ffa // indirect
 	github.com/mattn/go-colorable v0.0.9
 	github.com/mattn/go-isatty v0.0.4
 	github.com/mattn/go-runewidth v0.0.4

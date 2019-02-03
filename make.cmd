@@ -12,6 +12,8 @@ set CMD "Cmd" -option constant
 
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
+$env:GO111MODULE="on"
+Write-Verbose -Message "$ set GO111MODULE=$env:GO111MODULE"
 
 function Do-Copy($src,$dst){
     Write-Verbose "$ copy '$src' '$dst'"
@@ -261,13 +263,7 @@ switch( $args[0] ){
         }
     }
     "get" {
-        if( (git branch --contains) -eq "* master" ){
-            Write-Verbose "$GO get -u -v ./..."
-            & $GO get -u -v ./...
-        } else {
-            Write-Verbose "$GO get -v ./..."
-            & $GO get -v ./...
-        }
+        Write-Host "`make get` is no longer neccesary."
     }
     "fmt" {
         Go-Fmt | Out-Null
