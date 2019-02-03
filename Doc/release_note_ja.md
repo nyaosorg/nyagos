@@ -1,6 +1,8 @@
 [English](release_note_en.md) / Japanese
 
 * `print(nyagos.complete_for["COMMAND"])`が機能するようにした
+* (#356) `type` が LF を含まない最終行を表示しない不具合を修正 (Thx! @spiegel-im-spiegel)
+    * 要 [zetamatta/go-texts](https://github.com/zetamatta/go-texts) v1.0.1～
 
 NYAGOS 4.4.1\_0
 ===============
