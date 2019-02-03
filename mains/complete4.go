@@ -13,12 +13,12 @@ import (
 )
 
 func complete4getter(L Lua) int {
-	key, ok := L.Get(1).(lua.LString)
+	key, ok := L.Get(-1).(lua.LString)
 	if !ok {
 		return lerror(L, "nyagos.complete_for[] too few arguments")
 	}
-	if _, ok := completion.CustomCompletion[string(key)]; ok {
-		L.Push(lua.LTrue)
+	if p, ok := completion.CustomCompletion[string(key)]; ok {
+		L.Push(lua.LString(p.String()))
 	} else {
 		L.Push(lua.LNil)
 	}
