@@ -7,7 +7,7 @@ require (
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.2
 	github.com/josephspurrier/goversioninfo v0.0.0-20190123074621-6dac90912ffa // indirect
-	github.com/mattn/go-colorable v0.0.10-0.20180310133214-efa589957cd0
+	github.com/mattn/go-colorable v0.1.0
 	github.com/mattn/go-isatty v0.0.4
 	github.com/mattn/go-runewidth v0.0.4
 	github.com/mattn/go-tty v0.0.0-20181127064339-e4f871175a2f
