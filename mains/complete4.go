@@ -18,7 +18,13 @@ func complete4getter(L Lua) int {
 		return lerror(L, "nyagos.complete_for[] too few arguments")
 	}
 	if p, ok := completion.CustomCompletion[string(key)]; ok {
-		L.Push(lua.LString(p.String()))
+		if c, ok := p.(*customCompleter); ok {
+			L.Push(c.Func)
+		} else {
+			ud := L.NewUserData()
+			ud.Value = p
+			L.Push(ud)
+		}
 	} else {
 		L.Push(lua.LNil)
 	}
@@ -88,15 +94,23 @@ func complete4setter(L Lua) int {
 	val := L.Get(-1)
 	if val == lua.LNil {
 		delete(completion.CustomCompletion, string(key))
-		return 0
+		L.Push(lua.LTrue)
+		return 1
 	}
-	f, ok := val.(*lua.LFunction)
-	if !ok {
-		return lerror(L, "nyagos.complete_for[]= not function")
+	if f, ok := val.(*lua.LFunction); ok {
+		completion.CustomCompletion[string(key)] = &customCompleter{
+			Func: f,
+			Name: string(key),
+		}
+		L.Push(lua.LTrue)
+		return 1
 	}
-	completion.CustomCompletion[string(key)] = &customCompleter{
-		Func: f,
-		Name: string(key),
+	if ud, ok := val.(*lua.LUserData); ok {
+		if c, ok := ud.Value.(completion.CustomCompleter); ok {
+			completion.CustomCompletion[string(key)] = c
+			L.Push(lua.LTrue)
+			return 1
+		}
 	}
-	return 1
+	return lerror(L, "nyagos.complete_for[]= not function")
 }
