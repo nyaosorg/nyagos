@@ -25,5 +25,6 @@ case "$1" in
         echo Usage:
         echo   $0 \"\"
         echo   $0 build
+        echo   $0 release
         echo   $0 package
 esac
