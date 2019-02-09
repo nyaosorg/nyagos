@@ -77,6 +77,7 @@ var CustomCompletion = map[string]CustomCompleter{
 	"pushd": &customComplete{Func: completionCd, Name: "Built-in `pushd` completer"},
 	"rmdir": &customComplete{Func: completionCd, Name: "Built-in `rmdir` completer"},
 	"rd":    &customComplete{Func: completionCd, Name: "Built-in `rmdir` completer"},
+	"kill":  &customComplete{Func: completionProcessName, Name: "Built-in `kill` completer"},
 }
 
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {

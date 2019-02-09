@@ -4,6 +4,8 @@ import (
 	"context"
 	"os"
 	"strings"
+
+	"github.com/mitchellh/go-ps"
 )
 
 func completionSet(ctx context.Context, params []string) ([]Element, error) {
@@ -44,4 +46,24 @@ func completionWhich(ctx context.Context, param []string) ([]Element, error) {
 		return listUpCommands(ctx, param[len(param)-1])
 	}
 	return nil, nil
+}
+
+func completionProcessName(ctx context.Context, param []string) ([]Element, error) {
+	processes, err := ps.Processes()
+	if err != nil {
+		return nil, err
+	}
+	uniq := map[string]struct{}{}
+	base := strings.ToUpper(param[len(param)-1])
+	for _, ps1 := range processes {
+		name := ps1.Executable()
+		if strings.HasPrefix(strings.ToUpper(name), base) {
+			uniq[name] = struct{}{}
+		}
+	}
+	result := make([]Element, 0, len(uniq))
+	for name := range uniq {
+		result = append(result, Element1(name))
+	}
+	return result, nil
 }
