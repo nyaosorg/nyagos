@@ -263,7 +263,7 @@ switch( $args[0] ){
         }
     }
     "get" {
-        Write-Host "`make get` is no longer neccesary."
+        & $GO get -u
     }
     "fmt" {
         Go-Fmt | Out-Null

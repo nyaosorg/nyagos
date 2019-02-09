@@ -48,7 +48,6 @@ install:
 #---------------------------------#
 
 build_script:
-  - make.cmd get
   - make.cmd
   - make.cmd install %INSTALL_DIR%
 
