@@ -67,3 +67,10 @@ func completionProcessName(ctx context.Context, param []string) ([]Element, erro
 	}
 	return result, nil
 }
+
+func completionTaskKill(ctx context.Context, param []string) ([]Element, error) {
+	if len(param) >= 3 && strings.EqualFold(param[len(param)-2], "/IM") {
+		return completionProcessName(ctx, param)
+	}
+	return nil, nil
+}
