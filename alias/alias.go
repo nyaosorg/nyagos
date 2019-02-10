@@ -94,12 +94,12 @@ var Table = map[string]callableT{}
 var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 
 // AllNames returns all-alias names for completion
-func AllNames() []completion.Element {
+func AllNames(ctx context.Context) ([]completion.Element, error) {
 	names := make([]completion.Element, 0, len(Table))
 	for name1 := range Table {
 		names = append(names, completion.Element1(name1))
 	}
-	return names
+	return names, nil
 }
 
 var nextHook shell.HookT

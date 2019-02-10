@@ -66,10 +66,10 @@ func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 }
 
 // AllNames returns all command-names for completion package.
-func AllNames() []completion.Element {
+func AllNames(ctx context.Context) ([]completion.Element, error) {
 	names := make([]completion.Element, 0, len(buildInCommand))
 	for name1 := range buildInCommand {
 		names = append(names, completion.Element1(name1))
 	}
-	return names
+	return names, nil
 }

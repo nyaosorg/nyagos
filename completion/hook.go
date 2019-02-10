@@ -5,13 +5,17 @@ import (
 	"github.com/zetamatta/nyagos/readline"
 )
 
-var commandListUpper = []func() []Element{
-	func() []Element { return listUpAllExecutableOnEnv("PATH") },
-	func() []Element { return listUpAllExecutableOnEnv("NYAGOSPATH") },
+var commandListUpper = []func(context.Context) ([]Element, error){
+	func(ctx context.Context) ([]Element, error) {
+		return listUpAllExecutableOnEnv(ctx, "PATH")
+	},
+	func(ctx context.Context) ([]Element, error) {
+		return listUpAllExecutableOnEnv(ctx, "NYAGOSPATH")
+	},
 }
 
 // AppendCommandLister is the function to append the environment variable name at seeing on command-name completion.
-func AppendCommandLister(f func() []Element) {
+func AppendCommandLister(f func(context.Context) ([]Element, error)) {
 	commandListUpper = append(commandListUpper, f)
 }
 

@@ -9,11 +9,18 @@ import (
 	"strings"
 )
 
-func listUpAllExecutableOnEnv(envName string) []Element {
+func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, error) {
 	list := make([]Element, 0, 100)
 	pathEnv := os.Getenv(envName)
 	dirList := filepath.SplitList(pathEnv)
 	for _, dir1 := range dirList {
+		if ctx != nil {
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			default:
+			}
+		}
 		files, err := ioutil.ReadDir(dir1)
 		if err != nil {
 			continue
@@ -30,7 +37,7 @@ func listUpAllExecutableOnEnv(envName string) []Element {
 			}
 		}
 	}
-	return list
+	return list, nil
 }
 
 func listUpCurrentAllExecutable(ctx context.Context, str string) ([]Element, error) {
@@ -67,7 +74,11 @@ func listUpCommands(ctx context.Context, str string) ([]Element, error) {
 	}
 	strUpr := strings.ToUpper(str)
 	for _, f := range commandListUpper {
-		for _, element := range f() {
+		files, err := f(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, element := range files {
 			name1Upr := strings.ToUpper(element.String())
 			if strings.HasPrefix(name1Upr, strUpr) {
 				list = append(list, element)
