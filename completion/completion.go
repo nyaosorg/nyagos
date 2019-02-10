@@ -149,7 +149,9 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			rv.List, err = listUpFiles(ctx, rv.Word[start:])
 		}
 	}
-
+	if err != nil {
+		return rv, default_delimiter, err
+	}
 	if !replace {
 		for i := 0; i < len(rv.List); i++ {
 			rv.List[i] = Element2{
@@ -185,6 +187,11 @@ func toDisplay(source []Element) []string {
 
 func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
 	comp, _, err := listUpComplete(ctx, this)
+	if err != nil {
+		fmt.Fprintf(this.Out, "\n%s\n", err)
+		this.RepaintAll()
+		return readline.CONTINUE
+	}
 	if comp == nil {
 		return readline.CONTINUE
 	}
@@ -239,6 +246,11 @@ func endWithRoot(path string) bool {
 
 func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Result {
 	comp, default_delimiter, err := listUpComplete(ctx, this)
+	if err != nil {
+		fmt.Fprintf(this.Out, "\n%s\n", err)
+		this.RepaintAll()
+		return readline.CONTINUE
+	}
 	if comp.List == nil || len(comp.List) <= 0 {
 		return readline.CONTINUE
 	}

@@ -2,15 +2,12 @@ package completion
 
 import (
 	"context"
-	"errors"
 	"os"
 	"strings"
 
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/nyagos/nodos"
 )
-
-var ErrCtrlC = errors.New("C-c")
 
 const (
 	STD_SLASH = string(os.PathSeparator)
@@ -49,12 +46,12 @@ func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.Fil
 	}
 	commons := make([]Element, 0)
 	STR := strings.ToUpper(str)
-	canceled := false
+	var canceled error = nil
 	fdErr := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
-				canceled = true
+				canceled = ctx.Err()
 				return false
 			default:
 			}
@@ -87,8 +84,8 @@ func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.Fil
 		}
 		return true
 	})
-	if canceled {
-		return commons, ErrCtrlC
+	if canceled != nil {
+		return commons, canceled
 	}
 	return commons, fdErr
 }
