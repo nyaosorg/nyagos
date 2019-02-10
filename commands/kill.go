@@ -2,6 +2,7 @@ package commands
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -20,7 +21,9 @@ func cmdKill(ctx context.Context, cmd Param) (int, error) {
 	if err != nil {
 		return 1, fmt.Errorf("%s: arguments must be process ID", args[0])
 	}
-
+	if pid == os.Getpid() {
+		return 1, errors.New("Can not kill the killer self")
+	}
 	process, err := os.FindProcess(pid)
 	if err != nil {
 		return 1, err
@@ -51,7 +54,11 @@ func cmdKillAll(ctx context.Context, cmd Param) (int, error) {
 		keywords = append(keywords, strings.ToUpper(w))
 	}
 	errorlevel := 1
+	myself := os.Getpid()
 	for _, p := range processes {
+		if p.Pid() == myself {
+			continue
+		}
 		name := strings.ToUpper(p.Executable())
 		for _, w := range keywords {
 			if strings.Contains(name, w) {
