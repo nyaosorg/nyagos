@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/zetamatta/go-box/v2"
@@ -82,6 +83,9 @@ var CustomCompletion = map[string]CustomCompleter{
 }
 
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	defer cancel()
+
 	var err error
 	rv := &List{
 		AllLine: this.String(),
