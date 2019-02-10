@@ -4,6 +4,8 @@
 * (#356) `type` が LF を含まない最終行を表示しない不具合を修正 (Thx! @spiegel-im-spiegel)
     * 要 [zetamatta/go-texts](https://github.com/zetamatta/go-texts) v1.0.1～
 * ビルドに `Go Modules` を使うようにした
+* `killall`,`taskkill` コマンド向け補完
+* `kill` & `killall`: 自分自身のプロセスを停止できなくした。
 
 NYAGOS 4.4.1\_0
 ===============
