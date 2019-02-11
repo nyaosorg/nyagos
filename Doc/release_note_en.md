@@ -6,7 +6,7 @@ English / [Japanese](release_note_ja.md)
 * Use `Go Modules` to build.
 * Support completion for `killall` and `taskkill`.
 * `kill` & `killall`: Forbide killing self process
-* (#261) Set timeout(10sec) for completion
+* (#261) Set timeout(10sec) for completion and ls(1-folder)
 
 NYAGOS 4.4.1\_0
 ===============
