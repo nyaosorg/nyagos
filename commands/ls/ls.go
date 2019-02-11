@@ -55,17 +55,15 @@ const (
 	ANSI_END      = "\x1B[0m"
 )
 
-var ErrCtrlC = errors.New("C-c")
-
-func isCancel(ctx context.Context) bool {
+func chkCancel(ctx context.Context) error {
 	if ctx != nil {
 		select {
 		case <-ctx.Done():
-			return true
+			return ctx.Err()
 		default:
 		}
 	}
-	return false
+	return nil
 }
 
 func (this fileInfoT) Name() string { return this.name }
@@ -233,7 +231,7 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 		nodes_[key] = prefix + val.Name() + postfix + indicator
 	}
 	if !box.Print(ctx, nodes_, out) {
-		return ErrCtrlC
+		return ctx.Err()
 	}
 	return nil
 }
@@ -260,8 +258,8 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 	}
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
-		if isCancel(ctx) {
-			return ErrCtrlC
+		if err := chkCancel(ctx); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -280,8 +278,8 @@ func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int,
 			}
 		}
 		fmt.Fprintln(out)
-		if isCancel(ctx) {
-			return ErrCtrlC
+		if err := chkCancel(ctx); err != nil {
+			return err
 		}
 	}
 	return nil
@@ -342,10 +340,10 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	} else {
 		wildcard = nodos.Join(folder, "*")
 	}
-	canceled := false
+	var canceled error
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
-		if isCancel(ctx) {
-			canceled = true
+		if err := chkCancel(ctx); err != nil {
+			canceled = err
 			return false
 		}
 		if (flag & O_ALL) == 0 {
@@ -364,8 +362,8 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 		}
 		return true
 	})
-	if canceled {
-		return ErrCtrlC
+	if canceled != nil {
+		return canceled
 	}
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
@@ -382,8 +380,8 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	}
 	if folders != nil && len(folders) > 0 {
 		for _, f1 := range folders {
-			if isCancel(ctx) {
-				return ErrCtrlC
+			if err := chkCancel(ctx); err != nil {
+				return err
 			}
 			f1fullpath := nodos.Join(folder, f1)
 			fmt.Fprintf(out, "\n%s:\n", f1fullpath)
@@ -405,8 +403,8 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 	printCount := 0
 	files := make([]os.FileInfo, 0)
 	for _, name := range paths {
-		if isCancel(ctx) {
-			return ErrCtrlC
+		if err := chkCancel(ctx); err != nil {
+			return err
 		}
 		var nameStat string
 		if rxDriveOnly.MatchString(name) {
