@@ -226,7 +226,7 @@ func indexSub(L Lua, thisIndex int, nameIndex int) int {
 		ud.Value = m
 
 		meta := L.NewTable()
-		L.SetField(meta, "__newidex", L.NewFunction(set))
+		L.SetField(meta, "__newindex", L.NewFunction(set))
 		L.SetField(meta, "__call", L.NewFunction(call2))
 		L.SetField(meta, "__index", L.NewFunction(get2))
 		L.SetMetatable(ud, meta)
