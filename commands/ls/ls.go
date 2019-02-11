@@ -340,9 +340,10 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	} else {
 		wildcard = nodos.Join(folder, "*")
 	}
+	_ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	var canceled error
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
-		if err := chkCancel(ctx); err != nil {
+		if err := chkCancel(_ctx); err != nil {
 			canceled = err
 			return false
 		}
@@ -363,18 +364,20 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 		return true
 	})
 	if canceled != nil {
+		cancel()
 		return canceled
 	}
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	var err error
 	if (flag & O_LONG) != 0 {
-		err = lsLong(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsLong(_ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else if (flag & O_ONE) != 0 {
-		err = lsSimple(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsSimple(_ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	} else {
-		err = lsBox(ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsBox(_ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
 	}
+	cancel()
 	if err != nil {
 		return err
 	}
