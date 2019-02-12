@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * `kill` & `killall`: Forbide killing self process
 * (#261) Set timeout(10sec) for completion and ls(1-folder)
 * Fix: lua: ole object's setter(`__newindex`) did not work.
+* (#357) Fix: on a french keyboard, AltGr + anykey did not work (Thx! @crile)
 
 NYAGOS 4.4.1\_0
 ===============
