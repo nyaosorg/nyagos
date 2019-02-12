@@ -124,6 +124,9 @@ func keyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
 }
 
 func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
+	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
+		keys = keys[1:]
+	}
 	this.Insert(this.Cursor, []rune(keys))
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
