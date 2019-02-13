@@ -9,6 +9,7 @@ English / [Japanese](release_note_ja.md)
 * (#261) Set timeout(10sec) for completion and ls(1-folder)
 * Fix: lua: ole object's setter(`__newindex`) did not work.
 * (#357) Fix: on a french keyboard, AltGr + anykey did not work (Thx! @crile)
+* (#358) Fix: When `foo.exe` and `foo.cmd` exist, typing `foo` calls `foo.cmd` rather than `foo.exe`
 
 NYAGOS 4.4.1\_0
 ===============
