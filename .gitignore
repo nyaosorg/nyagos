@@ -2,11 +2,11 @@
 *.dll
 *.exe
 *.gz
-*.gz
 *.swp
 *.syso
 *.zip
 *~
+go.sum
 include/
 version.cmd
 version.json
