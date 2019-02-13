@@ -6,8 +6,6 @@ import (
 	"strings"
 
 	"github.com/zetamatta/go-findfile"
-
-	"github.com/zetamatta/nyagos/defined"
 )
 
 func lookPath(dir1, patternBase string) (foundpath string) {
@@ -19,12 +17,12 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 	} else {
 		pattern = patternBase
 	}
-	names := make([]string, len(pathExtList)+1)
 	basename := filepath.Base(patternBase)
-	names[0] = basename
+	names := map[string]int{strings.ToUpper(basename): 0}
 	for i, ext1 := range pathExtList {
-		names[i+1] = basename + ext1
+		names[strings.ToUpper(basename+ext1)] = i + 1
 	}
+	foundIndex := 999
 	findfile.Walk(pattern, func(f *findfile.FileInfo) bool {
 		if f.IsDir() {
 			return true
@@ -32,23 +30,17 @@ func lookPath(dir1, patternBase string) (foundpath string) {
 		if filepath.Ext(f.Name()) == "" {
 			return true
 		}
-		for _, name1 := range names {
-			if strings.EqualFold(f.Name(), name1) {
-				foundpath = filepath.Join(dir1, f.Name())
-				if !f.IsReparsePoint() {
-					return false
-				}
+		if i, ok := names[strings.ToUpper(f.Name())]; ok && i < foundIndex {
+			foundIndex = i
+			foundpath = filepath.Join(dir1, f.Name())
+			if f.IsReparsePoint() {
 				var err error
 				linkTo, err := os.Readlink(foundpath)
 				if err == nil && linkTo != "" {
 					foundpath = linkTo
-					if filepath.IsAbs(foundpath) {
-						return false
+					if !filepath.IsAbs(foundpath) {
+						foundpath = filepath.Join(dir1, foundpath)
 					}
-					foundpath = filepath.Join(dir1, foundpath)
-					return false
-				} else if defined.DBG {
-					print(err.Error(), "\n")
 				}
 			}
 		}
