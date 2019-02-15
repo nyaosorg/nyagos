@@ -129,7 +129,7 @@ function Download-Exe($url,$exename){
     Set-Location $cwd
 }
 
-function Build($version,$tags,[string]$target=$null) {
+function Build($version,$tags,[string]$target="") {
     Write-Verbose "Build as version='$version' tags='$tags'"
 
     if( -not (Go-Fmt) ){
@@ -141,7 +141,7 @@ function Build($version,$tags,[string]$target=$null) {
     Make-Dir $CMD
     $binDir = (Join-Path $CMD $env:GOARCH)
     Make-Dir $binDir
-    if ($target -eq $null) {
+    if ($target -eq "") {
         $target = (Join-Path $binDir "nyagos.exe")
     }
 
