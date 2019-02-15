@@ -129,7 +129,7 @@ function Download-Exe($url,$exename){
     Set-Location $cwd
 }
 
-function Build($version,$tags) {
+function Build($version,$tags,[string]$target=$null) {
     Write-Verbose "Build as version='$version' tags='$tags'"
 
     if( -not (Go-Fmt) ){
@@ -141,14 +141,16 @@ function Build($version,$tags) {
     Make-Dir $CMD
     $binDir = (Join-Path $CMD $env:GOARCH)
     Make-Dir $binDir
-    $target = (Join-Path $binDir "nyagos.exe")
+    if ($target -eq $null) {
+        $target = (Join-Path $binDir "nyagos.exe")
+    }
 
     Make-SysO $version
 
     Write-Verbose "$ $GO build -o '$target'"
     & $GO build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
-        Do-Copy $target ".\nyagos.exe"
+        Do-Copy $target (Join-Path "." ([System.IO.Path]::GetFileName($target)))
     }
     $env:GOARCH = $saveGOARCH
 }
@@ -199,6 +201,15 @@ switch( $args[0] ){
         }
         Build (Get-Content Misc\version.txt) ""
         $env:GOARCH = $save
+    }
+    "linux" {
+        $private:os = $env:GOOS
+        $private:arch = $env:GOARCH
+        $env:GOOS="linux"
+        $env:GOARCH="amd64"
+        Build -target ".\amd64\nyagos" (Get-Content Misc\version.txt) ""
+        $env:GOOS = $os
+        $env:GOARCH=$arch
     }
     "clean" {
         foreach( $p in @(`
