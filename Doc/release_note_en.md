@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.1\_1
+===============
+on Feb.15,2019
+
 * Made `print(nyagos.complete_for["COMMAND"])` work
 * Fix (#356) `type` could output the last line which does not contain LF. (Thx! @spiegel-im-spiegel)
     * [zetamatta/go-texts](https://github.com/zetamatta/go-texts) v1.0.1 or laster is required
@@ -13,7 +17,7 @@ English / [Japanese](release_note_ja.md)
 
 NYAGOS 4.4.1\_0
 ===============
-on Feb.2,2019
+on Feb.02,2019
 
 * Support completion for `which`,`set`,`cd`,`pushd`,`rmdir` and `env` command. (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
 * Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command) (Thx! [beepcap](https://twitter.com/beepcap))
