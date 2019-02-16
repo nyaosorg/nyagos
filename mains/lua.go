@@ -16,6 +16,7 @@ import (
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
+	"github.com/zetamatta/nyagos/glua-ole"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
@@ -170,7 +171,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "exec", L.NewFunction(cmdExec))
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2param(functions.Prompt)))
-	L.SetField(nyagosTable, "create_object", L.NewFunction(CreateObject))
+	L.SetField(nyagosTable, "create_object", L.NewFunction(ole.CreateObject))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
 	L.SetField(nyagosTable, "goversion", lua.LString(runtime.Version()))
 	L.SetField(nyagosTable, "goos", lua.LString(runtime.GOOS))

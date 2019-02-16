@@ -1,12 +1,17 @@
-package mains
+package ole
 
 import (
 	"errors"
 	"fmt"
+	"reflect"
+	"time"
+
 	"github.com/go-ole/go-ole"
 	"github.com/go-ole/go-ole/oleutil"
 	"github.com/yuin/gopher-lua"
 )
+
+type Lua = *lua.LState
 
 var initializedRequired = true
 
@@ -282,4 +287,115 @@ func CreateObject(L Lua) int {
 	}
 	L.Push(capsuleT{obj}.ToLValue(L))
 	return 1
+}
+
+func lerror(L Lua, s string) int {
+	L.Push(lua.LNil)
+	L.Push(lua.LString(s))
+	return 2
+}
+
+type ToLValueT interface {
+	ToLValue(Lua) lua.LValue
+}
+
+func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
+	if valueTmp == nil {
+		return lua.LNil
+	}
+	switch value := valueTmp.(type) {
+	case ToLValueT:
+		return value.ToLValue(L)
+	case string:
+		return lua.LString(value)
+	case error:
+		return lua.LString(value.Error())
+	case int:
+		return lua.LNumber(value)
+	case int16:
+		return lua.LNumber(value)
+	case int32:
+		return lua.LNumber(value)
+	case int64:
+		return lua.LNumber(value)
+	case uint:
+		return lua.LNumber(value)
+	case uint16:
+		return lua.LNumber(value)
+	case uint32:
+		return lua.LNumber(value)
+	case uint64:
+		return lua.LNumber(value)
+	case uintptr:
+		return lua.LNumber(value)
+	case float32:
+		return lua.LNumber(value)
+	case float64:
+		return lua.LNumber(value)
+	case time.Month:
+		return lua.LNumber(value)
+	case bool:
+		if value {
+			return lua.LTrue
+		}
+		return lua.LFalse
+	// case func([]interface{}) []interface{}:
+	//	return L.NewFunction(lua2cmd(value))
+	//case func(*functions.Param) []interface{}:
+	//	return L.NewFunction(lua2param(value))
+	case reflect.Value:
+		switch value.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			return lua.LNumber(value.Int())
+		case reflect.Uint, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+			return lua.LNumber(value.Uint())
+		case reflect.Float32, reflect.Float64:
+			return lua.LNumber(value.Float())
+		case reflect.Bool:
+			if value.Bool() {
+				return lua.LTrue
+			}
+			return lua.LFalse
+		case reflect.String:
+			return lua.LString(value.String())
+		case reflect.Interface:
+			return interfaceToLValue(L, value.Interface())
+		default:
+			panic("not supporting type even in reflect value: " + value.Kind().String())
+		}
+	default:
+		reflectValue := reflect.ValueOf(value)
+		switch reflectValue.Kind() {
+		case reflect.Slice, reflect.Array:
+			elem := reflectValue.Type().Elem()
+			if elem.Kind() == reflect.Uint8 {
+				buffer := make([]byte, reflectValue.Len())
+				for i, end := 0, reflectValue.Len(); i < end; i++ {
+					buffer[i] = byte(reflectValue.Index(i).Uint())
+				}
+				return lua.LString(string(buffer))
+			}
+			array1 := L.NewTable()
+			for i, end := 0, reflectValue.Len(); i < end; i++ {
+				val := reflectValue.Index(i)
+				L.SetTable(array1,
+					interfaceToLValue(L, i+1),
+					interfaceToLValue(L, val))
+			}
+			return array1
+		case reflect.Map:
+			map1 := L.NewTable()
+			for _, key := range reflectValue.MapKeys() {
+				L.SetTable(map1,
+					interfaceToLValue(L, key),
+					interfaceToLValue(L, reflectValue.MapIndex(key)))
+			}
+			return map1
+		default:
+			println("interfaceToLValue: not support type")
+			println(reflect.TypeOf(value).String())
+			return nil
+		}
+
+	}
 }
