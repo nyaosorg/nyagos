@@ -118,6 +118,8 @@ function Download-Exe($url,$exename){
         return
     }
     Write-Verbose -Message ("{0} not found." -f $exename)
+    $private:GO111MODULE = $env:GO111MODULE
+    $env:GO111MODULE = "off"
     Write-Verbose -Message ("$ $GO get -d " + $url)
     & $GO get -d $url
     $workdir = (Join-Path (Join-Path (& $GO env GOPATH).Split(";")[0] "src") $url)
@@ -127,6 +129,7 @@ function Download-Exe($url,$exename){
     & $GO build
     Do-Copy $exename $cwd
     Set-Location $cwd
+    $env:GO111MODULE = $private:GO111MODULE
 }
 
 function Build($version,$tags,[string]$target="") {
