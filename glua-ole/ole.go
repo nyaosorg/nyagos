@@ -3,6 +3,7 @@ package ole
 import (
 	"errors"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/go-ole/go-ole"
@@ -141,8 +142,16 @@ func callCommon(L Lua, com1 *ole.IDispatch, name string) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.CallMethod(%s): %s", name, err.Error()))
 	}
-	L.Push(variantToLValue(L, result))
-	return 1
+	val, err := variantToLValue(L, result)
+	if err == nil {
+		L.Push(val)
+		return 1
+	} else {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(err.Error()))
+		fmt.Fprintln(os.Stderr, err)
+		return 2
+	}
 }
 
 func set(L Lua) int {
@@ -191,8 +200,16 @@ func get(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
-	L.Push(variantToLValue(L, result))
-	return 1
+	val, err := variantToLValue(L, result)
+	if err == nil {
+		L.Push(val)
+		return 1
+	} else {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(err.Error()))
+		fmt.Fprintln(os.Stderr, err)
+		return 2
+	}
 }
 
 func indexSub(L Lua, thisIndex int, nameIndex int) int {
@@ -252,8 +269,16 @@ func get2(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
-	L.Push(variantToLValue(L, result))
-	return indexSub(L, 3, 2)
+	val, err := variantToLValue(L, result)
+	if err == nil {
+		L.Push(val)
+		return indexSub(L, 3, 2)
+	} else {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(err.Error()))
+		fmt.Fprintln(os.Stderr, err)
+		return 2
+	}
 }
 
 // CreateObject creates Lua-Object to access COM
@@ -296,38 +321,40 @@ func lerror(L Lua, s string) int {
 	return 2
 }
 
-func variantToLValue(L Lua, v *ole.VARIANT) lua.LValue {
+func variantToLValue(L Lua, v *ole.VARIANT) (lua.LValue, error) {
 	switch v.VT {
+	case ole.VT_EMPTY, ole.VT_NULL:
+		return lua.LNil, nil
 	case ole.VT_I1:
-		return lua.LNumber(v.Value().(int))
+		return lua.LNumber(v.Value().(int)), nil
 	case ole.VT_UI1:
-		return lua.LNumber(v.Value().(uint8))
+		return lua.LNumber(v.Value().(uint8)), nil
 	case ole.VT_I2:
-		return lua.LNumber(v.Value().(int16))
+		return lua.LNumber(v.Value().(int16)), nil
 	case ole.VT_UI2:
-		return lua.LNumber(v.Value().(uint16))
+		return lua.LNumber(v.Value().(uint16)), nil
 	case ole.VT_I4:
-		return lua.LNumber(v.Value().(int32))
+		return lua.LNumber(v.Value().(int32)), nil
 	case ole.VT_UI4:
-		return lua.LNumber(v.Value().(uint32))
+		return lua.LNumber(v.Value().(uint32)), nil
 	case ole.VT_I8:
-		return lua.LNumber(v.Value().(int64))
+		return lua.LNumber(v.Value().(int64)), nil
 	case ole.VT_UI8:
-		return lua.LNumber(v.Value().(uint64))
+		return lua.LNumber(v.Value().(uint64)), nil
 	case ole.VT_INT:
-		return lua.LNumber(v.Value().(int))
+		return lua.LNumber(v.Value().(int)), nil
 	case ole.VT_UINT:
-		return lua.LNumber(v.Value().(uint))
+		return lua.LNumber(v.Value().(uint)), nil
 	case ole.VT_INT_PTR:
-		return lua.LNumber(v.Value().(uintptr))
+		return lua.LNumber(v.Value().(uintptr)), nil
 	case ole.VT_UINT_PTR:
-		return lua.LNumber(v.Value().(uintptr))
+		return lua.LNumber(v.Value().(uintptr)), nil
 	case ole.VT_R4:
-		return lua.LNumber(v.Value().(float32))
+		return lua.LNumber(v.Value().(float32)), nil
 	case ole.VT_R8:
-		return lua.LNumber(v.Value().(float64))
+		return lua.LNumber(v.Value().(float64)), nil
 	case ole.VT_BSTR:
-		return lua.LString(v.ToString())
+		return lua.LString(v.ToString()), nil
 	case ole.VT_DATE:
 		if date, ok := v.Value().(time.Time); ok {
 			t := L.NewTable()
@@ -337,23 +364,21 @@ func variantToLValue(L Lua, v *ole.VARIANT) lua.LValue {
 			L.SetField(t, "hour", lua.LNumber(date.Hour()))
 			L.SetField(t, "min", lua.LNumber(date.Minute()))
 			L.SetField(t, "sec", lua.LNumber(date.Second()))
-			return t
+			return t, nil
 		} else if floatValue, ok := v.Value().(float64); ok {
-			return lua.LNumber(floatValue)
+			return lua.LNumber(floatValue), nil
 		} else {
-			panic("can not convert ole.VT_DATE")
+			return lua.LNil, errors.New("variantToLValue: can not convert ole.VT_DATE")
 		}
-	case ole.VT_UNKNOWN:
-		panic("can not convert ole.VT_UNKNOW")
 	case ole.VT_DISPATCH:
-		return capsuleT{v.ToIDispatch()}.ToLValue(L)
+		return capsuleT{v.ToIDispatch()}.ToLValue(L), nil
 	case ole.VT_BOOL:
 		if v.Value().(bool) {
-			return lua.LTrue
+			return lua.LTrue, nil
 		} else {
-			return lua.LFalse
+			return lua.LFalse, nil
 		}
 	default:
-		return lua.LNil
+		return lua.LNil, fmt.Errorf("variantToLValue: %v: not support", v.VT)
 	}
 }
