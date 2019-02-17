@@ -3,7 +3,6 @@ package ole
 import (
 	"errors"
 	"fmt"
-	"reflect"
 	"time"
 
 	"github.com/go-ole/go-ole"
@@ -140,11 +139,7 @@ func callCommon(L Lua, com1 *ole.IDispatch, name string) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.CallMethod(%s): %s", name, err.Error()))
 	}
-	if result.VT == ole.VT_DISPATCH {
-		L.Push(capsuleT{result.ToIDispatch()}.ToLValue(L))
-	} else {
-		L.Push(interfaceToLValue(L, result.Value()))
-	}
+	L.Push(variantToLValue(L, result))
 	return 1
 }
 
@@ -194,11 +189,7 @@ func get(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
-	if result.VT == ole.VT_DISPATCH {
-		L.Push(capsuleT{result.ToIDispatch()}.ToLValue(L))
-	} else {
-		L.Push(interfaceToLValue(L, result.Value()))
-	}
+	L.Push(variantToLValue(L, result))
 	return 1
 }
 
@@ -259,11 +250,7 @@ func get2(L Lua) int {
 	if err != nil {
 		return lerror(L, fmt.Sprintf("oleutil.GetProperty: %s", err.Error()))
 	}
-	if result.VT == ole.VT_DISPATCH {
-		L.Push(capsuleT{result.ToIDispatch()}.ToLValue(L))
-	} else {
-		L.Push(interfaceToLValue(L, result.Value()))
-	}
+	L.Push(variantToLValue(L, result))
 	return indexSub(L, 3, 2)
 }
 
@@ -295,107 +282,64 @@ func lerror(L Lua, s string) int {
 	return 2
 }
 
-type ToLValueT interface {
-	ToLValue(Lua) lua.LValue
-}
-
-func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
-	if valueTmp == nil {
-		return lua.LNil
-	}
-	switch value := valueTmp.(type) {
-	case ToLValueT:
-		return value.ToLValue(L)
-	case string:
-		return lua.LString(value)
-	case error:
-		return lua.LString(value.Error())
-	case int:
-		return lua.LNumber(value)
-	case int16:
-		return lua.LNumber(value)
-	case int32:
-		return lua.LNumber(value)
-	case int64:
-		return lua.LNumber(value)
-	case uint:
-		return lua.LNumber(value)
-	case uint16:
-		return lua.LNumber(value)
-	case uint32:
-		return lua.LNumber(value)
-	case uint64:
-		return lua.LNumber(value)
-	case uintptr:
-		return lua.LNumber(value)
-	case float32:
-		return lua.LNumber(value)
-	case float64:
-		return lua.LNumber(value)
-	case time.Month:
-		return lua.LNumber(value)
-	case bool:
-		if value {
-			return lua.LTrue
+func variantToLValue(L Lua, v *ole.VARIANT) lua.LValue {
+	switch v.VT {
+	case ole.VT_I1:
+		return lua.LNumber(v.Value().(int))
+	case ole.VT_UI1:
+		return lua.LNumber(v.Value().(uint8))
+	case ole.VT_I2:
+		return lua.LNumber(v.Value().(int16))
+	case ole.VT_UI2:
+		return lua.LNumber(v.Value().(uint16))
+	case ole.VT_I4:
+		return lua.LNumber(v.Value().(int32))
+	case ole.VT_UI4:
+		return lua.LNumber(v.Value().(uint32))
+	case ole.VT_I8:
+		return lua.LNumber(v.Value().(int64))
+	case ole.VT_UI8:
+		return lua.LNumber(v.Value().(uint64))
+	case ole.VT_INT:
+		return lua.LNumber(v.Value().(int))
+	case ole.VT_UINT:
+		return lua.LNumber(v.Value().(uint))
+	case ole.VT_INT_PTR:
+		return lua.LNumber(v.Value().(uintptr))
+	case ole.VT_UINT_PTR:
+		return lua.LNumber(v.Value().(uintptr))
+	case ole.VT_R4:
+		return lua.LNumber(v.Value().(float32))
+	case ole.VT_R8:
+		return lua.LNumber(v.Value().(float64))
+	case ole.VT_BSTR:
+		return lua.LString(v.ToString())
+	case ole.VT_DATE:
+		if date, ok := v.Value().(time.Time); ok {
+			t := L.NewTable()
+			L.SetField(t, "year", lua.LNumber(date.Year()))
+			L.SetField(t, "month", lua.LNumber(int(date.Month())))
+			L.SetField(t, "day", lua.LNumber(date.Day()))
+			L.SetField(t, "hour", lua.LNumber(date.Hour()))
+			L.SetField(t, "min", lua.LNumber(date.Minute()))
+			L.SetField(t, "sec", lua.LNumber(date.Second()))
+			return t
+		} else if floatValue, ok := v.Value().(float64); ok {
+			return lua.LNumber(floatValue)
+		} else {
+			panic("can not convert ole.VT_DATE")
 		}
-		return lua.LFalse
-	// case func([]interface{}) []interface{}:
-	//	return L.NewFunction(lua2cmd(value))
-	//case func(*functions.Param) []interface{}:
-	//	return L.NewFunction(lua2param(value))
-	case reflect.Value:
-		switch value.Kind() {
-		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-			return lua.LNumber(value.Int())
-		case reflect.Uint, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
-			return lua.LNumber(value.Uint())
-		case reflect.Float32, reflect.Float64:
-			return lua.LNumber(value.Float())
-		case reflect.Bool:
-			if value.Bool() {
-				return lua.LTrue
-			}
+	case ole.VT_UNKNOWN:
+		panic("can not convert ole.VT_UNKNOW")
+	case ole.VT_DISPATCH:
+		return capsuleT{v.ToIDispatch()}.ToLValue(L)
+	case ole.VT_BOOL:
+		if v.Value().(bool) {
+			return lua.LTrue
+		} else {
 			return lua.LFalse
-		case reflect.String:
-			return lua.LString(value.String())
-		case reflect.Interface:
-			return interfaceToLValue(L, value.Interface())
-		default:
-			panic("not supporting type even in reflect value: " + value.Kind().String())
 		}
 	default:
-		reflectValue := reflect.ValueOf(value)
-		switch reflectValue.Kind() {
-		case reflect.Slice, reflect.Array:
-			elem := reflectValue.Type().Elem()
-			if elem.Kind() == reflect.Uint8 {
-				buffer := make([]byte, reflectValue.Len())
-				for i, end := 0, reflectValue.Len(); i < end; i++ {
-					buffer[i] = byte(reflectValue.Index(i).Uint())
-				}
-				return lua.LString(string(buffer))
-			}
-			array1 := L.NewTable()
-			for i, end := 0, reflectValue.Len(); i < end; i++ {
-				val := reflectValue.Index(i)
-				L.SetTable(array1,
-					interfaceToLValue(L, i+1),
-					interfaceToLValue(L, val))
-			}
-			return array1
-		case reflect.Map:
-			map1 := L.NewTable()
-			for _, key := range reflectValue.MapKeys() {
-				L.SetTable(map1,
-					interfaceToLValue(L, key),
-					interfaceToLValue(L, reflectValue.MapIndex(key)))
-			}
-			return map1
-		default:
-			println("interfaceToLValue: not support type")
-			println(reflect.TypeOf(value).String())
-			return nil
-		}
-
+		return lua.LNil
 	}
 }
