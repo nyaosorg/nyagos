@@ -62,7 +62,7 @@ func lua2interface(L Lua, index int) (interface{}, error) {
 	case lua.LString:
 		return string(value), nil
 	case lua.LNumber:
-		return int(value), nil
+		return float64(value), nil
 	case *lua.LUserData:
 		c, ok := value.Value.(*capsuleT)
 		if !ok {
