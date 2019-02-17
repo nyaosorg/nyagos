@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix converting OLE-Object to Lua-Object causes panic on `VT_DATE` and some types.
+
 NYAGOS 4.4.1\_1
 ===============
 on Feb.15,2019
