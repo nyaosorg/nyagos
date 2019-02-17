@@ -172,6 +172,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2param(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(ole.CreateObject))
+	L.SetField(nyagosTable, "to_ole_integer", L.NewFunction(ole.ToOleInteger))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
 	L.SetField(nyagosTable, "goversion", lua.LString(runtime.Version()))
 	L.SetField(nyagosTable, "goos", lua.LString(runtime.GOOS))
