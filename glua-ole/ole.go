@@ -64,11 +64,13 @@ func lua2interface(L Lua, index int) (interface{}, error) {
 	case lua.LNumber:
 		return float64(value), nil
 	case *lua.LUserData:
-		c, ok := value.Value.(*capsuleT)
-		if !ok {
-			return nil, errors.New("lua2interface: not a OBJECT")
+		if v, ok := value.Value.(int); ok {
+			return int(v), nil
 		}
-		return c.Data, nil
+		if c, ok := value.Value.(*capsuleT); ok {
+			return c.Data, nil
+		}
+		return nil, errors.New("lua2interface: not a OBJECT")
 	}
 }
 
@@ -273,6 +275,18 @@ func CreateObject(L Lua) int {
 		return lerror(L, fmt.Sprintf("unknown.QueryInterfce: %s", err.Error()))
 	}
 	L.Push(capsuleT{obj}.ToLValue(L))
+	return 1
+}
+
+// ToOleInteger converts LNumber to integer which can be used by OLE parameter only.
+func ToOleInteger(L Lua) int {
+	var value int
+	if v, ok := L.Get(-1).(lua.LNumber); ok {
+		value = int(v)
+	}
+	ud := L.NewUserData()
+	ud.Value = value
+	L.Push(ud)
 	return 1
 }
 
