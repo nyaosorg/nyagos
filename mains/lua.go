@@ -13,10 +13,11 @@ import (
 	"github.com/BixData/gluabit32"
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/glua-ole"
+
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
-	"github.com/zetamatta/nyagos/glua-ole"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
