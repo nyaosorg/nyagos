@@ -336,6 +336,12 @@ OLEオブジェクトを作成します。OLEオブジェクトはメソッド�
     - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
+### `INTEGER_FOR_OLE = nyagos.to_ole_integer(10)`
+
+実数を OLE オブジェクトへのパラメータに使える整数にコンバートします。
+この関数は `nyagos.d/trash.lua` のために作られました。
+
+
 ### `nyagos.option.glob`
 
 true の時、外部コマンドに対するワイルドカード展開を有効にします。

@@ -312,6 +312,11 @@ Create OLEObject. OLEOBJECTs have methods and property.
     - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
 
+### `INTEGER_FOR_OLE = nyagos.to_ole_integer(10)`
+
+Convert a float number to integer which can be used as the parameter
+to OLE-Object only. This function is made for `nyagos.d/trash.lua`.
+
 ### `nyagos.option.glob`
 
 If it is true , enables the wildcard expansion on external commands also.
