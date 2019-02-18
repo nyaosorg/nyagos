@@ -14,7 +14,7 @@ require (
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
 	github.com/yuin/gopher-lua v0.0.0-20190206043414-8bfc7677f583
-	github.com/zetamatta/glua-ole v0.0.0-20190217142144-f08b70eb738d
+	github.com/zetamatta/glua-ole v0.0.0-20190218054739-f36cde9ba946
 	github.com/zetamatta/go-box/v2 v2.0.2
 	github.com/zetamatta/go-findfile v0.0.0-20181230022649-2abcfb29827a
 	github.com/zetamatta/go-texts v1.0.1
