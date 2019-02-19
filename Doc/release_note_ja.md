@@ -4,6 +4,8 @@
 * Luaの数値が実数として OLE に渡されるべきだったのに、整数として渡されていた。
 * Lua: 関数: `nyagos.to_ole_integer(n)` (数値を OLE 向けの整数に変換)を追加(trash.lua用)
 * Lua: OLEObject に列挙用オブジェクトを得るメソッド `_iter()` を追加
+* Lua: OLEObject を開放するメソッド `OLEObject:_release()` を追加
+* trash.lua が COM の解放漏れを起こしていた問題を修正
 
 NYAGOS 4.4.1\_1
 ===============
