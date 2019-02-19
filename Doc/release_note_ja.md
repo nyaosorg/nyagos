@@ -6,6 +6,7 @@
 * Lua: OLEObject に列挙用オブジェクトを得るメソッド `_iter()` を追加
 * Lua: OLEObject を開放するメソッド `OLEObject:_release()` を追加
 * trash.lua が COM の解放漏れを起こしていた問題を修正
+* Lua: `create_object`生成された IUnkown インスタンスが解放されていなかった不具合を修正
 
 NYAGOS 4.4.1\_1
 ===============

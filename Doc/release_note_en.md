@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * Lua: support `for p in OLEObject:_iter() do ... end`
 * Lua: add function: `OLEObject:_release()`
 * Fix: trash.lua COM leak
+* Fix: IUnknown instance created by `create_object` was not released.
 
 NYAGOS 4.4.1\_1
 ===============
