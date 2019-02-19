@@ -20,4 +20,7 @@ nyagos.alias.trash = function(args)
             nyagos.writerr(args[i]..": such a file or directory not found.\n")
         end
     end
+    trashBox:_release()
+    shellApp:_release()
+    fsObj:_release()
 end
