@@ -16,6 +16,7 @@ import (
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -126,7 +127,7 @@ func Main() error {
 		sh.SetTag(&luaWrapper{L})
 	}
 	defer sh.Close()
-	sh.Console = frame.GetConsole()
+	sh.Console = nodos.GetConsole()
 	ctx = context.WithValue(ctx, shellKey, sh)
 
 	langEngine := func(fname string) ([]byte, error) {
@@ -180,7 +181,7 @@ func Main() error {
 							In:   os.Stdin,
 							Out:  os.Stdout,
 							Err:  os.Stderr,
-							Term: frame.GetConsole(),
+							Term: nodos.GetConsole(),
 						})
 					return 0, nil
 				}

@@ -3,11 +3,8 @@ package frame
 import (
 	"context"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
-
-	"github.com/mattn/go-colorable"
 
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/nodos"
@@ -23,27 +20,6 @@ type CmdStreamConsole struct {
 	HistPath string
 }
 
-var console io.Writer
-var prevOptionGoColorable bool = false
-
-var isEscapeSequenceAvailableFlag = false
-
-func GetConsole() io.Writer {
-	if isEscapeSequenceAvailableFlag {
-		enableVirtualTerminalProcessing()
-		console = os.Stdout
-	} else if console == nil {
-		if nodos.IsEscapeSequenceAvailable() {
-			console = os.Stdout
-			enableVirtualTerminalProcessing()
-			isEscapeSequenceAvailableFlag = true
-		} else {
-			console = colorable.NewColorableStdout()
-		}
-	}
-	return console
-}
-
 func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	history1 := &history.Container{}
 	this := &CmdStreamConsole{
@@ -51,7 +27,7 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 		Editor: &readline.Editor{
 			History: history1,
 			Prompt:  doPrompt,
-			Writer:  GetConsole()},
+			Writer:  nodos.GetConsole()},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},

@@ -11,7 +11,3 @@ func coInitialize() {
 func coUnInitialize() {
 	dos.CoUninitialize()
 }
-
-func enableVirtualTerminalProcessing() {
-	dos.EnableStdoutVirtualTerminalProcessing()
-}

@@ -19,6 +19,7 @@ import (
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -430,7 +431,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = os.Stdout
 			param.Err = os.Stderr
 		}
-		param.Term = frame.GetConsole()
+		param.Term = nodos.GetConsole()
 		result := f(param)
 		pushInterfaces(L, result)
 		return len(result)

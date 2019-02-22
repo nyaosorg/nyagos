@@ -2,9 +2,14 @@ package nodos
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	"golang.org/x/sys/windows"
+
+	"github.com/mattn/go-colorable"
+
+	"github.com/zetamatta/nyagos/dos"
 )
 
 func isEscapeSequenceAvailable() bool {
@@ -28,4 +33,24 @@ func isEscapeSequenceAvailable() bool {
 	os.Stdout.Sync()
 	windows.SetConsoleMode(windows.Stdout, mode)
 	return result
+}
+
+var console io.Writer
+
+var isEscapeSequenceAvailableFlag = false
+
+func getConsole() io.Writer {
+	if isEscapeSequenceAvailableFlag {
+		dos.EnableStdoutVirtualTerminalProcessing()
+		console = os.Stdout
+	} else if console == nil {
+		if isEscapeSequenceAvailable() {
+			console = os.Stdout
+			dos.EnableStdoutVirtualTerminalProcessing()
+			isEscapeSequenceAvailableFlag = true
+		} else {
+			console = colorable.NewColorableStdout()
+		}
+	}
+	return console
 }
