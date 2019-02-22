@@ -13,6 +13,7 @@ import (
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -28,8 +29,8 @@ func Start(mainHandler func() error) error {
 	completion.AppendCommandLister(commands.AllNames)
 	completion.AppendCommandLister(alias.AllNames)
 
-	coInitialize()
-	defer coUnInitialize()
+	nodos.CoInitializeEx(0, nodos.COINIT_MULTITHREADED)
+	defer nodos.CoUninitialize()
 
 	alias.Init()
 

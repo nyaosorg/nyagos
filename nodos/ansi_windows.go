@@ -12,6 +12,18 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
+var ole32 = windows.NewLazyDLL("ole32")
+var procCoInitializeEx = ole32.NewProc("CoInitializeEx")
+var procCoUninitialize = ole32.NewProc("CoUninitialize")
+
+func coInitializeEx(res uintptr, opt uintptr) {
+	procCoInitializeEx.Call(res, opt)
+}
+
+func coUninitialize() {
+	procCoUninitialize.Call()
+}
+
 func isEscapeSequenceAvailable() bool {
 	var mode uint32
 	err := windows.GetConsoleMode(windows.Stdout, &mode)

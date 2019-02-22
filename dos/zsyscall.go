@@ -38,12 +38,9 @@ func errnoErr(e syscall.Errno) error {
 
 var (
 	modkernel32 = windows.NewLazySystemDLL("kernel32.dll")
-	modole32    = windows.NewLazySystemDLL("ole32.dll")
 
 	procCopyFileW           = modkernel32.NewProc("CopyFileW")
 	procGetDiskFreeSpaceExW = modkernel32.NewProc("GetDiskFreeSpaceExW")
-	procCoInitializeEx      = modole32.NewProc("CoInitializeEx")
-	procCoUninitialize      = modole32.NewProc("CoUninitialize")
 )
 
 func CopyFile(src string, dst string, isFailIfExist bool) (n uint32, err error) {
@@ -98,15 +95,5 @@ func _getDiskFreeSpaceEx(rootPathName *uint16, free *uint64, total *uint64, tota
 			err = syscall.EINVAL
 		}
 	}
-	return
-}
-
-func CoInitializeEx(res uintptr, opt uintptr) {
-	syscall.Syscall(procCoInitializeEx.Addr(), 2, uintptr(res), uintptr(opt), 0)
-	return
-}
-
-func CoUninitialize() {
-	syscall.Syscall(procCoUninitialize.Addr(), 0, 0, 0, 0)
 	return
 }
