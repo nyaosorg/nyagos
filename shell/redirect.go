@@ -2,10 +2,8 @@ package shell
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
 )
 
@@ -44,32 +42,6 @@ func (r *_Redirecter) SetAppend() {
 	r.isAppend = true
 }
 
-var deviceName = map[string]struct{}{
-	"AUX":    {},
-	"CON":    {},
-	"NUL":    {},
-	"PRN":    {},
-	"CLOCK$": {},
-	"COM1":   {},
-	"COM2":   {},
-	"COM3":   {},
-	"COM4":   {},
-	"COM5":   {},
-	"COM6":   {},
-	"COM7":   {},
-	"COM8":   {},
-	"COM9":   {},
-	"LPT1":   {},
-	"LPT2":   {},
-	"LPT3":   {},
-	"LPT4":   {},
-	"LPT5":   {},
-	"LPT6":   {},
-	"LPT7":   {},
-	"LPT8":   {},
-	"LPT9":   {},
-}
-
 func (r *_Redirecter) open() (*os.File, error) {
 	if r.path == "" {
 		return nil, errors.New("_Redirecter.open(): path=\"\"")
@@ -81,19 +53,9 @@ func (r *_Redirecter) open() (*os.File, error) {
 		return os.Open(r.path)
 	} else if r.isAppend {
 		return os.OpenFile(r.path, os.O_APPEND|os.O_CREATE, 0666)
+	} else if NoClobber && !r.force {
+		return os.OpenFile(r.path, os.O_EXCL|os.O_CREATE, 0666)
 	} else {
-		if NoClobber && !r.force {
-			_, err := os.Stat(r.path)
-			if err == nil {
-				name := strings.ToUpper(filepath.Base(r.path))
-				if pos := strings.IndexRune(name, '.'); pos >= 0 {
-					name = name[:pos]
-				}
-				if _, ok := deviceName[name]; !ok {
-					return nil, fmt.Errorf("%s: cannot overwrite existing file", r.path)
-				}
-			}
-		}
 		return os.Create(r.path)
 	}
 }
