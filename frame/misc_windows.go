@@ -15,7 +15,3 @@ func coUnInitialize() {
 func enableVirtualTerminalProcessing() {
 	dos.EnableStdoutVirtualTerminalProcessing()
 }
-
-func isEscapeSequenceAvailable() bool {
-	return dos.IsEscapeSequenceAvailable()
-}

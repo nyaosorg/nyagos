@@ -8,6 +8,3 @@ func coUnInitialize() {}
 
 func enableVirtualTerminalProcessing() {}
 
-func isEscapeSequenceAvailable() bool {
-	return true
-}

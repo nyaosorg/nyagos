@@ -1,4 +1,4 @@
-package dos
+package nodos
 
 import (
 	"fmt"
@@ -7,7 +7,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-func IsEscapeSequenceAvailable() bool {
+func isEscapeSequenceAvailable() bool {
 	var mode uint32
 	err := windows.GetConsoleMode(windows.Stdout, &mode)
 	if err != nil {

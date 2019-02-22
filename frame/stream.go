@@ -10,6 +10,7 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -32,7 +33,7 @@ func GetConsole() io.Writer {
 		enableVirtualTerminalProcessing()
 		console = os.Stdout
 	} else if console == nil {
-		if isEscapeSequenceAvailable() {
+		if nodos.IsEscapeSequenceAvailable() {
 			console = os.Stdout
 			enableVirtualTerminalProcessing()
 			isEscapeSequenceAvailableFlag = true
