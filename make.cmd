@@ -132,8 +132,16 @@ function Download-Exe($url,$exename){
     $env:GO111MODULE = $private:GO111MODULE
 }
 
-function Build($version,$tags,[string]$target="") {
+function Build([string]$version="",[string]$tags="",[string]$target="") {
+    if( $version -eq "" ){
+        $version = (git describe --tags)
+    }
+
     Write-Verbose "Build as version='$version' tags='$tags'"
+
+    if( $tags -ne "" ){
+        $tags = "-tags=$tags"
+    }
 
     if( -not (Go-Fmt) ){
         return
@@ -181,12 +189,12 @@ function Make-Package($arch){
 
 switch( $args[0] ){
     "" {
-        Build (git describe --tags) ""
+        Build
     }
     "386"{
         $private:save = $env:GOARCH
         $env:GOARCH = "386"
-        Build (git describe --tags) ""
+        Build
         $env:GOARCH = $save
     }
     "debug" {
@@ -194,7 +202,7 @@ switch( $args[0] ){
         if( $args[1] ){
             $env:GOARCH = $args[1]
         }
-        Build "" "-tags=debug"
+        Build -tags "debug"
         $env:GOARCH = $save
     }
     "release" {
@@ -202,7 +210,7 @@ switch( $args[0] ){
         if( $args[1] ){
             $env:GOARCH = $args[1]
         }
-        Build (Get-Content Etc\version.txt) ""
+        Build -version (Get-Content Etc\version.txt)
         $env:GOARCH = $save
     }
     "linux" {
@@ -210,7 +218,7 @@ switch( $args[0] ){
         $private:arch = $env:GOARCH
         $env:GOOS="linux"
         $env:GOARCH="amd64"
-        Build -target ".\amd64\nyagos" (Get-Content Etc\version.txt) ""
+        Build -target ".\amd64\nyagos" -version (Get-Content Etc\version.txt)
         $env:GOOS = $os
         $env:GOARCH=$arch
     }
