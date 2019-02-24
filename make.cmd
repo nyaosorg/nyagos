@@ -202,7 +202,7 @@ switch( $args[0] ){
         if( $args[1] ){
             $env:GOARCH = $args[1]
         }
-        Build (Get-Content Misc\version.txt) ""
+        Build (Get-Content Etc\version.txt) ""
         $env:GOARCH = $save
     }
     "linux" {
@@ -210,7 +210,7 @@ switch( $args[0] ){
         $private:arch = $env:GOARCH
         $env:GOOS="linux"
         $env:GOARCH="amd64"
-        Build -target ".\amd64\nyagos" (Get-Content Misc\version.txt) ""
+        Build -target ".\amd64\nyagos" (Get-Content Etc\version.txt) ""
         $env:GOOS = $os
         $env:GOARCH=$arch
     }
@@ -240,7 +240,7 @@ switch( $args[0] ){
         $installDir = $args[1]
         if( $installDir -eq $null -or $installDir -eq "" ){
             $installDir = (
-                Select-String 'INSTALLDIR=([^\)"]+)' Misc\version.cmd |
+                Select-String 'INSTALLDIR=([^\)"]+)' Etc\version.cmd |
                 ForEach-Object{ $_.Matches[0].Groups[1].Value }
             )
             if( -not $installDir ){
@@ -254,7 +254,7 @@ switch( $args[0] ){
             Write-Verbose "installDir=$installDir"
         }
         Write-Output "@set `"INSTALLDIR=$installDir`"" |
-            Out-File "Misc\version.cmd" -Encoding Default
+            Out-File "Etc\version.cmd" -Encoding Default
 
         robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
         Write-Verbose ("ERRORLEVEL=" + $LastExitCode)
