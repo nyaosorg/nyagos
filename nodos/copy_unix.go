@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func Copy(src, dst string, isFailIfExists bool) error {
+func copyFile(src, dst string, isFailIfExists bool) error {
 	srcFd, err := os.Open(src)
 	if err != nil {
 		return err
@@ -46,10 +46,10 @@ func Copy(src, dst string, isFailIfExists bool) error {
 	return nil
 }
 
-func Move(src, dst string) error {
+func moveFile(src, dst string) error {
 	return os.Rename(src, dst)
 }
 
-func ReadShortcut(path string) (string, string, error) {
+func readShortcut(path string) (string, string, error) {
 	return "", "", errors.New("ReadShortcut not support")
 }

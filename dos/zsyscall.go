@@ -39,42 +39,8 @@ func errnoErr(e syscall.Errno) error {
 var (
 	modkernel32 = windows.NewLazySystemDLL("kernel32.dll")
 
-	procCopyFileW           = modkernel32.NewProc("CopyFileW")
 	procGetDiskFreeSpaceExW = modkernel32.NewProc("GetDiskFreeSpaceExW")
 )
-
-func CopyFile(src string, dst string, isFailIfExist bool) (n uint32, err error) {
-	var _p0 *uint16
-	_p0, err = syscall.UTF16PtrFromString(src)
-	if err != nil {
-		return
-	}
-	var _p1 *uint16
-	_p1, err = syscall.UTF16PtrFromString(dst)
-	if err != nil {
-		return
-	}
-	return _CopyFile(_p0, _p1, isFailIfExist)
-}
-
-func _CopyFile(src *uint16, dst *uint16, isFailIfExist bool) (n uint32, err error) {
-	var _p2 uint32
-	if isFailIfExist {
-		_p2 = 1
-	} else {
-		_p2 = 0
-	}
-	r0, _, e1 := syscall.Syscall(procCopyFileW.Addr(), 3, uintptr(unsafe.Pointer(src)), uintptr(unsafe.Pointer(dst)), uintptr(_p2))
-	n = uint32(r0)
-	if n == 0 {
-		if e1 != 0 {
-			err = errnoErr(e1)
-		} else {
-			err = syscall.EINVAL
-		}
-	}
-	return
-}
 
 func getDiskFreeSpaceEx(rootPathName string, free *uint64, total *uint64, totalFree *uint64) (n uint32, err error) {
 	var _p0 *uint16
