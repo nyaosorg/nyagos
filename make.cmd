@@ -6,10 +6,6 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
         $args[0].Groups[1] -replace " ",[char]1
     }) -split " " | ForEach-Object{ $_ -replace [char]1," " })
 
-set GO "go.exe" -option constant
-
-set CMD "Cmd" -option constant
-
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
 $env:GO111MODULE="on"
@@ -67,8 +63,8 @@ function Go-Fmt{
         if( $fname -like "*.go" -and (Test-Path($fname)) ){
             $prop = Get-ItemProperty($fname)
             if( $prop.Mode -like "?a*" ){
-                Write-Verbose "$ $GO fmt $fname"
-                & $GO fmt $fname
+                Write-Verbose "$ go fmt $fname"
+                go fmt $fname
                 if( $LastExitCode -ne 0 ){
                     $status = $false
                 }else{
@@ -78,7 +74,7 @@ function Go-Fmt{
         }
     }
     if( -not $status ){
-        Write-Warning "Some of '$GO fmt' failed."
+        Write-Warning "Some of 'go fmt' failed."
     }
     return $status
 }
@@ -120,13 +116,13 @@ function Download-Exe($url,$exename){
     Write-Verbose -Message ("{0} not found." -f $exename)
     $private:GO111MODULE = $env:GO111MODULE
     $env:GO111MODULE = "off"
-    Write-Verbose -Message ("$ $GO get -d " + $url)
-    & $GO get -d $url
-    $workdir = (Join-Path (Join-Path (& $GO env GOPATH).Split(";")[0] "src") $url)
+    Write-Verbose -Message ("$ go get -d " + $url)
+    go get -d $url
+    $workdir = (Join-Path (Join-Path (go env GOPATH).Split(";")[0] "src") $url)
     $cwd = (Get-Location)
     Set-Location $workdir
-    Write-Verbose -Message ("$ $GO build {0} on {1}" -f $exename,$workdir)
-    & $GO build
+    Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
+    go build
     Do-Copy $exename $cwd
     Set-Location $cwd
     $env:GO111MODULE = $private:GO111MODULE
@@ -147,10 +143,10 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
         return
     }
     $saveGOARCH = $env:GOARCH
-    $env:GOARCH = (& $go env GOARCH)
+    $env:GOARCH = (go env GOARCH)
 
-    Make-Dir $CMD
-    $binDir = (Join-Path $CMD $env:GOARCH)
+    Make-Dir "cmd"
+    $binDir = (Join-Path "cmd" $env:GOARCH)
     Make-Dir $binDir
     if ($target -eq "") {
         $target = (Join-Path $binDir "nyagos.exe")
@@ -158,8 +154,8 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
 
     Make-SysO $version
 
-    Write-Verbose "$ $GO build -o '$target'"
-    & $GO build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
+    Write-Verbose "$ go build -o '$target'"
+    go build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
         Do-Copy $target (Join-Path "." ([System.IO.Path]::GetFileName($target)))
     }
@@ -167,7 +163,7 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
 }
 
 function Make-Package($arch){
-    $zipname = ("nyagos-{0}.zip" -f (& cmd\$arch\nyagos.exe --show-version-only))
+    $zipname = ("nyagos-{0}.zip" -f (& "cmd\$arch\nyagos.exe" --show-version-only))
     Write-Verbose "$ zip -9 $zipname ...."
     if( Test-Path $zipname ){
         Do-Remove $zipname
@@ -224,8 +220,8 @@ switch( $args[0] ){
     }
     "clean" {
         foreach( $p in @(`
-            (Join-Path $CMD "amd64\nyagos.exe"),`
-            (Join-Path $CMD "386\nyagos.exe"),`
+            "cmd\amd64\nyagos.exe",`
+            "cmd\386\nyagos.exe",`
             "nyagos.exe",`
             "nyagos.syso",`
             "version.now",`
@@ -234,14 +230,14 @@ switch( $args[0] ){
             Do-Remove $p
         }
         ForEach-GoDir | %{
-            Write-Verbose "$ $GO clean on $_"
+            Write-Verbose "$ go clean on $_"
             pushd $_
-            & $GO clean
+            go clean
             popd
         }
     }
     "package" {
-        $goarch = if( $args[1] ){ $args[1] }else{ (& $go env GOARCH) }
+        $goarch = if( $args[1] ){ $args[1] }else{ (go env GOARCH) }
         Make-Package $goarch
     }
     "install" {
@@ -285,7 +281,7 @@ switch( $args[0] ){
         }
     }
     "get" {
-        & $GO get -u
+        go get -u
     }
     "fmt" {
         Go-Fmt | Out-Null
