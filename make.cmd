@@ -9,7 +9,7 @@ $args = @( ([regex]'"([^"]*)"').Replace($env:args,{
 Set-PSDebug -strict
 $VerbosePreference = "Continue"
 $env:GO111MODULE="on"
-Write-Verbose -Message "$ set GO111MODULE=$env:GO111MODULE"
+Write-Verbose "$ set GO111MODULE=$env:GO111MODULE"
 
 function Do-Copy($src,$dst){
     Write-Verbose "$ copy '$src' '$dst'"
@@ -110,18 +110,18 @@ function Make-SysO($version) {
 
 function Download-Exe($url,$exename){
     if( Test-Path $exename ){
-        Write-Verbose -Message ("Found {0}" -f $exename)
+        Write-Verbose "Found $exename"
         return
     }
-    Write-Verbose -Message ("{0} not found." -f $exename)
+    Write-Verbose "$exename not found."
     $private:GO111MODULE = $env:GO111MODULE
     $env:GO111MODULE = "off"
-    Write-Verbose -Message ("$ go get -d " + $url)
+    Write-Verbose "$ go get -d $url"
     go get -d $url
     $workdir = (Join-Path (Join-Path (go env GOPATH).Split(";")[0] "src") $url)
     $cwd = (Get-Location)
     Set-Location $workdir
-    Write-Verbose -Message ("$ go build {0} on {1}" -f $exename,$workdir)
+    Write-Verbose "$ go build $exename on $workdir"
     go build
     Do-Copy $exename $cwd
     Set-Location $cwd
@@ -261,7 +261,7 @@ switch( $args[0] ){
             Out-File "Etc\version.cmd" -Encoding Default
 
         robocopy nyagos.d (Join-Path $installDir "nyagos.d") /E
-        Write-Verbose ("ERRORLEVEL=" + $LastExitCode)
+        Write-Verbose "ERRORLEVEL=$LastExitCode"
         if( $LastExitCode -lt 8 ){
             Remove-Item Variable:LastExitCode
         }
