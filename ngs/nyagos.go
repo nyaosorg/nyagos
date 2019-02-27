@@ -10,6 +10,7 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/zetamatta/nyagos/frame"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/shell"
@@ -33,7 +34,7 @@ func (*scriptEngineForOptionImpl) RunString(ctx context.Context, code string) er
 func Main() error {
 	sh := shell.New()
 	defer sh.Close()
-	sh.Console = frame.GetConsole()
+	sh.Console = nodos.GetConsole()
 
 	ctx := context.Background()
 
@@ -95,7 +96,7 @@ func Main() error {
 						Out:  os.Stdout,
 						Err:  os.Stderr,
 						In:   os.Stdin,
-						Term: frame.GetConsole(),
+						Term: nodos.GetConsole(),
 					},
 				)
 				return 0, nil
