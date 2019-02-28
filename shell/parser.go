@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"regexp"
 	"strconv"
 	"strings"
@@ -91,6 +92,31 @@ func string2word(source_ string, removeQuote bool) string {
 			break
 		}
 		if TildeExpansion && ch == '~' && unicode.IsSpace(lastchar) && quoteNow == NOTQUOTED {
+			var name strings.Builder
+			for {
+				ch, _, err = source.ReadRune()
+				if err != nil {
+					break
+				}
+				if !unicode.IsLetter(ch) {
+					source.UnreadRune()
+					break
+				}
+				name.WriteRune(ch)
+			}
+			if name.Len() > 0 {
+				nameStr := name.String()
+				u, err := user.Lookup(nameStr)
+				if err == nil {
+					buffer.WriteString(u.HomeDir)
+					lastchar = rune(u.HomeDir[len(u.HomeDir)-1])
+				} else {
+					buffer.WriteRune('~')
+					buffer.WriteString(nameStr)
+					lastchar = rune(nameStr[len(nameStr)-1])
+				}
+				continue
+			}
 			if home := nodos.GetHome(); home != "" {
 				buffer.WriteString(home)
 			} else {
