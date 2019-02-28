@@ -271,7 +271,7 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 	if quotechar != 0 {
 		var buffer strings.Builder
 		buffer.Grow(len(commonStr) + 3)
-		if len(commonStr) >= 2 && commonStr[0] == '~' && os.IsPathSeparator(commonStr[1]) {
+		if len(commonStr) >= 2 && commonStr[0] == '~' && (os.IsPathSeparator(commonStr[1]) || unicode.IsLetter(rune(commonStr[1]))) {
 			buffer.WriteString(commonStr[:1])
 			buffer.WriteByte(quotechar)
 			buffer.WriteString(commonStr[1:])

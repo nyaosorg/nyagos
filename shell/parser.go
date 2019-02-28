@@ -97,15 +97,20 @@ func string2word(source_ string, removeQuote bool) string {
 				ch, _, err = source.ReadRune()
 				if err != nil {
 					break
-				}
-				if !unicode.IsLetter(ch) {
+				} else if ch == '"' {
+					if quoteNow == NOTQUOTED {
+						quoteNow = ch
+					} else {
+						quoteNow = NOTQUOTED
+					}
+				} else if !unicode.IsLetter(ch) {
 					source.UnreadRune()
 					break
 				}
 				name.WriteRune(ch)
 			}
-			if name.Len() > 0 {
-				nameStr := name.String()
+			nameStr := strings.Replace(name.String(), `"`, ``, -1)
+			if len(nameStr) > 0 {
 				u, err := user.Lookup(nameStr)
 				if err == nil {
 					buffer.WriteString(u.HomeDir)
