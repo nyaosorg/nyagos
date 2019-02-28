@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * Lua: add function: `OLEObject:_release()`
 * Fix: trash.lua COM leak
 * Fix: IUnknown instance created by `create_object` was not released.
+* Implemented: expanding ~username
 
 NYAGOS 4.4.1\_1
 ===============
