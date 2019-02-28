@@ -5,7 +5,7 @@ require (
 	github.com/akavel/rsrc v0.0.0-20170831122431-f6a15ece2cfd // indirect
 	github.com/atotto/clipboard v0.1.1
 	github.com/dustin/go-humanize v1.0.0
-	github.com/go-ole/go-ole v1.2.2
+	github.com/go-ole/go-ole v1.2.1
 	github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd // indirect
 	github.com/mattn/go-colorable v0.1.1
 	github.com/mattn/go-isatty v0.0.6
