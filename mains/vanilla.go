@@ -1,4 +1,6 @@
-package main
+// +build vanilla
+
+package mains
 
 import (
 	"context"
@@ -10,9 +12,9 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/zetamatta/nyagos/frame"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 

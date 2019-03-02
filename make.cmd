@@ -201,6 +201,9 @@ switch( $args[0] ){
         Build -tags "debug"
         $env:GOARCH = $save
     }
+    "vanilla" {
+        Build -tags "vanilla"
+    }
     "release" {
         $private:save = $env:GOARCH
         if( $args[1] ){

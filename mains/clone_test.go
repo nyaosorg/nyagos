@@ -1,3 +1,5 @@
+// +build !vanilla
+
 package mains
 
 import (
