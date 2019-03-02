@@ -104,7 +104,7 @@ function Make-SysO($version) {
         ("-product-ver-patch=" + $v[2]) `
         ("-product-ver-build=" + $v[3]) `
         "-o" nyagos.syso `
-        versioninfo.json
+        Etc\versioninfo.json
 }
 
 
