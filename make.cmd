@@ -94,7 +94,7 @@ function Make-SysO($version) {
     .\goversioninfo.exe `
         "-file-version=$version" `
         "-product-version=$version" `
-        "-icon=nyagos.ico" `
+        "-icon=Etc\nyagos.ico" `
         ("-ver-major=" + $v[0]) `
         ("-ver-minor=" + $v[1]) `
         ("-ver-patch=" + $v[2]) `
