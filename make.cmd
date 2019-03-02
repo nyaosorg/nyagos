@@ -217,7 +217,7 @@ switch( $args[0] ){
         $private:arch = $env:GOARCH
         $env:GOOS="linux"
         $env:GOARCH="amd64"
-        Build -target ".\amd64\nyagos" -version (Get-Content Etc\version.txt)
+        Build -target "Cmd\linux\nyagos" -version (Get-Content Etc\version.txt)
         $env:GOOS = $os
         $env:GOARCH=$arch
     }
