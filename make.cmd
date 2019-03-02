@@ -240,8 +240,22 @@ switch( $args[0] ){
         }
     }
     "package" {
-        $goarch = if( $args[1] ){ $args[1] }else{ (go env GOARCH) }
-        Make-Package $goarch
+        $private:ARCH = (go env GOARCH)
+        $private:VER = (Get-Content Etc\version.txt)
+        if( $args[1] -eq "linux" ){
+            pushd ..
+            tar -zcvf "nyagos/nyagos-$VER-linux-$ARCH.tar.gz" `
+                nyagos/nyagos `
+                nyagos/.nyagos `
+                nyagos/_nyagos `
+                nyagos/readme.md `
+                nyagos/readme_ja.md `
+                nyagos/nyagos.d `
+                nyagos/Doc/*.md
+            popd
+        }else{
+            Make-Package $ARCH
+        }
     }
     "install" {
         $installDir = $args[1]
