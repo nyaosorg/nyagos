@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: trash.lua COM leak
 * Fix: IUnknown instance created by `create_object` was not released.
 * Implemented: expanding ~username
+* Fix: exit status of executables (not batchfile) was not printed
 
 NYAGOS 4.4.1\_1
 ===============
