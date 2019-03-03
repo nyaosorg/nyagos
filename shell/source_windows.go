@@ -149,11 +149,5 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 		}
 		return 1, err
 	}
-	if err != nil {
-		return errorlevel, err
-	}
-	if errorlevel != 0 {
-		return errorlevel, fmt.Errorf("exit status %d", errorlevel)
-	}
-	return 0, nil
+	return errorlevel, err
 }

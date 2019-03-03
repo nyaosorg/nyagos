@@ -106,6 +106,9 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 				fmt.Fprintln(os.Stderr, err)
 			}
 		}
+		if rc > 0 {
+			fmt.Fprintf(os.Stderr, "exit status %d\n", rc)
+		}
 	}
 }
 
