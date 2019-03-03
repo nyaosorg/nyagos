@@ -9,7 +9,6 @@ import (
 	"reflect"
 	"strings"
 	"sync"
-	"syscall"
 
 	"github.com/zetamatta/go-findfile"
 
@@ -242,16 +241,7 @@ func startAndWaitProcess(ctx context.Context, name string, args []string, procAt
 		}()
 	}
 	processState, err := process.Wait()
-	if err != nil {
-		return 254, err
-	}
-	if processState.Success() {
-		return 0, nil
-	}
-	if t, ok := processState.Sys().(syscall.WaitStatus); ok {
-		return t.ExitStatus(), nil
-	}
-	return 253, nil
+	return processState.ExitCode(), err
 }
 
 type AlreadyReportedError struct {

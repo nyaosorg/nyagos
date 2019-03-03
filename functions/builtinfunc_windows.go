@@ -47,10 +47,7 @@ func CmdRawExec(this *Param) []any_t {
 	xcmd.Stdout = this.Out
 	xcmd.Stderr = this.Err
 	err := xcmd.Run()
-	errorlevel, errorlevelOk := dos.GetErrorLevel(xcmd)
-	if !errorlevelOk {
-		errorlevel = 255
-	}
+	errorlevel := xcmd.ProcessState.ExitCode()
 	if err != nil {
 		fmt.Fprintln(xcmd.Stderr, err.Error())
 		return []any_t{errorlevel, err.Error()}

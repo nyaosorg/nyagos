@@ -12,8 +12,6 @@ import (
 	"syscall"
 
 	"github.com/zetamatta/go-texts/mbcs"
-
-	"github.com/zetamatta/nyagos/dos"
 )
 
 func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
@@ -114,11 +112,7 @@ func callBatch(
 	if err := cmd.Run(); err != nil {
 		return 1, err
 	}
-	errorlevel, errorlevelOk := dos.GetErrorLevel(&cmd)
-	if !errorlevelOk {
-		errorlevel = 255
-	}
-	return errorlevel, nil
+	return cmd.ProcessState.ExitCode(), nil
 }
 
 // RawSource calls the batchfiles and load the changed variable the batchfile has done.
