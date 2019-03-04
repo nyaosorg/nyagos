@@ -9,6 +9,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: IUnknown instance created by `create_object` was not released.
 * Implemented: expanding ~username
 * Fix: exit status of executables (not batchfile) was not printed
+* Fix: aliases using CMD.EXE (ren,mklink,dir...) did not work when %COMSPEC% is not defined.
 
 NYAGOS 4.4.1\_1
 ===============
