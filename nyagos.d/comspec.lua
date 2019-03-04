@@ -4,6 +4,10 @@ if not nyagos then
 end
 
 if nyagos.goos == "windows" then
+    local comspec = nyagos.env.comspec
+    if not comspec or comspec == "" then
+        comspec = "CMD.EXE"
+    end
     for _,name in pairs{
         "assoc",
         "dir",
@@ -11,7 +15,7 @@ if nyagos.goos == "windows" then
         "ren",
         "rename",
     } do
-        nyagos.alias[name] = "%COMSPEC% /c "..name.." $*"
+        nyagos.alias[name] = comspec .. " /c "..name.." $*"
     end
 
     local greppath=nyagos.which("grep")
