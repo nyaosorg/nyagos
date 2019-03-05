@@ -111,9 +111,7 @@ function Make-SysO($version) {
 
 function Download-Exe($url){
     $exename = $url.Split("/")[-1] + ".exe"
-    $gobin = (Join-Path (go env GOPATH).Split(";")[0] "bin")
-    Make-Dir $gobin
-    $exepath = (Join-Path $gobin $exename)
+    $exepath = (Join-Path (Join-Path (go env GOPATH).Split(";")[0] "bin") $exename)
 
     if( Test-Path $exepath ){
         Write-Verbose "Found $exepath"
