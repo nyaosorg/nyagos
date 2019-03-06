@@ -286,14 +286,23 @@ switch( $args[0] ){
         try{
             Do-Copy nyagos.exe $installDir
         }catch{
+            $old = (Join-Path $installDir "nyagos.exe")
+            Write-Warning "Failed to update $old"
             $now = (Get-Date -Format "yyyyMMddHHmmss")
+            $backup = ($old + "-" + $now)
             try{
-                $old = (Join-Path $installDir "nyagos.exe")
-                Do-Rename $old ($old + "-" + $now)
+                try{
+                    Do-Rename $old $backup
+                }catch{
+                    Write-Warning "Failed to rename $old to $backup"
+                    Write-Warning "Try to kill nyagos.exe process"
+                    taskkill /F /IM nyagos.exe
+                    Do-Rename $old ($old + "-" + $now)
+                }
                 Do-Copy nyagos.exe $installDir
             }catch{
-                Write-Host "Could not update installed nyagos.exe"
-                Write-Host "Some processes holds nyagos.exe now"
+                Write-Error "Could not update installed nyagos.exe"
+                Write-Error "Some processes holds nyagos.exe now"
             }
         }
     }
