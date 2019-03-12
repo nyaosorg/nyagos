@@ -16,6 +16,10 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
+func isSpace(c rune) bool {
+	return strings.IndexRune(" \t\n\r\v\f", c) >= 0
+}
+
 type StatementT struct {
 	Args     []string
 	RawArgs  []string
@@ -91,7 +95,7 @@ func string2word(source_ string, removeQuote bool) string {
 		if err != nil {
 			break
 		}
-		if TildeExpansion && ch == '~' && unicode.IsSpace(lastchar) && quoteNow == NOTQUOTED {
+		if TildeExpansion && ch == '~' && isSpace(lastchar) && quoteNow == NOTQUOTED {
 			var name strings.Builder
 			for {
 				ch, _, err = source.ReadRune()
@@ -269,14 +273,14 @@ func parse1(text string) ([]*StatementT, error) {
 		}
 		if quoteNow != NOTQUOTED {
 			buffer.WriteRune(ch)
-		} else if unicode.IsSpace(ch) {
+		} else if isSpace(ch) {
 			if buffer.Len() > 0 {
 				term_word()
 				isNextRedirect = false
 			}
-		} else if unicode.IsSpace(lastchar) && ch == '#' {
+		} else if isSpace(lastchar) && ch == '#' {
 			break
-		} else if unicode.IsSpace(lastchar) && ch == ';' {
+		} else if isSpace(lastchar) && ch == ';' {
 			term_line(";")
 		} else if ch == '!' && lastchar == '>' && isNextRedirect && len(redirect) > 0 {
 			redirect[len(redirect)-1].force = true
