@@ -11,6 +11,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: exit status of executables (not batchfile) was not printed
 * Fix: aliases using CMD.EXE (ren,mklink,dir...) did not work when %COMSPEC% is not defined.
 * Fix: %U+3000% was regarded as a charactor of parameter separators
+* (#359) -c and -k option can received multi arguments like CMD.EXE
 
 NYAGOS 4.4.1\_1
 ===============
