@@ -39,6 +39,24 @@ type optionT struct {
 	U string
 }
 
+func shellJoin(args []string) string {
+	var buffer strings.Builder
+	for i, s := range args {
+		if i > 0 {
+			buffer.WriteRune(' ')
+		}
+		if strings.ContainsRune(s, ' ') {
+			buffer.WriteRune('"')
+			r := strings.Replace(s, "\"", "\\\"", -1)
+			buffer.WriteString(r)
+			buffer.WriteRune('"')
+		} else {
+			buffer.WriteString(s)
+		}
+	}
+	return buffer.String()
+}
+
 var optionMap = map[string]optionT{
 	"--lua-first": {
 		U: "\"LUACODE\"\nExecute \"LUACODE\" before processing any rcfiles and continue shell",
@@ -69,7 +87,7 @@ var optionMap = map[string]optionT{
 				return nil, errors.New("-k: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				p.sh.Interpret(ctx, p.args[0])
+				p.sh.Interpret(ctx, shellJoin(p.args))
 				return nil
 			}, nil
 		},
@@ -81,7 +99,7 @@ var optionMap = map[string]optionT{
 				return nil, errors.New("-c: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				p.sh.Interpret(ctx, p.args[0])
+				p.sh.Interpret(ctx, shellJoin(p.args))
 				return io.EOF
 			}, nil
 		},
