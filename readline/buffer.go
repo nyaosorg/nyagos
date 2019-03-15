@@ -13,6 +13,8 @@ func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
 		this.Out.WriteByte('^')
 		this.Out.WriteByte(byte('A' + (ch - 1)))
+	} else if text, ok := specialRune[ch]; ok {
+		this.Out.WriteString(text)
 	} else {
 		this.Out.WriteRune(ch)
 	}
