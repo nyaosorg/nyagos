@@ -13,6 +13,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: %U+3000% was regarded as a charactor of parameter separators
 * (#359) -c and -k option can received multi arguments like CMD.EXE
 * Fix: (not exist dir)\something [TAB] -> The system cannot find the path specified.
+* (#360) Draw zero-width-joiner (U+200D) of Unicode as &lt;ZWJ&gt;
 
 NYAGOS 4.4.1\_1
 ===============
