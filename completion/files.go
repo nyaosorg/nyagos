@@ -47,7 +47,7 @@ func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.Fil
 	commons := make([]Element, 0)
 	STR := strings.ToUpper(str)
 	var canceled error = nil
-	fdErr := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
+	err := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
@@ -87,7 +87,10 @@ func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.Fil
 	if canceled != nil {
 		return commons, canceled
 	}
-	return commons, fdErr
+	if os.IsNotExist(err) {
+		return commons, nil
+	}
+	return commons, err
 }
 
 func join(dir, name string) string {
