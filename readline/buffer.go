@@ -6,15 +6,18 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/mattn/go-runewidth"
 	"github.com/mattn/go-tty"
 )
+
+var SurrogatePairOk = false
 
 func (this *Buffer) PutRune(ch rune) {
 	if ch < ' ' {
 		this.Out.WriteByte('^')
 		this.Out.WriteByte(byte('A' + (ch - 1)))
-	} else if text, ok := specialRune[ch]; ok {
-		this.Out.WriteString(text)
+	} else if (ch >= 0x10000 && !SurrogatePairOk) || runewidth.RuneWidth(ch) == 0 {
+		fmt.Fprintf(this.Out, "<%X>", ch)
 	} else {
 		this.Out.WriteRune(ch)
 	}
