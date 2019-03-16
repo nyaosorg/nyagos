@@ -52,6 +52,9 @@
 ### --no-glob (lua: `nyagos.option.glob=false`) [default]
 外部コマンドで、ワイルドカード展開をしません。
 
+### --no-output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=false`) [default]
+サロゲートペアな文字を `<NNNN>` と表記します。
+
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 リダイレクトでの上書きを許可します。
 
@@ -70,6 +73,9 @@
 
 ### --norc
 `~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*` といった起動スクリプトをロードしないようにします。
+
+### --output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=true`)
+サロゲートペアな文字をそのまま表示します
 
 ### --read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=true`)
 標準入力からファイル扱いでコマンドを読み込みます。

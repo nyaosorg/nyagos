@@ -55,6 +55,9 @@ Do not use slash on completion
 ### --no-glob (lua: `nyagos.option.glob=false`) [default]
 Disable to expand wildcards
 
+### --no-output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=false`) [default]
+Output surrogate pair characters like `<NNNNN>`
+
 ### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
 Do not forbide to overwrite files no redirect
 
@@ -73,6 +76,10 @@ forbide to overwrite files on redirect
 ### --norc
 Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos`
 and `(BINDIR)\nyagos.d\*`.
+
+### --output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=true`)
+Output surrogate pair characters as it is
+
 
 ### --read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=true`)
 Read commands from stdin as a file stream (Disable to edit line)
