@@ -86,6 +86,11 @@ var BoolOptions = map[string]*optionT{
 		Usage:   "Read commands from stdin as a file stream. Disable to edit line",
 		NoUsage: "Read commands from stdin as Windows Console(tty). Enable to edit line",
 	},
+	"output_surrogate_pair": {
+		V:       &readline.SurrogatePairOk,
+		Usage:   "Output surrogate pair characters as it is",
+		NoUsage: "Output surrogate pair characters like <NNNNN>",
+	},
 }
 
 func dumpBoolOptions(out io.Writer) {
