@@ -108,5 +108,28 @@ func WNetEnum(handler func(localName string, remoteName string)) error {
 	}
 }
 
+type NetDrive struct {
+	Letter rune
+	Remote string
+}
+
+func GetNetDrives() ([]*NetDrive, error) {
+	drives, err := GetDrives()
+	if err != nil {
+		return nil, err
+	}
+	result := []*NetDrive{}
+	for _, d := range drives {
+		if d.Type == windows.DRIVE_REMOTE {
+			path, err := WNetGetConnection(fmt.Sprintf("%c:", d.Letter))
+			if err == nil {
+				node := &NetDrive{Letter: d.Letter, Remote: path}
+				result = append(result, node)
+			}
+		}
+	}
+	return result, nil
+}
+
 // https://msdn.microsoft.com/ja-jp/library/cc447030.aspx
 // http://eternalwindows.jp/security/share/share06.html
