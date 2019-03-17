@@ -2,8 +2,10 @@ package commands
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
 )
@@ -39,5 +41,27 @@ func cmdClone(ctx context.Context, cmd Param) (int, error) {
 }
 
 func cmdSu(ctx context.Context, cmd Param) (int, error) {
+	netdrives, err := dos.GetNetDrives()
+	if err == nil {
+		var buffer strings.Builder
+		buffer.WriteString("/S /C \"")
+		for _, n := range netdrives {
+			fmt.Fprintf(&buffer, "net use %c: \"%s\" 1>nul 2>nul & ", n.Letter, n.Remote)
+		}
+		me, err := os.Executable()
+		if err != nil {
+			return 1, err
+		}
+		wd, err := os.Getwd()
+		if err != nil {
+			return 2, err
+		}
+		fmt.Fprintf(&buffer, " cd /d \"%s\" & \"%s\" \"", wd, me)
+		err = dos.ShellExecute("runas", "CMD.EXE", buffer.String(), "")
+		if err != nil {
+			return 3, err
+		}
+		return 0, nil
+	}
 	return _clone("runas", cmd.Err())
 }
