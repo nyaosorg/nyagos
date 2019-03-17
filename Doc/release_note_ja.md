@@ -15,6 +15,7 @@
 * 「存在しないディレクトリ\何か」を補完しようとすると「The system cannot find the path specified.」と表示される不具合を修正
 * (#360) 幅ゼロやサロゲートペアな Unicode は`<NNNNN>` と表示するようにした
 * サロゲートペアな Unicode をそのまま出力するオプション --output-surrogate-pair を追加
+* suコマンドで、ネットワークドライブが失なわれないようにした
 
 NYAGOS 4.4.1\_1
 ===============

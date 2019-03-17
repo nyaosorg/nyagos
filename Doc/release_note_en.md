@@ -15,6 +15,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: (not exist dir)\something [TAB] -> The system cannot find the path specified.
 * (#360) Draw zero-width or surrogate paired characters as `<NNNNN>`
 * Add the option --output-surrogate-pair to output them as it is (not `<NNNNN>`)
+* su: network drives is not lost now after UNC-dialog
 
 NYAGOS 4.4.1\_1
 ===============
