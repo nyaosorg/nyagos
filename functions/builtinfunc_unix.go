@@ -9,9 +9,6 @@ func CmdMsgBox(args []any_t) []any_t {
 func CmdElevated([]any_t) []any_t {
 	return []any_t{nil, "not support"}
 }
-func CmdNetDriveToUNC(args []any_t) []any_t {
-	return []any_t{nil, "not support"}
-}
 func CmdShellExecute(args []any_t) []any_t {
 	return []any_t{nil, "not support"}
 }

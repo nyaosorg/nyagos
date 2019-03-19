@@ -15,7 +15,7 @@ func _getwd() string {
 	if err != nil {
 		return ""
 	}
-	return dos.NetDriveToUNC(wd)
+	return wd
 }
 
 func _clone(action string, out io.Writer) (int, error) {

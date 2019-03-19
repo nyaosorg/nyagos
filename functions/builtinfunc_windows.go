@@ -27,18 +27,6 @@ func CmdElevated([]any_t) []any_t {
 	return []any_t{flag}
 }
 
-func CmdNetDriveToUNC(args []any_t) []any_t {
-	if len(args) < 1 {
-		return []any_t{}
-	}
-	path, ok := args[0].(string)
-	if !ok {
-		return []any_t{path}
-	}
-	unc := dos.NetDriveToUNC(path)
-	return []any_t{unc}
-}
-
 func CmdShellExecute(args []any_t) []any_t {
 	err := dos.ShellExecute(
 		toStr(args, 0),

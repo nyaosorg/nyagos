@@ -2,7 +2,6 @@ package dos
 
 import (
 	"fmt"
-	"path/filepath"
 	"syscall"
 	"unsafe"
 
@@ -32,18 +31,6 @@ func WNetGetConnection(localName string) (string, error) {
 		return "", err
 	}
 	return syscall.UTF16ToString(buffer[:]), nil
-}
-
-func NetDriveToUNC(path string) string {
-	if path[1] == ':' {
-		// print("'", path[:2], "'\n")
-		_path, err := WNetGetConnection(path[:2])
-		if err == nil {
-			return filepath.Join(_path, path[2:])
-		}
-		// print(err.Error(), "\n")
-	}
-	return path
 }
 
 type netresourceT struct {
