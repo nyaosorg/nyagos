@@ -151,6 +151,12 @@ const (
 var CtrlC = errors.New("^C")
 
 func getKey(tty1 *tty.TTY) (string, error) {
+	clean, err := tty1.Raw()
+	if err != nil {
+		return "", err
+	}
+	defer clean()
+
 	var buffer strings.Builder
 	escape := false
 	for {
