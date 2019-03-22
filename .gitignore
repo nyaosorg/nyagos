@@ -6,7 +6,6 @@
 *.syso
 *.zip
 *~
-go.sum
 include/
 version.cmd
 version.json
