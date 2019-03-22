@@ -19,6 +19,6 @@ require (
 	github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab
 	github.com/zetamatta/go-texts v1.0.1
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
-	golang.org/x/sys v0.0.0-20190322080309-f49334f85ddc
+	golang.org/x/sys v0.0.0-20190228124157-a34e9553db1e
 	golang.org/x/text v0.3.0 // indirect
 )
