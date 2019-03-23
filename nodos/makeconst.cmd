@@ -1,5 +1,5 @@
 pushd "%~dp0"
-go run ..\dos\importconst.go -p nodos ^
+go run ..\dos\importconst_run.go -p nodos ^
 	COINIT_APARTMENTTHREADED ^
 	COINIT_MULTITHREADED ^
 	COINIT_DISABLE_OLE1DDE ^

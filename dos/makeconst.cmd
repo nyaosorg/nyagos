@@ -1,5 +1,5 @@
 pushd "%~dp0"
-go run importconst.go -p dos ^
+go run importconst_run.go -p dos ^
 	CP_THREAD_ACP ^
 	SW_HIDE ^
 	SW_MAXIMIZE ^
