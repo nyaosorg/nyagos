@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
 var shell32 = syscall.NewLazyDLL("shell32")
@@ -49,7 +51,7 @@ func shellExecute(action string, path string, param string, directory string) er
 		uintptr(unsafe.Pointer(pathP)),
 		uintptr(unsafe.Pointer(paramP)),
 		uintptr(unsafe.Pointer(directoryP)),
-		SW_SHOWNORMAL)
+		windows.SW_SHOWNORMAL)
 
 	if status <= 32 {
 		if err != nil {
