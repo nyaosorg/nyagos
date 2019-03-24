@@ -10,6 +10,7 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -48,8 +49,21 @@ func cmdLn(ctx context.Context, cmd Param) (int, error) {
 		}.Run(ctx, args)
 	}
 	return copyMoveT{
-		Param:  cmd,
-		Action: os.Link,
+		Param: cmd,
+		Action: func(src, dst string) error {
+			if stat, err := os.Stat(src); err != nil {
+				return err
+			} else if stat.IsDir() {
+				if fullpath, err := filepath.Abs(src); err != nil {
+					return err
+				} else {
+					return dos.CreateJunction(dst, fullpath)
+				}
+			} else {
+				return os.Link(src, dst)
+			}
+		},
+		IsDirOk: true,
 	}.Run(ctx, cmd.Args())
 }
 
