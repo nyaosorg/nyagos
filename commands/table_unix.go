@@ -29,6 +29,7 @@ func init() {
 		"foreach":  cmdForeach,
 		"history":  cmdHistory,
 		"if":       cmdIf,
+		"ln":       cmdLn,
 		"kill":     cmdKill,
 		"killall":  cmdKillAll,
 		"md":       cmdMkdir,
