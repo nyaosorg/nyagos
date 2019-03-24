@@ -113,7 +113,15 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 	for i, src := range srcs {
 		dst := _dst
 		if isDir {
-			dst = filepath.Join(dst, filepath.Base(src))
+			name := filepath.Base(src)
+			if name == "." || name == ".." {
+				fullpath, err := filepath.Abs(src)
+				if err != nil {
+					return 0, err
+				}
+				name = filepath.Base(fullpath)
+			}
+			dst = filepath.Join(dst, name)
 		}
 		if !cm.IsDirOk {
 			fi, err := os.Stat(src)
