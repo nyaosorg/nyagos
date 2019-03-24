@@ -2,6 +2,7 @@ module github.com/zetamatta/nyagos
 
 require (
 	github.com/BixData/gluabit32 v0.0.0-20171213231653-fa1820b42f4b
+	github.com/Microsoft/go-winio v0.4.12
 	github.com/atotto/clipboard v0.1.2
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dustin/go-humanize v1.0.0

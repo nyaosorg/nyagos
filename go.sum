@@ -1,5 +1,7 @@
 github.com/BixData/gluabit32 v0.0.0-20171213231653-fa1820b42f4b h1:dOA7do0F6JfjM+LC7mrtcDhsg7z8hQ877JzUhWrTTJc=
 github.com/BixData/gluabit32 v0.0.0-20171213231653-fa1820b42f4b/go.mod h1:x3omb/t8px6dQX56PBRGqfK80s/O0Y/fEc64f1VJuSY=
+github.com/Microsoft/go-winio v0.4.12 h1:xAfWHN1IrQ0NJ9TBC0KBZoqLjzDTr1ML+4MywiUOryc=
+github.com/Microsoft/go-winio v0.4.12/go.mod h1:VhR8bwka0BXejwEJY73c50VrPtXAaKcyvVC4A4RozmA=
 github.com/atotto/clipboard v0.1.2 h1:YZCtFu5Ie8qX2VmVTBnrqLSiU9XOWwqNRmdT3gIQzbY=
 github.com/atotto/clipboard v0.1.2/go.mod h1:ZY9tmq7sm5xIbd9bOK4onWV4S6X0u6GY7Vn0Yu86PYI=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
