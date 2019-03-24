@@ -10,7 +10,6 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -57,7 +56,7 @@ func cmdLn(ctx context.Context, cmd Param) (int, error) {
 				if fullpath, err := filepath.Abs(src); err != nil {
 					return err
 				} else {
-					return dos.CreateJunction(dst, fullpath)
+					return nodos.CreateJunction(dst, fullpath)
 				}
 			} else {
 				return os.Link(src, dst)
