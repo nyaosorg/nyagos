@@ -10,7 +10,7 @@ import (
 )
 
 func CreateJunction(target, mountPt string) error {
-	_mountPt, err := windows.UTF16FromString(mountPt)
+	_mountPt, err := windows.UTF16PtrFromString(mountPt)
 	if err != nil {
 		return fmt.Errorf("%s: %s", mountPt, err)
 	}
@@ -26,7 +26,7 @@ func CreateJunction(target, mountPt string) error {
 		}
 	}()
 
-	handle, err := windows.CreateFile(&_mountPt[0],
+	handle, err := windows.CreateFile(_mountPt,
 		windows.GENERIC_WRITE,
 		0,
 		nil,
