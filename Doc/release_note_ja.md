@@ -19,6 +19,7 @@
 * (#197) ソースがディレクトリで -s がない時、`ln` はジャンクションを作成するようにした
 * 内蔵の mklink コマンドを実装し、`CMD.exe /c mklink` のエイリアス `mklink` を削除
 * ゼロバイトの Lua ファイルを削除(cdlnk.lua, open.lua, su.lua, swapstdfunc.lua )
+* (#262) `diskfree` でボリュームラベルとファイルシステムを表示するようにした
 
 NYAGOS 4.4.1\_1
 ===============
