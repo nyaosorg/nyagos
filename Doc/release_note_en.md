@@ -17,6 +17,7 @@ English / [Japanese](release_note_ja.md)
 * Add the option --output-surrogate-pair to output them as it is (not `<NNNNN>`)
 * su: network drives is not lost now after UNC-dialog
 * (#197) `ln` makes Junction when the source-path is directory and -s is not given)
+* Implemented built-in `mklink` command and remove the alias `mklink` as `CMD.exe /c mklink`
 
 NYAGOS 4.4.1\_1
 ===============
