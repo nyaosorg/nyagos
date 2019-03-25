@@ -6,6 +6,6 @@ import (
 	"os"
 )
 
-func CreateJunction(mountPt, target string) error {
+func CreateJunction(target, mountPt string) error {
 	return os.Symlink(target, mountPt)
 }

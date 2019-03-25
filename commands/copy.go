@@ -56,7 +56,7 @@ func cmdLn(ctx context.Context, cmd Param) (int, error) {
 				if fullpath, err := filepath.Abs(src); err != nil {
 					return err
 				} else {
-					return nodos.CreateJunction(dst, fullpath)
+					return nodos.CreateJunction(fullpath, dst)
 				}
 			} else {
 				return os.Link(src, dst)

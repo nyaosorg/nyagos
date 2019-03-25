@@ -9,7 +9,7 @@ import (
 	"github.com/Microsoft/go-winio"
 )
 
-func CreateJunction(mountPt, target string) error {
+func CreateJunction(target, mountPt string) error {
 	_mountPt, err := windows.UTF16FromString(mountPt)
 	if err != nil {
 		return fmt.Errorf("%s: %s", mountPt, err)
