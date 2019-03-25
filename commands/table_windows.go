@@ -37,6 +37,7 @@ func init() {
 		"if":       cmdIf,
 		"ln":       cmdLn,
 		"lnk":      cmdLnk,
+		"mklink":   cmdMklink,
 		"kill":     cmdKill,
 		"killall":  cmdKillAll,
 		"ls":       cmdLs,

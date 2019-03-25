@@ -11,7 +11,6 @@ if nyagos.goos == "windows" then
     for _,name in pairs{
         "assoc",
         "dir",
-        "mklink",
         "ren",
         "rename",
     } do
