@@ -26,6 +26,28 @@ func GetDiskFreeSpace(rootPathName string) (free uint64, total uint64, totalFree
 	return free, total, totalFree, nil
 }
 
+func volumeName(drive *uint16) (label string, fsname string, err error) {
+	var _label [256]uint16
+	var serial, length, flags uint32
+	var _fsname [256]uint16
+
+	err = windows.GetVolumeInformation(drive, &_label[0], uint32(len(_label)), &serial, &length, &flags, &_fsname[0], uint32(len(_fsname)))
+	if err != nil {
+		return
+	}
+	label = windows.UTF16ToString(_label[:])
+	fsname = windows.UTF16ToString(_fsname[:])
+	return
+}
+
+func VolumeName(drive string) (label string, fsname string, err error) {
+	_drive, err := windows.UTF16PtrFromString(drive)
+	if err != nil {
+		return "", "", err
+	}
+	return volumeName(_drive)
+}
+
 type Drive struct {
 	Letter rune
 	Type   uint32
