@@ -12,38 +12,48 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-func df(rootPathName string, w io.Writer) (err error) {
-	io.WriteString(w, rootPathName)
-	free, total, totalFree, err1 := dos.GetDiskFreeSpace(rootPathName)
-	if err1 != nil {
-		fmt.Fprintf(w, " %20s %20s %20s     ", "", "", "")
-		err = fmt.Errorf("%s: %s", rootPathName, err1)
-	} else {
-		fmt.Fprintf(w, " %20s %20s %20s %3d%%",
-			humanize.Comma(int64(free)),
-			humanize.Comma(int64(total)),
-			humanize.Comma(int64(totalFree)),
-			100*(total-free)/total)
-	}
+func driveType(rootPathName string) string {
 	_rootPathName, err := windows.UTF16PtrFromString(rootPathName)
 	if err != nil {
-		return err
+		return "UNKNOWN"
 	}
+
 	t := windows.GetDriveType(_rootPathName)
 	switch t {
 	case windows.DRIVE_REMOVABLE:
-		io.WriteString(w, " [REMOVABLE]")
+		return "REMOVABLE"
 	case windows.DRIVE_FIXED:
-		io.WriteString(w, " [FIXED]")
+		return "FIXED"
 	case windows.DRIVE_REMOTE:
-		io.WriteString(w, " [REMOTE]")
+		return "REMOTE"
 	case windows.DRIVE_CDROM:
-		io.WriteString(w, " [CDROM]")
+		return "CDROM"
 	case windows.DRIVE_RAMDISK:
-		io.WriteString(w, " [RAMDISK]")
+		return "RAMDISK"
+	default:
+		return "UNKNOWN"
 	}
-	fmt.Fprintln(w)
-	return
+}
+
+func df(rootPathName string, w io.Writer) error {
+	label, fs, err := dos.VolumeName(rootPathName)
+	if err != nil {
+		return err
+	}
+	free, total, totalFree, err := dos.GetDiskFreeSpace(rootPathName)
+	if err != nil {
+		return err
+	}
+	fmt.Fprintf(w, "%s %16s %16s %16s %3d%% \"%s\" (%s/%s)\n",
+		rootPathName,
+		humanize.Comma(int64(free)),
+		humanize.Comma(int64(total)),
+		humanize.Comma(int64(totalFree)),
+		100*(total-free)/total,
+		label,
+		fs,
+		driveType(rootPathName))
+	return nil
 }
 
 func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
@@ -51,7 +61,7 @@ func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	fmt.Fprintf(cmd.Out(), "   %20s %20s %20s Use%%\n",
+	fmt.Fprintf(cmd.Out(), "   %16s %16s %16s Use%%\n",
 		"Available",
 		"TotalNumber",
 		"TotalNumberOfFree")
@@ -66,7 +76,7 @@ func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
 	if count <= 0 {
 		for d := 'A'; d <= 'Z'; d++ {
 			if (bits & 1) != 0 {
-				rootPathName := fmt.Sprintf("%c:", d)
+				rootPathName := fmt.Sprintf("%c:\\", d)
 				if err := df(rootPathName, cmd.Out()); err != nil {
 					fmt.Fprintln(cmd.Err(), err)
 				}
