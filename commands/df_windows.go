@@ -38,11 +38,11 @@ func driveType(rootPathName string) string {
 func df(rootPathName string, w io.Writer) error {
 	label, fs, err := dos.VolumeName(rootPathName)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %s", rootPathName, err)
 	}
 	free, total, totalFree, err := dos.GetDiskFreeSpace(rootPathName)
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %s", rootPathName, err)
 	}
 	fmt.Fprintf(w, "%s %16s %16s %16s %3d%% \"%s\" (%s/%s)\n",
 		rootPathName,
@@ -69,7 +69,7 @@ func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
 	count := 0
 	for _, arg1 := range cmd.Args()[1:] {
 		if err := df(arg1, cmd.Out()); err != nil {
-			return 0, err
+			fmt.Fprintln(cmd.Err(), err)
 		}
 		count++
 	}
