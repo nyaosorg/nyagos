@@ -12,6 +12,8 @@ import (
 	"syscall"
 
 	"github.com/zetamatta/go-texts/mbcs"
+
+	"github.com/zetamatta/nyagos/dos"
 )
 
 func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
@@ -120,6 +122,16 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
+
+	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
+		netdrive, closer := dos.UNCtoNetDrive(wd)
+		defer closer()
+		if netdrive != "" {
+			if err := os.Chdir(netdrive); err == nil {
+				defer os.Chdir(wd)
+			}
+		}
+	}
 
 	errorlevel, err := callBatch(
 		args,

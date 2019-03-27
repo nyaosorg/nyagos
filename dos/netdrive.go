@@ -2,6 +2,7 @@ package dos
 
 import (
 	"errors"
+	"path/filepath"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -60,6 +61,21 @@ func FindVacantDrive() (uint, error) {
 		}
 	}
 	return 0, errors.New("vacant drive is not found")
+}
+
+func UNCtoNetDrive(uncpath string) (netdrive string, closer func()) {
+	vol := filepath.VolumeName(uncpath)
+	d, err := FindVacantDrive()
+	if err != nil {
+		return "", func() {}
+	}
+	remote := string([]byte{byte(d), ':'})
+	if err := WNetAddConnection2(vol, remote, "", ""); err != nil {
+		return "", func() {}
+	}
+	netdrive = filepath.Join(remote, uncpath[len(vol):])
+	closer = func() { WNetCancelConnection2(remote, false, false) }
+	return
 }
 
 // https://msdn.microsoft.com/ja-jp/library/cc447030.aspx
