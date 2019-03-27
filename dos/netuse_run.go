@@ -11,4 +11,8 @@ func main() {
 	if err != nil {
 		println(err.Error())
 	}
+	err = dos.WNetCancelConnection2("O:", false, false)
+	if err != nil {
+		println(err.Error())
+	}
 }

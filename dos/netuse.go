@@ -7,6 +7,7 @@ import (
 )
 
 var procWNetAddConnection2W = mpr.NewProc("WNetAddConnection2W")
+var procWNetCancelConnection = mpr.NewProc("WNetCancelConnection2W")
 
 type _NetResource struct {
 	Scope       uint32
@@ -55,6 +56,29 @@ func WNetAddConnection2(remote, local, user, pass string) (err error) {
 		uintptr(unsafe.Pointer(_user)),
 		0)
 
+	if rc != 0 {
+		return err
+	}
+	return nil
+}
+
+func WNetCancelConnection2(name string, update bool, force bool) error {
+	_name, err := windows.UTF16PtrFromString(name)
+	if err != nil {
+		return err
+	}
+	var _update uintptr
+	if update {
+		_update = CONNECT_UPDATE_PROFILE
+	}
+	var _force uintptr
+	if force {
+		_force = 1
+	}
+	rc, _, err := procWNetCancelConnection.Call(
+		uintptr(unsafe.Pointer(_name)),
+		_update,
+		_force)
 	if rc != 0 {
 		return err
 	}
