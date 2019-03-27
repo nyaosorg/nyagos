@@ -1,6 +1,7 @@
 package dos
 
 import (
+	"errors"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -46,6 +47,19 @@ func GetNetDrives() ([]*NetDrive, error) {
 		}
 	}
 	return result, nil
+}
+
+func FindVacantDrive() (uint, error) {
+	bits, err := windows.GetLogicalDrives()
+	if err != nil {
+		return 0, err
+	}
+	for d := uint('Z'); d >= 'A'; d-- {
+		if (bits & (1 << (d - 'A'))) == 0 {
+			return d, nil
+		}
+	}
+	return 0, errors.New("vacant drive is not found")
 }
 
 // https://msdn.microsoft.com/ja-jp/library/cc447030.aspx
