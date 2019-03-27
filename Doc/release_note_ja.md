@@ -20,6 +20,7 @@
 * 内蔵の mklink コマンドを実装し、`CMD.exe /c mklink` のエイリアス `mklink` を削除
 * ゼロバイトの Lua ファイルを削除(cdlnk.lua, open.lua, su.lua, swapstdfunc.lua )
 * (#262) `diskfree` でボリュームラベルとファイルシステムを表示するようにした
+* UNCパスがカレントディレクトリでもバッチファイルを実行できるようにした。
 
 NYAGOS 4.4.1\_1
 ===============
