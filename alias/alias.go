@@ -2,11 +2,7 @@ package alias
 
 import (
 	"context"
-	"fmt"
-	"regexp"
-	"strconv"
 	"strings"
-	"unicode"
 
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/shell"
@@ -36,62 +32,12 @@ func (f *Func) String() string {
 
 // Call is the method to support callableT and it calls the alias-function.
 func (f *Func) Call(ctx context.Context, cmd *shell.Cmd) (next int, err error) {
-	isReplaced := false
-	if dbg {
-		print("Func.Call('", cmd.Arg(0), "')\n")
-	}
-	cmdline := paramMatch.ReplaceAllStringFunc(f.BaseStr, func(s string) string {
-		if s == "$~*" {
-			isReplaced = true
-			if cmd.Args() != nil && len(cmd.Args()) >= 2 {
-				return strings.Join(cmd.Args()[1:], " ")
-			}
-			return ""
-		} else if s == "$*" {
-			isReplaced = true
-			if cmd.Args() != nil && len(cmd.Args()) >= 2 {
-				return strings.Join(cmd.RawArgs()[1:], " ")
-			}
-			return ""
-		} else if len(s) >= 3 && s[0] == '$' && s[1] == '~' && unicode.IsDigit(rune(s[2])) {
-			i, err := strconv.ParseInt(s[2:], 10, 0)
-			if err == nil {
-				isReplaced = true
-				if 0 <= i && cmd.Args() != nil && int(i) < len(cmd.Args()) {
-					return cmd.Arg(int(i))
-				}
-				return ""
-			}
-		}
-		i, err := strconv.ParseInt(s[1:], 10, 0)
-		if err == nil {
-			isReplaced = true
-			if 0 <= i && cmd.Args() != nil && int(i) < len(cmd.Args()) {
-				return cmd.RawArg(int(i))
-			}
-			return ""
-		}
-		return s
-	})
-
-	if !isReplaced {
-		var buffer strings.Builder
-		buffer.WriteString(f.BaseStr)
-		for _, s := range cmd.RawArgs()[1:] {
-			fmt.Fprintf(&buffer, " %s", s)
-		}
-		cmdline = buffer.String()
-	}
-	if dbg {
-		print("replaced cmdline=='", cmdline, "'\n")
-	}
-	next, err = cmd.Interpret(ctx, cmdline)
+	next, err = cmd.Interpret(ctx, ExpandMacro(f.BaseStr, cmd.Args(), cmd.RawArgs()))
 	return
 }
 
 // Table is the ALL ALIAS table !
 var Table = map[string]callableT{}
-var paramMatch = regexp.MustCompile(`\$(\~)?(\*|[0-9]+)`)
 
 // AllNames returns all-alias names for completion
 func AllNames(ctx context.Context) ([]completion.Element, error) {
