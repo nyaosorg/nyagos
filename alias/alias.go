@@ -30,9 +30,11 @@ func (f *Func) String() string {
 	return f.BaseStr
 }
 
+var LineFilter = func(ctx context.Context, s string) string { return s }
+
 // Call is the method to support callableT and it calls the alias-function.
 func (f *Func) Call(ctx context.Context, cmd *shell.Cmd) (next int, err error) {
-	next, err = cmd.Interpret(ctx, ExpandMacro(f.BaseStr, cmd.Args(), cmd.RawArgs()))
+	next, err = cmd.Interpret(ctx, LineFilter(ctx, ExpandMacro(f.BaseStr, cmd.Args(), cmd.RawArgs())))
 	return
 }
 

@@ -13,6 +13,7 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
@@ -140,6 +141,14 @@ func Main() error {
 	}
 	shellEngine := func(fname string) error {
 		return sh.Source(ctx, fname)
+	}
+
+	alias.LineFilter = func(ctx context.Context, line string) string {
+		if L, ok := ctx.Value(luaKey).(Lua); ok {
+			return luaLineFilter(ctx, L, line)
+		} else {
+			return line
+		}
 	}
 
 	script, err := frame.OptionParse(ctx, sh, &ScriptEngineForOptionImpl{L: L, Sh: sh})
