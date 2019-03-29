@@ -22,6 +22,7 @@ English / [Japanese](release_note_ja.md)
 * (#262) `diskfree` shows volume label and filesystem
 * Enabled to execute batch file even if UNC path is current directory.
 * Fix rename,assoc,dir & for did not run when the current directory is UNC-path
+* Fix (#363) Fix backquote did not work in nyagos.alias.COMMAND="string"
 
 NYAGOS 4.4.1\_1
 ===============
