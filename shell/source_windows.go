@@ -79,49 +79,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-func callBatch(
-	args []string,
-	tmpfile string,
-	verbose io.Writer,
-	stdin io.Reader,
-	stdout io.Writer,
-	stderr io.Writer) (int, error) {
-
-	var cmdline strings.Builder
-
-	cmdline.WriteString(`/S /C "call`)
-	for _, arg1 := range args {
-		cmdline.WriteByte(' ')
-		cmdline.WriteString(arg1)
-	}
-	cmdline.WriteString(` & call set ERRORLEVEL_=%^ERRORLEVEL% & (cd & set) > "`)
-	cmdline.WriteString(tmpfile)
-	cmdline.WriteString(`" "`)
-
-	cmdexe := os.Getenv("COMSPEC")
-
-	if cmdexe == "" {
-		cmdexe = "cmd.exe"
-	}
-
-	cmd := exec.Cmd{
-		Path:        cmdexe,
-		Stdin:       stdin,
-		Stdout:      stdout,
-		Stderr:      stderr,
-		SysProcAttr: &syscall.SysProcAttr{CmdLine: cmdline.String()},
-	}
-	if err := cmd.Run(); err != nil {
-		return 1, err
-	}
-	return cmd.ProcessState.ExitCode(), nil
-}
-
-// RawSource calls the batchfiles and load the changed variable the batchfile has done.
-func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
-	tempDir := os.TempDir()
-	pid := os.Getpid()
-	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
+func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
 
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
 		netdrive, closer := dos.UNCtoNetDrive(wd)
@@ -132,6 +90,58 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 			}
 		}
 	}
+
+	cmdexe := os.Getenv("COMSPEC")
+
+	if cmdexe == "" {
+		cmdexe = "cmd.exe"
+	}
+
+	var buffer strings.Builder
+	buffer.WriteString(`/S /C "`)
+	buffer.WriteString(cmdline)
+	buffer.WriteString(` "`)
+
+	cmd := exec.Cmd{
+		Path:        cmdexe,
+		Stdin:       stdin,
+		Stdout:      stdout,
+		Stderr:      stderr,
+		SysProcAttr: &syscall.SysProcAttr{CmdLine: buffer.String()},
+	}
+	if err := cmd.Run(); err != nil {
+		return -1, err
+	}
+	return cmd.ProcessState.ExitCode(), nil
+}
+
+func callBatch(
+	args []string,
+	tmpfile string,
+	verbose io.Writer,
+	stdin io.Reader,
+	stdout io.Writer,
+	stderr io.Writer) (int, error) {
+
+	var cmdline strings.Builder
+
+	cmdline.WriteString(`call`)
+	for _, arg1 := range args {
+		cmdline.WriteByte(' ')
+		cmdline.WriteString(arg1)
+	}
+	cmdline.WriteString(` & call set ERRORLEVEL_=%^ERRORLEVEL% & (cd & set) > "`)
+	cmdline.WriteString(tmpfile)
+	cmdline.WriteString(`"`)
+
+	return CmdExe(cmdline.String(), stdin, stdout, stderr)
+}
+
+// RawSource calls the batchfiles and load the changed variable the batchfile has done.
+func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
+	tempDir := os.TempDir()
+	pid := os.Getpid()
+	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
 
 	errorlevel, err := callBatch(
 		args,
