@@ -21,6 +21,7 @@ English / [Japanese](release_note_ja.md)
 * Remove zero-bytes Lua files (cdlnk.lua, open.lua, su.lua, swapstdfunc.lua )
 * (#262) `diskfree` shows volume label and filesystem
 * Enabled to execute batch file even if UNC path is current directory.
+* Fix rename,assoc,dir did not run when the current directory is UNC-path
 
 NYAGOS 4.4.1\_1
 ===============
