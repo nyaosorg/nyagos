@@ -22,6 +22,7 @@ func init() {
 		"clip":     cmdClip,
 		"clone":    cmdClone,
 		"cls":      cmdCls,
+		"cmdexesc": cmdExeSc,
 		"chmod":    cmdChmod,
 		"copy":     cmdCopy,
 		"del":      cmdDel,
