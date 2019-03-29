@@ -30,13 +30,6 @@ nyagos.alias.lua_f=function(args)
     _G["arg"] = save
 end
 
-nyagos.alias["for"]=function(args)
-    local origenv = os.getenv("CMDARG")
-    nyagos.env.CMDARG = "for "..table.concat(args.rawargs," ").."\n"
-    nyagos.rawexec(nyagos.env.comspec,"/c","%CMDARG%")
-    nyagos.env.CMDARG = origenv
-end
-
 -- on chcp, font-width is changed.
 nyagos.alias.chcp = function(args)
     nyagos.resetcharwidth()
