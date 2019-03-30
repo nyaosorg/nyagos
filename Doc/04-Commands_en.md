@@ -153,6 +153,11 @@ you should `set "ENV=VAL"`.
 - `+o usesource` you have to use `source BATCHFILE` to read the changes of the environment variables from batchfiles.
 - `-o cleaup_buffer` clean up console input buffer before readline.
 
+### `select FILENAME(s)...`
+
+Open a file with dialog to select application.
+
+
 ### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r ref_file ] FILENAME(s)`
 
 If FILENAME exists, update its timestamp, otherwise create it.

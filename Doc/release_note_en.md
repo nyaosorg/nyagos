@@ -23,6 +23,8 @@ English / [Japanese](release_note_ja.md)
 * Enabled to execute batch file even if UNC path is current directory.
 * Fix rename,assoc,dir & for did not run when the current directory is UNC-path
 * Fix (#363) Fix backquote did not work in nyagos.alias.COMMAND="string"
+* (#259) Implemented `select` command to open a file with dialog to select application.
+
 
 NYAGOS 4.4.1\_1
 ===============
