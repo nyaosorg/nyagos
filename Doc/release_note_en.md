@@ -12,8 +12,8 @@ English / [Japanese](release_note_ja.md)
 * Fix: aliases using CMD.EXE (ren,mklink,dir...) did not work when %COMSPEC% is not defined.
 * Fix: %U+3000% was regarded as a charactor of parameter separators
 * (#359) -c and -k option can received multi arguments like CMD.EXE
-* Fix: (not exist dir)\something [TAB] -> The system cannot find the path specified.
-* (#360) Draw zero-width or surrogate paired characters as `<NNNNN>`
+* Fix: (not exist dir)\something [TAB] -> The system cannot find the path specified.(Thx! [tsuyoshicho](https://github.com/tsuyoshicho))
+* (#360) Draw zero-width or surrogate paired characters as `<NNNNN>` (Thx! [tsuyoshicho](https://github.com/tsuyoshicho))
 * Add the option --output-surrogate-pair to output them as it is (not `<NNNNN>`)
 * su: network drives is not lost now after UNC-dialog
 * (#197) `ln` makes Junction when the source-path is directory and -s is not given)
@@ -22,7 +22,7 @@ English / [Japanese](release_note_ja.md)
 * (#262) `diskfree` shows volume label and filesystem
 * Enabled to execute batch file even if UNC path is current directory.
 * Fix rename,assoc,dir & for did not run when the current directory is UNC-path
-* Fix (#363) Fix backquote did not work in nyagos.alias.COMMAND="string"
+* Fix (#363) Fix backquote did not work in nyagos.alias.COMMAND="string" (Thx! [tostos5963](https://github.com/tostos5963) & [sambatriste](https://github.com/sambatriste) )
 * (#259) Implemented `select` command to open a file with dialog to select application.
 
 

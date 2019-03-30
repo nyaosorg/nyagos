@@ -12,8 +12,8 @@
 * %COMSPEC% が未定義の時に CMD.EXE を用いるエイリアス(ren,mklink,dir,...)が動かなくなっていた不具合を修正
 * 全角空白(%U+3000%)がパラメータの区切り文字と認識されていた点を修正
 * (#359) -c,-k オプションで CMD.EXE のように複数の引数をとれるようにした
-* 「存在しないディレクトリ\何か」を補完しようとすると「The system cannot find the path specified.」と表示される不具合を修正
-* (#360) 幅ゼロやサロゲートペアな Unicode は`<NNNNN>` と表示するようにした
+* 「存在しないディレクトリ\何か」を補完しようとすると「The system cannot find the path specified.」と表示される不具合を修正 (Thx! [tsuyoshicho](https://github.com/tsuyoshicho))
+* (#360) 幅ゼロやサロゲートペアな Unicode は`<NNNNN>` と表示するようにした (Thx! [tsuyoshicho](https://github.com/tsuyoshicho))
 * サロゲートペアな Unicode をそのまま出力するオプション --output-surrogate-pair を追加
 * suコマンドで、ネットワークドライブが失なわれないようにした
 * (#197) ソースがディレクトリで -s がない時、`ln` はジャンクションを作成するようにした
@@ -22,7 +22,7 @@
 * (#262) `diskfree` でボリュームラベルとファイルシステムを表示するようにした
 * UNCパスがカレントディレクトリでもバッチファイルを実行できるようにした。
 * UNCパスがカレントディレクトリの時、ren,assoc,dir,for が動作しない不具合を修正
-* (#363) nyagos.alias.COMMAND="string" 中では逆クォート置換が機能しない問題を修正
+* (#363) nyagos.alias.COMMAND="string" 中では逆クォート置換が機能しない問題を修正 (Thx! [tostos5963](https://github.com/tostos5963) & [sambatriste](https://github.com/sambatriste) )
 * (#259) アプリケーションをダイアログで選んでファイルを開くコマンド `select` を実装
 
 NYAGOS 4.4.1\_1
