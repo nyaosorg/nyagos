@@ -54,6 +54,7 @@ func init() {
 		"rd":       cmdRmdir,
 		"rem":      cmdRem,
 		"rmdir":    cmdRmdir,
+		"select":   cmdShOpenWithDialog,
 		"set":      cmdSet,
 		"source":   cmdSource,
 		"su":       cmdSu,
