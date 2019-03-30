@@ -10,9 +10,10 @@ require (
 	github.com/mattn/go-colorable v0.1.1
 	github.com/mattn/go-isatty v0.0.7
 	github.com/mattn/go-runewidth v0.0.4
-	github.com/mattn/go-tty v0.0.0-20190322114730-5518497423d1
+	github.com/mattn/go-tty v0.0.0-20190330125216-f5599460cf42
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
+	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.3.0 // indirect
 	github.com/yuin/gopher-lua v0.0.0-20190206043414-8bfc7677f583
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
