@@ -240,7 +240,7 @@ switch( $args[0] ){
         }
     }
     "package" {
-        $private:ARCH = (go env GOARCH)
+        $ARCH = (go env GOARCH)
         $private:VER = (Get-Content Etc\version.txt)
         if( $args[1] -eq "linux" ){
             pushd ..
@@ -253,6 +253,8 @@ switch( $args[0] ){
                 nyagos/nyagos.d `
                 nyagos/Doc/*.md
             popd
+        }elseif( $args[1] -ne $null -and $args[1] -ne "" ){
+            Make-Package $args[1]
         }else{
             Make-Package $ARCH
         }
