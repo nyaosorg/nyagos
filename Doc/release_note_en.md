@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.2\_0
+===============
+on Apr.02,2019
+
 * Fix converting OLE-Object to Lua-Object causes panic on `VT_DATE` and some types.
 * Fix: lua.LNumber was treated as integer. It should be as float64
 * Lua: add function: `nyagos.to_ole_integer(n)` for `nyagos.d/trash.lua`

@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.2\_0
+===============
+(2019.04.02)
+
 * OLEオブジェクトからLuaオブジェクトへの変換が日付型などでパニックを起こす不具合を修正
 * Luaの数値が実数として OLE に渡されるべきだったのに、整数として渡されていた。
 * Lua: 関数: `nyagos.to_ole_integer(n)` (数値を OLE 向けの整数に変換)を追加(trash.lua用)
