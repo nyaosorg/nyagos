@@ -24,6 +24,7 @@
 * UNCパスがカレントディレクトリの時、ren,assoc,dir,for が動作しない不具合を修正
 * (#363) nyagos.alias.COMMAND="string" 中では逆クォート置換が機能しない問題を修正 (Thx! [tostos5963](https://github.com/tostos5963) & [sambatriste](https://github.com/sambatriste) )
 * (#259) アプリケーションをダイアログで選んでファイルを開くコマンド `select` を実装
+* `diskfree` の出力フォーマットを修正
 
 NYAGOS 4.4.1\_1
 ===============

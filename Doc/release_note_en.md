@@ -24,7 +24,7 @@ English / [Japanese](release_note_ja.md)
 * Fix rename,assoc,dir & for did not run when the current directory is UNC-path
 * Fix (#363) Fix backquote did not work in nyagos.alias.COMMAND="string" (Thx! [tostos5963](https://github.com/tostos5963) & [sambatriste](https://github.com/sambatriste) )
 * (#259) Implemented `select` command to open a file with dialog to select application.
-
+* Fix the format of `diskfree`'s output
 
 NYAGOS 4.4.1\_1
 ===============
