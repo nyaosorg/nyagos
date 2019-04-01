@@ -3,7 +3,7 @@ package commands
 import (
 	"context"
 	"fmt"
-	"io"
+	"strconv"
 
 	"golang.org/x/sys/windows"
 
@@ -35,25 +35,25 @@ func driveType(rootPathName string) string {
 	}
 }
 
-func df(rootPathName string, w io.Writer) error {
+func df(rootPathName string) ([]string, error) {
 	label, fs, err := dos.VolumeName(rootPathName)
 	if err != nil {
-		return fmt.Errorf("%s: %s", rootPathName, err)
+		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
 	free, total, totalFree, err := dos.GetDiskFreeSpace(rootPathName)
 	if err != nil {
-		return fmt.Errorf("%s: %s", rootPathName, err)
+		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
-	fmt.Fprintf(w, "%s %16s %16s %16s %3d%% \"%s\" (%s/%s)\n",
+	return []string{
 		rootPathName,
 		humanize.Comma(int64(free)),
 		humanize.Comma(int64(total)),
 		humanize.Comma(int64(totalFree)),
-		100*(total-free)/total,
-		label,
+		strconv.FormatUint(100*(total-free)/total, 10),
 		fs,
-		driveType(rootPathName))
-	return nil
+		driveType(rootPathName),
+		label,
+	}, nil
 }
 
 func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
@@ -61,28 +61,54 @@ func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	fmt.Fprintf(cmd.Out(), "   %16s %16s %16s Use%%\n",
-		"Available",
-		"TotalNumber",
-		"TotalNumberOfFree")
-
-	count := 0
-	for _, arg1 := range cmd.Args()[1:] {
-		if err := df(arg1, cmd.Out()); err != nil {
-			fmt.Fprintln(cmd.Err(), err)
-		}
-		count++
+	dfs := [][]string{
+		[]string{"", "Available", "Total", "TotalFree", "Use%"},
 	}
-	if count <= 0 {
+
+	for _, arg1 := range cmd.Args()[1:] {
+		if df1, err := df(arg1); err != nil {
+			fmt.Fprintln(cmd.Err(), err)
+		} else {
+			dfs = append(dfs, df1)
+		}
+	}
+	if len(dfs) <= 1 {
 		for d := 'A'; d <= 'Z'; d++ {
 			if (bits & 1) != 0 {
 				rootPathName := fmt.Sprintf("%c:\\", d)
-				if err := df(rootPathName, cmd.Out()); err != nil {
+				if df1, err := df(rootPathName); err != nil {
 					fmt.Fprintln(cmd.Err(), err)
+				} else {
+					dfs = append(dfs, df1)
 				}
 			}
 			bits >>= 1
 		}
 	}
+
+	colsiz := []int{}
+	for _, df1 := range dfs {
+		for i, s := range df1 {
+			if i >= len(colsiz) {
+				colsiz = append(colsiz, len(s))
+			} else if len(s) > colsiz[i] {
+				colsiz[i] = len(s)
+			}
+		}
+	}
+	for _, df1 := range dfs {
+		for i, s := range df1 {
+			if i > 0 {
+				cmd.Out().Write([]byte{' '})
+			}
+			if i >= 5 {
+				fmt.Fprintf(cmd.Out(), "%-*s", colsiz[i], s)
+			} else {
+				fmt.Fprintf(cmd.Out(), "%*s", colsiz[i], s)
+			}
+		}
+		fmt.Fprintln(cmd.Out())
+	}
+
 	return 0, nil
 }
