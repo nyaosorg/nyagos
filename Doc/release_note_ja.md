@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* diskfree: 行末の空白を削除
+
 NYAGOS 4.4.2\_0
 ===============
 (2019.04.02)

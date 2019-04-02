@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* diskfree: trim spaces from the end of line
+
 NYAGOS 4.4.2\_0
 ===============
 on Apr.02,2019
