@@ -101,13 +101,14 @@ func cmdDiskFree(_ context.Context, cmd Param) (int, error) {
 			if i > 0 {
 				cmd.Out().Write([]byte{' '})
 			}
-			if i >= 5 {
+			if i == len(df1)-1 {
+				fmt.Fprintln(cmd.Out(), s)
+			} else if i >= 5 {
 				fmt.Fprintf(cmd.Out(), "%-*s", colsiz[i], s)
 			} else {
 				fmt.Fprintf(cmd.Out(), "%*s", colsiz[i], s)
 			}
 		}
-		fmt.Fprintln(cmd.Out())
 	}
 
 	return 0, nil
