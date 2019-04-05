@@ -138,20 +138,20 @@ func string2word(source_ string, removeQuote bool) string {
 				}
 				buffer.WriteString(home)
 			} else {
-				buffer.WriteRune('~')
+				buffer.WriteByte('~')
 			}
 			lastchar = '~'
 			continue
 		}
 		if ch == '%' && quoteNow != '\'' {
 			for ; yenCount > 0; yenCount-- {
-				buffer.WriteRune('\\')
+				buffer.WriteByte('\\')
 			}
 			var nameBuf strings.Builder
 			for {
 				ch, _, err = source.ReadRune()
 				if err != nil {
-					buffer.WriteRune('%')
+					buffer.WriteByte('%')
 					source.Seek(-int64(nameBuf.Len()), io.SeekCurrent)
 					break
 				}
@@ -159,7 +159,7 @@ func string2word(source_ string, removeQuote bool) string {
 					if value, ok := ourGetenvSub(nameBuf.String()); ok {
 						buffer.WriteString(value)
 					} else {
-						buffer.WriteRune('%')
+						buffer.WriteByte('%')
 						source.Seek(-int64(nameBuf.Len()+1), io.SeekCurrent)
 					}
 					break
@@ -175,7 +175,7 @@ func string2word(source_ string, removeQuote bool) string {
 			}
 			// Close Quotation.
 			for ; yenCount >= 2; yenCount -= 2 {
-				buffer.WriteRune('\\')
+				buffer.WriteByte('\\')
 			}
 			quoteNow = NOTQUOTED
 		} else if (ch == '\'' || ch == '"') && quoteNow == NOTQUOTED && yenCount%2 == 0 {
@@ -184,7 +184,7 @@ func string2word(source_ string, removeQuote bool) string {
 			}
 			// Open Qutation.
 			for ; yenCount >= 2; yenCount -= 2 {
-				buffer.WriteRune('\\')
+				buffer.WriteByte('\\')
 			}
 			quoteNow = ch
 			if ch == lastchar {
@@ -195,13 +195,13 @@ func string2word(source_ string, removeQuote bool) string {
 				yenCount++
 			} else if ch == '\'' || ch == '"' {
 				for ; yenCount >= 2; yenCount -= 2 {
-					buffer.WriteRune('\\')
+					buffer.WriteByte('\\')
 				}
 				yenCount = 0
 				buffer.WriteRune(ch)
 			} else {
 				for ; yenCount > 0; yenCount-- {
-					buffer.WriteRune('\\')
+					buffer.WriteByte('\\')
 				}
 				buffer.WriteRune(ch)
 			}
@@ -209,7 +209,7 @@ func string2word(source_ string, removeQuote bool) string {
 		lastchar = ch
 	}
 	for ; yenCount > 0; yenCount-- {
-		buffer.WriteRune('\\')
+		buffer.WriteByte('\\')
 	}
 	return buffer.String()
 }

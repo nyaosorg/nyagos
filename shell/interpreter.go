@@ -156,7 +156,7 @@ func makeCmdline(args, rawargs []string) string {
 	var buffer strings.Builder
 	for i, s := range args {
 		if i > 0 {
-			buffer.WriteRune(' ')
+			buffer.WriteByte(' ')
 		}
 		if (len(rawargs) > i && len(rawargs[i]) > 0 && rawargs[i][0] == '"') || strings.ContainsAny(s, " &|<>\t\"") {
 			fmt.Fprintf(&buffer, `"%s"`, strings.Replace(s, `"`, `\"`, -1))
@@ -172,9 +172,9 @@ var UseSourceRunBatch = true
 func encloseWithQuote(fullpath string) string {
 	if strings.ContainsRune(fullpath, ' ') {
 		var f strings.Builder
-		f.WriteRune('"')
+		f.WriteByte('"')
 		f.WriteString(fullpath)
-		f.WriteRune('"')
+		f.WriteByte('"')
 		return f.String()
 	} else {
 		return fullpath
