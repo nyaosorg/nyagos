@@ -122,6 +122,9 @@ func string2word(source_ string, removeQuote bool) string {
 			if len(nameStr) > 0 {
 				u, err := user.Lookup(nameStr)
 				if err == nil {
+					if strings.Count(undo.String(), `"`)%2 != 0 {
+						buffer.WriteByte('"')
+					}
 					buffer.WriteString(u.HomeDir)
 					lastchar = rune(u.HomeDir[len(u.HomeDir)-1])
 				} else {
