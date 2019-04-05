@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.2\_1
+===============
+on Apr.05,2019
+
 * diskfree: trim spaces from the end of line
 * Fix: on`~"\Program Files"`, the first quotation disappeared and `Files` was not contained in the argument.
 
