@@ -122,13 +122,15 @@ func string2word(source_ string, removeQuote bool) string {
 			if len(nameStr) > 0 {
 				u, err := user.Lookup(nameStr)
 				if err == nil {
-					if strings.Count(undo.String(), `"`)%2 != 0 {
+					if !removeQuote && strings.Count(undo.String(), `"`)%2 != 0 {
 						buffer.WriteByte('"')
 					}
 					buffer.WriteString(u.HomeDir)
 					lastchar = rune(u.HomeDir[len(u.HomeDir)-1])
 				} else {
-					buffer.WriteByte('~')
+					if !removeQuote {
+						buffer.WriteByte('~')
+					}
 					undoStr := undo.String()
 					buffer.WriteString(undoStr)
 					lastchar = rune(nameStr[len(undoStr)-1])
@@ -136,7 +138,7 @@ func string2word(source_ string, removeQuote bool) string {
 				continue
 			}
 			if home := nodos.GetHome(); home != "" {
-				if strings.Count(undo.String(), `"`)%2 != 0 {
+				if !removeQuote && strings.Count(undo.String(), `"`)%2 != 0 {
 					buffer.WriteByte('"')
 				}
 				buffer.WriteString(home)
