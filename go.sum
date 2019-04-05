@@ -26,6 +26,8 @@ github.com/mattn/go-tty v0.0.0-20190322114730-5518497423d1 h1:VRq8MIkqXRI9aytxCx
 github.com/mattn/go-tty v0.0.0-20190322114730-5518497423d1/go.mod h1:XPvLUNfbS4fJH25nqRHfWLMa1ONC8Amw+mIA639KxkE=
 github.com/mattn/go-tty v0.0.0-20190330125216-f5599460cf42 h1:2NRj49cvJx8uUE4ouZEoTvu29uVSQ2AClX34adUH/zA=
 github.com/mattn/go-tty v0.0.0-20190330125216-f5599460cf42/go.mod h1:XPvLUNfbS4fJH25nqRHfWLMa1ONC8Amw+mIA639KxkE=
+github.com/mattn/go-tty v0.0.0-20190402035014-76a2065f1a95 h1:zyW7ieMaS0tXk1KgXxFgQ+HAMmxYpwe7MiAzE4C/rkE=
+github.com/mattn/go-tty v0.0.0-20190402035014-76a2065f1a95/go.mod h1:XPvLUNfbS4fJH25nqRHfWLMa1ONC8Amw+mIA639KxkE=
 github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51 h1:mwbFlx48BwWB/EhRYMF2ddfFSPJKJt4whU89Oay+YYs=
 github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51/go.mod h1:yw034Lj7L3R1c5PK+5wgId2p8GOMqhqMwpkW/kQBOvo=
 github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936 h1:kw1v0NlnN+GZcU8Ma8CLF2Zzgjfx95gs3/GN3vYAPpo=
@@ -56,5 +58,7 @@ golang.org/x/sys v0.0.0-20190204203706-41f3e6584952/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190329044733-9eb1bfa1ce65 h1:hOY+O8MxdkPV10pNf7/XEHaySCiPKxixMKUshfHsGn0=
 golang.org/x/sys v0.0.0-20190329044733-9eb1bfa1ce65/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20190403152447-81d4e9dc473e h1:nFYrTHrdrAOpShe27kaFHjsqYSEQ0KWqdWLu3xuZJts=
+golang.org/x/sys v0.0.0-20190403152447-81d4e9dc473e/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
