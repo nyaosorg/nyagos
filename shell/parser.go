@@ -97,11 +97,14 @@ func string2word(source_ string, removeQuote bool) string {
 		}
 		if TildeExpansion && ch == '~' && isSpace(lastchar) && quoteNow == NOTQUOTED {
 			var name strings.Builder
+			var undo strings.Builder
 			for {
 				ch, _, err = source.ReadRune()
 				if err != nil {
+					undo.WriteRune(ch)
 					break
 				} else if ch == '"' {
+					undo.WriteByte('"')
 					if quoteNow == NOTQUOTED {
 						quoteNow = ch
 					} else {
@@ -110,6 +113,8 @@ func string2word(source_ string, removeQuote bool) string {
 				} else if !unicode.IsLetter(ch) {
 					source.UnreadRune()
 					break
+				} else {
+					undo.WriteRune(ch)
 				}
 				name.WriteRune(ch)
 			}
@@ -120,13 +125,17 @@ func string2word(source_ string, removeQuote bool) string {
 					buffer.WriteString(u.HomeDir)
 					lastchar = rune(u.HomeDir[len(u.HomeDir)-1])
 				} else {
-					buffer.WriteRune('~')
-					buffer.WriteString(nameStr)
-					lastchar = rune(nameStr[len(nameStr)-1])
+					buffer.WriteByte('~')
+					undoStr := undo.String()
+					buffer.WriteString(undoStr)
+					lastchar = rune(nameStr[len(undoStr)-1])
 				}
 				continue
 			}
 			if home := nodos.GetHome(); home != "" {
+				if strings.Count(undo.String(), `"`)%2 != 0 {
+					buffer.WriteByte('"')
+				}
 				buffer.WriteString(home)
 			} else {
 				buffer.WriteRune('~')
