@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * diskfree: 行末の空白を削除
+* `~"\Program Files"` の最初の引用符が消えて、Files が引数に含まれない不具合を修正
 
 NYAGOS 4.4.2\_0
 ===============
