@@ -93,6 +93,8 @@ var keyMap = map[string]KeyFuncT{
 	name2char[K_UP]:        name2func(F_HISTORY_UP),
 	name2char[K_ALT_V]:     name2func(F_YANK),
 	name2char[K_ALT_Y]:     name2func(F_YANK_WITH_QUOTE),
+	name2char[K_ALT_B]:     name2func(F_BACKWARD_WORD),
+	name2char[K_ALT_F]:     name2func(F_FORWARD_WORD),
 }
 
 func normWord(src string) string {

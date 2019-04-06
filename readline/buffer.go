@@ -163,6 +163,7 @@ func (this *Buffer) GetWidthBetween(from int, to int) int {
 	return width
 }
 
+// Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
 func (this *Buffer) Repaint(pos int, del int) {
 	bs := 0
 	vp := this.GetWidthBetween(this.ViewStart, pos)

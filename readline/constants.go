@@ -105,6 +105,7 @@ const (
 const (
 	F_ACCEPT_LINE          = "ACCEPT_LINE"
 	F_BACKWARD_CHAR        = "BACKWARD_CHAR"
+	F_BACKWARD_WORD        = "BACKWARD_WORD"
 	F_BACKWARD_DELETE_CHAR = "BACKWARD_DELETE_CHAR"
 	F_BEGINNING_OF_LINE    = "BEGINNING_OF_LINE"
 	F_CLEAR_SCREEN         = "CLEAR_SCREEN"
@@ -112,6 +113,7 @@ const (
 	F_DELETE_OR_ABORT      = "DELETE_OR_ABORT"
 	F_END_OF_LINE          = "END_OF_LINE"
 	F_FORWARD_CHAR         = "FORWARD_CHAR"
+	F_FORWARD_WORD         = "FORWARD_WORD"
 	F_HISTORY_DOWN         = "HISTORY_DOWN" // for compatible
 	F_HISTORY_UP           = "HISTORY_UP"   // for compatible
 	F_NEXT_HISTORY         = "NEXT_HISTORY"
@@ -233,6 +235,7 @@ var name2char = map[string]string{
 var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 	F_ACCEPT_LINE:          keyFuncEnter,
 	F_BACKWARD_CHAR:        keyFuncBackward,
+	F_BACKWARD_WORD:        keyFuncBackwardWord,
 	F_BACKWARD_DELETE_CHAR: keyFuncBackSpace,
 	F_BEGINNING_OF_LINE:    keyFuncHead,
 	F_CLEAR_SCREEN:         keyFuncCLS,
@@ -240,6 +243,7 @@ var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 	F_DELETE_OR_ABORT:      keyFuncDeleteOrAbort,
 	F_END_OF_LINE:          keyFuncTail,
 	F_FORWARD_CHAR:         keyFuncForward,
+	F_FORWARD_WORD:         keyFuncForwardWord,
 	F_HISTORY_DOWN:         keyFuncHistoryDown, // for compatible
 	F_HISTORY_UP:           keyFuncHistoryUp,   // for compatible
 	F_NEXT_HISTORY:         keyFuncHistoryDown,

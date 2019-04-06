@@ -287,3 +287,54 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 	}
 	return CONTINUE
 }
+
+func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
+	newPos := this.Cursor
+	for newPos > 0 && this.Buffer[newPos-1] == ' ' {
+		newPos--
+	}
+	for newPos > 0 && this.Buffer[newPos-1] != ' ' {
+		newPos--
+	}
+	if newPos >= this.ViewStart {
+		w := this.GetWidthBetween(newPos, this.Cursor)
+		this.Backspace(w)
+		this.Cursor = newPos
+	} else {
+		w := this.GetWidthBetween(this.ViewStart, this.Cursor)
+		this.Backspace(w)
+		this.Cursor = newPos
+		this.ViewStart = newPos
+		this.Repaint(newPos, 0)
+	}
+	return CONTINUE
+}
+
+func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
+	newPos := this.Cursor
+	for newPos < this.Length && this.Buffer[newPos] != ' ' {
+		newPos++
+	}
+	for newPos < this.Length && this.Buffer[newPos] == ' ' {
+		newPos++
+	}
+	w := this.GetWidthBetween(this.ViewStart, newPos)
+	if w < this.ViewWidth() {
+		for this.Cursor < newPos {
+			this.PutRune(this.Buffer[this.Cursor])
+			this.Cursor++
+		}
+	} else {
+		this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+		this.Cursor = newPos
+		for w >= this.ViewWidth() {
+			w -= GetCharWidth(this.Buffer[this.ViewStart])
+			this.ViewStart++
+		}
+		for p := this.ViewStart; p < this.Cursor; p++ {
+			this.PutRune(this.Buffer[p])
+		}
+		this.Eraseline()
+	}
+	return CONTINUE
+}
