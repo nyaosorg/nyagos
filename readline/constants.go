@@ -232,7 +232,7 @@ var name2char = map[string]string{
 
 var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 	F_ACCEPT_LINE:          keyFuncEnter,
-	F_BACKWARD_CHAR:        keyFuncBackword,
+	F_BACKWARD_CHAR:        keyFuncBackward,
 	F_BACKWARD_DELETE_CHAR: keyFuncBackSpace,
 	F_BEGINNING_OF_LINE:    keyFuncHead,
 	F_CLEAR_SCREEN:         keyFuncCLS,

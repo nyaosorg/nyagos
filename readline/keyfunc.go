@@ -28,7 +28,7 @@ func keyFuncHead(ctx context.Context, this *Buffer) Result { // Ctrl-A
 	return CONTINUE
 }
 
-func keyFuncBackword(ctx context.Context, this *Buffer) Result { // Ctrl-B
+func keyFuncBackward(ctx context.Context, this *Buffer) Result { // Ctrl-B
 	if this.Cursor <= 0 {
 		return CONTINUE
 	}
