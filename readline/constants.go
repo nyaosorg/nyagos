@@ -36,6 +36,7 @@ const (
 	K_CTRL_Z        = "C_Z"
 	K_DELETE        = "DEL"
 	K_DOWN          = "DOWN"
+	K_CTRL_DOWN     = "C_DOWN"
 	K_END           = "END"
 	K_ENTER         = "ENTER"
 	K_ESCAPE        = "ESCAPE"
@@ -65,12 +66,15 @@ const (
 	K_F9            = "F9"
 	K_HOME          = "HOME"
 	K_LEFT          = "LEFT"
+	K_CTRL_LEFT     = "C_LEFT"
 	K_PAGEDOWN      = "PAGEDOWN"
 	K_PAGEUP        = "PAGEUP"
 	K_PAUSE         = "PAUSE"
 	K_RIGHT         = "RIGHT"
+	K_CTRL_RIGHT    = "C_RIGHT"
 	K_SHIFT         = "SHIFT"
 	K_UP            = "UP"
+	K_CTRL_UP       = "C_UP"
 	K_ALT_A         = "M_A"
 	K_ALT_B         = "M_B"
 	K_ALT_BACKSPACE = "M_BACKSPACE"
@@ -195,6 +199,7 @@ var name2char = map[string]string{
 	K_CTRL_BREAK:    "0x03",
 	K_DELETE:        "\x1B[3~",
 	K_DOWN:          "\x1B[B",
+	K_CTRL_DOWN:     "\x1B[1;5B",
 	K_END:           "\x1B[F",
 	K_F10:           "\x1B[21~",
 	K_F11:           "\x1B[23~",
@@ -222,11 +227,14 @@ var name2char = map[string]string{
 	K_F9:            "\x1B[20~",
 	K_HOME:          "\x1B[H",
 	K_LEFT:          "\x1B[D",
+	K_CTRL_LEFT:     "\x1B[1;5D",
 	K_PAGEDOWN:      "\x1B[6~",
 	K_PAGEUP:        "\x1B[5~",
 	K_PAUSE:         "0x13",
 	K_RIGHT:         "\x1B[C",
+	K_CTRL_RIGHT:    "\x1B[1;5C",
 	K_UP:            "\x1B[A",
+	K_CTRL_UP:       "\x1B[1;5A",
 }
 
 // KeyCode from
