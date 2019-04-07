@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* ALT-F(次の単語へ), ALT-B(前の単語へ)を実装
+
 NYAGOS 4.4.2\_1
 ===============
 (2019.04.05)
