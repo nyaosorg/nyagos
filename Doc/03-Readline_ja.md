@@ -28,5 +28,7 @@ UNIX系シェルに近いキーバインドで、コマンドラインを編集�
 * Ctrl-XG , Alt-G    : カーソルで選択したGit Revisionを挿入する(by box.lua)
 * Ctrl-XH , Alt-H    : カーソルで選択した過去に移動したディレクトリを挿入する(by box.lua)
 * Ctrl-Q , Ctrl-V    : タイプした文字をそのまま挿入する
+* Alt-F              : 次の単語先頭へ移動
+* Alt-B              : 前の単語先頭へ移動
 
 <!-- set:fenc=utf8: -->

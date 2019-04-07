@@ -26,3 +26,6 @@ English / [Japanese](./03-Readline_ja.md)
 * Ctrl-XG , Alt-G    : Insert Git-revision to select by Cursor (box.lua)
 * Ctrl-XH , Alt-H    : Insert `CD`ed directory to select by Cursor (box.lua)
 * Ctrl-Q , Ctrl-V    : Add the next character typed to the line verbatim
+* Alt-F              : Move forward over a word
+* Alt-B              : Move backward over a word
+
