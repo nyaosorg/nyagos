@@ -134,7 +134,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
 		this.Backspace(w)
-		this.Cursor++
+		this.Cursor += len(keys)
 		this.ResetViewStart()
 		for i := this.ViewStart; i < this.Cursor; i++ {
 			this.PutRune(this.Buffer[i])
@@ -142,7 +142,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		this.Eraseline()
 	} else {
 		this.Repaint(this.Cursor, -w1)
-		this.Cursor++
+		this.Cursor += len(keys)
 	}
 	return CONTINUE
 }
