@@ -1,6 +1,6 @@
 English / [Japanese](release_note_ja.md)
 
-* Implement ALT-F(forward-word) and ALT-B(backward-word)
+* Implement Ctrl-RIGHT,ALT-F(forward-word) and Ctrl-LEFT,ALT-B(backward-word)
 
 NYAGOS 4.4.2\_1
 ===============
