@@ -33,7 +33,7 @@ func (this *Buffer) putRunes(ch rune, n width_t) {
 	}
 }
 
-func (this *Buffer) Backspace(n width_t) {
+func (this *Buffer) backspace(n width_t) {
 	if n > 1 {
 		fmt.Fprintf(this.Out, "\x1B[%dD", n)
 	} else if n == 1 {
@@ -113,7 +113,7 @@ func (this *Buffer) ResetViewStart() {
 
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
-	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 
 	// Replace Buffer
 	this.Delete(pos, this.Cursor-pos)
@@ -140,7 +140,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	}
 	this.Eraseline()
 	if bs > 0 {
-		this.Backspace(bs)
+		this.backspace(bs)
 	}
 }
 
@@ -168,10 +168,10 @@ func (this *Buffer) Repaint(pos int, del width_t) {
 	}
 	this.Eraseline()
 	if del > 0 {
-		this.Backspace(bs)
+		this.backspace(bs)
 	} else {
 		// for readline_keyfunc.go: KeyFuncInsertSelf()
-		this.Backspace(bs + del)
+		this.backspace(bs + del)
 	}
 }
 
