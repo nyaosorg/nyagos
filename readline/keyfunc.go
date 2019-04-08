@@ -86,8 +86,8 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 			this.ViewStart++
 		}
 		this.ViewStart++
-		for i := this.ViewStart; i <= this.Cursor; i++ {
-			this.putRune(this.Buffer[i])
+		for _, ch := range this.Buffer[this.ViewStart : this.Cursor+1] {
+			this.putRune(ch)
 		}
 		this.Eraseline()
 	}
@@ -272,15 +272,15 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
 			this.backspace(w_1)
 			this.ViewStart++
-			for i := this.ViewStart; i <= this.Cursor; i++ {
-				this.putRune(this.Buffer[i])
+			for _, ch := range this.Buffer[this.ViewStart : this.Cursor+1] {
+				this.putRune(ch)
 			}
 		} else {
 			// no necessary to scroll
 			redrawStart := maxInt(this.Cursor-1, this.ViewStart)
 			this.backspace(this.GetWidthBetween(redrawStart, this.Cursor))
-			for i := redrawStart; i <= this.Cursor; i++ {
-				this.putRune(this.Buffer[i])
+			for _, ch := range this.Buffer[redrawStart : this.Cursor+1] {
+				this.putRune(ch)
 			}
 		}
 		this.Cursor++
