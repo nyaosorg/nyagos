@@ -54,5 +54,5 @@ func PromptCore(console io.Writer, args ...interface{}) int {
 	if lfPos >= 0 {
 		text = text[lfPos+1:]
 	}
-	return readline.GetStringWidth(text)
+	return int(readline.GetStringWidth(text))
 }

@@ -32,7 +32,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	}
 	for {
 		drawStr := fmt.Sprintf("(i-search)[%s]:%s", searchStr, foundStr)
-		drawWidth := 0
+		drawWidth := width_t(0)
 		for _, ch := range drawStr {
 			w1 := GetCharWidth(ch)
 			if drawWidth+w1 >= this.ViewWidth() {
@@ -71,13 +71,13 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
 		case "\x03", "\x07", "\x1B":
-			w := 0
+			w := width_t(0)
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
 				w += GetCharWidth(this.Buffer[i])
 				this.PutRune(this.Buffer[i])
 			}
-			bs := 0
+			bs := width_t(0)
 			for {
 				if i >= len(this.Buffer) {
 					if drawWidth > w {

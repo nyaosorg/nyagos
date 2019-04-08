@@ -23,17 +23,17 @@ func (this *Buffer) PutRune(ch rune) {
 	}
 }
 
-func (this *Buffer) PutRunes(ch rune, n int) {
+func (this *Buffer) PutRunes(ch rune, n width_t) {
 	if n <= 0 {
 		return
 	}
 	this.PutRune(ch)
-	for i := 1; i < n; i++ {
+	for i := width_t(1); i < n; i++ {
 		this.Out.WriteRune(ch)
 	}
 }
 
-func (this *Buffer) Backspace(n int) {
+func (this *Buffer) Backspace(n width_t) {
 	if n > 1 {
 		fmt.Fprintf(this.Out, "\x1B[%dD", n)
 	} else if n == 1 {
@@ -45,7 +45,7 @@ func (this *Buffer) Eraseline() {
 	io.WriteString(this.Out, "\x1B[0K")
 }
 
-const forbiddenWidth = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
+const forbiddenWidth width_t = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
 	*Editor
@@ -57,8 +57,8 @@ type Buffer struct {
 	HistoryPointer int
 }
 
-func (this *Buffer) ViewWidth() int {
-	return this.TermWidth - this.TopColumn - forbiddenWidth
+func (this *Buffer) ViewWidth() width_t {
+	return width_t(this.TermWidth) - width_t(this.TopColumn) - forbiddenWidth
 }
 
 func (this *Buffer) insert(csrPos int, insStr []rune) {
@@ -81,7 +81,7 @@ func (this *Buffer) InsertString(pos int, s string) int {
 	return len(list)
 }
 
-func (this *Buffer) Delete(pos int, n int) int {
+func (this *Buffer) Delete(pos int, n int) width_t {
 	if n <= 0 || len(this.Buffer) < pos+n {
 		return 0
 	}
@@ -97,7 +97,7 @@ func (this *Buffer) InsertAndRepaint(str string) {
 
 func (this *Buffer) ResetViewStart() {
 	this.ViewStart = 0
-	w := 0
+	w := width_t(0)
 	for i := 0; i <= this.Cursor && i < len(this.Buffer); i++ {
 		w += GetCharWidth(this.Buffer[i])
 		for w >= this.ViewWidth() {
@@ -123,12 +123,12 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	this.ResetViewStart()
 
 	// Repaint
-	w := 0
+	w := width_t(0)
 	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
 		this.PutRune(ch)
 		w += GetCharWidth(ch)
 	}
-	bs := 0
+	bs := width_t(0)
 	for _, ch := range this.Buffer[this.Cursor:] {
 		w1 := GetCharWidth(ch)
 		if w+w1 >= this.ViewWidth() {
@@ -144,8 +144,8 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	}
 }
 
-func (this *Buffer) GetWidthBetween(from int, to int) int {
-	width := 0
+func (this *Buffer) GetWidthBetween(from int, to int) width_t {
+	width := width_t(0)
 	for _, ch := range this.Buffer[from:to] {
 		width += GetCharWidth(ch)
 	}
@@ -153,8 +153,8 @@ func (this *Buffer) GetWidthBetween(from int, to int) int {
 }
 
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
-func (this *Buffer) Repaint(pos int, del int) {
-	bs := 0
+func (this *Buffer) Repaint(pos int, del width_t) {
+	bs := width_t(0)
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
 	for _, ch := range this.Buffer[pos:] {

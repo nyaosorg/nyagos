@@ -2,18 +2,20 @@ package readline
 
 import "github.com/mattn/go-runewidth"
 
-var widthCache = map[rune]int{}
+type width_t int
+
+var widthCache = map[rune]width_t{}
 
 func ResetCharWidth() {
-	widthCache = map[rune]int{}
+	widthCache = map[rune]width_t{}
 }
 
 func SetCharWidth(c rune, width int) {
-	widthCache[c] = width
+	widthCache[c] = width_t(width)
 }
 
-func lenEscaped(c rune) int {
-	w := 3
+func lenEscaped(c rune) width_t {
+	w := width_t(3)
 	for c > 0xF {
 		c >>= 4
 		w++
@@ -21,7 +23,7 @@ func lenEscaped(c rune) int {
 	return w
 }
 
-func GetCharWidth(n rune) int {
+func GetCharWidth(n rune) width_t {
 	if n < ' ' {
 		return 2
 	}
@@ -30,7 +32,7 @@ func GetCharWidth(n rune) int {
 		if n > 0x10000 && !SurrogatePairOk {
 			width = lenEscaped(n)
 		} else {
-			width = runewidth.RuneWidth(n)
+			width = width_t(runewidth.RuneWidth(n))
 			if width == 0 {
 				width = lenEscaped(n)
 			}
@@ -40,8 +42,8 @@ func GetCharWidth(n rune) int {
 	return width
 }
 
-func GetStringWidth(s string) int {
-	width := 0
+func GetStringWidth(s string) width_t {
+	width := width_t(0)
 	for _, ch := range s {
 		width += GetCharWidth(ch)
 	}
