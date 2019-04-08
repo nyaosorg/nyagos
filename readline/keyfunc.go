@@ -127,7 +127,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	if len(keys) == 2 && keys[0] == '\x1B' { // for AltGr-shift
 		keys = keys[1:]
 	}
-	this.Insert(this.Cursor, []rune(keys))
+	this.InsertString(this.Cursor, keys)
 
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	w1 := GetStringWidth(keys)

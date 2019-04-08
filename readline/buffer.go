@@ -62,7 +62,7 @@ func (this *Buffer) ViewWidth() int {
 	return this.TermWidth - this.TopColumn - forbiddenWidth
 }
 
-func (this *Buffer) Insert(csrPos int, insStr []rune) {
+func (this *Buffer) insert(csrPos int, insStr []rune) {
 	addSize := len(insStr)
 	newSize := len(this.Buffer)
 	for this.Length+addSize >= newSize {
@@ -81,12 +81,12 @@ func (this *Buffer) Insert(csrPos int, insStr []rune) {
 	this.Length += addSize
 }
 
-// Insert String :s at :pos
+// Insert String :s at :pos (Do not update screen)
 // returns
 //    count of rune
 func (this *Buffer) InsertString(pos int, s string) int {
 	list := []rune(s)
-	this.Insert(pos, list)
+	this.insert(pos, list)
 	return len(list)
 }
 
