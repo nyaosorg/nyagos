@@ -190,15 +190,11 @@ func (this *Buffer) RepaintAll() {
 }
 
 func (this *Buffer) SubString(start, end int) string {
-	var result strings.Builder
-	for i := start; i < end; i++ {
-		result.WriteRune(this.Buffer[i])
-	}
-	return result.String()
+	return string(this.Buffer[start:end])
 }
 
 func (this Buffer) String() string {
-	return this.SubString(0, len(this.Buffer))
+	return string(this.Buffer)
 }
 
 var Delimiters = "\"'"
