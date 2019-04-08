@@ -14,7 +14,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	foundStr := ""
 	searchStr := ""
 	lastFoundPos := this.History.Len() - 1
-	this.Backspace(this.Cursor - this.ViewStart)
+	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 
 	update := func() {
 		for i := this.History.Len() - 1; ; i-- {
