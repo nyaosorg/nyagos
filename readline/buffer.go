@@ -124,17 +124,17 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 
 	// Repaint
 	w := 0
-	for i := this.ViewStart; i < this.Cursor; i++ {
-		this.PutRune(this.Buffer[i])
-		w += GetCharWidth(this.Buffer[i])
+	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
+		this.PutRune(ch)
+		w += GetCharWidth(ch)
 	}
 	bs := 0
-	for i := this.Cursor; i < len(this.Buffer); i++ {
-		w1 := GetCharWidth(this.Buffer[i])
+	for _, ch := range this.Buffer[this.Cursor:] {
+		w1 := GetCharWidth(ch)
 		if w+w1 >= this.ViewWidth() {
 			break
 		}
-		this.PutRune(this.Buffer[i])
+		this.PutRune(ch)
 		w += w1
 		bs += w1
 	}
@@ -146,8 +146,8 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 
 func (this *Buffer) GetWidthBetween(from int, to int) int {
 	width := 0
-	for i := from; i < to; i++ {
-		width += GetCharWidth(this.Buffer[i])
+	for _, ch := range this.Buffer[from:to] {
+		width += GetCharWidth(ch)
 	}
 	return width
 }
@@ -157,12 +157,12 @@ func (this *Buffer) Repaint(pos int, del int) {
 	bs := 0
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
-	for i := pos; i < len(this.Buffer); i++ {
-		w1 := GetCharWidth(this.Buffer[i])
+	for _, ch := range this.Buffer[pos:] {
+		w1 := GetCharWidth(ch)
 		if vp+w1 >= this.ViewWidth() {
 			break
 		}
-		this.PutRune(this.Buffer[i])
+		this.PutRune(ch)
 		vp += w1
 		bs += w1
 	}
@@ -177,8 +177,8 @@ func (this *Buffer) Repaint(pos int, del int) {
 
 func (this *Buffer) RepaintAfterPrompt() {
 	this.ResetViewStart()
-	for i := this.ViewStart; i < this.Cursor; i++ {
-		this.PutRune(this.Buffer[i])
+	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
+		this.PutRune(ch)
 	}
 	this.Repaint(this.Cursor, 0)
 }
@@ -202,15 +202,15 @@ var Delimiters = "\"'"
 func (this *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
-	for i := 0; i < this.Cursor; i++ {
+	for i, ch := range this.Buffer[:this.Cursor] {
 		if quotedchar == '\000' {
-			if strings.ContainsRune(Delimiters, this.Buffer[i]) {
-				quotedchar = this.Buffer[i]
+			if strings.ContainsRune(Delimiters, ch) {
+				quotedchar = ch
 			}
-		} else if this.Buffer[i] == quotedchar {
+		} else if ch == quotedchar {
 			quotedchar = '\000'
 		}
-		if unicode.IsSpace(this.Buffer[i]) && quotedchar == '\000' {
+		if unicode.IsSpace(ch) && quotedchar == '\000' {
 			wordTop = -1
 		} else if wordTop < 0 {
 			wordTop = i
