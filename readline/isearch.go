@@ -38,7 +38,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
-			this.PutRune(ch)
+			this.putRune(ch)
 			drawWidth += w1
 		}
 		this.Eraseline()
@@ -75,13 +75,13 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			var i int
 			for i = this.ViewStart; i < this.Cursor; i++ {
 				w += GetCharWidth(this.Buffer[i])
-				this.PutRune(this.Buffer[i])
+				this.putRune(this.Buffer[i])
 			}
 			bs := width_t(0)
 			for {
 				if i >= len(this.Buffer) {
 					if drawWidth > w {
-						this.PutRunes(' ', drawWidth-w)
+						this.putRunes(' ', drawWidth-w)
 						bs += (drawWidth - w)
 					}
 					break
@@ -90,7 +90,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 				if w+w1 >= this.ViewWidth() {
 					break
 				}
-				this.PutRune(this.Buffer[i])
+				this.putRune(this.Buffer[i])
 				w += w1
 				bs += w1
 				i++

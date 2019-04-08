@@ -12,7 +12,7 @@ import (
 
 var SurrogatePairOk = false
 
-func (this *Buffer) PutRune(ch rune) {
+func (this *Buffer) putRune(ch rune) {
 	if ch < ' ' {
 		this.Out.WriteByte('^')
 		this.Out.WriteByte(byte('A' + (ch - 1)))
@@ -23,11 +23,11 @@ func (this *Buffer) PutRune(ch rune) {
 	}
 }
 
-func (this *Buffer) PutRunes(ch rune, n width_t) {
+func (this *Buffer) putRunes(ch rune, n width_t) {
 	if n <= 0 {
 		return
 	}
-	this.PutRune(ch)
+	this.putRune(ch)
 	for i := width_t(1); i < n; i++ {
 		this.Out.WriteRune(ch)
 	}
@@ -125,7 +125,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Repaint
 	w := width_t(0)
 	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
-		this.PutRune(ch)
+		this.putRune(ch)
 		w += GetCharWidth(ch)
 	}
 	bs := width_t(0)
@@ -134,7 +134,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		if w+w1 >= this.ViewWidth() {
 			break
 		}
-		this.PutRune(ch)
+		this.putRune(ch)
 		w += w1
 		bs += w1
 	}
@@ -162,7 +162,7 @@ func (this *Buffer) Repaint(pos int, del width_t) {
 		if vp+w1 >= this.ViewWidth() {
 			break
 		}
-		this.PutRune(ch)
+		this.putRune(ch)
 		vp += w1
 		bs += w1
 	}
@@ -178,7 +178,7 @@ func (this *Buffer) Repaint(pos int, del width_t) {
 func (this *Buffer) RepaintAfterPrompt() {
 	this.ResetViewStart()
 	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
-		this.PutRune(ch)
+		this.putRune(ch)
 	}
 	this.Repaint(this.Cursor, 0)
 }
