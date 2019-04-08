@@ -66,7 +66,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			update()
 		case "\r":
 			this.ViewStart = 0
-			this.Length = 0
+			this.Buffer = this.Buffer[:0]
 			this.Cursor = 0
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
@@ -79,7 +79,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			}
 			bs := 0
 			for {
-				if i >= this.Length {
+				if i >= len(this.Buffer) {
 					if drawWidth > w {
 						this.PutRunes(' ', drawWidth-w)
 						bs += (drawWidth - w)

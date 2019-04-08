@@ -50,7 +50,6 @@ const forbiddenWidth = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 type Buffer struct {
 	*Editor
 	Buffer         []rune
-	Length         int
 	TTY            *tty.TTY
 	ViewStart      int
 	TermWidth      int // == TopColumn + ViewWidth + forbiddenWidth
@@ -63,22 +62,14 @@ func (this *Buffer) ViewWidth() int {
 }
 
 func (this *Buffer) insert(csrPos int, insStr []rune) {
-	addSize := len(insStr)
-	newSize := len(this.Buffer)
-	for this.Length+addSize >= newSize {
-		newSize *= 2
-	}
-	tmp := make([]rune, newSize)
-	copy(tmp, this.Buffer)
-	this.Buffer = tmp
+	// expand buffer
+	this.Buffer = append(this.Buffer, insStr...)
 
-	for i := this.Length - 1; i >= csrPos; i-- {
-		this.Buffer[i+addSize] = this.Buffer[i]
-	}
-	for i := 0; i < addSize; i++ {
-		this.Buffer[csrPos+i] = insStr[i]
-	}
-	this.Length += addSize
+	// shift original string to make area
+	copy(this.Buffer[csrPos+len(insStr):], this.Buffer[csrPos:])
+
+	// insert insStr
+	copy(this.Buffer[csrPos:csrPos+len(insStr)], insStr)
 }
 
 // Insert String :s at :pos (Do not update screen)
@@ -91,14 +82,12 @@ func (this *Buffer) InsertString(pos int, s string) int {
 }
 
 func (this *Buffer) Delete(pos int, n int) int {
-	if n <= 0 || this.Length < pos+n {
+	if n <= 0 || len(this.Buffer) < pos+n {
 		return 0
 	}
 	delw := this.GetWidthBetween(pos, pos+n)
-	for i := pos; i < this.Length-n; i++ {
-		this.Buffer[i] = this.Buffer[i+n]
-	}
-	this.Length -= n
+	copy(this.Buffer[pos:], this.Buffer[pos+n:])
+	this.Buffer = this.Buffer[:len(this.Buffer)-n]
 	return delw
 }
 
@@ -109,7 +98,7 @@ func (this *Buffer) InsertAndRepaint(str string) {
 func (this *Buffer) ResetViewStart() {
 	this.ViewStart = 0
 	w := 0
-	for i := 0; i <= this.Cursor; i++ {
+	for i := 0; i <= this.Cursor && i < len(this.Buffer); i++ {
 		w += GetCharWidth(this.Buffer[i])
 		for w >= this.ViewWidth() {
 			if this.ViewStart >= len(this.Buffer) {
@@ -140,7 +129,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 		w += GetCharWidth(this.Buffer[i])
 	}
 	bs := 0
-	for i := this.Cursor; i < this.Length; i++ {
+	for i := this.Cursor; i < len(this.Buffer); i++ {
 		w1 := GetCharWidth(this.Buffer[i])
 		if w+w1 >= this.ViewWidth() {
 			break
@@ -168,7 +157,7 @@ func (this *Buffer) Repaint(pos int, del int) {
 	bs := 0
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
-	for i := pos; i < this.Length; i++ {
+	for i := pos; i < len(this.Buffer); i++ {
 		w1 := GetCharWidth(this.Buffer[i])
 		if vp+w1 >= this.ViewWidth() {
 			break
@@ -209,7 +198,7 @@ func (this *Buffer) SubString(start, end int) string {
 }
 
 func (this Buffer) String() string {
-	return this.SubString(0, this.Length)
+	return this.SubString(0, len(this.Buffer))
 }
 
 var Delimiters = "\"'"

@@ -210,7 +210,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this := Buffer{
 		Editor:         session,
-		Buffer:         make([]rune, 20),
+		Buffer:         make([]rune, 0, 20),
 		HistoryPointer: session.History.Len(),
 	}
 
@@ -238,8 +238,8 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		this.TopColumn = 0
 	}
 	this.InsertString(0, session.Default)
-	if this.Cursor > this.Length {
-		this.Cursor = this.Length
+	if this.Cursor > len(this.Buffer) {
+		this.Cursor = len(this.Buffer)
 	}
 	this.RepaintAfterPrompt()
 

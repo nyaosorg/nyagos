@@ -14,7 +14,7 @@ func keyFuncEnter(ctx context.Context, this *Buffer) Result { // Ctrl-M
 }
 
 func keyFuncIntr(ctx context.Context, this *Buffer) Result { // Ctrl-C
-	this.Length = 0
+	this.Buffer = this.Buffer[:0]
 	this.Cursor = 0
 	this.ViewStart = 0
 	return INTR
@@ -43,15 +43,15 @@ func keyFuncBackward(ctx context.Context, this *Buffer) Result { // Ctrl-B
 }
 
 func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
-	allength := this.GetWidthBetween(this.ViewStart, this.Length)
+	allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
 	if allength < this.ViewWidth() {
-		for ; this.Cursor < this.Length; this.Cursor++ {
+		for ; this.Cursor < len(this.Buffer); this.Cursor++ {
 			this.PutRune(this.Buffer[this.Cursor])
 		}
 	} else {
 		io.WriteString(this.Out, "\a")
 		this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-		this.ViewStart = this.Length - 1
+		this.ViewStart = len(this.Buffer) - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
 		for {
 			if this.ViewStart <= 0 {
@@ -64,7 +64,7 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 			w = w_
 			this.ViewStart--
 		}
-		for this.Cursor = this.ViewStart; this.Cursor < this.Length; this.Cursor++ {
+		for this.Cursor = this.ViewStart; this.Cursor < len(this.Buffer); this.Cursor++ {
 			this.PutRune(this.Buffer[this.Cursor])
 		}
 	}
@@ -72,7 +72,7 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 }
 
 func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
-	if this.Cursor >= this.Length {
+	if this.Cursor >= len(this.Buffer) {
 		return CONTINUE
 	}
 	w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
@@ -116,7 +116,7 @@ func keyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
 }
 
 func keyFuncDeleteOrAbort(ctx context.Context, this *Buffer) Result { // Ctrl-D
-	if this.Length > 0 {
+	if len(this.Buffer) > 0 {
 		return keyFuncDelete(ctx, this)
 	} else {
 		return ABORT
@@ -148,10 +148,10 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 }
 
 func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
-	clipboard.WriteAll(this.SubString(this.Cursor, this.Length))
+	clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
 
 	this.Eraseline()
-	this.Length = this.Cursor
+	this.Buffer = this.Buffer[:this.Cursor]
 	return CONTINUE
 }
 
@@ -159,7 +159,7 @@ func keyFuncClear(ctx context.Context, this *Buffer) Result {
 	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
 	this.Backspace(width)
 	this.Eraseline()
-	this.Length = 0
+	this.Buffer = this.Buffer[:0]
 	this.Cursor = 0
 	this.ViewStart = 0
 	return CONTINUE
@@ -249,7 +249,7 @@ func maxInt(a, b int) int {
 }
 
 func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
-	if this.Length == this.Cursor {
+	if len(this.Buffer) == this.Cursor {
 		if this.Cursor < 2 {
 			return CONTINUE
 		}
@@ -312,10 +312,10 @@ func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 
 func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 	newPos := this.Cursor
-	for newPos < this.Length && this.Buffer[newPos] != ' ' {
+	for newPos < len(this.Buffer) && this.Buffer[newPos] != ' ' {
 		newPos++
 	}
-	for newPos < this.Length && this.Buffer[newPos] == ' ' {
+	for newPos < len(this.Buffer) && this.Buffer[newPos] == ' ' {
 		newPos++
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)
