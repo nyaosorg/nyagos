@@ -23,6 +23,25 @@ func (this *Buffer) ViewWidth() width_t {
 	return width_t(this.TermWidth) - width_t(this.TopColumn) - forbiddenWidth
 }
 
+func (this *Buffer) view() runes_t {
+	view := this.Buffer[this.ViewStart:]
+	width := this.ViewWidth()
+	w := width_t(0)
+	for i, c := range view {
+		w += GetCharWidth(c)
+		if w >= width {
+			return view[:i]
+		}
+	}
+	return runes_t(view)
+}
+
+func (this *Buffer) view3() (runes_t, runes_t, runes_t) {
+	v := this.view()
+	x := this.Cursor - this.ViewStart
+	return v, v[:x], v[x:]
+}
+
 func (this *Buffer) insert(csrPos int, insStr []rune) {
 	// expand buffer
 	this.Buffer = append(this.Buffer, insStr...)

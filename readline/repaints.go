@@ -6,7 +6,8 @@ func (this *Buffer) InsertAndRepaint(str string) {
 
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	// Cursor rewind
-	this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	_, left, _ := this.view3()
+	this.backspace(left.Width())
 
 	// Replace Buffer
 	this.Delete(pos, this.Cursor-pos)
@@ -16,38 +17,23 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	this.ResetViewStart()
 
 	// Repaint
-	w := this.puts(this.Buffer[this.ViewStart:this.Cursor]).Width()
+	view, _, right := this.view3()
+	this.puts(view)
 
-	bs := width_t(0)
-	for _, ch := range this.Buffer[this.Cursor:] {
-		w1 := GetCharWidth(ch)
-		if w+w1 >= this.ViewWidth() {
-			break
-		}
-		this.putRune(ch)
-		w += w1
-		bs += w1
-	}
+	// Move to cursor position
 	this.Eraseline()
-	if bs > 0 {
-		this.backspace(bs)
-	}
+	this.backspace(right.Width())
+
 }
 
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
 func (this *Buffer) Repaint(pos int, del width_t) {
-	bs := width_t(0)
 	vp := this.GetWidthBetween(this.ViewStart, pos)
 
-	for _, ch := range this.Buffer[pos:] {
-		w1 := GetCharWidth(ch)
-		if vp+w1 >= this.ViewWidth() {
-			break
-		}
-		this.putRune(ch)
-		vp += w1
-		bs += w1
-	}
+	view := this.view()
+	bs := this.puts(view[pos-this.ViewStart:]).Width()
+	vp += bs
+
 	this.Eraseline()
 	if del > 0 {
 		this.backspace(bs)

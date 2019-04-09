@@ -71,31 +71,10 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
 		case "\x03", "\x07", "\x1B":
-			w := width_t(0)
-			var i int
-			for i = this.ViewStart; i < this.Cursor; i++ {
-				w += GetCharWidth(this.Buffer[i])
-				this.putRune(this.Buffer[i])
-			}
-			bs := width_t(0)
-			for {
-				if i >= len(this.Buffer) {
-					if drawWidth > w {
-						this.putRunes(' ', drawWidth-w)
-						bs += (drawWidth - w)
-					}
-					break
-				}
-				w1 := GetCharWidth(this.Buffer[i])
-				if w+w1 >= this.ViewWidth() {
-					break
-				}
-				this.putRune(this.Buffer[i])
-				w += w1
-				bs += w1
-				i++
-			}
-			this.backspace(bs)
+			all, _, right := this.view3()
+			this.puts(all)
+			this.Eraseline()
+			this.backspace(right.Width())
 			return CONTINUE
 		case "\x12":
 			for i := lastFoundPos - 1; ; i-- {
