@@ -81,6 +81,9 @@ func (this *Buffer) InsertString(pos int, s string) int {
 	return len(list)
 }
 
+// Delete remove Buffer[pos:pos+n].
+// It returns the width to clear the end of line.
+// It does not update screen.
 func (this *Buffer) Delete(pos int, n int) width_t {
 	if n <= 0 || len(this.Buffer) < pos+n {
 		return 0
@@ -95,6 +98,8 @@ func (this *Buffer) InsertAndRepaint(str string) {
 	this.ReplaceAndRepaint(this.Cursor, str)
 }
 
+// ResetViewStart set ViewStart the new value which should be.
+// It does not update screen.
 func (this *Buffer) ResetViewStart() {
 	this.ViewStart = 0
 	w := width_t(0)
