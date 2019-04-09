@@ -45,9 +45,8 @@ func keyFuncBackward(ctx context.Context, this *Buffer) Result { // Ctrl-B
 func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 	allength := this.GetWidthBetween(this.ViewStart, len(this.Buffer))
 	if allength < this.ViewWidth() {
-		for ; this.Cursor < len(this.Buffer); this.Cursor++ {
-			this.putRune(this.Buffer[this.Cursor])
-		}
+		this.puts(this.Buffer[this.Cursor:])
+		this.Cursor = len(this.Buffer)
 	} else {
 		io.WriteString(this.Out, "\a")
 		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
@@ -64,9 +63,8 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 			w = w_
 			this.ViewStart--
 		}
-		for this.Cursor = this.ViewStart; this.Cursor < len(this.Buffer); this.Cursor++ {
-			this.putRune(this.Buffer[this.Cursor])
-		}
+		this.puts(this.Buffer[this.ViewStart:])
+		this.Cursor = len(this.Buffer)
 	}
 	return CONTINUE
 }
@@ -86,9 +84,7 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 			this.ViewStart++
 		}
 		this.ViewStart++
-		for _, ch := range this.Buffer[this.ViewStart : this.Cursor+1] {
-			this.putRune(ch)
-		}
+		this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
 		this.Eraseline()
 	}
 	this.Cursor++
@@ -136,9 +132,7 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 		this.backspace(w)
 		this.Cursor += len([]rune(keys))
 		this.ResetViewStart()
-		for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
-			this.putRune(ch)
-		}
+		this.puts(this.Buffer[this.ViewStart:this.Cursor])
 		this.Eraseline()
 	} else {
 		this.Repaint(this.Cursor, -w1)
@@ -257,9 +251,7 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 
 		redrawStart := maxInt(this.Cursor-2, this.ViewStart)
 		this.backspace(this.GetWidthBetween(redrawStart, this.Cursor))
-		for _, ch := range this.Buffer[redrawStart:this.Cursor] {
-			this.putRune(ch)
-		}
+		this.puts(this.Buffer[redrawStart:this.Cursor])
 	} else {
 		if this.Cursor < 1 {
 			return CONTINUE
@@ -272,16 +264,12 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 			w_1 := w - GetCharWidth(this.Buffer[this.Cursor])
 			this.backspace(w_1)
 			this.ViewStart++
-			for _, ch := range this.Buffer[this.ViewStart : this.Cursor+1] {
-				this.putRune(ch)
-			}
+			this.puts(this.Buffer[this.ViewStart : this.Cursor+1])
 		} else {
 			// no necessary to scroll
 			redrawStart := maxInt(this.Cursor-1, this.ViewStart)
 			this.backspace(this.GetWidthBetween(redrawStart, this.Cursor))
-			for _, ch := range this.Buffer[redrawStart : this.Cursor+1] {
-				this.putRune(ch)
-			}
+			this.puts(this.Buffer[redrawStart : this.Cursor+1])
 		}
 		this.Cursor++
 	}
@@ -320,10 +308,8 @@ func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 	}
 	w := this.GetWidthBetween(this.ViewStart, newPos)
 	if w < this.ViewWidth() {
-		for this.Cursor < newPos {
-			this.putRune(this.Buffer[this.Cursor])
-			this.Cursor++
-		}
+		this.puts(this.Buffer[this.Cursor:newPos])
+		this.Cursor = newPos
 	} else {
 		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.Cursor = newPos
@@ -331,9 +317,7 @@ func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 			w -= GetCharWidth(this.Buffer[this.ViewStart])
 			this.ViewStart++
 		}
-		for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
-			this.putRune(ch)
-		}
+		this.puts(this.Buffer[this.ViewStart:this.Cursor])
 		this.Eraseline()
 	}
 	return CONTINUE

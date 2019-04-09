@@ -16,11 +16,8 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	this.ResetViewStart()
 
 	// Repaint
-	w := width_t(0)
-	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
-		this.putRune(ch)
-		w += GetCharWidth(ch)
-	}
+	w := this.puts(this.Buffer[this.ViewStart:this.Cursor]).Width()
+
 	bs := width_t(0)
 	for _, ch := range this.Buffer[this.Cursor:] {
 		w1 := GetCharWidth(ch)
@@ -62,9 +59,7 @@ func (this *Buffer) Repaint(pos int, del width_t) {
 
 func (this *Buffer) RepaintAfterPrompt() {
 	this.ResetViewStart()
-	for _, ch := range this.Buffer[this.ViewStart:this.Cursor] {
-		this.putRune(ch)
-	}
+	this.puts(this.Buffer[this.ViewStart:this.Cursor])
 	this.Repaint(this.Cursor, 0)
 }
 

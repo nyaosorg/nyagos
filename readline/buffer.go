@@ -75,11 +75,7 @@ func (this *Buffer) ResetViewStart() {
 }
 
 func (this *Buffer) GetWidthBetween(from int, to int) width_t {
-	width := width_t(0)
-	for _, ch := range this.Buffer[from:to] {
-		width += GetCharWidth(ch)
-	}
-	return width
+	return runes_t(this.Buffer[from:to]).Width()
 }
 
 func (this *Buffer) SubString(start, end int) string {
