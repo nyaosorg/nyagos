@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-var shell32 = windows.NewLazyDLL("shell32")
+var shell32 = windows.NewLazySystemDLL("shell32.dll")
 var procShellExecute = shell32.NewProc("ShellExecuteW")
 
 const (

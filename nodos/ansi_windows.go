@@ -12,7 +12,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-var ole32 = windows.NewLazyDLL("ole32")
+var ole32 = windows.NewLazySystemDLL("ole32.dll")
 var procCoInitializeEx = ole32.NewProc("CoInitializeEx")
 var procCoUninitialize = ole32.NewProc("CoUninitialize")
 
