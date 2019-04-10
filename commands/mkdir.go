@@ -4,7 +4,8 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"syscall"
+
+	"golang.org/x/sys/windows"
 )
 
 func cmdMkdir(ctx context.Context, cmd Param) (int, error) {
@@ -85,7 +86,7 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 				return true
 			}, cmd.Out())
 		} else {
-			err = syscall.Rmdir(arg1)
+			err = windows.Rmdir(arg1)
 		}
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "-> %s\n", err)

@@ -3,13 +3,12 @@ package dos
 import (
 	"fmt"
 	"path/filepath"
-	"syscall"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
 )
 
-var shell32 = syscall.NewLazyDLL("shell32")
+var shell32 = windows.NewLazyDLL("shell32")
 var procShellExecute = shell32.NewProc("ShellExecuteW")
 
 const (
@@ -29,19 +28,19 @@ const (
 
 // ShellExecute calls ShellExecute-API: edit,explore,open and so on.
 func shellExecute(action string, path string, param string, directory string) error {
-	actionP, actionErr := syscall.UTF16PtrFromString(action)
+	actionP, actionErr := windows.UTF16PtrFromString(action)
 	if actionErr != nil {
 		return actionErr
 	}
-	pathP, pathErr := syscall.UTF16PtrFromString(path)
+	pathP, pathErr := windows.UTF16PtrFromString(path)
 	if pathErr != nil {
 		return pathErr
 	}
-	paramP, paramErr := syscall.UTF16PtrFromString(param)
+	paramP, paramErr := windows.UTF16PtrFromString(param)
 	if paramErr != nil {
 		return paramErr
 	}
-	directoryP, directoryErr := syscall.UTF16PtrFromString(directory)
+	directoryP, directoryErr := windows.UTF16PtrFromString(directory)
 	if directoryErr != nil {
 		return directoryErr
 	}
@@ -56,7 +55,7 @@ func shellExecute(action string, path string, param string, directory string) er
 	if status <= 32 {
 		if err != nil {
 			return err
-		} else if err = syscall.GetLastError(); err != nil {
+		} else if err = windows.GetLastError(); err != nil {
 			return err
 		} else {
 			return fmt.Errorf("Error(%d) in ShellExecuteW()", status)
@@ -65,7 +64,7 @@ func shellExecute(action string, path string, param string, directory string) er
 	return nil
 }
 
-const haveToEvalSymlinkError = syscall.Errno(4294967294)
+const haveToEvalSymlinkError = windows.Errno(4294967294)
 
 func ShellExecute(action string, path string, param string, directory string) error {
 	err := shellExecute(action, path, param, directory)
