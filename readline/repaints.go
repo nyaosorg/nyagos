@@ -4,10 +4,26 @@ func (this *Buffer) InsertAndRepaint(str string) {
 	this.ReplaceAndRepaint(this.Cursor, str)
 }
 
+// GotoHead move screen-cursor to the top of the viewarea.
+// It should be called before text is changed.
+func (this *Buffer) GotoHead() {
+	this.backspace(runes_t(this.Buffer[this.ViewStart:this.Cursor]).Width())
+}
+
+// DrawFromHead draw all text in viewarea and
+// move screen-cursor to the position where it should be.
+func (this *Buffer) DrawFromHead() {
+	// Repaint
+	view, _, right := this.view3()
+	this.puts(view)
+
+	// Move to cursor position
+	this.Eraseline()
+	this.backspace(right.Width())
+}
+
 func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
-	// Cursor rewind
-	_, left, _ := this.view3()
-	this.backspace(left.Width())
+	this.GotoHead()
 
 	// Replace Buffer
 	this.Delete(pos, this.Cursor-pos)
@@ -16,14 +32,7 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 	this.Cursor = pos + this.InsertString(pos, str)
 	this.ResetViewStart()
 
-	// Repaint
-	view, _, right := this.view3()
-	this.puts(view)
-
-	// Move to cursor position
-	this.Eraseline()
-	this.backspace(right.Width())
-
+	this.DrawFromHead()
 }
 
 // Repaint buffer[pos:] + " \b"*del but do not rewind cursor position

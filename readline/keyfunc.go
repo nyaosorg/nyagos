@@ -21,10 +21,10 @@ func keyFuncIntr(ctx context.Context, this *Buffer) Result { // Ctrl-C
 }
 
 func keyFuncHead(ctx context.Context, this *Buffer) Result { // Ctrl-A
-	this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.GotoHead()
 	this.Cursor = 0
 	this.ViewStart = 0
-	this.Repaint(0, 1)
+	this.DrawFromHead()
 	return CONTINUE
 }
 
@@ -35,7 +35,7 @@ func keyFuncBackward(ctx context.Context, this *Buffer) Result { // Ctrl-B
 	this.Cursor--
 	if this.Cursor < this.ViewStart {
 		this.ViewStart--
-		this.Repaint(this.Cursor, 1)
+		this.DrawFromHead()
 	} else {
 		this.backspace(GetCharWidth(this.Buffer[this.Cursor]))
 	}
@@ -79,7 +79,7 @@ func keyFuncForward(ctx context.Context, this *Buffer) Result { // Ctrl-F
 		this.putRune(this.Buffer[this.Cursor])
 	} else {
 		// Right Scroll
-		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+		this.GotoHead()
 		if GetCharWidth(this.Buffer[this.Cursor]) > GetCharWidth(this.Buffer[this.ViewStart]) {
 			this.ViewStart++
 		}
@@ -100,14 +100,14 @@ func keyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 		} else {
 			this.ViewStart = this.Cursor
 		}
-		this.Repaint(this.Cursor, delw)
+		this.DrawFromHead()
 	}
 	return CONTINUE
 }
 
 func keyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
-	delw := this.Delete(this.Cursor, 1)
-	this.Repaint(this.Cursor, delw)
+	this.Delete(this.Cursor, 1)
+	this.DrawFromHead()
 	return CONTINUE
 }
 
@@ -129,11 +129,10 @@ func keyFuncInsertSelf(ctx context.Context, this *Buffer, keys string) Result {
 	w1 := GetStringWidth(keys)
 	if w+w1 >= this.ViewWidth() {
 		// scroll left
-		this.backspace(w)
+		this.GotoHead()
 		this.Cursor += len([]rune(keys))
 		this.ResetViewStart()
-		this.puts(this.Buffer[this.ViewStart:this.Cursor])
-		this.Eraseline()
+		this.DrawFromHead()
 	} else {
 		this.Repaint(this.Cursor, -w1)
 		this.Cursor += len([]rune(keys))
@@ -150,8 +149,7 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 }
 
 func keyFuncClear(ctx context.Context, this *Buffer) Result {
-	width := this.GetWidthBetween(this.ViewStart, this.Cursor)
-	this.backspace(width)
+	this.GotoHead()
 	this.Eraseline()
 	this.Buffer = this.Buffer[:0]
 	this.Cursor = 0
@@ -178,13 +176,12 @@ func keyFuncWordRubout(ctx context.Context, this *Buffer) Result {
 }
 
 func keyFuncClearBefore(ctx context.Context, this *Buffer) Result {
-	keta := this.GetWidthBetween(this.ViewStart, this.Cursor)
+	this.GotoHead()
 	clipboard.WriteAll(this.SubString(0, this.Cursor))
 	this.Delete(0, this.Cursor)
-	this.backspace(keta)
 	this.Cursor = 0
 	this.ViewStart = 0
-	this.Repaint(0, keta)
+	this.DrawFromHead()
 	return CONTINUE
 }
 
@@ -289,11 +286,10 @@ func keyFuncBackwardWord(ctx context.Context, this *Buffer) Result {
 		this.backspace(w)
 		this.Cursor = newPos
 	} else {
-		w := this.GetWidthBetween(this.ViewStart, this.Cursor)
-		this.backspace(w)
+		this.GotoHead()
 		this.Cursor = newPos
 		this.ViewStart = newPos
-		this.Repaint(newPos, 0)
+		this.DrawFromHead()
 	}
 	return CONTINUE
 }
@@ -311,14 +307,10 @@ func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 		this.puts(this.Buffer[this.Cursor:newPos])
 		this.Cursor = newPos
 	} else {
-		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+		this.GotoHead()
 		this.Cursor = newPos
-		for w >= this.ViewWidth() {
-			w -= GetCharWidth(this.Buffer[this.ViewStart])
-			this.ViewStart++
-		}
-		this.puts(this.Buffer[this.ViewStart:this.Cursor])
-		this.Eraseline()
+		this.ResetViewStart()
+		this.DrawFromHead()
 	}
 	return CONTINUE
 }
