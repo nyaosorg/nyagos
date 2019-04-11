@@ -100,14 +100,14 @@ func keyFuncBackSpace(ctx context.Context, this *Buffer) Result { // Backspace
 		} else {
 			this.ViewStart = this.Cursor
 		}
-		this.DrawFromHead()
+		this.Repaint(this.Cursor, delw)
 	}
 	return CONTINUE
 }
 
 func keyFuncDelete(ctx context.Context, this *Buffer) Result { // Del
-	this.Delete(this.Cursor, 1)
-	this.DrawFromHead()
+	delw := this.Delete(this.Cursor, 1)
+	this.Repaint(this.Cursor, delw)
 	return CONTINUE
 }
 
