@@ -2,6 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * Implement Ctrl-RIGHT,ALT-F(forward-word) and Ctrl-LEFT,ALT-B(backward-word)
 * Fix: wrong the count of backspaces to move top on starting incremental-search
+* (#364) Fix: `ESC[0A` was used.
 
 NYAGOS 4.4.2\_1
 ===============
