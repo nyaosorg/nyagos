@@ -15,10 +15,10 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/yuin/gopher-lua v0.0.0-20190206043414-8bfc7677f583
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
-	github.com/zetamatta/go-box/v2 v2.0.3
+	github.com/zetamatta/go-box/v2 v2.0.4
 	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
-	golang.org/x/sys v0.0.0-20190410235845-0ad05ae3009d
+	golang.org/x/sys v0.0.0-20190412213103-97732733099d
 	golang.org/x/text v0.3.0 // indirect
 )
