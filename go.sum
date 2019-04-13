@@ -49,6 +49,8 @@ github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c h1:r9UpTInry+Yw
 github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c/go.mod h1:0C0I/UCXREnt1Pm8ONsoZMht/s9aTzLr9fcd57yIsls=
 github.com/zetamatta/go-box/v2 v2.0.3 h1:lUvEIbnLb9/SKF1j+ci91pjKD8XpLU12C2LvPMvEhjM=
 github.com/zetamatta/go-box/v2 v2.0.3/go.mod h1:lp22FglV7+xXQ11S7SV913YrBB0xhQNUlPg3f6UlIUw=
+github.com/zetamatta/go-box/v2 v2.0.4 h1:7A/BQaW0Ck13HmAh5yEDM9AnoC2fT8gLV/O/xWdA+Ig=
+github.com/zetamatta/go-box/v2 v2.0.4/go.mod h1:lp22FglV7+xXQ11S7SV913YrBB0xhQNUlPg3f6UlIUw=
 github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab h1:IAbt9u76S8PWbx0lO42vIeeJ2iaUGU1dKCJt2ASri4Q=
 github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
 github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7 h1:cQIrw9+JKS/fwCwXABQC2T/j6aiZ6MwtwqOw/BDo4E4=
@@ -69,5 +71,7 @@ golang.org/x/sys v0.0.0-20190405154228-4b34438f7a67 h1:1Fzlr8kkDLQwqMP8GxrhptBLq
 golang.org/x/sys v0.0.0-20190405154228-4b34438f7a67/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190410235845-0ad05ae3009d h1:+9jagSGtlJZAaZGdRvJikXNpc5lh2/rq9eyMN/5kmwA=
 golang.org/x/sys v0.0.0-20190410235845-0ad05ae3009d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20190412213103-97732733099d h1:+R4KGOnez64A81RvjARKc4UT5/tI9ujCIVX+P5KiHuI=
+golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
