@@ -163,7 +163,7 @@ var name2char = map[string]string{
 	K_CTRL_W:    "\x17",
 	K_CTRL_X:    "\x18",
 	K_CTRL_Y:    "\x19",
-	K_CTRL_Z:    "\x20",
+	K_CTRL_Z:    "\x1A",
 	// K_DELETE:        "\x7F",
 	K_ENTER:         "\r",
 	K_ESCAPE:        "\x1B",
