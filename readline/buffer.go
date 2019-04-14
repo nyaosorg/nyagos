@@ -9,6 +9,12 @@ import (
 
 const forbiddenWidth width_t = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
+type undo_t struct {
+	pos  int
+	del  int
+	text string
+}
+
 type Buffer struct {
 	*Editor
 	Buffer         []rune
@@ -17,6 +23,7 @@ type Buffer struct {
 	TermWidth      int // == TopColumn + ViewWidth + forbiddenWidth
 	TopColumn      int // == width of Prompt
 	HistoryPointer int
+	undoes         []*undo_t
 }
 
 func (this *Buffer) ViewWidth() width_t {
@@ -51,6 +58,12 @@ func (this *Buffer) insert(csrPos int, insStr []rune) {
 
 	// insert insStr
 	copy(this.Buffer[csrPos:csrPos+len(insStr)], insStr)
+
+	u := &undo_t{
+		pos: csrPos,
+		del: len(insStr),
+	}
+	this.undoes = append(this.undoes, u)
 }
 
 // Insert String :s at :pos (Do not update screen)
@@ -69,6 +82,12 @@ func (this *Buffer) Delete(pos int, n int) width_t {
 	if n <= 0 || len(this.Buffer) < pos+n {
 		return 0
 	}
+	u := &undo_t{
+		pos:  pos,
+		text: string(this.Buffer[pos : pos+n]),
+	}
+	this.undoes = append(this.undoes, u)
+
 	delw := this.GetWidthBetween(pos, pos+n)
 	copy(this.Buffer[pos:], this.Buffer[pos+n:])
 	this.Buffer = this.Buffer[:len(this.Buffer)-n]
@@ -134,4 +153,28 @@ func (this *Buffer) CurrentWordTop() (wordTop int) {
 func (this *Buffer) CurrentWord() (string, int) {
 	start := this.CurrentWordTop()
 	return this.SubString(start, this.Cursor), start
+}
+
+func (this *Buffer) joinUndo() {
+	if len(this.undoes) < 2 {
+		return
+	}
+	u1 := this.undoes[len(this.undoes)-2]
+	u2 := this.undoes[len(this.undoes)-1]
+	if u1.pos != u2.pos {
+		return
+	}
+	if u1.text != "" && u2.text != "" {
+		return
+	}
+	if u1.del != 0 && u2.del != 0 {
+		return
+	}
+	if u1.text == "" {
+		u1.text = u2.text
+	}
+	if u1.del == 0 {
+		u1.del = u2.del
+	}
+	this.undoes = this.undoes[:len(this.undoes)-1]
 }

@@ -30,6 +30,9 @@ func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
 
 	// Define ViewStart , Cursor
 	this.Cursor = pos + this.InsertString(pos, str)
+
+	this.joinUndo() // merge delete and insert
+
 	this.ResetViewStart()
 
 	this.DrawFromHead()

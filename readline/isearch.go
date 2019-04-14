@@ -66,6 +66,11 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			update()
 		case "\r":
 			this.ViewStart = 0
+			u := &undo_t{
+				pos:  0,
+				text: string(this.Buffer),
+			}
+			this.undoes = append(this.undoes, u)
 			this.Buffer = this.Buffer[:0]
 			this.Cursor = 0
 			this.ReplaceAndRepaint(0, foundStr)

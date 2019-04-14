@@ -17,6 +17,7 @@ func keyFuncIntr(ctx context.Context, this *Buffer) Result { // Ctrl-C
 	this.Buffer = this.Buffer[:0]
 	this.Cursor = 0
 	this.ViewStart = 0
+	this.undoes = nil
 	return INTR
 }
 
@@ -144,11 +145,21 @@ func keyFuncClearAfter(ctx context.Context, this *Buffer) Result {
 	clipboard.WriteAll(this.SubString(this.Cursor, len(this.Buffer)))
 
 	this.Eraseline()
+	u := &undo_t{
+		pos:  this.Cursor,
+		text: string(this.Buffer[this.Cursor:]),
+	}
+	this.undoes = append(this.undoes, u)
 	this.Buffer = this.Buffer[:this.Cursor]
 	return CONTINUE
 }
 
 func keyFuncClear(ctx context.Context, this *Buffer) Result {
+	u := &undo_t{
+		pos:  0,
+		text: string(this.Buffer),
+	}
+	this.undoes = append(this.undoes, u)
 	this.GotoHead()
 	this.Eraseline()
 	this.Buffer = this.Buffer[:0]
@@ -244,6 +255,12 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		if this.Cursor < 2 {
 			return CONTINUE
 		}
+		u := &undo_t{
+			pos:  this.Cursor,
+			del:  2,
+			text: string(this.Buffer[this.Cursor-2 : this.Cursor]),
+		}
+		this.undoes = append(this.undoes, u)
 		this.Buffer[this.Cursor-2], this.Buffer[this.Cursor-1] = this.Buffer[this.Cursor-1], this.Buffer[this.Cursor-2]
 
 		redrawStart := maxInt(this.Cursor-2, this.ViewStart)
@@ -253,6 +270,12 @@ func keyFuncSwapChar(ctx context.Context, this *Buffer) Result {
 		if this.Cursor < 1 {
 			return CONTINUE
 		}
+		u := &undo_t{
+			pos:  this.Cursor - 1,
+			del:  2,
+			text: string(this.Buffer[this.Cursor-1 : this.Cursor+1]),
+		}
+		this.undoes = append(this.undoes, u)
 
 		w := this.GetWidthBetween(this.ViewStart, this.Cursor+1)
 		this.Buffer[this.Cursor-1], this.Buffer[this.Cursor] = this.Buffer[this.Cursor], this.Buffer[this.Cursor-1]
@@ -312,5 +335,34 @@ func keyFuncForwardWord(ctx context.Context, this *Buffer) Result {
 		this.ResetViewStart()
 		this.DrawFromHead()
 	}
+	return CONTINUE
+}
+
+func keyFuncUndo(ctx context.Context, this *Buffer) Result {
+	if len(this.undoes) <= 0 {
+		io.WriteString(this.Out, "\a")
+		return CONTINUE
+	}
+	u := this.undoes[len(this.undoes)-1]
+	this.undoes = this.undoes[:len(this.undoes)-1]
+
+	this.GotoHead()
+	if u.del > 0 {
+		copy(this.Buffer[u.pos:], this.Buffer[u.pos+u.del:])
+		this.Buffer = this.Buffer[:len(this.Buffer)-u.del]
+	}
+	if u.text != "" {
+		t := []rune(u.text)
+		// widen buffer
+		this.Buffer = append(this.Buffer, t...)
+		// make area
+		copy(this.Buffer[u.pos+len(t):], this.Buffer[u.pos:])
+		copy(this.Buffer[u.pos:], t)
+		this.Cursor = u.pos + len(t)
+	} else {
+		this.Cursor = u.pos
+	}
+	this.ResetViewStart()
+	this.DrawFromHead()
 	return CONTINUE
 }

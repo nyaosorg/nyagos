@@ -134,6 +134,7 @@ const (
 	F_UNIX_WORD_RUBOUT     = "UNIX_WORD_RUBOUT"
 	F_YANK                 = "YANK"
 	F_YANK_WITH_QUOTE      = "YANK_WITH_QUOTE"
+	F_UNDO                 = "UNDO"
 )
 
 var name2char = map[string]string{
@@ -268,6 +269,7 @@ var NAME2FUNC = map[string]func(context.Context, *Buffer) Result{
 	F_YANK_WITH_QUOTE:      keyFuncPasteQuote,
 	F_SWAPCHAR:             keyFuncSwapChar,
 	F_REPAINT_ON_NEWLINE:   keyFuncRepaintOnNewline,
+	F_UNDO:                 keyFuncUndo,
 }
 
 func name2func(keyName string) KeyFuncT {
