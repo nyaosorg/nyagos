@@ -113,6 +113,9 @@ func (this *luaWrapper) Close() error {
 }
 
 func Main() error {
+	if clean, err := nodos.SetConsoleExeIcon(); err == nil {
+		defer clean(true)
+	}
 	ctx := context.Background()
 
 	completion.HookToList = append(completion.HookToList, luaHookForComplete)

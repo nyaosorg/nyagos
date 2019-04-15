@@ -10,6 +10,8 @@ import (
 	"sync"
 
 	"github.com/mattn/go-tty"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var FlushBeforeReadline = false
@@ -189,7 +191,11 @@ var mu sync.Mutex
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
+
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
+	if clean, err := nodos.SetConsoleExeIcon(); err == nil {
+		defer clean(false)
+	}
 	if session.Writer == nil {
 		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
 	}
