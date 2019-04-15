@@ -1,1 +1,1 @@
-* (#116) readline: implement UNDO on Ctrl-Z
+* (#116) readline: implement UNDO on Ctrl-Z,Ctrl-`_`
