@@ -6,7 +6,7 @@ import (
 	"os"
 	"unicode"
 
-	"golang.org/x/sys/windows"
+	"syscall"
 )
 
 func cmdDel(ctx context.Context, cmd Param) (int, error) {
@@ -82,10 +82,10 @@ func cmdDel(ctx context.Context, cmd Param) (int, error) {
 				continue
 			}
 		}
-		err = windows.Unlink(path)
+		err = syscall.Unlink(path)
 		if err != nil && force {
 			if err1 := setWritable(path); err1 == nil {
-				err = windows.Unlink(path)
+				err = syscall.Unlink(path)
 			}
 		}
 		if err != nil {
