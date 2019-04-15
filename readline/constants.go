@@ -3,107 +3,112 @@ package readline
 import "context"
 
 const (
-	K_BACKSPACE     = "BACKSPACE"
-	K_CAPSLOCK      = "CAPSLOCK"
-	K_CLEAR         = "CLEAR"
-	K_CTRL          = "CTRL"
-	K_CTRL_A        = "C_A"
-	K_CTRL_B        = "C_B"
-	K_CTRL_BREAK    = "C_BREAK"
-	K_CTRL_C        = "C_C"
-	K_CTRL_D        = "C_D"
-	K_CTRL_E        = "C_E"
-	K_CTRL_F        = "C_F"
-	K_CTRL_G        = "C_G"
-	K_CTRL_H        = "C_H"
-	K_CTRL_I        = "C_I"
-	K_CTRL_J        = "C_J"
-	K_CTRL_K        = "C_K"
-	K_CTRL_L        = "C_L"
-	K_CTRL_M        = "C_M"
-	K_CTRL_N        = "C_N"
-	K_CTRL_O        = "C_O"
-	K_CTRL_P        = "C_P"
-	K_CTRL_Q        = "C_Q"
-	K_CTRL_R        = "C_R"
-	K_CTRL_S        = "C_S"
-	K_CTRL_T        = "C_T"
-	K_CTRL_U        = "C_U"
-	K_CTRL_V        = "C_V"
-	K_CTRL_W        = "C_W"
-	K_CTRL_X        = "C_X"
-	K_CTRL_Y        = "C_Y"
-	K_CTRL_Z        = "C_Z"
-	K_DELETE        = "DEL"
-	K_DOWN          = "DOWN"
-	K_CTRL_DOWN     = "C_DOWN"
-	K_END           = "END"
-	K_ENTER         = "ENTER"
-	K_ESCAPE        = "ESCAPE"
-	K_F1            = "F1"
-	K_F10           = "F10"
-	K_F11           = "F11"
-	K_F12           = "F12"
-	K_F13           = "F13"
-	K_F14           = "F14"
-	K_F15           = "F15"
-	K_F16           = "F16"
-	K_F17           = "F17"
-	K_F18           = "F18"
-	K_F19           = "F19"
-	K_F2            = "F2"
-	K_F20           = "F20"
-	K_F21           = "F21"
-	K_F22           = "F22"
-	K_F23           = "F23"
-	K_F24           = "F24"
-	K_F3            = "F3"
-	K_F4            = "F4"
-	K_F5            = "F5"
-	K_F6            = "F6"
-	K_F7            = "F7"
-	K_F8            = "F8"
-	K_F9            = "F9"
-	K_HOME          = "HOME"
-	K_LEFT          = "LEFT"
-	K_CTRL_LEFT     = "C_LEFT"
-	K_PAGEDOWN      = "PAGEDOWN"
-	K_PAGEUP        = "PAGEUP"
-	K_PAUSE         = "PAUSE"
-	K_RIGHT         = "RIGHT"
-	K_CTRL_RIGHT    = "C_RIGHT"
-	K_SHIFT         = "SHIFT"
-	K_UP            = "UP"
-	K_CTRL_UP       = "C_UP"
-	K_ALT_A         = "M_A"
-	K_ALT_B         = "M_B"
-	K_ALT_BACKSPACE = "M_BACKSPACE"
-	K_ALT_BREAK     = "M_BREAK"
-	K_ALT_C         = "M_C"
-	K_ALT_D         = "M_D"
-	K_ALT_E         = "M_E"
-	K_ALT_F         = "M_F"
-	K_ALT_G         = "M_G"
-	K_ALT_H         = "M_H"
-	K_ALT_I         = "M_I"
-	K_ALT_J         = "M_J"
-	K_ALT_K         = "M_K"
-	K_ALT_L         = "M_L"
-	K_ALT_M         = "M_M"
-	K_ALT_N         = "M_N"
-	K_ALT_O         = "M_O"
-	K_ALT_P         = "M_P"
-	K_ALT_Q         = "M_Q"
-	K_ALT_R         = "M_R"
-	K_ALT_S         = "M_S"
-	K_ALT_T         = "M_T"
-	K_ALT_U         = "M_U"
-	K_ALT_V         = "M_V"
-	K_ALT_W         = "M_W"
-	K_ALT_X         = "M_X"
-	K_ALT_Y         = "M_Y"
-	K_ALT_Z         = "M_Z"
-	K_ALT_OEM_2     = "M_OEM_2"
+	K_BACKSPACE      = "BACKSPACE"
+	K_CAPSLOCK       = "CAPSLOCK"
+	K_CLEAR          = "CLEAR"
+	K_CTRL           = "CTRL"
+	K_CTRL_A         = "C_A"
+	K_CTRL_B         = "C_B"
+	K_CTRL_BREAK     = "C_BREAK"
+	K_CTRL_C         = "C_C"
+	K_CTRL_D         = "C_D"
+	K_CTRL_E         = "C_E"
+	K_CTRL_F         = "C_F"
+	K_CTRL_G         = "C_G"
+	K_CTRL_H         = "C_H"
+	K_CTRL_I         = "C_I"
+	K_CTRL_J         = "C_J"
+	K_CTRL_K         = "C_K"
+	K_CTRL_L         = "C_L"
+	K_CTRL_M         = "C_M"
+	K_CTRL_N         = "C_N"
+	K_CTRL_O         = "C_O"
+	K_CTRL_P         = "C_P"
+	K_CTRL_Q         = "C_Q"
+	K_CTRL_R         = "C_R"
+	K_CTRL_S         = "C_S"
+	K_CTRL_T         = "C_T"
+	K_CTRL_U         = "C_U"
+	K_CTRL_V         = "C_V"
+	K_CTRL_W         = "C_W"
+	K_CTRL_X         = "C_X"
+	K_CTRL_Y         = "C_Y"
+	K_CTRL_Z         = "C_Z"
+	K_CTRL_UNDERBAR  = "C_UNDERBAR"
+	K_CTRL_LBRACKET  = "C_["
+	K_CTRL_RBRACKET  = "C_]"
+	K_CTRL_BACKSLASH = "C_\\"
+	K_CTRL_CARET     = "C_^"
+	K_DELETE         = "DEL"
+	K_DOWN           = "DOWN"
+	K_CTRL_DOWN      = "C_DOWN"
+	K_END            = "END"
+	K_ENTER          = "ENTER"
+	K_ESCAPE         = "ESCAPE"
+	K_F1             = "F1"
+	K_F10            = "F10"
+	K_F11            = "F11"
+	K_F12            = "F12"
+	K_F13            = "F13"
+	K_F14            = "F14"
+	K_F15            = "F15"
+	K_F16            = "F16"
+	K_F17            = "F17"
+	K_F18            = "F18"
+	K_F19            = "F19"
+	K_F2             = "F2"
+	K_F20            = "F20"
+	K_F21            = "F21"
+	K_F22            = "F22"
+	K_F23            = "F23"
+	K_F24            = "F24"
+	K_F3             = "F3"
+	K_F4             = "F4"
+	K_F5             = "F5"
+	K_F6             = "F6"
+	K_F7             = "F7"
+	K_F8             = "F8"
+	K_F9             = "F9"
+	K_HOME           = "HOME"
+	K_LEFT           = "LEFT"
+	K_CTRL_LEFT      = "C_LEFT"
+	K_PAGEDOWN       = "PAGEDOWN"
+	K_PAGEUP         = "PAGEUP"
+	K_PAUSE          = "PAUSE"
+	K_RIGHT          = "RIGHT"
+	K_CTRL_RIGHT     = "C_RIGHT"
+	K_SHIFT          = "SHIFT"
+	K_UP             = "UP"
+	K_CTRL_UP        = "C_UP"
+	K_ALT_A          = "M_A"
+	K_ALT_B          = "M_B"
+	K_ALT_BACKSPACE  = "M_BACKSPACE"
+	K_ALT_BREAK      = "M_BREAK"
+	K_ALT_C          = "M_C"
+	K_ALT_D          = "M_D"
+	K_ALT_E          = "M_E"
+	K_ALT_F          = "M_F"
+	K_ALT_G          = "M_G"
+	K_ALT_H          = "M_H"
+	K_ALT_I          = "M_I"
+	K_ALT_J          = "M_J"
+	K_ALT_K          = "M_K"
+	K_ALT_L          = "M_L"
+	K_ALT_M          = "M_M"
+	K_ALT_N          = "M_N"
+	K_ALT_O          = "M_O"
+	K_ALT_P          = "M_P"
+	K_ALT_Q          = "M_Q"
+	K_ALT_R          = "M_R"
+	K_ALT_S          = "M_S"
+	K_ALT_T          = "M_T"
+	K_ALT_U          = "M_U"
+	K_ALT_V          = "M_V"
+	K_ALT_W          = "M_W"
+	K_ALT_X          = "M_X"
+	K_ALT_Y          = "M_Y"
+	K_ALT_Z          = "M_Z"
+	K_ALT_OEM_2      = "M_OEM_2"
 )
 
 const (
@@ -138,33 +143,38 @@ const (
 )
 
 var name2char = map[string]string{
-	K_BACKSPACE: "\x7F",
-	K_CTRL_A:    "\x01",
-	K_CTRL_B:    "\x02",
-	K_CTRL_C:    "\x03",
-	K_CTRL_D:    "\x04",
-	K_CTRL_E:    "\x05",
-	K_CTRL_F:    "\x06",
-	K_CTRL_G:    "\x07",
-	K_CTRL_H:    "\x08",
-	K_CTRL_I:    "\x09",
-	K_CTRL_J:    "\x0A",
-	K_CTRL_K:    "\x0B",
-	K_CTRL_L:    "\x0C",
-	K_CTRL_M:    "\x0D",
-	K_CTRL_N:    "\x0E",
-	K_CTRL_O:    "\x0F",
-	K_CTRL_P:    "\x10",
-	K_CTRL_Q:    "\x11",
-	K_CTRL_R:    "\x12",
-	K_CTRL_S:    "\x13",
-	K_CTRL_T:    "\x14",
-	K_CTRL_U:    "\x15",
-	K_CTRL_V:    "\x16",
-	K_CTRL_W:    "\x17",
-	K_CTRL_X:    "\x18",
-	K_CTRL_Y:    "\x19",
-	K_CTRL_Z:    "\x1A",
+	K_BACKSPACE:      "\x7F",
+	K_CTRL_A:         "\x01",
+	K_CTRL_B:         "\x02",
+	K_CTRL_C:         "\x03",
+	K_CTRL_D:         "\x04",
+	K_CTRL_E:         "\x05",
+	K_CTRL_F:         "\x06",
+	K_CTRL_G:         "\x07",
+	K_CTRL_H:         "\x08",
+	K_CTRL_I:         "\x09",
+	K_CTRL_J:         "\x0A",
+	K_CTRL_K:         "\x0B",
+	K_CTRL_L:         "\x0C",
+	K_CTRL_M:         "\x0D",
+	K_CTRL_N:         "\x0E",
+	K_CTRL_O:         "\x0F",
+	K_CTRL_P:         "\x10",
+	K_CTRL_Q:         "\x11",
+	K_CTRL_R:         "\x12",
+	K_CTRL_S:         "\x13",
+	K_CTRL_T:         "\x14",
+	K_CTRL_U:         "\x15",
+	K_CTRL_V:         "\x16",
+	K_CTRL_W:         "\x17",
+	K_CTRL_X:         "\x18",
+	K_CTRL_Y:         "\x19",
+	K_CTRL_Z:         "\x1A",
+	K_CTRL_LBRACKET:  "\x1B", // C-[
+	K_CTRL_BACKSLASH: "\x1C", // C-\
+	K_CTRL_RBRACKET:  "\x1D", // C-]
+	K_CTRL_CARET:     "\x1E", // C-^
+	K_CTRL_UNDERBAR:  "\x1F",
 	// K_DELETE:        "\x7F",
 	K_ENTER:         "\r",
 	K_ESCAPE:        "\x1B",
