@@ -229,21 +229,21 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	this.TTY = tty1
 	defer tty1.Close()
 
-	this.TermWidth, _, err = tty1.Size()
+	this.termWidth, _, err = tty1.Size()
 	if err != nil {
 		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
 	}
 
 	var err1 error
-	this.TopColumn, err1 = session.Prompt()
+	this.topColumn, err1 = session.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
 		fmt.Fprintf(this.Out, "%s\n$ ", err1.Error())
-		this.TopColumn = 2
-	} else if this.TopColumn >= this.TermWidth-3 {
+		this.topColumn = 2
+	} else if this.topColumn >= this.termWidth-3 {
 		// ViewWidth is too narrow to edit.
 		io.WriteString(this.Out, "\n")
-		this.TopColumn = 0
+		this.topColumn = 0
 	}
 	this.InsertString(0, session.Default)
 	if this.Cursor > len(this.Buffer) {
@@ -259,14 +259,14 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			w := ws1.W
 			if lastw != w {
 				mu.Lock()
-				this.TermWidth = w
-				fmt.Fprintf(this.Out, "\x1B[%dG", this.TopColumn+1)
+				this.termWidth = w
+				fmt.Fprintf(this.Out, "\x1B[%dG", this.topColumn+1)
 				this.RepaintAfterPrompt()
 				mu.Unlock()
 				lastw = w
 			}
 		}
-	}(this.TermWidth)
+	}(this.termWidth)
 
 	for {
 		mu.Lock()

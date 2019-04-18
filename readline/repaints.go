@@ -63,6 +63,6 @@ func (this *Buffer) RepaintAfterPrompt() {
 
 func (this *Buffer) RepaintAll() {
 	this.Out.Flush()
-	this.TopColumn, _ = this.Prompt()
+	this.topColumn, _ = this.Prompt()
 	this.RepaintAfterPrompt()
 }

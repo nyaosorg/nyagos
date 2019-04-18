@@ -20,14 +20,14 @@ type Buffer struct {
 	Buffer         []rune
 	TTY            *tty.TTY
 	ViewStart      int
-	TermWidth      int // == TopColumn + ViewWidth + forbiddenWidth
-	TopColumn      int // == width of Prompt
+	termWidth      int // == topColumn + termWidth + forbiddenWidth
+	topColumn      int // == width of Prompt
 	HistoryPointer int
 	undoes         []*undo_t
 }
 
 func (this *Buffer) ViewWidth() width_t {
-	return width_t(this.TermWidth) - width_t(this.TopColumn) - forbiddenWidth
+	return width_t(this.termWidth) - width_t(this.topColumn) - forbiddenWidth
 }
 
 func (this *Buffer) view() range_t {
