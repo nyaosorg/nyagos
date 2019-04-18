@@ -49,7 +49,6 @@ func keyFuncTail(ctx context.Context, this *Buffer) Result { // Ctrl-E
 		this.puts(this.Buffer[this.Cursor:])
 		this.Cursor = len(this.Buffer)
 	} else {
-		io.WriteString(this.Out, "\a")
 		this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 		this.ViewStart = len(this.Buffer) - 1
 		w := GetCharWidth(this.Buffer[this.ViewStart])
