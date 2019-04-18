@@ -42,16 +42,16 @@ func (this *Buffer) Eraseline() {
 	io.WriteString(this.Out, "\x1B[0K")
 }
 
-type runes_t []rune
+type range_t []rune
 
-func (this *Buffer) puts(s []rune) runes_t {
+func (this *Buffer) puts(s []rune) range_t {
 	for _, ch := range s {
 		this.putRune(ch)
 	}
-	return runes_t(s)
+	return range_t(s)
 }
 
-func (s runes_t) Width() (w width_t) {
+func (s range_t) Width() (w width_t) {
 	for _, ch := range s {
 		w += GetCharWidth(ch)
 	}

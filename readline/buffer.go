@@ -30,7 +30,7 @@ func (this *Buffer) ViewWidth() width_t {
 	return width_t(this.TermWidth) - width_t(this.TopColumn) - forbiddenWidth
 }
 
-func (this *Buffer) view() runes_t {
+func (this *Buffer) view() range_t {
 	view := this.Buffer[this.ViewStart:]
 	width := this.ViewWidth()
 	w := width_t(0)
@@ -40,10 +40,10 @@ func (this *Buffer) view() runes_t {
 			return view[:i]
 		}
 	}
-	return runes_t(view)
+	return range_t(view)
 }
 
-func (this *Buffer) view3() (runes_t, runes_t, runes_t) {
+func (this *Buffer) view3() (range_t, range_t, range_t) {
 	v := this.view()
 	x := this.Cursor - this.ViewStart
 	return v, v[:x], v[x:]
@@ -113,7 +113,7 @@ func (this *Buffer) ResetViewStart() {
 }
 
 func (this *Buffer) GetWidthBetween(from int, to int) width_t {
-	return runes_t(this.Buffer[from:to]).Width()
+	return range_t(this.Buffer[from:to]).Width()
 }
 
 func (this *Buffer) SubString(start, end int) string {

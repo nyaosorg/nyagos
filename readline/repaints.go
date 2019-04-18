@@ -7,7 +7,7 @@ func (this *Buffer) InsertAndRepaint(str string) {
 // GotoHead move screen-cursor to the top of the viewarea.
 // It should be called before text is changed.
 func (this *Buffer) GotoHead() {
-	this.backspace(runes_t(this.Buffer[this.ViewStart:this.Cursor]).Width())
+	this.backspace(range_t(this.Buffer[this.ViewStart:this.Cursor]).Width())
 }
 
 // DrawFromHead draw all text in viewarea and
