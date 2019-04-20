@@ -47,7 +47,7 @@ func callReplace(L Lua) int {
 	}
 	str := L.ToString(-1)
 	pos_zero_base := int(pos) - 1
-	if pos_zero_base > buffer.Length {
+	if pos_zero_base > len(buffer.Buffer) {
 		return lerror(L, fmt.Sprintf(":replace: pos=%d: Too big.", pos))
 	}
 	buffer.ReplaceAndRepaint(pos_zero_base, string(str))
@@ -148,9 +148,6 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 	pos := -1
 	var text strings.Builder
 	for i, c := range buffer.Buffer {
-		if i >= buffer.Length {
-			break
-		}
 		if i == buffer.Cursor {
 			pos = text.Len() + 1
 		}
@@ -186,8 +183,7 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 			buffer.InsertAndRepaint(string(value))
 		case lua.LBool:
 			if !value {
-				buffer.Buffer = []rune{}
-				buffer.Length = 0
+				buffer.Buffer = buffer.Buffer[:0]
 			}
 			return readline.ENTER
 		}

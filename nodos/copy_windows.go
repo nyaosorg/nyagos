@@ -7,7 +7,7 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-var kernel32 = windows.NewLazyDLL("kernel32")
+var kernel32 = windows.NewLazySystemDLL("kernel32.dll")
 
 var procCopyFileW = kernel32.NewProc("CopyFileW")
 

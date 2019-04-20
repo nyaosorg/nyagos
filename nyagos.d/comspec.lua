@@ -10,6 +10,8 @@ if nyagos.goos == "windows" then
         "for",
         "ren",
         "rename",
+        "date",
+        "time"
     } do
         nyagos.alias[name] = "cmdexesc " .. name .. " $*"
     end

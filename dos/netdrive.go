@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-var mpr = windows.NewLazyDLL("mpr")
+var mpr = windows.NewLazySystemDLL("mpr.dll")
 var procWNetGetConnectionW = mpr.NewProc("WNetGetConnectionW")
 
 func _WNetGetConnection(drive uint16) (string, error) {

@@ -28,3 +28,4 @@ English / [Japanese](./03-Readline_ja.md)
 * Ctrl-Q , Ctrl-V    : Add the next character typed to the line verbatim
 * Ctrl-Right , Alt-F : Move forward over a word
 * Ctrl-Left , Alt-B  : Move backward over a word
+* Ctrl-`_`, Ctrl-Z   : Undo

@@ -2,11 +2,12 @@ package dos
 
 import (
 	"fmt"
-	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/windows"
 )
 
-var advapi32 = syscall.NewLazyDLL("advapi32.dll")
+var advapi32 = windows.NewLazySystemDLL("advapi32.dll")
 var procOpenProcessToken = advapi32.NewProc("OpenProcessToken")
 var procGetTokenInformation = advapi32.NewProc("GetTokenInformation")
 var procGetCurrentProcess = kernel32.NewProc("GetCurrentProcess")

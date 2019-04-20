@@ -30,5 +30,6 @@ UNIX系シェルに近いキーバインドで、コマンドラインを編集�
 * Ctrl-Q , Ctrl-V    : タイプした文字をそのまま挿入する
 * Ctrl-Right , Alt-F : 次の単語先頭へ移動
 * Ctrl-Left , Alt-B  : 前の単語先頭へ移動
+* Ctrl-`_`, Ctrl-Z   : 直前の変更を取り消す
 
 <!-- set:fenc=utf8: -->

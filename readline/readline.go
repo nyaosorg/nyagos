@@ -10,6 +10,8 @@ import (
 	"sync"
 
 	"github.com/mattn/go-tty"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var FlushBeforeReadline = false
@@ -59,44 +61,46 @@ func (this KeyGoFuncT) String() string {
 }
 
 var keyMap = map[string]KeyFuncT{
-	name2char[K_CTRL_A]:     name2func(F_BEGINNING_OF_LINE),
-	name2char[K_CTRL_B]:     name2func(F_BACKWARD_CHAR),
-	name2char[K_BACKSPACE]:  name2func(F_BACKWARD_DELETE_CHAR),
-	name2char[K_CTRL_C]:     name2func(F_INTR),
-	name2char[K_CTRL_D]:     name2func(F_DELETE_OR_ABORT),
-	name2char[K_CTRL_E]:     name2func(F_END_OF_LINE),
-	name2char[K_CTRL_F]:     name2func(F_FORWARD_CHAR),
-	name2char[K_CTRL_H]:     name2func(F_BACKWARD_DELETE_CHAR),
-	name2char[K_CTRL_K]:     name2func(F_KILL_LINE),
-	name2char[K_CTRL_L]:     name2func(F_CLEAR_SCREEN),
-	name2char[K_CTRL_M]:     name2func(F_ACCEPT_LINE),
-	name2char[K_CTRL_R]:     name2func(F_ISEARCH_BACKWARD),
-	name2char[K_CTRL_U]:     name2func(F_UNIX_LINE_DISCARD),
-	name2char[K_CTRL_Y]:     name2func(F_YANK),
-	name2char[K_DELETE]:     name2func(F_DELETE_CHAR),
-	name2char[K_ENTER]:      name2func(F_ACCEPT_LINE),
-	name2char[K_ESCAPE]:     name2func(F_KILL_WHOLE_LINE),
-	name2char[K_CTRL_N]:     name2func(F_HISTORY_DOWN),
-	name2char[K_CTRL_P]:     name2func(F_HISTORY_UP),
-	name2char[K_CTRL_Q]:     name2func(F_QUOTED_INSERT),
-	name2char[K_CTRL_T]:     name2func(F_SWAPCHAR),
-	name2char[K_CTRL_V]:     name2func(F_QUOTED_INSERT),
-	name2char[K_CTRL_W]:     name2func(F_UNIX_WORD_RUBOUT),
-	name2char[K_CTRL]:       name2func(F_PASS),
-	name2char[K_DELETE]:     name2func(F_DELETE_CHAR),
-	name2char[K_END]:        name2func(F_END_OF_LINE),
-	name2char[K_HOME]:       name2func(F_BEGINNING_OF_LINE),
-	name2char[K_LEFT]:       name2func(F_BACKWARD_CHAR),
-	name2char[K_RIGHT]:      name2func(F_FORWARD_CHAR),
-	name2char[K_SHIFT]:      name2func(F_PASS),
-	name2char[K_DOWN]:       name2func(F_HISTORY_DOWN),
-	name2char[K_UP]:         name2func(F_HISTORY_UP),
-	name2char[K_ALT_V]:      name2func(F_YANK),
-	name2char[K_ALT_Y]:      name2func(F_YANK_WITH_QUOTE),
-	name2char[K_ALT_B]:      name2func(F_BACKWARD_WORD),
-	name2char[K_ALT_F]:      name2func(F_FORWARD_WORD),
-	name2char[K_CTRL_LEFT]:  name2func(F_BACKWARD_WORD),
-	name2char[K_CTRL_RIGHT]: name2func(F_FORWARD_WORD),
+	name2char[K_CTRL_A]:        name2func(F_BEGINNING_OF_LINE),
+	name2char[K_CTRL_B]:        name2func(F_BACKWARD_CHAR),
+	name2char[K_BACKSPACE]:     name2func(F_BACKWARD_DELETE_CHAR),
+	name2char[K_CTRL_C]:        name2func(F_INTR),
+	name2char[K_CTRL_D]:        name2func(F_DELETE_OR_ABORT),
+	name2char[K_CTRL_E]:        name2func(F_END_OF_LINE),
+	name2char[K_CTRL_F]:        name2func(F_FORWARD_CHAR),
+	name2char[K_CTRL_H]:        name2func(F_BACKWARD_DELETE_CHAR),
+	name2char[K_CTRL_K]:        name2func(F_KILL_LINE),
+	name2char[K_CTRL_L]:        name2func(F_CLEAR_SCREEN),
+	name2char[K_CTRL_M]:        name2func(F_ACCEPT_LINE),
+	name2char[K_CTRL_R]:        name2func(F_ISEARCH_BACKWARD),
+	name2char[K_CTRL_U]:        name2func(F_UNIX_LINE_DISCARD),
+	name2char[K_CTRL_Y]:        name2func(F_YANK),
+	name2char[K_DELETE]:        name2func(F_DELETE_CHAR),
+	name2char[K_ENTER]:         name2func(F_ACCEPT_LINE),
+	name2char[K_ESCAPE]:        name2func(F_KILL_WHOLE_LINE),
+	name2char[K_CTRL_N]:        name2func(F_HISTORY_DOWN),
+	name2char[K_CTRL_P]:        name2func(F_HISTORY_UP),
+	name2char[K_CTRL_Q]:        name2func(F_QUOTED_INSERT),
+	name2char[K_CTRL_T]:        name2func(F_SWAPCHAR),
+	name2char[K_CTRL_V]:        name2func(F_QUOTED_INSERT),
+	name2char[K_CTRL_W]:        name2func(F_UNIX_WORD_RUBOUT),
+	name2char[K_CTRL]:          name2func(F_PASS),
+	name2char[K_DELETE]:        name2func(F_DELETE_CHAR),
+	name2char[K_END]:           name2func(F_END_OF_LINE),
+	name2char[K_HOME]:          name2func(F_BEGINNING_OF_LINE),
+	name2char[K_LEFT]:          name2func(F_BACKWARD_CHAR),
+	name2char[K_RIGHT]:         name2func(F_FORWARD_CHAR),
+	name2char[K_SHIFT]:         name2func(F_PASS),
+	name2char[K_DOWN]:          name2func(F_HISTORY_DOWN),
+	name2char[K_UP]:            name2func(F_HISTORY_UP),
+	name2char[K_ALT_V]:         name2func(F_YANK),
+	name2char[K_ALT_Y]:         name2func(F_YANK_WITH_QUOTE),
+	name2char[K_ALT_B]:         name2func(F_BACKWARD_WORD),
+	name2char[K_ALT_F]:         name2func(F_FORWARD_WORD),
+	name2char[K_CTRL_LEFT]:     name2func(F_BACKWARD_WORD),
+	name2char[K_CTRL_RIGHT]:    name2func(F_FORWARD_WORD),
+	name2char[K_CTRL_Z]:        name2func(F_UNDO),
+	name2char[K_CTRL_UNDERBAR]: name2func(F_UNDO),
 }
 
 func normWord(src string) string {
@@ -187,7 +191,11 @@ var mu sync.Mutex
 // - ENTER typed -> returns TEXT and nil
 // - CTRL-C typed -> returns "" and readline.CtrlC
 // - CTRL-D typed -> returns "" and io.EOF
+
 func (session *Editor) ReadLine(ctx context.Context) (string, error) {
+	if clean, err := nodos.SetConsoleExeIcon(); err == nil {
+		defer clean(false)
+	}
 	if session.Writer == nil {
 		panic("readline.Editor.Writer is not set. Set an instance such as go-colorable.NewColorableStdout()")
 	}
@@ -210,7 +218,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	}
 	this := Buffer{
 		Editor:         session,
-		Buffer:         make([]rune, 20),
+		Buffer:         make([]rune, 0, 20),
 		HistoryPointer: session.History.Len(),
 	}
 
@@ -221,25 +229,25 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	this.TTY = tty1
 	defer tty1.Close()
 
-	this.TermWidth, _, err = tty1.Size()
+	this.termWidth, _, err = tty1.Size()
 	if err != nil {
 		return "", fmt.Errorf("go-tty.Size: %s", err.Error())
 	}
 
 	var err1 error
-	this.TopColumn, err1 = session.Prompt()
+	this.topColumn, err1 = session.Prompt()
 	if err1 != nil {
 		// unable to get prompt-string.
 		fmt.Fprintf(this.Out, "%s\n$ ", err1.Error())
-		this.TopColumn = 2
-	} else if this.TopColumn >= this.TermWidth-3 {
+		this.topColumn = 2
+	} else if this.topColumn >= this.termWidth-3 {
 		// ViewWidth is too narrow to edit.
 		io.WriteString(this.Out, "\n")
-		this.TopColumn = 0
+		this.topColumn = 0
 	}
 	this.InsertString(0, session.Default)
-	if this.Cursor > this.Length {
-		this.Cursor = this.Length
+	if this.Cursor > len(this.Buffer) {
+		this.Cursor = len(this.Buffer)
 	}
 	this.RepaintAfterPrompt()
 
@@ -251,14 +259,14 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 			w := ws1.W
 			if lastw != w {
 				mu.Lock()
-				this.TermWidth = w
-				fmt.Fprintf(this.Out, "\x1B[%dG", this.TopColumn+1)
+				this.termWidth = w
+				fmt.Fprintf(this.Out, "\x1B[%dG", this.topColumn+1)
 				this.RepaintAfterPrompt()
 				mu.Unlock()
 				lastw = w
 			}
 		}
-	}(this.TermWidth)
+	}(this.termWidth)
 
 	for {
 		mu.Lock()

@@ -14,7 +14,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	foundStr := ""
 	searchStr := ""
 	lastFoundPos := this.History.Len() - 1
-	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
+	this.backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
 
 	update := func() {
 		for i := this.History.Len() - 1; ; i-- {
@@ -32,13 +32,13 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 	}
 	for {
 		drawStr := fmt.Sprintf("(i-search)[%s]:%s", searchStr, foundStr)
-		drawWidth := 0
+		drawWidth := width_t(0)
 		for _, ch := range drawStr {
 			w1 := GetCharWidth(ch)
 			if drawWidth+w1 >= this.ViewWidth() {
 				break
 			}
-			this.PutRune(ch)
+			this.putRune(ch)
 			drawWidth += w1
 		}
 		this.Eraseline()
@@ -50,7 +50,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			return CONTINUE
 		}
 		io.WriteString(this.Out, ansiCursorOff)
-		this.Backspace(drawWidth)
+		this.backspace(drawWidth)
 		switch key {
 		case "\b":
 			searchBuf.Reset()
@@ -66,36 +66,20 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 			update()
 		case "\r":
 			this.ViewStart = 0
-			this.Length = 0
+			u := &undo_t{
+				pos:  0,
+				text: string(this.Buffer),
+			}
+			this.undoes = append(this.undoes, u)
+			this.Buffer = this.Buffer[:0]
 			this.Cursor = 0
 			this.ReplaceAndRepaint(0, foundStr)
 			return CONTINUE
 		case "\x03", "\x07", "\x1B":
-			w := 0
-			var i int
-			for i = this.ViewStart; i < this.Cursor; i++ {
-				w += GetCharWidth(this.Buffer[i])
-				this.PutRune(this.Buffer[i])
-			}
-			bs := 0
-			for {
-				if i >= this.Length {
-					if drawWidth > w {
-						this.PutRunes(' ', drawWidth-w)
-						bs += (drawWidth - w)
-					}
-					break
-				}
-				w1 := GetCharWidth(this.Buffer[i])
-				if w+w1 >= this.ViewWidth() {
-					break
-				}
-				this.PutRune(this.Buffer[i])
-				w += w1
-				bs += w1
-				i++
-			}
-			this.Backspace(bs)
+			all, _, right := this.view3()
+			this.puts(all)
+			this.Eraseline()
+			this.backspace(right.Width())
 			return CONTINUE
 		case "\x12":
 			for i := lastFoundPos - 1; ; i-- {

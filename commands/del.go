@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"syscall"
 	"unicode"
+
+	"syscall"
 )
 
 func cmdDel(ctx context.Context, cmd Param) (int, error) {

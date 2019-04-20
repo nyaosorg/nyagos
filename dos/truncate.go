@@ -5,7 +5,6 @@ import (
 	"io"
 	"io/ioutil"
 	"path/filepath"
-	"syscall"
 
 	"golang.org/x/sys/windows"
 )
@@ -34,7 +33,7 @@ func Truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 			} else {
 				fmt.Fprintln(out, fullpath)
 				SetFileAttributes(fullpath, windows.FILE_ATTRIBUTE_NORMAL)
-				err = syscall.Unlink(fullpath)
+				err = windows.Unlink(fullpath)
 			}
 			if err != nil {
 				if whenError != nil && !whenError(fullpath, err) {
@@ -43,7 +42,7 @@ func Truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 			}
 		}
 	}
-	if err := syscall.Rmdir(folder); err != nil {
+	if err := windows.Rmdir(folder); err != nil {
 		return fmt.Errorf("%s: %s", folder, err.Error())
 	}
 	return nil

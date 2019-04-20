@@ -1,115 +1,105 @@
 package readline
 
 import (
-	"fmt"
-	"io"
 	"strings"
 	"unicode"
 
-	"github.com/mattn/go-runewidth"
 	"github.com/mattn/go-tty"
 )
 
-var SurrogatePairOk = false
+const forbiddenWidth width_t = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
-func (this *Buffer) PutRune(ch rune) {
-	if ch < ' ' {
-		this.Out.WriteByte('^')
-		this.Out.WriteByte(byte('A' + (ch - 1)))
-	} else if (ch >= 0x10000 && !SurrogatePairOk) || runewidth.RuneWidth(ch) == 0 {
-		fmt.Fprintf(this.Out, "<%X>", ch)
-	} else {
-		this.Out.WriteRune(ch)
-	}
+type undo_t struct {
+	pos  int
+	del  int
+	text string
 }
-
-func (this *Buffer) PutRunes(ch rune, n int) {
-	if n <= 0 {
-		return
-	}
-	this.PutRune(ch)
-	for i := 1; i < n; i++ {
-		this.Out.WriteRune(ch)
-	}
-}
-
-func (this *Buffer) Backspace(n int) {
-	if n > 1 {
-		fmt.Fprintf(this.Out, "\x1B[%dD", n)
-	} else if n == 1 {
-		this.Out.WriteByte('\b')
-	}
-}
-
-func (this *Buffer) Eraseline() {
-	io.WriteString(this.Out, "\x1B[0K")
-}
-
-const forbiddenWidth = 3 // = lastcolumn(1) and FULLWIDTHCHAR-SIZE(2)
 
 type Buffer struct {
 	*Editor
 	Buffer         []rune
-	Length         int
 	TTY            *tty.TTY
 	ViewStart      int
-	TermWidth      int // == TopColumn + ViewWidth + forbiddenWidth
-	TopColumn      int // == width of Prompt
+	termWidth      int // == topColumn + termWidth + forbiddenWidth
+	topColumn      int // == width of Prompt
 	HistoryPointer int
+	undoes         []*undo_t
 }
 
-func (this *Buffer) ViewWidth() int {
-	return this.TermWidth - this.TopColumn - forbiddenWidth
+func (this *Buffer) ViewWidth() width_t {
+	return width_t(this.termWidth) - width_t(this.topColumn) - forbiddenWidth
 }
 
-func (this *Buffer) Insert(csrPos int, insStr []rune) {
-	addSize := len(insStr)
-	newSize := len(this.Buffer)
-	for this.Length+addSize >= newSize {
-		newSize *= 2
+func (this *Buffer) view() range_t {
+	view := this.Buffer[this.ViewStart:]
+	width := this.ViewWidth()
+	w := width_t(0)
+	for i, c := range view {
+		w += GetCharWidth(c)
+		if w >= width {
+			return view[:i]
+		}
 	}
-	tmp := make([]rune, newSize)
-	copy(tmp, this.Buffer)
-	this.Buffer = tmp
-
-	for i := this.Length - 1; i >= csrPos; i-- {
-		this.Buffer[i+addSize] = this.Buffer[i]
-	}
-	for i := 0; i < addSize; i++ {
-		this.Buffer[csrPos+i] = insStr[i]
-	}
-	this.Length += addSize
+	return range_t(view)
 }
 
-// Insert String :s at :pos
+func (this *Buffer) view3() (range_t, range_t, range_t) {
+	v := this.view()
+	x := this.Cursor - this.ViewStart
+	return v, v[:x], v[x:]
+}
+
+func (this *Buffer) insert(csrPos int, insStr []rune) {
+	// expand buffer
+	this.Buffer = append(this.Buffer, insStr...)
+
+	// shift original string to make area
+	copy(this.Buffer[csrPos+len(insStr):], this.Buffer[csrPos:])
+
+	// insert insStr
+	copy(this.Buffer[csrPos:csrPos+len(insStr)], insStr)
+
+	u := &undo_t{
+		pos: csrPos,
+		del: len(insStr),
+	}
+	this.undoes = append(this.undoes, u)
+}
+
+// Insert String :s at :pos (Do not update screen)
 // returns
 //    count of rune
 func (this *Buffer) InsertString(pos int, s string) int {
 	list := []rune(s)
-	this.Insert(pos, list)
+	this.insert(pos, list)
 	return len(list)
 }
 
-func (this *Buffer) Delete(pos int, n int) int {
-	if n <= 0 || this.Length < pos+n {
+// Delete remove Buffer[pos:pos+n].
+// It returns the width to clear the end of line.
+// It does not update screen.
+func (this *Buffer) Delete(pos int, n int) width_t {
+	if n <= 0 || len(this.Buffer) < pos+n {
 		return 0
 	}
-	delw := this.GetWidthBetween(pos, pos+n)
-	for i := pos; i < this.Length-n; i++ {
-		this.Buffer[i] = this.Buffer[i+n]
+	u := &undo_t{
+		pos:  pos,
+		text: string(this.Buffer[pos : pos+n]),
 	}
-	this.Length -= n
+	this.undoes = append(this.undoes, u)
+
+	delw := this.GetWidthBetween(pos, pos+n)
+	copy(this.Buffer[pos:], this.Buffer[pos+n:])
+	this.Buffer = this.Buffer[:len(this.Buffer)-n]
 	return delw
 }
 
-func (this *Buffer) InsertAndRepaint(str string) {
-	this.ReplaceAndRepaint(this.Cursor, str)
-}
-
+// ResetViewStart set ViewStart the new value which should be.
+// It does not update screen.
 func (this *Buffer) ResetViewStart() {
 	this.ViewStart = 0
-	w := 0
-	for i := 0; i <= this.Cursor; i++ {
+	w := width_t(0)
+	for i := 0; i <= this.Cursor && i < len(this.Buffer); i++ {
 		w += GetCharWidth(this.Buffer[i])
 		for w >= this.ViewWidth() {
 			if this.ViewStart >= len(this.Buffer) {
@@ -122,94 +112,16 @@ func (this *Buffer) ResetViewStart() {
 	}
 }
 
-func (this *Buffer) ReplaceAndRepaint(pos int, str string) {
-	// Cursor rewind
-	this.Backspace(this.GetWidthBetween(this.ViewStart, this.Cursor))
-
-	// Replace Buffer
-	this.Delete(pos, this.Cursor-pos)
-
-	// Define ViewStart , Cursor
-	this.Cursor = pos + this.InsertString(pos, str)
-	this.ResetViewStart()
-
-	// Repaint
-	w := 0
-	for i := this.ViewStart; i < this.Cursor; i++ {
-		this.PutRune(this.Buffer[i])
-		w += GetCharWidth(this.Buffer[i])
-	}
-	bs := 0
-	for i := this.Cursor; i < this.Length; i++ {
-		w1 := GetCharWidth(this.Buffer[i])
-		if w+w1 >= this.ViewWidth() {
-			break
-		}
-		this.PutRune(this.Buffer[i])
-		w += w1
-		bs += w1
-	}
-	this.Eraseline()
-	if bs > 0 {
-		this.Backspace(bs)
-	}
-}
-
-func (this *Buffer) GetWidthBetween(from int, to int) int {
-	width := 0
-	for i := from; i < to; i++ {
-		width += GetCharWidth(this.Buffer[i])
-	}
-	return width
-}
-
-// Repaint buffer[pos:] + " \b"*del but do not rewind cursor position
-func (this *Buffer) Repaint(pos int, del int) {
-	bs := 0
-	vp := this.GetWidthBetween(this.ViewStart, pos)
-
-	for i := pos; i < this.Length; i++ {
-		w1 := GetCharWidth(this.Buffer[i])
-		if vp+w1 >= this.ViewWidth() {
-			break
-		}
-		this.PutRune(this.Buffer[i])
-		vp += w1
-		bs += w1
-	}
-	this.Eraseline()
-	if del > 0 {
-		this.Backspace(bs)
-	} else {
-		// for readline_keyfunc.go: KeyFuncInsertSelf()
-		this.Backspace(bs + del)
-	}
-}
-
-func (this *Buffer) RepaintAfterPrompt() {
-	this.ResetViewStart()
-	for i := this.ViewStart; i < this.Cursor; i++ {
-		this.PutRune(this.Buffer[i])
-	}
-	this.Repaint(this.Cursor, 0)
-}
-
-func (this *Buffer) RepaintAll() {
-	this.Out.Flush()
-	this.TopColumn, _ = this.Prompt()
-	this.RepaintAfterPrompt()
+func (this *Buffer) GetWidthBetween(from int, to int) width_t {
+	return range_t(this.Buffer[from:to]).Width()
 }
 
 func (this *Buffer) SubString(start, end int) string {
-	var result strings.Builder
-	for i := start; i < end; i++ {
-		result.WriteRune(this.Buffer[i])
-	}
-	return result.String()
+	return string(this.Buffer[start:end])
 }
 
 func (this Buffer) String() string {
-	return this.SubString(0, this.Length)
+	return string(this.Buffer)
 }
 
 var Delimiters = "\"'"
@@ -217,15 +129,15 @@ var Delimiters = "\"'"
 func (this *Buffer) CurrentWordTop() (wordTop int) {
 	wordTop = -1
 	quotedchar := '\000'
-	for i := 0; i < this.Cursor; i++ {
+	for i, ch := range this.Buffer[:this.Cursor] {
 		if quotedchar == '\000' {
-			if strings.ContainsRune(Delimiters, this.Buffer[i]) {
-				quotedchar = this.Buffer[i]
+			if strings.ContainsRune(Delimiters, ch) {
+				quotedchar = ch
 			}
-		} else if this.Buffer[i] == quotedchar {
+		} else if ch == quotedchar {
 			quotedchar = '\000'
 		}
-		if unicode.IsSpace(this.Buffer[i]) && quotedchar == '\000' {
+		if unicode.IsSpace(ch) && quotedchar == '\000' {
 			wordTop = -1
 		} else if wordTop < 0 {
 			wordTop = i
@@ -241,4 +153,28 @@ func (this *Buffer) CurrentWordTop() (wordTop int) {
 func (this *Buffer) CurrentWord() (string, int) {
 	start := this.CurrentWordTop()
 	return this.SubString(start, this.Cursor), start
+}
+
+func (this *Buffer) joinUndo() {
+	if len(this.undoes) < 2 {
+		return
+	}
+	u1 := this.undoes[len(this.undoes)-2]
+	u2 := this.undoes[len(this.undoes)-1]
+	if u1.pos != u2.pos {
+		return
+	}
+	if u1.text != "" && u2.text != "" {
+		return
+	}
+	if u1.del != 0 && u2.del != 0 {
+		return
+	}
+	if u1.text == "" {
+		u1.text = u2.text
+	}
+	if u1.del == 0 {
+		u1.del = u2.del
+	}
+	this.undoes = this.undoes[:len(this.undoes)-1]
 }
