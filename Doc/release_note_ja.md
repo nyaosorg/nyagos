@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+* (#116) readline: Ctrl-Z,Ctrl-`_` による操作取り消しを実装
+* (#194) コンソールウインドウの左上のアイコンを更新するようにした
+* CMD.EXE 内蔵 date,time を使うためのエイリアスを追加
+
 NYAGOS 4.4.2\_3
 ===============
 (2019.04.13)
