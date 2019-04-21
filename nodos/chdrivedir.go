@@ -48,9 +48,10 @@ func Chdir(folder string) error {
 			return nil
 		}
 	}
+	absFolder, absErr := filepath.Abs(folder)
 	err := os.Chdir(folder)
 	if err == nil {
-		if absFolder, err := filepath.Abs(folder); err == nil {
+		if absErr == nil {
 			folder = absFolder
 		}
 		os.Setenv("="+filepath.VolumeName(folder), folder)
