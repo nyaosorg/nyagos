@@ -3,6 +3,8 @@ English / [Japanese](release_note_ja.md)
 * (#116) readline: implement UNDO on Ctrl-Z,Ctrl-`_`
 * (#194) Update Console Window's ICON (LEFT-TOP-CORNER)
 * Add alias for `date` and `time` in CMD.EXE
+* Fix: the current-dir per each drive was mistaken after `cd RELATIVE-PATH`  
+  ( `cd C:\x\y\z ; cd .. ; cd \\localhost\c$ ; c: ; pwd` -> `C:\x` (not `C:\x\y`) )
 
 NYAGOS 4.4.2\_2
 ===============
