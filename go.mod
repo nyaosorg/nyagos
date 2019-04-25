@@ -9,7 +9,7 @@ require (
 	github.com/mattn/go-colorable v0.1.1
 	github.com/mattn/go-isatty v0.0.7
 	github.com/mattn/go-runewidth v0.0.4
-	github.com/mattn/go-tty v0.0.0-20190407112021-83fae09cc007
+	github.com/mattn/go-tty v0.0.0-20190424173100-523744f04859
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v0.0.0-20170309133038-4fdf99ab2936
 	github.com/stretchr/objx v0.2.0 // indirect
@@ -19,6 +19,9 @@ require (
 	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
-	golang.org/x/sys v0.0.0-20190412213103-97732733099d
-	golang.org/x/text v0.3.0 // indirect
+	golang.org/x/crypto v0.0.0-20190424203555-c05e17bb3b2d // indirect
+	golang.org/x/net v0.0.0-20190424112056-4829fb13d2c6 // indirect
+	golang.org/x/sys v0.0.0-20190424175732-18eb32c0e2f0
+	golang.org/x/text v0.3.1 // indirect
+	golang.org/x/tools v0.0.0-20190425001055-9e44c1c40307 // indirect
 )
