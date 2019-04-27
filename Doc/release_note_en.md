@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#233) Completion for `\\server\folder`
+
 NYAGOS 4.4.3\_0
 ===============
 on Apr.27,2019
