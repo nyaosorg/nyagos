@@ -26,6 +26,9 @@ func listUpDirs(ctx context.Context, str string) ([]Element, error) {
 }
 
 func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.FileInfo) bool) ([]Element, error) {
+	if r, err := uncComplete(str); err == nil {
+		return r, nil
+	}
 	orgSlash := STD_SLASH[0]
 	if UseSlash {
 		orgSlash = OPT_SLASH[0]
