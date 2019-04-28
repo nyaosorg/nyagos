@@ -86,15 +86,11 @@ func WNetEnum(callback func(nr *NetResource) bool) error {
 
 func EachMachine(callback func(*NetResource) bool) error {
 	return WNetEnum(func(all *NetResource) bool {
-		if strings.EqualFold(all.RemoteName(), "Microsoft Windows Network") {
-			all.Enum(func(domain *NetResource) bool {
-				domain.Enum(callback)
-				return true
-			})
-			return false
-		} else {
+		all.Enum(func(domain *NetResource) bool {
+			domain.Enum(callback)
 			return true
-		}
+		})
+		return true
 	})
 }
 
