@@ -2,6 +2,7 @@ package dos
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 	"unsafe"
 
@@ -84,14 +85,19 @@ func WNetEnum(callback func(nr *NetResource) bool) error {
 	return nr.Enum(callback)
 }
 
+var rxServerPattern = regexp.MustCompile(`^\\\\[^\\/]+$`)
+
 func EachMachine(callback func(*NetResource) bool) error {
-	return WNetEnum(func(all *NetResource) bool {
-		all.Enum(func(domain *NetResource) bool {
-			domain.Enum(callback)
-			return true
-		})
+	var me func(*NetResource) bool
+	me = func(nr *NetResource) bool {
+		if rxServerPattern.MatchString(nr.RemoteName()) {
+			callback(nr)
+		} else {
+			nr.Enum(me)
+		}
 		return true
-	})
+	}
+	return WNetEnum(me)
 }
 
 func EachMachineNode(name string, callback func(*NetResource) bool) error {
