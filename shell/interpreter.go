@@ -64,6 +64,7 @@ type Cmd struct {
 	fullPath        string
 	UseShellExecute bool
 	Closers         []io.Closer
+	env             map[string]string
 }
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
@@ -72,6 +73,40 @@ func (cmd *Cmd) SetArgs(s []string)    { cmd.args = s }
 func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
+
+func (cmd *Cmd) Getenv(key string) string {
+	if cmd.env != nil {
+		if val, ok := cmd.env[strings.ToUpper(key)]; ok {
+			return val
+		}
+	}
+	return os.Getenv(key)
+}
+
+func (cmd *Cmd) Setenv(key, val string) {
+	if cmd.env == nil {
+		cmd.env = make(map[string]string)
+	}
+	cmd.env[strings.ToUpper(key)] = val
+}
+
+func (cmd *Cmd) dumpEnv() []string {
+	if cmd.env == nil {
+		return nil
+	}
+	osEnv := os.Environ()
+	result := make([]string, 0, len(cmd.env)+len(osEnv))
+	for _, equation := range osEnv {
+		eqIndex := strings.IndexRune(equation, '=')
+		if _, ok := cmd.env[strings.ToUpper(equation[:eqIndex])]; !ok {
+			result = append(result, equation)
+		}
+	}
+	for key, val := range cmd.env {
+		result = append(result, key+"="+val)
+	}
+	return result
+}
 
 var LookCurdirOrder = nodos.LookCurdirFirst
 
