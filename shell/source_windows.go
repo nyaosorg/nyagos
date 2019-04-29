@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"math/rand"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -143,7 +144,7 @@ func callBatch(
 func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer, env []string) (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
-	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
+	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d-%d.tmp", pid, rand.Int()))
 
 	errorlevel, err := callBatch(
 		args,
