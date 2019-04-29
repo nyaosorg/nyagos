@@ -2,6 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * (#233) Completion for `\\server\folder`
 * (#238) copy: drawing progress
+* Support variable assignments those preceding the command name like bash
 
 NYAGOS 4.4.3\_0
 ===============
