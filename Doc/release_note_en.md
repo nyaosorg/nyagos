@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#233) Completion for `\\server\folder`
+* (#238) copy: drawing progress
 
 NYAGOS 4.4.3\_0
 ===============

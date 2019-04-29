@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * (#233) `\\server\folder` を補完できるようになった
+* (#238) copyコマンドで進捗表示をするようにした
 
 NYAGOS 4.4.3\_0
 ===============
