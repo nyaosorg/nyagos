@@ -182,10 +182,25 @@ func encloseWithQuote(fullpath string) string {
 }
 
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
-	// command is empty.
-	if len(cmd.args) <= 0 {
-		return 0, nil
+	for {
+		// command is empty.
+		if len(cmd.args) <= 0 {
+			return 0, nil
+		}
+		eq := strings.IndexRune(cmd.args[0], '=')
+		if eq <= 0 {
+			break
+		}
+		envName := cmd.args[0][:eq]
+		envNewValue := cmd.args[0][eq+1:]
+		envOrgValue := os.Getenv(envName)
+
+		defer os.Setenv(envName, envOrgValue)
+
+		os.Setenv(envName, envNewValue)
+		cmd.args = cmd.args[1:]
 	}
+
 	if defined.DBG {
 		print("spawnvpSilent('", cmd.args[0], "')\n")
 	}
