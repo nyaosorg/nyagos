@@ -24,9 +24,11 @@ type Param interface {
 	Term() io.Writer
 	RawArgs() []string
 	Spawnlp(context.Context, []string, []string) (int, error)
+	Spawnlpe(context.Context, []string, []string, map[string]string) (int, error)
 	Loop(context.Context, shell.Stream) (int, error)
 	ReadCommand(context.Context, shell.Stream) (context.Context, string, error)
 	DumpEnv() []string
+	Setenv(key, val string)
 }
 
 var buildInCommand map[string]func(context.Context, Param) (int, error)

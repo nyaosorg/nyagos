@@ -29,16 +29,5 @@ func cmdEnv(ctx context.Context, cmd Param) (int, error) {
 		}
 		return 0, nil
 	}
-	backup := map[string]string{}
-	for key, val := range hash {
-		backup[key] = os.Getenv(key)
-		os.Setenv(key, val)
-	}
-
-	rc, err := cmd.Spawnlp(ctx, args, args)
-
-	for key, val := range backup {
-		os.Setenv(key, val)
-	}
-	return rc, err
+	return cmd.Spawnlpe(ctx, args, args, hash)
 }

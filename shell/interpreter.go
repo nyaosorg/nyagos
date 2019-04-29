@@ -316,12 +316,18 @@ func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
 	return errorlevel, err
 }
 
-func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
+func (sh *Shell) Spawnlpe(ctx context.Context, args, rawargs []string, env map[string]string) (int, error) {
 	cmd := sh.Command()
 	defer cmd.Close()
 	cmd.SetArgs(args)
 	cmd.SetRawArgs(rawargs)
+	cmd.env = env
 	return cmd.Spawnvp(ctx)
+}
+
+func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
+
+	return sh.Spawnlpe(ctx, args, rawargs, nil)
 }
 
 func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, finalerr error) {
