@@ -46,7 +46,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	cmdline := makeCmdline(cmd.args, cmd.rawArgs)
 
 	procAttr := &os.ProcAttr{
-		Env:   os.Environ(),
+		Env:   cmd.dumpEnv(),
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}

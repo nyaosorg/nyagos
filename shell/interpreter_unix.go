@@ -18,7 +18,7 @@ func (cmd *Cmd) lookpath() string {
 
 func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	procAttr := &os.ProcAttr{
-		Env:   os.Environ(),
+		Env:   cmd.dumpEnv(),
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 	}
 	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr)

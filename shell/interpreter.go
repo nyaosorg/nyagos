@@ -228,11 +228,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 		}
 		envName := cmd.args[0][:eq]
 		envNewValue := cmd.args[0][eq+1:]
-		envOrgValue := os.Getenv(envName)
-
-		defer os.Setenv(envName, envOrgValue)
-
-		os.Setenv(envName, envNewValue)
+		cmd.Setenv(envName, envNewValue)
 		cmd.args = cmd.args[1:]
 	}
 
