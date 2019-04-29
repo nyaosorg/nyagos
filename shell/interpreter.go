@@ -230,6 +230,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 		envNewValue := cmd.args[0][eq+1:]
 		cmd.Setenv(envName, envNewValue)
 		cmd.args = cmd.args[1:]
+		cmd.rawArgs = cmd.rawArgs[1:]
 	}
 
 	if defined.DBG {
