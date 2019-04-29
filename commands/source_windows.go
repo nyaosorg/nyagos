@@ -55,7 +55,7 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 	}
 	if tmp, ok := findBatch(args[0]); ok {
 		args[0] = tmp
-		return shell.RawSource(rawargs, verbose, debug, cmd.In(), cmd.Out(), cmd.Err())
+		return shell.RawSource(rawargs, verbose, debug, cmd.In(), cmd.Out(), cmd.Err(), cmd.DumpEnv())
 	}
 	if sh, ok := cmd.(*shell.Cmd); ok {
 		if err := sh.Source(ctx, args[0]); err != nil {

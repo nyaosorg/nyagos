@@ -26,6 +26,7 @@ type Param interface {
 	Spawnlp(context.Context, []string, []string) (int, error)
 	Loop(context.Context, shell.Stream) (int, error)
 	ReadCommand(context.Context, shell.Stream) (context.Context, string, error)
+	DumpEnv() []string
 }
 
 var buildInCommand map[string]func(context.Context, Param) (int, error)

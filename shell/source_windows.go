@@ -79,7 +79,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer) (int, error) {
+func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
 
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
 		netdrive, closer := dos.UNCtoNetDrive(wd)
@@ -107,6 +107,7 @@ func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer) (int, err
 		Stdin:       stdin,
 		Stdout:      stdout,
 		Stderr:      stderr,
+		Env:         env,
 		SysProcAttr: &syscall.SysProcAttr{CmdLine: buffer.String()},
 	}
 	if err := cmd.Run(); err != nil {
@@ -121,7 +122,8 @@ func callBatch(
 	verbose io.Writer,
 	stdin io.Reader,
 	stdout io.Writer,
-	stderr io.Writer) (int, error) {
+	stderr io.Writer,
+	env []string) (int, error) {
 
 	var cmdline strings.Builder
 
@@ -134,11 +136,11 @@ func callBatch(
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`"`)
 
-	return CmdExe(cmdline.String(), stdin, stdout, stderr)
+	return CmdExe(cmdline.String(), stdin, stdout, stderr, env)
 }
 
 // RawSource calls the batchfiles and load the changed variable the batchfile has done.
-func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer) (int, error) {
+func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer, env []string) (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d.tmp", pid))
@@ -149,7 +151,8 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 		verbose,
 		stdin,
 		stdout,
-		stderr)
+		stderr,
+		env)
 
 	if err != nil {
 		return errorlevel, err

@@ -90,7 +90,7 @@ func (cmd *Cmd) Setenv(key, val string) {
 	cmd.env[strings.ToUpper(key)] = val
 }
 
-func (cmd *Cmd) dumpEnv() []string {
+func (cmd *Cmd) DumpEnv() []string {
 	if cmd.env == nil {
 		return nil
 	}

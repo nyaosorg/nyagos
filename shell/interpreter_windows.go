@@ -39,14 +39,14 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 				args[i] = rawargs[i]
 			}
 			// Batch files
-			return RawSource(args, ioutil.Discard, false, cmd.Stdin, cmd.Stdout, cmd.Stderr)
+			return RawSource(args, ioutil.Discard, false, cmd.Stdin, cmd.Stdout, cmd.Stderr, cmd.DumpEnv())
 		}
 	}
 
 	cmdline := makeCmdline(cmd.args, cmd.rawArgs)
 
 	procAttr := &os.ProcAttr{
-		Env:   cmd.dumpEnv(),
+		Env:   cmd.DumpEnv(),
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}

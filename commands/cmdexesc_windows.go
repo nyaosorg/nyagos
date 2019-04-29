@@ -12,5 +12,6 @@ func cmdExeSc(ctx context.Context, cmd Param) (int, error) {
 		strings.Join(cmd.RawArgs()[1:], " "),
 		cmd.In(),
 		cmd.Out(),
-		cmd.Err())
+		cmd.Err(),
+		cmd.DumpEnv())
 }
