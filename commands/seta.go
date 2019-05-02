@@ -37,6 +37,18 @@ func readValue(r io.RuneScanner) (int, error) {
 	if ch == '+' {
 		return readValue(r)
 	}
+	if ch == '~' {
+		value, err := readValue(r)
+		return ^value, err
+	}
+	if ch == '!' {
+		value, err := readValue(r)
+		if value != 0 {
+			return 0, err
+		} else {
+			return 1, err
+		}
+	}
 	if n := strings.IndexRune("0123456789", ch); n >= 0 {
 		value := n
 		for {
