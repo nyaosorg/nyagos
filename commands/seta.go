@@ -2,6 +2,7 @@ package commands
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"strconv"
@@ -12,11 +13,31 @@ import (
 const (
 	lshift = '\uE000' + iota
 	rshift
+	assign_add
+	assign_sub
+	assign_mul
+	assign_div
+	assign_mod
+	assign_and
+	assign_or
+	assign_xor
+	assign_lshift
+	assign_rshift
 )
 
 var replacer = strings.NewReplacer(
+	"<<=", string(assign_lshift),
+	">>=", string(assign_rshift),
 	"<<", string(lshift),
-	">>", string(rshift))
+	">>", string(rshift),
+	"+=", string(assign_add),
+	"-=", string(assign_sub),
+	"*=", string(assign_mul),
+	"/=", string(assign_div),
+	"%=", string(assign_mod),
+	"&=", string(assign_and),
+	"|=", string(assign_or),
+	"^=", string(assign_xor))
 
 func skipSpace(r io.RuneScanner) error {
 	for {
@@ -31,31 +52,56 @@ func skipSpace(r io.RuneScanner) error {
 	}
 }
 
-func readValue(r io.RuneScanner) (int, error) {
+type value_t interface {
+	Get() int
+}
+
+type rvalue_t int
+
+func (n rvalue_t) Get() int {
+	return int(n)
+}
+
+type lvalue_t string
+
+func (name lvalue_t) Get() int {
+	n, err := strconv.Atoi(os.Getenv(string(name)))
+	if err != nil {
+		return 0
+	} else {
+		return n
+	}
+}
+
+func (name lvalue_t) Set(value int) {
+	os.Setenv(string(name), fmt.Sprintf("%d", value))
+}
+
+func readValue(r io.RuneScanner) (value_t, error) {
 	if err := skipSpace(r); err != nil {
-		return 1, err
+		return rvalue_t(1), err
 	}
 	ch, _, err := r.ReadRune()
 	if err != nil {
-		return 1, err
+		return rvalue_t(1), err
 	}
 	if ch == '-' {
 		value, err := readValue(r)
-		return -value, err
+		return rvalue_t(-value.Get()), err
 	}
 	if ch == '+' {
 		return readValue(r)
 	}
 	if ch == '~' {
 		value, err := readValue(r)
-		return ^value, err
+		return rvalue_t(^value.Get()), err
 	}
 	if ch == '!' {
 		value, err := readValue(r)
-		if value != 0 {
-			return 0, err
+		if value.Get() != 0 {
+			return rvalue_t(0), err
 		} else {
-			return 1, err
+			return rvalue_t(1), err
 		}
 	}
 	if n := strings.IndexRune("0123456789", ch); n >= 0 {
@@ -63,12 +109,12 @@ func readValue(r io.RuneScanner) (int, error) {
 		for {
 			ch, _, err := r.ReadRune()
 			if err != nil {
-				return value, err
+				return rvalue_t(value), err
 			}
 			m := strings.IndexRune("0123456789", ch)
 			if m < 0 {
 				r.UnreadRune()
-				return value, nil
+				return rvalue_t(value), nil
 			}
 			value = value*10 + m
 		}
@@ -86,8 +132,7 @@ func readValue(r io.RuneScanner) (int, error) {
 				break
 			}
 		}
-		envValue := os.Getenv(name.String())
-		return strconv.Atoi(envValue)
+		return lvalue_t(name.String()), nil
 	}
 	if ch == '(' {
 		value, err := readEquation(r)
@@ -100,15 +145,15 @@ func readValue(r io.RuneScanner) (int, error) {
 		}
 		return value, errors.New("() pair is not closed")
 	}
-	return 1, errors.New("syntax error")
+	return rvalue_t(1), errors.New("syntax error")
 }
 
 type operation struct {
-	Operator map[rune]func(v1, v2 int) int
-	Sub      func(io.RuneScanner) (int, error)
+	Operator map[rune]func(v1, v2 value_t) value_t
+	Sub      func(io.RuneScanner) (value_t, error)
 }
 
-func (this *operation) Eval(r io.RuneScanner) (int, error) {
+func (this *operation) Eval(r io.RuneScanner) (value_t, error) {
 	value, err := this.Sub(r)
 	if err != nil {
 		return value, err
@@ -136,53 +181,173 @@ func (this *operation) Eval(r io.RuneScanner) (int, error) {
 
 var opComma *operation
 
-func readEquation(r io.RuneScanner) (int, error) {
+func readEquation(r io.RuneScanner) (value_t, error) {
 	if opComma == nil {
 		opMulDiv := &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				'*': func(v1, v2 int) int { return v1 * v2 },
-				'/': func(v1, v2 int) int { return v1 / v2 },
-				'%': func(v1, v2 int) int { return v1 % v2 },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				'*': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() * v2.Get())
+				},
+				'/': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() / v2.Get())
+				},
+				'%': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() % v2.Get())
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return readValue(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return readValue(r)
+			},
 		}
 		opAddSub := &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				'+': func(v1, v2 int) int { return v1 + v2 },
-				'-': func(v1, v2 int) int { return v1 - v2 },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				'+': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() + v2.Get())
+				},
+				'-': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() - v2.Get())
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return opMulDiv.Eval(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opMulDiv.Eval(r)
+			},
 		}
 		opShift := &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				lshift: func(v1, v2 int) int { return v1 << uint(v2) },
-				rshift: func(v1, v2 int) int { return v1 >> uint(v2) },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				lshift: func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() << uint(v2.Get()))
+				},
+				rshift: func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() >> uint(v2.Get()))
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return opAddSub.Eval(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opAddSub.Eval(r)
+			},
 		}
 		opBitAnd := &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				'&': func(v1, v2 int) int { return v1 & v2 },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				'&': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() & v2.Get())
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return opShift.Eval(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opShift.Eval(r)
+			},
 		}
 		opBitXor := &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				'^': func(v1, v2 int) int { return v1 ^ v2 },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				'^': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() ^ v2.Get())
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return opBitAnd.Eval(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opBitAnd.Eval(r)
+			},
 		}
 		opBitOr := &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				'|': func(v1, v2 int) int { return v1 | v2 },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				'|': func(v1, v2 value_t) value_t {
+					return rvalue_t(v1.Get() | v2.Get())
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return opBitXor.Eval(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opBitXor.Eval(r)
+			},
+		}
+		opAssign := &operation{
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				'=': func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_add: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() + v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_sub: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() - v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_mul: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() * v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_div: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() / v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_mod: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() % v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_and: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() & v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_or: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() | v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_xor: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() ^ v2.Get())
+						return V1
+					}
+					return v2
+				},
+				assign_lshift: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() << uint(v2.Get()))
+						return V1
+					}
+					return v2
+				},
+				assign_rshift: func(v1, v2 value_t) value_t {
+					if V1, ok := v1.(lvalue_t); ok {
+						V1.Set(v1.Get() >> uint(v2.Get()))
+						return V1
+					}
+					return v2
+				},
+			},
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opBitOr.Eval(r)
+			},
 		}
 		opComma = &operation{
-			Operator: map[rune]func(v1, v2 int) int{
-				',': func(v1, v2 int) int { return v2 },
+			Operator: map[rune]func(v1, v2 value_t) value_t{
+				',': func(v1, v2 value_t) value_t {
+					return v2
+				},
 			},
-			Sub: func(r io.RuneScanner) (int, error) { return opBitOr.Eval(r) },
+			Sub: func(r io.RuneScanner) (value_t, error) {
+				return opAssign.Eval(r)
+			},
 		}
 	}
 	return opComma.Eval(r)
@@ -193,5 +358,5 @@ func evalEquation(s string) (int, error) {
 	if err == io.EOF {
 		err = nil
 	}
-	return value, err
+	return value.Get(), err
 }
