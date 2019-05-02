@@ -150,7 +150,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				}
 				args = args[1:]
 			}
-		} else if args[0] == "/a" || args[0] == "-a" {
+		} else if val := strings.ToLower(args[0]); val == "/a" || val == "-a" {
 			value, err := evalEquation(strings.Join(args[1:], " "))
 			if err != nil {
 				return 1, err
