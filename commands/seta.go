@@ -9,6 +9,15 @@ import (
 	"unicode"
 )
 
+const (
+	lshift = '\uE000' + iota
+	rshift
+)
+
+var replacer = strings.NewReplacer(
+	"<<", string(lshift),
+	">>", string(rshift))
+
 func skipSpace(r io.RuneScanner) error {
 	for {
 		ch, _, err := r.ReadRune()
@@ -94,34 +103,27 @@ func readValue(r io.RuneScanner) (int, error) {
 	return 1, errors.New("syntax error")
 }
 
-func readMulDiv(r io.RuneScanner) (int, error) {
-	value, err := readValue(r)
+type operation struct {
+	Operator map[rune]func(v1, v2 int) int
+	Sub      func(io.RuneScanner) (int, error)
+}
+
+func (this *operation) Eval(r io.RuneScanner) (int, error) {
+	value, err := this.Sub(r)
 	if err != nil {
 		return value, err
 	}
 	for {
 		if err := skipSpace(r); err != nil {
-			return value, nil
+			return value, err
 		}
 		ch, _, err := r.ReadRune()
 		if err != nil {
 			return value, err
 		}
-		if ch == '*' {
-			value2, err := readValue(r)
-			value *= value2
-			if err != nil {
-				return value, err
-			}
-		} else if ch == '/' {
-			value2, err := readValue(r)
-			value /= value2
-			if err != nil {
-				return value, err
-			}
-		} else if ch == '%' {
-			value2, err := readValue(r)
-			value %= value2
+		if f := this.Operator[ch]; f != nil {
+			value2, err := this.Sub(r)
+			value = f(value, value2)
 			if err != nil {
 				return value, err
 			}
@@ -132,44 +134,62 @@ func readMulDiv(r io.RuneScanner) (int, error) {
 	}
 }
 
-func readAddSub(r io.RuneScanner) (int, error) {
-	value, err := readMulDiv(r)
-	if err != nil {
-		return value, err
-	}
-	for {
-		if err := skipSpace(r); err != nil {
-			return value, err
-		}
-		ch, _, err := r.ReadRune()
-		if err != nil {
-			return value, err
-		}
-		if ch == '+' {
-			value2, err := readMulDiv(r)
-			value += value2
-			if err != nil {
-				return value, err
-			}
-		} else if ch == '-' {
-			value2, err := readMulDiv(r)
-			value -= value2
-			if err != nil {
-				return value, err
-			}
-		} else {
-			r.UnreadRune()
-			return value, nil
-		}
-	}
-}
+var opComma *operation
 
 func readEquation(r io.RuneScanner) (int, error) {
-	return readAddSub(r)
+	if opComma == nil {
+		opMulDiv := &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				'*': func(v1, v2 int) int { return v1 * v2 },
+				'/': func(v1, v2 int) int { return v1 / v2 },
+				'%': func(v1, v2 int) int { return v1 % v2 },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return readValue(r) },
+		}
+		opAddSub := &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				'+': func(v1, v2 int) int { return v1 + v2 },
+				'-': func(v1, v2 int) int { return v1 - v2 },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return opMulDiv.Eval(r) },
+		}
+		opShift := &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				lshift: func(v1, v2 int) int { return v1 << uint(v2) },
+				rshift: func(v1, v2 int) int { return v1 >> uint(v2) },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return opAddSub.Eval(r) },
+		}
+		opBitAnd := &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				'&': func(v1, v2 int) int { return v1 & v2 },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return opShift.Eval(r) },
+		}
+		opBitXor := &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				'^': func(v1, v2 int) int { return v1 ^ v2 },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return opBitAnd.Eval(r) },
+		}
+		opBitOr := &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				'|': func(v1, v2 int) int { return v1 | v2 },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return opBitXor.Eval(r) },
+		}
+		opComma = &operation{
+			Operator: map[rune]func(v1, v2 int) int{
+				',': func(v1, v2 int) int { return v2 },
+			},
+			Sub: func(r io.RuneScanner) (int, error) { return opBitOr.Eval(r) },
+		}
+	}
+	return opComma.Eval(r)
 }
 
 func evalEquation(s string) (int, error) {
-	value, err := readEquation(strings.NewReader(s))
+	value, err := readEquation(strings.NewReader(replacer.Replace(s)))
 	if err == io.EOF {
 		err = nil
 	}
