@@ -150,6 +150,13 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				}
 				args = args[1:]
 			}
+		} else if args[0] == "/a" || args[0] == "-a" {
+			value, err := evalEquation(strings.Join(args[1:], " "))
+			if err != nil {
+				return 1, err
+			}
+			fmt.Fprintf(cmd.Out(), "%d\n", value)
+			return 0, nil
 		} else {
 			// environment variable operation
 			arg := strings.Join(args, " ")
