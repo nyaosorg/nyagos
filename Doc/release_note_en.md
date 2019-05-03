@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * Support variable assignments those preceding the command name like bash
 * Fix the problem temporary filenames on executing batchfile conflict
 * (#277) Support set /A
+* (#291) Print Process-ID when it is started with `&` mark like /bin/sh 
 
 NYAGOS 4.4.3\_0
 ===============
