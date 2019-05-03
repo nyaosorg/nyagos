@@ -18,10 +18,10 @@ func (cmd *Cmd) lookpath() string {
 
 func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	procAttr := &os.ProcAttr{
-		Env:   cmd.dumpEnv(),
+		Env:   cmd.DumpEnv(),
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 	}
-	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr)
+	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.report)
 }
 
 func isGui(path string) bool {
