@@ -13,6 +13,18 @@ import (
 	"github.com/zetamatta/nyagos/nodos"
 )
 
+func encloseWithQuote(fullpath string) string {
+	if strings.ContainsRune(fullpath, ' ') {
+		var f strings.Builder
+		f.WriteByte('"')
+		f.WriteString(fullpath)
+		f.WriteByte('"')
+		return f.String()
+	} else {
+		return fullpath
+	}
+}
+
 func (cmd *Cmd) lookpath() string {
 	return nodos.LookPath(LookCurdirOrder, cmd.args[0], "NYAGOSPATH")
 }

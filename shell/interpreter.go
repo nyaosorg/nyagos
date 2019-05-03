@@ -205,18 +205,6 @@ func makeCmdline(args, rawargs []string) string {
 
 var UseSourceRunBatch = true
 
-func encloseWithQuote(fullpath string) string {
-	if strings.ContainsRune(fullpath, ' ') {
-		var f strings.Builder
-		f.WriteByte('"')
-		f.WriteString(fullpath)
-		f.WriteByte('"')
-		return f.String()
-	} else {
-		return fullpath
-	}
-}
-
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	for {
 		// command is empty.
