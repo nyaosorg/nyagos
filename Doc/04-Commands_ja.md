@@ -160,6 +160,10 @@ PID で示されるプロセスを強制終了します
 - `+o usesource` バッチファイルから環境変数の変更を読みとるには source コマンドを使う必要があります。
 - `-o cleaup_buffer` 一行入力の前に入力バッファをクリアします。
 
+### `set -a "EQUATION"`, `set /a "EQUATION"`
+
+CMD.EXE と同じ。式を評価する
+
 ### `select FILENAME(s)...`
 
 アプリケーションを選択するダイアログ付きでファイルを開きます
