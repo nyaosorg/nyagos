@@ -3,7 +3,6 @@ package shell
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strings"
 	"syscall"
@@ -23,8 +22,8 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
 		pid, err := dos.ShellExecute("open", cmd.args[0], cmdline, "")
-		if err == nil && pid != 0 {
-			fmt.Fprintf(cmd.Stderr, "[%d]\n", pid)
+		if err == nil && pid != 0 && cmd.report != nil {
+			fmt.Fprintf(cmd.report, "[%d]\n", pid)
 		}
 		return 0, err
 	}
@@ -44,7 +43,14 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 				args[i] = rawargs[i]
 			}
 			// Batch files
-			return RawSource(args, ioutil.Discard, false, cmd.Stdin, cmd.Stdout, cmd.Stderr, cmd.DumpEnv())
+			return Source{
+				Args:    args,
+				Stdin:   cmd.Stdin,
+				Stdout:  cmd.Stdout,
+				Stderr:  cmd.Stderr,
+				Env:     cmd.DumpEnv(),
+				DumpPid: cmd.report,
+			}.Call()
 		}
 	}
 
@@ -55,7 +61,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}
-	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr)
+	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.report)
 }
 
 func isGui(path string) bool {

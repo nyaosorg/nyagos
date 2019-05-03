@@ -81,6 +81,25 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 }
 
 func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
+	return CmdExeEnv{
+		Cmdline: cmdline,
+		Stdin:   stdin,
+		Stdout:  stdout,
+		Stderr:  stderr,
+		Env:     env,
+	}.Call()
+}
+
+type CmdExeEnv struct {
+	Cmdline string
+	Stdin   io.Reader
+	Stdout  io.Writer
+	Stderr  io.Writer
+	Env     []string
+	DumpPid io.Writer
+}
+
+func (this CmdExeEnv) Call() (int, error) {
 
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
 		netdrive, closer := dos.UNCtoNetDrive(wd)
@@ -100,36 +119,46 @@ func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer, env []str
 
 	var buffer strings.Builder
 	buffer.WriteString(`/S /C "`)
-	buffer.WriteString(cmdline)
+	buffer.WriteString(this.Cmdline)
 	buffer.WriteString(` "`)
 
 	cmd := exec.Cmd{
 		Path:        cmdexe,
-		Stdin:       stdin,
-		Stdout:      stdout,
-		Stderr:      stderr,
-		Env:         env,
+		Stdin:       this.Stdin,
+		Stdout:      this.Stdout,
+		Stderr:      this.Stderr,
+		Env:         this.Env,
 		SysProcAttr: &syscall.SysProcAttr{CmdLine: buffer.String()},
 	}
-	if err := cmd.Run(); err != nil {
+	if err := cmd.Start(); err != nil {
+		return -1, err
+	}
+	if this.DumpPid != nil && cmd.Process != nil {
+		fmt.Fprintf(this.DumpPid, "[%d]\n", cmd.Process.Pid)
+	}
+	if err := cmd.Wait(); err != nil {
 		return -1, err
 	}
 	return cmd.ProcessState.ExitCode(), nil
 }
 
-func callBatch(
-	args []string,
-	tmpfile string,
-	verbose io.Writer,
-	stdin io.Reader,
-	stdout io.Writer,
-	stderr io.Writer,
-	env []string) (int, error) {
+type Source struct {
+	Stdin   io.Reader
+	Stdout  io.Writer
+	Stderr  io.Writer
+	Env     []string
+	DumpPid io.Writer
+	Args    []string
+	Verbose io.Writer
+	Debug   bool
+}
+
+func (this *Source) callBatch(tmpfile string) (int, error) {
 
 	var cmdline strings.Builder
 
 	cmdline.WriteString(`call`)
-	for _, arg1 := range args {
+	for _, arg1 := range this.Args {
 		cmdline.WriteByte(' ')
 		cmdline.WriteString(arg1)
 	}
@@ -137,35 +166,48 @@ func callBatch(
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`"`)
 
-	return CmdExe(cmdline.String(), stdin, stdout, stderr, env)
+	cee := &CmdExeEnv{
+		Cmdline: cmdline.String(),
+		Stdin:   this.Stdin,
+		Stdout:  this.Stdout,
+		Stderr:  this.Stderr,
+		Env:     this.Env,
+		DumpPid: this.DumpPid,
+	}
+	return cee.Call()
 }
 
 // RawSource calls the batchfiles and load the changed variable the batchfile has done.
-func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout io.Writer, stderr io.Writer, env []string) (int, error) {
+func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
+	return Source{
+		Args:    args,
+		Verbose: verbose,
+		Debug:   debug,
+		Stdin:   stdin,
+		Stdout:  stdout,
+		Stderr:  stderr,
+		Env:     env,
+	}.Call()
+}
+
+func (this Source) Call() (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d-%d.tmp", pid, rand.Int()))
 
-	errorlevel, err := callBatch(
-		args,
-		tmpfile,
-		verbose,
-		stdin,
-		stdout,
-		stderr,
-		env)
+	errorlevel, err := this.callBatch(tmpfile)
 
 	if err != nil {
 		return errorlevel, err
 	}
 
-	if !debug {
+	if !this.Debug {
 		defer os.Remove(tmpfile)
 	}
 
-	if errorlevel, err = loadTmpFile(tmpfile, verbose); err != nil {
+	if errorlevel, err = loadTmpFile(tmpfile, this.Verbose); err != nil {
 		if os.IsNotExist(err) {
-			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", args[0])
+			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", this.Args[0])
 		}
 		return 1, err
 	}
