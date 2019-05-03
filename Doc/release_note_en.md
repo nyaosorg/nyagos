@@ -2,7 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * (#233) Completion for `\\server\folder`
 * (#238) copy: drawing progress
-* Support variable assignments those preceding the command name like bash
+* Support `ENVVARNAME=VALUE COMMAND PARAMETERS..`
 * Fix the problem temporary filenames on executing batchfile conflict
 * (#277) Support set /A
 * (#291) Print Process-ID when it is started with `&` mark like /bin/sh 
