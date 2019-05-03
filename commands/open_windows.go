@@ -10,9 +10,11 @@ import (
 )
 
 func open1(fname string, out io.Writer) {
-	err1 := dos.ShellExecute("open", fname, "", "")
+	pid, err1 := dos.ShellExecute("open", fname, "", "")
 	if err1 != nil {
 		fmt.Fprintf(out, "%s: %s\n", fname, err1.Error())
+	} else if pid > 0 {
+		fmt.Fprintf(out, "[%d]\n", pid)
 	}
 }
 

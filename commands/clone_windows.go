@@ -26,12 +26,16 @@ func _clone(action string, out io.Writer) (int, error) {
 	if err != nil {
 		return 1, err
 	}
-	err = dos.ShellExecute(action, me, "", wd)
+	var pid uintptr
+	pid, err = dos.ShellExecute(action, me, "", wd)
 	if err != nil {
-		err = dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
+		pid, err = dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
 		if err != nil {
 			return 1, err // return original error
 		}
+	}
+	if pid > 0 {
+		fmt.Fprintf(out, "[%d]\n", pid)
 	}
 	return 0, nil
 }
@@ -57,9 +61,12 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 			return 2, err
 		}
 		fmt.Fprintf(&buffer, " cd /d \"%s\" & \"%s\" \"", wd, me)
-		err = dos.ShellExecute("runas", "CMD.EXE", buffer.String(), "")
+		pid, err := dos.ShellExecute("runas", "CMD.EXE", buffer.String(), "")
 		if err != nil {
 			return 3, err
+		}
+		if pid > 0 {
+			fmt.Fprintf(cmd.Err(), "[%d]\n", pid)
 		}
 		return 0, nil
 	}

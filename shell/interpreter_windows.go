@@ -2,6 +2,7 @@ package shell
 
 import (
 	"context"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -21,7 +22,11 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if cmd.UseShellExecute {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
-		return 0, dos.ShellExecute("open", cmd.args[0], cmdline, "")
+		pid, err := dos.ShellExecute("open", cmd.args[0], cmdline, "")
+		if err == nil && pid != 0 {
+			fmt.Fprintf(cmd.Stderr, "[%d]\n", pid)
+		}
+		return 0, err
 	}
 	if closer, err := dos.ChangeConsoleMode(windows.Stdin, dos.ModeSet(0x7)); err == nil {
 		defer closer()

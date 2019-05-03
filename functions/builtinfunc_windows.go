@@ -28,7 +28,7 @@ func CmdElevated([]any_t) []any_t {
 }
 
 func CmdShellExecute(args []any_t) []any_t {
-	err := dos.ShellExecute(
+	pid, err := dos.ShellExecute(
 		toStr(args, 0),
 		toStr(args, 1),
 		toStr(args, 2),
@@ -36,7 +36,7 @@ func CmdShellExecute(args []any_t) []any_t {
 	if err != nil {
 		return []any_t{nil, err}
 	} else {
-		return []any_t{true}
+		return []any_t{pid}
 	}
 }
 

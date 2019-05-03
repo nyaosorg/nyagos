@@ -102,7 +102,7 @@ func shellExecute(action, path, param, directory string) (pid uintptr, err error
 
 const haveToEvalSymlinkError = windows.Errno(4294967294)
 
-func ShellExecute(action string, path string, param string, directory string) error {
+func ShellExecute(action string, path string, param string, directory string) (uintptr, error) {
 	pid, err := shellExecute(action, path, param, directory)
 	if err == haveToEvalSymlinkError {
 		path, err = filepath.EvalSymlinks(path)
@@ -110,6 +110,5 @@ func ShellExecute(action string, path string, param string, directory string) er
 			pid, err = shellExecute(action, path, param, directory)
 		}
 	}
-	println(pid)
-	return err
+	return pid, err
 }
