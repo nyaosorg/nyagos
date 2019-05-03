@@ -33,8 +33,8 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
 		pid, err := dos.ShellExecute("open", cmd.args[0], cmdline, "")
-		if err == nil && pid != 0 && cmd.report != nil {
-			cmd.report(int(pid))
+		if err == nil && pid != 0 && cmd.OnBackExec != nil {
+			cmd.OnBackExec(int(pid))
 		}
 		return 0, err
 	}
@@ -55,12 +55,13 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 			}
 			// Batch files
 			return Source{
-				Args:    args,
-				Stdin:   cmd.Stdin,
-				Stdout:  cmd.Stdout,
-				Stderr:  cmd.Stderr,
-				Env:     cmd.DumpEnv(),
-				DumpPid: cmd.report,
+				Args:   args,
+				Stdin:  cmd.Stdin,
+				Stdout: cmd.Stdout,
+				Stderr: cmd.Stderr,
+				Env:    cmd.DumpEnv(),
+				OnExec: cmd.OnBackExec,
+				OnDone: cmd.OnBackDone,
 			}.Call()
 		}
 	}
@@ -72,7 +73,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}
-	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.report)
+	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.OnBackExec, cmd.OnBackDone)
 }
 
 func isGui(path string) bool {

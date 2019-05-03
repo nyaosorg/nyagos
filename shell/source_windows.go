@@ -86,7 +86,8 @@ type CmdExe struct {
 	Stdout  io.Writer
 	Stderr  io.Writer
 	Env     []string
-	DumpPid func(int)
+	OnExec  func(int)
+	OnDone  func(int)
 }
 
 func (this CmdExe) Call() (int, error) {
@@ -132,11 +133,14 @@ func (this CmdExe) Call() (int, error) {
 	if err := cmd.Start(); err != nil {
 		return -1, err
 	}
-	if this.DumpPid != nil && cmd.Process != nil {
-		this.DumpPid(cmd.Process.Pid)
+	if this.OnExec != nil && cmd.Process != nil {
+		this.OnExec(cmd.Process.Pid)
 	}
 	if err := cmd.Wait(); err != nil {
 		return -1, err
+	}
+	if this.OnDone != nil && cmd.Process != nil {
+		this.OnDone(cmd.Process.Pid)
 	}
 	return cmd.ProcessState.ExitCode(), nil
 }
@@ -146,7 +150,8 @@ type Source struct {
 	Stdout  io.Writer
 	Stderr  io.Writer
 	Env     []string
-	DumpPid func(int)
+	OnExec  func(int)
+	OnDone  func(int)
 	Args    []string
 	Verbose io.Writer
 	Debug   bool
@@ -171,7 +176,8 @@ func (this *Source) callBatch(tmpfile string) (int, error) {
 		Stdout:  this.Stdout,
 		Stderr:  this.Stderr,
 		Env:     this.Env,
-		DumpPid: this.DumpPid,
+		OnExec:  this.OnExec,
+		OnDone:  this.OnDone,
 	}.Call()
 }
 

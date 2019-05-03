@@ -65,7 +65,8 @@ type Cmd struct {
 	UseShellExecute bool
 	Closers         []io.Closer
 	env             map[string]string
-	report          func(int)
+	OnBackExec      func(int)
+	OnBackDone      func(int)
 }
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
@@ -248,7 +249,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	return cmd.startProcess(ctx)
 }
 
-func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr, report func(int)) (int, error) {
+func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr, onExec, onDone func(int)) (int, error) {
 	if ctx != nil {
 		select {
 		case <-ctx.Done():
@@ -262,8 +263,8 @@ func startAndWaitProcess(ctx context.Context, name string, args []string, procAt
 		return 255, err
 	}
 
-	if report != nil {
-		report(process.Pid)
+	if onExec != nil {
+		onExec(process.Pid)
 	}
 
 	if ctx != nil {
@@ -281,6 +282,11 @@ func startAndWaitProcess(ctx context.Context, name string, args []string, procAt
 		}()
 	}
 	processState, err := process.Wait()
+
+	if onDone != nil {
+		onDone(process.Pid)
+	}
+
 	return processState.ExitCode(), err
 }
 
@@ -418,13 +424,19 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			}
 			if len(pipeline) == 1 && isGui(cmd.FullPath()) {
 				cmd.UseShellExecute = true
-				cmd.report = func(pid int) {
-					fmt.Fprintf(cmd.Stderr, "[%d]\n", pid)
+				cmd.OnBackExec = func(pid int) {
+					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+				}
+				cmd.OnBackDone = func(pid int) {
+					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
 				}
 			}
 			if i == len(pipeline)-1 && state.Term == "&" {
-				cmd.report = func(pid int) {
-					fmt.Fprintf(cmd.Stderr, "[%d]\n", pid)
+				cmd.OnBackExec = func(pid int) {
+					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+				}
+				cmd.OnBackDone = func(pid int) {
+					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
 				}
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {

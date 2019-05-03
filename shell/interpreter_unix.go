@@ -21,7 +21,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		Env:   cmd.DumpEnv(),
 		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
 	}
-	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.report)
+	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.OnBackExec, cmd.OnBackDone)
 }
 
 func isGui(path string) bool {
