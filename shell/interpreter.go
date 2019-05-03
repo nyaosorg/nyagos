@@ -65,7 +65,7 @@ type Cmd struct {
 	UseShellExecute bool
 	Closers         []io.Closer
 	env             map[string]string
-	report          io.Writer
+	report          func(int)
 }
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
@@ -248,7 +248,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	return cmd.startProcess(ctx)
 }
 
-func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr, report io.Writer) (int, error) {
+func startAndWaitProcess(ctx context.Context, name string, args []string, procAttr *os.ProcAttr, report func(int)) (int, error) {
 	if ctx != nil {
 		select {
 		case <-ctx.Done():
@@ -263,7 +263,7 @@ func startAndWaitProcess(ctx context.Context, name string, args []string, procAt
 	}
 
 	if report != nil {
-		fmt.Fprintf(report, "[%d]\n", process.Pid)
+		report(process.Pid)
 	}
 
 	if ctx != nil {
@@ -418,10 +418,14 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			}
 			if len(pipeline) == 1 && isGui(cmd.FullPath()) {
 				cmd.UseShellExecute = true
-				cmd.report = cmd.Stderr
+				cmd.report = func(pid int) {
+					fmt.Fprintf(cmd.Stderr, "[%d]\n", pid)
+				}
 			}
 			if i == len(pipeline)-1 && state.Term == "&" {
-				cmd.report = cmd.Stderr
+				cmd.report = func(pid int) {
+					fmt.Fprintf(cmd.Stderr, "[%d]\n", pid)
+				}
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
 				// foreground execution.

@@ -2,7 +2,6 @@ package shell
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"strings"
 	"syscall"
@@ -35,7 +34,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
 		pid, err := dos.ShellExecute("open", cmd.args[0], cmdline, "")
 		if err == nil && pid != 0 && cmd.report != nil {
-			fmt.Fprintf(cmd.report, "[%d]\n", pid)
+			cmd.report(int(pid))
 		}
 		return 0, err
 	}

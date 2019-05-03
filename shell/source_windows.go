@@ -86,7 +86,7 @@ type CmdExe struct {
 	Stdout  io.Writer
 	Stderr  io.Writer
 	Env     []string
-	DumpPid io.Writer
+	DumpPid func(int)
 }
 
 func (this CmdExe) Call() (int, error) {
@@ -133,7 +133,7 @@ func (this CmdExe) Call() (int, error) {
 		return -1, err
 	}
 	if this.DumpPid != nil && cmd.Process != nil {
-		fmt.Fprintf(this.DumpPid, "[%d]\n", cmd.Process.Pid)
+		this.DumpPid(cmd.Process.Pid)
 	}
 	if err := cmd.Wait(); err != nil {
 		return -1, err
@@ -146,7 +146,7 @@ type Source struct {
 	Stdout  io.Writer
 	Stderr  io.Writer
 	Env     []string
-	DumpPid io.Writer
+	DumpPid func(int)
 	Args    []string
 	Verbose io.Writer
 	Debug   bool
