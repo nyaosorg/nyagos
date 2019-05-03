@@ -23,11 +23,12 @@ type _ShellExecuteInfo struct {
 	keyClass      uintptr
 	hotkey        uint32
 	iconOrMonitor uintptr
-	hProcess      uintptr
+	hProcess      windows.Handle
 }
 
 var shell32 = windows.NewLazySystemDLL("shell32.dll")
 var procShellExecute = shell32.NewProc("ShellExecuteExW")
+var procGetProcessId = kernel32.NewProc("GetProcessId")
 
 const (
 	// EDIT is the action "edit" for ShellExecute
@@ -45,62 +46,70 @@ const (
 )
 
 const (
-	_SEE_MASK_UNICODE = 0x4000
+	_SEE_MASK_NOCLOSEPROCESS = 0x40
+	_SEE_MASK_UNICODE        = 0x4000
 )
 
 // ShellExecute calls ShellExecute-API: edit,explore,open and so on.
-func shellExecute(action string, path string, param string, directory string) (err error) {
+func shellExecute(action, path, param, directory string) (pid uintptr, err error) {
 	var p _ShellExecuteInfo
 
 	p.size = uint32(unsafe.Sizeof(p))
 
-	p.mask = _SEE_MASK_UNICODE
+	p.mask = _SEE_MASK_UNICODE | _SEE_MASK_NOCLOSEPROCESS
 
 	p.verb, err = windows.UTF16PtrFromString(action)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	p.file, err = windows.UTF16PtrFromString(path)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	p.parameter, err = windows.UTF16PtrFromString(param)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	p.directory, err = windows.UTF16PtrFromString(directory)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	p.show = 1
-
 	status, _, err := procShellExecute.Call(uintptr(unsafe.Pointer(&p)))
+
+	if p.hProcess != 0 {
+		pid, _, _ = procGetProcessId.Call(uintptr(p.hProcess))
+		if err := windows.CloseHandle(p.hProcess); err != nil {
+			println("windows.Closehandle()=", err.Error())
+		}
+	}
 
 	if status == 0 {
 		// ShellExecute and ShellExecuteExA's error is lower than 32
 		// But, ShellExecuteExW's error is FALSE.
 
 		if err != nil {
-			return err
+			return pid, err
 		} else if err = windows.GetLastError(); err != nil {
-			return err
+			return pid, err
 		} else {
-			return fmt.Errorf("Error(%d) in ShellExecuteExW()", status)
+			return pid, fmt.Errorf("Error(%d) in ShellExecuteExW()", status)
 		}
 	}
-	return nil
+	return pid, nil
 }
 
 const haveToEvalSymlinkError = windows.Errno(4294967294)
 
 func ShellExecute(action string, path string, param string, directory string) error {
-	err := shellExecute(action, path, param, directory)
+	pid, err := shellExecute(action, path, param, directory)
 	if err == haveToEvalSymlinkError {
 		path, err = filepath.EvalSymlinks(path)
 		if err == nil {
-			err = shellExecute(action, path, param, directory)
+			pid, err = shellExecute(action, path, param, directory)
 		}
 	}
+	println(pid)
 	return err
 }
