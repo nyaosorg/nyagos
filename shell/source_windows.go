@@ -80,17 +80,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-func CmdExe(cmdline string, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
-	return CmdExeEnv{
-		Cmdline: cmdline,
-		Stdin:   stdin,
-		Stdout:  stdout,
-		Stderr:  stderr,
-		Env:     env,
-	}.Call()
-}
-
-type CmdExeEnv struct {
+type CmdExe struct {
 	Cmdline string
 	Stdin   io.Reader
 	Stdout  io.Writer
@@ -99,7 +89,7 @@ type CmdExeEnv struct {
 	DumpPid io.Writer
 }
 
-func (this CmdExeEnv) Call() (int, error) {
+func (this CmdExe) Call() (int, error) {
 
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
 		netdrive, closer := dos.UNCtoNetDrive(wd)
@@ -129,6 +119,15 @@ func (this CmdExeEnv) Call() (int, error) {
 		Stderr:      this.Stderr,
 		Env:         this.Env,
 		SysProcAttr: &syscall.SysProcAttr{CmdLine: buffer.String()},
+	}
+	if cmd.Stdin != nil {
+		cmd.Stdin = os.Stdin
+	}
+	if cmd.Stdout != nil {
+		cmd.Stdout = os.Stdout
+	}
+	if cmd.Stderr != nil {
+		cmd.Stderr = os.Stderr
 	}
 	if err := cmd.Start(); err != nil {
 		return -1, err
@@ -166,15 +165,14 @@ func (this *Source) callBatch(tmpfile string) (int, error) {
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`"`)
 
-	cee := &CmdExeEnv{
+	return CmdExe{
 		Cmdline: cmdline.String(),
 		Stdin:   this.Stdin,
 		Stdout:  this.Stdout,
 		Stderr:  this.Stderr,
 		Env:     this.Env,
 		DumpPid: this.DumpPid,
-	}
-	return cee.Call()
+	}.Call()
 }
 
 // RawSource calls the batchfiles and load the changed variable the batchfile has done.

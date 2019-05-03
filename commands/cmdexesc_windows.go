@@ -8,10 +8,11 @@ import (
 )
 
 func cmdExeSc(ctx context.Context, cmd Param) (int, error) {
-	return shell.CmdExe(
-		strings.Join(cmd.RawArgs()[1:], " "),
-		cmd.In(),
-		cmd.Out(),
-		cmd.Err(),
-		cmd.DumpEnv())
+	return shell.CmdExe{
+		Cmdline: strings.Join(cmd.RawArgs()[1:], " "),
+		Stdin:   cmd.In(),
+		Stdout:  cmd.Out(),
+		Stderr:  cmd.Err(),
+		Env:     cmd.DumpEnv(),
+	}.Call()
 }
