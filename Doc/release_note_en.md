@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * Fix the problem temporary filenames on executing batchfile conflict
 * (#277) Support set /A
 * (#291) Print Process-ID when it is started with `&` mark like /bin/sh 
+* (#361) Fix the problem GUI Application's STDOUT could not be redirected
 
 NYAGOS 4.4.3\_0
 ===============
