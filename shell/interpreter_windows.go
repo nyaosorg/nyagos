@@ -34,7 +34,15 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
 		pid, err := dos.ShellExecute("open", cmd.args[0], cmdline, "")
 		if err == nil && pid != 0 && cmd.OnBackExec != nil {
-			cmd.OnBackExec(int(pid))
+			cmd.OnBackExec(pid)
+			if cmd.OnBackDone != nil {
+				if process, err := os.FindProcess(pid); err == nil {
+					go func(f func(int)) {
+						process.Wait()
+						f(pid)
+					}(cmd.OnBackDone)
+				}
+			}
 		}
 		return 0, err
 	}

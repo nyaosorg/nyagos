@@ -51,8 +51,10 @@ const (
 )
 
 // ShellExecute calls ShellExecute-API: edit,explore,open and so on.
-func shellExecute(action, path, param, directory string) (pid uintptr, err error) {
+func shellExecute(action, path, param, directory string) (int, error) {
 	var p _ShellExecuteInfo
+	var pid uintptr
+	var err error
 
 	p.size = uint32(unsafe.Sizeof(p))
 
@@ -90,19 +92,19 @@ func shellExecute(action, path, param, directory string) (pid uintptr, err error
 		// But, ShellExecuteExW's error is FALSE.
 
 		if err != nil {
-			return pid, err
+			return int(pid), err
 		} else if err = windows.GetLastError(); err != nil {
-			return pid, err
+			return int(pid), err
 		} else {
-			return pid, fmt.Errorf("Error(%d) in ShellExecuteExW()", status)
+			return int(pid), fmt.Errorf("Error(%d) in ShellExecuteExW()", status)
 		}
 	}
-	return pid, nil
+	return int(pid), nil
 }
 
 const haveToEvalSymlinkError = windows.Errno(4294967294)
 
-func ShellExecute(action string, path string, param string, directory string) (uintptr, error) {
+func ShellExecute(action, path, param, directory string) (int, error) {
 	pid, err := shellExecute(action, path, param, directory)
 	if err == haveToEvalSymlinkError {
 		path, err = filepath.EvalSymlinks(path)

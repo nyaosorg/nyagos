@@ -26,7 +26,7 @@ func _clone(action string, out io.Writer) (int, error) {
 	if err != nil {
 		return 1, err
 	}
-	var pid uintptr
+	var pid int
 	pid, err = dos.ShellExecute(action, me, "", wd)
 	if err != nil {
 		pid, err = dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
@@ -36,6 +36,12 @@ func _clone(action string, out io.Writer) (int, error) {
 	}
 	if pid > 0 {
 		fmt.Fprintf(out, "[%d]\n", pid)
+		if process, err := os.FindProcess(pid); err == nil {
+			go func() {
+				process.Wait()
+				fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+			}()
+		}
 	}
 	return 0, nil
 }

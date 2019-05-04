@@ -15,6 +15,12 @@ func open1(fname string, out io.Writer) {
 		fmt.Fprintf(out, "%s: %s\n", fname, err1.Error())
 	} else if pid > 0 {
 		fmt.Fprintf(out, "[%d]\n", pid)
+		if process, err := os.FindProcess(pid); err == nil {
+			go func() {
+				process.Wait()
+				fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+			}()
+		}
 	}
 }
 
