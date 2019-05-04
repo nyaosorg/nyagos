@@ -423,12 +423,18 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				cmd.IsBackGround = true
 			}
 			if len(pipeline) == 1 && isGui(cmd.FullPath()) {
-				cmd.UseShellExecute = true
-				cmd.OnBackExec = func(pid int) {
-					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
-				}
-				cmd.OnBackDone = func(pid int) {
-					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+				if len(state.Redirect) > 0 {
+					// Use CreateProcess even if it is GUI application
+					// bacause process by ShellExecute can not redirect. #361
+					state.Term = "&"
+				} else {
+					cmd.UseShellExecute = true
+					cmd.OnBackExec = func(pid int) {
+						fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+					}
+					cmd.OnBackDone = func(pid int) {
+						fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+					}
 				}
 			}
 			if i == len(pipeline)-1 && state.Term == "&" {
