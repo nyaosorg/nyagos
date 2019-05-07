@@ -295,6 +295,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		if fg, ok := f.(*KeyGoFuncT); !ok || fg.Func != nil {
 			io.WriteString(this.Out, ansiCursorOff)
 			cursorOnSwitch = false
+			this.Out.Flush()
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
