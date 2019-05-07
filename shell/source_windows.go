@@ -121,13 +121,13 @@ func (this CmdExe) Call() (int, error) {
 		Env:         this.Env,
 		SysProcAttr: &syscall.SysProcAttr{CmdLine: buffer.String()},
 	}
-	if cmd.Stdin != nil {
+	if cmd.Stdin == nil {
 		cmd.Stdin = os.Stdin
 	}
-	if cmd.Stdout != nil {
+	if cmd.Stdout == nil {
 		cmd.Stdout = os.Stdout
 	}
-	if cmd.Stderr != nil {
+	if cmd.Stderr == nil {
 		cmd.Stderr = os.Stderr
 	}
 	if err := cmd.Start(); err != nil {
