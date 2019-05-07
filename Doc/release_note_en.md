@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * (#277) Support set /A
 * (#291) Print Process-ID when it is started with `&` mark like /bin/sh 
 * (#361) Fix the problem GUI Application's STDOUT could not be redirected
+* Implemented `.` and `source` for Linux (using /bin/sh)
 
 NYAGOS 4.4.3\_0
 ===============
