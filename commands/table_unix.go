@@ -12,6 +12,7 @@ import (
 
 func init() {
 	buildInCommand = map[string]func(context.Context, Param) (int, error){
+		".":        cmdSource,
 		"alias":    cmdAlias,
 		"bindkey":  cmdBindkey,
 		"box":      cmdBox,
@@ -44,6 +45,7 @@ func init() {
 		"rem":      cmdRem,
 		"rmdir":    cmdRmdir,
 		"set":      cmdSet,
+		"source":   cmdSource,
 		"touch":    cmdTouch,
 		"type":     cmdType,
 		"which":    cmdWhich,
