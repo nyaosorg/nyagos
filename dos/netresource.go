@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
+	//"github.com/zetamatta/go-outputdebug"
+	//"time"
 )
 
 var procWNetOpenEnum = mpr.NewProc("WNetOpenEnumW")
@@ -55,7 +58,7 @@ func (nr *NetResource) Enum(callback func(*NetResource) bool) error {
 	}
 	defer procWNetCloseEnum.Call(handle)
 	for {
-		var buffer [16 * 1024]byte
+		var buffer [32 * 1024]byte
 		count := int32(-1)
 		size := len(buffer)
 		rc, _, err := procWNetEnumResource.Call(
@@ -87,17 +90,32 @@ func WNetEnum(callback func(nr *NetResource) bool) error {
 
 var rxServerPattern = regexp.MustCompile(`^\\\\[^\\/]+$`)
 
+var netlock sync.RWMutex
+
 func EachMachine(callback func(*NetResource) bool) error {
+	//outputdebug.String(time.Now().String())
+
 	var me func(*NetResource) bool
+	var wg sync.WaitGroup
 	me = func(nr *NetResource) bool {
 		if rxServerPattern.MatchString(nr.RemoteName()) {
+			netlock.Lock()
 			callback(nr)
+			netlock.Unlock()
 		} else {
-			nr.Enum(me)
+			nr1 := *nr
+			wg.Add(1)
+			go func() {
+				nr1.Enum(me)
+				wg.Done()
+			}()
 		}
 		return true
 	}
-	return WNetEnum(me)
+	err := WNetEnum(me)
+	wg.Wait()
+	//outputdebug.String(time.Now().String())
+	return err
 }
 
 func EachMachineNode(name string, callback func(*NetResource) bool) error {

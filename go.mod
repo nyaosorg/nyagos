@@ -17,6 +17,7 @@ require (
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
 	github.com/zetamatta/go-box/v2 v2.0.4
 	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
+	github.com/zetamatta/go-outputdebug v0.0.0-20190407163505-b4470600349e
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	golang.org/x/crypto v0.0.0-20190424203555-c05e17bb3b2d // indirect

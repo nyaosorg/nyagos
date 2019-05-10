@@ -57,6 +57,8 @@ github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab h1:IAbt9u76S
 github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
 github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7 h1:cQIrw9+JKS/fwCwXABQC2T/j6aiZ6MwtwqOw/BDo4E4=
 github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
+github.com/zetamatta/go-outputdebug v0.0.0-20190407163505-b4470600349e h1:9kr0iljvnfnpjtrmNIjRfJEZpovWJIrL8xlbOQJdvbo=
+github.com/zetamatta/go-outputdebug v0.0.0-20190407163505-b4470600349e/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
