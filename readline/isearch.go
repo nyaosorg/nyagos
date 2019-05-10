@@ -44,7 +44,7 @@ func keyFuncIncSearch(ctx context.Context, this *Buffer) Result {
 		this.Eraseline()
 		io.WriteString(this.Out, ansiCursorOn)
 		this.Out.Flush()
-		key, err := getKey(this.TTY)
+		key, err := this.GetKey()
 		if err != nil {
 			println(err.Error())
 			return CONTINUE

@@ -212,7 +212,7 @@ func keyFuncQuotedInsert(ctx context.Context, this *Buffer) Result {
 	defer io.WriteString(this.Out, ansiCursorOff)
 
 	this.Out.Flush()
-	if key, err := getKey(this.TTY); err == nil {
+	if key, err := this.GetKey(); err == nil {
 		return keyFuncInsertSelf(ctx, this, key)
 	} else {
 		return CONTINUE

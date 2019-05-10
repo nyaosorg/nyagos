@@ -158,7 +158,8 @@ const (
 
 var CtrlC = errors.New("^C")
 
-func getKey(tty1 *tty.TTY) (string, error) {
+func (this *Buffer) GetKey() (string, error) {
+	tty1 := this.TTY
 	clean, err := tty1.Raw()
 	if err != nil {
 		return "", err
@@ -277,7 +278,7 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		this.Out.Flush()
 
 		mu.Unlock()
-		key1, err := getKey(tty1)
+		key1, err := this.GetKey()
 		if err != nil {
 			return "", err
 		}
