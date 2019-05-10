@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -10,10 +12,20 @@ func main() {
 	var callback func(*dos.NetResource) bool
 
 	callback = func(node *dos.NetResource) bool {
-		fmt.Printf("%*s%s\n", indent*2, "", node.RemoteName())
-		indent++
-		node.Enum(callback)
-		indent--
+		name := node.RemoteName()
+		now := time.Now()
+		fmt.Printf("%02d:%02d:%02d %*s%s\n",
+			now.Hour(),
+			now.Minute(),
+			now.Second(),
+			indent*2,
+			"",
+			name)
+		if len(name) <= 0 || name[0] != '\\' {
+			indent++
+			node.Enum(callback)
+			indent--
+		}
 		return true
 	}
 	err := dos.WNetEnum(callback)
