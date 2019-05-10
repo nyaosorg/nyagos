@@ -3,13 +3,10 @@ package dos
 import (
 	"fmt"
 	"regexp"
-	"strings"
 	"sync"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
-	//"github.com/zetamatta/go-outputdebug"
-	//"time"
 )
 
 var procWNetOpenEnum = mpr.NewProc("WNetOpenEnumW")
@@ -93,8 +90,6 @@ var rxServerPattern = regexp.MustCompile(`^\\\\[^\\/]+$`)
 var netlock sync.RWMutex
 
 func EachMachine(callback func(*NetResource) bool) error {
-	//outputdebug.String(time.Now().String())
-
 	var me func(*NetResource) bool
 	var wg sync.WaitGroup
 	me = func(nr *NetResource) bool {
@@ -114,15 +109,5 @@ func EachMachine(callback func(*NetResource) bool) error {
 	}
 	err := WNetEnum(me)
 	wg.Wait()
-	//outputdebug.String(time.Now().String())
 	return err
-}
-
-func EachMachineNode(name string, callback func(*NetResource) bool) error {
-	return EachMachine(func(machine *NetResource) bool {
-		if strings.EqualFold(name, machine.RemoteName()) {
-			machine.Enum(callback)
-		}
-		return true
-	})
 }
