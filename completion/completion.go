@@ -78,7 +78,7 @@ var CustomCompletion = map[string]CustomCompleter{
 	"pushd":    &customComplete{Func: completionCd, Name: "Built-in `pushd` completer"},
 	"rmdir":    &customComplete{Func: completionCd, Name: "Built-in `rmdir` completer"},
 	"rd":       &customComplete{Func: completionCd, Name: "Built-in `rmdir` completer"},
-	"kill":     &customComplete{Func: completionProcessName, Name: "Built-in `kill` completer"},
+	"killall":  &customComplete{Func: completionProcessName, Name: "Built-in `kill` completer"},
 	"taskkill": &customComplete{Func: completionTaskKill, Name: "Built-in `taskkill` completer"},
 }
 
