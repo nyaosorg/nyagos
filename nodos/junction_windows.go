@@ -3,6 +3,7 @@ package nodos
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"golang.org/x/sys/windows"
 
@@ -10,6 +11,10 @@ import (
 )
 
 func CreateJunction(target, mountPt string) error {
+	_target, err := filepath.Abs(target)
+	if err != nil {
+		return fmt.Errorf("%s: %s", target, err)
+	}
 	_mountPt, err := windows.UTF16PtrFromString(mountPt)
 	if err != nil {
 		return fmt.Errorf("%s: %s", mountPt, err)
@@ -39,7 +44,7 @@ func CreateJunction(target, mountPt string) error {
 	defer windows.CloseHandle(handle)
 
 	rp := winio.ReparsePoint{
-		Target:       target,
+		Target:       _target,
 		IsMountPoint: true,
 	}
 
