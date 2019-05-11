@@ -104,6 +104,40 @@ func readValue(r io.RuneScanner) (value_t, error) {
 			return rvalue_t(1), err
 		}
 	}
+	if ch == '0' {
+		value := 0
+		ch, _, err := r.ReadRune()
+		if err != nil {
+			return rvalue_t(0), err
+		}
+		if ch == 'x' || ch == 'X' {
+			for {
+				ch, _, err := r.ReadRune()
+				if err != nil {
+					return rvalue_t(value), err
+				}
+				m := strings.IndexRune("0123456789ABCDEFF", unicode.ToUpper(ch))
+				if m < 0 {
+					r.UnreadRune()
+					return rvalue_t(value), nil
+				}
+				value = value*16 + m
+			}
+		} else {
+			for {
+				m := strings.IndexRune("01234567", ch)
+				if m < 0 {
+					r.UnreadRune()
+					return rvalue_t(value), nil
+				}
+				value = value*8 + m
+				ch, _, err = r.ReadRune()
+				if err != nil {
+					return rvalue_t(value), err
+				}
+			}
+		}
+	}
 	if n := strings.IndexRune("0123456789", ch); n >= 0 {
 		value := n
 		for {
