@@ -312,7 +312,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 					ctx:  _ctx,
 				})
 			}
-		} else {
+		} else if !tryOsOption(args[i]) {
 			fmt.Fprintf(os.Stderr, "%s: unknown parameter\n", args[i])
 		}
 	}
