@@ -2,6 +2,5 @@
 
 package frame
 
-func tryOsOption(string) bool {
-	return false
+func optionNetUse(arg string) {
 }

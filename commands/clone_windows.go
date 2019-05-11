@@ -71,10 +71,10 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 
 	if netdrives, err := dos.GetNetDrives(); err == nil {
 		for _, n := range netdrives {
-			fmt.Fprintf(&buffer, ` "--netuse=%c:=%s"`, n.Letter, n.Remote)
+			fmt.Fprintf(&buffer, ` --netuse "%c:=%s"`, n.Letter, n.Remote)
 		}
 	}
-	fmt.Fprintf(&buffer, ` "--chdir=%s"`, wd)
+	fmt.Fprintf(&buffer, ` --chdir "%s"`, wd)
 
 	pid, err := dos.ShellExecute("runas", me, buffer.String(), "")
 	if err != nil {

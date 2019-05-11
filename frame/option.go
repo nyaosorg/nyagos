@@ -34,9 +34,10 @@ type optionArg struct {
 }
 
 type optionT struct {
-	F func()
-	V func(*optionArg) (func(context.Context) error, error)
-	U string
+	F  func()
+	F1 func(arg string)
+	V  func(*optionArg) (func(context.Context) error, error)
+	U  string
 }
 
 func shellJoin(args []string) string {
@@ -58,6 +59,18 @@ func shellJoin(args []string) string {
 }
 
 var optionMap = map[string]optionT{
+	"--netuse": {
+		U:  "\"DRIVE:=UNCPATH\"\nassign DRIVE to UNCPATH on startup",
+		F1: optionNetUse,
+	},
+	"--chdir": {
+		U: "\"DIRECTORY\"\nchange directory on startup",
+		F1: func(arg string) {
+			if err := os.Chdir(arg); err != nil {
+				println("chdir:", err.Error())
+			}
+		},
+	},
 	"--lua-first": {
 		U: "\"LUACODE\"\nExecute \"LUACODE\" before processing any rcfiles and continue shell",
 		V: func(p *optionArg) (func(context.Context) error, error) {
@@ -304,6 +317,14 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 			if f.F != nil {
 				f.F()
 			}
+			if f.F1 != nil {
+				i++
+				arg1 := ""
+				if i < len(args) {
+					arg1 = args[i]
+				}
+				f.F1(arg1)
+			}
 			if f.V != nil {
 				return f.V(&optionArg{
 					args: args[i+1:],
@@ -312,7 +333,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 					ctx:  _ctx,
 				})
 			}
-		} else if !tryOsOption(args[i]) {
+		} else {
 			fmt.Fprintf(os.Stderr, "%s: unknown parameter\n", args[i])
 		}
 	}
