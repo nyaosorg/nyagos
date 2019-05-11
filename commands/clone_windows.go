@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
@@ -51,30 +52,36 @@ func cmdClone(ctx context.Context, cmd Param) (int, error) {
 }
 
 func cmdSu(ctx context.Context, cmd Param) (int, error) {
-	netdrives, err := dos.GetNetDrives()
-	if err == nil {
-		var buffer strings.Builder
-		buffer.WriteString("/S /C \"")
-		for _, n := range netdrives {
-			fmt.Fprintf(&buffer, "net use %c: \"%s\" 1>nul 2>nul & ", n.Letter, n.Remote)
-		}
-		me, err := os.Executable()
-		if err != nil {
-			return 1, err
-		}
-		wd, err := os.Getwd()
-		if err != nil {
-			return 2, err
-		}
-		fmt.Fprintf(&buffer, " cd /d \"%s\" & \"%s\" \"", wd, me)
-		pid, err := dos.ShellExecute("runas", "CMD.EXE", buffer.String(), "")
-		if err != nil {
-			return 3, err
-		}
-		if pid > 0 {
-			fmt.Fprintf(cmd.Err(), "[%d]\n", pid)
-		}
-		return 0, nil
+	me, err := os.Executable()
+	if err != nil {
+		return 1, err
 	}
-	return _clone("runas", cmd.Err())
+	if me2, err2 := filepath.EvalSymlinks(me); err2 == nil {
+		me = me2
+	}
+	wd, err := os.Getwd()
+	if err != nil {
+		return 2, err
+	}
+	if strings.HasSuffix(wd, `\`) {
+		wd += "."
+	}
+
+	var buffer strings.Builder
+
+	if netdrives, err := dos.GetNetDrives(); err == nil {
+		for _, n := range netdrives {
+			fmt.Fprintf(&buffer, ` "--netuse=%c:=%s"`, n.Letter, n.Remote)
+		}
+	}
+	fmt.Fprintf(&buffer, ` "--chdir=%s"`, wd)
+
+	pid, err := dos.ShellExecute("runas", me, buffer.String(), "")
+	if err != nil {
+		return 3, err
+	}
+	if pid > 0 {
+		fmt.Fprintf(cmd.Err(), "[%d]\n", pid)
+	}
+	return 0, nil
 }

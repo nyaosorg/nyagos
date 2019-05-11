@@ -20,7 +20,9 @@ func tryOsOption(arg string) bool {
 		dos.NetUse(piece[0], piece[1])
 		return true
 	} else if strings.HasPrefix(arg, chdir_opt) {
-		os.Chdir(arg[len(chdir_opt):])
+		if err := os.Chdir(arg[len(chdir_opt):]); err != nil {
+			println("chdir:", err.Error())
+		}
 		return true
 	} else {
 		return false
