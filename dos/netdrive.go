@@ -63,19 +63,36 @@ func FindVacantDrive() (uint, error) {
 	return 0, errors.New("vacant drive is not found")
 }
 
-func UNCtoNetDrive(uncpath string) (netdrive string, closer func()) {
+// NetUse do same thing as `net use X: \\server\path...`
+//    drive - `X:`
+//    vol - `server\\path\...`
+// returns
+//    func() - function release the drive
+//    error
+func NetUse(drive, vol string) (func(), error) {
+	if err := WNetAddConnection2(vol, drive, "", ""); err != nil {
+		return func() {}, err
+	}
+	return func() { WNetCancelConnection2(drive, false, false) }, nil
+}
+
+// UNCtoNetDrive replace UNCPath to path using netdrive.
+//    uncpath - for example \\server\path\folder\name
+// returns
+//    newpath - X:\folder\name
+func UNCtoNetDrive(uncpath string) (newpath string, closer func()) {
 	vol := filepath.VolumeName(uncpath)
 	d, err := FindVacantDrive()
 	if err != nil {
 		return "", func() {}
 	}
-	remote := string([]byte{byte(d), ':'})
-	if err := WNetAddConnection2(vol, remote, "", ""); err != nil {
+	netdrive := string([]byte{byte(d), ':'})
+	newpath = filepath.Join(netdrive, uncpath[len(vol):])
+	if closer, err = NetUse(netdrive, vol); err != nil {
 		return "", func() {}
+	} else {
+		return newpath, closer
 	}
-	netdrive = filepath.Join(remote, uncpath[len(vol):])
-	closer = func() { WNetCancelConnection2(remote, false, false) }
-	return
 }
 
 // https://msdn.microsoft.com/ja-jp/library/cc447030.aspx
