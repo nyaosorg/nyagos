@@ -2,6 +2,7 @@ package completion
 
 import (
 	"context"
+	"errors"
 	"os"
 	"strings"
 
@@ -16,18 +17,32 @@ const (
 
 var IncludeHidden = false
 
-func listUpFiles(ctx context.Context, str string) ([]Element, error) {
-	return listUpWithFilter(ctx, str, func(*findfile.FileInfo) bool { return true })
+func listUpFiles(ctx context.Context, ua UncAccess, str string) ([]Element, error) {
+	return listUpWithFilter(ctx, str, ua, func(*findfile.FileInfo) bool { return true })
 }
-func listUpDirs(ctx context.Context, str string) ([]Element, error) {
-	return listUpWithFilter(ctx, str, func(fd *findfile.FileInfo) bool {
+func listUpDirs(ctx context.Context, ua UncAccess, str string) ([]Element, error) {
+	return listUpWithFilter(ctx, str, ua, func(fd *findfile.FileInfo) bool {
 		return fd.IsDir() || strings.HasSuffix(strings.ToLower(fd.Name()), ".lnk")
 	})
 }
 
-func listUpWithFilter(ctx context.Context, str string, filter func(*findfile.FileInfo) bool) ([]Element, error) {
-	if r, err := uncComplete(str); err == nil {
-		return r, nil
+type UncAccess int
+
+const (
+	UNC_IGNORE UncAccess = iota
+	UNC_PROMPT
+	UNC_FORCE
+)
+
+var ErrAskRetry = errors.New("Complete Network Path ?")
+
+func listUpWithFilter(ctx context.Context, str string, ua UncAccess, filter func(*findfile.FileInfo) bool) ([]Element, error) {
+	if ua != UNC_IGNORE {
+		if r, err := uncComplete(str, ua == UNC_FORCE); err == nil {
+			return r, nil
+		} else if err == ErrAskRetry {
+			return nil, err
+		}
 	}
 	orgSlash := STD_SLASH[0]
 	if UseSlash {

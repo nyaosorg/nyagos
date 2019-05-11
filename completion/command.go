@@ -41,7 +41,7 @@ func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, e
 }
 
 func listUpCurrentAllExecutable(ctx context.Context, str string) ([]Element, error) {
-	listTmp, listErr := listUpFiles(ctx, str)
+	listTmp, listErr := listUpFiles(ctx, UNC_IGNORE, str)
 	if listErr != nil {
 		return nil, listErr
 	}

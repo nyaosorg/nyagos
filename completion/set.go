@@ -8,7 +8,7 @@ import (
 	"github.com/mitchellh/go-ps"
 )
 
-func completionSet(ctx context.Context, params []string) ([]Element, error) {
+func completionSet(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
 	result := []Element{}
 	base := strings.ToUpper(params[len(params)-1])
 	for _, env1 := range os.Environ() {
@@ -19,11 +19,11 @@ func completionSet(ctx context.Context, params []string) ([]Element, error) {
 	return result, nil
 }
 
-func completionCd(ctx context.Context, params []string) ([]Element, error) {
-	return listUpDirs(ctx, params[len(params)-1])
+func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
+	return listUpDirs(ctx, ua, params[len(params)-1])
 }
 
-func completionEnv(ctx context.Context, param []string) ([]Element, error) {
+func completionEnv(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
 	eq := -1
 	for i := 1; i < len(param); i++ {
 		if strings.Contains(param[i], "=") {
@@ -33,7 +33,7 @@ func completionEnv(ctx context.Context, param []string) ([]Element, error) {
 	current := len(param) - 1
 
 	if current == eq || current == 1 {
-		return completionSet(ctx, param)
+		return completionSet(ctx, ua, param)
 	} else if current == eq+1 {
 		return listUpCommands(ctx, param[current])
 	} else {
@@ -41,14 +41,14 @@ func completionEnv(ctx context.Context, param []string) ([]Element, error) {
 	}
 }
 
-func completionWhich(ctx context.Context, param []string) ([]Element, error) {
+func completionWhich(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
 	if len(param) == 2 {
 		return listUpCommands(ctx, param[len(param)-1])
 	}
 	return nil, nil
 }
 
-func completionProcessName(ctx context.Context, param []string) ([]Element, error) {
+func completionProcessName(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
 	processes, err := ps.Processes()
 	if err != nil {
 		return nil, err
@@ -68,9 +68,9 @@ func completionProcessName(ctx context.Context, param []string) ([]Element, erro
 	return result, nil
 }
 
-func completionTaskKill(ctx context.Context, param []string) ([]Element, error) {
+func completionTaskKill(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
 	if len(param) >= 3 && strings.EqualFold(param[len(param)-2], "/IM") {
-		return completionProcessName(ctx, param)
+		return completionProcessName(ctx, ua, param)
 	}
 	return nil, nil
 }

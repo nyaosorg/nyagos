@@ -33,8 +33,15 @@ func getServerCache() map[string]*_ServerCache {
 	return serverCache
 }
 
-func uncComplete(str string) ([]Element, error) {
+func hasServerCache() bool {
+	return serverCache != nil
+}
+
+func uncComplete(str string, force bool) ([]Element, error) {
 	if rxUNCPattern1.MatchString(str) {
+		if !force && !hasServerCache() {
+			return nil, ErrAskRetry
+		}
 		//outputdebug.String(`start complete \\server:` + time.Now().String())
 		server := strings.ToUpper(str)
 		result := []Element{}
@@ -48,6 +55,9 @@ func uncComplete(str string) ([]Element, error) {
 	}
 	if m := rxUNCPattern2.FindStringSubmatch(str); m != nil {
 		//outputdebug.String(`start complete \\server\path:` + time.Now().String())
+		if !force {
+			return nil, ErrAskRetry
+		}
 		server := m[1]
 		result := []Element{}
 

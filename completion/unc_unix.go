@@ -6,6 +6,6 @@ import (
 	"errors"
 )
 
-func uncComplete(str string) ([]Element, error) {
+func uncComplete(str string, force bool) ([]Element, error) {
 	return nil, errors.New("not supported")
 }

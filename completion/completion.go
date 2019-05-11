@@ -2,6 +2,7 @@ package completion
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -53,17 +54,17 @@ func isTop(s string, indexes [][]int) bool {
 }
 
 type CustomCompleter interface {
-	Complete(context.Context, []string) ([]Element, error)
+	Complete(context.Context, UncAccess, []string) ([]Element, error)
 	String() string
 }
 
 type customComplete struct {
-	Func func(context.Context, []string) ([]Element, error)
+	Func func(context.Context, UncAccess, []string) ([]Element, error)
 	Name string
 }
 
-func (f customComplete) Complete(ctx context.Context, args []string) ([]Element, error) {
-	return f.Func(ctx, args)
+func (f customComplete) Complete(ctx context.Context, ua UncAccess, args []string) ([]Element, error) {
+	return f.Func(ctx, ua, args)
 }
 
 func (f customComplete) String() string {
@@ -138,15 +139,30 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			args = append(args, "")
 		}
 
-		if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
-			rv.List, err = f.Complete(ctx, args)
-			if rv.List != nil && err == nil {
-				replace = true
+		ua := UNC_PROMPT
+		for {
+			if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
+				rv.List, err = f.Complete(ctx, ua, args)
+				if rv.List != nil && err == nil {
+					replace = true
+				} else {
+					rv.List, err = listUpFiles(ctx, ua, rv.Word[start:])
+				}
 			} else {
-				rv.List, err = listUpFiles(ctx, rv.Word[start:])
+				rv.List, err = listUpFiles(ctx, ua, rv.Word[start:])
 			}
-		} else {
-			rv.List, err = listUpFiles(ctx, rv.Word[start:])
+			if err != ErrAskRetry {
+				break
+			}
+			fmt.Fprintf(this.Out, "\n%s [y/n]", err.Error())
+			this.Out.Flush()
+			if key, err1 := this.GetKey(); err1 != nil || !strings.EqualFold(key, "y") {
+				return rv, default_delimiter, errors.New("completion canceled")
+			}
+			fmt.Fprintln(this.Out)
+			this.RepaintAll()
+			this.Out.Flush()
+			ua = UNC_FORCE
 		}
 	}
 	if err != nil {
