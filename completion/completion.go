@@ -215,8 +215,7 @@ func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.
 	if err != nil {
 		fmt.Fprintf(this.Out, "(warning) %s\n", err.Error())
 	}
-	box.Print(ctx, toDisplay(comp.List), this.Out)
-	this.RepaintAll()
+	showCompList(ctx, this, comp)
 	return readline.CONTINUE
 }
 
@@ -258,6 +257,22 @@ func CommonPrefix(list []string) string {
 
 func endWithRoot(path string) bool {
 	return len(path) >= 1 && os.IsPathSeparator(path[len(path)-1])
+}
+
+func showCompList(ctx context.Context, this *readline.Buffer, comp *List) {
+	if len(comp.List) > 100 {
+		fmt.Fprintf(this.Out, "Display all %d possibilities ? (y or n)", len(comp.List))
+		this.Out.Flush()
+		key, err := this.GetKey()
+		if err != nil || !strings.EqualFold(key, "y") {
+			this.Out.WriteByte('\n')
+			this.RepaintAll()
+			return
+		}
+		this.Out.WriteByte('\n')
+	}
+	box.Print(ctx, toDisplay(comp.List), this.Out)
+	this.RepaintAll()
 }
 
 func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Result {
@@ -308,8 +323,7 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		if err != nil {
 			fmt.Fprintf(this.Out, "(warning) %s\n", err.Error())
 		}
-		box.Print(nil, toDisplay(comp.List), this.Out)
-		this.RepaintAll()
+		showCompList(nil, this, comp)
 		return readline.CONTINUE
 	}
 	this.ReplaceAndRepaint(comp.Pos, commonStr)
