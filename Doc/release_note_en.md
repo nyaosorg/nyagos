@@ -12,6 +12,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: `mklink /J mountPt target-relative-path` made a broken junction.(Add change path absolute)
 * Add options: `--chdir "DIR"` and `--netuse "X:=\\server\path"`
 * Stop using CMD.EXE on `su` to set console-windows' icon nyagos'
+* Completion: ask completion when more than possibilities exist.
 
 NYAGOS 4.4.3\_0
 ===============
