@@ -201,24 +201,6 @@ func toDisplay(source []Element) []string {
 	return result
 }
 
-func KeyFuncCompletionList(ctx context.Context, this *readline.Buffer) readline.Result {
-	comp, _, err := listUpComplete(ctx, this)
-	if err != nil {
-		fmt.Fprintf(this.Out, "\n%s\n", err)
-		this.RepaintAll()
-		return readline.CONTINUE
-	}
-	if comp == nil {
-		return readline.CONTINUE
-	}
-	this.Out.WriteByte('\n')
-	if err != nil {
-		fmt.Fprintf(this.Out, "(warning) %s\n", err.Error())
-	}
-	showCompList(ctx, this, comp)
-	return readline.CONTINUE
-}
-
 func CommonPrefix(list []string) string {
 	if len(list) < 1 {
 		return ""
