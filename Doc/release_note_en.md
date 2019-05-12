@@ -10,7 +10,7 @@ English / [Japanese](release_note_ja.md)
 * Implemented `.` and `source` for Linux (using /bin/sh)
 * readline: fixed cursor-blink-off did not work while user wait.
 * Fix: `mklink /J mountPt target-relative-path` made a broken junction.(Add change path absolute)
-* Add options: `--chdir=` and `--netuse=X:=\\server\path`
+* Add options: `--chdir "DIR"` and `--netuse "X:=\\server\path"`
 * Stop using CMD.EXE on `su` to set console-windows' icon nyagos'
 
 NYAGOS 4.4.3\_0

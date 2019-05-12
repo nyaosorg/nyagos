@@ -10,7 +10,7 @@
 * Linux用の `.` と `source` を実装(/bin/sh を想定)
 * 一行入力で、ユーザが待っている時にカーソルの点滅がオフになっていなかった不具合を修正
 * `mklink /J マウントポイント 相対パス` で作るジャンクションが壊れていた(絶対パス化が抜けていた)
-* 起動オプション `--chdir=` and `--netuse=X:=\\server\path` を追加
+* 起動オプション `--chdir "DIR"` and `--netuse "X:=\\server\path"` を追加
 * `su`を実行する際にCMD.EXEを使わないようにした(アイコンをNYAGOSのにするため)
 
 NYAGOS 4.4.3\_0
