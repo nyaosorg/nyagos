@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-var clockmark = []rune{'/', '-', '\u2216', '|'}
+var clockmark = []rune{'-', '\u2216', '|', '/'}
 
 func Progress() func() {
 	done := make(chan struct{})
-	fmt.Print(" ")
+	fmt.Print(" /\b")
 	go func() {
 		ticker := time.NewTicker(time.Second / 2)
 		i := 0
