@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 	//"github.com/zetamatta/go-outputdebug"
 	//"time"
 )
@@ -22,6 +23,8 @@ var serverCache map[string]*_ServerCache
 
 func getServerCache() map[string]*_ServerCache {
 	if serverCache == nil {
+		c := nodos.Progress()
+		defer c()
 		serverCache = make(map[string]*_ServerCache)
 		dos.EachMachine(func(n *dos.NetResource) bool {
 			serverCache[n.RemoteName()] = &_ServerCache{
