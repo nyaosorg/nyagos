@@ -13,6 +13,7 @@ English / [Japanese](release_note_ja.md)
 * Add options: `--chdir "DIR"` and `--netuse "X:=\\server\path"`
 * Stop using CMD.EXE on `su` to set console-windows' icon nyagos'
 * Completion: ask completion when more than 100 possibilities exist.
+* ps: print `[self]` the line where nyagos.exe self exists.
 
 NYAGOS 4.4.3\_0
 ===============
