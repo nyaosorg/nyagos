@@ -83,9 +83,11 @@ var CustomCompletion = map[string]CustomCompleter{
 	"taskkill": &customComplete{Func: completionTaskKill, Name: "Built-in `taskkill` completer"},
 }
 
-func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, error) {
+func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, func(), error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
+
+	cmdline_recover := func() {}
 
 	var err error
 	rv := &List{
@@ -104,7 +106,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
 		rv.RawWord = rv.AllLine[rv.Pos:]
 		rv.Word = rv.RawWord
-		return rv, default_delimiter, nil
+		return rv, default_delimiter, cmdline_recover, nil
 	}
 
 	// filename or commandname completion
@@ -140,7 +142,6 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 		}
 
 		ua := UNC_PROMPT
-		command_line_broken := false
 		for {
 			if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
 				rv.List, err = f.Complete(ctx, ua, args)
@@ -157,25 +158,24 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			}
 			fmt.Fprintf(this.Out, "\n%s [y/n] ", err.Error())
 			this.Out.Flush()
-			command_line_broken = true
+			cmdline_recover = func() {
+				fmt.Fprintln(this.Out)
+				this.RepaintAll()
+				this.Out.Flush()
+			}
 			key, err1 := this.GetKey()
 			if err1 == nil {
 				fmt.Fprint(this.Out, key)
 				this.Out.Flush()
 			}
 			if err1 != nil || !strings.EqualFold(key, "y") {
-				return rv, default_delimiter, errors.New("Canceled.")
+				return rv, default_delimiter, cmdline_recover, errors.New("Canceled.")
 			}
 			ua = UNC_FORCE
 		}
-		if command_line_broken {
-			fmt.Fprintln(this.Out)
-			this.RepaintAll()
-			this.Out.Flush()
-		}
 	}
 	if err != nil {
-		return rv, default_delimiter, err
+		return rv, default_delimiter, cmdline_recover, err
 	}
 	if !replace {
 		for i := 0; i < len(rv.List); i++ {
@@ -191,7 +191,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			break
 		}
 	}
-	return rv, default_delimiter, err
+	return rv, default_delimiter, cmdline_recover, err
 }
 
 func toComplete(source []Element) []string {
@@ -269,13 +269,14 @@ func showCompList(ctx context.Context, this *readline.Buffer, comp *List) {
 }
 
 func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Result {
-	comp, default_delimiter, err := listUpComplete(ctx, this)
+	comp, default_delimiter, cmdline_recover, err := listUpComplete(ctx, this)
 	if err != nil {
 		fmt.Fprintf(this.Out, "\n%s\n", err)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}
 	if comp.List == nil || len(comp.List) <= 0 {
+		cmdline_recover()
 		return readline.CONTINUE
 	}
 
@@ -318,6 +319,8 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		}
 		showCompList(nil, this, comp)
 		return readline.CONTINUE
+	} else {
+		cmdline_recover()
 	}
 	this.ReplaceAndRepaint(comp.Pos, commonStr)
 	return readline.CONTINUE
