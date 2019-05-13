@@ -252,15 +252,17 @@ func endWithRoot(path string) bool {
 
 func showCompList(ctx context.Context, this *readline.Buffer, comp *List) {
 	if len(comp.List) > 100 {
-		fmt.Fprintf(this.Out, "Display all %d possibilities ? (y or n)", len(comp.List))
+		fmt.Fprintf(this.Out, "Display all %d possibilities ? [y/n] ", len(comp.List))
 		this.Out.Flush()
 		key, err := this.GetKey()
+		if err == nil {
+			fmt.Fprintln(this.Out, key)
+			this.Out.Flush()
+		}
 		if err != nil || !strings.EqualFold(key, "y") {
-			this.Out.WriteByte('\n')
 			this.RepaintAll()
 			return
 		}
-		this.Out.WriteByte('\n')
 	}
 	box.Print(ctx, toDisplay(comp.List), this.Out)
 	this.RepaintAll()
