@@ -140,6 +140,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 		}
 
 		ua := UNC_PROMPT
+		command_line_broken := false
 		for {
 			if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
 				rv.List, err = f.Complete(ctx, ua, args)
@@ -154,15 +155,23 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, er
 			if err != ErrAskRetry {
 				break
 			}
-			fmt.Fprintf(this.Out, "\n%s [y/n]", err.Error())
+			fmt.Fprintf(this.Out, "\n%s [y/n] ", err.Error())
 			this.Out.Flush()
-			if key, err1 := this.GetKey(); err1 != nil || !strings.EqualFold(key, "y") {
-				return rv, default_delimiter, errors.New("completion canceled")
+			command_line_broken = true
+			key, err1 := this.GetKey()
+			if err1 == nil {
+				fmt.Fprint(this.Out, key)
+				this.Out.Flush()
 			}
+			if err1 != nil || !strings.EqualFold(key, "y") {
+				return rv, default_delimiter, errors.New("Canceled.")
+			}
+			ua = UNC_FORCE
+		}
+		if command_line_broken {
 			fmt.Fprintln(this.Out)
 			this.RepaintAll()
 			this.Out.Flush()
-			ua = UNC_FORCE
 		}
 	}
 	if err != nil {

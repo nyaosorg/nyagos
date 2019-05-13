@@ -55,7 +55,7 @@ func uncComplete(str string, force bool) ([]Element, error) {
 	}
 	if m := rxUNCPattern2.FindStringSubmatch(str); m != nil {
 		//outputdebug.String(`start complete \\server\path:` + time.Now().String())
-		if !force {
+		if !force && !hasServerCache() {
 			return nil, ErrAskRetry
 		}
 		server := m[1]
