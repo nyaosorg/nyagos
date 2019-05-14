@@ -30,11 +30,15 @@ func (c *Container) Len() int {
 }
 
 // At returns n-th history-text
-func (c *Container) At(n int) string {
+func (c *Container) GetAt(n int) *Line {
 	for n < 0 {
 		n += len(c.rows)
 	}
-	return c.rows[n%len(c.rows)].Text
+	return &c.rows[n%len(c.rows)]
+}
+
+func (c *Container) At(n int) string {
+	return c.GetAt(n).Text
 }
 
 // Push appends a new history line to self with string
