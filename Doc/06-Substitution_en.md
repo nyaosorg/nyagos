@@ -17,6 +17,7 @@ These suffix are available.
 * `^` first argument
 * `$` last argument
 * `\*` all argument
+* `@` the directory
 
 #### Variables
 
