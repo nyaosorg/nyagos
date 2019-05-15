@@ -16,6 +16,7 @@ var procCopyFileW = kernel32.NewProc("CopyFileExW")
 
 type progressCopy struct {
 	last time.Time
+	n    int
 	run  bool
 }
 
@@ -31,7 +32,7 @@ func progressPrint(total, transfer, c, d, e, f, g, h, _this uintptr) uintptr {
 	now := time.Now()
 
 	if now.Sub(this.last) >= time.Second {
-		fmt.Printf("%3d%% %*d/%d\r",
+		this.n, _ = fmt.Printf("%3d%% %*d/%d\r",
 			transfer*100/total,
 			keta(total),
 			transfer,
@@ -71,7 +72,7 @@ func copyFile(src, dst string, isFailIfExists bool) error {
 		flag)
 
 	if progressCopy1.run {
-		fmt.Println()
+		fmt.Printf("%*s\r", progressCopy1.n, "")
 	}
 	if rc == 0 {
 		return err
