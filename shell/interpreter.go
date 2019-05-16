@@ -52,7 +52,8 @@ func (nul *_NulHistory) Len() int            { return 0 }
 
 type Shell struct {
 	Stream
-	History History
+	History  History
+	LineHook func(context.Context, *Cmd) (int, bool, error)
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
@@ -150,6 +151,12 @@ func New() *Shell {
 	return &Shell{
 		Stream:  NulStream,
 		History: &_NulHistory{},
+		LineHook: func(ctx context.Context, cmd1 *Cmd) (int, bool, error) {
+			if hook != nil {
+				return hook(ctx, cmd1)
+			}
+			return 0, false, nil
+		},
 		Stdin:   os.Stdin,
 		Stdout:  os.Stdout,
 		Stderr:  os.Stderr,
@@ -160,13 +167,14 @@ func New() *Shell {
 func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
-			Stream:  sh.Stream,
-			History: sh.History,
-			Stdin:   sh.Stdin,
-			Stdout:  sh.Stdout,
-			Stderr:  sh.Stderr,
-			Console: sh.Console,
-			tag:     sh.tag,
+			Stream:   sh.Stream,
+			History:  sh.History,
+			LineHook: sh.LineHook,
+			Stdin:    sh.Stdin,
+			Stdout:   sh.Stdout,
+			Stderr:   sh.Stderr,
+			Console:  sh.Console,
+			tag:      sh.tag,
 		},
 	}
 	if sh.session != nil {
@@ -245,7 +253,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	}
 
 	// aliases and lua-commands
-	if errorlevel, done, err := hook(ctx, cmd); done || err != nil {
+	if errorlevel, done, err := cmd.LineHook(ctx, cmd); done || err != nil {
 		return errorlevel, err
 	}
 
