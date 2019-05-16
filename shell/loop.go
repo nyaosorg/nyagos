@@ -14,6 +14,14 @@ type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
 }
 
+type _NulStream struct{}
+
+func (stream *_NulStream) ReadLine(ctx context.Context) (context.Context, string, error) {
+	return ctx, "", io.EOF
+}
+
+var NulStream = &_NulStream{}
+
 func (ses *session) push(lines []string) {
 	if lines != nil && len(lines) >= 1 {
 		ses.unreadline = append(ses.unreadline, lines...)
@@ -34,7 +42,8 @@ func (ses *session) pop() (string, bool) {
 }
 
 // ReadCommand reads completed one command from `stream`.
-func (sh *Shell) ReadCommand(ctx context.Context, stream Stream) (context.Context, string, error) {
+func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, error) {
+	stream := sh.Stream
 	var line string
 	var err error
 
@@ -52,18 +61,18 @@ func (sh *Shell) ReadCommand(ctx context.Context, stream Stream) (context.Contex
 	return ctx, line, nil
 }
 
-type streamIDT struct{}
-
-// StreamID is the key-object to find the last stream in the context object.
-var StreamID streamIDT
-
 // Loop executes commands from `stream` until any errors are found.
 func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
+	backup := sh.Stream
+	sh.Stream = stream
+	defer func() {
+		sh.Stream = backup
+	}()
+
 	for {
 		ctx, cancel := context.WithCancel(ctx0)
-		ctx = context.WithValue(ctx, StreamID, stream)
 
-		ctx, line, err := sh.ReadCommand(ctx, stream)
+		ctx, line, err := sh.ReadCommand(ctx)
 		if err != nil {
 			cancel()
 			if err == io.EOF {

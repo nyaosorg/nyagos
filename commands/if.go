@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"io"
 	"os"
 	"regexp"
@@ -87,11 +86,6 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 
 	// block `then` / `else`
 
-	stream, ok := ctx.Value(shell.StreamID).(shell.Stream)
-	if !ok {
-		return 1, errors.New("not found stream")
-	}
-
 	elseBuffer := shell.BufStream{}
 	elsePart := false
 
@@ -100,7 +94,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 	defer os.Setenv("PROMPT", savePrompt)
 	nest := 1
 	for {
-		_, line, err := cmd.ReadCommand(ctx, stream)
+		_, line, err := cmd.ReadCommand(ctx)
 		if err != nil {
 			if err != io.EOF {
 				return -1, err

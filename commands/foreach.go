@@ -2,7 +2,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"io"
 	"os"
 	"strings"
@@ -17,19 +16,13 @@ var startList = map[string]bool{
 }
 
 func cmdForeach(ctx context.Context, cmd Param) (int, error) {
-	stream, ok := ctx.Value(shell.StreamID).(shell.Stream)
-
-	if !ok {
-		return 1, errors.New("Not found stream")
-	}
-
 	bufstream := shell.BufStream{}
 	savePrompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "foreach>")
 	defer os.Setenv("PROMPT", savePrompt)
 	nest := 1
 	for {
-		_, line, err := cmd.ReadCommand(ctx, stream)
+		_, line, err := cmd.ReadCommand(ctx)
 		if err != nil {
 			if err != io.EOF {
 				return -1, err

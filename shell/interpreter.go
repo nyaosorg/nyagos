@@ -41,6 +41,7 @@ type CloneCloser interface {
 }
 
 type Shell struct {
+	Stream
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
@@ -135,6 +136,7 @@ func (sh *Shell) Close() {}
 
 func New() *Shell {
 	return &Shell{
+		Stream:  NulStream,
 		Stdin:   os.Stdin,
 		Stdout:  os.Stdout,
 		Stderr:  os.Stderr,
@@ -145,6 +147,7 @@ func New() *Shell {
 func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
+			Stream:  sh.Stream,
 			Stdin:   sh.Stdin,
 			Stdout:  sh.Stdout,
 			Stderr:  sh.Stderr,
