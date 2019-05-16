@@ -54,6 +54,7 @@ type Shell struct {
 	Stream
 	History  History
 	LineHook func(context.Context, *Cmd) (int, bool, error)
+	ArgsHook func(context.Context, *Shell, []string) ([]string, error)
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
@@ -157,6 +158,12 @@ func New() *Shell {
 			}
 			return 0, false, nil
 		},
+		ArgsHook: func(ctx context.Context, sh *Shell, args []string) ([]string, error) {
+			if argsHook != nil {
+				return argsHook(ctx, sh, args)
+			}
+			return args, nil
+		},
 		Stdin:   os.Stdin,
 		Stdout:  os.Stdout,
 		Stderr:  os.Stderr,
@@ -170,6 +177,7 @@ func (sh *Shell) Command() *Cmd {
 			Stream:   sh.Stream,
 			History:  sh.History,
 			LineHook: sh.LineHook,
+			ArgsHook: sh.ArgsHook,
 			Stdin:    sh.Stdin,
 			Stdout:   sh.Stdout,
 			Stderr:   sh.Stderr,
@@ -372,21 +380,15 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 		}
 		return 0, statementsErr
 	}
-	if argsHook != nil {
-		if defined.DBG {
-			print("call argsHook\n")
-		}
+	if sh.ArgsHook != nil {
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
 				var err error
-				state.Args, err = argsHook(ctx, sh, state.Args)
+				state.Args, err = sh.ArgsHook(ctx, sh, state.Args)
 				if err != nil {
 					return 255, err
 				}
 			}
-		}
-		if defined.DBG {
-			print("done argsHook\n")
 		}
 	}
 	for _, pipeline := range statements {

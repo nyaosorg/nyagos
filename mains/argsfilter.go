@@ -12,17 +12,14 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-type argsFilterFlagT struct{}
-
-var argsFilterFlag argsFilterFlagT
-
 var orgArgHook func(context.Context, *shell.Shell, []string) ([]string, error)
 
 func newArgHook(ctx context.Context, it *shell.Shell, args []string) ([]string, error) {
-	if ctx.Value(argsFilterFlag) != nil {
-		return orgArgHook(ctx, it, args)
-	}
-	ctx = context.WithValue(ctx, argsFilterFlag, true)
+	saveHook := it.ArgsHook
+	it.ArgsHook = orgArgHook
+	defer func() {
+		it.ArgsHook = saveHook
+	}()
 
 	luawrapper, ok := it.Tag().(*luaWrapper)
 	if !ok {
