@@ -2,7 +2,6 @@ package history
 
 import (
 	"bufio"
-	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -14,13 +13,26 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/mattn/go-isatty"
 	"github.com/zetamatta/nyagos/texts"
 )
 
 var Mark = "!"
 
 var DisableMarks = "\"'"
+
+func (row *Line) dump() string {
+	home := os.Getenv("USERPROFILE")
+	dir := row.Dir
+	if strings.HasPrefix(strings.ToUpper(dir), strings.ToUpper(home)) {
+		dir = "~" + dir[len(home):]
+	}
+	dir = filepath.ToSlash(dir)
+	return fmt.Sprintf("%s [%d] %-s (%s)",
+		row.Stamp.Format("Jan _2 15:04:05"),
+		row.Pid,
+		row.Text,
+		dir)
+}
 
 func (hisObj *Container) Replace(line string) (string, bool, error) {
 	var mark rune
@@ -201,64 +213,6 @@ func expandMacro(buffer *strings.Builder, reader *strings.Reader, row *Line) {
 		}
 		buffer.WriteString(line)
 	}
-}
-
-type Param interface {
-	Arg(int) string
-	Args() []string
-	Out() io.Writer
-	Err() io.Writer
-}
-
-func CmdHistory(ctx context.Context, cmd Param) (int, error) {
-	if ctx == nil {
-		fmt.Fprintln(cmd.Err(), "history not found (case1)")
-		return 1, nil
-	}
-	var num int
-	if len(cmd.Args()) >= 2 {
-		num64, err := strconv.ParseInt(cmd.Arg(1), 0, 32)
-		if err != nil {
-			switch err.(type) {
-			case *strconv.NumError:
-				return 0, fmt.Errorf(
-					"history: %s not a number", cmd.Arg(1))
-			default:
-				return 0, err
-			}
-		}
-		num = int(num64)
-		if num < 0 {
-			num = -num
-		}
-	} else {
-		num = 10
-	}
-	start := 0
-
-	historyObj, ok := ctx.Value(PackageId).(*Container)
-	if !ok {
-		return -1, errors.New("history: not available in startup script")
-	}
-	if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) && historyObj.Len() > num {
-		start = historyObj.Len() - num
-	}
-	home := os.Getenv("USERPROFILE")
-	for i := start; i < historyObj.Len(); i++ {
-		row := historyObj.rows[i]
-		dir := row.Dir
-		if strings.HasPrefix(strings.ToUpper(dir), strings.ToUpper(home)) {
-			dir = "~" + dir[len(home):]
-		}
-		dir = filepath.ToSlash(dir)
-		fmt.Fprintf(cmd.Out(), "%4d  %s [%d] %-s (%s)\n",
-			i,
-			row.Stamp.Format("Jan _2 15:04:05"),
-			row.Pid,
-			row.Text,
-			dir)
-	}
-	return 0, nil
 }
 
 var MaxSaveHistory = 1000

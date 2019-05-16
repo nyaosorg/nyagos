@@ -18,7 +18,6 @@ import (
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
-	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -202,7 +201,7 @@ func Main() error {
 			})
 		stream1 = constream
 		frame.DefaultHistory = constream.History
-		ctx = context.WithValue(ctx, history.PackageId, constream.History)
+		sh.History = constream.History
 		ctx = context.WithValue(ctx, shellKey, sh)
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)

@@ -19,11 +19,6 @@ type Container struct {
 	rows []Line
 }
 
-type packageIdT struct{}
-
-// PackageId is the unique mark to use as Context key
-var PackageId packageIdT
-
 // Len returns size of history
 func (c *Container) Len() int {
 	return len(c.rows)
@@ -39,6 +34,10 @@ func (c *Container) GetAt(n int) *Line {
 
 func (c *Container) At(n int) string {
 	return c.GetAt(n).Text
+}
+
+func (c *Container) DumpAt(n int) string {
+	return c.GetAt(n).dump()
 }
 
 // Push appends a new history line to self with string

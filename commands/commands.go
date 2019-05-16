@@ -29,6 +29,7 @@ type Param interface {
 	ReadCommand(context.Context) (context.Context, string, error)
 	DumpEnv() []string
 	Setenv(key, val string)
+	GetHistory() shell.History
 }
 
 var buildInCommand map[string]func(context.Context, Param) (int, error)

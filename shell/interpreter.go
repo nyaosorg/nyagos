@@ -40,8 +40,19 @@ type CloneCloser interface {
 	Close() error
 }
 
+type History interface {
+	Len() int
+	DumpAt(n int) string
+}
+
+type _NulHistory struct{}
+
+func (nul *_NulHistory) DumpAt(n int) string { return "" }
+func (nul *_NulHistory) Len() int            { return 0 }
+
 type Shell struct {
 	Stream
+	History History
 	*session
 	Stdout       *os.File
 	Stderr       *os.File
@@ -57,6 +68,7 @@ func (sh *Shell) Err() io.Writer         { return sh.Stderr }
 func (sh *Shell) Term() io.Writer        { return sh.Console }
 func (sh *Shell) Tag() CloneCloser       { return sh.tag }
 func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
+func (sh *Shell) GetHistory() History    { return sh.History }
 
 type Cmd struct {
 	Shell
@@ -137,6 +149,7 @@ func (sh *Shell) Close() {}
 func New() *Shell {
 	return &Shell{
 		Stream:  NulStream,
+		History: &_NulHistory{},
 		Stdin:   os.Stdin,
 		Stdout:  os.Stdout,
 		Stderr:  os.Stderr,
@@ -148,6 +161,7 @@ func (sh *Shell) Command() *Cmd {
 	cmd := &Cmd{
 		Shell: Shell{
 			Stream:  sh.Stream,
+			History: sh.History,
 			Stdin:   sh.Stdin,
 			Stdout:  sh.Stdout,
 			Stderr:  sh.Stderr,

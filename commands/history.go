@@ -6,5 +6,5 @@ import (
 )
 
 func cmdHistory(ctx context.Context, args Param) (int, error) {
-	return history.CmdHistory(ctx, args)
+	return history.CmdHistory(ctx, args, args.GetHistory())
 }
