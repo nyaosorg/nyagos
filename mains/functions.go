@@ -173,10 +173,10 @@ func cmdEval(L Lua) int {
 			defer sh.Close()
 		}
 		sh.SetTag(&luaWrapper{L})
-		saveOut := sh.Stdout
-		sh.Stdout = w
+		saveOut := sh.Stdio[1]
+		sh.Stdio[1] = w
 		sh.Interpret(ctx, statement)
-		sh.Stdout = saveOut
+		sh.Stdio[1] = saveOut
 		w.Close()
 	}(string(statement), w)
 

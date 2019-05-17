@@ -71,13 +71,13 @@ func (r *_Redirecter) OpenOn(cmd *Cmd) (closer io.Closer, err error) {
 
 	switch r.dupFrom {
 	case 0:
-		fd = cmd.Stdin
+		fd = cmd.Stdio[0]
 		closer = &dontCloseHandle{}
 	case 1:
-		fd = cmd.Stdout
+		fd = cmd.Stdio[1]
 		closer = &dontCloseHandle{}
 	case 2:
-		fd = cmd.Stderr
+		fd = cmd.Stdio[2]
 		closer = &dontCloseHandle{}
 	default:
 		fd, err = r.open()
@@ -88,11 +88,11 @@ func (r *_Redirecter) OpenOn(cmd *Cmd) (closer io.Closer, err error) {
 	}
 	switch r.FileNo() {
 	case 0:
-		cmd.Stdin = fd
+		cmd.Stdio[0] = fd
 	case 1:
-		cmd.Stdout = fd
+		cmd.Stdio[1] = fd
 	case 2:
-		cmd.Stderr = fd
+		cmd.Stdio[2] = fd
 	default:
 		panic("Assertion failed: _Redirecter.OpenAs: r.no not in (0,1,2)")
 	}

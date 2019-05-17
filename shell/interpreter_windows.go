@@ -64,9 +64,9 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 			// Batch files
 			return Source{
 				Args:   args,
-				Stdin:  cmd.Stdin,
-				Stdout: cmd.Stdout,
-				Stderr: cmd.Stderr,
+				Stdin:  cmd.Stdio[0],
+				Stdout: cmd.Stdio[1],
+				Stderr: cmd.Stdio[2],
 				Env:    cmd.DumpEnv(),
 				OnExec: cmd.OnBackExec,
 				OnDone: cmd.OnBackDone,
@@ -78,7 +78,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 
 	procAttr := &os.ProcAttr{
 		Env:   cmd.DumpEnv(),
-		Files: []*os.File{cmd.Stdin, cmd.Stdout, cmd.Stderr},
+		Files: cmd.Stdio[:],
 		Sys:   &syscall.SysProcAttr{CmdLine: cmdline},
 	}
 	return startAndWaitProcess(ctx, cmd.args[0], cmd.args, procAttr, cmd.OnBackExec, cmd.OnBackDone)

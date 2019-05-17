@@ -56,17 +56,15 @@ type Shell struct {
 	LineHook func(context.Context, *Cmd) (int, bool, error)
 	ArgsHook func(context.Context, *Shell, []string) ([]string, error)
 	*session
-	Stdout       *os.File
-	Stderr       *os.File
-	Stdin        *os.File
+	Stdio        [3]*os.File
 	Console      io.Writer
 	tag          CloneCloser
 	IsBackGround bool
 }
 
-func (sh *Shell) In() io.Reader          { return sh.Stdin }
-func (sh *Shell) Out() io.Writer         { return sh.Stdout }
-func (sh *Shell) Err() io.Writer         { return sh.Stderr }
+func (sh *Shell) In() io.Reader          { return sh.Stdio[0] }
+func (sh *Shell) Out() io.Writer         { return sh.Stdio[1] }
+func (sh *Shell) Err() io.Writer         { return sh.Stdio[2] }
 func (sh *Shell) Term() io.Writer        { return sh.Console }
 func (sh *Shell) Tag() CloneCloser       { return sh.tag }
 func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
@@ -164,9 +162,7 @@ func New() *Shell {
 			}
 			return args, nil
 		},
-		Stdin:   os.Stdin,
-		Stdout:  os.Stdout,
-		Stderr:  os.Stderr,
+		Stdio:   [3]*os.File{os.Stdin, os.Stdout, os.Stderr},
 		session: &session{},
 	}
 }
@@ -178,9 +174,7 @@ func (sh *Shell) Command() *Cmd {
 			History:  sh.History,
 			LineHook: sh.LineHook,
 			ArgsHook: sh.ArgsHook,
-			Stdin:    sh.Stdin,
-			Stdout:   sh.Stdout,
-			Stderr:   sh.Stderr,
+			Stdio:    sh.Stdio,
 			Console:  sh.Console,
 			tag:      sh.tag,
 		},
@@ -341,9 +335,9 @@ func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if defined.DBG {
 			val := reflect.ValueOf(err)
-			fmt.Fprintf(cmd.Stderr, "error-type=%s\n", val.Type())
+			fmt.Fprintf(cmd.Err(), "error-type=%s\n", val.Type())
 		}
-		fmt.Fprintln(cmd.Stderr, err.Error())
+		fmt.Fprintln(cmd.Err(), err.Error())
 		err = AlreadyReportedError{err}
 	}
 	return errorlevel, err
@@ -419,7 +413,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			cmd.IsBackGround = isBackGround
 
 			if pipeIn != nil {
-				cmd.Stdin = pipeIn
+				cmd.Stdio[0] = pipeIn
 				cmd.Closers = append(cmd.Closers, pipeIn)
 				pipeIn = nil
 			}
@@ -428,9 +422,9 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			if state.Term[0] == '|' {
 				var pipeOut *os.File
 				pipeIn, pipeOut, err = os.Pipe()
-				cmd.Stdout = pipeOut
+				cmd.Stdio[1] = pipeOut
 				if state.Term == "|&" {
-					cmd.Stderr = pipeOut
+					cmd.Stdio[2] = pipeOut
 				}
 				cmd.Closers = append(cmd.Closers, pipeOut)
 			}
