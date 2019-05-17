@@ -352,6 +352,15 @@ func (sh *Shell) Spawnlpe(ctx context.Context, args, rawargs []string, env map[s
 	return cmd.Spawnvp(ctx)
 }
 
+type TmpCloser struct {
+	Closer func()
+}
+
+func (this *TmpCloser) Close() error {
+	this.Closer()
+	return nil
+}
+
 func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, error) {
 
 	return sh.Spawnlpe(ctx, args, rawargs, nil)
@@ -429,13 +438,12 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				cmd.Closers = append(cmd.Closers, pipeOut)
 			}
 
-			for _, red := range state.Redirect {
-				var closer io.Closer
-				closer, err = red.OpenOn(cmd)
+			for _, f := range state.Redirect {
+				c, err := f(cmd.Stdio[:])
 				if err != nil {
 					return 0, err
 				}
-				cmd.Closers = append(cmd.Closers, closer)
+				cmd.Closers = append(cmd.Closers, &TmpCloser{Closer: c})
 			}
 
 			cmd.args = state.Args

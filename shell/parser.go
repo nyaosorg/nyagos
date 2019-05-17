@@ -2,7 +2,6 @@ package shell
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -16,6 +15,8 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
+var NoClobber = false
+
 func isSpace(c rune) bool {
 	return strings.IndexRune(" \t\n\r\v\f", c) >= 0
 }
@@ -23,8 +24,8 @@ func isSpace(c rune) bool {
 type StatementT struct {
 	Args     []string
 	RawArgs  []string
-	Redirect []*_Redirecter
 	Term     string
+	Redirect []func([]*os.File) (func(), error)
 }
 
 var PercentFunc = map[string]func() string{
@@ -78,8 +79,6 @@ func chomp(buffer *bytes.Buffer) {
 }
 
 const NOTQUOTED = '\000'
-
-const EMPTY_COMMAND_FOUND = "Empty command found"
 
 var TildeExpansion = true
 
@@ -216,10 +215,77 @@ func string2word(source_ string, removeQuote bool) string {
 	for ; yenCount > 0; yenCount-- {
 		buffer.WriteByte('\\')
 	}
-	return buffer.String()
+	return reverse.Replace(buffer.String())
+}
+
+const (
+	_ANDALSO   = '\uE000' + iota // &&
+	_ORELSE                      // ||
+	_REDIRECT0                   // 0<
+	_REDIRECT1                   // 1>
+	_REDIRECT2                   // 2>
+	_APPEND1                     // 1>>
+	_APPEND2                     // 2>>
+	_APPEND                      // >>
+	_FORCE                       // >!
+	_FORCE1                      // 1>!
+	_FORCE2                      // 2>!
+	_FORCE11                     // 1>|
+	_FORCE22                     // 2>|
+	_YPIPE                       // |&
+	_TO2                         // >&2
+	_1TO2                        // 1>&2
+	_2TO1                        // 2>&1
+)
+
+var replacer = strings.NewReplacer(
+	"1>&2", string(_1TO2),
+	"2>&1", string(_2TO1),
+	">&2", string(_TO2),
+	"1>!", string(_FORCE1),
+	"2>!", string(_FORCE2),
+	"1>|", string(_FORCE11),
+	"2>|", string(_FORCE22),
+	"1>>", string(_APPEND1),
+	"2>>", string(_APPEND2),
+	"0<", string(_REDIRECT0),
+	"1>", string(_REDIRECT1),
+	"2>", string(_REDIRECT2),
+	"&&", string(_ANDALSO),
+	"||", string(_ORELSE),
+	">>", string(_APPEND),
+	">!", string(_FORCE),
+	"|&", string(_YPIPE))
+
+var reverse = strings.NewReplacer(
+	string(_1TO2), "1>&2",
+	string(_2TO1), "2>&1",
+	string(_TO2), ">&2",
+	string(_FORCE1), "1>!",
+	string(_FORCE2), "2>!",
+	string(_FORCE11), "1>|",
+	string(_FORCE22), "2>|",
+	string(_APPEND1), "1>>",
+	string(_APPEND2), "2>>",
+	string(_REDIRECT0), "0<",
+	string(_REDIRECT1), "1>",
+	string(_REDIRECT2), "2>",
+	string(_ANDALSO), "&&",
+	string(_ORELSE), "||",
+	string(_APPEND), ">>",
+	string(_FORCE), ">!",
+	string(_YPIPE), "|&")
+
+func openSeeNoClobber(fname string) (*os.File, error) {
+	if NoClobber {
+		return os.OpenFile(fname, os.O_EXCL|os.O_CREATE, 0666)
+	} else {
+		return os.Create(fname)
+	}
 }
 
 func parse1(text string) ([]*StatementT, error) {
+	text = replacer.Replace(text)
 	quoteNow := NOTQUOTED
 	yenCount := 0
 	statements := make([]*StatementT, 0)
@@ -227,15 +293,16 @@ func parse1(text string) ([]*StatementT, error) {
 	rawArgs := make([]string, 0)
 	lastchar := ' '
 	var buffer bytes.Buffer
-	isNextRedirect := false
-	redirect := make([]*_Redirecter, 0, 3)
+	var todo_nextword func(string)
+
+	todo_redirect := make([]func([]*os.File) (func(), error), 0, 3)
 
 	term_line := func(term string) {
 		statement1 := new(StatementT)
 		if buffer.Len() > 0 {
-			if isNextRedirect && len(redirect) > 0 {
-				redirect[len(redirect)-1].SetPath(string2word(buffer.String(), true))
-				isNextRedirect = false
+			if todo_nextword != nil {
+				todo_nextword(string2word(buffer.String(), true))
+				todo_nextword = nil
 				statement1.RawArgs = rawArgs
 				statement1.Args = args
 			} else {
@@ -249,17 +316,19 @@ func parse1(text string) ([]*StatementT, error) {
 			statement1.RawArgs = rawArgs
 			statement1.Args = args
 		}
-		statement1.Redirect = redirect
-		redirect = make([]*_Redirecter, 0, 3)
-		rawArgs = make([]string, 0)
-		args = make([]string, 0)
+		statement1.Redirect = todo_redirect
 		statement1.Term = term
 		statements = append(statements, statement1)
+
+		todo_redirect = make([]func([]*os.File) (func(), error), 0, 3)
+		rawArgs = make([]string, 0)
+		args = make([]string, 0)
 	}
 
 	term_word := func() {
-		if isNextRedirect && len(redirect) > 0 {
-			redirect[len(redirect)-1].SetPath(string2word(buffer.String(), true))
+		if todo_nextword != nil {
+			todo_nextword(string2word(buffer.String(), true))
+			todo_nextword = nil
 		} else {
 			if buffer.Len() > 0 {
 				rawArgs = append(rawArgs, string2word(buffer.String(), false))
@@ -290,87 +359,115 @@ func parse1(text string) ([]*StatementT, error) {
 		} else if isSpace(ch) {
 			if buffer.Len() > 0 {
 				term_word()
-				isNextRedirect = false
 			}
 		} else if isSpace(lastchar) && ch == '#' {
 			break
 		} else if isSpace(lastchar) && ch == ';' {
 			term_line(";")
-		} else if ch == '!' && lastchar == '>' && isNextRedirect && len(redirect) > 0 {
-			redirect[len(redirect)-1].force = true
+		} else if ch == _ORELSE {
+			term_line("||")
 		} else if ch == '|' {
-			if lastchar == '>' && isNextRedirect && len(redirect) > 0 {
-				redirect[len(redirect)-1].force = true
-			} else if lastchar == '|' {
-				if len(statements) <= 0 {
-					return nil, errors.New(EMPTY_COMMAND_FOUND)
-				}
-				statements[len(statements)-1].Term = "||"
-			} else {
-				term_line("|")
-			}
-		} else if ch == '&' {
-			switch lastchar {
-			case '&':
-				if len(statements) <= 0 {
-					return nil, errors.New(EMPTY_COMMAND_FOUND)
-				}
-				statements[len(statements)-1].Term = "&&"
-			case '|':
-				if len(statements) <= 0 {
-					return nil, errors.New(EMPTY_COMMAND_FOUND)
-				}
-				statements[len(statements)-1].Term = "|&"
-			case '>':
-				// >&[n]
-				ch2, ch2siz, ch2err := reader.ReadRune()
-				if ch2err != nil {
-					return nil, ch2err
-				}
-				if ch2siz <= 0 {
-					return nil, errors.New("Too Near EOF for >&")
-				}
-				red := redirect[len(redirect)-1]
-				switch ch2 {
-				case '1':
-					red.DupFrom(1)
-				case '2':
-					red.DupFrom(2)
-				default:
-					return nil, errors.New("Syntax error after >&")
-				}
-				isNextRedirect = false
-			default:
-				term_line("&")
-			}
-		} else if ch == '>' {
-			switch lastchar {
-			case '1':
-				// 1>
-				chomp(&buffer)
-				term_word()
-				redirect = append(redirect, newRedirecter(1))
-			case '2':
-				// 2>
-				chomp(&buffer)
-				term_word()
-				redirect = append(redirect, newRedirecter(2))
-			case '>':
-				// >>
-				term_word()
-				if len(redirect) >= 0 {
-					redirect[len(redirect)-1].SetAppend()
-				}
-			default:
-				// >
-				term_word()
-				redirect = append(redirect, newRedirecter(1))
-			}
-			isNextRedirect = true
-		} else if ch == '<' {
+			term_line("|")
+		} else if ch == _ANDALSO {
+			term_line("&&")
+		} else if ch == _YPIPE {
+			term_line("|&")
+		} else if ch == _2TO1 {
 			term_word()
-			redirect = append(redirect, newRedirecter(0))
-			isNextRedirect = true
+			todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				fds[2] = fds[1]
+				return func() {}, nil
+			})
+		} else if ch == _1TO2 || ch == _TO2 {
+			term_word()
+			todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				fds[1] = fds[2]
+				return func() {}, nil
+			})
+		} else if ch == '<' || ch == _REDIRECT0 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := os.Open(word)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[0] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
+		} else if ch == '>' || ch == _REDIRECT1 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := openSeeNoClobber(word)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[1] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
+		} else if ch == _FORCE || ch == _FORCE1 || ch == _FORCE11 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := os.Create(word)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[1] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
+		} else if ch == _REDIRECT2 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := openSeeNoClobber(word)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[2] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
+		} else if ch == _FORCE2 || ch == _FORCE22 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := os.Create(word)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[2] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
+		} else if ch == _APPEND || ch == _APPEND1 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := os.OpenFile(word, os.O_APPEND|os.O_CREATE, 0666)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[1] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
+		} else if ch == _APPEND2 {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					fd, err := os.OpenFile(word, os.O_APPEND|os.O_CREATE, 0666)
+					if err != nil {
+						return func() {}, err
+					}
+					fds[2] = fd
+					return func() { fd.Close() }, nil
+				})
+			}
 		} else {
 			buffer.WriteRune(ch)
 		}
