@@ -392,27 +392,36 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 			term_word()
 			todo_nextword = func(word string) {
 				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					lines := make([]string, 0, 20)
+					prompt := os.Getenv("PROMPT")
+					os.Setenv("PROMPT", fmt.Sprintf("\"%s\">", word))
+					defer os.Setenv("PROMPT", prompt)
+					ctx := context.Background()
+					for {
+						_, line, err := stream.ReadLine(ctx)
+						if err != nil {
+							if err != io.EOF {
+								return func() {}, err
+							}
+							break
+						}
+						if strings.HasPrefix(line, word) {
+							break
+						}
+						lines = append(lines, line)
+					}
+
 					r, w, err := os.Pipe()
 					if err != nil {
 						return func() {}, err
 					}
 					fds[0] = r
+
 					go func() {
-						prompt := os.Getenv("PROMPT")
-						os.Setenv("PROMPT", fmt.Sprintf("\"%s\">", word))
-						ctx := context.Background()
-						for {
-							_, line, err := stream.ReadLine(ctx)
-							if err != nil {
-								break
-							}
-							if strings.HasPrefix(line, word) {
-								break
-							}
+						for _, line := range lines {
 							fmt.Fprintln(w, line)
 						}
 						w.Close()
-						os.Setenv("PROMPT", prompt)
 					}()
 					return func() { r.Close() }, nil
 				})
