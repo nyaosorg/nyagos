@@ -15,6 +15,7 @@ English / [Japanese](release_note_ja.md)
 * Completion: ask completion when more than 100 possibilities exist.
 * ps: print `[self]` the line where nyagos.exe self exists.
 * (#272) replace `!(historyNo)@` to the directory when the command was executed.
+* (#130) Support Here Document
 
 NYAGOS 4.4.3\_0
 ===============
