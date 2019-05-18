@@ -180,7 +180,7 @@ func (this *Buffer) GetKey() (string, error) {
 		if r == '\x1B' {
 			escape = true
 		}
-		if !(escape && tty1.Buffered()) {
+		if !(escape && tty1.Buffered()) && buffer.Len() > 0 {
 			return buffer.String(), nil
 		}
 	}
