@@ -406,7 +406,7 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 							if err != nil {
 								break
 							}
-							if strings.HasPrefix(word, line) {
+							if strings.HasPrefix(line, word) {
 								break
 							}
 							fmt.Fprintln(w, line)
