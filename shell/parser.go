@@ -2,6 +2,7 @@ package shell
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -236,6 +237,7 @@ const (
 	_TO2                         // >&2
 	_1TO2                        // 1>&2
 	_2TO1                        // 2>&1
+	_HEREDOC                     // <<
 )
 
 var replacer = strings.NewReplacer(
@@ -255,7 +257,8 @@ var replacer = strings.NewReplacer(
 	"||", string(_ORELSE),
 	">>", string(_APPEND),
 	">!", string(_FORCE),
-	"|&", string(_YPIPE))
+	"|&", string(_YPIPE),
+	"<<", string(_HEREDOC))
 
 var reverse = strings.NewReplacer(
 	string(_1TO2), "1>&2",
@@ -274,7 +277,8 @@ var reverse = strings.NewReplacer(
 	string(_ORELSE), "||",
 	string(_APPEND), ">>",
 	string(_FORCE), ">!",
-	string(_YPIPE), "|&")
+	string(_YPIPE), "|&",
+	string(_HEREDOC), "<<")
 
 func openSeeNoClobber(fname string) (*os.File, error) {
 	if NoClobber {
@@ -284,7 +288,7 @@ func openSeeNoClobber(fname string) (*os.File, error) {
 	}
 }
 
-func parse1(text string) ([]*StatementT, error) {
+func parse1(stream Stream, text string) ([]*StatementT, error) {
 	text = replacer.Replace(text)
 	quoteNow := NOTQUOTED
 	yenCount := 0
@@ -384,6 +388,35 @@ func parse1(text string) ([]*StatementT, error) {
 				fds[1] = fds[2]
 				return func() {}, nil
 			})
+		} else if ch == _HEREDOC {
+			term_word()
+			todo_nextword = func(word string) {
+				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+					r, w, err := os.Pipe()
+					if err != nil {
+						return func() {}, err
+					}
+					fds[0] = r
+					go func() {
+						prompt := os.Getenv("PROMPT")
+						os.Setenv("PROMPT", fmt.Sprintf("\"%s\">", word))
+						ctx := context.Background()
+						for {
+							_, line, err := stream.ReadLine(ctx)
+							if err != nil {
+								break
+							}
+							if strings.HasPrefix(word, line) {
+								break
+							}
+							fmt.Fprintln(w, line)
+						}
+						w.Close()
+						os.Setenv("PROMPT", prompt)
+					}()
+					return func() { r.Close() }, nil
+				})
+			}
 		} else if ch == '<' || ch == _REDIRECT0 {
 			term_word()
 			todo_nextword = func(word string) {
@@ -500,8 +533,8 @@ func parse2(statements []*StatementT) [][]*StatementT {
 	return result
 }
 
-func Parse(text string) ([][]*StatementT, error) {
-	result1, err := parse1(text)
+func parse(stream Stream, text string) ([][]*StatementT, error) {
+	result1, err := parse1(stream, text)
 	if err != nil {
 		return nil, err
 	}

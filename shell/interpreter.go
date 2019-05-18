@@ -376,7 +376,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 	errorlevel = 0
 	finalerr = nil
 
-	statements, statementsErr := Parse(text)
+	statements, statementsErr := parse(sh.Stream, text)
 	if statementsErr != nil {
 		if defined.DBG {
 			print("Parse Error:", statementsErr.Error(), "\n")
