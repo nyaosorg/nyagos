@@ -18,6 +18,10 @@ type CmdStreamFile struct {
 	Scanner *bufio.Scanner
 }
 
+func (this *CmdStreamFile) DisableHistory(value bool) bool {
+	return false
+}
+
 func NewCmdStreamFile(r io.Reader) *CmdStreamFile {
 	return &CmdStreamFile{
 		Scanner: bufio.NewScanner(r),

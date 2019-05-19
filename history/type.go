@@ -17,6 +17,7 @@ type Line struct {
 // Container has all history data.
 type Container struct {
 	rows []Line
+	off  bool
 }
 
 // Len returns size of history
@@ -45,9 +46,17 @@ func (c *Container) Push(line string) {
 	c.rows = append(c.rows, Line{Text: line})
 }
 
+func (c *Container) IgnorePush(newvalue bool) bool {
+	rc := c.off
+	c.off = newvalue
+	return rc
+}
+
 // PushLine appends a new history line to self with Line object
 func (c *Container) PushLine(row Line) {
-	c.rows = append(c.rows, row)
+	if !c.off {
+		c.rows = append(c.rows, row)
+	}
 }
 
 // String returns self as printable text

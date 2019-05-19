@@ -12,12 +12,17 @@ import (
 // Stream is the inteface which can read command-line
 type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
+	DisableHistory(value bool) bool
 }
 
 type _NulStream struct{}
 
 func (stream *_NulStream) ReadLine(ctx context.Context) (context.Context, string, error) {
 	return ctx, "", io.EOF
+}
+
+func (stream *_NulStream) DisableHistory(value bool) bool {
+	return false
 }
 
 var NulStream = &_NulStream{}

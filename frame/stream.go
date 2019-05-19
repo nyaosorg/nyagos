@@ -39,6 +39,10 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	return this
 }
 
+func (this *CmdStreamConsole) DisableHistory(value bool) bool {
+	return this.History.IgnorePush(value)
+}
+
 func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
 	if this.Pointer >= 0 {
 		if this.Pointer < len(this.PlainHistory) {

@@ -10,6 +10,8 @@ type BufStream struct {
 	n    int
 }
 
+func (this *BufStream) DisableHistory(value bool) bool { return false }
+
 func (this *BufStream) ReadLine(c context.Context) (context.Context, string, error) {
 	if this.n >= len(this.line) {
 		return c, "", io.EOF

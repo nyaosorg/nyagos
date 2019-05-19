@@ -43,12 +43,14 @@ type CloneCloser interface {
 type History interface {
 	Len() int
 	DumpAt(n int) string
+	IgnorePush(newvalue bool) bool
 }
 
 type _NulHistory struct{}
 
-func (nul *_NulHistory) DumpAt(n int) string { return "" }
-func (nul *_NulHistory) Len() int            { return 0 }
+func (nul *_NulHistory) DumpAt(n int) string           { return "" }
+func (nul *_NulHistory) Len() int                      { return 0 }
+func (nul *_NulHistory) IgnorePush(newvalue bool) bool { return false }
 
 type Shell struct {
 	Stream

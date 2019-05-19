@@ -397,6 +397,8 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					os.Setenv("PROMPT", fmt.Sprintf("\"%s\">", word))
 					defer os.Setenv("PROMPT", prompt)
 					ctx := context.Background()
+					backup := stream.DisableHistory(true)
+					defer stream.DisableHistory(backup)
 					for {
 						_, line, err := stream.ReadLine(ctx)
 						if err != nil {
