@@ -29,3 +29,4 @@ English / [Japanese](./03-Readline_ja.md)
 * Ctrl-Right , Alt-F : Move forward over a word
 * Ctrl-Left , Alt-B  : Move backward over a word
 * Ctrl-`_`, Ctrl-Z   : Undo
+* Alt-O              : Expand the path of shortcut.lnk to target-path
