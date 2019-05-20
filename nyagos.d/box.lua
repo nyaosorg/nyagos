@@ -104,3 +104,34 @@ nyagos.key.M_g = function(this)
     this:call("REPAINT_ON_NEWLINE")
     return string.match(result,"^%S+") or ""
 end
+
+nyagos.key["M-o"] = function(this)
+    if string.match(this.text," $") then
+        this:call("BACKWARD_DELETE_CHAR")
+    end
+    local path,pos = this:lastword()
+    if not string.match(path,"%.[Ll][Nn][Kk]$") then
+        return
+    end
+    path = string.gsub(path,'"','')
+    path = string.gsub(path,"/","\\")
+    path = string.gsub(path,"^~",os.getenv("USERPROFILE"))
+
+    local wsh,err = nyagos.create_object("WScript.Shell")
+    if wsh then
+        local shortcut = wsh:CreateShortCut(path)
+        if shortcut then
+            local newpath = shortcut:_get("TargetPath")
+            if newpath then
+                if string.find(newpath," ") then
+                    newpath = '"'..newpath..'"'
+                end
+                if string.len(newpath) > 0 then
+                    this:replacefrom(pos,newpath)
+                end
+            end
+            shortcut:_release()
+        end
+        wsh:_release()
+    end
+end
