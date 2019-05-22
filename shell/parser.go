@@ -372,6 +372,8 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 			term_line("||")
 		} else if ch == '|' {
 			term_line("|")
+		} else if ch == '&' {
+			term_line("&")
 		} else if ch == _ANDALSO {
 			term_line("&&")
 		} else if ch == _YPIPE {
