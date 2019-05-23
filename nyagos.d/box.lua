@@ -113,6 +113,9 @@ nyagos.key["M-o"] = function(this)
     end
     local path,pos = this:lastword()
     if not string.match(path,"%.[Ll][Nn][Kk]$") then
+        if spacecut then
+            return " "
+        end
         return
     end
     path = string.gsub(path,'"','')
