@@ -106,8 +106,10 @@ nyagos.key.M_g = function(this)
 end
 
 nyagos.key["M-o"] = function(this)
+    local spacecut = false
     if string.match(this.text," $") then
         this:call("BACKWARD_DELETE_CHAR")
+        spacecut = true
     end
     local path,pos = this:lastword()
     if not string.match(path,"%.[Ll][Nn][Kk]$") then
@@ -123,8 +125,27 @@ nyagos.key["M-o"] = function(this)
         if shortcut then
             local newpath = shortcut:_get("TargetPath")
             if newpath then
+                local isDir = false
+                local fso = nyagos.create_object("Scripting.FileSystemObject")
+                if fso then
+                    if fso:FolderExists(newpath) then
+                        isDir = true
+                    end
+                    fso:_release()
+                end
                 if string.find(newpath," ") then
-                    newpath = '"'..newpath..'"'
+                    if isDir then
+                        newpath = '"'..newpath..'\\'
+                    else
+                        newpath = '"'..newpath..'"'
+                        if spacecut then
+                            newpath = newpath .. ' '
+                        end
+                    end
+                elseif isDir then
+                    newpath = newpath .. '\\'
+                elseif spacecut then
+                    newpath = newpath .. ' '
                 end
                 if string.len(newpath) > 0 then
                     this:replacefrom(pos,newpath)
