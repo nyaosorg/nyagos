@@ -3,6 +3,7 @@ package dos
 import (
 	"fmt"
 	"regexp"
+	"strings"
 	"sync"
 	"unsafe"
 
@@ -89,7 +90,7 @@ var rxServerPattern = regexp.MustCompile(`^\\\\[^\\/]+$`)
 
 var netlock sync.RWMutex
 
-func EachMachine(callback func(*NetResource) bool) error {
+func EnumFileServer(callback func(*NetResource) bool) error {
 	var me func(*NetResource) bool
 	var wg sync.WaitGroup
 	me = func(nr *NetResource) bool {
@@ -110,4 +111,21 @@ func EachMachine(callback func(*NetResource) bool) error {
 	err := WNetEnum(me)
 	wg.Wait()
 	return err
+}
+
+func NewFileServer(name string) (*NetResource, error) {
+	if !strings.HasPrefix(name, `\\`) {
+		name = `\\` + name
+	}
+	name16, err := windows.UTF16PtrFromString(name)
+	if err != nil {
+		return nil, err
+	}
+	return &NetResource{
+		Scope:       2,
+		Type:        1,
+		DisplayType: 2,
+		Usage:       2,
+		remoteName:  name16,
+	}, nil
 }

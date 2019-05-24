@@ -14,22 +14,15 @@ import (
 var rxUNCPattern1 = regexp.MustCompile(`^\\\\[^\\/]*$`)
 var rxUNCPattern2 = regexp.MustCompile(`^(\\\\[^\\/]+)\\[^\\/]*$`)
 
-type _ServerCache struct {
-	dos.NetResource
-	Path []string
-}
+var serverCache []string
 
-var serverCache map[string]*_ServerCache
-
-func getServerCache() map[string]*_ServerCache {
+func getServerCache() []string {
 	if serverCache == nil {
 		c := nodos.Progress()
 		defer c()
-		serverCache = make(map[string]*_ServerCache)
-		dos.EachMachine(func(n *dos.NetResource) bool {
-			serverCache[n.RemoteName()] = &_ServerCache{
-				NetResource: *n,
-			}
+		serverCache = []string{}
+		dos.EnumFileServer(func(n *dos.NetResource) bool {
+			serverCache = append(serverCache, n.RemoteName())
 			return true
 		})
 	}
@@ -48,7 +41,7 @@ func uncComplete(str string, force bool) ([]Element, error) {
 		//outputdebug.String(`start complete \\server:` + time.Now().String())
 		server := strings.ToUpper(str)
 		result := []Element{}
-		for server1 := range getServerCache() {
+		for _, server1 := range getServerCache() {
 			if strings.HasPrefix(strings.ToUpper(server1), server) {
 				result = append(result, Element1(server1+`\`))
 			}
@@ -58,23 +51,17 @@ func uncComplete(str string, force bool) ([]Element, error) {
 	}
 	if m := rxUNCPattern2.FindStringSubmatch(str); m != nil {
 		//outputdebug.String(`start complete \\server\path:` + time.Now().String())
-		if !force && !hasServerCache() {
-			return nil, ErrAskRetry
-		}
 		server := m[1]
 		result := []Element{}
 
-		cache := getServerCache()
-		root, ok := cache[server]
-		if ok {
-			if root.Path == nil {
-				root.NetResource.Enum(func(n *dos.NetResource) bool {
-					root.Path = append(root.Path, n.RemoteName())
-					return true
-				})
-			}
+		if fs, err := dos.NewFileServer(server); err == nil {
+			paths := []string{}
+			fs.Enum(func(n *dos.NetResource) bool {
+				paths = append(paths, n.RemoteName())
+				return true
+			})
 			path := strings.ToUpper(str)
-			for _, node := range root.Path {
+			for _, node := range paths {
 				if strings.HasPrefix(strings.ToUpper(node), path) {
 					result = append(result, Element1(node+`\`))
 				}
