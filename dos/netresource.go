@@ -122,10 +122,10 @@ func NewFileServer(name string) (*NetResource, error) {
 		return nil, err
 	}
 	return &NetResource{
-		Scope:       2,
-		Type:        1,
-		DisplayType: 2,
-		Usage:       2,
+		Scope:       RESOURCE_GLOBALNET,
+		Type:        RESOURCETYPE_DISK,
+		DisplayType: RESOURCEDISPLAYTYPE_SERVER,
+		Usage:       RESOURCEUSAGE_CONTAINER,
 		remoteName:  name16,
 	}, nil
 }
