@@ -9,7 +9,7 @@ import (
 func main() {
 	machines := []string{}
 
-	err := dos.EachMachine(func(node *dos.NetResource) bool {
+	err := dos.EnumFileServer(func(node *dos.NetResource) bool {
 		machines = append(machines, node.RemoteName())
 		return true
 	})
@@ -19,10 +19,12 @@ func main() {
 
 	for _, name := range machines {
 		println("machine:", name)
-		err = dos.EachMachineNode(name, func(node *dos.NetResource) bool {
-			println("  ", node.RemoteName())
-			return true
-		})
+		if fs,err := dos.NewFileServer(name) ; err == nil {
+			fs.Enum(func(node *dos.NetResource) bool {
+				println("  ", node.RemoteName())
+				return true
+			})
+		}
 	}
 
 	if err != nil {
