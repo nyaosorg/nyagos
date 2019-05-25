@@ -3,6 +3,7 @@
 package mains
 
 import (
+	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -24,6 +25,8 @@ import (
 	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
+
+	"github.com/zetamatta/go-outputdebug"
 )
 
 // Lua is the alias for Lua's state type.
@@ -114,6 +117,7 @@ var isHookSetup = false
 func lerror(L Lua, s string) int {
 	L.Push(lua.LNil)
 	L.Push(lua.LString(s))
+	outputdebug.String(s)
 	return 2
 }
 
@@ -480,11 +484,67 @@ func dispose(L *lua.LState, val lua.LValue) {
 	}
 }
 
-func luaRedirect(ctx context.Context, _stdin io.Reader, _stdout, _stderr io.Writer, L Lua, callback func() error) error {
+type XFile struct {
+	File      *os.File
+	br        *bufio.Reader
+	dontClose bool
+	closed    bool
+	eof       bool
+}
+
+func (xf *XFile) reader() *bufio.Reader {
+	if xf.br == nil {
+		if xf.File != nil {
+			xf.br = bufio.NewReader(xf.File)
+		} else {
+			panic("XFile.reader() not found reader object")
+		}
+	}
+	return xf.br
+}
+
+func (xf *XFile) Write(b []byte) (int, error) { return xf.File.Write(b) }
+func (xf *XFile) Read(b []byte) (int, error)  { return xf.reader().Read(b) }
+func (xf *XFile) ReadByte() (byte, error)     { return xf.reader().ReadByte() }
+func (xf *XFile) UnreadByte() error           { return xf.reader().UnreadByte() }
+func (xf *XFile) ReadString(d byte) (string, error) {
+	return xf.reader().ReadString(d)
+}
+
+func (xf *XFile) Seek(offset int64, whence int) (int64, error) {
+	xf.eof = false
+	if xf.br != nil {
+		back := xf.br.Buffered()
+		if back > 0 {
+			xf.File.Seek(int64(-back), io.SeekCurrent)
+		}
+		xf.br = nil
+	}
+	return xf.File.Seek(offset, whence)
+}
+
+func (this *XFile) Close() error {
+	this.br = nil
+	if !this.dontClose && !this.closed {
+		this.closed = true
+		return this.File.Close()
+	}
+	return nil
+}
+
+func (this *XFile) IsClosed() bool { return this.closed }
+func (this *XFile) Eof() bool      { return this.eof }
+func (this *XFile) SetEof()        { this.eof = true }
+
+func (this *XFile) Sync() error {
+	return this.File.Sync()
+}
+
+func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, callback func() error) error {
 	ioTbl := L.GetGlobal("io")
-	stdin := newIoLuaReader(L, _stdin, nil, nil)
-	stdout := newIoLuaWriter(L, _stdout, nil, nil)
-	stderr := newIoLuaWriter(L, _stderr, nil, nil)
+	stdin := newXFile(L, &XFile{File: _stdin, dontClose: true}, true, false)
+	stdout := newXFile(L, &XFile{File: _stdout, dontClose: true}, false, true)
+	stderr := newXFile(L, &XFile{File: _stderr, dontClose: true}, false, true)
 	L.SetField(ioTbl, "stdin", stdin)
 	L.SetField(ioTbl, "stdout", stdout)
 	L.SetField(ioTbl, "stderr", stderr)
@@ -505,7 +565,7 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) er
 	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(L, ctx)
 
-	return luaRedirect(ctx, sh.In(), sh.Out(), sh.Err(), L, func() error {
+	return luaRedirect(ctx, sh.Stdio[0], sh.Stdio[1], sh.Stdio[2], L, func() error {
 		return L.PCall(nargs, nresult, nil)
 	})
 }

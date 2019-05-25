@@ -3,64 +3,36 @@
 package mains
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 
 	"github.com/yuin/gopher-lua"
 )
 
 const ioTblName = "io"
 
-type ioLuaReader struct {
-	reader *bufio.Reader
-	closer io.Closer
-	seeker io.Seeker
-}
-
-func (io *ioLuaReader) Close() error {
-	if io.closer != nil {
-		err := io.closer.Close()
-		io.closer = nil
-		io.reader = nil
-		return err
-	}
-	return nil
-}
-
-type ioLuaWriter struct {
-	writer io.Writer
-	closer io.Closer
-	seeker io.Seeker
-}
-
-func (io *ioLuaWriter) Close() error {
-	if io.closer != nil {
-		err := io.closer.Close()
-		io.closer = nil
-		io.writer = nil
-		return err
-	}
-	return nil
-}
-
-func newIoLuaReader(L *lua.LState, r io.Reader, c io.Closer, s io.Seeker) *lua.LUserData {
+func newXFile(L *lua.LState, fd *XFile, read, write bool) *lua.LUserData {
 	ud := L.NewUserData()
-	ud.Value = &ioLuaReader{
-		reader: bufio.NewReader(r),
-		seeker: s,
-		closer: c,
-	}
+	ud.Value = fd
 	index := L.NewTable()
-	L.SetField(index, "lines", L.NewFunction(fileLines))
+	if read {
+		L.SetField(index, "lines", L.NewFunction(fileLines))
+		L.SetField(index, "read", L.NewFunction(fileRead))
+	}
+	if write {
+		L.SetField(index, "write", L.NewFunction(fileWrite))
+		L.SetField(index, "flush", L.NewFunction(fileFlush))
+	}
+	L.SetField(index, "setvbuf", L.NewFunction(fileSetVBuf))
 	L.SetField(index, "close", L.NewFunction(fileClose))
-	L.SetField(index, "read", L.NewFunction(fileRead))
 	L.SetField(index, "seek", L.NewFunction(fileSeek))
 	meta := L.NewTable()
+	L.SetField(meta, "__gc", L.NewFunction(fileClose))
 	L.SetField(meta, "__index", index)
 	L.SetMetatable(ud, meta)
 	return ud
@@ -80,49 +52,32 @@ func fileClose(L *lua.LState) int {
 	return lerror(L, "(file)close: not a file-handle")
 }
 
-func newIoLuaWriter(L *lua.LState, w io.Writer, c io.Closer, s io.Seeker) *lua.LUserData {
-	ud := L.NewUserData()
-	ud.Value = &ioLuaWriter{
-		writer: w,
-		seeker: s,
-		closer: c,
-	}
-	meta := L.NewTable()
-	L.SetField(meta, "__gc", L.NewFunction(fileClose))
-	index := L.NewTable()
-	L.SetField(index, "close", L.NewFunction(fileClose))
-	L.SetField(index, "write", L.NewFunction(fileWrite))
-	L.SetField(index, "flush", L.NewFunction(fileFlush))
-	L.SetField(index, "seek", L.NewFunction(fileSeek))
-	L.SetField(index, "setvbuf", L.NewFunction(fileSetVBuf))
-	L.SetField(meta, "__index", index)
-	L.SetMetatable(ud, meta)
-	return ud
-}
-
+// ioLineIter is the callback function for `io.lines()`
 func ioLinesIter(L *lua.LState) int {
 	ud, ok := L.Get(1).(*lua.LUserData)
 	if !ok {
 		L.Push(lua.LNil)
 		return 1
 	}
-	r, ok := ud.Value.(*ioLuaReader)
-	if !ok {
+	r, ok := ud.Value.(*XFile)
+	if !ok || r.Eof() || r.closed {
 		L.Push(lua.LNil)
 		return 1
 	}
-	if text, err := r.reader.ReadString('\n'); err == nil {
+
+	if text, err := r.ReadString('\n'); err == nil {
 		L.Push(lua.LString(strings.TrimSuffix(text, "\n")))
 	} else {
-		if err == io.EOF && text != "" {
-			L.Push(lua.LString(text))
-			return 1
+		if err == io.EOF {
+			r.SetEof()
+			if len(text) > 0 {
+				L.Push(lua.LString(text))
+				r.Close()
+				return 1
+			}
 		}
 		L.Push(lua.LNil)
-		if r.closer != nil {
-			r.closer.Close()
-			r.closer = nil
-		}
+		r.Close()
 	}
 	return 1
 }
@@ -131,8 +86,11 @@ func ioLines(L *lua.LState) int {
 	var ud *lua.LUserData
 	if L.GetTop() >= 1 {
 		if filename, ok := L.Get(1).(lua.LString); ok {
+			// io.lines("filename")
+			//   requires close()
 			if fd, err := os.Open(string(filename)); err == nil {
-				ud = newIoLuaReader(L, fd, fd, fd)
+				ud = L.NewUserData()
+				ud.Value = &XFile{File: fd}
 			} else {
 				return lerror(L, fmt.Sprintf("%s: can not open", filename))
 			}
@@ -152,9 +110,9 @@ func ioLines(L *lua.LState) int {
 func ioWrite(L *lua.LState) int {
 	ioTbl := L.GetGlobal(ioTblName)
 	if stdout, ok := L.GetField(ioTbl, "stdout").(*lua.LUserData); ok {
-		if w, ok := stdout.Value.(*ioLuaWriter); ok {
+		if w, ok := stdout.Value.(io.Writer); ok {
 			for i := 1; i <= L.GetTop(); i++ {
-				fmt.Fprint(w.writer, L.Get(i).String())
+				fmt.Fprint(w, L.Get(i).String())
 			}
 			return 0
 		}
@@ -163,50 +121,57 @@ func ioWrite(L *lua.LState) int {
 	return 0
 }
 
-func _ioOpenWriter(L *lua.LState, fd *os.File, err error) int {
-	if err != nil {
-		return lerror(L, err.Error())
-	}
-	L.Push(newIoLuaWriter(L, fd, fd, fd))
-	return 1
-}
-
 func ioOpen(L *lua.LState) int {
 	fname, ok := L.Get(1).(lua.LString)
 	if !ok {
 		return lerror(L, "io.open: filename is not a string")
 	}
-	mode, ok := L.Get(2).(lua.LString)
-	if !ok {
-		mode = "r"
-	}
-	if mode == "r" {
-		fd, err := os.Open(string(fname))
-		if err != nil {
-			return lerror(L, err.Error())
+	mode := os.O_RDONLY
+	read := true
+	write := false
+	if m, ok := L.Get(2).(lua.LString); ok {
+		switch m {
+		case "r", "rb":
+			mode = os.O_RDONLY
+			read = true
+			write = false
+		case "w", "wb":
+			mode = os.O_WRONLY | os.O_CREATE
+			read = false
+			write = true
+		case "a", "ab":
+			mode = os.O_WRONLY | os.O_APPEND | os.O_CREATE
+			read = false
+			write = true
+		case "r+", "rb+":
+			mode = os.O_RDWR
+			read = true
+			write = true
+		case "w+", "wb+":
+			mode = os.O_RDWR | os.O_TRUNC | os.O_CREATE
+			read = true
+			write = true
+		case "a+", "ab+":
+			mode = os.O_APPEND | os.O_RDWR | os.O_CREATE
+			read = true
+			write = true
+		default:
+			return lerror(L, fmt.Sprintf("io.open (nyagos compatible version) does not support mode=\"%s\" yet.", string(mode)))
 		}
-		L.Push(newIoLuaReader(L, fd, fd, fd))
-		return 1
 	}
-	if mode == "w" {
-		fd, err := os.Create(string(fname))
-		return _ioOpenWriter(L, fd, err)
+	fd, err := os.OpenFile(string(fname), mode, 0666)
+	if err != nil {
+		return lerror(L, err.Error())
 	}
-	if mode == "a" {
-		fd, err := os.OpenFile(string(fname), os.O_APPEND, 0755)
-		return _ioOpenWriter(L, fd, err)
-	}
-	return lerror(L, fmt.Sprintf("io.open (nyagos compatible version) does not support mode=\"%s\" yet.", string(mode)))
+	L.Push(newXFile(L, &XFile{File: fd}, read, write))
+	return 1
 }
 
 func fileWrite(L *lua.LState) int {
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
-		if f, ok := ud.Value.(*ioLuaWriter); ok {
-			if f.writer == nil {
-				return lerror(L, "file:write: handle has already closed")
-			}
-			for i := 2; i <= L.GetTop(); i++ {
-				io.WriteString(f.writer, L.Get(i).String())
+		if w, ok := ud.Value.(io.Writer); ok {
+			for i, end := 2, L.GetTop(); i <= end; i++ {
+				fmt.Fprint(w, L.Get(i).String())
 			}
 			L.Push(ud)
 			return 1
@@ -225,32 +190,47 @@ func ioPOpen(L *lua.LState) int {
 		return lerror(L, "io.popen: mode is not a string")
 	}
 	xcmd := exec.Command("cmd.exe", "/S", "/C", string(command+` `))
+	xcmd.SysProcAttr = &syscall.SysProcAttr{
+		CmdLine: `/S /C "` + string(command) + ` "`,
+	}
 	// Append one space to enclose with double quotation by exec.Command
 	xcmd.Stderr = os.Stderr
 
 	if m := string(mode); m == "r" {
 		xcmd.Stdin = os.Stdin
-		in, err := xcmd.StdoutPipe()
+		in, out, err := os.Pipe()
 		if err != nil {
 			return lerror(L, err.Error())
 		}
+		xcmd.Stdout = out
 		if err := xcmd.Start(); err != nil {
 			in.Close()
-			return lerror(L, err.Error())
-		}
-		L.Push(newIoLuaReader(L, in, in, nil))
-		return 1
-	} else if m == "w" {
-		xcmd.Stdout = os.Stdout
-		out, err := xcmd.StdinPipe()
-		if err != nil {
-			return lerror(L, err.Error())
-		}
-		if err := xcmd.Start(); err != nil {
 			out.Close()
 			return lerror(L, err.Error())
 		}
-		L.Push(newIoLuaWriter(L, out, out, nil))
+		L.Push(newXFile(L, &XFile{File: in}, true, false))
+		go func() {
+			xcmd.Wait()
+			out.Close()
+		}()
+		return 1
+	} else if m == "w" {
+		xcmd.Stdout = os.Stdout
+		in, out, err := os.Pipe()
+		if err != nil {
+			return lerror(L, err.Error())
+		}
+		xcmd.Stdin = in
+		if err := xcmd.Start(); err != nil {
+			in.Close()
+			out.Close()
+			return lerror(L, err.Error())
+		}
+		L.Push(newXFile(L, &XFile{File: out}, false, true))
+		go func() {
+			xcmd.Wait()
+			in.Close()
+		}()
 		return 1
 	} else {
 		return lerror(L, fmt.Sprintf("io.popen(...,\"%s\") is not supported yet", m))
@@ -266,10 +246,9 @@ func fileLines(L *lua.LState) int {
 
 func fileFlush(L *lua.LState) int {
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
-		if f, ok := ud.Value.(*ioLuaWriter); ok {
-			if fd, okok := f.writer.(*os.File); okok {
-				fd.Sync()
-			}
+		type Syncer interface{ Sync() error }
+		if fd, ok := ud.Value.(Syncer); ok {
+			fd.Sync()
 			L.Push(ud)
 			return 1
 		}
@@ -281,20 +260,16 @@ func fileFlush(L *lua.LState) int {
 
 func ioType(L *lua.LState) int {
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
-		if f, ok := ud.Value.(*ioLuaWriter); ok {
-			if f.writer != nil {
-				L.Push(lua.LString("file"))
-			} else {
+		if x, ok := ud.Value.(*XFile); ok {
+			if x.closed {
 				L.Push(lua.LString("closed file"))
+			} else {
+				L.Push(lua.LString("file"))
 			}
 			return 1
 		}
-		if f, ok := ud.Value.(*ioLuaReader); ok {
-			if f.reader != nil {
-				L.Push(lua.LString("file"))
-			} else {
-				L.Push(lua.LString("closed file"))
-			}
+		if _, ok := ud.Value.(*os.File); ok {
+			L.Push(lua.LString("file"))
 			return 1
 		}
 	}
@@ -313,107 +288,127 @@ func openIo(L *lua.LState) *lua.LTable {
 	return ioTable
 }
 
+type Eofer interface {
+	SetEof()
+	Eof() bool
+}
+
 func fileRead(L *lua.LState) int {
 	var err error
-	if ud, ok := L.Get(1).(*lua.LUserData); ok {
-		if f, ok := ud.Value.(*ioLuaReader); ok {
-			r := f.reader
-			end := L.GetTop()
-			if end == 1 {
-				L.Push(lua.LString("*l"))
-				end++
+	ud, ok := L.Get(1).(*lua.LUserData)
+	if !ok {
+		L.ArgError(1, "not a file-handle")
+		return 0
+	}
+	r, ok := ud.Value.(*XFile)
+	if !ok {
+		L.ArgError(1, "not a xfile-handle")
+		return 0
+	}
+
+	end := L.GetTop()
+	if end == 1 {
+		L.Push(lua.LString("*l"))
+		end++
+	}
+	result := make([]lua.LValue, 0, end-1)
+	for i := 2; i <= end; i++ {
+		if r.Eof() {
+			break
+		}
+		val := L.Get(i)
+		if num, ok := val.(lua.LNumber); ok {
+			if num == 0 {
+				_, err = r.ReadByte()
+				if err == io.EOF {
+					r.SetEof()
+					result = append(result, lua.LNil)
+					goto normalreturn
+				}
+				r.UnreadByte()
 			}
-			result := make([]lua.LValue, 0, end-1)
-			for i := 2; i <= end; i++ {
-				val := L.Get(i)
-				if num, ok := val.(lua.LNumber); ok {
-					if num == 0 {
-						_, err = r.ReadByte()
-						if err == io.EOF {
+			data := make([]byte, 0, int(num))
+			for len(data) < cap(data) {
+				b, err := r.ReadByte()
+				if err == io.EOF {
+					r.SetEof()
+					if len(data) == 0 {
+						result = append(result, lua.LNil)
+					} else {
+						result = append(result, lua.LString(string(data)))
+					}
+					goto normalreturn
+				}
+				if err != nil {
+					goto errreturn
+				}
+				if b != '\r' {
+					data = append(data, b)
+				}
+			}
+			result = append(result, lua.LString(string(data)))
+		} else if s, ok := val.(lua.LString); ok {
+			switch s {
+			case "*l":
+				line, err := r.ReadString('\n')
+				if err != nil {
+					if err == io.EOF {
+						r.SetEof()
+						if line == "" {
 							result = append(result, lua.LNil)
 							goto normalreturn
 						}
-						r.UnreadByte()
+					} else {
+						goto errreturn
 					}
-					data := make([]byte, 0, int(num))
-					for len(data) < cap(data) {
-						var b byte
-						b, err = r.ReadByte()
-						if err == io.EOF {
-							if len(data) == 0 {
-								result = append(result, lua.LNil)
-							} else {
-								result = append(result, lua.LString(string(data)))
-							}
-							goto normalreturn
-						}
-						if err != nil {
-							goto errreturn
-						}
-						if b != '\r' {
-							data = append(data, b)
-						}
-					}
-					result = append(result, lua.LString(string(data)))
-				} else if s, ok := val.(lua.LString); ok {
-					switch s {
-					case "*l":
-						var line string
-						line, err = r.ReadString('\n')
-						if err == io.EOF && line == "" {
-							result = append(result, lua.LNil)
-							goto normalreturn
-						}
-						if err != nil && err != io.EOF {
-							goto errreturn
-						}
-						line = strings.TrimSuffix(line, "\n")
-						line = strings.TrimSuffix(line, "\r")
-						result = append(result, lua.LString(line))
-						break
-					case "*a":
-						var all []byte
-						all, err = ioutil.ReadAll(r)
-						if err == io.EOF {
+				}
+				line = strings.TrimSuffix(line, "\n")
+				line = strings.TrimSuffix(line, "\r")
+				result = append(result, lua.LString(line))
+				break
+			case "*a":
+				var all []byte
+				all, err = ioutil.ReadAll(r.reader())
+				if err != nil {
+					if err == io.EOF {
+						r.SetEof()
+						if len(all) <= 0 {
 							result = append(result, lua.LString(""))
 							goto normalreturn
 						}
-						if err != nil {
-							goto errreturn
-						}
-						text := strings.Replace(string(all), "\r\n", "\n", -1)
-						result = append(result, lua.LString(text))
-						break
-					case "*n":
-						var n int
-						if _, err = fmt.Fscan(r, &n); err != nil {
-							if err == io.EOF ||
-								(err != nil && err.Error() == "expected integer") {
-								result = append(result, lua.LNil)
-								goto normalreturn
-							}
-							goto errreturn
-						}
-						result = append(result, lua.LNumber(n))
-					default:
-						L.ArgError(i, "invalid format")
+					} else {
+						goto errreturn
 					}
-				} else {
-					L.ArgError(i, "invalid argument")
 				}
+				text := strings.Replace(string(all), "\r\n", "\n", -1)
+				result = append(result, lua.LString(text))
+				break
+			case "*n":
+				var n int
+				if _, err = fmt.Fscan(r, &n); err != nil {
+					if err == io.EOF ||
+						(err != nil && err.Error() == "expected integer") {
+						result = append(result, lua.LNil)
+						goto normalreturn
+					}
+					goto errreturn
+				}
+				result = append(result, lua.LNumber(n))
+			default:
+				L.ArgError(i, "invalid format")
 			}
-		normalreturn:
-			for _, v := range result {
-				L.Push(v)
-			}
-			return len(result)
-		errreturn:
-			L.RaiseError(err.Error())
-			return 2
+		} else {
+			L.ArgError(i, "invalid argument")
 		}
 	}
-	L.ArgError(1, "not a file-handle")
-	return 0
+normalreturn:
+	for _, v := range result {
+		L.Push(v)
+	}
+	return len(result)
+errreturn:
+	L.RaiseError(err.Error())
+	return 2
 }
 
 func fileSeek(L *lua.LState) int {
@@ -421,27 +416,10 @@ func fileSeek(L *lua.LState) int {
 	if !ok {
 		return lerror(L, "(file)seek: not file-handle")
 	}
-	var seeker io.Seeker
-	if f, ok := ud.Value.(*ioLuaReader); ok {
-		seeker = f.seeker
-		buffered := f.reader.Buffered()
-		if seeker != nil {
-			_, err := seeker.Seek(-int64(buffered), 1)
-			if err != nil {
-				return lerror(L, err.Error())
-			}
-			_, err = f.reader.Discard(buffered)
-			if err != nil {
-				return lerror(L, "(file)seek: failed discard buffered data")
-			}
-		}
-	} else if f, ok := ud.Value.(*ioLuaWriter); ok {
-		seeker = f.seeker
-	}
-	if seeker == nil {
+	seeker, ok := ud.Value.(io.Seeker)
+	if !ok {
 		return lerror(L, "(file)seek: not seekable file handle")
 	}
-
 	whence := 1
 	offset := int64(0)
 	if L.GetTop() >= 2 {
@@ -451,11 +429,11 @@ func fileSeek(L *lua.LState) int {
 		}
 		switch strings.ToLower(string(_whence)) {
 		case "set":
-			whence = 0
+			whence = io.SeekStart
 		case "cur":
-			whence = 1
+			whence = io.SeekCurrent
 		case "end":
-			whence = 2
+			whence = io.SeekEnd
 		default:
 			return lerror(L, "(file)seek: invalid whence string")
 		}
