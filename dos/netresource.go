@@ -1,10 +1,14 @@
 package dos
 
 import (
-	"fmt"
+	"errors"
+	"io"
+	"net/http"
+	"os"
 	"regexp"
 	"strings"
 	"sync"
+	"time"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -64,7 +68,19 @@ func (nr *NetResource) Provider() string {
 	return u2str(nr.provider)
 }
 
-func (nr *NetResource) Enum(callback func(*NetResource) bool) error {
+func (nr *NetResource) Name() string       { return nr.RemoteName() }
+func (nr *NetResource) Size() int64        { return 0 }
+func (nr *NetResource) Mode() os.FileMode  { return 0555 }
+func (nr *NetResource) ModTime() time.Time { return time.Time{} }
+func (nr *NetResource) IsDir() bool        { return true }
+func (nr *NetResource) Sys() interface{}   { return nr }
+
+type NetResourceHandle struct {
+	handle      uintptr
+	netresource *NetResource
+}
+
+func (nr *NetResource) open() (*NetResourceHandle, error) {
 	var handle uintptr
 
 	rc, _, err := procWNetOpenEnum.Call(
@@ -73,32 +89,79 @@ func (nr *NetResource) Enum(callback func(*NetResource) bool) error {
 		0,
 		uintptr(unsafe.Pointer(nr)),
 		uintptr(unsafe.Pointer(&handle)))
-	if rc != windows.NO_ERROR {
-		return fmt.Errorf("NetOpenEnum: %s", err)
-	}
-	defer procWNetCloseEnum.Call(handle)
-	for {
-		var buffer [32 * 1024]byte
-		count := int32(-1)
-		size := len(buffer)
-		rc, _, err := procWNetEnumResource.Call(
-			handle,
-			uintptr(unsafe.Pointer(&count)),
-			uintptr(unsafe.Pointer(&buffer[0])),
-			uintptr(unsafe.Pointer(&size)))
 
-		if rc == windows.NO_ERROR {
-			for i := int32(0); i < count; i++ {
-				var p *NetResource
-				p = (*NetResource)(unsafe.Pointer(&buffer[uintptr(i)*unsafe.Sizeof(*p)]))
-				if !callback(p) {
-					return nil
-				}
+	if rc != windows.NO_ERROR {
+		return nil, err
+	}
+	return &NetResourceHandle{
+		handle:      handle,
+		netresource: nr,
+	}, nil
+}
+
+func (this *NetResourceHandle) Readdir(_count int) ([]os.FileInfo, error) {
+	var buffer [32 * 1024]byte
+	count := int32(_count)
+	size := len(buffer)
+	rc, _, err := procWNetEnumResource.Call(
+		uintptr(this.handle),
+		uintptr(unsafe.Pointer(&count)),
+		uintptr(unsafe.Pointer(&buffer[0])),
+		uintptr(unsafe.Pointer(&size)))
+
+	if rc == windows.NO_ERROR {
+		result := make([]os.FileInfo, 0, count)
+		for i := int32(0); i < count; i++ {
+			var p NetResource
+			p = *(*NetResource)(unsafe.Pointer(&buffer[uintptr(i)*unsafe.Sizeof(p)]))
+			result = append(result, &p)
+		}
+		return result, nil
+	} else if rc == ERROR_NO_MORE_ITEMS {
+		return nil, io.EOF
+	} else {
+		return nil, err
+	}
+}
+
+func (this *NetResourceHandle) Close() error {
+	procWNetCloseEnum.Call(this.handle)
+	return nil
+}
+
+func (this *NetResourceHandle) Read([]byte) (int, error) {
+	return 0, errors.New("not support")
+}
+
+func (this *NetResourceHandle) Seek(int64, int) (int64, error) {
+	return 0, errors.New("not support")
+}
+
+func (this *NetResourceHandle) Stat() (os.FileInfo, error) {
+	return this.netresource, nil
+}
+
+var _ http.File = (*NetResourceHandle)(nil)
+
+func (nr *NetResource) Enum(callback func(*NetResource) bool) error {
+	handle, err := nr.open()
+	if err != nil {
+		return err
+	}
+	defer handle.Close()
+
+	for {
+		records, err := handle.Readdir(-1)
+		if err != nil {
+			if err == io.EOF {
+				return nil
 			}
-		} else if rc == ERROR_NO_MORE_ITEMS {
-			return nil
-		} else {
-			return fmt.Errorf("NetEnumResource: %s", err)
+			return err
+		}
+		for _, record := range records {
+			if nr1, ok := record.(*NetResource); ok && !callback(nr1) {
+				return nil
+			}
 		}
 	}
 }
