@@ -307,6 +307,7 @@ func openIo(L *lua.LState) *lua.LTable {
 	L.SetField(ioTable, "lines", L.NewFunction(ioLines))
 	L.SetField(ioTable, "write", L.NewFunction(ioWrite))
 	L.SetField(ioTable, "open", L.NewFunction(ioOpen))
+	L.SetField(ioTable, "close", L.NewFunction(fileClose))
 	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
 	L.SetField(ioTable, "type", L.NewFunction(ioType))
 	return ioTable
