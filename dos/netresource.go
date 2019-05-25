@@ -37,10 +37,32 @@ func u2str(u *uint16) string {
 	return windows.UTF16ToString(buffer)
 }
 
-func (nr *NetResource) LocalName() string  { return u2str(nr.localName) }
-func (nr *NetResource) RemoteName() string { return u2str(nr.remoteName) }
-func (nr *NetResource) Comment() string    { return u2str(nr.comment) }
-func (nr *NetResource) Provider() string   { return u2str(nr.provider) }
+func (nr *NetResource) LocalName() string {
+	if nr == nil {
+		return ""
+	}
+	return u2str(nr.localName)
+}
+
+func (nr *NetResource) RemoteName() string {
+	if nr == nil {
+		return `\\`
+	}
+	return u2str(nr.remoteName)
+}
+
+func (nr *NetResource) Comment() string {
+	if nr == nil {
+		return ""
+	}
+	return u2str(nr.comment)
+}
+func (nr *NetResource) Provider() string {
+	if nr == nil {
+		return ""
+	}
+	return u2str(nr.provider)
+}
 
 func (nr *NetResource) Enum(callback func(*NetResource) bool) error {
 	var handle uintptr
