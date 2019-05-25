@@ -7,10 +7,10 @@ assert(fd:write('HOGEHOGE\n'))
 assert(fd:flush())
 fd:close()
 
-local ok=true
+local ok=false
 for line in io.lines(tmpfn) do
-    if line ~= 'HOGEHOGE' then
-        ok = false
+    if line == 'HOGEHOGE' then
+        ok = true
     end
 end
 if ok then
