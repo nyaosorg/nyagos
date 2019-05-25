@@ -17,6 +17,7 @@ English / [Japanese](release_note_ja.md)
 * (#272) replace `!(historyNo)@` to the directory when the command was executed.
 * (#130) Support Here Document
 * ALT-O expands the path of shortcut(for example: SHORTCUT.lnk) to target-path
+* (#368) Fix: Lua function: io.close() did not exist.
 
 NYAGOS 4.4.3\_0
 ===============
