@@ -18,6 +18,7 @@ English / [Japanese](release_note_ja.md)
 * (#130) Support Here Document
 * ALT-O expands the path of shortcut(for example: SHORTCUT.lnk) to target-path
 * (#368) Fix: Lua function: io.close() did not exist.
+* (#332)(#369) Implement r+/w+/a+ mode for io.open
 
 NYAGOS 4.4.3\_0
 ===============
