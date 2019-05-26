@@ -1,6 +1,6 @@
 English / [Japanese](release_note_ja.md)
 
-* (#233) Completion for `\\server\folder`
+* (#233) Completion for `\\host-name\share-name`
 * (#238) copy: drawing progress
 * Support `ENVVARNAME=VALUE COMMAND PARAMETERS..`
 * Fix the problem temporary filenames on executing batchfile conflict
@@ -10,7 +10,7 @@ English / [Japanese](release_note_ja.md)
 * Implemented `.` and `source` for Linux (using /bin/sh)
 * readline: fixed cursor-blink-off did not work while user wait.
 * Fix: `mklink /J mountPt target-relative-path` made a broken junction.(Add change path absolute)
-* Add options: `--chdir "DIR"` and `--netuse "X:=\\server\path"`
+* Add options: `--chdir "DIR"` and `--netuse "X:=\\host-name\share-name"`
 * Stop using CMD.EXE on `su` to set console-windows' icon nyagos'
 * Completion: ask completion when more than 100 possibilities exist.
 * ps: print `[self]` the line where nyagos.exe self exists.
@@ -376,7 +376,7 @@ on Mar.4,2018
 * Show an error when `type DIRECTORY` is executed.
 * Made error message simple on `del NOTEXISTFILE`
 * Fix: #279 Substitution on Environment variable (%VAR:OLD=NEW%) did not ignore case
-* Fix: #281 `cd \\server\folder ; open` -> `C:\Windows\system32` was open.
+* Fix: #281 `cd \\host-name\share-name ; open` -> `C:\Windows\system32` was open.
 * Fix: #286 A tilde(~) after whitespace enclosed with double quotations was interpreted same as %USERPROFILE%
 * #287 On the last entry of the history, do nothing for typing ARROW-DOWN
 

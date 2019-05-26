@@ -1,6 +1,6 @@
 [English](release_note_en.md) / Japanese
 
-* (#233) `\\server\folder` を補完できるようになった
+* (#233) `\\host-name\share-name` を補完できるようになった
 * (#238) copyコマンドで進捗表示をするようにした
 * `環境変数名=値　コマンド名　パラメータ…` をサポート
 * バッチファイル用の一時ファイル名が重複する問題を修正
@@ -10,7 +10,7 @@
 * Linux用の `.` と `source` を実装(/bin/sh を想定)
 * 一行入力で、ユーザが待っている時にカーソルの点滅がオフになっていなかった不具合を修正
 * `mklink /J マウントポイント 相対パス` で作るジャンクションが壊れていた(絶対パス化が抜けていた)
-* 起動オプション `--chdir "DIR"` and `--netuse "X:=\\server\path"` を追加
+* 起動オプション `--chdir "DIR"` and `--netuse "X:=\\host-name\share-name"` を追加
 * `su`を実行する際にCMD.EXEを使わないようにした(アイコンをNYAGOSのにするため)
 * 100個を越える補完候補がある時、確認するようにした
 * ps: nyagos.exe 自身の行に `[self]` と表示するようにした
@@ -375,7 +375,7 @@ NYAGOS 4.2.3\_4
 * `type DIRECTORY` が実行された時にエラーにするようにした。
 * `del 存在しないファイル` を実行した時のエラーをシンプルにした.
 * #279 環境変数置換(%VAR:OLD=NEW%)で、英大文字/小文字を区別していた不具合を修正
-* #281 `cd \\server\folder ; open` で `C:\Windows\system32` 開く不具合を修正
+* #281 `cd \\host-name\share-name ; open` で `C:\Windows\system32` 開く不具合を修正
 * #286 Fix: 二重引用符内の空白に続く ~ が %USERPROFILE% と解釈されていた不具合を修正
 * #287 ヒストリの最後のエントリの時、↓をタイプしても何もしないようにした
 
