@@ -220,4 +220,36 @@ else
     print("NG: iotype()==\""..io.type(fd).."\"")
 end
 
+local tmpfn = os.getenv("TEMP") .. "\\tmp2.txt"
+
+local fd = assert(io.open(tmpfn,"w"))
+fd:write("12345678")
+fd:close()
+
+fd = io.open(tmpfn,"r+")
+fd:write("abcd")
+fd:close()
+
+for line in io.lines(tmpfn) do
+    if line == "abcd5678" then
+        print "OK: io.write(r+)"
+    else
+        print("NG: io.write(r+)",line)
+    end
+    break
+end
+
+fd = io.open(tmpfn,"r+")
+fd:write("ABCD")
+fd:close()
+
+for line in io.lines(tmpfn) do
+    if line == "ABCD5678" then
+        print "OK: io.write(w+)"
+    else
+        print("NG: io.write(w+)",line)
+    end
+    break
+end
+
 io.stdout:setvbuf("no")
