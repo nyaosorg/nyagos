@@ -7,9 +7,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"strings"
-	"syscall"
 
 	"github.com/yuin/gopher-lua"
 )
@@ -189,10 +187,7 @@ func ioPOpen(L *lua.LState) int {
 	if !ok {
 		return lerror(L, "io.popen: mode is not a string")
 	}
-	xcmd := exec.Command("cmd.exe", "/S", "/C", string(command+` `))
-	xcmd.SysProcAttr = &syscall.SysProcAttr{
-		CmdLine: `/S /C "` + string(command) + ` "`,
-	}
+	xcmd := newCommand(string(command))
 	// Append one space to enclose with double quotation by exec.Command
 	xcmd.Stderr = os.Stderr
 
