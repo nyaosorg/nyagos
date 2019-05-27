@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.4\_0 the Reiwa edition
+=================================
+on May.27,2019
+
 * (#233) Completion for `\\host-name\share-name`
 * (#238) copy: drawing progress
 * Support `ENVVARNAME=VALUE COMMAND PARAMETERS..`
