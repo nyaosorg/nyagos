@@ -1,6 +1,6 @@
 -- This script runs on both lua.exe and nyagos' lua_f
 
-local tmpfn = os.getenv("TEMP") .. "\\tmp.txt"
+local tmpfn = os.tmpname()
 
 local fd = assert(io.open(tmpfn,"w"))
 assert(fd:write('HOGEHOGE\n'))
@@ -19,9 +19,10 @@ else
     print("NG: write-open,write-flush,write-close,io-lines")
 end
 
-local fd,err = io.open(":::","w")
+local fd,err = io.open("./notexistdir/cantopenfile","w")
 if fd then
     print("NG: invalid-open")
+    fd:close()
 else
     print("OK: invalid-open:",err)
 end
@@ -43,7 +44,7 @@ for line in fd:lines() do
 end
 fd:close()
 
-local fd,err = io.popen("cmd.exe /c \"echo AHAHA\"","r")
+local fd,err = io.popen("echo AHAHA","r")
 if fd then
     for line in fd:lines() do
         print("OK>",line)
@@ -220,7 +221,7 @@ else
     print("NG: iotype()==\""..io.type(fd).."\"")
 end
 
-local tmpfn = os.getenv("TEMP") .. "\\tmp2.txt"
+local tmpfn = os.tmpname()
 
 local fd = assert(io.open(tmpfn,"w"))
 fd:write("12345678")
