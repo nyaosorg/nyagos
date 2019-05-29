@@ -47,6 +47,34 @@ func utf8codes(L *lua.LState) int {
 	return 3
 }
 
+func runeCountLua(b []byte) (int, int) {
+	if len(b) <= 0 {
+		return 0, 0
+	}
+	if 0x80 <= b[0] && b[0] <= 0xBF && 0xC2 <= b[0] && b[0] <= 0xDF {
+		if len(b) < 2 || b[1] < 0x80 || b[1] > 0xBF {
+			return -1, 1
+		}
+	} else if 0xE0 <= b[0] && b[0] <= 0xEF {
+		if len(b) < 2 || b[1] < 0x80 || b[1] > 0xBF {
+			return -1, 1
+		} else if len(b) < 3 || b[2] < 0x80 || b[2] > 0xBF {
+			return -1, 2
+		}
+	} else if 0xF0 <= b[0] && b[0] <= 0xF7 {
+		if len(b) < 2 || b[1] < 0x80 || b[1] > 0xBF {
+			return -1, 1
+		} else if len(b) < 3 || b[2] < 0x80 || b[2] > 0xBF {
+			return -1, 2
+		} else if len(b) < 4 || b[3] < 0x80 || b[3] > 0xBF {
+			return -1, 3
+		}
+	} else if b[0] >= 0x80 {
+		return -1, 0
+	}
+	return utf8.RuneCount(b), 0
+}
+
 func utf8len(L *lua.LState) int {
 	_s, ok := L.Get(1).(lua.LString)
 	if !ok {
@@ -72,29 +100,20 @@ func utf8len(L *lua.LState) int {
 			}
 		}
 	}
-	if j < 0 {
-		j += _len + 1
-	} else if j > 0 {
-		j--
+	if j <= 0 {
+		j += _len
 	}
-	if i < 0 {
-		i += _len + 1
-	} else if i > 0 {
-		i--
+	if i <= 0 {
+		i += _len
 	}
-	if !utf8.RuneStart(s[i]) {
-		return lerror(L, "utf8.len: not start byte")
+
+	pos, errpos := runeCountLua([]byte(s[(i - 1):(j - 1)]))
+	if pos < 0 {
+		L.Push(lua.LNil)
+		L.Push(lua.LNumber(errpos + i))
+		return 2
 	}
-	s = s[i:]
-	j -= i
-	length := 0
-	for pos := range s {
-		if pos > j {
-			break
-		}
-		length++
-	}
-	L.Push(lua.LNumber(length))
+	L.Push(lua.LNumber(pos))
 	return 1
 }
 
