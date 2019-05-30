@@ -28,18 +28,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-type CmdExe struct {
-	Cmdline string
-	Stdin   io.Reader
-	Stdout  io.Writer
-	Stderr  io.Writer
-	Env     []string
-	OnExec  func(int)
-	OnDone  func(int)
-}
-
-func (this CmdExe) Call() (int, error) {
-
+func (this *CmdExe) run() (int, error) {
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
 		netdrive, closer := dos.UNCtoNetDrive(wd)
 		defer closer()
@@ -113,5 +102,5 @@ func (this *Source) callBatch(tmpfile string) (int, error) {
 		Env:     this.Env,
 		OnExec:  this.OnExec,
 		OnDone:  this.OnDone,
-	}.Call()
+	}.Run()
 }

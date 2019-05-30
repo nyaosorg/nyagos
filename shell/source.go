@@ -107,3 +107,17 @@ func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, st
 		Env:     env,
 	}.Call()
 }
+
+type CmdExe struct {
+	Cmdline string
+	Stdin   io.Reader
+	Stdout  io.Writer
+	Stderr  io.Writer
+	Env     []string
+	OnExec  func(int)
+	OnDone  func(int)
+}
+
+func (this CmdExe) Run() (int, error) {
+	return this.run()
+}

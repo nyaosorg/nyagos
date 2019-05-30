@@ -14,5 +14,5 @@ func cmdExeSc(ctx context.Context, cmd Param) (int, error) {
 		Stdout:  cmd.Out(),
 		Stderr:  cmd.Err(),
 		Env:     cmd.DumpEnv(),
-	}.Call()
+	}.Run()
 }

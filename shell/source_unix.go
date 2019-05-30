@@ -26,30 +26,11 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-func (this *Source) callBatch(tmpfile string) (int, error) {
-	var cmdline strings.Builder
-
-	cmdline.WriteByte('.')
-
-	if fullpath, err := filepath.Abs(strings.ReplaceAll(this.Args[0], `"`, ``)); err == nil {
-		fmt.Fprintf(&cmdline, ` "%s"`, fullpath)
-	} else {
-		cmdline.WriteByte(' ')
-		cmdline.WriteString(this.Args[0])
-	}
-
-	for _, arg1 := range this.Args[1:] {
-		cmdline.WriteByte(' ')
-		cmdline.WriteString(arg1)
-	}
-	cmdline.WriteString(` ; (pwd ; env) > '`)
-	cmdline.WriteString(tmpfile)
-	cmdline.WriteString(`'`)
-
+func (this *CmdExe) run() (int, error) {
 	args := []string{
 		"/bin/sh",
 		"-c",
-		cmdline.String(),
+		this.Cmdline,
 	}
 	cmd := exec.Cmd{
 		Path:   "/bin/sh",
@@ -80,4 +61,35 @@ func (this *Source) callBatch(tmpfile string) (int, error) {
 		this.OnDone(cmd.Process.Pid)
 	}
 	return cmd.ProcessState.ExitCode(), nil
+}
+
+func (this *Source) callBatch(tmpfile string) (int, error) {
+	var cmdline strings.Builder
+
+	cmdline.WriteByte('.')
+
+	if fullpath, err := filepath.Abs(strings.ReplaceAll(this.Args[0], `"`, ``)); err == nil {
+		fmt.Fprintf(&cmdline, ` "%s"`, fullpath)
+	} else {
+		cmdline.WriteByte(' ')
+		cmdline.WriteString(this.Args[0])
+	}
+
+	for _, arg1 := range this.Args[1:] {
+		cmdline.WriteByte(' ')
+		cmdline.WriteString(arg1)
+	}
+	cmdline.WriteString(` ; (pwd ; env) > '`)
+	cmdline.WriteString(tmpfile)
+	cmdline.WriteString(`'`)
+
+	return CmdExe{
+		Cmdline: cmdline.String(),
+		Stdin:   this.Stdin,
+		Stdout:  this.Stdout,
+		Stderr:  this.Stderr,
+		Env:     this.Env,
+		OnExec:  this.OnExec,
+		OnDone:  this.OnDone,
+	}.Run()
 }
