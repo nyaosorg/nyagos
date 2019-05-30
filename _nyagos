@@ -5,9 +5,12 @@ if "%OS%" == "Windows_NT" then
     alias "ls=__ls__ -oFh $*"
     alias "ll=__ls__ -olFh $*"
     alias "wordpad=""%PROGRAMFILES%\Windows NT\Accessories\wordpad.exe"""
+    set NUL=nul
+else
+    set NUL=/dev/null
 endif
 
-suffix >nul 2>nul
+suffix >%NUL% 2>%NUL%
 if not errorlevel 1 then
     suffix "awk=gawk -f"
     suffix "js=cscript //nologo"
