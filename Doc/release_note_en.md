@@ -1,5 +1,11 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.4\_1
+===============
+on May.30,2019
+
+* Fix: executable for Linux could not be built.
+
 NYAGOS 4.4.4\_0 the Reiwa edition
 =================================
 on May.27,2019
