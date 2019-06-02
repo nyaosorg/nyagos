@@ -1,36 +1,86 @@
 package completion
 
 import (
+	"bufio"
 	"errors"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/zetamatta/go-inline-animation"
 	"github.com/zetamatta/nyagos/dos"
-	//"github.com/zetamatta/go-outputdebug"
-	//"time"
 )
 
 var rxUNCPattern1 = regexp.MustCompile(`^\\\\[^\\/]*$`)
 var rxUNCPattern2 = regexp.MustCompile(`^(\\\\[^\\/]+)\\[^\\/]*$`)
 
+func getServers() []string {
+	servers := []string{}
+	dos.EnumFileServer(func(n *dos.NetResource) bool {
+		servers = append(servers, n.RemoteName())
+		return true
+	})
+	return servers
+}
+
+func getCachePath() string {
+	dir, err := os.UserCacheDir()
+	if err != nil {
+		return ""
+	}
+	dir = filepath.Join(dir, "nyaos.org")
+	os.MkdirAll(dir, 0666)
+	return filepath.Join(dir, "computers.txt")
+}
+
 var serverCache []string
 
 func getServerCache() []string {
 	if serverCache == nil {
-		c := animation.Progress()
-		defer c()
-		serverCache = []string{}
-		dos.EnumFileServer(func(n *dos.NetResource) bool {
-			serverCache = append(serverCache, n.RemoteName())
-			return true
-		})
+		end := animation.Progress()
+		serverCache = getServers()
+		if cachePath := getCachePath(); cachePath != "" {
+			ioutil.WriteFile(cachePath, []byte(strings.Join(serverCache, "\n")), 0666)
+		}
+		end()
 	}
 	return serverCache
 }
 
 func hasServerCache() bool {
-	return serverCache != nil
+	if serverCache != nil {
+		return true
+	}
+	cachePath := getCachePath()
+	if cachePath == "" {
+		return false
+	}
+	fd, err := os.Open(cachePath)
+	if err != nil {
+		return false
+	}
+	serverCache = []string{}
+	for sc := bufio.NewScanner(fd); sc.Scan(); {
+		serverCache = append(serverCache, sc.Text())
+	}
+	stat, err := fd.Stat()
+	fd.Close()
+	//outputdebug.String(stat.ModTime().String())
+	//outputdebug.String(stat.ModTime().Add(time.Hour * 2).String())
+
+	if err == nil && stat.ModTime().Add(time.Hour*2).Before(time.Now()) {
+		go func() {
+			//outputdebug.String("begin searching servers at " + time.Now().String())
+			tmp := getServers()
+			ioutil.WriteFile(cachePath, []byte(strings.Join(tmp, "\n")), 0666)
+			serverCache = tmp
+			//outputdebug.String("update cache at " + time.Now().String())
+		}()
+	}
+	return true
 }
 
 func uncComplete(str string, force bool) ([]Element, error) {
@@ -38,7 +88,6 @@ func uncComplete(str string, force bool) ([]Element, error) {
 		if !force && !hasServerCache() {
 			return nil, ErrAskRetry
 		}
-		//outputdebug.String(`start complete \\server:` + time.Now().String())
 		server := strings.ToUpper(str)
 		result := []Element{}
 		for _, server1 := range getServerCache() {
@@ -46,11 +95,9 @@ func uncComplete(str string, force bool) ([]Element, error) {
 				result = append(result, Element1(server1+`\`))
 			}
 		}
-		//outputdebug.String(`end complete \\server:` + time.Now().String())
 		return result, nil
 	}
 	if m := rxUNCPattern2.FindStringSubmatch(str); m != nil {
-		//outputdebug.String(`start complete \\server\path:` + time.Now().String())
 		server := m[1]
 		result := []Element{}
 
@@ -67,7 +114,6 @@ func uncComplete(str string, force bool) ([]Element, error) {
 				}
 			}
 		}
-		//outputdebug.String(`end complete \\server\path:` + time.Now().String())
 		return result, nil
 	}
 	return nil, errors.New("not support")
