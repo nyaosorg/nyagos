@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/zetamatta/go-inline-animation"
 	"github.com/zetamatta/nyagos/dos"
-	"github.com/zetamatta/nyagos/nodos"
 	//"github.com/zetamatta/go-outputdebug"
 	//"time"
 )
@@ -18,7 +18,7 @@ var serverCache []string
 
 func getServerCache() []string {
 	if serverCache == nil {
-		c := nodos.Progress()
+		c := animation.Progress()
 		defer c()
 		serverCache = []string{}
 		dos.EnumFileServer(func(n *dos.NetResource) bool {

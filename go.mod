@@ -17,6 +17,7 @@ require (
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
 	github.com/zetamatta/go-box/v2 v2.0.4
 	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
+	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
 	github.com/zetamatta/go-outputdebug v0.0.0-20190527151759-1278a2b3f557
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
