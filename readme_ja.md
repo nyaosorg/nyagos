@@ -9,6 +9,8 @@ The Nihongo Yet Another GOing Shell
 
 NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 
+<img src="./demo.gif" alt="demo-animation" />
+
 * UNIX風シェル
   * Emacs風キーバインド
   * ヒストリ (Ctrl-P や ! マークによる)

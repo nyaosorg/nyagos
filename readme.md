@@ -10,6 +10,8 @@ English
 
 NYAGOS is the commandline-shell written with the Programming Language GO and Lua.
 
+<img src="./demo.gif" alt="demo-animation" />
+
 * UNIX-Like Shell
   * Keybinding like Emacs.
   * History (Ctrl-P and !-mark)
