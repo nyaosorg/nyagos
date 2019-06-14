@@ -1,5 +1,11 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.4\_2
+===============
+on Jun.14,2019
+
+* Speed up the completion for `\\host-name` by updating the cache on background.
+
 NYAGOS 4.4.4\_1
 ===============
 on May.30,2019
