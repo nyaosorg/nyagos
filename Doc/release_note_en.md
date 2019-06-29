@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#371) Could not execute `foo.bar.exe` as `foo.bar`
+
 NYAGOS 4.4.4\_2
 ===============
 on Jun.14,2019
