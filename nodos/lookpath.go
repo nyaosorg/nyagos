@@ -8,33 +8,21 @@ import (
 	"github.com/zetamatta/go-findfile"
 )
 
-func lookPath(dir1, patternBase string) (foundpath string) {
-	pathExtList := filepath.SplitList(os.Getenv("PATHEXT"))
-	ext := filepath.Ext(patternBase)
-	var pattern string
-	if ext == "" {
-		pattern = patternBase + ".*"
-	} else {
-		pattern = patternBase
-	}
-	basename := filepath.Base(patternBase)
-	names := map[string]int{strings.ToUpper(basename): 0}
-	for i, ext1 := range pathExtList {
-		names[strings.ToUpper(basename+ext1)] = i + 1
+func lookPath(dir1, targetPath string) (foundpath string) {
+	targetName := filepath.Base(targetPath)
+	names := map[string]int{strings.ToUpper(targetName): 0}
+	for i, ext1 := range filepath.SplitList(os.Getenv("PATHEXT")) {
+		names[strings.ToUpper(targetName+ext1)] = i + 1
 	}
 	foundIndex := 999
-	findfile.Walk(pattern, func(f *findfile.FileInfo) bool {
-		if f.IsDir() {
-			return true
-		}
-		if filepath.Ext(f.Name()) == "" {
+	findfile.Walk(targetPath+"*", func(f *findfile.FileInfo) bool {
+		if f.IsDir() || filepath.Ext(f.Name()) == "" {
 			return true
 		}
 		if i, ok := names[strings.ToUpper(f.Name())]; ok && i < foundIndex {
 			foundIndex = i
 			foundpath = filepath.Join(dir1, f.Name())
 			if f.IsReparsePoint() {
-				var err error
 				linkTo, err := os.Readlink(foundpath)
 				if err == nil && linkTo != "" {
 					foundpath = linkTo
