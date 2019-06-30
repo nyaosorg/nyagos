@@ -112,6 +112,7 @@ Acknowledgement
 * [beepcap](https://twitter.com/beepcap)
 * [tostos5963](https://github.com/tostos5963)
 * [sambatriste](https://github.com/sambatriste)
+* [terepanda](https://github.com/terepanda)
 
 Author
 ------
