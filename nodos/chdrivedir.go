@@ -49,7 +49,14 @@ func Chdrive(drive string) (string, error) {
 	if len(drive) < 1 {
 		return "", errors.New("Chdrive: drive is empty string")
 	}
-	return chDriveByte(drive[0])
+	s, err := chDriveByte(drive[0])
+	if err == nil {
+		return s, err
+	}
+	if !chdriveRetry(rune(drive[0])) {
+		return s, err
+	}
+	return s, nil
 }
 
 func Chdir(folder string) (err error) {
