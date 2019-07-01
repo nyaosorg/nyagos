@@ -12,26 +12,26 @@ import (
 	"github.com/zetamatta/nyagos/dos"
 )
 
-func driveType(rootPathName string) string {
+func driveType(rootPathName string) (uint32, string) {
 	_rootPathName, err := windows.UTF16PtrFromString(rootPathName)
 	if err != nil {
-		return "UNKNOWN"
+		return 0, "UNKNOWN"
 	}
 
 	t := windows.GetDriveType(_rootPathName)
 	switch t {
 	case windows.DRIVE_REMOVABLE:
-		return "REMOVABLE"
+		return t, "REMOVABLE"
 	case windows.DRIVE_FIXED:
-		return "FIXED"
+		return t, "FIXED"
 	case windows.DRIVE_REMOTE:
-		return "REMOTE"
+		return t, "REMOTE"
 	case windows.DRIVE_CDROM:
-		return "CDROM"
+		return t, "CDROM"
 	case windows.DRIVE_RAMDISK:
-		return "RAMDISK"
+		return t, "RAMDISK"
 	default:
-		return "UNKNOWN"
+		return t, "UNKNOWN"
 	}
 }
 
@@ -44,6 +44,12 @@ func df(rootPathName string) ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
+	driveTypeId, driveTypeStr := driveType(rootPathName)
+	var uncPath string
+	if driveTypeId == windows.DRIVE_REMOTE {
+		uncPath, _ = dos.WNetGetConnectionUTF16a(uint16(rootPathName[0]))
+	}
+
 	return []string{
 		rootPathName,
 		humanize.Comma(int64(free)),
@@ -51,8 +57,9 @@ func df(rootPathName string) ([]string, error) {
 		humanize.Comma(int64(totalFree)),
 		strconv.FormatUint(100*(total-free)/total, 10),
 		fs,
-		driveType(rootPathName),
+		driveTypeStr,
 		label,
+		uncPath,
 	}, nil
 }
 

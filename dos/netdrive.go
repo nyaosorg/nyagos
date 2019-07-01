@@ -11,11 +11,9 @@ import (
 var mpr = windows.NewLazySystemDLL("mpr.dll")
 var procWNetGetConnectionW = mpr.NewProc("WNetGetConnectionW")
 
-func _WNetGetConnection(drive uint16) (string, error) {
-	localName := []uint16{drive, ':', 0}
+func WNetGetConnectionUTF16s(localName []uint16) (string, error) {
 	var buffer [1024]uint16
 	size := uintptr(len(buffer))
-
 	rc, _, err := procWNetGetConnectionW.Call(
 		uintptr(unsafe.Pointer(&localName[0])),
 		uintptr(unsafe.Pointer(&buffer[0])),
@@ -25,6 +23,10 @@ func _WNetGetConnection(drive uint16) (string, error) {
 		return "", err
 	}
 	return windows.UTF16ToString(buffer[:]), nil
+}
+
+func WNetGetConnectionUTF16a(drive uint16) (string, error) {
+	return WNetGetConnectionUTF16s([]uint16{drive, ':', 0})
 }
 
 type NetDrive struct {
@@ -40,7 +42,7 @@ func GetNetDrives() ([]*NetDrive, error) {
 	result := []*NetDrive{}
 	for _, d := range drives {
 		if d.Type == windows.DRIVE_REMOTE {
-			path, err := _WNetGetConnection(uint16(d.Letter))
+			path, err := WNetGetConnectionUTF16a(uint16(d.Letter))
 			if err == nil {
 				node := &NetDrive{Letter: d.Letter, Remote: path}
 				result = append(result, node)

@@ -19,7 +19,7 @@ func main() {
 
 	for _, name := range machines {
 		println("machine:", name)
-		if fs,err := dos.NewFileServer(name) ; err == nil {
+		if fs, err := dos.NewFileServer(name); err == nil {
 			fs.Enum(func(node *dos.NetResource) bool {
 				println("  ", node.RemoteName())
 				return true
