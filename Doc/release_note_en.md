@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#371) Could not execute `foo.bar.exe` as `foo.bar`
+* diskfree shows UNCPath assigned network drive
 
 NYAGOS 4.4.4\_2
 ===============

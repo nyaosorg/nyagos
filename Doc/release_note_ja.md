@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * (#371) ファイル名に.を含む実行ファイルを参照できなかった
+* diskfree でネットワークドライブに割り当てられた UNC パスを表示
 
 NYAGOS 4.4.4\_2
 ===============
