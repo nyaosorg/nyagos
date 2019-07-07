@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.4\_3
+===============
+on Jul.07,2019
+
 * (#371) Could not execute `foo.bar.exe` as `foo.bar`
 * diskfree shows UNCPath assigned network drive
 
