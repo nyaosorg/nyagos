@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* Lua関数: `nyagos.dirname()` を実装
+
 NYAGOS 4.4.4\_3
 ===============
 (2019.06.14)

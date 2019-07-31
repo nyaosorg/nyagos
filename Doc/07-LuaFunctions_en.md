@@ -112,6 +112,11 @@ It returns the table which includes files matching the wildcard pattern(s).
 
 It makes parts of path-string join.
 
+### `path = nyagos.dirname('C:\\path\\to\\where')`
+
+It returns the directory-part of each argument.
+The sample code returns `C:\\path\\to`.
+
 ### `nyagos.bindkey("KEYNAME","FUNCNAME")`
 ### `nyagos.key["KEYNAME"] = "FUNCNAME"`
 ### `nyagos.key.KEYNAME = "FUNCNAME"`

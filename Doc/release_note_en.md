@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Implement `nyagos.dirname()` as a Lua function.
+
 NYAGOS 4.4.4\_3
 ===============
 on Jul.07,2019
