@@ -124,7 +124,7 @@ func CmdGetViewWidth(args []any_t) []any_t {
 }
 
 func CmdPathJoin(args []any_t) []any_t {
-	if len(args) < 0 {
+	if len(args) < 1 {
 		return []any_t{""}
 	}
 	path := fmt.Sprint(args[0])
@@ -133,6 +133,21 @@ func CmdPathJoin(args []any_t) []any_t {
 		path = filepath.Join(path, sub)
 	}
 	return []any_t{path}
+}
+
+func CmdDirName(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{""}
+	}
+	result := []any_t{}
+	for _, arg1 := range args {
+		if s, ok := arg1.(string); ok {
+			result = append(result, any_t(filepath.Dir(s)))
+		} else {
+			result = append(result, any_t(""))
+		}
+	}
+	return result
 }
 
 func CmdAccess(args []any_t) []any_t {
