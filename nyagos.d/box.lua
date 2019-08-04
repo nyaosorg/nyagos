@@ -25,24 +25,28 @@ nyagos.key.C_o = function(this)
         dict[fname] = path
     end
     nyagos.write("\n")
-    local result=nyagos.box(array)
-    if result then
-        result = dict[result]
-        if not result then
-            result = word
+    local result={ nyagos.box(array) }
+    if result and type(result)=='table' then
+        local tmp={}
+        for _,val in ipairs(result) do
+            local one=dict[val]
+            if one then
+                if string.find(one," ",1,true) then
+                    if string.find(one,"^~[\\/]") then
+                        one = '~"'..string.sub(one,2)..'"'
+                    else
+                        one = '"'..one..'"'
+                    end
+                end
+                tmp[#tmp+1] = one
+            end
         end
+        result = tmp
     else
-        result = word
+        result = { word }
     end
     this:call("REPAINT_ON_NEWLINE")
-    if string.find(result," ",1,true) then
-        if string.find(result,"^~[\\/]") then
-            result = '~"'..string.sub(result,2)..'"'
-        else
-            result = '"'..result..'"'
-        end
-    end
-    assert( this:replacefrom(pos,result) )
+    assert( this:replacefrom(pos,table.concat(result," ")) )
 end
 
 share.__dump_history = function()

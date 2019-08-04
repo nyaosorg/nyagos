@@ -76,7 +76,11 @@ func CmdBox(this *Param) []any_t {
 			sources = append(sources, fmt.Sprint(val))
 		}
 	}
-	return []any_t{box.Choice(sources, this.Term)}
+	values := make([]any_t, 0)
+	for _, s := range box.ChoiceMulti(sources, this.Term) {
+		values = append(values, s)
+	}
+	return values
 }
 
 func CmdResetCharWidth(args []any_t) []any_t {
