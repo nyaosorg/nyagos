@@ -2,6 +2,7 @@
 
 * Lua関数: `nyagos.dirname()` を実装
 * C-o で複数ファイル選択をサポート(Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up)
+* Alt-Y(引用符つきペースト)で、改行前後に引用符を置くようにした
 
 NYAGOS 4.4.4\_3
 ===============
