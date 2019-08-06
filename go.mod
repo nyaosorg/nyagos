@@ -17,7 +17,7 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/yuin/gopher-lua v0.0.0-20190514113301-1cd887cd7036
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
-	github.com/zetamatta/go-box/v2 v2.0.6
+	github.com/zetamatta/go-box/v2 v2.0.7
 	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
 	github.com/zetamatta/go-outputdebug v0.0.0-20190527151759-1278a2b3f557
@@ -27,5 +27,5 @@ require (
 	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80 // indirect
 	golang.org/x/sys v0.0.0-20190804053845-51ab0e2deafa
 	golang.org/x/text v0.3.2 // indirect
-	golang.org/x/tools v0.0.0-20190802220118-1d1727260058 // indirect
+	golang.org/x/tools v0.0.0-20190805222050-c5a2fd39b72a // indirect
 )

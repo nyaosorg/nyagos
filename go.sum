@@ -75,6 +75,8 @@ github.com/zetamatta/go-box/v2 v2.0.5 h1:YfIiAM9YAeWq55jXypg1DgqfUs6K1XlOmBKZdUx
 github.com/zetamatta/go-box/v2 v2.0.5/go.mod h1:lp22FglV7+xXQ11S7SV913YrBB0xhQNUlPg3f6UlIUw=
 github.com/zetamatta/go-box/v2 v2.0.6 h1:QsXRFxfIgweKdvDaSmtBfvAMg0gqCzUhTKCMtCVAI50=
 github.com/zetamatta/go-box/v2 v2.0.6/go.mod h1:lp22FglV7+xXQ11S7SV913YrBB0xhQNUlPg3f6UlIUw=
+github.com/zetamatta/go-box/v2 v2.0.7 h1:AFnhi+l0Z3w+vkJ8Qnv1g/euGS60ub9zxAUpIzp4R7Q=
+github.com/zetamatta/go-box/v2 v2.0.7/go.mod h1:lp22FglV7+xXQ11S7SV913YrBB0xhQNUlPg3f6UlIUw=
 github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab h1:IAbt9u76S8PWbx0lO42vIeeJ2iaUGU1dKCJt2ASri4Q=
 github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
 github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7 h1:cQIrw9+JKS/fwCwXABQC2T/j6aiZ6MwtwqOw/BDo4E4=
@@ -134,3 +136,4 @@ golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGm
 golang.org/x/tools v0.0.0-20190425001055-9e44c1c40307/go.mod h1:RgjU9mgBXZiqYHBnxXauZ1Gv1EHHAz9KjViQ78xBX0Q=
 golang.org/x/tools v0.0.0-20190525145741-7be61e1b0e51/go.mod h1:RgjU9mgBXZiqYHBnxXauZ1Gv1EHHAz9KjViQ78xBX0Q=
 golang.org/x/tools v0.0.0-20190802220118-1d1727260058/go.mod h1:jcCCGcm9btYwXyDqrUWc6MKQKKGJCWEQ3AfLSRIbEuI=
+golang.org/x/tools v0.0.0-20190805222050-c5a2fd39b72a/go.mod h1:jcCCGcm9btYwXyDqrUWc6MKQKKGJCWEQ3AfLSRIbEuI=
