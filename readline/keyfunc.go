@@ -235,7 +235,9 @@ func keyFuncPasteQuote(ctx context.Context, this *Buffer) Result {
 	}
 	if strings.IndexRune(text, ' ') >= 0 &&
 		!strings.HasPrefix(text, `"`) {
+
 		text = `"` + strings.Replace(text, `"`, `""`, -1) + `"`
+		text = strings.Replace(text, "\r\n", "\"\r\n\"", -1)
 	}
 	this.InsertAndRepaint(text)
 	return CONTINUE
