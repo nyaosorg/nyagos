@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * Lua関数: `nyagos.dirname()` を実装
+* C-o で複数ファイル選択をサポート(Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up)
 
 NYAGOS 4.4.4\_3
 ===============
