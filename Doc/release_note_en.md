@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 * Implement `nyagos.dirname()` as a Lua function.
 * C-o supports selecting multi-files by Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up
 * Alt-Y(paste with quotes) puts quotes around CRLF
+* C-o: append `\` after choices when they are directories.
 
 NYAGOS 4.4.4\_3
 ===============
