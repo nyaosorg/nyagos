@@ -21,6 +21,11 @@ nyagos.key.C_o = function(this)
         else
             fname=path
         end
+        local stat1 = nyagos.stat(path)
+        if stat1 and stat1.isdir then
+            path = path .. "\\"
+            fname = fname .. "\\"
+        end
         array[1+#array] = fname
         dict[fname] = path
     end
