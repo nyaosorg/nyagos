@@ -470,3 +470,16 @@ func CmdFields(args []any_t) []any_t {
 	fields := strings.Fields(fmt.Sprint(args[0]))
 	return []any_t{fields}
 }
+
+func CmdEnvAdd(args []any_t) []any_t {
+	if len(args) >= 1 {
+		list := make([]string, 1, len(args))
+		name := strings.ToUpper(fmt.Sprint(args[0]))
+		list[0] = os.Getenv(name)
+		for _, s := range args[1:] {
+			list = append(list, fmt.Sprint(s))
+		}
+		os.Setenv(name, nodos.JoinList(list...))
+	}
+	return []any_t{}
+}

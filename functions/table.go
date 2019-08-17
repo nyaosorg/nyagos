@@ -2,6 +2,7 @@ package functions
 
 var Table = map[string]func([]interface{}) []interface{}{
 	"access":         CmdAccess,
+	"envadd":         CmdEnvAdd,
 	"atou":           CmdAtoU,
 	"bitand":         CmdBitAnd,
 	"bitor":          CmdBitOr,
