@@ -5,36 +5,14 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/zetamatta/nyagos/completion"
+	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 	"github.com/zetamatta/nyagos/texts"
 )
-
-func shrink(values ...string) string {
-	hash := make(map[string]struct{})
-
-	var buffer strings.Builder
-	for _, value := range values {
-		for _, val1 := range filepath.SplitList(value) {
-			val1 = strings.TrimSpace(val1)
-			if len(val1) > 0 {
-				VAL1 := strings.ToUpper(val1)
-				if _, ok := hash[VAL1]; !ok {
-					hash[VAL1] = struct{}{}
-					if buffer.Len() > 0 {
-						buffer.WriteRune(os.PathListSeparator)
-					}
-					buffer.WriteString(val1)
-				}
-			}
-		}
-	}
-	return buffer.String()
-}
 
 var ReadStdinAsFile = false
 
@@ -168,12 +146,12 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				// set NAME+=VALUE
 				right := arg[eqlPos+1:]
 				left := arg[:eqlPos-1]
-				os.Setenv(left, shrink(os.Getenv(left), right))
+				os.Setenv(left, nodos.JoinList(os.Getenv(left), right))
 			} else if eqlPos >= 3 && arg[eqlPos-1] == '^' {
 				// set NAME^=VALUE
 				right := arg[eqlPos+1:]
 				left := arg[:eqlPos-1]
-				os.Setenv(left, shrink(right, os.Getenv(left)))
+				os.Setenv(left, nodos.JoinList(right, os.Getenv(left)))
 			} else if eqlPos+1 < len(arg) {
 				// set NAME=VALUE
 				os.Setenv(arg[:eqlPos], arg[eqlPos+1:])
