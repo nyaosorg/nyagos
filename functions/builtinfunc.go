@@ -130,8 +130,15 @@ func CmdGetViewWidth(args []any_t) []any_t {
 
 var rxEnv = regexp.MustCompile("%[^%]+%")
 
-func expandEnv(src string) string {
-	return rxEnv.ReplaceAllStringFunc(src, func(s string) string {
+func expandEnv(str string) string {
+	if len(str) >= 2 && str[0] == '~' && (str[1] == '\\' || str[1] == '/') {
+		home := os.Getenv("HOME")
+		if home == "" {
+			home = os.Getenv("USERPROFILE")
+		}
+		str = home + str[1:]
+	}
+	return rxEnv.ReplaceAllStringFunc(str, func(s string) string {
 		name := s[1 : len(s)-1]
 		return os.Getenv(name)
 	})
