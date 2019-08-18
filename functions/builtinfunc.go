@@ -483,3 +483,27 @@ func CmdEnvAdd(args []any_t) []any_t {
 	}
 	return []any_t{}
 }
+
+func CmdEnvDel(args []any_t) []any_t {
+	if len(args) >= 1 {
+		name := strings.ToUpper(fmt.Sprint(args[0]))
+		list := filepath.SplitList(os.Getenv(name))
+		newlist := make([]string, 0, len(list))
+
+		for _, e := range list {
+			E := strings.ToUpper(e)
+			doRemove := false
+			for _, substr := range args[1:] {
+				if strings.Contains(E, strings.ToUpper(fmt.Sprint(substr))) {
+					doRemove = true
+					break
+				}
+			}
+			if !doRemove {
+				newlist = append(newlist, e)
+			}
+		}
+		os.Setenv(name, strings.Join(newlist, ";"))
+	}
+	return []any_t{}
+}
