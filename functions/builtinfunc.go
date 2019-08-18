@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -127,13 +128,22 @@ func CmdGetViewWidth(args []any_t) []any_t {
 	return []any_t{width, height}
 }
 
+var rxEnv = regexp.MustCompile("%[^%]+%")
+
+func expandEnv(src string) string {
+	return rxEnv.ReplaceAllStringFunc(src, func(s string) string {
+		name := s[1 : len(s)-1]
+		return os.Getenv(name)
+	})
+}
+
 func CmdPathJoin(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{""}
 	}
-	path := fmt.Sprint(args[0])
+	path := expandEnv(fmt.Sprint(args[0]))
 	for i, i_ := 1, len(args); i < i_; i++ {
-		sub := fmt.Sprint(args[i])
+		sub := expandEnv(fmt.Sprint(args[i]))
 		path = filepath.Join(path, sub)
 	}
 	return []any_t{path}
@@ -477,7 +487,7 @@ func CmdEnvAdd(args []any_t) []any_t {
 		name := strings.ToUpper(fmt.Sprint(args[0]))
 		list[0] = os.Getenv(name)
 		for _, s := range args[1:] {
-			list = append(list, fmt.Sprint(s))
+			list = append(list, expandEnv(fmt.Sprint(s)))
 		}
 		os.Setenv(name, nodos.JoinList(list...))
 	}
