@@ -4,6 +4,8 @@
 * C-o で複数ファイル選択をサポート(Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up)
 * Alt-Y(引用符つきペースト)で、改行前後に引用符を置くようにした
 * C-o で表示される選択肢がディレクトリの時、末尾に \ をつけるようにした。
+* `nyagos.envadd("ENVNAME","DIR")` と `nyagos.envdel("ENVNAME","PATTERN")` を実装
+* `nyagos.pathjoin()` で `%ENVNAME%` と `~\` を展開するようにした
 
 NYAGOS 4.4.4\_3
 ===============

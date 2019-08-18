@@ -119,6 +119,41 @@ UTF8文字列を、現在のコードページの文字列に変換します。
 
 パスのディレクトリ部分を返します。例では `C:\\path\\to` が得られます。
 
+### `nyagos.envadd('ENVNAME','PATH'...)
+
+`nyagos.envadd("PATH","C:\\path\\to")` は
+`set PATH=%PATH%;C:\path\to` と等価です。
+ただし、%PATH% が既に `C:\path\to` を含んでいる時、
+`C:\path\to` が存在しない場合は除きます。
+
+例:
+
+    nyagos.envadd("PATH",
+        "C:\\go\\bin",
+        "C:\\TDM-GCC-64\\bin",
+        "%ProgramFiles%\\Git\\bin",
+        "%ProgramFiles%\\Git\\cmd",
+        "%ProgramFiles(x86)%\\Git\\bin",
+        "%ProgramFiles(x86)%\\Git\\cmd",
+        "%ProgramFiles%\\Subversion\\bin",
+        "%ProgramFiles(x86)%\\Subversion\\bin",
+        "%VBOX_MSI_INSTALL_PATH%",
+        "~\\Share\\bin",
+        "~\\Share\\cmds")
+
+### `nyagos.envdel('ENVNAME','PATTERN')
+
+ENVNAME が示す環境変数の中から PATTERN を含む要素を
+削除します。
+
+例：
+
+    nyagos.envdel("PATH",
+        "Oracle","Lenovo","Skype","SQL Server",
+        "TypeScript","WindowsApps",
+        "Wbem","dotnet")
+
+
 ### `nyagos.bindkey("キー名","機能名")`
 ### `nyagos.key["キー名"] = "機能名"`
 ### `nyagos.key.キー名 = "機能名"`

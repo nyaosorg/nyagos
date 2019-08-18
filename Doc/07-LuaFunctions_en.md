@@ -110,12 +110,46 @@ It returns the table which includes files matching the wildcard pattern(s).
 
 ### `path = nyagos.pathjoin('path','to','where'...)`
 
-It makes parts of path-string join.
+It makes parts of path-string join. It expands %ENVNAME% and ~/
 
 ### `path = nyagos.dirname('C:\\path\\to\\where')`
 
 It returns the directory-part of each argument.
 The sample code returns `C:\\path\\to`.
+
+### `nyagos.envadd('ENVNAME','PATH'...)
+
+`nyagos.envadd("PATH","C:\\path\\to")` equals to 
+`set PATH=%PATH%;C:\path\to` except when %PATH%
+already contains `C:\path\to` or `C:\path\to` 
+does not exist.
+
+For example:
+
+    nyagos.envadd("PATH",
+        "C:\\go\\bin",
+        "C:\\TDM-GCC-64\\bin",
+        "%ProgramFiles%\\Git\\bin",
+        "%ProgramFiles%\\Git\\cmd",
+        "%ProgramFiles(x86)%\\Git\\bin",
+        "%ProgramFiles(x86)%\\Git\\cmd",
+        "%ProgramFiles%\\Subversion\\bin",
+        "%ProgramFiles(x86)%\\Subversion\\bin",
+        "%VBOX_MSI_INSTALL_PATH%",
+        "~\\Share\\bin",
+        "~\\Share\\cmds")
+
+### `nyagos.envdel('ENVNAME','PATTERN')`
+
+It removes the field which contains PATTERN
+from the environment variable pointed by ENVNAME.
+
+For example:
+
+    nyagos.envdel("PATH",
+        "Oracle","Lenovo","Skype","SQL Server",
+        "TypeScript","WindowsApps",
+        "Wbem","dotnet")
 
 ### `nyagos.bindkey("KEYNAME","FUNCNAME")`
 ### `nyagos.key["KEYNAME"] = "FUNCNAME"`
