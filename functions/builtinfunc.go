@@ -520,7 +520,7 @@ func CmdEnvDel(args []any_t) []any_t {
 				newlist = append(newlist, e)
 			}
 		}
-		os.Setenv(name, strings.Join(newlist, ";"))
+		os.Setenv(name, strings.Join(newlist, string(os.PathListSeparator)))
 	}
 	return []any_t{}
 }
