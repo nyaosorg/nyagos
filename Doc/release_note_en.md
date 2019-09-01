@@ -3,9 +3,9 @@ English / [Japanese](release_note_ja.md)
 * Implement `nyagos.dirname()` as a Lua function.
 * C-o supports selecting multi-files by Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up
 * Alt-Y(paste with quotes) puts quotes around CRLF
-* C-o: append `\` after choices when they are directories.
+* C-o: append `\`(on Windows) or `/`(on Linux) after choices when they are directories.
 * Implement `nyagos.envadd("ENVNAME","DIR")`,`nyagos.envdel("ENVNAME","PATTERN")`
-* `nyagos.pathjoin()` now expands `%ENVNAME%` and `~\`
+* `nyagos.pathjoin()` now expands `%ENVNAME%` and `~\`,`~/`
 
 NYAGOS 4.4.4\_3
 ===============
