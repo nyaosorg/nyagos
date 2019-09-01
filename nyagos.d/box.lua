@@ -14,7 +14,7 @@ nyagos.key.C_o = function(this)
     local dict = {}
     local array = {}
     for _,path in ipairs(list) do
-        local index=string.find(path,"[^\\]+$")
+        local index=string.find(path,"[^\\/]+$")
         local fname
         if index then
             fname=string.sub(path,index)
@@ -23,8 +23,8 @@ nyagos.key.C_o = function(this)
         end
         local stat1 = nyagos.stat(path)
         if stat1 and stat1.isdir then
-            path = path .. "\\"
-            fname = fname .. "\\"
+            path = path .. nyagos.pathseparator
+            fname = fname .. nyagos.pathseparator
         end
         array[1+#array] = fname
         dict[fname] = path
