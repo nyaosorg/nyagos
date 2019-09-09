@@ -25,11 +25,13 @@ func cmdBox(ctx context.Context, cmd Param) (int, error) {
 	}
 
 	console := bufio.NewWriter(cmd.Term())
-	result := box.Choice(
+	result := box.ChoiceMulti(
 		list,
 		console)
 	fmt.Fprintln(console)
 	console.Flush()
-	fmt.Fprintln(cmd.Out(), result)
+	for _, s := range result {
+		fmt.Fprintln(cmd.Out(), s)
+	}
 	return 0, nil
 }
