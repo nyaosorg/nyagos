@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix that built-in `box` command did not support selecting multi-items.
+
 NYAGOS 4.4.5\_0
 ===============
 on Sep.01,2019
