@@ -2,7 +2,6 @@ package nodos
 
 import (
 	"fmt"
-	"runtime"
 	"time"
 	"unsafe"
 
@@ -43,18 +42,6 @@ func progressPrint(total, transfer uint64, this *progressCopy) {
 	}
 }
 
-func progressPrint64bit(total, transfer, c, d, e, f, g, h, this uintptr) uintptr {
-	progressPrint(uint64(total), uint64(transfer), (*progressCopy)(unsafe.Pointer(this)))
-	return 0
-}
-
-func progressPrint32bit(totalL, totalH, transferL, transferH, c1, c2, d1, d2, e, f, g, h, this uintptr) uintptr {
-	progressPrint(uint64(totalL)|(uint64(totalH)<<32),
-		uint64(transferL)|(uint64(transferH)<<32),
-		(*progressCopy)(unsafe.Pointer(this)))
-	return 0
-}
-
 // Copy calls Win32's CopyFile API.
 func copyFile(src, dst string, isFailIfExists bool) error {
 	_src, err := windows.UTF16PtrFromString(src)
@@ -75,23 +62,13 @@ func copyFile(src, dst string, isFailIfExists bool) error {
 	var cancel uintptr
 	var rc uintptr
 
-	if runtime.GOARCH == "386" {
-		rc, _, err = procCopyFileW.Call(
-			uintptr(unsafe.Pointer(_src)),
-			uintptr(unsafe.Pointer(_dst)),
-			windows.NewCallbackCDecl(progressPrint32bit),
-			uintptr(unsafe.Pointer(&progressCopy1)),
-			uintptr(unsafe.Pointer(&cancel)),
-			flag)
-	} else {
-		rc, _, err = procCopyFileW.Call(
-			uintptr(unsafe.Pointer(_src)),
-			uintptr(unsafe.Pointer(_dst)),
-			windows.NewCallbackCDecl(progressPrint64bit),
-			uintptr(unsafe.Pointer(&progressCopy1)),
-			uintptr(unsafe.Pointer(&cancel)),
-			flag)
-	}
+	rc, _, err = procCopyFileW.Call(
+		uintptr(unsafe.Pointer(_src)),
+		uintptr(unsafe.Pointer(_dst)),
+		windows.NewCallbackCDecl(progressPrintCallBack),
+		uintptr(unsafe.Pointer(&progressCopy1)),
+		uintptr(unsafe.Pointer(&cancel)),
+		flag)
 
 	if progressCopy1.run {
 		fmt.Printf("%*s\r", progressCopy1.n, "")
