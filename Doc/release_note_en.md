@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * Fix that built-in `box` command did not support selecting multi-items.
+* Do not move cursor at drawing [PID] when process starts or shutdowns
 
 NYAGOS 4.4.5\_0
 ===============
