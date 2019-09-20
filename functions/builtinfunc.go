@@ -184,7 +184,7 @@ func CmdAccess(args []any_t) []any_t {
 	if defined.DBG {
 		fmt.Fprintf(os.Stderr, "given mode==%o\n", mode)
 	}
-	fi, err := os.Stat(path)
+	fi, err := os.Stat(expandEnv(path))
 
 	var result bool
 	if err != nil || fi == nil {
@@ -210,7 +210,7 @@ func CmdStat(args []any_t) []any_t {
 	if len(args) < 1 {
 		return []any_t{nil, TooFewArguments}
 	}
-	path := fmt.Sprint(args[0])
+	path := expandEnv(fmt.Sprint(args[0]))
 	var stat os.FileInfo
 	var path_ string
 	if len(path) > 0 && path[len(path)-1] == '\\' {
