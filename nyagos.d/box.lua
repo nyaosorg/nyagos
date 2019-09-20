@@ -38,9 +38,19 @@ nyagos.key.C_o = function(this)
             if one then
                 if string.find(one," ",1,true) then
                     if string.find(one,"^~[\\/]") then
-                        one = '~"'..string.sub(one,2)..'"'
+                        if string.sub(one,string.len(one)) == "\\" then
+                            -- dont put quotation after \ --
+                            one = '~"'..string.sub(one,2)
+                        else
+                            one = '~"'..string.sub(one,2)..'"'
+                        end
                     else
-                        one = '"'..one..'"'
+                        if string.sub(one,string.len(one)) == "\\" then
+                            -- dont put quotation after \ --
+                            one = '"'..one
+                        else
+                            one = '"'..one..'"'
+                        end
                     end
                 end
                 tmp[#tmp+1] = one
