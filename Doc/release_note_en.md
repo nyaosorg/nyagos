@@ -2,6 +2,7 @@ English / [Japanese](release_note_ja.md)
 
 * Fix that built-in `box` command did not support selecting multi-items.
 * Do not move cursor at drawing [PID] when process starts or shutdowns
+* Ctrl-O: do not append a quotation after last backslach (NG: `"Program Files\"` -> OK:`"Program Files\`)
 
 NYAGOS 4.4.5\_0
 ===============
