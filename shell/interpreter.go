@@ -368,6 +368,12 @@ func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, erro
 	return sh.Spawnlpe(ctx, args, rawargs, nil)
 }
 
+func putbs(n int) {
+	for ; n > 0; n-- {
+		os.Stderr.Write([]byte{'\b'})
+	}
+}
+
 func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, finalerr error) {
 	if defined.DBG {
 		print("Interpret('", text, "')\n")
@@ -461,19 +467,23 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				} else {
 					cmd.UseShellExecute = true
 					cmd.OnBackExec = func(pid int) {
-						fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+						n, _ := fmt.Fprintf(os.Stderr, "[%d]", pid)
+						putbs(n)
 					}
 					cmd.OnBackDone = func(pid int) {
-						fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+						n, _ := fmt.Fprintf(os.Stderr, "[%d]+ Done", pid)
+						putbs(n)
 					}
 				}
 			}
 			if i == len(pipeline)-1 && state.Term == "&" {
 				cmd.OnBackExec = func(pid int) {
-					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+					n, _ := fmt.Fprintf(os.Stderr, "[%d]", pid)
+					putbs(n)
 				}
 				cmd.OnBackDone = func(pid int) {
-					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+					n, _ := fmt.Fprintf(os.Stderr, "[%d]+ Done", pid)
+					putbs(n)
 				}
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
