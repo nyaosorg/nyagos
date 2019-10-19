@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.5\_1
+===============
+(2019.10.20)
+
 * 内蔵boxコマンドが複数アイテム選択に対応していなかった不具合を修正した
 * プロセスを開始終了させる時、[PID]表示する際にカーソルを移動させないようにした
 * Ctrl-O: 最後の \ の後に引用符を不可しないようにした。(NG: `"Program Files\"` -> OK:`"Program Files\`)
