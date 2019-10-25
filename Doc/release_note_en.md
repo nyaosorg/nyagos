@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#375) Fix: `~randomstring` causes panic
+
 NYAGOS 4.4.5\_1
 ===============
 on Oct.20,2019
