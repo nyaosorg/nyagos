@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#375) Fix: `~randomstring` causes panic
+* (#374) Fix: `ls -l` for future timestamp's files do not print year.
 
 NYAGOS 4.4.5\_1
 ===============

@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * (#375) `~randomstring` でクラッシュする不具合を修正
+* (#374) 未来のタイムスタンプのファイルの`ls -l`で西暦がでなかった不具合を修正
 
 NYAGOS 4.4.5\_1
 ===============
