@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.5\_2
+===============
+on Oct.26,2019
+
 * (#375) Fix: `~randomstring` causes panic
 * (#374) Fix: `ls -l` for future timestamp's files do not print year.
 
