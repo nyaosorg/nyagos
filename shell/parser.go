@@ -100,10 +100,11 @@ func string2word(source_ string, removeQuote bool) string {
 		if TildeExpansion && ch == '~' && isSpace(lastchar) && quoteNow == NOTQUOTED {
 			var name strings.Builder
 			var undo strings.Builder
+			undo.WriteByte('~')
 			for {
 				ch, _, err = source.ReadRune()
 				if err != nil {
-					undo.WriteRune(ch)
+					//undo.WriteRune(ch)
 					break
 				} else if ch == '"' {
 					undo.WriteByte('"')
@@ -135,7 +136,7 @@ func string2word(source_ string, removeQuote bool) string {
 					}
 					undoStr := undo.String()
 					buffer.WriteString(undoStr)
-					lastchar = rune(nameStr[len(undoStr)-1])
+					lastchar = rune(undoStr[len(undoStr)-1])
 				}
 				continue
 			}
