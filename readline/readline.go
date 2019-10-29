@@ -217,6 +217,11 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 	if session.History == nil {
 		session.History = new(EmptyHistory)
 	}
+	if session.LineFeed == nil {
+		session.LineFeed = func(Result) {
+			session.Out.WriteByte('\n')
+		}
+	}
 	this := Buffer{
 		Editor:         session,
 		Buffer:         make([]rune, 0, 20),
@@ -300,7 +305,8 @@ func (session *Editor) ReadLine(ctx context.Context) (string, error) {
 		}
 		rc := f.Call(ctx, &this)
 		if rc != CONTINUE {
-			this.Out.WriteByte('\n')
+			this.LineFeed(rc)
+
 			if !cursorOnSwitch {
 				io.WriteString(this.Out, ansiCursorOn)
 			}

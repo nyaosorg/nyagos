@@ -12,12 +12,13 @@ type IHistory interface {
 }
 
 type Editor struct {
-	History IHistory
-	Writer  io.Writer
-	Out     *bufio.Writer
-	Prompt  func() (int, error)
-	Default string
-	Cursor  int
+	History  IHistory
+	Writer   io.Writer
+	Out      *bufio.Writer
+	Prompt   func() (int, error)
+	Default  string
+	Cursor   int
+	LineFeed func(Result)
 }
 
 func keyFuncHistoryUp(ctx context.Context, this *Buffer) Result {
