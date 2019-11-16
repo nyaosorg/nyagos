@@ -31,7 +31,7 @@ func getCachePath() string {
 	if err != nil {
 		return ""
 	}
-	dir = filepath.Join(dir, "nyaos.org")
+	dir = filepath.Join(dir, "nyaos_org")
 	os.MkdirAll(dir, 0666)
 	return filepath.Join(dir, "computers.txt")
 }
