@@ -1,6 +1,6 @@
 package readline
 
-import "github.com/mattn/go-runewidth"
+import "github.com/zetamatta/go-termgap/hybrid"
 
 type width_t int
 
@@ -32,7 +32,7 @@ func GetCharWidth(n rune) width_t {
 		if n > 0x10000 && !SurrogatePairOk {
 			width = lenEscaped(n)
 		} else {
-			width = width_t(runewidth.RuneWidth(n))
+			width = width_t(hybrid.RuneWidth(n))
 			if width == 0 {
 				width = lenEscaped(n)
 			}
