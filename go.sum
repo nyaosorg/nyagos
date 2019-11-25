@@ -87,6 +87,8 @@ github.com/zetamatta/go-outputdebug v0.0.0-20190407163505-b4470600349e h1:9kr0il
 github.com/zetamatta/go-outputdebug v0.0.0-20190407163505-b4470600349e/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
 github.com/zetamatta/go-outputdebug v0.0.0-20190527151759-1278a2b3f557 h1:3Sm9lmfDXnkww6tLE3iUIujhwsHNj36IJnML5r7LIwE=
 github.com/zetamatta/go-outputdebug v0.0.0-20190527151759-1278a2b3f557/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
+github.com/zetamatta/go-termgap v0.0.0-20191116134100-b5ac4082151b h1:f63bFp9fjYdj7JMUvWQmYyDtp3poLm/BvP76XLZpMKo=
+github.com/zetamatta/go-termgap v0.0.0-20191116134100-b5ac4082151b/go.mod h1:ATNASMrnRf1UAzqy9vig5novUc3galqD0rjuT8zspV4=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=

@@ -21,6 +21,7 @@ require (
 	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
 	github.com/zetamatta/go-outputdebug v0.0.0-20190527151759-1278a2b3f557
+	github.com/zetamatta/go-termgap v0.0.0-20191116134100-b5ac4082151b
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4 // indirect
