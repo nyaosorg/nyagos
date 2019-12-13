@@ -22,7 +22,7 @@ const GoSource = "const.go"
 
 var clean = flag.Bool("c", false, "clean output")
 var debug = flag.Bool("d", false, "debug flag")
-var packageName = flag.String("p", "main", "package name")
+var packageName = os.Getenv("GOPACKAGE")
 
 func makeCSource(csrcname string, headers []string, vars []string) {
 	fd, err := os.Create(csrcname)
@@ -55,7 +55,7 @@ void p(const char *name,double n){
 int main()
 {
 `)
-	fmt.Fprintln(fd, `    printf("package `+*packageName+`\n\n");`)
+	fmt.Fprintln(fd, `    printf("package `+packageName+`\n\n");`)
 
 	for _, name1 := range vars {
 		fmt.Fprintf(fd, "    p(\"%s\",%s);\n", name1, name1)
