@@ -3,11 +3,14 @@
 package main
 
 import (
+	"bufio"
+	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
+	"strconv"
 	"strings"
 )
 
@@ -17,8 +20,7 @@ const CSource = "makeconst.cpp"
 // CC is the Compiler command
 const CC = "gcc"
 
-// GoSource is the filename of the temporary file *.go
-const GoSource = "const.go"
+var GoSource = flag.String("o", "const.go", "go-source-filename to output constants")
 
 var clean = flag.Bool("c", false, "clean output")
 var debug = flag.Bool("d", false, "debug flag")
@@ -88,7 +90,7 @@ func nameOfExecutable() string {
 }
 
 func aexe() (string, error) {
-	constC, err := os.Create(GoSource)
+	constC, err := os.Create(*GoSource)
 	if err != nil {
 		return "", err
 	}
@@ -109,7 +111,7 @@ func gofmt() error {
 	gofmt.Args = []string{
 		"go",
 		"fmt",
-		GoSource,
+		*GoSource,
 	}
 	fn, err := exec.LookPath("go")
 	if err != nil {
@@ -121,8 +123,80 @@ func gofmt() error {
 	return gofmt.Run()
 }
 
+func readGoGenerateParameter() ([]string, error) {
+	gofile := os.Getenv("GOFILE")
+	if gofile == "" {
+		return nil, errors.New("$GOFILE is not defined. Use `go generate`")
+	}
+	fd, err := os.Open(gofile)
+	if err != nil {
+		return nil, err
+	}
+	goline := os.Getenv("GOLINE")
+	if goline == "" {
+		return nil, errors.New("$GOLINE is not defined. Use `go generate`")
+	}
+	lnum, err := strconv.Atoi(goline)
+	if err != nil {
+		return nil, fmt.Errorf("$GOLINE: %s", err.Error())
+	}
+	sc := bufio.NewScanner(fd)
+	var tokens []string
+	for sc.Scan() {
+		lnum--
+		if lnum >= 0 {
+			continue
+		}
+		text := sc.Text()
+		if !strings.HasPrefix(text, "//") {
+			break
+		}
+		fields := strings.Fields(text[2:])
+		if len(fields) <= 0 {
+			break
+		}
+		for _, arg1 := range fields {
+			tokens = append(tokens, arg1)
+		}
+	}
+	return tokens, nil
+}
+
 func main1() error {
-	err := compile()
+	flag.Parse()
+
+	if *clean {
+		os.Remove(CSource)
+		os.Remove(nameOfExecutable())
+		os.Remove(*GoSource)
+		return nil
+	}
+	goParams, err := readGoGenerateParameter()
+	if err != nil {
+		return err
+	}
+	headers := []string{"<cstdio>"}
+	if runtime.GOOS == "windows" {
+		headers = append(headers, "<windows.h>")
+	}
+	vars := make([]string, 0)
+	for _, s := range goParams {
+		if len(s) > 0 && s[0] == '<' {
+			headers = append(headers, s)
+		} else if strings.HasSuffix(s, ".h") {
+			headers = append(headers, fmt.Sprintf(`"%s"`, s))
+		} else {
+			vars = append(vars, s)
+		}
+	}
+
+	makeCSource(CSource, headers, vars)
+
+	if !*debug {
+		defer os.Remove(CSource)
+	}
+
+	err = compile()
 	if err != nil {
 		return err
 	}
@@ -139,35 +213,6 @@ func main1() error {
 }
 
 func main() {
-	flag.Parse()
-
-	if *clean {
-		os.Remove(CSource)
-		os.Remove(nameOfExecutable())
-		os.Remove(GoSource)
-		return
-	}
-
-	headers := []string{"<cstdio>"}
-	if runtime.GOOS == "windows" {
-		headers = append(headers, "<windows.h>")
-	}
-	vars := make([]string, 0)
-
-	for _, arg1 := range flag.Args() {
-		if len(arg1) > 0 && arg1[0] == '<' {
-			headers = append(headers, arg1)
-		} else if strings.HasSuffix(arg1, ".h") {
-			headers = append(headers, fmt.Sprintf(`"%s"`, arg1))
-		} else {
-			vars = append(vars, arg1)
-		}
-	}
-	makeCSource(CSource, headers, vars)
-
-	if !*debug {
-		defer os.Remove(CSource)
-	}
 	if err := main1(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return
