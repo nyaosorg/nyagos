@@ -88,24 +88,14 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 
 		sigint := make(chan os.Signal)
 		signal.Notify(sigint, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-		quit := make(chan struct{})
 
-		go func(sigint_ chan os.Signal, quit_ chan struct{}, cancel_ func()) {
-			for {
-				select {
-				case <-sigint_:
-					cancel_()
-					<-quit
-					return
-				case <-quit:
-					cancel_()
-					return
-				}
-			}
-		}(sigint, quit, cancel)
+		go func(sig chan os.Signal, canc func()) {
+			<-sig // wait for receiving signal or channel closed
+			canc()
+		}(sigint, cancel)
+
 		rc, err := sh.Interpret(ctx, line)
 		signal.Stop(sigint)
-		close(quit)
 		close(sigint)
 
 		if err != nil {
