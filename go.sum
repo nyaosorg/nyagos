@@ -81,6 +81,8 @@ github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab h1:IAbt9u76S
 github.com/zetamatta/go-findfile v0.0.0-20190228141917-8394705d2bab/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
 github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7 h1:cQIrw9+JKS/fwCwXABQC2T/j6aiZ6MwtwqOw/BDo4E4=
 github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
+github.com/zetamatta/go-importconst v0.0.0-20191214082529-c6bfe45feaf3 h1:HnxgE4qyjdKIjN+OX9HwC5yT1c2Hu3ZBhiwbV4ID0Vs=
+github.com/zetamatta/go-importconst v0.0.0-20191214082529-c6bfe45feaf3/go.mod h1:p+vv8o/hJPBx65neeDfDzpUmGhDq0Rr3ze/XkfKqSKE=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n50N7PRFw06uZq3KBYye4wq/t860QEQQXNJVWppdOgc=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
 github.com/zetamatta/go-outputdebug v0.0.0-20190407163505-b4470600349e h1:9kr0iljvnfnpjtrmNIjRfJEZpovWJIrL8xlbOQJdvbo=

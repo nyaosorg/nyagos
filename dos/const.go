@@ -1,6 +1,7 @@
 package dos
 
-//go:generate go run importconst_run.go
+//go:generate go run github.com/zetamatta/go-importconst
+//	<windows.h>
 //	RESOURCE_CONNECTED
 //	RESOURCE_CONTEXT
 //	RESOURCE_GLOBALNET

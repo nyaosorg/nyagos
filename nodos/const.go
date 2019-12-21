@@ -1,6 +1,7 @@
 package nodos
 
-//go:generate go run ../dos/importconst_run.go
+//go:generate go run github.com/zetamatta/go-importconst
+//	<windows.h>
 //	COINIT_APARTMENTTHREADED
 //	COINIT_MULTITHREADED
 //	COINIT_DISABLE_OLE1DDE
