@@ -13,6 +13,13 @@ NYAGOS is the commandline-shell written with the Programming Language GO and Lua
 
 <img src="./demo.gif" alt="demo-animation" />
 
+There are some shells in Windows compatible with ones in UNIX.<br />
+But, most of them do not support Windows's traditional PATH-style
+like `X:\DIR\FILE.EXT` though a lot of applications need them
+as arguments.
+
+So, I create a new shell like below:
+
 * UNIX-Like Shell
   * Keybinding like Emacs.
   * History (Ctrl-P and !-mark)
