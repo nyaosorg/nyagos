@@ -9,25 +9,14 @@ import (
 var procWNetAddConnection2W = mpr.NewProc("WNetAddConnection2W")
 var procWNetCancelConnection = mpr.NewProc("WNetCancelConnection2W")
 
-type _NetResource struct {
-	Scope       uint32
-	Type        uint32
-	DisplayType uint32
-	Usage       uint32
-	LocalName   *uint16
-	RemoteName  *uint16
-	Comment     uintptr
-	Provider    uintptr
-}
-
 func WNetAddConnection2(remote, local, user, pass string) (err error) {
-	var rs _NetResource
+	var rs NetResource
 
-	rs.LocalName, err = windows.UTF16PtrFromString(local)
+	rs.localName, err = windows.UTF16PtrFromString(local)
 	if err != nil {
 		return
 	}
-	rs.RemoteName, err = windows.UTF16PtrFromString(remote)
+	rs.remoteName, err = windows.UTF16PtrFromString(remote)
 	if err != nil {
 		return
 	}
