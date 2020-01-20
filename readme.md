@@ -121,6 +121,7 @@ Acknowledgement
 * [tostos5963](https://github.com/tostos5963)
 * [sambatriste](https://github.com/sambatriste)
 * [terepanda](https://github.com/terepanda)
+* [Takmg](https://github.com/Takmg)
 
 Author
 ------
