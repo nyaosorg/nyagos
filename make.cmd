@@ -80,52 +80,9 @@ function Go-Fmt{
 }
 
 function Make-SysO($version) {
-    Download-Exe "github.com/josephspurrier/goversioninfo/cmd/goversioninfo" "goversioninfo.exe"
-    if( $version -match "^\d+[\._]\d+[\._]\d+[\._]\d+$" ){
-        $v = $version.Split("[\._]")
-    }else{
-        $v = @(0,0,0,0)
-        if( $version -eq $null -or $version -eq "" ){
-            $version = "0.0.0_0"
-        }
-    }
-    Write-Verbose "version=$version"
-
-    .\goversioninfo.exe `
-        "-file-version=$version" `
-        "-product-version=$version" `
-        "-icon=Etc\nyagos.ico" `
-        ("-ver-major=" + $v[0]) `
-        ("-ver-minor=" + $v[1]) `
-        ("-ver-patch=" + $v[2]) `
-        ("-ver-build=" + $v[3]) `
-        ("-product-ver-major=" + $v[0]) `
-        ("-product-ver-minor=" + $v[1]) `
-        ("-product-ver-patch=" + $v[2]) `
-        ("-product-ver-build=" + $v[3]) `
-        "-o" nyagos.syso `
-        Etc\versioninfo.json
-}
-
-
-function Download-Exe($url,$exename){
-    if( Test-Path $exename ){
-        Write-Verbose "Found $exename"
-        return
-    }
-    Write-Verbose "$exename not found."
-    $private:GO111MODULE = $env:GO111MODULE
-    $env:GO111MODULE = "off"
-    Write-Verbose "$ go get -d $url"
-    go get -d $url
-    $workdir = (Join-Path (Join-Path (go env GOPATH).Split(";")[0] "src") $url)
-    $cwd = (Get-Location)
-    Set-Location $workdir
-    Write-Verbose "$ go build $exename on $workdir"
-    go build
-    Do-Copy $exename $cwd
-    Set-Location $cwd
-    $env:GO111MODULE = $private:GO111MODULE
+    pushd Etc
+    go generate
+    popd
 }
 
 function Build([string]$version="",[string]$tags="",[string]$target="") {

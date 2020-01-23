@@ -3,9 +3,11 @@ module github.com/zetamatta/nyagos
 require (
 	github.com/BixData/gluabit32 v0.0.0-20190708203852-cb1e79982fc9
 	github.com/Microsoft/go-winio v0.4.13
+	github.com/akavel/rsrc v0.8.0 // indirect
 	github.com/atotto/clipboard v0.1.2
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.4
+	github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd // indirect
 	github.com/mattn/go-colorable v0.1.2
 	github.com/mattn/go-isatty v0.0.8
 	github.com/mattn/go-runewidth v0.0.4
