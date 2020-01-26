@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 	"unicode"
@@ -83,6 +84,13 @@ var CustomCompletion = map[string]CustomCompleter{
 	"taskkill": &customComplete{Func: completionTaskKill, Name: "Built-in `taskkill` completer"},
 }
 
+func lookupCustomCompletion(s string) (CustomCompleter, bool) {
+	s = strings.ToLower(s)
+	s = s[:len(s)-len(filepath.Ext(s))]
+	f, ok := CustomCompletion[s]
+	return f, ok
+}
+
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, func(), error) {
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
@@ -143,7 +151,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 
 		ua := UNC_PROMPT
 		for {
-			if f, ok := CustomCompletion[strings.ToLower(args[0])]; ok {
+			if f, ok := lookupCustomCompletion(args[0]); ok {
 				rv.List, err = f.Complete(ctx, ua, args)
 				if rv.List != nil && err == nil {
 					replace = true
