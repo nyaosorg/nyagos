@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * UNCパスのキャッシュを `~/appdata/local/nyaos.org/computers.txt` ではなく `~/appdata/local/nyaos_org/computers.txt` にセーブするようにした ( 他の機能は `nyaos_org` フォルダーを使っているため )
+* サブコマンド補完(`complete_for`)では拡張子は無視してコマンドのマッチングを行うようにした
 
 NYAGOS 4.4.5\_2
 ===============

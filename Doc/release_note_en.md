@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * UNC Path Cache is saved to `~/appdata/local/nyaos_org/computers.txt` rather than `~/appdata/local/nyaos.org/computers.txt` because other features use `nyaos_org` folder.
+* Sub command completion(`complete_for`) now matches command-name ignoring its suffix
 
 NYAGOS 4.4.5\_2
 ===============
