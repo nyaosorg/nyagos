@@ -114,6 +114,10 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
     Write-Verbose "$ go build -o '$target'"
     go build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
+        where.exe upx 2>&1 | Out-Null
+        if ( $LastExitCode -eq 0 ){
+            upx -9 $target
+        }
         Do-Copy $target (Join-Path "." ([System.IO.Path]::GetFileName($target)))
     }
     $env:GOARCH = $saveGOARCH
