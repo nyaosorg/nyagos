@@ -116,8 +116,11 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
     if( $LastExitCode -eq 0 ){
         where.exe upx 2>&1 | Out-Null
         if ( $LastExitCode -eq 0 ){
-            upx -9 $target
+            upx.exe -9 $target
+        }else{
+            $global:LastExitCode = 0
         }
+
         Do-Copy $target (Join-Path "." ([System.IO.Path]::GetFileName($target)))
     }
     $env:GOARCH = $saveGOARCH
