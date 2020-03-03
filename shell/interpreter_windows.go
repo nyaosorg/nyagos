@@ -46,7 +46,11 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		}
 		return 0, err
 	}
-	if closer, err := dos.ChangeConsoleMode(windows.Stdin, dos.ModeSet(0x7)); err == nil {
+	if closer, err := dos.ChangeConsoleMode(windows.Stdin,
+		dos.ModeSet(
+			windows.ENABLE_PROCESSED_INPUT|
+				windows.ENABLE_LINE_INPUT|
+				windows.ENABLE_ECHO_INPUT)); err == nil {
 		defer closer()
 	}
 	if closer, err := dos.ChangeConsoleMode(windows.Stdout); err == nil {
