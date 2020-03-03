@@ -37,15 +37,3 @@ func ChangeConsoleMode(console windows.Handle, ops ...ModeOp) (func(), error) {
 	}
 	return restore, err
 }
-
-const enableVirtualTerminalProcessing uint32 = 0x0004
-
-// EnableStdoutVirtualTerminalProcessing enables Windows10's native ESCAPE SEQUENCE support on STDOUT
-func EnableStdoutVirtualTerminalProcessing() (func(), error) {
-	return ChangeConsoleMode(windows.Stdout, ModeSet(enableVirtualTerminalProcessing))
-}
-
-// EnableStderrVirtualTerminalProcessing enables Windows10's native ESCAPE SEQUENCE support on STDERR
-func EnableStderrVirtualTerminalProcessing() (func(), error) {
-	return ChangeConsoleMode(windows.Stderr, ModeSet(enableVirtualTerminalProcessing))
-}
