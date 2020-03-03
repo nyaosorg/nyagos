@@ -1,6 +1,7 @@
 package nodos
 
 import (
+	"github.com/mattn/go-colorable"
 	"io"
 )
 
@@ -13,9 +14,9 @@ func CoUninitialize() {
 }
 
 func IsEscapeSequenceAvailable() bool {
-	return isEscapeSequenceAvailable()
+	return true
 }
 
 func GetConsole() io.Writer {
-	return getConsole()
+	return colorable.NewColorableStdout()
 }

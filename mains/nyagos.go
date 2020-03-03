@@ -10,6 +10,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
 
@@ -112,6 +113,9 @@ func (this *luaWrapper) Close() error {
 }
 
 func Main() error {
+	disableColors := colorable.EnableColorsStdout(nil)
+	defer disableColors()
+
 	if clean, err := nodos.SetConsoleExeIcon(); err == nil {
 		defer clean(true)
 	}
