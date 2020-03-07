@@ -9,11 +9,12 @@ import (
 	"os"
 	"runtime/debug"
 
+	"github.com/go-ole/go-ole"
+
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -29,8 +30,9 @@ func Start(mainHandler func() error) error {
 	completion.AppendCommandLister(commands.AllNames)
 	completion.AppendCommandLister(alias.AllNames)
 
-	nodos.CoInitializeEx(0, nodos.COINIT_MULTITHREADED)
-	defer nodos.CoUninitialize()
+	if ole.CoInitializeEx(0, ole.COINIT_MULTITHREADED) == nil {
+		defer ole.CoUninitialize()
+	}
 
 	alias.Init()
 
