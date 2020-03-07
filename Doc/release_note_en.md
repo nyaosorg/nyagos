@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * Compressed the executable by upx.exe
 * Lua function `bit32.*` are not available because github.com/BixData/gluabit32 is 404.
 * Use Windows10's native ansi-escape-sequence through mattn/go-colorable
+* Fix that `echo $(gawk "BEGIN{ print \"\x22\x22\" }")` could not print double-quatations
 
 NYAGOS 4.4.5\_2
 ===============

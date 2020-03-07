@@ -5,6 +5,7 @@
 * UPX.EXE で、実行ファイルを圧縮するようにした
 * github.com/BixData/gluabit32 が 404 になって、Lua関数 `bit32.*` が利用できなくなった。
 * Windows10 のネイティブANSIエスケープシーケンスも mattn/go-colorable 経由で利用するようにした。
+* `echo $(gawk "BEGIN{ print \"\x22\x22\" }")` で二重引用符が出ない不具合を修正
 
 NYAGOS 4.4.5\_2
 ===============
