@@ -6,8 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/mattn/go-colorable"
+
 	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
@@ -27,7 +28,7 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 		Editor: &readline.Editor{
 			History: history1,
 			Prompt:  doPrompt,
-			Writer:  nodos.GetConsole()},
+			Writer:  colorable.NewColorableStdout()},
 		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},

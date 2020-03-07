@@ -136,7 +136,7 @@ func Main() error {
 		sh.SetTag(&luaWrapper{L})
 	}
 	defer sh.Close()
-	sh.Console = nodos.GetConsole()
+	sh.Console = colorable.NewColorableStdout()
 	ctx = context.WithValue(ctx, shellKey, sh)
 
 	langEngine := func(fname string) ([]byte, error) {
@@ -198,7 +198,7 @@ func Main() error {
 							In:   os.Stdin,
 							Out:  os.Stdout,
 							Err:  os.Stderr,
-							Term: nodos.GetConsole(),
+							Term: colorable.NewColorableStdout(),
 						})
 					return 0, nil
 				}

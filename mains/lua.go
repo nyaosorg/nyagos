@@ -13,6 +13,7 @@ import (
 	"runtime"
 	"time"
 
+	"github.com/mattn/go-colorable"
 	"github.com/yuin/gopher-lua"
 
 	"github.com/zetamatta/glua-ole"
@@ -21,7 +22,6 @@ import (
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 
@@ -429,7 +429,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = os.Stdout
 			param.Err = os.Stderr
 		}
-		param.Term = nodos.GetConsole()
+		param.Term = colorable.NewColorableStdout()
 		result := f(param)
 		pushInterfaces(L, result)
 		return len(result)
