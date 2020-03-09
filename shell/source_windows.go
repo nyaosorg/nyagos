@@ -9,8 +9,7 @@ import (
 	"syscall"
 
 	"github.com/zetamatta/go-texts/mbcs"
-
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-netresource"
 )
 
 // loadTmpFile - read update the current-directory and environment-variables from tmp-file.
@@ -30,8 +29,8 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 
 func (this *CmdExe) run() (int, error) {
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
-		netdrive, closer := dos.UNCtoNetDrive(wd)
-		defer closer()
+		netdrive, closer := netresource.UNCtoNetDrive(wd)
+		defer closer(false, false)
 		if netdrive != "" {
 			if err := os.Chdir(netdrive); err == nil {
 				defer os.Chdir(wd)

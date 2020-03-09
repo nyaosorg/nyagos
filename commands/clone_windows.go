@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/zetamatta/go-windows-netresource"
+
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -69,7 +71,7 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 
 	var buffer strings.Builder
 
-	if netdrives, err := dos.GetNetDrives(); err == nil {
+	if netdrives, err := netresource.GetNetDrives(); err == nil {
 		for _, n := range netdrives {
 			fmt.Fprintf(&buffer, ` --netuse "%c:=%s"`, n.Letter, n.Remote)
 		}

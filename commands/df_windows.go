@@ -9,6 +9,8 @@ import (
 
 	"github.com/dustin/go-humanize"
 
+	"github.com/zetamatta/go-windows-netresource"
+
 	"github.com/zetamatta/nyagos/dos"
 )
 
@@ -47,7 +49,7 @@ func df(rootPathName string) ([]string, error) {
 	driveTypeId, driveTypeStr := driveType(rootPathName)
 	var uncPath string
 	if driveTypeId == windows.DRIVE_REMOTE {
-		uncPath, _ = dos.WNetGetConnectionUTF16a(uint16(rootPathName[0]))
+		uncPath, _ = netresource.WNetGetConnectionUTF16a(uint16(rootPathName[0]))
 	}
 
 	return []string{
