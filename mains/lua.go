@@ -212,6 +212,12 @@ func NewLua() (Lua, error) {
 
 	setupUtf8Table(L)
 
+	bit32Table := L.NewTable()
+	L.SetField(bit32Table, "band", L.NewFunction(lua2cmd(functions.CmdBitAnd)))
+	L.SetField(bit32Table, "bor", L.NewFunction(lua2cmd(functions.CmdBitOr)))
+	L.SetField(bit32Table, "bxor", L.NewFunction(lua2cmd(functions.CmdBitXor)))
+	L.SetGlobal("bit32", bit32Table)
+
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
 
 	if !isHookSetup {
