@@ -44,10 +44,8 @@ if githelp then
     if #gitcmds > 1 then
         local maincmds = share.maincmds
         maincmds["git"] = gitcmds
-        maincmds["git.exe"] = gitcmds
         if hub then
           maincmds["hub"] = gitcmds
-          maincmds["hub.exe"] = gitcmds
         end
         share.maincmds = maincmds
     end
@@ -66,7 +64,6 @@ if string.len(svnhelp) > 5 then
     if #svncmds > 1 then
         local maincmds = share.maincmds
         maincmds["svn"] = svncmds
-        maincmds["svn.exe"] = svncmds
         share.maincmds = maincmds
     end
 end
@@ -83,7 +80,6 @@ if string.len(hghelp) > 5 then
     if #hgcmds > 1 then
         local maincmds=share.maincmds
         maincmds["hg"] = hgcmds
-        maincmds["hg.exe"] = hgcmds
         share.maincmds = maincmds
     end
 end
@@ -114,7 +110,6 @@ if rclonehelp then
   if #rclonecmds > 1 then
       local maincmds=share.maincmds
       maincmds["rclone"] = rclonecmds
-      maincmds["rclone.exe"] = rclonecmds
       share.maincmds = maincmds
   end
 end
@@ -128,6 +123,7 @@ if next(share.maincmds) then
         if not cmdname then
             return nil
         end
+        cmdname = string.lower(string.gsub(cmdname,"%.%w+$",""))
         --[[
           2nd command completion like :git bisect go[od]
           user define-able
