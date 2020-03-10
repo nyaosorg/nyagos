@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * (#319) Add bit32.band , bor & bxor again.
 * (#378) nyagos.d/catalog/subcomplete.lua: ignore command's case and suffixes by default.
 * (#377) Fix: Escape sequence does not work after `git gui` installed by scoop
+* make.cmd: do not compress executable on every building by upx.exe. Use it only on making packages.
 
 NYAGOS 4.4.5\_3
 ===============
