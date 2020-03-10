@@ -1,7 +1,8 @@
 [English](release_note_en.md) / Japanese
 
 * github.com/BixData/gluabit32 が消えて C-xC-r C-xC-h , C-xC-g が動かなくなった問題を修正
-* 自前版 bit32.band , bor , bxor を再び追加
+* (#319) 自前版 bit32.band , bor , bxor を再び追加
+* (#378) nyagos.d/catalog/subcomplete.lua: こちらのサブコマンド補完でも拡張子なし・英大文字・小文字は区別しないでコマンドを照合する動作を標準にした
 
 NYAGOS 4.4.5\_3
 ===============
