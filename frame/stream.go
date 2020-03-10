@@ -55,7 +55,9 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 	var line string
 	var err error
 	for {
+		disabler := colorable.EnableColorsStdout(nil)
 		line, err = this.Editor.ReadLine(ctx)
+		disabler()
 		if err != nil {
 			return ctx, line, err
 		}
