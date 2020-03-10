@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* bit32.bitand が消えたために C-xC-r C-xC-h , C-xC-g が動かなくなっていた問題を修正
+
 NYAGOS 4.4.5\_3
 ===============
 (2020.03.08)

@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* box.lua: fixed C-xC-r, C-xC-h & C-xC-g did not work because bit32.bitand disappeared.
+
 NYAGOS 4.4.5\_3
 ===============
 on Mar.08,2020
