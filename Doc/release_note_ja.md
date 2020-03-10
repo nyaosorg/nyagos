@@ -3,6 +3,7 @@
 * github.com/BixData/gluabit32 が消えて C-xC-r C-xC-h , C-xC-g が動かなくなった問題を修正
 * (#319) 自前版 bit32.band , bor , bxor を再び追加
 * (#378) nyagos.d/catalog/subcomplete.lua: こちらのサブコマンド補完でも拡張子なし・英大文字・小文字は区別しないでコマンドを照合する動作を標準にした
+* (#377) scoop でインストールされた git で `git gui` を実行すると、エスケープシーケンスが効かなくなる問題に対応
 
 NYAGOS 4.4.5\_3
 ===============
