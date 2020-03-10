@@ -114,13 +114,6 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
     Write-Verbose "$ go build -o '$target'"
     go build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
     if( $LastExitCode -eq 0 ){
-        where.exe upx 2>&1 | Out-Null
-        if ( $LastExitCode -eq 0 ){
-            upx.exe -9 $target
-        }else{
-            $global:LastExitCode = 0
-        }
-
         Do-Copy $target (Join-Path "." ([System.IO.Path]::GetFileName($target)))
     }
     $env:GOARCH = $saveGOARCH
@@ -128,10 +121,19 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
 
 function Make-Package($arch){
     $zipname = ("nyagos-{0}.zip" -f (& "cmd\$arch\nyagos.exe" --show-version-only))
+
+    where.exe upx 2>&1 | Out-Null
+    if ( $LastExitCode -eq 0 ){
+        upx.exe -9 "cmd\$arch\nyagos.exe"
+    }else{
+        $global:LastExitCode = 0
+    }
+
     Write-Verbose "$ zip -9 $zipname ...."
     if( Test-Path $zipname ){
         Do-Remove $zipname
     }
+
     zip -9j $zipname `
         "cmd\$arch\nyagos.exe" `
         .nyagos `
