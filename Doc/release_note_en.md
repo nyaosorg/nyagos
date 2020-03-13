@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.5\_4
+===============
+on Mar.13,2020
+
 * box.lua: fixed C-xC-r, C-xC-h & C-xC-g did not work because github.com/BixData/gluabit32 disappeared.
 * (#319) Add bit32.band , bor & bxor again.
 * (#378) nyagos.d/catalog/subcomplete.lua: ignore command's case and suffixes by default.
