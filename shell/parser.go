@@ -49,6 +49,9 @@ var PercentFunc = map[string]func() string{
 		}
 		return time.Now().Format(layout)
 	},
+	"TIME": func() string {
+		return time.Now().Format("15:04:05.00")
+	},
 }
 
 var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
