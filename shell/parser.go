@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 
 	"github.com/zetamatta/nyagos/nodos"
@@ -40,6 +41,13 @@ var PercentFunc = map[string]func() string{
 	},
 	"ERRORLEVEL": func() string {
 		return fmt.Sprintf("%d", LastErrorLevel)
+	},
+	"DATE": func() string {
+		layout, err := nodos.OsDateLayout()
+		if err != nil {
+			return err.Error()
+		}
+		return time.Now().Format(layout)
 	},
 }
 
