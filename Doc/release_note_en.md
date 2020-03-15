@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Implement: %DATE% and %TIME%
+
 NYAGOS 4.4.5\_4
 ===============
 on Mar.13,2020

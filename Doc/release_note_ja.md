@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* %DATE% と %TIME% を実装した。
+
 NYAGOS 4.4.5\_4
 ===============
 (2020.03.13)
