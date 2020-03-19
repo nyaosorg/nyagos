@@ -7,3 +7,4 @@ package nodos
 //	WM_GETICON
 //	ICON_BIG
 //	ICON_SMALL
+//	S_OK

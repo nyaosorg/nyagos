@@ -1,4 +1,4 @@
-package dos
+package nodos
 
 import (
 	"unsafe"
@@ -6,7 +6,6 @@ import (
 	"golang.org/x/sys/windows"
 )
 
-var shell32 = windows.NewLazySystemDLL("shell32.dll")
 var procSHOpenWithDialog = shell32.NewProc("SHOpenWithDialog")
 
 type _OpenAsInfo struct {
@@ -15,7 +14,7 @@ type _OpenAsInfo struct {
 	Flag     uintptr
 }
 
-func ShOpenWithDialog(filename, class string) (err error) {
+func shOpenWithDialog(filename, class string) (err error) {
 	var info _OpenAsInfo
 
 	info.FileName, err = windows.UTF16PtrFromString(filename)

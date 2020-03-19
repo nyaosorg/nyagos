@@ -6,3 +6,4 @@ const WM_SETICON = 128
 const WM_GETICON = 127
 const ICON_BIG = 1
 const ICON_SMALL = 0
+const S_OK = 0

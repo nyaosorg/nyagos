@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func cmdShOpenWithDialog(ctx context.Context, cmd Param) (int, error) {
@@ -15,7 +15,7 @@ func cmdShOpenWithDialog(ctx context.Context, cmd Param) (int, error) {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", s, err)
 			continue
 		}
-		err = dos.ShOpenWithDialog(fullpath, "")
+		err = nodos.ShOpenWithDialog(fullpath, "")
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", s, err)
 		}
