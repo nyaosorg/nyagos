@@ -502,7 +502,7 @@ func CmdEnvAdd(args []any_t) []any_t {
 	return []any_t{}
 }
 
-func CmdEnvDel(args []any_t) []any_t {
+func CmdEnvDel(args []any_t) (result []any_t) {
 	if len(args) >= 1 {
 		name := strings.ToUpper(fmt.Sprint(args[0]))
 		list := filepath.SplitList(os.Getenv(name))
@@ -517,11 +517,13 @@ func CmdEnvDel(args []any_t) []any_t {
 					break
 				}
 			}
-			if !doRemove {
+			if doRemove {
+				result = append(result, e)
+			} else {
 				newlist = append(newlist, e)
 			}
 		}
 		os.Setenv(name, strings.Join(newlist, string(os.PathListSeparator)))
 	}
-	return []any_t{}
+	return
 }
