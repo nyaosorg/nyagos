@@ -70,7 +70,3 @@ func setWritable(path string) error {
 	mode := stat.Mode() | 0x600
 	return os.Chmod(path, mode)
 }
-
-func truncate(path string, _ func(path string, err error) bool, _ io.Writer) error {
-	return os.RemoveAll(path)
-}

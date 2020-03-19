@@ -9,7 +9,6 @@ import (
 	"github.com/zetamatta/go-texts/mbcs"
 	"github.com/zetamatta/go-windows-shortcut"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -81,8 +80,4 @@ func setWritable(path string) error {
 		return err
 	}
 	return nodos.SetFileAttributes(path, perm&^windows.FILE_ATTRIBUTE_READONLY)
-}
-
-func truncate(path string, f func(path string, err error) bool, out io.Writer) error {
-	return dos.Truncate(path, f, out)
 }
