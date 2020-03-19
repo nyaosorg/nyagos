@@ -91,5 +91,5 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 }
 
 func isGui(path string) bool {
-	return dos.IsGui(path)
+	return nodos.IsGui(path)
 }
