@@ -7,7 +7,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-shortcut"
 )
 
 var kernel32 = windows.NewLazySystemDLL("kernel32.dll")
@@ -98,5 +98,5 @@ func moveFile(src, dst string) error {
 }
 
 func readShortcut(path string) (string, string, error) {
-	return dos.ReadShortcut(path)
+	return shortcut.Read(path)
 }

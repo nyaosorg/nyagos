@@ -68,6 +68,8 @@ github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab h1:HSqU95q
 github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab/go.mod h1:6F5d7H+8arzFAg018o96dqhBxbnwG69z3yQVkg+MS+0=
 github.com/zetamatta/go-windows-netresource v0.0.0-20200125163457-98b22d33ed73 h1:pMw7beMSX9c805S6Mz8acglSNCSfO8MCR501NYayLh8=
 github.com/zetamatta/go-windows-netresource v0.0.0-20200125163457-98b22d33ed73/go.mod h1:zcM57zYz2gjmxUmMZCbzex7+XgSPXm2/Rl2nrTUScMw=
+github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e h1:q9+U7iW+yyH1NK3Ozc7tNhEeIIYkV0vJorMW+uelAXY=
+github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e/go.mod h1:buJWG/mCpNkeABgIeEaX6b+6qh3wBhioplFV6K6ZPo8=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190203050204-7ae0202eb74c/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=

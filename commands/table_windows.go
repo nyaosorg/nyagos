@@ -7,6 +7,7 @@ import (
 	"golang.org/x/sys/windows"
 
 	"github.com/zetamatta/go-texts/mbcs"
+	"github.com/zetamatta/go-windows-shortcut"
 
 	"github.com/zetamatta/nyagos/dos"
 )
@@ -69,7 +70,7 @@ func newMbcsReader(r io.Reader) io.Reader {
 }
 
 func readShortCut(dir string) (string, error) {
-	newdir, _, err := dos.ReadShortcut(dir)
+	newdir, _, err := shortcut.Read(dir)
 	return newdir, err
 }
 

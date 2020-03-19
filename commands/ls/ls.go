@@ -19,6 +19,7 @@ import (
 
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
+	"github.com/zetamatta/go-windows-shortcut"
 	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
@@ -174,7 +175,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	if strings.HasSuffix(name, ".lnk") {
 		path := nodos.Join(folder, name)
-		shortcut, workdir, err := dos.ReadShortcut(path)
+		shortcut, workdir, err := shortcut.Read(path)
 		if err == nil && shortcut != "" {
 			fmt.Fprintf(out, " -> %s", shortcut)
 			if workdir != "" {

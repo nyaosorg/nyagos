@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-shortcut"
 )
 
 func printShortcut(s, t, d string, out io.Writer) {
@@ -40,7 +40,7 @@ func makeShortcut(s, t, d string, out io.Writer) error {
 	if !strings.EqualFold(filepath.Ext(tAbs), ".lnk") {
 		tAbs = tAbs + ".lnk"
 	}
-	err = dos.MakeShortcut(sAbs, tAbs, d)
+	err = shortcut.Make(sAbs, tAbs, d)
 	if err == nil {
 		printShortcut(sAbs, tAbs, d, out)
 	}
@@ -60,7 +60,7 @@ func cmdLnk(_ context.Context, cmd1 Param) (int, error) {
 		if _, err := os.Stat(fn); err != nil {
 			return 1, fmt.Errorf("%s: not exist", fn)
 		}
-		target, dir, err := dos.ReadShortcut(fn)
+		target, dir, err := shortcut.Read(fn)
 		if err != nil {
 			return 1, err
 		}
