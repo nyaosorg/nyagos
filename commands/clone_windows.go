@@ -9,8 +9,7 @@ import (
 	"strings"
 
 	"github.com/zetamatta/go-windows-netresource"
-
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-su"
 )
 
 func _getwd() string {
@@ -30,9 +29,9 @@ func _clone(action string, out io.Writer) (int, error) {
 		return 1, err
 	}
 	var pid int
-	pid, err = dos.ShellExecute(action, me, "", wd)
+	pid, err = su.ShellExecute(action, me, "", wd)
 	if err != nil {
-		pid, err = dos.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
+		pid, err = su.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
 		if err != nil {
 			return 1, err // return original error
 		}
@@ -78,7 +77,7 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	}
 	fmt.Fprintf(&buffer, ` --chdir "%s"`, wd)
 
-	pid, err := dos.ShellExecute("runas", me, buffer.String(), "")
+	pid, err := su.ShellExecute("runas", me, buffer.String(), "")
 	if err != nil {
 		return 3, err
 	}

@@ -6,7 +6,7 @@ import (
 
 	"github.com/mattn/msgbox"
 	"github.com/zetamatta/go-texts/mbcs"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-su"
 )
 
 func CmdMsgBox(args []any_t) []any_t {
@@ -23,12 +23,12 @@ func CmdMsgBox(args []any_t) []any_t {
 }
 
 func CmdElevated([]any_t) []any_t {
-	flag, _ := dos.IsElevated()
+	flag, _ := su.IsElevated()
 	return []any_t{flag}
 }
 
 func CmdShellExecute(args []any_t) []any_t {
-	pid, err := dos.ShellExecute(
+	pid, err := su.ShellExecute(
 		toStr(args, 0),
 		toStr(args, 1),
 		toStr(args, 2),

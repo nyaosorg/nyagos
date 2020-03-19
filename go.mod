@@ -24,6 +24,7 @@ require (
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200125163457-98b22d33ed73
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e
+	github.com/zetamatta/go-windows-su v0.1.0
 	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527
 	golang.org/x/text v0.3.2 // indirect
 )

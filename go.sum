@@ -70,6 +70,8 @@ github.com/zetamatta/go-windows-netresource v0.0.0-20200125163457-98b22d33ed73 h
 github.com/zetamatta/go-windows-netresource v0.0.0-20200125163457-98b22d33ed73/go.mod h1:zcM57zYz2gjmxUmMZCbzex7+XgSPXm2/Rl2nrTUScMw=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e h1:q9+U7iW+yyH1NK3Ozc7tNhEeIIYkV0vJorMW+uelAXY=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e/go.mod h1:buJWG/mCpNkeABgIeEaX6b+6qh3wBhioplFV6K6ZPo8=
+github.com/zetamatta/go-windows-su v0.1.0 h1:ZL5z9QyZ9SPey/XtIbPVvupqtfDVg5HTqf9zwVA0DDs=
+github.com/zetamatta/go-windows-su v0.1.0/go.mod h1:4n9f0mFNFXFahrF27dl2PyawsOg5I+F7gbhXzop+SPc=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190203050204-7ae0202eb74c/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
