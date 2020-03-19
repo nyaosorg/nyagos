@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<Include>
+    <Product Id='2a558eea-0873-45d8-a046-6e6ebe998559' Name='NyaosOrg Package' 
+        Language='1033' UpgradeCode='c33cd270-1b44-47c1-b8b4-1dadde7c23b0'
+            Version='1.0.0.0' Manufacturer='nyaos.org'>
+      <Package Id='*'
+               Description='Nihongo Yet Another GOing Shell $(var.Platform) Install Package'
+               Comments='This is my first attempt at creating a Windows Installer database'
+               Manufacturer='nyaos.org'
+               InstallerVersion='200'
+               Platform='$(var.Platform)'
+               Compressed='yes' />
+      <Media Id='1' Cabinet='nyagos.cab' EmbedCab='yes' />
+
+      <Directory Id='TARGETDIR' Name='SourceDir'>
+          <Directory Id='$(var.ProgramFilesFolder)' Name='PFiles'>
+              <Directory Id='NyaosOrg' Name='NyaosOrg'>
+                  <Component Id='Nyagos' Guid='$(var.NyagosExeGuid)' Win64='$(var.Win64)'>
+                      <File Id="NyagosExe" Name="nyagos.exe" DiskId='1' 
+                          Source='$(var.Executable)' KeyPath='yes'>
+                          <Shortcut Id='DesktopNyagos'
+                              Directory='DesktopFolder'
+                              Name='Nyagos'
+                              WorkingDirectory='INSTALLDIR'
+                              Icon='nyagos.exe'
+                              IconIndex='0'
+                              Advertise='yes' />
+                        </File>
+                  </Component>
+              </Directory>
+          </Directory>
+          <Directory Id='DesktopFolder' Name='Desktop' />
+      </Directory>
+
+      <Feature Id='NyaosOrg' Title='NYAOS.ORG' Level='1'>
+         <ComponentRef Id='Nyagos' />
+      </Feature>
+      <Icon Id='nyagos.exe' SourceFile='$(var.Executable)' />
+   </Product>
+
+</Include>
