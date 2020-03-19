@@ -1,6 +1,8 @@
 [English](release_note_en.md) / Japanese
 
 * %DATE% と %TIME% を実装した。
+* nyagos.envdel は削除したディレクトリを戻り値として返すようになった。
+* `dos/net*.go` などを github.com/zetamatta/go-windows-netresource へ移行
 
 NYAGOS 4.4.5\_4
 ===============
