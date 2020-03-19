@@ -10,6 +10,7 @@ import (
 	"github.com/zetamatta/go-windows-shortcut"
 
 	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func init() {
@@ -75,11 +76,11 @@ func readShortCut(dir string) (string, error) {
 }
 
 func setWritable(path string) error {
-	perm, err := dos.GetFileAttributes(path)
+	perm, err := nodos.GetFileAttributes(path)
 	if err != nil {
 		return err
 	}
-	return dos.SetFileAttributes(path, perm&^windows.FILE_ATTRIBUTE_READONLY)
+	return nodos.SetFileAttributes(path, perm&^windows.FILE_ATTRIBUTE_READONLY)
 }
 
 func truncate(path string, f func(path string, err error) bool, out io.Writer) error {

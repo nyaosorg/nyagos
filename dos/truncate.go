@@ -7,15 +7,17 @@ import (
 	"path/filepath"
 
 	"golang.org/x/sys/windows"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 // Truncate is same as os.RemoveAll but report files to remove.
 func Truncate(folder string, whenError func(string, error) bool, out io.Writer) error {
-	attr, err := GetFileAttributes(folder)
+	attr, err := nodos.GetFileAttributes(folder)
 	if err != nil {
 		return fmt.Errorf("%s: %s", folder, err)
 	}
-	if (attr & windows.FILE_ATTRIBUTE_REPARSE_POINT) == 0 {
+	if (attr & nodos.REPARSE_POINT) == 0 {
 		// Only not junction, delete files under folder.
 		files, err := ioutil.ReadDir(folder)
 		if err != nil {
@@ -32,7 +34,7 @@ func Truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 				err = Truncate(fullpath, whenError, out)
 			} else {
 				fmt.Fprintln(out, fullpath)
-				SetFileAttributes(fullpath, windows.FILE_ATTRIBUTE_NORMAL)
+				nodos.SetFileAttributes(fullpath, windows.FILE_ATTRIBUTE_NORMAL)
 				err = windows.Unlink(fullpath)
 			}
 			if err != nil {

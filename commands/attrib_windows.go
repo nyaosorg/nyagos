@@ -10,7 +10,7 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func getbit(c byte) uint32 {
@@ -80,7 +80,7 @@ func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 	}
 	sort.Strings(files)
 	for _, arg1 := range files {
-		bits, err := dos.GetFileAttributes(arg1)
+		bits, err := nodos.GetFileAttributes(arg1)
 		if err != nil {
 			return 1, err
 		}
@@ -97,7 +97,7 @@ func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 				fullpath)
 		} else {
 			bits = (bits | setBits) &^ resetBits
-			err = dos.SetFileAttributes(arg1, bits)
+			err = nodos.SetFileAttributes(arg1, bits)
 			if err != nil {
 				return 2, err
 			}
