@@ -10,8 +10,6 @@ import (
 	"github.com/dustin/go-humanize"
 
 	"github.com/zetamatta/go-windows-netresource"
-
-	"github.com/zetamatta/nyagos/dos"
 )
 
 func driveType(rootPathName string) (uint32, string) {
@@ -38,11 +36,11 @@ func driveType(rootPathName string) (uint32, string) {
 }
 
 func df(rootPathName string) ([]string, error) {
-	label, fs, err := dos.VolumeName(rootPathName)
+	label, fs, err := netresource.VolumeName(rootPathName)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
-	free, total, totalFree, err := dos.GetDiskFreeSpace(rootPathName)
+	free, total, totalFree, err := netresource.GetDiskFreeSpace(rootPathName)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
