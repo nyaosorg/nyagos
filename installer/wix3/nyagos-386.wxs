@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2003/01/wi'>
-    <?define Platform=Intel ?>
-    <?define Executable=../cmd/386/nyagos.exe ?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+    <?define Platform=x86 ?>
+    <?define Win64=no ?>
+    <?define Executable=../../cmd/386/nyagos.exe ?>
     <?define ProgramFilesFolder=ProgramFilesFolder ?>
     <?define PackageGuid=19a00d2e-e048-42d1-9c59-09fcd46458a9 ?>
     <?define NyagosExeGuid=330897a0-6c52-4cff-995c-fe498c8eb8a4 ?>
-    <?include nyagos-common-wix2.wxi ?>
+    <?include common.wxi ?>
 </Wix>
