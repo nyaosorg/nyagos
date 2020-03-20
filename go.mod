@@ -16,17 +16,17 @@ require (
 	github.com/yuin/gopher-lua v0.0.0-20191220021717-ab39c6098bdb
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
 	github.com/zetamatta/go-box/v2 v2.0.7
-	github.com/zetamatta/go-findfile v0.0.0-20190411140638-e97d0b4e19b7
+	github.com/zetamatta/go-findfile v0.0.0-20200320002345-488b487d9498
 	github.com/zetamatta/go-importconst v0.0.0-20191214082529-c6bfe45feaf3 // indirect
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
-	github.com/zetamatta/go-outputdebug v0.0.0-20190527151759-1278a2b3f557
+	github.com/zetamatta/go-outputdebug v0.0.0-20200312034632-d2ad5f0d3c33
 	github.com/zetamatta/go-termgap v0.0.0-20191117090052-034bc34d33c1
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
-	github.com/zetamatta/go-windows-netresource v0.0.0-20200125163457-98b22d33ed73
+	github.com/zetamatta/go-windows-netresource v0.0.0-20200319170337-06fa9942e7d4
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e
-	github.com/zetamatta/go-windows-su v0.1.0
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527
+	github.com/zetamatta/go-windows-su v0.1.1
+	golang.org/x/sys v0.0.0-20200317113312-5766fd39f98d
 	golang.org/x/text v0.3.2 // indirect
 )
 
