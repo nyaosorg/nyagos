@@ -4,7 +4,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -56,10 +55,6 @@ func init() {
 
 func newMbcsReader(r io.Reader) io.Reader {
 	return r
-}
-
-func readShortCut(dir string) (string, error) {
-	return "", errors.New("not support shortcut")
 }
 
 func setWritable(path string) error {
