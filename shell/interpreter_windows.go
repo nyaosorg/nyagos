@@ -10,7 +10,6 @@ import (
 
 	"github.com/zetamatta/go-windows-su"
 
-	"github.com/zetamatta/nyagos/dos"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -48,14 +47,14 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		}
 		return 0, err
 	}
-	if closer, err := dos.ChangeConsoleMode(windows.Stdin,
-		dos.ModeSet(
+	if closer, err := nodos.ChangeConsoleMode(windows.Stdin,
+		nodos.ModeSet(
 			windows.ENABLE_PROCESSED_INPUT|
 				windows.ENABLE_LINE_INPUT|
 				windows.ENABLE_ECHO_INPUT)); err == nil {
 		defer closer()
 	}
-	if closer, err := dos.ChangeConsoleMode(windows.Stdout); err == nil {
+	if closer, err := nodos.ChangeConsoleMode(windows.Stdout); err == nil {
 		defer closer()
 	}
 	if UseSourceRunBatch {
