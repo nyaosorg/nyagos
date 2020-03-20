@@ -11,8 +11,8 @@ import (
 	"github.com/yuin/gopher-lua"
 
 	"github.com/zetamatta/go-box/v2"
+	"github.com/zetamatta/go-readline-ny"
 
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/texts"
 )
 
@@ -199,7 +199,7 @@ func cmdBindKey(L Lua) int {
 	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
 	switch value := L.Get(-1).(type) {
 	case *lua.LFunction:
-		if err := readline.BindKeyFunc(key, &KeyLuaFuncT{value}); err != nil {
+		if err := readline.GlobalKeyMap.BindKeyFunc(key, &KeyLuaFuncT{value}); err != nil {
 			return lerror(L, err.Error())
 		} else {
 			L.Push(lua.LTrue)
@@ -207,7 +207,7 @@ func cmdBindKey(L Lua) int {
 		}
 	default:
 		val := L.ToString(-1)
-		err := readline.BindKeySymbol(key, val)
+		err := readline.GlobalKeyMap.BindKeySymbol(key, val)
 		if err != nil {
 			return lerror(L, err.Error())
 		} else {

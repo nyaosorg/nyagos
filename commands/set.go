@@ -7,9 +7,10 @@ import (
 	"os"
 	"strings"
 
+	"github.com/zetamatta/go-readline-ny"
+
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 	"github.com/zetamatta/nyagos/texts"
 )

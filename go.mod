@@ -20,6 +20,7 @@ require (
 	github.com/zetamatta/go-importconst v0.0.0-20191214082529-c6bfe45feaf3 // indirect
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
 	github.com/zetamatta/go-outputdebug v0.0.0-20200312034632-d2ad5f0d3c33
+	github.com/zetamatta/go-readline-ny v0.0.0-20200113081009-4a2705ceea0c
 	github.com/zetamatta/go-termgap v0.0.0-20191117090052-034bc34d33c1
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab

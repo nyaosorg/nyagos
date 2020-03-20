@@ -16,13 +16,13 @@ import (
 
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
+	"github.com/zetamatta/go-readline-ny"
 
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 

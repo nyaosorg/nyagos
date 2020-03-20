@@ -8,9 +8,10 @@ import (
 
 	"github.com/mattn/go-colorable"
 
+	"github.com/zetamatta/go-readline-ny"
+
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/shell"
 )
 
