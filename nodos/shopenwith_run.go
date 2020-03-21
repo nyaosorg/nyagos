@@ -5,12 +5,12 @@ package main
 import (
 	"os"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func main() {
 	for _, arg := range os.Args[1:] {
-		err := dos.ShOpenWithDialog(arg, "")
+		err := nodos.ShOpenWithDialog(arg, "")
 		if err != nil {
 			println(err.Error())
 		}
