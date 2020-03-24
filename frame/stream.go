@@ -9,9 +9,9 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/zetamatta/go-readline-ny"
+	"github.com/zetamatta/go-windows-consoleicon"
 
 	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -58,7 +58,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 	var err error
 	for {
 		disabler := colorable.EnableColorsStdout(nil)
-		clean, err2 := nodos.SetConsoleExeIcon()
+		clean, err2 := consoleicon.SetFromExe()
 		line, err = this.Editor.ReadLine(ctx)
 		if err2 == nil {
 			clean(false)

@@ -6,6 +6,7 @@ import (
 	"golang.org/x/sys/windows"
 )
 
+var shell32 = windows.NewLazySystemDLL("shell32.dll")
 var procSHOpenWithDialog = shell32.NewProc("SHOpenWithDialog")
 
 type _OpenAsInfo struct {

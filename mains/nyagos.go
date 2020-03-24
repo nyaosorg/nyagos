@@ -14,12 +14,13 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/go-windows-consoleicon"
+
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -116,7 +117,7 @@ func Main() error {
 	disableColors := colorable.EnableColorsStdout(nil)
 	defer disableColors()
 
-	if clean, err := nodos.SetConsoleExeIcon(); err == nil {
+	if clean, err := consoleicon.SetFromExe(); err == nil {
 		defer clean(true)
 	}
 	ctx := context.Background()
