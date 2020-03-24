@@ -10,6 +10,8 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/zetamatta/go-windows-junction"
+
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -56,7 +58,7 @@ func cmdLn(ctx context.Context, cmd Param) (int, error) {
 				if fullpath, err := filepath.Abs(src); err != nil {
 					return err
 				} else {
-					return nodos.CreateJunction(fullpath, dst)
+					return junction.Create(fullpath, dst)
 				}
 			} else {
 				return os.Link(src, dst)
