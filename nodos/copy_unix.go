@@ -3,7 +3,6 @@
 package nodos
 
 import (
-	"errors"
 	"io"
 	"os"
 )
