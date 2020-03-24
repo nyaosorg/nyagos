@@ -68,6 +68,8 @@ github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab h1:HSqU95q
 github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab/go.mod h1:6F5d7H+8arzFAg018o96dqhBxbnwG69z3yQVkg+MS+0=
 github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf h1:bm1E5aNg05yjXojl7h7HIybtPUlzZ6v5KKIZqPTjmCw=
 github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf/go.mod h1:H9lSm59TPbbdGAjEkYzqkVZM86GAXljktexMjsbZS+Y=
+github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:wl3g2w4/zcybfI+tSVLef0SrKG7Xl23AUxhCPdeSek0=
+github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc/go.mod h1:Z9Oob8fSU9i1JvP5c+gaX957/ZKeqBdNuDI2XfEhuRU=
 github.com/zetamatta/go-windows-netresource v0.0.0-20200319170337-06fa9942e7d4 h1:lhnCZ0r51+fPJRA2XhHkDzF76AxXZZ0IzuCGvpbUL5E=
 github.com/zetamatta/go-windows-netresource v0.0.0-20200319170337-06fa9942e7d4/go.mod h1:zcM57zYz2gjmxUmMZCbzex7+XgSPXm2/Rl2nrTUScMw=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e h1:q9+U7iW+yyH1NK3Ozc7tNhEeIIYkV0vJorMW+uelAXY=

@@ -23,6 +23,7 @@ require (
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
+	github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200319170337-06fa9942e7d4
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e
 	github.com/zetamatta/go-windows-su v0.1.1
