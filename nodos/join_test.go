@@ -1,23 +1,25 @@
 package nodos
 
 import (
-	"fmt"
 	"testing"
 )
 
-func _testJoin(a, b string) {
-	fmt.Printf("'%s'+'%s' -> '%s'\n", a, b, Join(a, b))
+func _testJoin(t *testing.T, a, b, expect string) {
+	result := Join(a, b)
+	if result != expect {
+		t.Fatalf("'%s'+'%s' should be '%s',but '%s'\n", a, b, expect, result)
+	}
 }
 
 func TestJoin(t *testing.T) {
-	_testJoin(`foo`, `bar`)
-	_testJoin(`foo`, `\bar`)
-	_testJoin(`c:`, `bar`)
-	_testJoin(`foo/`, `bar`)
-	_testJoin(`foo\`, `bar`)
-	_testJoin(`foo`, `c:bar`)
-	_testJoin(`foo`, `c:\bar`)
-	_testJoin(`c:foo`, `\bar`)
-	_testJoin(`c:foo`, `\\host\path\to`)
-	_testJoin(`\\host\path\to`, `c:foo`)
+	_testJoin(t, `foo`, `bar`, `foo\bar`)
+	_testJoin(t, `foo`, `\bar`, `\bar`)
+	_testJoin(t, `c:`, `bar`, `c:bar`)
+	_testJoin(t, `foo/`, `bar`, `foo/bar`)
+	_testJoin(t, `foo\`, `bar`, `foo\bar`)
+	_testJoin(t, `foo`, `c:bar`, `c:bar`)
+	_testJoin(t, `foo`, `c:\bar`, `c:\bar`)
+	_testJoin(t, `c:foo`, `\bar`, `c:\bar`)
+	_testJoin(t, `c:foo`, `\\host\path\to`, `\\host\path\to`)
+	_testJoin(t, `\\host\path\to`, `c:foo`, `c:foo`)
 }
