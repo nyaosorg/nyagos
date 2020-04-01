@@ -2,7 +2,7 @@
 
 ## Lua拡張
 
-nyagos では、EXE の本体の機能はコンパクトとし、便利機能は 
+nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 なるべく Lua で機能を拡張できるよう設計を進めています。
 現在は以下のような関数が使用できます。
 
@@ -83,7 +83,7 @@ nyagos.exec と同じですが、標準出力を取り込んで、戻り値と�
 ### `nyagos.write(テキスト)`
 
 テキストを標準出力に出力しますが、リダイレクトされている場合は
-文字コードはUTF8 になります。内蔵 Lua の print は 
+文字コードはUTF8 になります。内蔵 Lua の print は
 nyagos.write(テキスト..'\n') に差し替えられています。
 
 ### `nyagos.writerr(テキスト)`
@@ -141,7 +141,7 @@ UTF8文字列を、現在のコードページの文字列に変換します。
         "~\\Share\\bin",
         "~\\Share\\cmds")
 
-### `nyagos.envdel('ENVNAME','PATTERN')
+### `nyagos.envdel('ENVNAME','PATTERN')`
 
 ENVNAME が示す環境変数の中から PATTERN を含む要素を
 削除します。
