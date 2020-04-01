@@ -119,7 +119,7 @@ UTF8文字列を、現在のコードページの文字列に変換します。
 
 パスのディレクトリ部分を返します。例では `C:\\path\\to` が得られます。
 
-### `nyagos.envadd('ENVNAME','PATH'...)
+### `nyagos.envadd('ENVNAME','PATH'...)`
 
 `nyagos.envadd("PATH","C:\\path\\to")` は
 `set PATH=%PATH%;C:\path\to` と等価です。
