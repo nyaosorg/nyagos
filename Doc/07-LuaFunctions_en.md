@@ -117,7 +117,7 @@ It makes parts of path-string join. It expands %ENVNAME% and ~/
 It returns the directory-part of each argument.
 The sample code returns `C:\\path\\to`.
 
-### `nyagos.envadd('ENVNAME','PATH'...)
+### `nyagos.envadd('ENVNAME','PATH'...)`
 
 `nyagos.envadd("PATH","C:\\path\\to")` equals to 
 `set PATH=%PATH%;C:\path\to` except when %PATH%
