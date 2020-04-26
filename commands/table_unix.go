@@ -4,7 +4,6 @@ package commands
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -14,30 +13,37 @@ func init() {
 	buildInCommand = map[string]func(context.Context, Param) (int, error){
 		".":        cmdSource,
 		"alias":    cmdAlias,
+		"attrib":   cmdAttrib,
 		"bindkey":  cmdBindkey,
 		"box":      cmdBox,
 		"cd":       cmdCd,
 		"clip":     cmdClip,
+		"clone":    cmdClone,
 		"cls":      cmdCls,
 		"cmdexesc": cmdExeSc,
 		"chmod":    cmdChmod,
 		"copy":     cmdCopy,
 		"del":      cmdDel,
 		"dirs":     cmdDirs,
+		"diskfree": cmdDiskFree,
 		"diskused": cmdDiskUsed,
 		"echo":     cmdEcho,
 		"env":      cmdEnv,
+		"erase":    cmdDel,
 		"exit":     cmdExit,
 		"foreach":  cmdForeach,
 		"history":  cmdHistory,
 		"if":       cmdIf,
 		"ln":       cmdLn,
+		"lnk":      cmdLnk,
+		"mklink":   cmdMklink,
 		"kill":     cmdKill,
 		"killall":  cmdKillAll,
 		"md":       cmdMkdir,
 		"mkdir":    cmdMkdir,
 		"more":     cmdMore,
 		"move":     cmdMove,
+		"open":     cmdOpen,
 		"popd":     cmdPopd,
 		"ps":       cmdPs,
 		"pushd":    cmdPushd,
@@ -45,8 +51,10 @@ func init() {
 		"rd":       cmdRmdir,
 		"rem":      cmdRem,
 		"rmdir":    cmdRmdir,
+		"select":   cmdShOpenWithDialog,
 		"set":      cmdSet,
 		"source":   cmdSource,
+		"su":       cmdSu,
 		"touch":    cmdTouch,
 		"type":     cmdType,
 		"which":    cmdWhich,
@@ -57,10 +65,6 @@ func newMbcsReader(r io.Reader) io.Reader {
 	return r
 }
 
-func readShortCut(dir string) (string, error) {
-	return "", errors.New("not support shortcut")
-}
-
 func setWritable(path string) error {
 	stat, err := os.Stat(path)
 	if err != nil {
@@ -68,8 +72,4 @@ func setWritable(path string) error {
 	}
 	mode := stat.Mode() | 0x600
 	return os.Chmod(path, mode)
-}
-
-func truncate(path string, _ func(path string, err error) bool, _ io.Writer) error {
-	return os.RemoveAll(path)
 }

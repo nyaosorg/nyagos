@@ -11,8 +11,8 @@ import (
 	"unicode"
 
 	"github.com/zetamatta/go-box/v2"
+	"github.com/zetamatta/go-readline-ny"
 
-	"github.com/zetamatta/nyagos/readline"
 	"github.com/zetamatta/nyagos/texts"
 )
 

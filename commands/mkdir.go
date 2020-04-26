@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 	"os"
-
 	"syscall"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func cmdMkdir(ctx context.Context, cmd Param) (int, error) {
@@ -81,7 +82,7 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 			if !quiet {
 				fmt.Fprintln(cmd.Out())
 			}
-			err = truncate(arg1, func(path string, err error) bool {
+			err = nodos.Truncate(arg1, func(path string, err error) bool {
 				fmt.Fprintf(cmd.Err(), "%s -> %s\n", path, err)
 				return true
 			}, cmd.Out())

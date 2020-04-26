@@ -80,9 +80,11 @@ function Go-Fmt{
 }
 
 function Make-SysO($version) {
-    pushd Etc
-    go generate
-    popd
+    if( $env:GOOS -eq $null -or $env:GOOS -eq "" -or $env:GOOS -eq "windows" ){
+        pushd Etc
+        go generate
+        popd
+    }
 }
 
 function Build([string]$version="",[string]$tags="",[string]$target="") {

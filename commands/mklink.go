@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/zetamatta/go-windows-junction"
 )
 
 func cmdMklink(_ context.Context, cmd Param) (rc int, err error) {
@@ -16,7 +16,7 @@ func cmdMklink(_ context.Context, cmd Param) (rc int, err error) {
 	for len(args) >= 2 && len(args[1]) >= 1 && args[1][0] == '/' {
 		switch strings.ToUpper(args[1]) {
 		case "/J":
-			f = nodos.CreateJunction
+			f = junction.Create
 			label = "Junction"
 		case "/D":
 			f = os.Symlink

@@ -7,7 +7,3 @@ func Copy(src, dst string, isFailIfExists bool) error {
 func Move(src, dst string) error {
 	return moveFile(src, dst)
 }
-
-func ReadShortcut(path string) (string, string, error) {
-	return readShortcut(path)
-}

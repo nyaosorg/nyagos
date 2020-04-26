@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/zetamatta/nyagos/readline"
+	"github.com/zetamatta/go-readline-ny"
 )
 
 func cmdBindkey(ctx context.Context, cmd Param) (int, error) {
@@ -13,7 +13,7 @@ func cmdBindkey(ctx context.Context, cmd Param) (int, error) {
 			cmd.Arg(0))
 		return 0, nil
 	}
-	err := readline.BindKeySymbol(cmd.Arg(1), cmd.Arg(2))
+	err := readline.GlobalKeyMap.BindKeySymbol(cmd.Arg(1), cmd.Arg(2))
 	if err != nil {
 		return 1, err
 	}

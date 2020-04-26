@@ -6,8 +6,6 @@ import (
 	"unsafe"
 
 	"golang.org/x/sys/windows"
-
-	"github.com/zetamatta/nyagos/dos"
 )
 
 var kernel32 = windows.NewLazySystemDLL("kernel32.dll")
@@ -95,8 +93,4 @@ func moveFile(src, dst string) error {
 		windows.MOVEFILE_REPLACE_EXISTING|
 			windows.MOVEFILE_COPY_ALLOWED|
 			windows.MOVEFILE_WRITE_THROUGH)
-}
-
-func readShortcut(path string) (string, string, error) {
-	return dos.ReadShortcut(path)
 }

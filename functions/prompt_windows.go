@@ -1,10 +1,10 @@
 package functions
 
 import (
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-su"
 )
 
 func isElevated() bool {
-	val, _ := dos.IsElevated()
+	val, _ := su.IsElevated()
 	return val
 }

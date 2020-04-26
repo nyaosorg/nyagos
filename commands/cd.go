@@ -8,6 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/zetamatta/go-windows-shortcut"
+
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -44,7 +46,7 @@ func cmdCdSub(dir string) (int, error) {
 		dir = dir[len(fileHead):]
 	}
 	if strings.HasSuffix(strings.ToLower(dir), ".lnk") {
-		newdir, err := readShortCut(dir)
+		newdir, _, err := shortcut.Read(dir)
 		if err == nil && newdir != "" {
 			dir = newdir
 		}

@@ -19,7 +19,7 @@ import (
 
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-shortcut"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -111,7 +111,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	if (perm & 1) > 0 {
 		io.WriteString(out, "x")
-	} else if dos.IsExecutableSuffix(filepath.Ext(name)) {
+	} else if nodos.IsExecutableSuffix(filepath.Ext(name)) {
 		io.WriteString(out, "x")
 		indicator = "*"
 		if (flag & O_COLOR) != 0 {
@@ -174,7 +174,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	}
 	if strings.HasSuffix(name, ".lnk") {
 		path := nodos.Join(folder, name)
-		shortcut, workdir, err := dos.ReadShortcut(path)
+		shortcut, workdir, err := shortcut.Read(path)
 		if err == nil && shortcut != "" {
 			fmt.Fprintf(out, " -> %s", shortcut)
 			if workdir != "" {
@@ -210,7 +210,7 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 				postfix = ANSI_END
 			}
 		}
-		if !val.IsDir() && dos.IsExecutableSuffix(filepath.Ext(val.Name())) {
+		if !val.IsDir() && nodos.IsExecutableSuffix(filepath.Ext(val.Name())) {
 			if (flag & O_COLOR) != 0 {
 				prefix = ANSI_EXEC
 				postfix = ANSI_END
@@ -274,7 +274,7 @@ func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int,
 				io.WriteString(out, "@")
 			} else if f.IsDir() {
 				io.WriteString(out, "/")
-			} else if dos.IsExecutableSuffix(filepath.Ext(f.Name())) {
+			} else if nodos.IsExecutableSuffix(filepath.Ext(f.Name())) {
 				io.WriteString(out, "*")
 			}
 		}

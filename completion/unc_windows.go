@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/zetamatta/go-inline-animation"
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-netresource"
 )
 
 var rxUNCPattern1 = regexp.MustCompile(`^\\\\[^\\/]*$`)
@@ -19,7 +19,7 @@ var rxUNCPattern2 = regexp.MustCompile(`^(\\\\[^\\/]+)\\[^\\/]*$`)
 
 func getServers() []string {
 	servers := []string{}
-	dos.EnumFileServer(func(n *dos.NetResource) bool {
+	netresource.EnumFileServer(func(n *netresource.NetResource) bool {
 		servers = append(servers, n.RemoteName())
 		return true
 	})
@@ -101,9 +101,9 @@ func uncComplete(str string, force bool) ([]Element, error) {
 		server := m[1]
 		result := []Element{}
 
-		if fs, err := dos.NewFileServer(server); err == nil {
+		if fs, err := netresource.NewFileServer(server); err == nil {
 			paths := []string{}
-			fs.Enum(func(n *dos.NetResource) bool {
+			fs.Enum(func(n *netresource.NetResource) bool {
 				paths = append(paths, n.RemoteName())
 				return true
 			})

@@ -9,7 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-netresource"
 )
 
 func driveType(rootPathName string) (uint32, string) {
@@ -36,18 +36,18 @@ func driveType(rootPathName string) (uint32, string) {
 }
 
 func df(rootPathName string) ([]string, error) {
-	label, fs, err := dos.VolumeName(rootPathName)
+	label, fs, err := netresource.VolumeName(rootPathName)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
-	free, total, totalFree, err := dos.GetDiskFreeSpace(rootPathName)
+	free, total, totalFree, err := netresource.GetDiskFreeSpace(rootPathName)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
 	driveTypeId, driveTypeStr := driveType(rootPathName)
 	var uncPath string
 	if driveTypeId == windows.DRIVE_REMOTE {
-		uncPath, _ = dos.WNetGetConnectionUTF16a(uint16(rootPathName[0]))
+		uncPath, _ = netresource.WNetGetConnectionUTF16a(uint16(rootPathName[0]))
 	}
 
 	return []string{

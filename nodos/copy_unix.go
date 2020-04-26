@@ -3,7 +3,6 @@
 package nodos
 
 import (
-	"errors"
 	"io"
 	"os"
 )
@@ -48,8 +47,4 @@ func copyFile(src, dst string, isFailIfExists bool) error {
 
 func moveFile(src, dst string) error {
 	return os.Rename(src, dst)
-}
-
-func readShortcut(path string) (string, string, error) {
-	return "", "", errors.New("ReadShortcut not support")
 }

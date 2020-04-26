@@ -9,11 +9,11 @@ import (
 	"os"
 	"runtime"
 
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 
 	"github.com/zetamatta/nyagos/frame"
 	"github.com/zetamatta/nyagos/functions"
-	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 )
 
@@ -33,10 +33,12 @@ func (*scriptEngineForOptionImpl) RunString(ctx context.Context, code string) er
 
 // Main is the main routine on the build without Lua
 func Main() error {
+	disableColors := colorable.EnableColorsStdout(nil)
+	defer disableColors()
+
 	sh := shell.New()
 	defer sh.Close()
-	sh.Console = nodos.GetConsole()
-
+	sh.Console = colorable.NewColorableStdout()
 	ctx := context.Background()
 
 	langEngine := func(fname string) ([]byte, error) {
@@ -97,7 +99,7 @@ func Main() error {
 						Out:  os.Stdout,
 						Err:  os.Stderr,
 						In:   os.Stdin,
-						Term: nodos.GetConsole(),
+						Term: colorable.NewColorableStdout(),
 					},
 				)
 				return 0, nil

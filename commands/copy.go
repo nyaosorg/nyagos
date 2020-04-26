@@ -10,6 +10,9 @@ import (
 	"strings"
 	"unicode"
 
+	"github.com/zetamatta/go-windows-junction"
+	"github.com/zetamatta/go-windows-shortcut"
+
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -56,7 +59,7 @@ func cmdLn(ctx context.Context, cmd Param) (int, error) {
 				if fullpath, err := filepath.Abs(src); err != nil {
 					return err
 				} else {
-					return nodos.CreateJunction(fullpath, dst)
+					return junction.Create(fullpath, dst)
 				}
 			} else {
 				return os.Link(src, dst)
@@ -103,7 +106,7 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 
 	_dst := args[len(args)-1]
 	if strings.ToLower(filepath.Ext(_dst)) == ".lnk" {
-		if __dst, _, err := nodos.ReadShortcut(_dst); err == nil {
+		if __dst, _, err := shortcut.Read(_dst); err == nil {
 			_dst = __dst
 		}
 	}

@@ -1,6 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
 * Implement: %DATE% and %TIME%
+* nyagos.envdel now returns removed directories.
+* use github.com/zetamatta/go-windows-netresource instead of `dos/net*.go`
 
 NYAGOS 4.4.5\_4
 ===============

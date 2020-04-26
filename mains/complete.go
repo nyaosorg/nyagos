@@ -10,8 +10,9 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
+	"github.com/zetamatta/go-readline-ny"
+
 	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/readline"
 )
 
 func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {

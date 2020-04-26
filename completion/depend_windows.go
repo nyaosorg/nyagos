@@ -3,9 +3,9 @@ package completion
 import (
 	"path/filepath"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func isExecutable(path string) bool {
-	return dos.IsExecutableSuffix(filepath.Ext(path))
+	return nodos.IsExecutableSuffix(filepath.Ext(path))
 }

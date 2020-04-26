@@ -8,7 +8,8 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/go-windows-su"
+
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -32,7 +33,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if cmd.UseShellExecute {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
-		pid, err := dos.ShellExecute("open", cmd.args[0], cmdline, "")
+		pid, err := su.ShellExecute("open", cmd.args[0], cmdline, "")
 		if err == nil && pid != 0 && cmd.OnBackExec != nil {
 			cmd.OnBackExec(pid)
 			if cmd.OnBackDone != nil {
@@ -46,14 +47,14 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		}
 		return 0, err
 	}
-	if closer, err := dos.ChangeConsoleMode(windows.Stdin,
-		dos.ModeSet(
+	if closer, err := nodos.ChangeConsoleMode(windows.Stdin,
+		nodos.ModeSet(
 			windows.ENABLE_PROCESSED_INPUT|
 				windows.ENABLE_LINE_INPUT|
 				windows.ENABLE_ECHO_INPUT)); err == nil {
 		defer closer()
 	}
-	if closer, err := dos.ChangeConsoleMode(windows.Stdout); err == nil {
+	if closer, err := nodos.ChangeConsoleMode(windows.Stdout); err == nil {
 		defer closer()
 	}
 	if UseSourceRunBatch {
@@ -89,5 +90,5 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 }
 
 func isGui(path string) bool {
-	return dos.IsGui(path)
+	return nodos.IsGui(path)
 }

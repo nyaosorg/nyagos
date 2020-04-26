@@ -8,7 +8,7 @@ import (
 
 	"github.com/zetamatta/go-texts/mbcs"
 
-	"github.com/zetamatta/nyagos/dos"
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func init() {
@@ -68,19 +68,10 @@ func newMbcsReader(r io.Reader) io.Reader {
 	return mbcs.NewAutoDetectReader(r, mbcs.ConsoleCP())
 }
 
-func readShortCut(dir string) (string, error) {
-	newdir, _, err := dos.ReadShortcut(dir)
-	return newdir, err
-}
-
 func setWritable(path string) error {
-	perm, err := dos.GetFileAttributes(path)
+	perm, err := nodos.GetFileAttributes(path)
 	if err != nil {
 		return err
 	}
-	return dos.SetFileAttributes(path, perm&^windows.FILE_ATTRIBUTE_READONLY)
-}
-
-func truncate(path string, f func(path string, err error) bool, out io.Writer) error {
-	return dos.Truncate(path, f, out)
+	return nodos.SetFileAttributes(path, perm&^windows.FILE_ATTRIBUTE_READONLY)
 }
