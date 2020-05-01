@@ -332,27 +332,24 @@ func IsAlreadyReported(err error) bool {
 	return ok
 }
 
-type preExecHookFlagT struct{}
+type execHookFlagT struct{}
 
-var preExecHookFlag1 preExecHookFlagT
+var execHookFlag1 execHookFlagT
 
 var PreExecHook func(context.Context, *Cmd)
-
-type postExecHookFlagT struct{}
-
-var postExecHookFlag1 postExecHookFlagT
-
 var PostExecHook func(context.Context, *Cmd)
 
 func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
-	if PreExecHook != nil && ctx.Value(preExecHookFlag1) == nil {
-		PreExecHook(context.WithValue(ctx, preExecHookFlag1, true), cmd)
+	_ctx := context.WithValue(ctx, execHookFlag1, true)
+
+	if PreExecHook != nil && ctx.Value(execHookFlag1) == nil {
+		PreExecHook(_ctx, cmd)
 	}
 
-	errorlevel, err := cmd.spawnvpSilent(ctx)
+	errorlevel, err := cmd.spawnvpSilent(_ctx)
 
-	if PostExecHook != nil && ctx.Value(postExecHookFlag1) == nil {
-		PostExecHook(context.WithValue(ctx, postExecHookFlag1, true), cmd)
+	if PostExecHook != nil && ctx.Value(execHookFlag1) == nil {
+		PostExecHook(_ctx, cmd)
 	}
 
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
