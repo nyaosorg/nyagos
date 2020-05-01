@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -188,4 +189,27 @@ func cmdEval(L Lua) int {
 		L.Push(lua.LNil)
 	}
 	return 1
+}
+
+func cmdSetPrehook(L Lua) int {
+	f, ok := L.Get(1).(*lua.LFunction)
+	if ok {
+		shell.PreExecHook = func(ctx context.Context, cmd *shell.Cmd) {
+			if LL, ok := ctx.Value(luaKey).(Lua); ok {
+				table := LL.NewTable()
+				for i, s := range cmd.Args() {
+					LL.SetTable(table, lua.LNumber(i+1), lua.LString(s))
+				}
+				LL.Push(f)
+				LL.Push(table)
+				err := LL.PCall(1, 0, nil)
+				if err != nil {
+					fmt.Fprintln(os.Stderr, err.Error())
+				}
+			}
+		}
+	} else {
+		shell.PreExecHook = nil
+	}
+	return 0
 }

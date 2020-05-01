@@ -186,6 +186,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "version", lua.LString(frame.Version))
 	L.SetField(nyagosTable, "pathseparator", lua.LString(string(os.PathSeparator)))
 	L.SetField(nyagosTable, "pathlistseperator", lua.LString(string(os.PathListSeparator)))
+	L.SetField(nyagosTable, "setprehook", L.NewFunction(cmdSetPrehook))
 
 	if exePath, err := os.Executable(); err == nil {
 		L.SetField(nyagosTable, "exe", lua.LString(exePath))
