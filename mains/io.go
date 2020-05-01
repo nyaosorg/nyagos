@@ -280,6 +280,12 @@ func openIo(L *lua.LState) *lua.LTable {
 	L.SetField(ioTable, "close", L.NewFunction(fileClose))
 	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
 	L.SetField(ioTable, "type", L.NewFunction(ioType))
+	L.SetField(ioTable, "stdin",
+		newXFile(L, &XFile{File: os.Stdin, dontClose: true}, true, false))
+	L.SetField(ioTable, "stdout",
+		newXFile(L, &XFile{File: os.Stdout, dontClose: true}, false, true))
+	L.SetField(ioTable, "stderr",
+		newXFile(L, &XFile{File: os.Stderr, dontClose: true}, false, true))
 	return ioTable
 }
 

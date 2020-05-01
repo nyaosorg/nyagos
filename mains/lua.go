@@ -540,9 +540,15 @@ func (this *XFile) Sync() error {
 
 func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, callback func() error) error {
 	ioTbl := L.GetGlobal("io")
+
+	orgStdin := L.GetField(ioTbl, "stdin")
+	orgStdout := L.GetField(ioTbl, "stdout")
+	orgStderr := L.GetField(ioTbl, "stderr")
+
 	stdin := newXFile(L, &XFile{File: _stdin, dontClose: true}, true, false)
 	stdout := newXFile(L, &XFile{File: _stdout, dontClose: true}, false, true)
 	stderr := newXFile(L, &XFile{File: _stderr, dontClose: true}, false, true)
+
 	L.SetField(ioTbl, "stdin", stdin)
 	L.SetField(ioTbl, "stdout", stdout)
 	L.SetField(ioTbl, "stderr", stderr)
@@ -552,9 +558,9 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 	dispose(L, stdin)
 	dispose(L, stdout)
 	dispose(L, stderr)
-	L.SetField(ioTbl, "stdin", lua.LNil)
-	L.SetField(ioTbl, "stdout", lua.LNil)
-	L.SetField(ioTbl, "stderr", lua.LNil)
+	L.SetField(ioTbl, "stdin", orgStdin)
+	L.SetField(ioTbl, "stdout", orgStdout)
+	L.SetField(ioTbl, "stderr", orgStderr)
 	return err
 }
 
