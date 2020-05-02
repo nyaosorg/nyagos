@@ -3,6 +3,7 @@
 * %DATE% と %TIME% を実装した。
 * nyagos.envdel は削除したディレクトリを戻り値として返すようになった。
 * `dos/net*.go` などを github.com/zetamatta/go-windows-netresource へ移行
+* (#379) nyagos.preexechook & postexechook を追加
 
 NYAGOS 4.4.5\_4
 ===============
