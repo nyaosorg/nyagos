@@ -201,7 +201,7 @@ func setExecHook(f *lua.LFunction, hook *func(context.Context, *shell.Cmd)) int 
 				}
 				LL.Push(f)
 				LL.Push(table)
-				err := callCSL(ctx, &cmd.Shell, LL, 1, 0)
+				err := execLuaKeepContextAndShell(ctx, &cmd.Shell, LL, 1, 0)
 				if err != nil {
 					fmt.Fprintln(os.Stderr, err.Error())
 				}

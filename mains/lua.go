@@ -581,7 +581,7 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 	return err
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
+func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	defer setContext(L, getContext(L))
 	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(L, ctx)
@@ -596,5 +596,5 @@ func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
 	if !ok {
 		return errors.New("callLua: can not find Lua instance in the shell")
 	}
-	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
+	return execLuaKeepContextAndShell(ctx, sh, luawrapper.Lua, nargs, nresult)
 }

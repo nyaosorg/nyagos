@@ -19,7 +19,7 @@ func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
 		// nyagos.prompt is function.
 		L.Push(promptHook)
 		L.Push(lua.LString(os.Getenv("PROMPT")))
-		if err := callCSL(ctx, sh, L, 1, 1); err != nil {
+		if err := execLuaKeepContextAndShell(ctx, sh, L, 1, 1); err != nil {
 			return 0, err
 		}
 
