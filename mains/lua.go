@@ -5,7 +5,6 @@ package mains
 import (
 	"bufio"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -589,12 +588,4 @@ func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nar
 	return luaRedirect(ctx, sh.Stdio[0], sh.Stdio[1], sh.Stdio[2], L, func() error {
 		return L.PCall(nargs, nresult, nil)
 	})
-}
-
-func execLuaAttachedShellKeepContext(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
-	luawrapper, ok := sh.Tag().(*luaWrapper)
-	if !ok {
-		return errors.New("execLuaAttachedShellKeepContext: can not find Lua instance in the shell")
-	}
-	return execLuaKeepContextAndShell(ctx, sh, luawrapper.Lua, nargs, nresult)
 }

@@ -45,7 +45,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	L.Push(table)
 
 	errorlevel := 0
-	err := execLuaAttachedShellKeepContext(ctx, &cmd.Shell, 1, 1)
+	err := execLuaKeepContextAndShell(ctx, &cmd.Shell, L, 1, 1)
 	if err == nil {
 		switch val := L.Get(-1).(type) {
 		case *lua.LTable:
