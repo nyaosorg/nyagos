@@ -419,6 +419,50 @@ OS名 (`windows` or `linux`)
 
 メッセージボックスを表示します
 
+### `nyagos.preexechook`
+
+コマンド実行前のフックです。
+
+#### 登録
+
+```
+nyagos.preexechook = function(args)
+    io.write("Call ")
+    for i=1,#args do
+        io.write("[" .. args[i] .. "]")
+    end
+    io.write("\n")
+end
+```
+
+#### 解除
+
+```
+nyagos.preexechook = nil
+```
+
+### `nyagos.postexechook`
+
+コマンド実行後のフックです。
+
+#### 登録
+
+```
+nyagos.postexechook = function(args)
+    io.write("Done ")
+    for i=1,#args do
+        io.write("[" .. args[i] .. "]")
+    end
+    io.write("\n")
+end
+```
+
+#### 解除
+
+```
+nyagos.postexechook = nil
+```
+
 ### `nyagos.exe`
 
 nyagos.exe のフルパスが格納されています。
