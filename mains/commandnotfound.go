@@ -30,7 +30,7 @@ func onCommandNotFound(ctx context.Context, sh *shell.Cmd, err error) error {
 	}
 	L.Push(hook)
 	L.Push(args)
-	err1 := callLua(ctx, &sh.Shell, 1, 1)
+	err1 := execLuaAttachedShellKeepContext(ctx, &sh.Shell, 1, 1)
 	if err1 != nil {
 		return err1
 	}

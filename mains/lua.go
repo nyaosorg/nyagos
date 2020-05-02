@@ -591,10 +591,10 @@ func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nar
 	})
 }
 
-func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
+func execLuaAttachedShellKeepContext(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
 	luawrapper, ok := sh.Tag().(*luaWrapper)
 	if !ok {
-		return errors.New("callLua: can not find Lua instance in the shell")
+		return errors.New("execLuaAttachedShellKeepContext: can not find Lua instance in the shell")
 	}
 	return execLuaKeepContextAndShell(ctx, sh, luawrapper.Lua, nargs, nresult)
 }
