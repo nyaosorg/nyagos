@@ -57,6 +57,15 @@ var boolProperty = map[string]*bool{
 	"completion_slash":  &completion.UseSlash,
 }
 
+var funcPropertySetter = map[string](func(*lua.LFunction)){
+	"preexechook": func(f *lua.LFunction) {
+		setExecHook(f, &shell.PreExecHook)
+	},
+	"postexechook": func(f *lua.LFunction) {
+		setExecHook(f, &shell.PostExecHook)
+	},
+}
+
 func nyagosGetter(L Lua) int {
 	keyTmp, ok := L.Get(2).(lua.LString)
 	if !ok {
@@ -104,6 +113,14 @@ func nyagosSetter(L Lua) int {
 			*ptr = false
 		} else {
 			return lerror(L, fmt.Sprintf("nyagos.%s: must be boolean", key))
+		}
+	} else if setter, ok := funcPropertySetter[key]; ok {
+		if f, ok := L.Get(3).(*lua.LFunction); ok {
+			setter(f)
+		} else if L.Get(3) == lua.LNil {
+			setter(nil)
+		} else {
+			return lerror(L, fmt.Sprintf("nyagos.%s: must be function", key))
 		}
 	} else {
 		L.RawSet(L.Get(1).(*lua.LTable), L.Get(2), L.Get(3))
@@ -186,8 +203,6 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "version", lua.LString(frame.Version))
 	L.SetField(nyagosTable, "pathseparator", lua.LString(string(os.PathSeparator)))
 	L.SetField(nyagosTable, "pathlistseperator", lua.LString(string(os.PathListSeparator)))
-	L.SetField(nyagosTable, "setprehook", L.NewFunction(cmdSetPreHook))
-	L.SetField(nyagosTable, "setposthook", L.NewFunction(cmdSetPostHook))
 
 	if exePath, err := os.Executable(); err == nil {
 		L.SetField(nyagosTable, "exe", lua.LString(exePath))

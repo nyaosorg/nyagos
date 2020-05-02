@@ -191,9 +191,8 @@ func cmdEval(L Lua) int {
 	return 1
 }
 
-func _SetHook(L Lua, hook *func(context.Context, *shell.Cmd)) int {
-	f, ok := L.Get(1).(*lua.LFunction)
-	if ok {
+func setExecHook(f *lua.LFunction, hook *func(context.Context, *shell.Cmd)) int {
+	if f != nil {
 		*hook = func(ctx context.Context, cmd *shell.Cmd) {
 			if LL, ok := ctx.Value(luaKey).(Lua); ok {
 				table := LL.NewTable()
@@ -212,12 +211,4 @@ func _SetHook(L Lua, hook *func(context.Context, *shell.Cmd)) int {
 		*hook = nil
 	}
 	return 0
-}
-
-func cmdSetPreHook(L Lua) int {
-	return _SetHook(L, &shell.PreExecHook)
-}
-
-func cmdSetPostHook(L Lua) int {
-	return _SetHook(L, &shell.PostExecHook)
 }
