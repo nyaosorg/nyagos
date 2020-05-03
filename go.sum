@@ -55,6 +55,8 @@ github.com/zetamatta/go-box/v2 v2.0.7 h1:AFnhi+l0Z3w+vkJ8Qnv1g/euGS60ub9zxAUpIzp
 github.com/zetamatta/go-box/v2 v2.0.7/go.mod h1:lp22FglV7+xXQ11S7SV913YrBB0xhQNUlPg3f6UlIUw=
 github.com/zetamatta/go-findfile v0.0.0-20200320002345-488b487d9498 h1:AxDg/uN4XXidYxr+YK0bHjhtLi35L5i5OmHJB112O1o=
 github.com/zetamatta/go-findfile v0.0.0-20200320002345-488b487d9498/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
+github.com/zetamatta/go-findfile v0.0.0-20200328162119-eee69b678cbf h1:WZYd2EJmrCIw3zM7pdZDAsuNjATb6xLUDDess5/scNY=
+github.com/zetamatta/go-findfile v0.0.0-20200328162119-eee69b678cbf/go.mod h1:uXs4YM21qjgpxOrPBbO/9IVZBG4L72DOZHeuKZdrm1s=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n50N7PRFw06uZq3KBYye4wq/t860QEQQXNJVWppdOgc=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
 github.com/zetamatta/go-outputdebug v0.0.0-20200312034632-d2ad5f0d3c33 h1:fJ55jw5kAeVHHCN+/f+EFT3lXMO/TGEzQJtvE7KNJPU=
@@ -72,8 +74,12 @@ github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:w
 github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc/go.mod h1:Z9Oob8fSU9i1JvP5c+gaX957/ZKeqBdNuDI2XfEhuRU=
 github.com/zetamatta/go-windows-netresource v0.0.0-20200319170337-06fa9942e7d4 h1:lhnCZ0r51+fPJRA2XhHkDzF76AxXZZ0IzuCGvpbUL5E=
 github.com/zetamatta/go-windows-netresource v0.0.0-20200319170337-06fa9942e7d4/go.mod h1:zcM57zYz2gjmxUmMZCbzex7+XgSPXm2/Rl2nrTUScMw=
+github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2 h1:spfe6lLLnG2gNi053Gvhl14tQ4J56YKvZorH8Ml7NpI=
+github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2/go.mod h1:zcM57zYz2gjmxUmMZCbzex7+XgSPXm2/Rl2nrTUScMw=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e h1:q9+U7iW+yyH1NK3Ozc7tNhEeIIYkV0vJorMW+uelAXY=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200202123734-027ea350645e/go.mod h1:buJWG/mCpNkeABgIeEaX6b+6qh3wBhioplFV6K6ZPo8=
+github.com/zetamatta/go-windows-shortcut v0.0.0-20200324140129-c189109eb763 h1:thKzxVNomPyAn8vDLLdhBoyJubCOCNz+LkkjAgP7vRs=
+github.com/zetamatta/go-windows-shortcut v0.0.0-20200324140129-c189109eb763/go.mod h1:buJWG/mCpNkeABgIeEaX6b+6qh3wBhioplFV6K6ZPo8=
 github.com/zetamatta/go-windows-su v0.1.1 h1:95i4NZ0HLPMHSscuEK0khn8lQWgt5+Cp+UMlOG9k9V8=
 github.com/zetamatta/go-windows-su v0.1.1/go.mod h1:4n9f0mFNFXFahrF27dl2PyawsOg5I+F7gbhXzop+SPc=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
@@ -88,6 +94,8 @@ golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200320181252-af34d8274f85 h1:fD99hd4ciR6T3oPhr2EkmuKe9oHixHx9Hj/hND89j3g=
 golang.org/x/sys v0.0.0-20200320181252-af34d8274f85/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20200501145240-bc7a7d42d5c3 h1:5B6i6EAiSYyejWfvc5Rc9BbI3rzIsrrXfAQBWnYfn+w=
+golang.org/x/sys v0.0.0-20200501145240-bc7a7d42d5c3/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
