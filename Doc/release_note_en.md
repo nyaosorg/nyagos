@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * nyagos.envdel now returns removed directories.
 * use github.com/zetamatta/go-windows-netresource instead of `dos/net*.go`
 * (#379) Add: nyagos.preexechook & postexechook
+* (#383) Fixed the bug to go into an infinite loop when the terminal crashes
 
 NYAGOS 4.4.5\_4
 ===============
