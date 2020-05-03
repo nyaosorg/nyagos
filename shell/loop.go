@@ -117,14 +117,14 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 }
 
 // ForEver executes commands from `stream` until EOF are found.
-func (sh *Shell) ForEver(ctx context.Context, stream Stream) {
+func (sh *Shell) ForEver(ctx context.Context, stream Stream) error {
 	for {
 		_, err := sh.Loop(ctx, stream)
 		if err == io.EOF {
-			return
+			return nil
 		}
 		if err != nil {
-			fmt.Println(err.Error())
+			return err
 		}
 	}
 }
