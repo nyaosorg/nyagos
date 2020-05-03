@@ -5,7 +5,6 @@ package mains
 import (
 	"bufio"
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -57,6 +56,15 @@ var boolProperty = map[string]*bool{
 	"completion_slash":  &completion.UseSlash,
 }
 
+var funcPropertySetter = map[string](func(*lua.LFunction)){
+	"preexechook": func(f *lua.LFunction) {
+		setExecHook(f, &shell.PreExecHook)
+	},
+	"postexechook": func(f *lua.LFunction) {
+		setExecHook(f, &shell.PostExecHook)
+	},
+}
+
 func nyagosGetter(L Lua) int {
 	keyTmp, ok := L.Get(2).(lua.LString)
 	if !ok {
@@ -104,6 +112,14 @@ func nyagosSetter(L Lua) int {
 			*ptr = false
 		} else {
 			return lerror(L, fmt.Sprintf("nyagos.%s: must be boolean", key))
+		}
+	} else if setter, ok := funcPropertySetter[key]; ok {
+		if f, ok := L.Get(3).(*lua.LFunction); ok {
+			setter(f)
+		} else if L.Get(3) == lua.LNil {
+			setter(nil)
+		} else {
+			return lerror(L, fmt.Sprintf("nyagos.%s: must be function", key))
 		}
 	} else {
 		L.RawSet(L.Get(1).(*lua.LTable), L.Get(2), L.Get(3))
@@ -540,9 +556,15 @@ func (this *XFile) Sync() error {
 
 func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, callback func() error) error {
 	ioTbl := L.GetGlobal("io")
+
+	orgStdin := L.GetField(ioTbl, "stdin")
+	orgStdout := L.GetField(ioTbl, "stdout")
+	orgStderr := L.GetField(ioTbl, "stderr")
+
 	stdin := newXFile(L, &XFile{File: _stdin, dontClose: true}, true, false)
 	stdout := newXFile(L, &XFile{File: _stdout, dontClose: true}, false, true)
 	stderr := newXFile(L, &XFile{File: _stderr, dontClose: true}, false, true)
+
 	L.SetField(ioTbl, "stdin", stdin)
 	L.SetField(ioTbl, "stdout", stdout)
 	L.SetField(ioTbl, "stderr", stderr)
@@ -552,13 +574,13 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 	dispose(L, stdin)
 	dispose(L, stdout)
 	dispose(L, stderr)
-	L.SetField(ioTbl, "stdin", lua.LNil)
-	L.SetField(ioTbl, "stdout", lua.LNil)
-	L.SetField(ioTbl, "stderr", lua.LNil)
+	L.SetField(ioTbl, "stdin", orgStdin)
+	L.SetField(ioTbl, "stdout", orgStdout)
+	L.SetField(ioTbl, "stderr", orgStderr)
 	return err
 }
 
-func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
+func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	defer setContext(L, getContext(L))
 	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(L, ctx)
@@ -566,12 +588,4 @@ func callCSL(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) er
 	return luaRedirect(ctx, sh.Stdio[0], sh.Stdio[1], sh.Stdio[2], L, func() error {
 		return L.PCall(nargs, nresult, nil)
 	})
-}
-
-func callLua(ctx context.Context, sh *shell.Shell, nargs, nresult int) error {
-	luawrapper, ok := sh.Tag().(*luaWrapper)
-	if !ok {
-		return errors.New("callLua: can not find Lua instance in the shell")
-	}
-	return callCSL(ctx, sh, luawrapper.Lua, nargs, nresult)
 }

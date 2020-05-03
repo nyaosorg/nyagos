@@ -395,6 +395,50 @@ The string indicating OS name (`windows` or `linux`)
 
 Show message-box
 
+### `nyagos.preexechook`
+
+The hook before calling commands.
+
+#### To register:
+
+```
+nyagos.preexechook = function(args)
+    io.write("Call ")
+    for i=1,#args do
+        io.write("[" .. args[i] .. "]")
+    end
+    io.write("\n")
+end
+```
+
+#### To unregister:
+
+```
+nyagos.preexechook = nil
+```
+
+### `nyagos.postexechook`
+
+The hook after calling commands.
+
+#### To register:
+
+```
+nyagos.postexechook = function(args)
+    io.write("Done ")
+    for i=1,#args do
+        io.write("[" .. args[i] .. "]")
+    end
+    io.write("\n")
+end
+```
+
+#### To unregister:
+
+```
+nyagos.postexechook = nil
+```
+
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.

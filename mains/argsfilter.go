@@ -40,7 +40,7 @@ func newArgHook(ctx context.Context, it *shell.Shell, args []string) ([]string, 
 	}
 	L.Push(f)
 	L.Push(param)
-	if err := callLua(ctx, it, 1, 1); err != nil {
+	if err := execLuaKeepContextAndShell(ctx, it, L, 1, 1); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		return orgArgHook(ctx, it, args)
 	}

@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -44,7 +45,7 @@ func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	L.Push(table)
 
 	errorlevel := 0
-	err := callLua(ctx, &cmd.Shell, 1, 1)
+	err := execLuaKeepContextAndShell(ctx, &cmd.Shell, L, 1, 1)
 	if err == nil {
 		switch val := L.Get(-1).(type) {
 		case *lua.LTable:
@@ -188,4 +189,26 @@ func cmdEval(L Lua) int {
 		L.Push(lua.LNil)
 	}
 	return 1
+}
+
+func setExecHook(f *lua.LFunction, hook *func(context.Context, *shell.Cmd)) int {
+	if f != nil {
+		*hook = func(ctx context.Context, cmd *shell.Cmd) {
+			if LL, ok := ctx.Value(luaKey).(Lua); ok {
+				table := LL.NewTable()
+				for i, s := range cmd.Args() {
+					LL.SetTable(table, lua.LNumber(i+1), lua.LString(s))
+				}
+				LL.Push(f)
+				LL.Push(table)
+				err := execLuaKeepContextAndShell(ctx, &cmd.Shell, LL, 1, 0)
+				if err != nil {
+					fmt.Fprintln(os.Stderr, err.Error())
+				}
+			}
+		}
+	} else {
+		*hook = nil
+	}
+	return 0
 }

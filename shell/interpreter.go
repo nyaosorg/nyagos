@@ -266,6 +266,8 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	if fullpath == "" {
 		return 255, OnCommandNotFound(ctx, cmd, os.ErrNotExist)
 	}
+	saveArg0 := cmd.args[0]
+	defer func() { cmd.args[0] = saveArg0 }()
 	cmd.args[0] = fullpath
 
 	if defined.DBG {
@@ -273,6 +275,8 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	}
 
 	if WildCardExpansionAlways {
+		saveArgs := cmd.args
+		defer func() { cmd.args = saveArgs }()
 		cmd.args = findfile.Globs(cmd.args)
 	}
 	return cmd.startProcess(ctx)
@@ -332,8 +336,26 @@ func IsAlreadyReported(err error) bool {
 	return ok
 }
 
+type execHookFlagT struct{}
+
+var execHookFlag1 execHookFlagT
+
+var PreExecHook func(context.Context, *Cmd)
+var PostExecHook func(context.Context, *Cmd)
+
 func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
-	errorlevel, err := cmd.spawnvpSilent(ctx)
+	_ctx := context.WithValue(ctx, execHookFlag1, true)
+
+	if PreExecHook != nil && ctx.Value(execHookFlag1) == nil {
+		PreExecHook(_ctx, cmd)
+	}
+
+	errorlevel, err := cmd.spawnvpSilent(_ctx)
+
+	if PostExecHook != nil && ctx.Value(execHookFlag1) == nil {
+		PostExecHook(_ctx, cmd)
+	}
+
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if defined.DBG {
 			val := reflect.ValueOf(err)
