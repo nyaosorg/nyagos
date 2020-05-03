@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"reflect"
 	"strings"
 	"sync"
 
@@ -358,8 +357,7 @@ func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
 
 	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
 		if defined.DBG {
-			val := reflect.ValueOf(err)
-			fmt.Fprintf(cmd.Err(), "error-type=%s\n", val.Type())
+			fmt.Fprintf(cmd.Err(), "error-type=%T\n", err)
 		}
 		fmt.Fprintln(cmd.Err(), err.Error())
 		err = AlreadyReportedError{err}
