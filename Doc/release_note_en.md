@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * use github.com/zetamatta/go-windows-netresource instead of `dos/net*.go`
 * (#379) Add: nyagos.preexechook & postexechook
 * (#383) Fixed the bug to go into an infinite loop when the terminal crashes
+* Tab-key after `start` completes as a command name as `which`
 
 NYAGOS 4.4.5\_4
 ===============

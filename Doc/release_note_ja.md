@@ -5,6 +5,7 @@
 * `dos/net*.go` などを github.com/zetamatta/go-windows-netresource へ移行
 * (#379) nyagos.preexechook & postexechook を追加
 * (#383) 端末がクラッシュした時、無限ループに突入してしまう不具合を修正
+* `start` の後のタブキーは `which` のようにコマンド名補完をするようにした
 
 NYAGOS 4.4.5\_4
 ===============
