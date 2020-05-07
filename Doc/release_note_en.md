@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * (#379) Add: nyagos.preexechook & postexechook
 * (#383) Fixed the bug to go into an infinite loop when the terminal crashes
 * Tab-key after `start` completes as a command name as `which`
+* Fix: when `cd x:\y\z` failed, the current directory is moved to x:\ (root)
 
 NYAGOS 4.4.5\_4
 ===============
