@@ -1,7 +1,7 @@
-package timecheck
+package commands
 
-// DoesYearHave366Days returns true if the `year` has 366 days.
-func DoesYearHave366Days(year int) bool {
+// doesYearHave366Days returns true if the `year` has 366 days.
+func doesYearHave366Days(year int) bool {
 	if year%400 == 0 {
 		return true
 	}
@@ -14,8 +14,8 @@ func DoesYearHave366Days(year int) bool {
 	return false
 }
 
-// IsOk returns true if year,month,mday,hour,min,sec isnot invalid.
-func IsOk(year, month, mday, hour, min, sec int) bool {
+// stampIsOk returns true if year,month,mday,hour,min,sec isnot invalid.
+func stampIsValid(year, month, mday, hour, min, sec int) bool {
 	if sec < 0 || sec > 60 {
 		return false
 	}
@@ -35,7 +35,7 @@ func IsOk(year, month, mday, hour, min, sec int) bool {
 	case 4, 6, 9, 11:
 		mdayMax = 30
 	case 2:
-		if DoesYearHave366Days(year) {
+		if doesYearHave366Days(year) {
 			mdayMax = 29
 		} else {
 			mdayMax = 28

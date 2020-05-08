@@ -7,8 +7,6 @@ import (
 	"regexp"
 	"strconv"
 	"time"
-
-	"github.com/zetamatta/nyagos/commands/timecheck"
 )
 
 var timePattern = regexp.MustCompile(
@@ -47,7 +45,7 @@ func readTimeStamp(s string) *time.Time {
 	hour := atoiOr(m[5], 0)
 	min := atoiOr(m[6], 0)
 	sec := atoiOr(m[7], 0)
-	if !timecheck.IsOk(year, month, mday, hour, min, sec) {
+	if !stampIsValid(year, month, mday, hour, min, sec) {
 		return nil
 	}
 	stamp := time.Date(year, time.Month(month), mday, hour, min, sec, 0, time.Local)
