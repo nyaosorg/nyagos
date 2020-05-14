@@ -2,7 +2,9 @@ package completion
 
 import (
 	"context"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/mitchellh/go-ps"
@@ -19,8 +21,35 @@ func completionSet(ctx context.Context, ua UncAccess, params []string) ([]Elemen
 	return result, nil
 }
 
-func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
+func completionDir(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
 	return listUpDirs(ctx, ua, params[len(params)-1])
+}
+
+func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
+
+	list, err := completionDir(ctx, ua, params)
+	source := params[len(params)-1]
+	if strings.ContainsAny(source, "/\\:") {
+		return list, err
+	}
+	cdpath := os.Getenv("CDPATH")
+	if cdpath == "" {
+		return list, err
+	}
+	base := strings.ToUpper(source)
+	for _, cdpath1 := range filepath.SplitList(cdpath) {
+		if files, err := ioutil.ReadDir(cdpath1); err == nil {
+			for _, file1 := range files {
+				if file1.IsDir() {
+					name := strings.ToUpper(file1.Name())
+					if strings.HasPrefix(name, base) {
+						list = append(list, Element1(file1.Name()))
+					}
+				}
+			}
+		}
+	}
+	return list, nil
 }
 
 func completionEnv(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
