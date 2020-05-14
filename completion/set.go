@@ -29,7 +29,7 @@ func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element
 
 	list, err := completionDir(ctx, ua, params)
 	source := params[len(params)-1]
-	if strings.ContainsAny(source, "/\\:") {
+	if source[0] == '.' || strings.ContainsAny(source, "/\\:") {
 		return list, err
 	}
 	cdpath := os.Getenv("CDPATH")

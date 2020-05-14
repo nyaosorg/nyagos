@@ -41,7 +41,7 @@ const (
 )
 
 func seekCdPath(dir string) string {
-	if strings.ContainsAny(dir, "/\\:") {
+	if dir[0] == '.' || strings.ContainsAny(dir, "/\\:") {
 		return ""
 	}
 	cdpath := os.Getenv("CDPATH")
