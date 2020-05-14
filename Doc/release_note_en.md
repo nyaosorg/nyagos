@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* cd,push and their completion supports %CDPATH% like bash
+
 NYAGOS 4.4.6\_0
 ===============
 on May.08,2020
