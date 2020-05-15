@@ -35,6 +35,10 @@ No arguments, move to %HOME% or %USERPROFILE%.
 * `cd --history` : listing directories stayed all with no decoration
 * `cd shortcut.lnk` : move the target directory pointed shortcut.lnk
 
+If the directory-path does not contain `:`,`/`,`\` and it does not
+exists in the current directory, seek the directory to move in the
+list of %CDPATH%.
+
 ### `chmod ooo FILE(s)`
 
 ### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
