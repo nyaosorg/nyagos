@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * cd,pushd とその補完で bash のような %CDPATH% をサポートした
+* `%APPDIR%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
 
 NYAGOS 4.4.6\_0
 ===============
