@@ -69,6 +69,8 @@ github.com/zetamatta/go-readline-ny v0.1.0 h1:Uyzoq7yV6YwjRQBRyhdkuyHtZ5TDfwHRfJ
 github.com/zetamatta/go-readline-ny v0.1.0/go.mod h1:0dyGlgYyE33wgGMmv6p6eLe4yGro1kwQ0792hlccXdk=
 github.com/zetamatta/go-readline-ny v0.1.1 h1:Az6XYta3SqhcpqqzobZNxYQajAVx4UQmBTm2Kmssy04=
 github.com/zetamatta/go-readline-ny v0.1.1/go.mod h1:0dyGlgYyE33wgGMmv6p6eLe4yGro1kwQ0792hlccXdk=
+github.com/zetamatta/go-readline-ny v0.1.2 h1:Mm7EZczKSWyHg227CwvwHJisBCTjLviZENUEdWxrLVE=
+github.com/zetamatta/go-readline-ny v0.1.2/go.mod h1:lCPUzYO4tOZQWUeUIdGGVU56AFU5zcQzoFlf/y/VNMQ=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
