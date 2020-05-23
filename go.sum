@@ -49,6 +49,8 @@ github.com/tidwall/transform v0.0.0-20170512230743-9b12a70c77d3 h1:uXZlvhDoptL/r
 github.com/tidwall/transform v0.0.0-20170512230743-9b12a70c77d3/go.mod h1:MvrEmduDUz4ST5pGZ7CABCnOU5f3ZiOAZzT6b1A6nX8=
 github.com/yuin/gopher-lua v0.0.0-20191220021717-ab39c6098bdb h1:ZkM6LRnq40pR1Ox0hTHlnpkcOTuFIDQpZ1IN8rKKhX0=
 github.com/yuin/gopher-lua v0.0.0-20191220021717-ab39c6098bdb/go.mod h1:gqRgreBUhTSL0GeU64rtZ3Uq3wtjOa/TB2YfrtkCbVQ=
+github.com/yuin/gopher-lua v0.0.0-20200521060427-6ff375d91eab h1:K7gu9IIvA+0JDhq7R9CepwSbSRiKY0JcUUs/CVZ3vfU=
+github.com/yuin/gopher-lua v0.0.0-20200521060427-6ff375d91eab/go.mod h1:gqRgreBUhTSL0GeU64rtZ3Uq3wtjOa/TB2YfrtkCbVQ=
 github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c h1:r9UpTInry+YwbwhQ6JFwYiFQMTXuwlWu3mKHQxDtiBM=
 github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c/go.mod h1:0C0I/UCXREnt1Pm8ONsoZMht/s9aTzLr9fcd57yIsls=
 github.com/zetamatta/go-box/v2 v2.0.7 h1:AFnhi+l0Z3w+vkJ8Qnv1g/euGS60ub9zxAUpIzp4R7Q=
@@ -61,8 +63,12 @@ github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
 github.com/zetamatta/go-outputdebug v0.0.0-20200312034632-d2ad5f0d3c33 h1:fJ55jw5kAeVHHCN+/f+EFT3lXMO/TGEzQJtvE7KNJPU=
 github.com/zetamatta/go-outputdebug v0.0.0-20200312034632-d2ad5f0d3c33/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
+github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae h1:LLvf5CCPekfeUlqQDGfVvds1kMf4hBfcAkpzYHqjYV4=
+github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
 github.com/zetamatta/go-readline-ny v0.1.0 h1:Uyzoq7yV6YwjRQBRyhdkuyHtZ5TDfwHRfJ5JdIZCKXA=
 github.com/zetamatta/go-readline-ny v0.1.0/go.mod h1:0dyGlgYyE33wgGMmv6p6eLe4yGro1kwQ0792hlccXdk=
+github.com/zetamatta/go-readline-ny v0.1.1 h1:Az6XYta3SqhcpqqzobZNxYQajAVx4UQmBTm2Kmssy04=
+github.com/zetamatta/go-readline-ny v0.1.1/go.mod h1:0dyGlgYyE33wgGMmv6p6eLe4yGro1kwQ0792hlccXdk=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
@@ -96,6 +102,8 @@ golang.org/x/sys v0.0.0-20200320181252-af34d8274f85 h1:fD99hd4ciR6T3oPhr2EkmuKe9
 golang.org/x/sys v0.0.0-20200320181252-af34d8274f85/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200501145240-bc7a7d42d5c3 h1:5B6i6EAiSYyejWfvc5Rc9BbI3rzIsrrXfAQBWnYfn+w=
 golang.org/x/sys v0.0.0-20200501145240-bc7a7d42d5c3/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20200519105757-fe76b779f299 h1:DYfZAGf2WMFjMxbgTjaC+2HC7NkNAQs+6Q8b9WEB/F4=
+golang.org/x/sys v0.0.0-20200519105757-fe76b779f299/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
