@@ -2,6 +2,7 @@
 
 * cd,pushd とその補完で bash のような %CDPATH% をサポートした
 * `%APPDIR%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
+* WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした
 
 NYAGOS 4.4.6\_0
 ===============
