@@ -74,12 +74,14 @@ func cmdCdSub(dir string) (int, error) {
 		// println(dir, "->", dirTmp)
 		dir = dirTmp
 	}
-	if _dir := seekCdPath(dir); _dir != "" {
-		dir = _dir
-	}
 	err := nodos.Chdir(dir)
 	if err == nil {
 		return 0, nil
+	}
+	if _dir := seekCdPath(dir); _dir != "" {
+		if err = nodos.Chdir(_dir); err == nil {
+			return 0, nil
+		}
 	}
 	return errnoChdirFail, err
 }
