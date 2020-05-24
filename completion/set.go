@@ -25,6 +25,15 @@ func completionDir(ctx context.Context, ua UncAccess, params []string) ([]Elemen
 	return listUpDirs(ctx, ua, params[len(params)-1])
 }
 
+func containsInList(list []Element, target Element) bool {
+	for _, s := range list {
+		if s.String() == target.String() {
+			return true
+		}
+	}
+	return false
+}
+
 func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
 
 	list, err := completionDir(ctx, ua, params)
@@ -36,6 +45,10 @@ func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element
 	if cdpath == "" {
 		return list, err
 	}
+	orgSlash := STD_SLASH[0]
+	if UseSlash {
+		orgSlash = OPT_SLASH[0]
+	}
 	base := strings.ToUpper(source)
 	for _, cdpath1 := range filepath.SplitList(cdpath) {
 		if files, err := ioutil.ReadDir(cdpath1); err == nil {
@@ -43,7 +56,12 @@ func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element
 				if file1.IsDir() {
 					name := strings.ToUpper(file1.Name())
 					if strings.HasPrefix(name, base) {
-						list = append(list, Element1(file1.Name()))
+						new1 := Element2{
+							file1.Name() + string(orgSlash),
+							file1.Name() + string(OPT_SLASH[0])}
+						if !containsInList(list, new1) {
+							list = append(list, new1)
+						}
 					}
 				}
 			}
