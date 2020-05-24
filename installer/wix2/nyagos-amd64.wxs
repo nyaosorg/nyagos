@@ -1,9 +1,0 @@
-<?xml version='1.0'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2003/01/wi'>
-    <?define Platform=x64 ?>
-    <?define Executable=../../cmd/amd64/nyagos.exe ?>
-    <?define ProgramFilesFolder=ProgramFiles64Folder ?>
-    <?define PackageGuid=7bf815ef-79d5-4f9f-8870-71e5866ea512 ?>
-    <?define NyagosExeGuid=de4dcea9-fd79-4112-a68b-f57e62dcd320 ?>
-    <?include common.wxi ?>
-</Wix>

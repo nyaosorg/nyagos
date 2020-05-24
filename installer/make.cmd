@@ -1,6 +1,6 @@
 @echo off
 setlocal
-set "PROMPT=$ "
+set "PROMPT=$$ "
 call :"%1"
 endlocal
 exit /b
@@ -11,7 +11,7 @@ exit /b
     exit /b
 
 :"amd64"
-    call :mkmsi nyagos-amd64
+    call :mkmsi nyagos-amd64 "-arch x64"
     exit /b
 
 :"386"
@@ -19,10 +19,12 @@ exit /b
     exit /b
 
 :mkmsi
-    candle "%~1.wxs" || exit /b 1
-    light  "%~1.wixobj" || exit /b 1
-    del "%~1.wixobj"
-    del "%~1.wixpdb"
+    @echo on
+        candle %~2 "%~1.wxs" || exit /b 1
+        light  "%~1.wixobj" || exit /b 1
+        del "%~1.wixobj"
+        del "%~1.wixpdb"
+    @echo off
     exit /b 0
 
 :"status"
@@ -37,13 +39,26 @@ exit /b
     exit /b
 
 :"install"
-    msiexec /i nyagos-amd64-%WIX%.msi
+    @echo on
+        msiexec /i nyagos-amd64.msi
+    @echo off
     exit /b 0
 
 :"uninstall"
-    msiexec /x nyagos-amd64-%WIX%.msi
+    @echo on
+    msiexec /x nyagos-amd64.msi
+    @echo off
     exit /b 0
 
 :"clean"
+    @echo on
     del *.msi *.wixobj *.bak *.wixpdb
+    @echo off
+    exit /b 0
+
+:"files"
+    @echo on
+    go run mkfiles.go "dada523c-cb49-4e4e-a9cb-d509c50631b9" < files.txt > files.wxi
+    go run componentRef.go < files.txt > componentRef.wxi
+    @echo off
     exit /b 0

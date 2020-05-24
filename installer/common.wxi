@@ -27,15 +27,15 @@
                               Advertise='yes' />
                         </File>
                   </Component>
+                  <?include files.wxi ?>
               </Directory>
           </Directory>
           <Directory Id='DesktopFolder' Name='Desktop' />
       </Directory>
-
       <Feature Id='NyaosOrg' Title='NYAOS.ORG' Level='1'>
          <ComponentRef Id='Nyagos' />
+         <?include componentRef.wxi ?>
       </Feature>
       <Icon Id='nyagos.exe' SourceFile='$(var.Executable)' />
    </Product>
-
 </Include>

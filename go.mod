@@ -6,6 +6,7 @@ require (
 	github.com/atotto/clipboard v0.1.2
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.4
+	github.com/google/uuid v1.1.1
 	github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd
 	github.com/mattn/go-colorable v0.1.6
 	github.com/mattn/go-isatty v0.0.12
