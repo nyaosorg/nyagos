@@ -3,6 +3,7 @@
 * cd,pushd とその補完で bash のような %CDPATH% をサポートした
 * `%APPDIR%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
 * WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした
+* 最後にいたフォルダーが削除されたドライブの任意のフォルダーへ移動できなかった不具合を修正
 
 NYAGOS 4.4.6\_0
 ===============
