@@ -1,66 +1,67 @@
 package nodos
 
 import (
-	"fmt"
+	"errors"
 	"os"
 	"path/filepath"
-	"regexp"
-	"unicode/utf8"
 )
 
-// chDriveRune changes drive and returns the previous working directory.
-func chDriveRune(n rune) (string, error) {
-	lastDir, lastDirErr := os.Getwd()
+func saveLastDirOfDriveToEnv(dir string) {
+	os.Setenv("="+filepath.VolumeName(dir), dir)
+}
 
-	newDir := os.Getenv(fmt.Sprintf("=%c:", n))
-	if newDir == "" {
-		newDir = fmt.Sprintf("%c:%c", n, os.PathSeparator)
+func getLastDirOfdrive(d byte) string {
+	dir := os.Getenv(string([]byte{'=', d, ':'}))
+	if dir == "" {
+		dir = string([]byte{d, ':', os.PathSeparator})
 	}
-	err := os.Chdir(newDir)
-	if err != nil {
-		return lastDir, err
+	return dir
+}
+
+func isOtherDrivesRelative(path string) bool {
+	if len(path) < 2 {
+		return false
 	}
-	if lastDirErr == nil {
-		os.Setenv("="+filepath.VolumeName(lastDir), lastDir)
+
+	if (path[0] < 'A' && 'Z' < path[0]) &&
+		(path[0] < 'a' && 'z' < path[0]) {
+		return false
 	}
-	return lastDir, err
+
+	if path[1] != ':' {
+		return false
+	}
+	return len(path) == 2 || (path[2] != '/' && path[2] != os.PathSeparator)
+}
+
+// chDriveRune changes drive and returns the previous working directory.
+func chDriveByte(n byte) (string, error) {
+	lastDir, err := os.Getwd()
+	if err == nil {
+		saveLastDirOfDriveToEnv(lastDir)
+	}
+	return lastDir, os.Chdir(getLastDirOfdrive(n))
 }
 
 // Chdrive changes drive without changing the working directory there.
 // And returns the previous working directory.
 func Chdrive(drive string) (string, error) {
-	c, _ := utf8.DecodeRuneInString(drive)
-	return chDriveRune(c)
+	if len(drive) < 1 {
+		return "", errors.New("Chdrive: drive is empty string")
+	}
+	return chDriveByte(drive[0])
 }
 
-var rxPath = regexp.MustCompile("^([a-zA-Z]):(.*)$")
-
-// Chdir changes the current working directory
-// without changeing the working directory
-// in the last drive.
 func Chdir(folder string) (err error) {
-	lastDir := ""
-	if m := rxPath.FindStringSubmatch(folder); m != nil {
-		folder = m[2]
-		lastDir, err = chDriveRune(rune(m[1][0]))
-		if err != nil {
-			return err
-		}
-		if len(folder) <= 0 { // Change drive only.
-			return nil
-		}
+	if isOtherDrivesRelative(folder) {
+		folder = filepath.Join(getLastDirOfdrive(folder[0]), folder[2:])
 	}
-	absFolder, absErr := filepath.Abs(folder)
-	err = os.Chdir(folder)
-	if err != nil {
-		if lastDir != "" {
-			os.Chdir(lastDir)
-		}
+	if err := os.Chdir(folder); err != nil {
 		return err
 	}
-	if absErr == nil {
+	if absFolder, err := filepath.Abs(folder); err == nil {
 		folder = absFolder
 	}
-	os.Setenv("="+filepath.VolumeName(folder), folder)
+	saveLastDirOfDriveToEnv(folder)
 	return nil
 }
