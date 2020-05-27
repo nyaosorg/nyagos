@@ -13,7 +13,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type FileXmlT struct {
+type FileXml struct {
 	XMLName xml.Name `xml:"File"`
 	Id      string   `xml:"Id,attr"`      // 'NyagosExe'
 	Name    string   `xml:"Name,attr"`    // 'nyagos.exe'
@@ -22,66 +22,72 @@ type FileXmlT struct {
 	KeyPath string   `xml:"KeyPath,attr"` // 'yes'
 }
 
-type ComponentXmlT struct {
+type ComponentXml struct {
 	XMLName xml.Name `xml:"Component"`
 	Id      string   `xml:"Id,attr"`
 	Guid    string   `xml:"Guid,attr"`
-	File    FileXmlT `xml:"File"`
+	File    FileXml  `xml:"File"`
 }
 
-type DirectoryXmlT struct {
-	XMLName   xml.Name         `xml:"Directory"`
-	Id        string           `xml:"Id,attr"`
-	Name      string           `xml:"Name,attr"`
-	File      []*ComponentXmlT `xml:"File,omitempty"`
-	Directory []*DirectoryXmlT `xml:"Directory,omitempty"`
+type DirectoryXml struct {
+	XMLName   xml.Name        `xml:"Directory"`
+	Id        string          `xml:"Id,attr"`
+	Name      string          `xml:"Name,attr"`
+	File      []*ComponentXml `xml:"File,omitempty"`
+	Directory []*DirectoryXml `xml:"Directory,omitempty"`
 }
 
-func (this *DirectoryXmlT) GetDirectory() []*DirectoryXmlT {
+func (this *DirectoryXml) GetDirectory() []*DirectoryXml {
 	return this.Directory
 }
-func (this *DirectoryXmlT) SetDirectory(value []*DirectoryXmlT) {
+func (this *DirectoryXml) SetDirectory(value []*DirectoryXml) {
 	this.Directory = value
 }
 
-func (this *DirectoryXmlT) GetFile() []*ComponentXmlT {
+func (this *DirectoryXml) GetFile() []*ComponentXml {
 	return this.File
 }
 
-func (this *DirectoryXmlT) SetFile(value []*ComponentXmlT) {
+func (this *DirectoryXml) SetFile(value []*ComponentXml) {
 	this.File = value
 }
 
-type IncludeXmlT struct {
-	XMLName   xml.Name         `xml:"Include"`
-	File      []*ComponentXmlT `xml:"File,omitempty"`
-	Directory []*DirectoryXmlT `xml:"Directory"`
+type IncludeXml struct {
+	XMLName   xml.Name        `xml:"Include"`
+	File      []*ComponentXml `xml:"File,omitempty"`
+	Directory []*DirectoryXml `xml:"Directory"`
 }
 
-func (this *IncludeXmlT) GetDirectory() []*DirectoryXmlT {
+func (this *IncludeXml) GetDirectory() []*DirectoryXml {
 	return this.Directory
 }
-func (this *IncludeXmlT) SetDirectory(value []*DirectoryXmlT) {
+func (this *IncludeXml) SetDirectory(value []*DirectoryXml) {
 	this.Directory = value
 }
 
-func (this *IncludeXmlT) GetFile() []*ComponentXmlT {
+func (this *IncludeXml) GetFile() []*ComponentXml {
 	return this.File
 }
 
-func (this *IncludeXmlT) SetFile(value []*ComponentXmlT) {
+func (this *IncludeXml) SetFile(value []*ComponentXml) {
 	this.File = value
+}
+
+func (this *IncludeXml) WriteTo(out io.Writer) (int64, error) {
+	bin, err := xml.MarshalIndent(this, "", "    ")
+	if err != nil {
+		return 0, err
+	}
+	n, err := out.Write(bin)
+	return int64(n), err
 }
 
 type DirectoryI interface {
-	GetDirectory() []*DirectoryXmlT
-	SetDirectory([]*DirectoryXmlT)
-	GetFile() []*ComponentXmlT
-	SetFile([]*ComponentXmlT)
+	GetDirectory() []*DirectoryXml
+	SetDirectory([]*DirectoryXml)
+	GetFile() []*ComponentXml
+	SetFile([]*ComponentXml)
 }
-
-var _ DirectoryI = &DirectoryXmlT{}
-var _ DirectoryI = &IncludeXmlT{}
 
 func makeId(sourcePath string) string {
 	baseName := filepath.Base(sourcePath)
@@ -96,7 +102,7 @@ func makeId(sourcePath string) string {
 	return left + strings.Title(strings.TrimLeft(suffix, "."))
 }
 
-func setFiles(this DirectoryI, subdir []string, files []*ComponentXmlT) {
+func setFiles(this DirectoryI, subdir []string, files []*ComponentXml) {
 	if len(subdir) <= 0 || subdir[0] == "." {
 		this.SetFile(append(this.GetFile(), files...))
 		return
@@ -107,22 +113,42 @@ func setFiles(this DirectoryI, subdir []string, files []*ComponentXmlT) {
 			return
 		}
 	}
-	d := &DirectoryXmlT{Id: makeId(subdir[0]) + "Dir", Name: subdir[0]}
+	d := &DirectoryXml{Id: makeId(subdir[0]) + "Dir", Name: subdir[0]}
 	setFiles(d, subdir[1:], files)
 	this.SetDirectory(append(this.GetDirectory(), d))
 }
 
-func SetFiles(this DirectoryI, subdir string, files []*ComponentXmlT) {
+func SetFiles(this DirectoryI, subdir string, files []*ComponentXml) {
 	subdirArray := strings.Split(filepath.ToSlash(subdir), "/")
 	setFiles(this, subdirArray, files)
 }
 
 var rxTrimDots = regexp.MustCompile(`^(\.\./)+`)
 
-func readerToFileObjs(uuidSeed uuid.UUID, in io.Reader) (*IncludeXmlT, error) {
+type ComponentRefXml struct {
+	XMLName xml.Name `xml:"ComponentRef"`
+	Id      string   `xml:"Id,attr"`
+}
+
+type Include2Xml struct {
+	XMLName      xml.Name           `xml:"Include"`
+	ComponentRef []*ComponentRefXml `xml:"ComponentRef"`
+}
+
+func (this *Include2Xml) WriteTo(out io.Writer) (int64, error) {
+	bin, err := xml.MarshalIndent(this, "", "    ")
+	if err != nil {
+		return 0, err
+	}
+	n, err := out.Write(bin)
+	return int64(n), err
+}
+
+func readerToFileObjs(uuidSeed uuid.UUID, in io.Reader) ([]io.WriterTo, error) {
 	sc := bufio.NewScanner(in)
-	fileXmls := []*ComponentXmlT{}
-	directory := map[string][]*ComponentXmlT{}
+	fileXmls := []*ComponentXml{}
+	directory := map[string][]*ComponentXml{}
+	references := []*ComponentRefXml{}
 	for sc.Scan() {
 		field := strings.Fields(sc.Text())
 		if len(field) <= 0 {
@@ -143,10 +169,10 @@ func readerToFileObjs(uuidSeed uuid.UUID, in io.Reader) (*IncludeXmlT, error) {
 
 		id := makeId(sourcePath)
 		guid := uuid.NewMD5(uuidSeed, []byte(id))
-		f := &ComponentXmlT{
+		f := &ComponentXml{
 			Id:   id,
 			Guid: guid.String(),
-			File: FileXmlT{
+			File: FileXml{
 				Id:      "F" + id,
 				Name:    filepath.Base(dstPath),
 				DiskId:  len(fileXmls) + 1,
@@ -158,36 +184,51 @@ func readerToFileObjs(uuidSeed uuid.UUID, in io.Reader) (*IncludeXmlT, error) {
 		dstDir := filepath.Dir(rxTrimDots.ReplaceAllString(dstPath, ""))
 
 		directory[dstDir] = append(directory[dstDir], f)
+
+		references = append(references, &ComponentRefXml{Id: id})
 	}
-	root := &IncludeXmlT{}
+	root := &IncludeXml{}
 	for dirName, files := range directory {
 		SetFiles(root, dirName, files)
 	}
-	return root, nil
+	return []io.WriterTo{root, &Include2Xml{ComponentRef: references}}, nil
 }
 
-func fileXmlToBin(xml1 *IncludeXmlT) ([]byte, error) {
-	return xml.MarshalIndent(xml1, "", "    ")
+func outputWithXmlHeader(xml1 io.WriterTo,w io.Writer) error {
+	bw := bufio.NewWriter(w)
+	if _, err := bw.WriteString(xml.Header); err != nil {
+		return err
+	}
+	if _, err := xml1.WriteTo(bw); err != nil {
+		return err
+	}
+	if err := bw.WriteByte('\n'); err != nil {
+		return err
+	}
+	return bw.Flush()
 }
 
-func MakeWxi(fileList io.Reader, uuidSeed string, wxsOutput io.Writer) error {
+
+func MakeWxi(fileList io.Reader, uuidSeed string, out []io.Writer) error {
 	seed, err := uuid.Parse(uuidSeed)
 	if err != nil {
 		return err
 	}
-	xml1, err := readerToFileObjs(seed, fileList)
+	xmls, err := readerToFileObjs(seed, fileList)
 	if err != nil {
 		return err
 	}
-	bin, err := fileXmlToBin(xml1)
-	if err != nil {
-		return err
+	for i, xml1 := range xmls {
+		if i >= len(out) {
+			break
+		}
+		if out[i] == nil {
+			continue
+		}
+		if err := outputWithXmlHeader(xml1,out[i]) ; err != nil {
+			return err
+		}
 	}
-	bw := bufio.NewWriter(wxsOutput)
-	bw.Write([]byte(xml.Header))
-	bw.Write(bin)
-	bw.Write([]byte{'\n'})
-	bw.Flush()
 	return nil
 }
 
@@ -198,7 +239,7 @@ func main() {
 			os.Args[0])
 		os.Exit(2)
 	}
-	if err := MakeWxi(os.Stdin, os.Args[1], os.Stdout); err != nil {
+	if err := MakeWxi(os.Stdin, os.Args[1], []io.Writer{os.Stdout}); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}
