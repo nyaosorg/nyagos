@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#385) Fix: Can not move to any folder in the other drive whose last folder is removed.
+
 NYAGOS 4.4.6\_0
 ===============
 on May.08,2020
