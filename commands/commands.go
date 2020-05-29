@@ -40,6 +40,7 @@ var backslashPattern = regexp.MustCompile(`^\\(\w*)$`)
 func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 	name := strings.ToLower(cmd.Arg(0))
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
+		pushCdHistory()
 		_, err := nodos.Chdrive(name)
 		return 0, true, err
 	}
