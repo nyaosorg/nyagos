@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#385) Fix: Can not move to any folder in the other drive whose last folder is removed.
+* Fix: cd's history did not ignore filepath's case.(see `cd -h`)
 
 NYAGOS 4.4.6\_0
 ===============
