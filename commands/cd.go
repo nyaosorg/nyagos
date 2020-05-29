@@ -18,20 +18,21 @@ var cdHistory = make([]string, 0, 100)
 var cdUniq = map[string]int{}
 
 func pushCdHistory() {
-	directory, err := os.Getwd()
+	dir, err := os.Getwd()
 	if err != nil {
 		return
 	}
-	if i, ok := cdUniq[directory]; ok {
+	dirUpper := strings.ToUpper(dir)
+	if i, ok := cdUniq[dirUpper]; ok {
 		for ; i < len(cdHistory)-1; i++ {
 			cdHistory[i] = cdHistory[i+1]
-			cdUniq[cdHistory[i]] = i
+			cdUniq[strings.ToUpper(cdHistory[i])] = i
 		}
-		cdHistory[i] = directory
-		cdUniq[directory] = i
+		cdHistory[i] = dir
+		cdUniq[dirUpper] = i
 	} else {
-		cdUniq[directory] = len(cdHistory)
-		cdHistory = append(cdHistory, directory)
+		cdUniq[dirUpper] = len(cdHistory)
+		cdHistory = append(cdHistory, dir)
 	}
 }
 
