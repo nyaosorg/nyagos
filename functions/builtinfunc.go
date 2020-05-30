@@ -412,8 +412,9 @@ func stackToSlice(this *Param) []string {
 	argv := make([]string, 0, len(this.Args))
 	for _, arg1 := range this.Args {
 		if table, ok := arg1.(map[interface{}]interface{}); ok {
-			for i := 0; i < len(table); i++ {
-				if _, ok = table[i]; ok {
+			// Support both {0..(n-1)} and {1..n}
+			for i := 0; i <= len(table); i++ {
+				if _, ok = table[i]; ok { // check out of range here
 					argv = append(argv, fmt.Sprint(table[i]))
 				}
 			}
