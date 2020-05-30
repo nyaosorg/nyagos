@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * (#385) Fix: Can not move to any folder in the other drive whose last folder is removed.
 * Fix: cd's history did not ignore filepath's case.(see `cd -h`)
 * Fix: change drive(`x:`) did not push the last directory to directory history
+* Fix: The last element of `nyagos.rawexec{...}` was ignored.
 
 NYAGOS 4.4.6\_0
 ===============
