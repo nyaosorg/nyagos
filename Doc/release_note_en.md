@@ -4,6 +4,10 @@ English / [Japanese](release_note_ja.md)
 * load scripts on `%APPDIR%\NYAOS_ORG\nyagos.d`
 * On WindowsTerminal, print surrogate-paired unicode by not escaped like &lt;nnnnn&gt;
 
+NYAGOS 4.4.6\_1
+===============
+on May.31,2020
+
 * (#385) Fix: Can not move to any folder in the other drive whose last folder is removed.
 * Fix: cd's history did not ignore filepath's case.(see `cd -h`)
 * Fix: change drive(`x:`) did not push the last directory to directory history
