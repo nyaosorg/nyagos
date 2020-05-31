@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 * cd,push and their completion supports %CDPATH% like bash
 * load scripts on `%APPDIR%\NYAOS_ORG\nyagos.d`
 * On WindowsTerminal, print surrogate-paired unicode by not escaped like &lt;nnnnn&gt;
+* Change the directory put binary from Cmd to bin
 
 NYAGOS 4.4.6\_1
 ===============
