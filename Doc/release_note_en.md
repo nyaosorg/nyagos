@@ -1,9 +1,14 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.6\_2
+===============
+on Jun.09,2020
+
 * Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at `4.4.6_0`)
 
 NYAGOS 4.4.6\_1
 ===============
+on May.31,2020
 
 * (#385) Fix: Can not move to any folder in the other drive whose last folder is removed.
 * Fix: cd's history did not ignore filepath's case.(see `cd -h`)
