@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* Fix: Ctrl-C で Ctrl-D のように終了していた (`4.4.6_0` で #383 修正時に発生)
+
 NYAGOS 4.4.6\_1
 ===============
 

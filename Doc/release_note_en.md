@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at `4.4.6_0`)
+
 NYAGOS 4.4.6\_1
 ===============
 
