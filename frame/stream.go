@@ -59,7 +59,13 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 	for {
 		disabler := colorable.EnableColorsStdout(nil)
 		clean, err2 := consoleicon.SetFromExe()
-		line, err = this.Editor.ReadLine(ctx)
+		for {
+			line, err = this.Editor.ReadLine(ctx)
+			if err != readline.CtrlC {
+				break
+			}
+			fmt.Fprintln(os.Stderr, err.Error())
+		}
 		if err2 == nil {
 			clean(false)
 		}

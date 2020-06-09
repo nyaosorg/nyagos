@@ -5,6 +5,8 @@ English / [Japanese](release_note_ja.md)
 * On WindowsTerminal, print surrogate-paired unicode by not escaped like &lt;nnnnn&gt;
 * Change the directory put binary from Cmd to bin
 
+* Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at `4.4.6_0`)
+
 NYAGOS 4.4.6\_1
 ===============
 on May.31,2020
