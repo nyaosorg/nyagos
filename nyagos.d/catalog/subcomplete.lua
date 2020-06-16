@@ -203,6 +203,12 @@ if not share.maincmds["fsutil"] then
     end
 end
 
+share.maincmds["go"] = {
+    "bug", "build", "clean", "doc", "env", "fix",
+    "fmt", "generate", "get", "install", "list",
+    "mod", "run", "test", "tool", "version", "vet"
+}
+
 for cmd,subcmdData in pairs(share.maincmds or {}) do
     if not nyagos.complete_for[cmd] then
         nyagos.complete_for[cmd] = function(args)
