@@ -6,6 +6,7 @@ endlocal
 exit /b
 
 :""
+    call :"version"
     call :"amd64"
     call :"386"
     exit /b
@@ -67,3 +68,12 @@ exit /b
     mkfwxi.exe -c files.wxi -r refer.wxi "dada523c-cb49-4e4e-a9cb-d509c50631b9" < files.txt
     @echo off
     exit /b 0
+
+:"version"
+    for /F %%I in (..\Etc\version.txt) do set "VER=%%I"
+    set "VER=%VER:_=.%"
+    ( echo ^<?xml version="1.0" encoding="UTF-8"?^>
+      echo ^<Include^>
+      echo ^<?define Version=%VER% ?^>
+      echo ^</Include^> ) > version.wxi
+    exit /b
