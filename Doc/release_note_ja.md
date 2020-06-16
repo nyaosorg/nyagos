@@ -4,6 +4,13 @@
 * `%APPDIR%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
 * WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした
 * バイナリファイルを置くディレクトリを Cmd から bin へ変更した
+* catalog/subcomplete.lua
+    - 新補完API `nyagos.complete_for` を使うようにした
+    - 起動を早くするため、補完するサブコマンド名をファイルにキャッシング
+    - キャッシュクリアコマンド `clear_subcomands_cache` を実装
+* catalog/git.lua
+    - `subcomplete.lua` を自動でロードするようにした
+
 
 NYAGOS 4.4.6\_2
 ===============

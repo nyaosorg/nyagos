@@ -4,6 +4,12 @@ English / [Japanese](release_note_ja.md)
 * load scripts on `%APPDIR%\NYAOS_ORG\nyagos.d`
 * On WindowsTerminal, print surrogate-paired unicode by not escaped like &lt;nnnnn&gt;
 * Change the directory put binary from Cmd to bin
+* catalog/subcomplete.lua
+    - Use new completion api:`nyagos.complete_for`
+    - Caching subcommands to complete to speed-up nyagos starting. 
+    - Implement `clear_subcomands_cache` to clear cache.
+* catalog/git.lua
+    - load `subcomplete.lua` automatically
 
 NYAGOS 4.4.6\_2
 ===============
