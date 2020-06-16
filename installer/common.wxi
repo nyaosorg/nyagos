@@ -34,7 +34,7 @@
       </Directory>
       <Feature Id='NyaosOrg' Title='NYAOS.ORG' Level='1'>
          <ComponentRef Id='Nyagos' />
-         <?include componentRef.wxi ?>
+         <?include refer.wxi ?>
       </Feature>
       <Icon Id='nyagos.exe' SourceFile='$(var.Executable)' />
    </Product>

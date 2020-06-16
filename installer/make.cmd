@@ -64,6 +64,6 @@ exit /b
         move mkfwxi.exe ..
         popd
     )
-    mkfwxi.exe -c files.wxi -r componentRef.wxi "dada523c-cb49-4e4e-a9cb-d509c50631b9" < files.txt
+    mkfwxi.exe -c files.wxi -r refer.wxi "dada523c-cb49-4e4e-a9cb-d509c50631b9" < files.txt
     @echo off
     exit /b 0
