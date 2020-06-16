@@ -51,20 +51,28 @@ gitvar.branch=branchlist
 gitvar.currentbranch=currentbranch
 share.git=gitvar
 
-if share.maincmds then
-  if share.maincmds["git"] then
+if share.maincmds and share.maincmds["git"] then
     -- git command complementation exists.
-    local maincmds = share.maincmds
-
-    -- build
-    for key, cmds in pairs(gitsubcommands) do
-      local gitcommand="git "..key
-      maincmds[gitcommand]=cmds
+    nyagos.complete_for.git = function(args)
+        while #args > 2 and args[2]:sub(1,1) == "-" do
+            table.remove(args,2)
+        end
+        if #args == 2 then
+            return share.maincmds.git
+        end
+        local subcmd = table.remove(args,2)
+        while #args > 2 and args[2]:sub(1,1) == "-" do
+            table.remove(args,2)
+        end
+        if #args == 2 then
+            local t = gitsubcommands[subcmd]
+            if type(t) == "function" then
+                return t()
+            elseif type(t) == "table" then
+                return t
+            end
+        end
     end
-
-    -- replace
-    share.maincmds = maincmds
-  end
 end
 
 -- EOF
