@@ -51,6 +51,10 @@ gitvar.branch=branchlist
 gitvar.currentbranch=currentbranch
 share.git=gitvar
 
+if not share.maincmds then
+    use "subcomplete.lua"
+end
+
 if share.maincmds and share.maincmds["git"] then
     -- git command complementation exists.
     nyagos.complete_for.git = function(args)

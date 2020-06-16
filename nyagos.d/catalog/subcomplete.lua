@@ -3,6 +3,10 @@ if not nyagos then
     os.exit()
 end
 
+if share.maincmds then
+    return
+end
+
 share.maincmds = {}
 
 -- git
