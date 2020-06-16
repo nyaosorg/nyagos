@@ -184,6 +184,25 @@ if not share.maincmds["rclone"] then
     end
 end
 
+share.maincmds["fsutil"] = load_subcommands_cache("fsutil-subcommands.txt")
+if not share.maincmds["fsutil"] then
+    local fd=io.popen("fsutil","r")
+    if fd then
+        local list = {}
+        for line in fd:lines() do
+            local m=string.match(line,"^(%w+)%s+%S+")
+            if m then
+                list[#list+1] = m
+            end
+        end
+        fd:close()
+        if #list >= 1 then
+            share.maincmds["fsutil"] = list
+            save_subcommands_cache("fsutil-subcommands.txt",list)
+        end
+    end
+end
+
 for cmd,subcmdData in pairs(share.maincmds or {}) do
     if not nyagos.complete_for[cmd] then
         nyagos.complete_for[cmd] = function(args)
