@@ -18,6 +18,17 @@ function get_local()
     return dir
 end
 
+nyagos.alias.clear_subcommands_cache = function()
+    local wildcard = nyagos.pathjoin(get_local(),"*-subcommands.txt")
+    local files = nyagos.glob(wildcard)
+    if #files >= 2 or not string.find(files[1],"*",1,true) then
+        for i=1,#files do
+            print("remove "..files[i])
+            os.remove(files[i])
+        end
+    end
+end
+
 function load_subcommands_cache(fname)
     fname = nyagos.pathjoin(get_local(),fname)
     local fd=io.open(fname,"r")
