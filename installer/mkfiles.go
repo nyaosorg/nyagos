@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/xml"
+	"flag"
 	"fmt"
 	"io"
 	"os"
@@ -194,7 +195,7 @@ func readerToFileObjs(uuidSeed uuid.UUID, in io.Reader) ([]io.WriterTo, error) {
 	return []io.WriterTo{root, &Include2Xml{ComponentRef: references}}, nil
 }
 
-func outputWithXmlHeader(xml1 io.WriterTo,w io.Writer) error {
+func outputWithXmlHeader(xml1 io.WriterTo, w io.Writer) error {
 	bw := bufio.NewWriter(w)
 	if _, err := bw.WriteString(xml.Header); err != nil {
 		return err
@@ -207,7 +208,6 @@ func outputWithXmlHeader(xml1 io.WriterTo,w io.Writer) error {
 	}
 	return bw.Flush()
 }
-
 
 func MakeWxi(fileList io.Reader, uuidSeed string, out []io.Writer) error {
 	seed, err := uuid.Parse(uuidSeed)
@@ -225,21 +225,37 @@ func MakeWxi(fileList io.Reader, uuidSeed string, out []io.Writer) error {
 		if out[i] == nil {
 			continue
 		}
-		if err := outputWithXmlHeader(xml1,out[i]) ; err != nil {
+		if err := outputWithXmlHeader(xml1, out[i]); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
+var componentFname = flag.String("c", "", "output filename for <Component>s")
+var componentRefFname = flag.String("r", "", "output filename for <ComponentRef>s")
+
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Fprintf(os.Stderr,
-			"Usage: %s SeedUUID < FileList.txt > Files.wxi\n",
-			os.Args[0])
+	flag.Parse()
+	if len(flag.Args()) < 1 {
+		flag.PrintDefaults()
 		os.Exit(2)
 	}
-	if err := MakeWxi(os.Stdin, os.Args[1], []io.Writer{os.Stdout}); err != nil {
+	outs := []io.Writer{os.Stdout, nil}
+
+	if *componentFname != "" {
+		if fd, err := os.Create(*componentFname); err == nil {
+			outs[0] = fd
+			defer fd.Close()
+		}
+	}
+	if *componentRefFname != "" {
+		if fd, err := os.Create(*componentRefFname); err == nil {
+			outs[1] = fd
+			defer fd.Close()
+		}
+	}
+	if err := MakeWxi(os.Stdin, flag.Arg(0), outs); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
 	}

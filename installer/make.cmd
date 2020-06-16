@@ -58,7 +58,6 @@ exit /b
 
 :"files"
     @echo on
-    go run mkfiles.go "dada523c-cb49-4e4e-a9cb-d509c50631b9" < files.txt > files.wxi
-    go run componentRef.go < files.txt > componentRef.wxi
+    go run mkfiles.go -c files.wxi -r componentRef.wxi "dada523c-cb49-4e4e-a9cb-d509c50631b9" < files.txt
     @echo off
     exit /b 0
