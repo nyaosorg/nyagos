@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
     - Use new completion api:`nyagos.complete_for`
     - Caching subcommands to complete to speed-up nyagos starting. 
     - Implement `clear_subcomands_cache` to clear cache.
+    - Subcompletion for `fsutil` and `go`
 * catalog/git.lua
     - load `subcomplete.lua` automatically
 

@@ -8,6 +8,7 @@
     - 新補完API `nyagos.complete_for` を使うようにした
     - 起動を早くするため、補完するサブコマンド名をファイルにキャッシング
     - キャッシュクリアコマンド `clear_subcomands_cache` を実装
+    - `fsutil` と `go` のサブコマンド補完
 * catalog/git.lua
     - `subcomplete.lua` を自動でロードするようにした
 
