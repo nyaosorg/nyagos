@@ -1,6 +1,7 @@
 @echo off
 setlocal
 set "PROMPT=$$ "
+for /F %%I in (..\Etc\version.txt) do set "VER=%%I"
 call :"%1"
 endlocal
 exit /b
@@ -13,10 +14,12 @@ exit /b
 
 :"amd64"
     call :mkmsi nyagos-amd64 "-arch x64"
+    ren nyagos-amd64.msi nyagos-%VER%-windows-amd64.msi
     exit /b
 
 :"386"
     call :mkmsi nyagos-386
+    ren nyagos-386.msi nyagos-%VER%-windows-386.msi
     exit /b
 
 :mkmsi
@@ -70,7 +73,6 @@ exit /b
     exit /b 0
 
 :"version"
-    for /F %%I in (..\Etc\version.txt) do set "VER=%%I"
     set "VER=%VER:_=.%"
     ( echo ^<?xml version="1.0" encoding="UTF-8"?^>
       echo ^<Include^>
