@@ -114,43 +114,21 @@ if rclonehelp then
   end
 end
 
-if next(share.maincmds) then
-    nyagos.completion_hook = function(c)
-        if c.pos <= 1 then
+for cmd,subcmdData in pairs(share.maincmds or {}) do
+    if not nyagos.complete_for[cmd] then
+        nyagos.complete_for[cmd] = function(args)
+            local subcmdType = type(subcmdData)
+            if "table" == subcmdType then
+                while #args > 2 and args[2]:sub(1,1) == "-" do
+                    table.remove(args,2)
+                end
+                if #args == 2 then
+                    return subcmdData
+                end
+            elseif "function" == subcmdType then
+                return subcmdData(args)
+            end
             return nil
         end
-        local cmdname = string.match(c.text,"^%S+")
-        if not cmdname then
-            return nil
-        end
-        cmdname = string.lower(string.gsub(cmdname,"%.%w+$",""))
-        --[[
-          2nd command completion like :git bisect go[od]
-          user define-able
-
-          local subcommands={"good", "bad"}
-          local maincmds=share.maincmds
-          maincmds["git bisect"] = subcommands
-          share.maincmds = maincmds
-        --]]
-        local cmd2nd = string.match(c.text,"^%S+%s+%S+")
-        if share.maincmds[cmd2nd] then
-          cmdname = cmd2nd
-        end
-        local subcmds = {}
-        local subcmdData = share.maincmds[cmdname]
-        if not subcmdData then
-            return nil
-        end
-        local subcmdType = type(subcmdData)
-        if "table" == subcmdType then
-          subcmds = subcmdData
-        elseif "function" == subcmdType then
-          subcmds = subcmdData()
-        end
-        for i=1,#subcmds do
-            table.insert(c.list,subcmds[i])
-        end
-        return c.list
     end
 end
