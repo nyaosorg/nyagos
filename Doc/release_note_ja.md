@@ -1,7 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * cd,pushd とその補完で bash のような %CDPATH% をサポートした
-* `%APPDIR%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
+* `%APPDATA%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
 * WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした
 * バイナリファイルを置くディレクトリを Cmd から bin へ変更した
 * catalog/subcomplete.lua
