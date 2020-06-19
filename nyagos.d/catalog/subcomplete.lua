@@ -53,7 +53,7 @@ local function update_cache()
         local githelp=io.popen("git help -a 2>nul","r")
         local hubhelp=io.popen("hub help -a 2>nul","r")
         if githelp then
-            local gitcmds={}
+            local gitcmds={ "update-git-for-windows" }
             local hub=false
             if hubhelp then
               hub=true
