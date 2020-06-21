@@ -12,7 +12,10 @@ end
 share.git = {}
 
 -- setup local branch listup
-local branchlist = function()
+local branchlist = function(args)
+  if string.find(args[#args],"[/\\\\]") then
+      return nil
+  end
   local gitbranches = {}
   local gitbranch_tmp = nyagos.eval('git for-each-ref  --format="%(refname:short)" refs/heads/ 2> nul')
   for line in gitbranch_tmp:gmatch('[^\n]+') do
@@ -71,7 +74,7 @@ if share.maincmds and share.maincmds["git"] then
         if #args == 2 then
             local t = gitsubcommands[subcmd]
             if type(t) == "function" then
-                return t()
+                return t(args)
             elseif type(t) == "table" then
                 return t
             end

@@ -26,4 +26,6 @@ nyagos.prompt = function(this)
     end
 end
 
+use "git.lua"
+
 -- vim:set ft=lua: --
