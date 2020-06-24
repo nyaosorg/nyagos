@@ -24,6 +24,19 @@ local branchlist = function(args)
   return gitbranches
 end
 
+local addlist = function(args)
+    local fd = io.popen("git status -s 2>nul","r")
+    if not fd then
+        return nil
+    end
+    local files = {}
+    for line in fd:lines() do
+        files[#files+1] = string.sub(line,4)
+    end
+    fd:close()
+    return files
+end
+
 --setup current branch string
 local currentbranch = function()
   return nyagos.eval('git rev-parse --abbrev-ref HEAD 2> nul')
@@ -47,6 +60,7 @@ gitsubcommands["checkout"]=branchlist
 gitsubcommands["reset"]=branchlist
 gitsubcommands["merge"]=branchlist
 gitsubcommands["rebase"]=branchlist
+gitsubcommands["add"]=addlist
 
 local gitvar=share.git
 gitvar.subcommand=gitsubcommands
