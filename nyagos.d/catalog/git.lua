@@ -11,12 +11,28 @@ end
 
 share.git = {}
 
+local getcommits = function(args)
+    local fd=io.popen("git log --format=\"%H\" -n 20","r")
+    if not fd then
+        return {}
+    end
+    local result={}
+    for line in fd:lines() do
+        result[#result+1] = line
+    end
+    fd:close()
+    return result
+end
+
 -- setup local branch listup
 local branchlist = function(args)
   if string.find(args[#args],"[/\\\\]") then
       return nil
   end
   local gitbranches = {}
+  if string.match(args[#args],"^[0-9a-f][0-9a-f]") then
+      gitbranches = getcommits()
+  end
   local gitbranch_tmp = nyagos.eval('git for-each-ref  --format="%(refname:short)" refs/heads/ 2> nul')
   for line in gitbranch_tmp:gmatch('[^\n]+') do
     table.insert(gitbranches,line)
