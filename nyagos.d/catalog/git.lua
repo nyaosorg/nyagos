@@ -12,7 +12,7 @@ end
 share.git = {}
 
 local getcommits = function(args)
-    local fd=io.popen("git log --format=\"%H\" -n 20","r")
+    local fd=io.popen("git log --format=\"%H\" -n 20 2>nul","r")
     if not fd then
         return {}
     end
@@ -76,7 +76,11 @@ gitsubcommands["checkout"]=branchlist
 gitsubcommands["reset"]=branchlist
 gitsubcommands["merge"]=branchlist
 gitsubcommands["rebase"]=branchlist
+
+gitsubcommands["show"]=getcommits
+
 gitsubcommands["add"]=addlist
+
 
 local gitvar=share.git
 gitvar.subcommand=gitsubcommands
