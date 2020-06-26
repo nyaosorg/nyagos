@@ -11,6 +11,7 @@ English / [Japanese](release_note_ja.md)
     - Subcompletion for `fsutil` and `go`
 * catalog/git.lua
     - load `subcomplete.lua` automatically
+    - Complete commit-hash like branch-name
 
 NYAGOS 4.4.6\_2
 ===============

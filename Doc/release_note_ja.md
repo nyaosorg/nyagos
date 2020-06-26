@@ -11,7 +11,7 @@
     - `fsutil` と `go` のサブコマンド補完
 * catalog/git.lua
     - `subcomplete.lua` を自動でロードするようにした
-
+    - commit-hash も branch-name 同様に補完する
 
 NYAGOS 4.4.6\_2
 ===============
