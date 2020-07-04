@@ -85,10 +85,16 @@ type Cmd struct {
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
 func (cmd *Cmd) Args() []string        { return cmd.args }
-func (cmd *Cmd) SetArgs(s []string)    { cmd.args = s }
 func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
+
+func (cmd *Cmd) SetArgs(s []string) {
+	cmd.args = s
+	if cmd.rawArgs == nil {
+		cmd.rawArgs = s
+	}
+}
 
 func (cmd *Cmd) Getenv(key string) string {
 	if cmd.env != nil {
