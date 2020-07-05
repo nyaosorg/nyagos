@@ -135,7 +135,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		name = filepath.Base(name)
 	}
 	if (flag & O_HUMAN) != 0 {
-		fmt.Fprintf(out, " %*s", width, humanize.Comma(status.Size()))
+		fmt.Fprintf(out, " %*s", width, humanize.Bytes(uint64(status.Size())))
 	} else {
 		fmt.Fprintf(out, " %*d", width, status.Size())
 	}
