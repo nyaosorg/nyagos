@@ -248,7 +248,11 @@ func keta(n int64) int {
 }
 
 func formatByHumanize(size int64) string {
-	return humanize.Bytes(uint64(size))
+	s := humanize.Bytes(uint64(size))
+	if len(s) > 0 && s[len(s)-1] == 'B' {
+		s = s[:len(s)-1]
+	}
+	return strings.ToUpper(strings.ReplaceAll(s, " ", ""))
 }
 
 func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
