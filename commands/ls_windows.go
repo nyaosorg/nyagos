@@ -135,7 +135,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 		name = filepath.Base(name)
 	}
 	if (flag & O_HUMAN) != 0 {
-		fmt.Fprintf(out, " %*s", width, humanize.Bytes(uint64(status.Size())))
+		fmt.Fprintf(out, " %*s", width, formatByHumanize(status.Size()))
 	} else {
 		fmt.Fprintf(out, " %*d", width, status.Size())
 	}
@@ -247,16 +247,27 @@ func keta(n int64) int {
 	return count
 }
 
+func formatByHumanize(size int64) string {
+	return humanize.Bytes(uint64(size))
+}
+
 func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
-	size := int64(1)
-	for _, finfo := range nodes {
-		if finfo.Size() > size {
-			size = finfo.Size()
-		}
-	}
-	width := keta(size)
+	var width int = 0
 	if (flag & O_HUMAN) != 0 {
-		width = width * 4 / 3
+		for _, finfo := range nodes {
+			width1 := len(formatByHumanize(finfo.Size()))
+			if width1 > width {
+				width = width1
+			}
+		}
+	} else {
+		size := int64(1)
+		for _, finfo := range nodes {
+			if finfo.Size() > size {
+				size = finfo.Size()
+			}
+		}
+		width = keta(size)
 	}
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
