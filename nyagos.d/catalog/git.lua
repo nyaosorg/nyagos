@@ -76,6 +76,7 @@ gitsubcommands["checkout"]=branchlist
 gitsubcommands["reset"]=branchlist
 gitsubcommands["merge"]=branchlist
 gitsubcommands["rebase"]=branchlist
+gitsubcommands["revert"]=branchlist
 
 gitsubcommands["show"]=getcommits
 
