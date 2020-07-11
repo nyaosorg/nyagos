@@ -53,6 +53,21 @@ local addlist = function(args)
     return files
 end
 
+local checkoutlist = function(args)
+    local result = branchlist(args) or {}
+    local fd = io.popen("git status -s 2>nul","r")
+    if fd then
+        for line in fd:lines() do
+            if string.sub(line,1,2) == " M" then
+                result[1+#result] = string.sub(line,4)
+            end
+        end
+        fd:close()
+    end
+    return result
+end
+
+
 --setup current branch string
 local currentbranch = function()
   return nyagos.eval('git rev-parse --abbrev-ref HEAD 2> nul')
@@ -72,7 +87,7 @@ gitsubcommands["svn"]={"init", "fetch", "clone", "rebase", "dcommit", "log", "fi
 gitsubcommands["worktree"]={"add", "list", "lock", "prune", "unlock"}
 
 -- branch
-gitsubcommands["checkout"]=branchlist
+gitsubcommands["checkout"]=checkoutlist
 gitsubcommands["reset"]=branchlist
 gitsubcommands["merge"]=branchlist
 gitsubcommands["rebase"]=branchlist
