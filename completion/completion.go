@@ -55,16 +55,16 @@ func isTop(s string, indexes [][]int) bool {
 }
 
 type CustomCompleter interface {
-	Complete(context.Context, UncAccess, []string) ([]Element, error)
+	Complete(context.Context, UncCompletion, []string) ([]Element, error)
 	String() string
 }
 
 type customComplete struct {
-	Func func(context.Context, UncAccess, []string) ([]Element, error)
+	Func func(context.Context, UncCompletion, []string) ([]Element, error)
 	Name string
 }
 
-func (f customComplete) Complete(ctx context.Context, ua UncAccess, args []string) ([]Element, error) {
+func (f customComplete) Complete(ctx context.Context, ua UncCompletion, args []string) ([]Element, error) {
 	return f.Func(ctx, ua, args)
 }
 
@@ -150,7 +150,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 			args = append(args, "")
 		}
 
-		ua := UNC_PROMPT
+		ua := AskDoUncCompletion
 		for {
 			if f, ok := lookupCustomCompletion(args[0]); ok {
 				rv.List, err = f.Complete(ctx, ua, args)
@@ -180,7 +180,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 			if err1 != nil || !strings.EqualFold(key, "y") {
 				return rv, default_delimiter, cmdline_recover, errors.New("Canceled.")
 			}
-			ua = UNC_FORCE
+			ua = DoUncCompletion
 		}
 	}
 	if err != nil {
