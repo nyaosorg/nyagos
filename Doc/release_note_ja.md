@@ -15,6 +15,7 @@
     - `git checkout`で commit-hash,ブランチ名、修正されたファイル名を補完
 * (#386) `ls -h` のサイズ出力を単位付きで表示するよう修正 (Thx! [@Matsuyanagi](https://github.com/Matsuyanagi))
 * Fix: `nyagos.exec{ ALIAS-COMMAND-USING $@ }` がパニックを引き起す不具合を修正
+* 補完可能なファイルのテーブルを返す関数 `nyagos.complete_for_files` を追加
 
 NYAGOS 4.4.6\_2
 ===============

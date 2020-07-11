@@ -15,6 +15,7 @@ English / [Japanese](release_note_ja.md)
     - Complete commit-hash,branch-name and modified filenames after `git checkout`
 * (#386) Fix the file size output of `ls -h` to be displayed in units.(Thx! [@Matsuyanagi](https://github.com/Matsuyanagi))
 * Fix: `nyagos.exec{ ALIAS-COMMAND-USING $@ }` causes panic
+* Add: `nyagos.complete_for_files `(which returns table of completable files)`
 
 NYAGOS 4.4.6\_2
 ===============
