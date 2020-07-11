@@ -2,6 +2,8 @@ package functions
 
 import (
 	"bufio"
+	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -527,4 +529,25 @@ func CmdEnvDel(args []any_t) (result []any_t) {
 		os.Setenv(name, strings.Join(newlist, string(os.PathListSeparator)))
 	}
 	return
+}
+
+func CmdCompleteForFiles(args []any_t) []any_t {
+	if len(args) < 1 {
+		return []any_t{nil, errors.New("too few arguments")}
+	}
+	if s, ok := args[0].(string); ok {
+		elements, err := completion.ListUpFiles(
+			context.TODO(),
+			completion.DoNotUncCompletion,
+			s)
+		if err != nil {
+			return []any_t{nil, err.Error()}
+		}
+		result := make([]string, len(elements))
+		for i := 0; i < len(elements); i++ {
+			result[i] = elements[i].String()
+		}
+		return []any_t{result}
+	}
+	return []any_t{nil, errors.New("invalid arguments")}
 }
