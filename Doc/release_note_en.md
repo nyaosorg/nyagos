@@ -12,6 +12,7 @@ English / [Japanese](release_note_ja.md)
 * catalog/git.lua
     - load `subcomplete.lua` automatically
     - Complete commit-hash like branch-name
+    - Complete commit-hash,branch-name and modified filenames after `git checkout`
 * (#386) Fix the file size output of `ls -h` to be displayed in units.(Thx! [@Matsuyanagi](https://github.com/Matsuyanagi))
 * Fix: `nyagos.exec{ ALIAS-COMMAND-USING $@ }` causes panic
 
