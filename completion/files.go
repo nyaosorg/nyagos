@@ -17,7 +17,7 @@ const (
 
 var IncludeHidden = false
 
-func listUpFiles(ctx context.Context, ua UncAccess, str string) ([]Element, error) {
+func ListUpFiles(ctx context.Context, ua UncAccess, str string) ([]Element, error) {
 	return listUpWithFilter(ctx, str, ua, func(*findfile.FileInfo) bool { return true })
 }
 func listUpDirs(ctx context.Context, ua UncAccess, str string) ([]Element, error) {

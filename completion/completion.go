@@ -157,10 +157,10 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 				if rv.List != nil && err == nil {
 					replace = true
 				} else {
-					rv.List, err = listUpFiles(ctx, ua, rv.Word[start:])
+					rv.List, err = ListUpFiles(ctx, ua, rv.Word[start:])
 				}
 			} else {
-				rv.List, err = listUpFiles(ctx, ua, rv.Word[start:])
+				rv.List, err = ListUpFiles(ctx, ua, rv.Word[start:])
 			}
 			if err != ErrAskRetry {
 				break
