@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -40,6 +41,24 @@ const (
 	errnoNoHistory = 2
 )
 
+func seekCdPath(dir string) string {
+	if dir[0] == '.' || strings.ContainsAny(dir, "/\\:") {
+		return ""
+	}
+	cdpath := os.Getenv("CDPATH")
+	if cdpath == "" {
+		return ""
+	}
+	for _, cdpath1 := range filepath.SplitList(cdpath) {
+		fullpath := filepath.Join(cdpath1, dir)
+		stat1, err := os.Stat(fullpath)
+		if err == nil && stat1.IsDir() {
+			return fullpath
+		}
+	}
+	return ""
+}
+
 func cmdCdSub(dir string) (int, error) {
 	const fileHead = "file:///"
 
@@ -59,6 +78,11 @@ func cmdCdSub(dir string) (int, error) {
 	err := nodos.Chdir(dir)
 	if err == nil {
 		return 0, nil
+	}
+	if _dir := seekCdPath(dir); _dir != "" {
+		if err = nodos.Chdir(_dir); err == nil {
+			return 0, nil
+		}
 	}
 	return errnoChdirFail, err
 }

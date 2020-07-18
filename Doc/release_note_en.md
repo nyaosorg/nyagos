@@ -1,5 +1,22 @@
 English / [Japanese](release_note_ja.md)
 
+* cd,push and their completion supports %CDPATH% like bash
+* load scripts on `%APPDATA%\NYAOS_ORG\nyagos.d`
+* On WindowsTerminal, print surrogate-paired unicode by not escaped like &lt;nnnnn&gt;
+* Change the directory put binary from Cmd to bin
+* catalog/subcomplete.lua
+    - Use new completion api:`nyagos.complete_for`
+    - Caching subcommands to complete to speed-up nyagos starting. 
+    - Implement `clear_subcomands_cache` to clear cache.
+    - Subcompletion for `fsutil` and `go`
+* catalog/git.lua
+    - load `subcomplete.lua` automatically
+    - Complete commit-hash like branch-name
+    - Complete commit-hash,branch-name and modified filenames after `git checkout`
+* (#386) Fix the file size output of `ls -h` to be displayed in units.(Thx! [@Matsuyanagi](https://github.com/Matsuyanagi))
+* Fix: `nyagos.exec{ ALIAS-COMMAND-USING $@ }` causes panic
+* Add: `nyagos.complete_for_files `(which returns table of completable files)`
+
 NYAGOS 4.4.6\_2
 ===============
 on Jun.09,2020

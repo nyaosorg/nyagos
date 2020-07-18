@@ -17,28 +17,28 @@ const (
 
 var IncludeHidden = false
 
-func listUpFiles(ctx context.Context, ua UncAccess, str string) ([]Element, error) {
+func ListUpFiles(ctx context.Context, ua UncCompletion, str string) ([]Element, error) {
 	return listUpWithFilter(ctx, str, ua, func(*findfile.FileInfo) bool { return true })
 }
-func listUpDirs(ctx context.Context, ua UncAccess, str string) ([]Element, error) {
+func listUpDirs(ctx context.Context, ua UncCompletion, str string) ([]Element, error) {
 	return listUpWithFilter(ctx, str, ua, func(fd *findfile.FileInfo) bool {
 		return fd.IsDir() || strings.HasSuffix(strings.ToLower(fd.Name()), ".lnk")
 	})
 }
 
-type UncAccess int
+type UncCompletion int
 
 const (
-	UNC_IGNORE UncAccess = iota
-	UNC_PROMPT
-	UNC_FORCE
+	DoNotUncCompletion UncCompletion = iota
+	AskDoUncCompletion
+	DoUncCompletion
 )
 
 var ErrAskRetry = errors.New("Complete Network Path ?")
 
-func listUpWithFilter(ctx context.Context, str string, ua UncAccess, filter func(*findfile.FileInfo) bool) ([]Element, error) {
-	if ua != UNC_IGNORE {
-		if r, err := uncComplete(str, ua == UNC_FORCE); err == nil {
+func listUpWithFilter(ctx context.Context, str string, ua UncCompletion, filter func(*findfile.FileInfo) bool) ([]Element, error) {
+	if ua != DoNotUncCompletion {
+		if r, err := uncComplete(str, ua == DoUncCompletion); err == nil {
 			return r, nil
 		} else if err == ErrAskRetry {
 			return nil, err

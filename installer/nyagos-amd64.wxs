@@ -2,7 +2,7 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
     <?define Platform=x64 ?>
     <?define Win64=yes ?>
-    <?define Executable=../../cmd/amd64/nyagos.exe ?>
+    <?define Executable=../bin/amd64/nyagos.exe ?>
     <?define ProgramFilesFolder=ProgramFiles64Folder ?>
     <?define PackageGuid=7bf815ef-79d5-4f9f-8870-71e5866ea512 ?>
     <?define NyagosExeGuid=de4dcea9-fd79-4112-a68b-f57e62dcd320 ?>

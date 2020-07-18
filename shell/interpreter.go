@@ -85,10 +85,54 @@ type Cmd struct {
 
 func (cmd *Cmd) Arg(n int) string      { return cmd.args[n] }
 func (cmd *Cmd) Args() []string        { return cmd.args }
-func (cmd *Cmd) SetArgs(s []string)    { cmd.args = s }
 func (cmd *Cmd) RawArg(n int) string   { return cmd.rawArgs[n] }
 func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
+
+func argToRawArg(s string) string {
+	if !strings.ContainsAny(s, " &|<>\t\"") {
+		return s
+	}
+	var buffer strings.Builder
+	buffer.WriteByte('"')
+	yenCount := 0
+	for _, c := range s {
+		if c == '\\' {
+			yenCount++
+			continue
+		}
+		if c == '"' {
+			for yenCount > 0 {
+				buffer.WriteString("\\\\")
+				yenCount--
+			}
+			buffer.WriteString("\\\"")
+		} else {
+			for yenCount > 0 {
+				buffer.WriteByte('\\')
+				yenCount--
+			}
+			buffer.WriteRune(c)
+		}
+	}
+	for yenCount > 0 {
+		buffer.WriteString("\\\\")
+		yenCount--
+	}
+	buffer.WriteByte('"')
+	return buffer.String()
+}
+
+func (cmd *Cmd) SetArgs(s []string) {
+	cmd.args = s
+	if cmd.rawArgs == nil {
+		rargs := make([]string, len(s))
+		for i, s1 := range s {
+			rargs[i] = argToRawArg(s1)
+		}
+		cmd.rawArgs = rargs
+	}
+}
 
 func (cmd *Cmd) Getenv(key string) string {
 	if cmd.env != nil {

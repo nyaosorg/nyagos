@@ -1,4 +1,4 @@
-package timecheck
+package commands
 
 import "testing"
 
@@ -7,7 +7,7 @@ type testListT struct {
 	d []int
 }
 
-func TestIsOk(t *testing.T) {
+func TestStampIsValid(t *testing.T) {
 	testlist := []testListT{
 		{true, []int{2016, 5, 13, 17, 20, 0}},
 		{true, []int{2016, 2, 29, 17, 20, 0}},
@@ -19,7 +19,7 @@ func TestIsOk(t *testing.T) {
 	}
 	for _, p := range testlist {
 		d := p.d
-		if p.r != IsOk(d[0], d[1], d[2], d[3], d[4], d[5]) {
+		if p.r != stampIsValid(d[0], d[1], d[2], d[3], d[4], d[5]) {
 			t.Fatalf("[NG] %d/%d/%d %d:%d:%d\n", d[0], d[1], d[2], d[3], d[4], d[5])
 			t.Fail()
 		}

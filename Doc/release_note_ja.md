@@ -1,5 +1,22 @@
 [English](release_note_en.md) / Japanese
 
+* cd,pushd とその補完で bash のような %CDPATH% をサポートした
+* `%APPDATA%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
+* WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした
+* バイナリファイルを置くディレクトリを Cmd から bin へ変更した
+* catalog/subcomplete.lua
+    - 新補完API `nyagos.complete_for` を使うようにした
+    - 起動を早くするため、補完するサブコマンド名をファイルにキャッシング
+    - キャッシュクリアコマンド `clear_subcomands_cache` を実装
+    - `fsutil` と `go` のサブコマンド補完
+* catalog/git.lua
+    - `subcomplete.lua` を自動でロードするようにした
+    - commit-hash も branch-name 同様に補完する
+    - `git checkout`で commit-hash,ブランチ名、修正されたファイル名を補完
+* (#386) `ls -h` のサイズ出力を単位付きで表示するよう修正 (Thx! [@Matsuyanagi](https://github.com/Matsuyanagi))
+* Fix: `nyagos.exec{ ALIAS-COMMAND-USING $@ }` がパニックを引き起す不具合を修正
+* 補完可能なファイルのテーブルを返す関数 `nyagos.complete_for_files` を追加
+
 NYAGOS 4.4.6\_2
 ===============
 (2020.06.09)

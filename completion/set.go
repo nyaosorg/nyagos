@@ -2,13 +2,15 @@ package completion
 
 import (
 	"context"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/mitchellh/go-ps"
 )
 
-func completionSet(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
+func completionSet(ctx context.Context, ua UncCompletion, params []string) ([]Element, error) {
 	result := []Element{}
 	base := strings.ToUpper(params[len(params)-1])
 	for _, env1 := range os.Environ() {
@@ -19,11 +21,38 @@ func completionSet(ctx context.Context, ua UncAccess, params []string) ([]Elemen
 	return result, nil
 }
 
-func completionCd(ctx context.Context, ua UncAccess, params []string) ([]Element, error) {
+func completionDir(ctx context.Context, ua UncCompletion, params []string) ([]Element, error) {
 	return listUpDirs(ctx, ua, params[len(params)-1])
 }
 
-func completionEnv(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
+func completionCd(ctx context.Context, ua UncCompletion, params []string) ([]Element, error) {
+
+	list, err := completionDir(ctx, ua, params)
+	source := params[len(params)-1]
+	if len(source) < 1 || source[0] == '.' || strings.ContainsAny(source, "/\\:") {
+		return list, err
+	}
+	cdpath := os.Getenv("CDPATH")
+	if cdpath == "" {
+		return list, err
+	}
+	base := strings.ToUpper(source)
+	for _, cdpath1 := range filepath.SplitList(cdpath) {
+		if files, err := ioutil.ReadDir(cdpath1); err == nil {
+			for _, file1 := range files {
+				if file1.IsDir() {
+					name := strings.ToUpper(file1.Name())
+					if strings.HasPrefix(name, base) {
+						list = append(list, Element1(file1.Name()))
+					}
+				}
+			}
+		}
+	}
+	return list, nil
+}
+
+func completionEnv(ctx context.Context, ua UncCompletion, param []string) ([]Element, error) {
 	eq := -1
 	for i := 1; i < len(param); i++ {
 		if strings.Contains(param[i], "=") {
@@ -41,14 +70,14 @@ func completionEnv(ctx context.Context, ua UncAccess, param []string) ([]Element
 	}
 }
 
-func completionWhich(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
+func completionWhich(ctx context.Context, ua UncCompletion, param []string) ([]Element, error) {
 	if len(param) == 2 {
 		return listUpCommands(ctx, param[len(param)-1])
 	}
 	return nil, nil
 }
 
-func completionProcessName(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
+func completionProcessName(ctx context.Context, ua UncCompletion, param []string) ([]Element, error) {
 	processes, err := ps.Processes()
 	if err != nil {
 		return nil, err
@@ -68,7 +97,7 @@ func completionProcessName(ctx context.Context, ua UncAccess, param []string) ([
 	return result, nil
 }
 
-func completionTaskKill(ctx context.Context, ua UncAccess, param []string) ([]Element, error) {
+func completionTaskKill(ctx context.Context, ua UncCompletion, param []string) ([]Element, error) {
 	if len(param) >= 3 && strings.EqualFold(param[len(param)-2], "/IM") {
 		return completionProcessName(ctx, ua, param)
 	}

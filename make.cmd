@@ -104,8 +104,8 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
     $saveGOARCH = $env:GOARCH
     $env:GOARCH = (go env GOARCH)
 
-    Make-Dir "cmd"
-    $binDir = (Join-Path "cmd" $env:GOARCH)
+    Make-Dir "bin"
+    $binDir = (Join-Path "bin" $env:GOARCH)
     Make-Dir $binDir
     if ($target -eq "") {
         $target = (Join-Path $binDir "nyagos.exe")
@@ -122,11 +122,11 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
 }
 
 function Make-Package($arch){
-    $zipname = ("nyagos-{0}.zip" -f (& "cmd\$arch\nyagos.exe" --show-version-only))
+    $zipname = ("nyagos-{0}.zip" -f (& "bin\$arch\nyagos.exe" --show-version-only))
 
     where.exe upx 2>&1 | Out-Null
     if ( $LastExitCode -eq 0 ){
-        upx.exe -9 "cmd\$arch\nyagos.exe"
+        upx.exe -9 "bin\$arch\nyagos.exe"
     }else{
         $global:LastExitCode = 0
     }
@@ -137,7 +137,7 @@ function Make-Package($arch){
     }
 
     zip -9j $zipname `
-        "cmd\$arch\nyagos.exe" `
+        "bin\$arch\nyagos.exe" `
         .nyagos `
         _nyagos `
         makeicon.cmd `
@@ -185,14 +185,14 @@ switch( $args[0] ){
         $private:arch = $env:GOARCH
         $env:GOOS="linux"
         $env:GOARCH="amd64"
-        Build -target "Cmd\linux\nyagos" -version (Get-Content Etc\version.txt)
+        Build -target "bin\linux\nyagos" -version (Get-Content Etc\version.txt)
         $env:GOOS = $os
         $env:GOARCH=$arch
     }
     "clean" {
         foreach( $p in @(`
-            "cmd\amd64\nyagos.exe",`
-            "cmd\386\nyagos.exe",`
+            "bin\amd64\nyagos.exe",`
+            "bin\386\nyagos.exe",`
             "nyagos.exe",`
             "nyagos.syso",`
             "version.now",`

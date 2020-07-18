@@ -55,16 +55,16 @@ func isTop(s string, indexes [][]int) bool {
 }
 
 type CustomCompleter interface {
-	Complete(context.Context, UncAccess, []string) ([]Element, error)
+	Complete(context.Context, UncCompletion, []string) ([]Element, error)
 	String() string
 }
 
 type customComplete struct {
-	Func func(context.Context, UncAccess, []string) ([]Element, error)
+	Func func(context.Context, UncCompletion, []string) ([]Element, error)
 	Name string
 }
 
-func (f customComplete) Complete(ctx context.Context, ua UncAccess, args []string) ([]Element, error) {
+func (f customComplete) Complete(ctx context.Context, ua UncCompletion, args []string) ([]Element, error) {
 	return f.Func(ctx, ua, args)
 }
 
@@ -78,8 +78,8 @@ var CustomCompletion = map[string]CustomCompleter{
 	"env":      &customComplete{Func: completionEnv, Name: "built-in `env` completer"},
 	"which":    &customComplete{Func: completionWhich, Name: "built-in `which` completer"},
 	"pushd":    &customComplete{Func: completionCd, Name: "Built-in `pushd` completer"},
-	"rmdir":    &customComplete{Func: completionCd, Name: "Built-in `rmdir` completer"},
-	"rd":       &customComplete{Func: completionCd, Name: "Built-in `rmdir` completer"},
+	"rmdir":    &customComplete{Func: completionDir, Name: "Built-in `rmdir` completer"},
+	"rd":       &customComplete{Func: completionDir, Name: "Built-in `rmdir` completer"},
 	"killall":  &customComplete{Func: completionProcessName, Name: "Built-in `kill` completer"},
 	"taskkill": &customComplete{Func: completionTaskKill, Name: "Built-in `taskkill` completer"},
 	"start":    &customComplete{Func: completionWhich, Name: "built-in `start` completer"},
@@ -150,17 +150,17 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 			args = append(args, "")
 		}
 
-		ua := UNC_PROMPT
+		ua := AskDoUncCompletion
 		for {
 			if f, ok := lookupCustomCompletion(args[0]); ok {
 				rv.List, err = f.Complete(ctx, ua, args)
 				if rv.List != nil && err == nil {
 					replace = true
 				} else {
-					rv.List, err = listUpFiles(ctx, ua, rv.Word[start:])
+					rv.List, err = ListUpFiles(ctx, ua, rv.Word[start:])
 				}
 			} else {
-				rv.List, err = listUpFiles(ctx, ua, rv.Word[start:])
+				rv.List, err = ListUpFiles(ctx, ua, rv.Word[start:])
 			}
 			if err != ErrAskRetry {
 				break
@@ -180,7 +180,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 			if err1 != nil || !strings.EqualFold(key, "y") {
 				return rv, default_delimiter, cmdline_recover, errors.New("Canceled.")
 			}
-			ua = UNC_FORCE
+			ua = DoUncCompletion
 		}
 	}
 	if err != nil {

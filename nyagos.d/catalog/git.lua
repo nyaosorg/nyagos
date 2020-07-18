@@ -11,15 +11,59 @@ end
 
 share.git = {}
 
+local getcommits = function(args)
+    local fd=io.popen("git log --format=\"%h\" -n 20 2>nul","r")
+    if not fd then
+        return {}
+    end
+    local result={}
+    for line in fd:lines() do
+        result[#result+1] = line
+    end
+    fd:close()
+    return result
+end
+
 -- setup local branch listup
-local branchlist = function()
-  local gitbranches = {}
+local branchlist = function(args)
+  if string.find(args[#args],"[/\\\\]") then
+      return nil
+  end
+  local gitbranches = getcommits()
   local gitbranch_tmp = nyagos.eval('git for-each-ref  --format="%(refname:short)" refs/heads/ 2> nul')
   for line in gitbranch_tmp:gmatch('[^\n]+') do
     table.insert(gitbranches,line)
   end
   return gitbranches
 end
+
+local addlist = function(args)
+    local fd = io.popen("git status -s 2>nul","r")
+    if not fd then
+        return nil
+    end
+    local files = {}
+    for line in fd:lines() do
+        files[#files+1] = string.sub(line,4)
+    end
+    fd:close()
+    return files
+end
+
+local checkoutlist = function(args)
+    local result = branchlist(args) or {}
+    local fd = io.popen("git status -s 2>nul","r")
+    if fd then
+        for line in fd:lines() do
+            if string.sub(line,1,2) == " M" then
+                result[1+#result] = string.sub(line,4)
+            end
+        end
+        fd:close()
+    end
+    return result
+end
+
 
 --setup current branch string
 local currentbranch = function()
@@ -40,10 +84,16 @@ gitsubcommands["svn"]={"init", "fetch", "clone", "rebase", "dcommit", "log", "fi
 gitsubcommands["worktree"]={"add", "list", "lock", "prune", "unlock"}
 
 -- branch
-gitsubcommands["checkout"]=branchlist
+gitsubcommands["checkout"]=checkoutlist
 gitsubcommands["reset"]=branchlist
 gitsubcommands["merge"]=branchlist
 gitsubcommands["rebase"]=branchlist
+gitsubcommands["revert"]=branchlist
+
+gitsubcommands["show"]=getcommits
+
+gitsubcommands["add"]=addlist
+
 
 local gitvar=share.git
 gitvar.subcommand=gitsubcommands
@@ -51,20 +101,30 @@ gitvar.branch=branchlist
 gitvar.currentbranch=currentbranch
 share.git=gitvar
 
-if share.maincmds then
-  if share.maincmds["git"] then
+if not share.maincmds then
+    use "subcomplete.lua"
+end
+
+if share.maincmds and share.maincmds["git"] then
     -- git command complementation exists.
-    local maincmds = share.maincmds
-
-    -- build
-    for key, cmds in pairs(gitsubcommands) do
-      local gitcommand="git "..key
-      maincmds[gitcommand]=cmds
+    nyagos.complete_for.git = function(args)
+        while #args > 2 and args[2]:sub(1,1) == "-" do
+            table.remove(args,2)
+        end
+        if #args == 2 then
+            return share.maincmds.git
+        end
+        local subcmd = table.remove(args,2)
+        while #args > 2 and args[2]:sub(1,1) == "-" do
+            table.remove(args,2)
+        end
+        local t = gitsubcommands[subcmd]
+        if type(t) == "function" then
+            return t(args)
+        elseif type(t) == "table" and #args == 2 then
+            return t
+        end
     end
-
-    -- replace
-    share.maincmds = maincmds
-  end
 end
 
 -- EOF

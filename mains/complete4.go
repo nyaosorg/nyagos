@@ -42,7 +42,7 @@ func (c *customCompleter) String() string {
 	return c.Name
 }
 
-func (c *customCompleter) Complete(ctx context.Context, ua completion.UncAccess, args []string) ([]completion.Element, error) {
+func (c *customCompleter) Complete(ctx context.Context, ua completion.UncCompletion, args []string) ([]completion.Element, error) {
 	LL, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
 		return nil, errors.New("completion.CustomCompletion: no lua instance")
