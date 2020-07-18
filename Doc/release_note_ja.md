@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.7\_0
+===============
+(2020.07.18)
+
 * cd,pushd とその補完で bash のような %CDPATH% をサポートした
 * `%APPDATA%\NYAOS_ORG\nyagos.d` のスクリプトも読むようにした
 * WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした
