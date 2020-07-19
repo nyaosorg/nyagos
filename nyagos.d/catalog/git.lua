@@ -118,7 +118,7 @@ if share.maincmds and share.maincmds["git"] then
         while #args > 2 and args[2]:sub(1,1) == "-" do
             table.remove(args,2)
         end
-        local t = gitsubcommands[subcmd]
+        local t = share.git.subcommand[subcmd]
         if type(t) == "function" then
             return t(args)
         elseif type(t) == "table" and #args == 2 then
