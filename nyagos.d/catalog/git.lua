@@ -37,6 +37,13 @@ local branchlist = function(args)
   return gitbranches
 end
 
+local unquote = function(s)
+    s = string.gsub(s,'"','')
+    return string.gsub(s,'\\[0-7][0-7][0-7]',function(t)
+        return string.char(tonumber(string.sub(t,2),8))
+    end)
+end
+
 local addlist = function(args)
     local fd = io.popen("git status -s 2>nul","r")
     if not fd then
@@ -44,7 +51,7 @@ local addlist = function(args)
     end
     local files = {}
     for line in fd:lines() do
-        files[#files+1] = string.sub(line,4)
+        files[#files+1] = unquote(string.sub(line,4))
     end
     fd:close()
     return files
@@ -56,7 +63,7 @@ local checkoutlist = function(args)
     if fd then
         for line in fd:lines() do
             if string.sub(line,1,2) == " M" then
-                result[1+#result] = string.sub(line,4)
+                result[1+#result] = unquote(string.sub(line,4))
             end
         end
         fd:close()
