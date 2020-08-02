@@ -49,10 +49,15 @@ func _du(path string, output func(string, int64) error, stderr io.Writer, blocks
 	for _, dir1 := range dirs {
 		fullpath := filepath.Join(path, dir1)
 		diskuse1, err := _du(fullpath, output, stderr, blocksize)
+		if err == errCtrlC {
+			return diskuse, err
+		}
 		if err == nil {
 			if err = output(fullpath, diskuse1); err == nil {
 				diskuse += diskuse1
 				continue
+			} else if err == errCtrlC {
+				return diskuse1, errCtrlC
 			}
 		}
 		fmt.Fprintf(stderr, "%s: %s\n", fullpath, err)
@@ -91,6 +96,9 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 		count++
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
+			if err == errCtrlC {
+				return 0, err
+			}
 			continue
 		}
 		printDu1Line(cmd.Out(), arg1, size)
