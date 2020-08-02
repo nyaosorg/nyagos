@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * git.lua: `git add` 向け補完で"\343\201\202\343\201\257\343\201\257"といったファイル名のクォーテーションを解除するようにした
+* diskused: サイズ表記を `ls -h` のように
 
 NYAGOS 4.4.7\_0
 ===============

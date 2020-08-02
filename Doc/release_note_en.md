@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * git.lua: completion for `git add`: unquoto filenames like "\343\201\202\343\201\257\343\201\257"
+* diskused: shows size like `ls -h`
 
 NYAGOS 4.4.7\_0
 ===============
