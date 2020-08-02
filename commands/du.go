@@ -11,6 +11,10 @@ import (
 
 var errCtrlC = errors.New("^C")
 
+func printDu1Line(out io.Writer, name string, size int64) {
+	fmt.Fprintf(out, "%7s %s\n", formatByHumanize(size), name)
+}
+
 // _du returns the sum (bytes) of path
 func _du(path string, output func(string, int64) error, stderr io.Writer, blocksize int64) (int64, error) {
 	fd, err := os.Open(path)
@@ -58,7 +62,7 @@ func _du(path string, output func(string, int64) error, stderr io.Writer, blocks
 
 func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 	output := func(name string, size int64) error {
-		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, name)
+		printDu1Line(cmd.Out(), name, size)
 		if ctx != nil {
 			select {
 			case <-ctx.Done():
@@ -89,14 +93,14 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
 			continue
 		}
-		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, arg1)
+		printDu1Line(cmd.Out(), arg1, size)
 	}
 	if count <= 0 {
 		size, err := _du(".", output, cmd.Err(), 4096)
 		if err != nil {
 			return 1, err
 		}
-		fmt.Fprintf(cmd.Out(), "%d\t%s\n", size/1024, ".")
+		printDu1Line(cmd.Out(), ".", size)
 	}
 	return 0, nil
 }
