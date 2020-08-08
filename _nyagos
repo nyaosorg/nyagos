@@ -10,19 +10,6 @@ else
     set NUL=/dev/null
 endif
 
-suffix >%NUL% 2>%NUL%
-if not errorlevel 1 then
-    suffix "awk=gawk -f"
-    suffix "js=cscript //nologo"
-    suffix "lua=nyagos.exe --norc --lua-file"
-    suffix "pl=perl"
-    suffix "ps1=powershell -ExecutionPolicy RemoteSigned -file"
-    suffix "rb=ruby"
-    suffix "vbs=cscript //nologo"
-    suffix "wsf=cscript //nologo"
-    suffix "py=python"
-end
-
 if     "%OS%" == "Windows_NT" set "PROMPT=$L%COMPUTERNAME%:$P$G$_$$$s"
 if not "%OS%" == "Windows_NT" set "PROMPT=$L%NAME%:$P$G$_$$$s"
 

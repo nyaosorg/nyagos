@@ -92,3 +92,17 @@ nyagos.alias.suffix = function(args)
         end
     end
 end
+
+for key,val in pairs{
+    awk={"gawk","-f"},
+    js={"cscript","//nologo"},
+    lua={"nyagos.exe","--norc","--lua-file"},
+    pl={"perl"},
+    ps1={"powershell","-ExecutionPolicy","RemoteSigned","-file"},
+    rb={"ruby"},
+    vbs={"cscript","//nologo"},
+    wsf={"cscript","//nologo"},
+    py={"python"},
+} do
+    share._setsuffix( key , val )
+end
