@@ -24,7 +24,7 @@ So, I created a new shell like below:
   * Keybinding
     * Features are bound to keys like Bash on default
     * Customized like
-        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` ([Lua](https://github.com/yuin/gopher-lua))
+        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` on %USERPROFILE%\\.nyagos ([Lua](https://github.com/yuin/gopher-lua))
     * A lua-functions can be bound to a key like
         * `nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end`
   * History (Ctrl-P and !-mark)

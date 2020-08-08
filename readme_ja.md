@@ -16,7 +16,7 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
   * キーバインド
     * デフォルト：Bash風
     * カスタマイズ
-        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` ([Lua](https://github.com/yuin/gopher-lua))
+        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` on %USERPROFILE%\\.nyagos ([Lua](https://github.com/yuin/gopher-lua))
     * Lua関数のキーへのバインド
         * `nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end`
   * ヒストリ (Ctrl-P や ! マークによる)
