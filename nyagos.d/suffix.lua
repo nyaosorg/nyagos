@@ -6,10 +6,7 @@ end
 share._suffixes={}
 
 share._setsuffix = function(suffix,cmdline)
-    local suffix=string.lower(suffix)
-    if string.sub(suffix,1,1)=='.' then
-        suffix = string.sub(suffix,2)
-    end
+    suffix=string.gsub(string.lower(suffix),"^%.","")
     if not share._suffixes[suffix] then
         local newext="."..suffix
         local orgpathext = nyagos.env.PATHEXT
@@ -21,9 +18,7 @@ share._setsuffix = function(suffix,cmdline)
             nyagos.env.PATHEXT = newext
         end
     end
-    local table = share._suffixes
-    table[suffix]=cmdline
-    share._suffixes = table
+    share._suffixes[suffix]=cmdline
 end
 
 suffix = setmetatable({},{
