@@ -78,3 +78,11 @@ function nyagos.alias.chompf(args)
         end
     end
 end
+
+if nyagos.env.OS == "Windows_NT" then
+    nyagos.alias.ls="__ls__ -oFh $*"
+    nyagos.alias.ll="__ls__ -olFh $*"
+    nyagos.alias.wordpad=
+        '"' .. nyagos.pathjoin( nyagos.env.PROGRAMFILES ,
+        'Windows NT\\Accessories\\wordpad.exe' ) .. '"'
+end
