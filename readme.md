@@ -21,27 +21,46 @@ as arguments.
 So, I created a new shell like below:
 
 * UNIX-Like Shell
-  * Keybinding like Emacs.
+  * Keybinding
+    * Features are bound to keys like Bash on default
+    * Customized like
+        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` ([Lua](https://github.com/yuin/gopher-lua))
+    * A lua-functions can be bound to a key like
+        * `nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end`
   * History (Ctrl-P and !-mark)
   * Alias
-  * Filename/Command-name/Custom completion
-* DOS-Like Shell
-  * Drive Letters work on Windows. Each drive has its current directory.
+    * like DOSKEY
+        * `nyagos.alias["g++"]="g++.exe -std=gnu++17 $*"`
+    * ones implemented by Lua functions
+        * `nyagos.alias["lala"]=function(args) nyagos.exec("ls","-al",unpack(args)) end`
+  * Custom completions
+```lua
+            nyagos.complete_for["go"] = function(args)
+                if #args == 2 then
+                    return {
+                        "bug","doc","fmt","install","run","version",
+                        "build","env","generate","list","test","vet",
+                        "clean","fix","get","mod","tool" }
+                else
+                    return nil -- files completion
+                end
+            end
+```
+* Shell that follows the Windows' style like CMD.EXE
+  * Windows' path format `C:\path\to\file` are able to be used.
+  * Each drive has its own current directory.
   * `copy`,`move` and some dos-like built-in commands work.
-* Support UNICODE
+  * No additional DLL are required.
+  * Registry are not used.
+* Support Unicode. Windows unicode APIs are used.
   * Can paste unicode character on clipboard and edit them.
   * Unicode-literal %U+XXXX%
   * Prompt Macro $Uxxxx
 * Built-in ls
   * color support (-o option)
   * print hard-link,symbolic-link and junction's target-path
-* Customizing with [GopherLua](https://github.com/yuin/gopher-lua)
-  * built-in command written with Lua
-  * filtering command-line
-  * useful functions: ANSI-String & UTF8 convert , eval and so on.
-  * Support to call COM(OLE)
 * Support OS:
-  * Windows 7 or later
+  * Windows 8.1 & 10
   * Linux (experimental)
 
 Download Binary
@@ -52,7 +71,7 @@ Download Binary
 Contents
 --------
 
-### Release note and history 
+### Release note and history
 
 - [Current Release note](Doc/release_note_en.md)
 - [History ~4.0](Doc/history_4.0_en.md)

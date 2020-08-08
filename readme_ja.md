@@ -13,13 +13,38 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 <img src="./demo.gif" alt="demo-animation" />
 
 * UNIX風シェル
-  * Emacs風キーバインド
+  * キーバインド
+    * デフォルト：Bash風
+    * カスタマイズ
+        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` ([Lua](https://github.com/yuin/gopher-lua))
+    * Lua関数のキーへのバインド
+        * `nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end`
   * ヒストリ (Ctrl-P や ! マークによる)
   * エイリアス
-  * ファイル名・コマンド名補完
-* DOS 風シェル
-  * ドライブ文字。ドライブごとにカレントディレクトリを保持
+    * DOSKEY風
+        * `nyagos.alias["g++"]="g++.exe -std=gnu++17 $*"`
+    * Lua関数による実装
+        * `nyagos.alias["lala"]=function(args) nyagos.exec("ls","-al",unpack(args)) end`
+
+  * カスタム補完
+```lua
+            nyagos.complete_for["go"] = function(args)
+                if #args == 2 then
+                    return {
+                        "bug","doc","fmt","install","run","version",
+                        "build","env","generate","list","test","vet",
+                        "clean","fix","get","mod","tool" }
+                else
+                    return nil -- files completion
+                end
+            end
+```
+* CMD.EXE同様のウインドウズの作法に従うシェル
+  * `C:\path\to\file` のような Windowsパス使用可能
+  * ドライブごとにカレントディレクトリを保持
   * `copy`,`move` など DOS 風の内蔵コマンドが動作
+  * ランタイムDLL不要
+  * レジストリ無使用
 * Unicodeサポート
   * Unicode文字をコピペ・編集可能
   * Unicodeリテラル %U+XXXX%
@@ -27,13 +52,8 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 * 内蔵ls
   * カラーサポート(-oオプション)
   * ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示
-* [GopherLua](https://github.com/yuin/gopher-lua) によるカスタマイズ
-  * Lua で内蔵コマンドを組込み
-  * コマンドラインフィルター
-  * コードページ文字列とUTF8とのコンバート関数
-  * COM サポート
 * サポート OS
-  * Windows 7～
+  * Windows 8.1 & 10
   * Linux (試験的サポート)
 
 ダウンロード
