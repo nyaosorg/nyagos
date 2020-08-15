@@ -51,7 +51,13 @@ local addlist = function(args)
     end
     local files = {}
     for line in fd:lines() do
-        files[#files+1] = unquote(string.sub(line,4))
+        local arrowStart,arrowEnd = string.find(line," -> ",1,true)
+        if arrowStart then
+            files[#files+1] = unquote(string.sub(line,4,arrowStart-1))
+            files[#files+1] = unquote(string.sub(line,arrowEnd+1))
+        else
+            files[#files+1] = unquote(string.sub(line,4))
+        end
     end
     fd:close()
     return files
