@@ -1,6 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
-* git.lua: completion for `git add`: unquoto filenames like "\343\201\202\343\201\257\343\201\257"
+* git.lua: completion for `git add`: 
+    - unquoto filenames like "\343\201\202\343\201\257\343\201\257"
+    - support files under untracked directories.
 * diskused: shows size like `ls -h`
 * Fix: diskused can not be stoped by Ctrl-C
 
