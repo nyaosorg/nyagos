@@ -44,6 +44,25 @@ local unquote = function(s)
     end)
 end
 
+local isUnderUntrackedDir = function(arg,files)
+    local matched_count=0
+    local last_matched
+    local upper_arg = string.upper(arg)
+    local upper_arg_len = string.len(upper_arg)
+    for i=1,#files do
+        if string.upper(string.sub(files[i],1,upper_arg_len)) == upper_arg then
+            matched_count = matched_count + 1
+            last_matched = files[i]
+        end
+    end
+    if matched_count == 1 and string.match(last_matched,"/$") then
+        return true
+    elseif matched_count < 1 then
+        return true
+    end
+    return false
+end
+
 local addlist = function(args)
     local fd = io.popen("git status -s 2>nul","r")
     if not fd then
@@ -60,6 +79,9 @@ local addlist = function(args)
         end
     end
     fd:close()
+    if isUnderUntrackedDir(args[#args],files) then
+        return nil
+    end
     return files
 end
 
