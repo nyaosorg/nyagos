@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
     - support files under untracked directories.
 * diskused: shows size like `ls -h`
 * Fix: diskused can not be stoped by Ctrl-C
+* Implement: environment variable substring like %ENV:~10,5%
 
 NYAGOS 4.4.7\_0
 ===============
