@@ -58,20 +58,50 @@ var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
 
 var rxSubstitute = regexp.MustCompile(`^([^\:]+)\:([^\=]+)=(.*)$`)
 
+var rxSubstring = regexp.MustCompile(`^([^\:]+)\:\~(\-?\d+)(?:,(\-?\d+))?$`)
+
 var rxPercent = regexp.MustCompile(`%\w+%`)
+
+func minusPosToAbs(s string, pos int) int {
+	if pos < 0 {
+		pos = len(s) + pos
+	}
+	if pos < 0 {
+		pos = 0
+	}
+	if pos > len(s) {
+		pos = len(s)
+	}
+	return pos
+}
 
 func ourGetenvSub(name string) (string, bool) {
 	m := rxSubstitute.FindStringSubmatch(name)
 	if m != nil {
 		base, ok := OurGetEnv(m[1])
-		if ok {
-			return texts.ReplaceIgnoreCase(base, m[2], m[3]), true
-		} else {
+		if !ok {
 			return "", false
 		}
-	} else {
-		return OurGetEnv(name)
+		return texts.ReplaceIgnoreCase(base, m[2], m[3]), true
 	}
+	m = rxSubstring.FindStringSubmatch(name)
+	if m != nil {
+		base, ok := OurGetEnv(m[1])
+		if !ok {
+			return "", false
+		}
+		pos, _ := strconv.Atoi(m[2])
+		pos = minusPosToAbs(base, pos)
+		base = base[pos:]
+		if len(m) >= 4 {
+			if pos, err := strconv.Atoi(m[3]); err == nil {
+				pos = minusPosToAbs(base, pos)
+				base = base[:pos]
+			}
+		}
+		return base, true
+	}
+	return OurGetEnv(name)
 }
 
 func OurGetEnv(name string) (string, bool) {
