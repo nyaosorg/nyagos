@@ -29,6 +29,9 @@ func _clone(action string, out io.Writer) (int, error) {
 		return 1, err
 	}
 	var pid int
+	if _me, err := filepath.EvalSymlinks(me); err == nil {
+		me = _me
+	}
 	pid, err = su.ShellExecute(action, me, "", wd)
 	if err != nil {
 		pid, err = su.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
