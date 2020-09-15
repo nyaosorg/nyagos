@@ -3,6 +3,7 @@ package shell
 import (
 	"context"
 	"os"
+	"path/filepath"
 	"strings"
 	"syscall"
 
@@ -33,7 +34,11 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if cmd.UseShellExecute {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
-		pid, err := su.ShellExecute("open", cmd.args[0], cmdline, "")
+		truepath, err := filepath.EvalSymlinks(cmd.args[0])
+		if err != nil {
+			truepath = cmd.args[0]
+		}
+		pid, err := su.ShellExecute("open", truepath, cmdline, "")
 		if err == nil && pid != 0 && cmd.OnBackExec != nil {
 			cmd.OnBackExec(pid)
 			if cmd.OnBackDone != nil {
