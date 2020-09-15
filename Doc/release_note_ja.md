@@ -6,6 +6,8 @@
 * diskused: サイズ表記を `ls -h` のように
 * diskused が Ctrl-C で止まらなかった不具合を修正
 * %ENV:~10,5% のような環境変数抽出を実装
+* UNCパスで表現されていないネットワーク上の GUI 実行ファイルを起動しようとすると `The operation was canceled by the user` というエラーになる問題を修正
+* nyagos がネットワーク上にある時、clone コマンドでエラーダイアログが出る問題を修正
 
 NYAGOS 4.4.7\_0
 ===============
