@@ -8,13 +8,13 @@ require (
 	github.com/go-ole/go-ole v1.2.4
 	github.com/google/uuid v1.1.1
 	github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd
-	github.com/mattn/go-colorable v0.1.6
+	github.com/mattn/go-colorable v0.1.7
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.9
 	github.com/mattn/go-tty v0.0.3
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v1.0.0
-	github.com/yuin/gopher-lua v0.0.0-20200521060427-6ff375d91eab
+	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da
 	github.com/zetamatta/glua-ole v0.0.0-20190220022351-75e104a4933c
 	github.com/zetamatta/go-box/v2 v2.0.7
 	github.com/zetamatta/go-findfile v0.0.0-20200328162119-eee69b678cbf
@@ -26,9 +26,10 @@ require (
 	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
 	github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2
-	github.com/zetamatta/go-windows-shortcut v0.0.0-20200324140129-c189109eb763
-	github.com/zetamatta/go-windows-su v0.1.1
-	golang.org/x/sys v0.0.0-20200519105757-fe76b779f299
+	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
+	github.com/zetamatta/go-windows-su v0.1.2
+	golang.org/x/sys v0.0.0-20200915084602-288bc346aa39
+	golang.org/x/text v0.3.3 // indirect
 )
 
 go 1.13
