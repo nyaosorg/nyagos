@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * Implement: environment variable substring like %ENV:~10,5%
 * Fix: error: `The operation was canceled by the user` when the executable is placed on the network folder which is not written by true-UNC-Path
 * Fix: `clone` command showed security error dialog when nyagos exists on network.
+* (#389) su: keep drive mounting by SUBST
 
 NYAGOS 4.4.7\_0
 ===============
