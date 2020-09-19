@@ -28,7 +28,8 @@ require (
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.2
-	golang.org/x/sys v0.0.0-20200915084602-288bc346aa39
+	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
+	golang.org/x/sys v0.0.0-20200918174421-af09f7315aff
 	golang.org/x/text v0.3.3 // indirect
 )
 

@@ -100,6 +100,8 @@ github.com/zetamatta/go-windows-su v0.1.1 h1:95i4NZ0HLPMHSscuEK0khn8lQWgt5+Cp+UM
 github.com/zetamatta/go-windows-su v0.1.1/go.mod h1:4n9f0mFNFXFahrF27dl2PyawsOg5I+F7gbhXzop+SPc=
 github.com/zetamatta/go-windows-su v0.1.2 h1:hHBZHEsRg1QBOWJ3FzMtMaD1phPlX1BsM04q8vA8Q5E=
 github.com/zetamatta/go-windows-su v0.1.2/go.mod h1:4n9f0mFNFXFahrF27dl2PyawsOg5I+F7gbhXzop+SPc=
+github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34 h1:NAMg+8eAh9stJ1MOa54mk/GQKdqvdlP2KadXlNN+8Ns=
+github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34/go.mod h1:ZLHt7lS384NeG9Z+9JsvukLJIYgiMP+p9mXyCY+AsO0=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190203050204-7ae0202eb74c/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
@@ -118,6 +120,8 @@ golang.org/x/sys v0.0.0-20200519105757-fe76b779f299 h1:DYfZAGf2WMFjMxbgTjaC+2HC7
 golang.org/x/sys v0.0.0-20200519105757-fe76b779f299/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200915084602-288bc346aa39 h1:356XA7ITklAU2//sYkjFeco+dH1bCRD8XCJ9FIEsvo4=
 golang.org/x/sys v0.0.0-20200915084602-288bc346aa39/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20200918174421-af09f7315aff h1:1CPUrky56AcgSpxz/KfgzQWzfG09u5YOL8MvPYBlrL8=
+golang.org/x/sys v0.0.0-20200918174421-af09f7315aff/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
 golang.org/x/text v0.3.2/go.mod h1:bEr9sfX3Q8Zfm5fL9x+3itogRgK3+ptLWKqgva+5dAk=
 golang.org/x/text v0.3.3 h1:cokOdA+Jmi5PJGXLlLllQSgYigAEfHXJAERHVMaCc2k=
