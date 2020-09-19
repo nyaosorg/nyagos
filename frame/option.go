@@ -59,6 +59,10 @@ func shellJoin(args []string) string {
 }
 
 var optionMap = map[string]optionT{
+	"--subst": {
+		U:  "\"DRIVE:=PATH\"\nassign DRIVE to PATH by subst on startup",
+		F1: optionSubst,
+	},
 	"--netuse": {
 		U:  "\"DRIVE:=UNCPATH\"\nassign DRIVE to UNCPATH on startup",
 		F1: optionNetUse,

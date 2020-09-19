@@ -8,8 +8,11 @@ import (
 	"path/filepath"
 	"strings"
 
+	"golang.org/x/sys/windows"
+
 	"github.com/zetamatta/go-windows-netresource"
 	"github.com/zetamatta/go-windows-su"
+	"github.com/zetamatta/go-windows-subst"
 )
 
 func _getwd() string {
@@ -76,6 +79,18 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	if netdrives, err := netresource.GetNetDrives(); err == nil {
 		for _, n := range netdrives {
 			fmt.Fprintf(&buffer, ` --netuse "%c:=%s"`, n.Letter, n.Remote)
+		}
+	}
+	if drives, err := netresource.GetDrives(); err == nil {
+		for _, d := range drives {
+			if d.Type == windows.DRIVE_FIXED {
+				mountPt := string([]byte{byte(d.Letter), ':'})
+				target, err := subst.QueryRaw(mountPt)
+				if err == nil && target[:4] == `\??\` {
+					fmt.Fprintf(&buffer, ` --subst "%c:=%s"`, d.Letter, target[4:])
+				}
+
+			}
 		}
 	}
 	fmt.Fprintf(&buffer, ` --chdir "%s"`, wd)
