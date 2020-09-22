@@ -1,7 +1,7 @@
 module github.com/zetamatta/nyagos
 
 require (
-	github.com/Microsoft/go-winio v0.4.14
+	github.com/Microsoft/go-winio v0.4.14 // indirect
 	github.com/akavel/rsrc v0.8.0 // indirect
 	github.com/atotto/clipboard v0.1.2
 	github.com/dustin/go-humanize v1.0.0
@@ -29,8 +29,10 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.2
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20200918174421-af09f7315aff
+	golang.org/x/sys v0.0.0-20200922070232-aee5d888a860
 	golang.org/x/text v0.3.3 // indirect
 )
+
+replace github.com/mattn/go-tty v0.0.3 => github.com/zetamatta/go-tty v0.0.4-0.20200922103638-e1c25758b0f4
 
 go 1.13
