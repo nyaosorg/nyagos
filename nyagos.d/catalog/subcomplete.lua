@@ -98,6 +98,28 @@ local function update_cache()
         end
     end
 
+    -- gh comand
+    share.maincmds["gh"] = load_subcommands_cache("gh-subcommands.txt")
+    if not share.maincmds["gh"] then
+        if nyagos.which("gh.exe") then
+            local ghhelp=io.popen("gh -a 2>&1","r")
+            local ghcmds={}
+            for line in ghhelp:lines() do
+                local word = string.match(line,"^ +(%S+)")
+                if nil ~= word then
+                    ghcmds[ #ghcmds+1 ] = word
+                end
+            end
+            ghhelp:close()
+            if #ghcmds > 1 then
+                local maincmds = share.maincmds
+                maincmds["gh"] =  ghcmds
+                save_subcommands_cache("gh-subcommands.txt",ghcmds)
+                share.maincmds = maincmds
+            end
+        end
+    end
+
     -- Subversion
     share.maincmds["svn"] = load_subcommands_cache("svn-subcommands.txt")
     if not share.maincmds["svn"] then
