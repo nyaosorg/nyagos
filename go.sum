@@ -66,6 +66,8 @@ github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae h1:LLvf5C
 github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
 github.com/zetamatta/go-readline-ny v0.1.2 h1:Mm7EZczKSWyHg227CwvwHJisBCTjLviZENUEdWxrLVE=
 github.com/zetamatta/go-readline-ny v0.1.2/go.mod h1:lCPUzYO4tOZQWUeUIdGGVU56AFU5zcQzoFlf/y/VNMQ=
+github.com/zetamatta/go-readline-ny v0.1.4 h1:1f9QIMhH5RT6zxH4bnCpuYa3i5zlFKBNWbn+eIrUUZ4=
+github.com/zetamatta/go-readline-ny v0.1.4/go.mod h1:ALbKzbM9QjyhEjbFLgXYBM2k/zoIkuzVN+rcL4ao6xA=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
