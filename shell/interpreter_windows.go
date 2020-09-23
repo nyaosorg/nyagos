@@ -34,9 +34,12 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if cmd.UseShellExecute {
 		// GUI Application
 		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
-		truepath, err := filepath.EvalSymlinks(cmd.args[0])
-		if err != nil {
-			truepath = cmd.args[0]
+		truepath := cmd.args[0]
+		if _truepath, err := filepath.Abs(truepath); err == nil {
+			truepath = _truepath
+		}
+		if _truepath, err := filepath.EvalSymlinks(truepath); err == nil {
+			truepath = _truepath
 		}
 		pid, err := su.ShellExecute("open", truepath, cmdline, "")
 		if err == nil && pid != 0 && cmd.OnBackExec != nil {
