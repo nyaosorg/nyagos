@@ -56,7 +56,11 @@ nyagos.key.C_o = function(this)
                 tmp[#tmp+1] = one
             end
         end
-        result = tmp
+        if tmp and #tmp >= 1 then
+            result = tmp
+        else
+            result = { word }
+        end
     else
         result = { word }
     end
