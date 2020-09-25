@@ -11,6 +11,7 @@ English / [Japanese](release_note_ja.md)
 * (#389) su: keep drive mounting by SUBST
 * (#390) Fixed: Some unicode character from U+2000 to U+2FFF could not be input
 * (#390) Fixed: Characters represented by Surrogate pair could not be input
+* box.lua: Fix: C-o and ESCAPE erased the user-input-word.
 
 NYAGOS 4.4.7\_0
 ===============
