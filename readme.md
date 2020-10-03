@@ -141,6 +141,7 @@ Acknowledgement
 * [sambatriste](https://github.com/sambatriste)
 * [terepanda](https://github.com/terepanda)
 * [Takmg](https://github.com/Takmg)
+* [nu8](https://github.com/nu8)
 
 Author
 ------
