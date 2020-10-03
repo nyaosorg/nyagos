@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.8\_0
+===============
+on Oct.3,2020
+
 * git.lua: completion for `git add`: 
     - unquoto filenames like "\343\201\202\343\201\257\343\201\257"
     - support files under untracked directories.
