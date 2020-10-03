@@ -6,12 +6,13 @@
 * diskused: サイズ表記を `ls -h` のように
 * diskused が Ctrl-C で止まらなかった不具合を修正
 * %ENV:~10,5% のような環境変数抽出を実装
-* UNCパスで表現されていないネットワーク上の GUI 実行ファイルを起動しようとすると `The operation was canceled by the user` というエラーになる問題を修正
+* (#308) UNCパスで表現されていないネットワーク上の GUI 実行ファイルを起動しようとすると `The operation was canceled by the user` というエラーになる問題を修正
 * nyagos がネットワーク上にある時、clone コマンドでエラーダイアログが出る問題を修正
 * (#389) su: SUBST コマンドのドライブマウントを維持するようにした
 * (#390) U+2000～U+2FFF の Unicode が入力できない不具合を修正
 * (#390) サロゲートペアな文字が入力できない不具合を修正
 * box.lua: Ctrl+O→ESCAPE でユーザが入力した単語が消える不具合を修正
+* (#391) subcommand.lua: ghコマンド向けサブコマンド補完を追加 (Thanks to @tsuyoshicho)
 
 NYAGOS 4.4.7\_0
 ===============

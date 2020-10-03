@@ -6,12 +6,13 @@ English / [Japanese](release_note_ja.md)
 * diskused: shows size like `ls -h`
 * Fix: diskused can not be stoped by Ctrl-C
 * Implement: environment variable substring like %ENV:~10,5%
-* Fix: error: `The operation was canceled by the user` when the executable is placed on the network folder which is not written by true-UNC-Path
+* (#308) Fix: error: `The operation was canceled by the user` when the executable is placed on the network folder which is not written by true-UNC-Path
 * Fix: `clone` command showed security error dialog when nyagos exists on network.
 * (#389) su: keep drive mounting by SUBST
 * (#390) Fixed: Some unicode character from U+2000 to U+2FFF could not be input
 * (#390) Fixed: Characters represented by Surrogate pair could not be input
 * box.lua: Fix: C-o and ESCAPE erased the user-input-word.
+* (#391) subcommand.lua: add gh first level subcommand rule (Thanks to @tsuyoshicho)
 
 NYAGOS 4.4.7\_0
 ===============
