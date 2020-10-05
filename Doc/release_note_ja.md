@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* (#390) Unicode の合字をサポート
+
 NYAGOS 4.4.8\_0
 ===============
 (2020.10.03)

@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#390) Support zero-width-join sequence for WindowsTerminal
+
 NYAGOS 4.4.8\_0
 ===============
 on Oct.3,2020
