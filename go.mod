@@ -8,7 +8,7 @@ require (
 	github.com/go-ole/go-ole v1.2.4
 	github.com/google/uuid v1.1.1
 	github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd
-	github.com/mattn/go-colorable v0.1.7
+	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.9
 	github.com/mattn/go-tty v0.0.4-0.20200929012639-b0f19ff1ae2f
@@ -29,7 +29,7 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.2
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20200928205150-006507a75852
+	golang.org/x/sys v0.0.0-20201005065044-765f4ea38db3
 	golang.org/x/text v0.3.3 // indirect
 )
 
