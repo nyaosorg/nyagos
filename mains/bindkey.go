@@ -151,7 +151,7 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 		if i == buffer.Cursor {
 			pos = text.Len() + 1
 		}
-		text.WriteRune(c)
+		c.WriteTo(&text)
 	}
 	if pos < 0 {
 		pos = text.Len() + 1
