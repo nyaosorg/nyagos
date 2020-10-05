@@ -12,6 +12,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/texts"
@@ -104,13 +105,19 @@ func ourGetenvSub(name string) (string, bool) {
 	return OurGetEnv(name)
 }
 
+func rune2string(r rune) string {
+	var b [utf8.UTFMax]byte
+	n := utf8.EncodeRune(b[:], r)
+	return string(b[:n])
+}
+
 func OurGetEnv(name string) (string, bool) {
 	value := os.Getenv(name)
 	if value != "" {
 		return value, true
 	} else if m := rxUnicode.FindStringSubmatch(name); m != nil {
 		ucode, _ := strconv.ParseInt(m[1], 16, 32)
-		return fmt.Sprintf("%c", rune(ucode)), true
+		return rune2string(rune(ucode)), true
 	} else if f, ok := PercentFunc[strings.ToUpper(name)]; ok {
 		return f(), true
 	} else {
