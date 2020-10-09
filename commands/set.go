@@ -25,11 +25,6 @@ type optionT struct {
 
 // BoolOptions are the all global option list.
 var BoolOptions = map[string]*optionT{
-	"cleanup_buffer": {
-		V:       &readline.FlushBeforeReadline,
-		Usage:   "Clean up key buffer at prompt",
-		NoUsage: "Do not clean up key buffer at prompt",
-	},
 	"completion_hidden": {
 		V:       &completion.IncludeHidden,
 		Usage:   "Include hidden files on completion",
