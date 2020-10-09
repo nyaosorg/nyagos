@@ -11,7 +11,7 @@ require (
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.9
-	github.com/mattn/go-tty v0.0.4-0.20200929012639-b0f19ff1ae2f
+	github.com/mattn/go-tty v0.0.4-0.20201006155210-6cb398a5c845
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da
@@ -29,7 +29,7 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.2
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20201008064518-c1f3e3309c71
+	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634
 	golang.org/x/text v0.3.3 // indirect
 )
 
