@@ -37,7 +37,11 @@ func _clone(action string, out io.Writer) (int, error) {
 	if _me, err := filepath.EvalSymlinks(me); err == nil {
 		me = _me
 	}
-	pid, err = su.ShellExecute(action, me, "", wd)
+	if isWindowsTerminal {
+		pid, err = su.ShellExecute(action, "wt.exe", fmt.Sprintf(`new-tab "%s"`, me), wd)
+	} else {
+		pid, err = su.ShellExecute(action, me, "", wd)
+	}
 	if err != nil {
 		pid, err = su.ShellExecute(action, "CMD.EXE", "/c \""+me+"\"", wd)
 		if err != nil {
@@ -60,14 +64,14 @@ func cmdClone(ctx context.Context, cmd Param) (int, error) {
 	return _clone("open", cmd.Err())
 }
 
-func runByWindowsTerminal(action, me, arguments string) (int, error) {
+func runAsByWindowsTerminal(me, arguments string) (int, error) {
 	var param strings.Builder
 	param.WriteString("/c wt.exe new-tab \"")
 	param.WriteString(me)
 	param.WriteString("\" ")
 	param.WriteString(arguments)
 	return su.Param{
-		Action: action,
+		Action: "runas",
 		Path:   "cmd.exe",
 		Param:  param.String(),
 		Show:   su.HIDE,
@@ -114,7 +118,7 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	var pid int
 
 	if isWindowsTerminal {
-		pid, err = runByWindowsTerminal("runas", me, buffer.String())
+		pid, err = runAsByWindowsTerminal(me, buffer.String())
 	} else {
 		pid, err = su.ShellExecute("runas", me, buffer.String(), "")
 	}
