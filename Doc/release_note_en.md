@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 * (#390) Support zero-width-join sequence for WindowsTerminal
 * Fix the cursor position broken on VARIATION SELECTOR-1..16  
   ( VARIATION SELECTOR-1..16 are shown like &lt;FE0F&gt; )
+* su and clone commands supports WindowsTerminal
 
 NYAGOS 4.4.8\_0
 ===============
