@@ -15,6 +15,8 @@ import (
 	"github.com/zetamatta/go-windows-subst"
 )
 
+var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
+
 func _getwd() string {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -58,6 +60,20 @@ func cmdClone(ctx context.Context, cmd Param) (int, error) {
 	return _clone("open", cmd.Err())
 }
 
+func runByWindowsTerminal(action, me, arguments string) (int, error) {
+	var param strings.Builder
+	param.WriteString("/c wt.exe new-tab \"")
+	param.WriteString(me)
+	param.WriteString("\" ")
+	param.WriteString(arguments)
+	return su.Param{
+		Action: action,
+		Path:   "cmd.exe",
+		Param:  param.String(),
+		Show:   su.HIDE,
+	}.ShellExecute()
+}
+
 func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	me, err := os.Executable()
 	if err != nil {
@@ -95,7 +111,13 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	}
 	fmt.Fprintf(&buffer, ` --chdir "%s"`, wd)
 
-	pid, err := su.ShellExecute("runas", me, buffer.String(), "")
+	var pid int
+
+	if isWindowsTerminal {
+		pid, err = runByWindowsTerminal("runas", me, buffer.String())
+	} else {
+		pid, err = su.ShellExecute("runas", me, buffer.String(), "")
+	}
 	if err != nil {
 		return 3, err
 	}
