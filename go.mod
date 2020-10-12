@@ -27,7 +27,7 @@ require (
 	github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
-	github.com/zetamatta/go-windows-su v0.1.2
+	github.com/zetamatta/go-windows-su v0.1.3
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
 	golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634
 	golang.org/x/text v0.3.3 // indirect
