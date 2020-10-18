@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * Fix the cursor position broken on VARIATION SELECTOR-1..16  
   ( VARIATION SELECTOR-1..16 are shown like &lt;FE0F&gt; )
 * su and clone commands supports WindowsTerminal
+* The background process start/end message is no longer displayed during editing.
 
 NYAGOS 4.4.8\_0
 ===============
