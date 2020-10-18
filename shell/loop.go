@@ -54,7 +54,9 @@ func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, erro
 
 	line, ok := sh.pop()
 	if !ok {
+		outputMutex.Lock()
 		ctx, line, err = stream.ReadLine(ctx)
+		outputMutex.Unlock()
 		if err != nil {
 			return ctx, line, err
 		}

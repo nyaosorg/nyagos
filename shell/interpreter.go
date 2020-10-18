@@ -17,6 +17,8 @@ import (
 
 var WildCardExpansionAlways = false
 
+var outputMutex sync.Mutex
+
 type CommandNotFound struct {
 	Name string
 	Err  error
@@ -531,23 +533,27 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				} else {
 					cmd.UseShellExecute = true
 					cmd.OnBackExec = func(pid int) {
-						n, _ := fmt.Fprintf(os.Stderr, "[%d]", pid)
-						putbs(n)
+						outputMutex.Lock()
+						fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+						outputMutex.Unlock()
 					}
 					cmd.OnBackDone = func(pid int) {
-						n, _ := fmt.Fprintf(os.Stderr, "[%d]+ Done", pid)
-						putbs(n)
+						outputMutex.Lock()
+						fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+						outputMutex.Unlock()
 					}
 				}
 			}
 			if i == len(pipeline)-1 && state.Term == "&" {
 				cmd.OnBackExec = func(pid int) {
-					n, _ := fmt.Fprintf(os.Stderr, "[%d]", pid)
-					putbs(n)
+					outputMutex.Lock()
+					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+					outputMutex.Unlock()
 				}
 				cmd.OnBackDone = func(pid int) {
-					n, _ := fmt.Fprintf(os.Stderr, "[%d]+ Done", pid)
-					putbs(n)
+					outputMutex.Lock()
+					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+					outputMutex.Unlock()
 				}
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {
