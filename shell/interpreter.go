@@ -24,12 +24,8 @@ type CommandNotFound struct {
 	Err  error
 }
 
-func (this CommandNotFound) Stringer() string {
-	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", this.Name)
-}
-
 func (this CommandNotFound) Error() string {
-	return this.Stringer()
+	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", this.Name)
 }
 
 type session struct {
