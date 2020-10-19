@@ -497,10 +497,13 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				pipeIn = nil
 			}
 
-			var err error
 			if state.Term[0] == '|' {
 				var pipeOut *os.File
+				var err error
 				pipeIn, pipeOut, err = os.Pipe()
+				if err != nil {
+					return 0, err
+				}
 				cmd.Stdio[1] = pipeOut
 				if state.Term == "|&" {
 					cmd.Stdio[2] = pipeOut
@@ -571,6 +574,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				}
 				if tag := cmd.Tag(); tag != nil {
 					var newtag CloneCloser
+					var err error
 					if newctx, newtag, err = tag.Clone(newctx); err != nil {
 						fmt.Fprintln(os.Stderr, err.Error())
 						return -1, err
