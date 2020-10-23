@@ -19,8 +19,6 @@ github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd h1:Ki
 github.com/josephspurrier/goversioninfo v0.0.0-20190209210621-63e6d1acd3dd/go.mod h1:eJTEwMjXb7kZ633hO3Ln9mBUCOjX2+FlTljvpl9SYdE=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
-github.com/mattn/go-colorable v0.1.7 h1:bQGKb3vps/j0E9GfJQ03JyhRuxsvdAanXlT9BTw3mdw=
-github.com/mattn/go-colorable v0.1.7/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-colorable v0.1.8 h1:c1ghPdyEDarC70ftn0y+A/Ee++9zz8ljHG1b13eJ0s8=
 github.com/mattn/go-colorable v0.1.8/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-isatty v0.0.7 h1:UvyT9uN+3r7yLEYSlJsbQGdsaB/a0DlgWP3pql6iwOc=
@@ -37,8 +35,6 @@ github.com/mattn/go-runewidth v0.0.9 h1:Lm995f3rfxdpd6TSmuVCHVb/QhupuXlYr8sCI/Qd
 github.com/mattn/go-runewidth v0.0.9/go.mod h1:H031xJmbD/WCDINGzjvQ9THkh0rPKHF+m2gUSrubnMI=
 github.com/mattn/go-tty v0.0.0-20190322114730-5518497423d1 h1:VRq8MIkqXRI9aytxCxOTDiQorwXRt8vlSOapwx8Ubys=
 github.com/mattn/go-tty v0.0.0-20190322114730-5518497423d1/go.mod h1:XPvLUNfbS4fJH25nqRHfWLMa1ONC8Amw+mIA639KxkE=
-github.com/mattn/go-tty v0.0.4-0.20200929012639-b0f19ff1ae2f h1:UI5Hj2NOjrpbBTnNa4w1FZcDe5bAa/R2vywFzPq9jSE=
-github.com/mattn/go-tty v0.0.4-0.20200929012639-b0f19ff1ae2f/go.mod h1:+0QBZrHExAnq8s9KMEZErKk7qTDOyCmOmXxHBLO8M2o=
 github.com/mattn/go-tty v0.0.4-0.20201006155210-6cb398a5c845 h1:KA/tyKdQEtY5pGrDyGpff0+UAekBQsF/aNK/GG+v1q0=
 github.com/mattn/go-tty v0.0.4-0.20201006155210-6cb398a5c845/go.mod h1:+0QBZrHExAnq8s9KMEZErKk7qTDOyCmOmXxHBLO8M2o=
 github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51 h1:mwbFlx48BwWB/EhRYMF2ddfFSPJKJt4whU89Oay+YYs=
@@ -65,8 +61,8 @@ github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
 github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae h1:LLvf5CCPekfeUlqQDGfVvds1kMf4hBfcAkpzYHqjYV4=
 github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
-github.com/zetamatta/go-readline-ny v0.2.2 h1:s7vJvRXsrHaLYSNkGttk7sipiIm6KK4Z5JDEWXU7Rd0=
-github.com/zetamatta/go-readline-ny v0.2.2/go.mod h1:9SuxP9+4MGYUgu13lI/+C0lOkUUZHwSp2y0L+PQnSnM=
+github.com/zetamatta/go-readline-ny v0.2.3 h1:j6+BEgTxpvqlnWhCFR2wC5pxnvLPqi9d3XWxD3IBaDc=
+github.com/zetamatta/go-readline-ny v0.2.3/go.mod h1:WS7uaX703/I0rbYgzbcZnfK7GscrzfR5PJQ9lG487kI=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
@@ -94,10 +90,8 @@ golang.org/x/sys v0.0.0-20191008105621-543471e840be/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20200928205150-006507a75852 h1:sXxgOAXy8JwHhZnPuItAlUtwIlxrlEqi28mKhUR+zZY=
-golang.org/x/sys v0.0.0-20200928205150-006507a75852/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634 h1:bNEHhJCnrwMKNMmOx3yAynp5vs5/gRy+XWFtZFu7NBM=
-golang.org/x/sys v0.0.0-20201009025420-dfb3f7c4e634/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20201022201747-fb209a7c41cd h1:WgqgiQvkiZWz7XLhphjt2GI2GcGCTIZs9jqXMWmH+oc=
+golang.org/x/sys v0.0.0-20201022201747-fb209a7c41cd/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.3 h1:cokOdA+Jmi5PJGXLlLllQSgYigAEfHXJAERHVMaCc2k=
 golang.org/x/text v0.3.3/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
