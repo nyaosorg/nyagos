@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
   ( VARIATION SELECTOR-1..16 are shown like &lt;FE0F&gt; )
 * su and clone commands supports WindowsTerminal
 * The background process start/end message is no longer displayed during editing.
+* C-r: Incremental Serach: compare case-insensitively
 
 NYAGOS 4.4.8\_0
 ===============
