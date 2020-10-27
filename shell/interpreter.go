@@ -534,11 +534,13 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 					cmd.OnBackExec = func(pid int) {
 						outputMutex.Lock()
 						fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+						os.Stderr.Sync()
 						outputMutex.Unlock()
 					}
 					cmd.OnBackDone = func(pid int) {
 						outputMutex.Lock()
 						fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+						os.Stderr.Sync()
 						outputMutex.Unlock()
 					}
 				}
@@ -547,11 +549,13 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				cmd.OnBackExec = func(pid int) {
 					outputMutex.Lock()
 					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
+					os.Stderr.Sync()
 					outputMutex.Unlock()
 				}
 				cmd.OnBackDone = func(pid int) {
 					outputMutex.Lock()
 					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+					os.Stderr.Sync()
 					outputMutex.Unlock()
 				}
 			}
