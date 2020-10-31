@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * su and clone commands supports WindowsTerminal
 * The background process start/end message is no longer displayed during editing.
 * C-r: Incremental Search: compare case-insensitively
+* Fix: Command-name completion did not work after && and ||.
 
 NYAGOS 4.4.8\_0
 ===============
