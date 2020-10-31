@@ -51,7 +51,8 @@ func isTop(s string, indexes [][]int) bool {
 		return indexes[0][1] == len(s)
 	}
 	prev := s[indexes[len(indexes)-2][0]:indexes[len(indexes)-2][1]]
-	return prev == ";" || prev == "|" || prev == "&"
+	return prev == ";" || prev == "|" || prev == "&" ||
+		prev == "&&" || prev == "||"
 }
 
 type CustomCompleter interface {
