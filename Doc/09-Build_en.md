@@ -6,7 +6,7 @@ Build
 These sortwares are required.
 They are able to be downloaded with `make.cmd get`.
 
-* [go 1.10 for windows](http://golang.org)
+* [go 1.13 for windows](http://golang.org)
 * https://github.com/atotto/clipboard
 * https://github.com/dustin/go-humanize
 * https://github.com/go-ole/go-ole
@@ -24,6 +24,7 @@ They are able to be downloaded with `make.cmd get`.
 * https://github.com/zetamatta/go-mbcs
 * https://golang.org/x/sys/windows
 
+<!-- -->
     go get github.com/zetamatta/nyagos
     cd "%GOPATH%\src\github.com\zetamatta\nyagos"
 
