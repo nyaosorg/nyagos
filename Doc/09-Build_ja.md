@@ -6,7 +6,7 @@
 次のソフトウェアが必要となります。
 これらは `make.cmd get` でダウンロード可能です。
 
-* [go 1.10 for windows](http://golang.org)
+* [go 1.13 for windows](http://golang.org)
 * https://github.com/atotto/clipboard
 * https://github.com/dustin/go-humanize
 * https://github.com/go-ole/go-ole
@@ -24,13 +24,16 @@
 * https://github.com/zetamatta/go-mbcs
 * https://golang.org/x/sys/windows
 
+<!-- -->
     go get github.com/zetamatta/nyagos
     cd "%GOPATH%\src\github.com\zetamatta\nyagos"
 
 (安定板の時)
+
     git checkout master
 
 (最新版の時)
+
     git checkout develop
 
     make.cmd get
