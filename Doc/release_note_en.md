@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * The background process start/end message is no longer displayed during editing.
 * C-r: Incremental Search: compare case-insensitively
 * Fix: Command-name completion did not work after && and ||.
+* C-y: Trim the last CRLF on pasting
 
 NYAGOS 4.4.8\_0
 ===============
