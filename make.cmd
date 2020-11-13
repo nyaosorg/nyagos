@@ -278,6 +278,8 @@ switch( $args[0] ){
     }
     "get" {
         go get -u
+        go get -u github.com/mattn/go-tty@master
+        go mod tidy
     }
     "fmt" {
         Go-Fmt | Out-Null
