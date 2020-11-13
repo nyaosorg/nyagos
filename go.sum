@@ -63,8 +63,8 @@ github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
 github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae h1:LLvf5CCPekfeUlqQDGfVvds1kMf4hBfcAkpzYHqjYV4=
 github.com/zetamatta/go-outputdebug v0.0.0-20200519164229-222c7991e4ae/go.mod h1:oWzR58pjEbqmQK35Wh+slsMO3H4Chi/24zVIyqJfWNI=
-github.com/zetamatta/go-readline-ny v0.2.3 h1:j6+BEgTxpvqlnWhCFR2wC5pxnvLPqi9d3XWxD3IBaDc=
-github.com/zetamatta/go-readline-ny v0.2.3/go.mod h1:WS7uaX703/I0rbYgzbcZnfK7GscrzfR5PJQ9lG487kI=
+github.com/zetamatta/go-readline-ny v0.2.4 h1:Sq2z3/wkVsTsj9fG7H5T+AcECt6C6sHH8CSBVAkWGEk=
+github.com/zetamatta/go-readline-ny v0.2.4/go.mod h1:7jzaLvcSxqLy4dOkkNLnadj3AjtLZXzFciMT4KH4bi4=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
@@ -92,8 +92,6 @@ golang.org/x/sys v0.0.0-20191008105621-543471e840be/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20201022201747-fb209a7c41cd h1:WgqgiQvkiZWz7XLhphjt2GI2GcGCTIZs9jqXMWmH+oc=
-golang.org/x/sys v0.0.0-20201022201747-fb209a7c41cd/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201113135734-0a15ea8d9b02 h1:5Ftd3YbC/kANXWCBjvppvUmv1BMakgFcBKA7MpYYp4M=
 golang.org/x/sys v0.0.0-20201113135734-0a15ea8d9b02/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.4 h1:0YWbFKbhXG/wIiuHDSKpS0Iy7FSA+u45VtBMfQcFTTc=
