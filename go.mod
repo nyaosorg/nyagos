@@ -30,7 +30,7 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.3
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20201119102817-f84b799fce68
+	golang.org/x/sys v0.0.0-20201202213521-69691e467435
 	golang.org/x/text v0.3.4 // indirect
 )
 
