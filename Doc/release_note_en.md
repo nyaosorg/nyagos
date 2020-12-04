@@ -13,6 +13,7 @@ on Dec.5,2020
 * Fix: Command-name completion did not work after && and ||.
 * C-y: Trim the last CRLF on pasting
 * Fix: (#393) the first key after terminal-window activated was input twice. (Thanks to @tostos5963)
+* Stop using upx.exe because antivirus software sometimes disjudges as a virus.
 
 NYAGOS 4.4.8\_0
 ===============
