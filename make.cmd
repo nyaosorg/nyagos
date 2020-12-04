@@ -124,13 +124,6 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
 function Make-Package($arch){
     $zipname = ("nyagos-{0}.zip" -f (& "bin\$arch\nyagos.exe" --show-version-only))
 
-    where.exe upx 2>&1 | Out-Null
-    if ( $LastExitCode -eq 0 ){
-        upx.exe -9 "bin\$arch\nyagos.exe"
-    }else{
-        $global:LastExitCode = 0
-    }
-
     Write-Verbose "$ zip -9 $zipname ...."
     if( Test-Path $zipname ){
         Do-Remove $zipname
