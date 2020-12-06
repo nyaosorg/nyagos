@@ -33,9 +33,6 @@ func (*scriptEngineForOptionImpl) RunString(ctx context.Context, code string) er
 
 // Main is the main routine on the build without Lua
 func Main() error {
-	disableColors := colorable.EnableColorsStdout(nil)
-	defer disableColors()
-
 	sh := shell.New()
 	defer sh.Close()
 	sh.Console = colorable.NewColorableStdout()

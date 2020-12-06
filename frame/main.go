@@ -10,6 +10,9 @@ import (
 	"runtime/debug"
 
 	"github.com/go-ole/go-ole"
+	"github.com/mattn/go-colorable"
+
+	"github.com/zetamatta/go-windows-consoleicon"
 
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
@@ -35,6 +38,13 @@ func Start(mainHandler func() error) error {
 	}
 
 	alias.Init()
+
+	disableColors := colorable.EnableColorsStdout(nil)
+	defer disableColors()
+
+	if clean, err := consoleicon.SetFromExe(); err == nil {
+		defer clean(true)
+	}
 
 	return mainHandler()
 }

@@ -14,8 +14,6 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
 
-	"github.com/zetamatta/go-windows-consoleicon"
-
 	"github.com/zetamatta/nyagos/alias"
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/completion"
@@ -114,14 +112,7 @@ func (this *luaWrapper) Close() error {
 }
 
 func Main() error {
-	disableColors := colorable.EnableColorsStdout(nil)
-	defer disableColors()
-
-	if clean, err := consoleicon.SetFromExe(); err == nil {
-		defer clean(true)
-	}
 	ctx := context.Background()
-
 	completion.HookToList = append(completion.HookToList, luaHookForComplete)
 
 	L, err := NewLua()
