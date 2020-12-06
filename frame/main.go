@@ -7,7 +7,9 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"os/signal"
 	"runtime/debug"
+	"syscall"
 
 	"github.com/go-ole/go-ole"
 	"github.com/mattn/go-colorable"
@@ -45,6 +47,8 @@ func Start(mainHandler func() error) error {
 	if clean, err := consoleicon.SetFromExe(); err == nil {
 		defer clean(true)
 	}
+
+	signal.Ignore(os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
 	return mainHandler()
 }
