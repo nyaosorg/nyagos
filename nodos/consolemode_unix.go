@@ -11,3 +11,7 @@ type Handle = uintptr
 func changeConsoleMode(console Handle, ops ...ModeOp) (func(), error) {
 	return func() {}, errors.New("not supported")
 }
+
+func disableCtrlC() (func(), error) {
+	return func() {}, nil
+}

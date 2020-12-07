@@ -13,6 +13,8 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
 	"github.com/mattn/go-tty"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
@@ -42,8 +44,14 @@ func more(r io.Reader, cmd Param) error {
 	scanner := bufio.NewScanner(newMbcsReader(r))
 	count := 0
 
-	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {
+	f, ok := cmd.Out().(*os.File)
+	if !ok || !isatty.IsTerminal(f.Fd()) {
 		screenHeight = math.MaxInt32
+	}
+	if ok && isatty.IsTerminal(f.Fd()) {
+		if closer, err := nodos.DisableCtrlC(); err == nil {
+			defer closer()
+		}
 	}
 
 	for scanner.Scan() {

@@ -23,3 +23,8 @@ func changeConsoleMode(console Handle, ops ...ModeOp) (func(), error) {
 	}
 	return restore, err
 }
+
+func disableCtrlC() (func(), error) {
+	return changeConsoleMode(windows.Stdin,
+		ModeReset(windows.ENABLE_PROCESSED_INPUT))
+}

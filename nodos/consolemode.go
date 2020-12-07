@@ -19,3 +19,7 @@ func (this ModeSet) Op(mode uint32) uint32 {
 func ChangeConsoleMode(console Handle, ops ...ModeOp) (func(), error) {
 	return changeConsoleMode(console, ops...)
 }
+
+func DisableCtrlC() (func(), error) {
+	return disableCtrlC()
+}
