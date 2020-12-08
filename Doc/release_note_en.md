@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* Fix: the first `make install` without path parameter fails.
+
 NYAGOS 4.4.9\_0
 ===============
 on Dec.5,2020
