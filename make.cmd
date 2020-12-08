@@ -223,6 +223,11 @@ switch( $args[0] ){
     "install" {
         $installDir = $args[1]
         if( $installDir -eq $null -or $installDir -eq "" ){
+            if( -not (Test-Path Etc\version.cmd) ){
+                Write-Warning "Etc\version.cmd does not exist."
+                Write-Warning "Run ``make.cmd install <INSTALLDIR>``"
+                exit
+            }
             $installDir = (
                 Select-String 'INSTALLDIR=([^\)"]+)' Etc\version.cmd |
                 ForEach-Object{ $_.Matches[0].Groups[1].Value }
