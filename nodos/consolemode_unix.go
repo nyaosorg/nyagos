@@ -12,6 +12,6 @@ func changeConsoleMode(console Handle, ops ...ModeOp) (func(), error) {
 	return func() {}, errors.New("not supported")
 }
 
-func disableCtrlC() (func(), error) {
+func enableProcessInput() (func(), error) {
 	return func() {}, nil
 }

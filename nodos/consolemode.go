@@ -20,6 +20,7 @@ func ChangeConsoleMode(console Handle, ops ...ModeOp) (func(), error) {
 	return changeConsoleMode(console, ops...)
 }
 
-func DisableCtrlC() (func(), error) {
-	return disableCtrlC()
+// EnableProcessInput enables Ctrl-C's signal and console's echo back.
+func EnableProcessInput() (func(), error) {
+	return enableProcessInput()
 }
