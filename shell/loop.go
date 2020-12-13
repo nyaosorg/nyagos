@@ -78,6 +78,14 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		sh.Stream = backup
 	}()
 
+	sigint := make(chan os.Signal)
+	signal.Notify(sigint, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+
+	defer func() {
+		signal.Stop(sigint)
+		close(sigint)
+	}()
+
 	for {
 		ctx, cancel := context.WithCancel(ctx0)
 
@@ -90,24 +98,24 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			return 1, err
 		}
 
-		sigint := make(chan os.Signal)
-		signal.Notify(sigint, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
-
-		go func(sig chan os.Signal, canc func()) {
-			<-sig // wait for receiving signal or channel closed
-			canc()
-		}(sigint, cancel)
+		go func() {
+			select {
+			case <-sigint:
+				cancel()
+			case <-ctx.Done():
+			}
+		}()
 
 		rc, err := sh.Interpret(ctx, line)
-		signal.Stop(sigint)
-		close(sigint)
 
 		if err != nil {
 			if err == io.EOF {
+				cancel()
 				return rc, err
 			}
 			if err1, ok := err.(AlreadyReportedError); ok {
 				if err1.Err == io.EOF {
+					cancel()
 					return rc, err
 				}
 			} else {
@@ -117,6 +125,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		if rc > 0 {
 			fmt.Fprintf(os.Stderr, "exit status %d\n", rc)
 		}
+		cancel()
 	}
 }
 
