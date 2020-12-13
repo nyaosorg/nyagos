@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * パス引数なしの`make install` が失敗する不具合を修正
+* (#396) Ctrl-W で左へのスクロールが必要な時に panic する不具合を修正
 
 NYAGOS 4.4.9\_0
 ===============
