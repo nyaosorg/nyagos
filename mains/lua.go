@@ -23,8 +23,6 @@ import (
 	"github.com/zetamatta/nyagos/functions"
 	"github.com/zetamatta/nyagos/history"
 	"github.com/zetamatta/nyagos/shell"
-
-	"github.com/zetamatta/go-outputdebug"
 )
 
 // Lua is the alias for Lua's state type.
@@ -132,7 +130,6 @@ var isHookSetup = false
 func lerror(L Lua, s string) int {
 	L.Push(lua.LNil)
 	L.Push(lua.LString(s))
-	outputdebug.String(s)
 	return 2
 }
 
