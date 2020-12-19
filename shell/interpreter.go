@@ -430,12 +430,6 @@ func (sh *Shell) Spawnlp(ctx context.Context, args, rawargs []string) (int, erro
 	return sh.Spawnlpe(ctx, args, rawargs, nil)
 }
 
-func putbs(n int) {
-	for ; n > 0; n-- {
-		os.Stderr.Write([]byte{'\b'})
-	}
-}
-
 func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, finalerr error) {
 	if defined.DBG {
 		print("Interpret('", text, "')\n")
