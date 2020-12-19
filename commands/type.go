@@ -7,6 +7,8 @@ import (
 	"io"
 	"os"
 	"strings"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
@@ -29,6 +31,13 @@ func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
 
 func cmdType(ctx context.Context, cmd Param) (int, error) {
 	if len(cmd.Args()) <= 1 {
+		if isTerminalIn(cmd.In()) {
+			c, err := nodos.EnableProcessInput()
+			if err != nil {
+				return 1, err
+			}
+			defer c()
+		}
 		cat(ctx, cmd.In(), cmd.Out())
 	} else {
 		for _, arg1 := range cmd.Args()[1:] {

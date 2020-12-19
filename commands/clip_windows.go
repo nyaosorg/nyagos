@@ -7,9 +7,18 @@ import (
 
 	"github.com/atotto/clipboard"
 	"github.com/zetamatta/go-texts/mbcs"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func cmdClip(ctx context.Context, cmd Param) (int, error) {
+	if isTerminalIn(cmd.In()) {
+		c, err := nodos.EnableProcessInput()
+		if err != nil {
+			return -1, err
+		}
+		defer c()
+	}
 	data, err := ioutil.ReadAll(cmd.In())
 	if err != nil {
 		return 1, err

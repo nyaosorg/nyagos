@@ -23,6 +23,14 @@ var bold = false
 var screenWidth int
 var screenHeight int
 
+func isTerminalIn(in io.Reader) bool {
+	f, ok := in.(*os.File)
+	if !ok {
+		return false
+	}
+	return f.Fd() == os.Stdin.Fd()
+}
+
 func getkey() (rune, error) {
 	tty1, err := tty.Open()
 	if err != nil {
@@ -44,16 +52,9 @@ func more(r io.Reader, cmd Param) error {
 	scanner := bufio.NewScanner(newMbcsReader(r))
 	count := 0
 
-	f, ok := cmd.Out().(*os.File)
-	if !ok || !isatty.IsTerminal(f.Fd()) {
+	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {
 		screenHeight = math.MaxInt32
 	}
-	if ok && isatty.IsTerminal(f.Fd()) {
-		if f, err := nodos.EnableProcessInput(); err == nil {
-			defer f()
-		}
-	}
-
 	for scanner.Scan() {
 		text := scanner.Text()
 		width := runewidth.StringWidth(ansiStrip.ReplaceAllString(text, ""))
@@ -120,6 +121,13 @@ func cmdMore(ctx context.Context, cmd Param) (int, error) {
 		count++
 	}
 	if count <= 0 {
+		if isTerminalIn(cmd.In()) {
+			c, err := nodos.EnableProcessInput()
+			if err != nil {
+				return 1, err
+			}
+			defer c()
+		}
 		err := more(cmd.In(), cmd)
 		if err != nil && err != io.EOF {
 			return 1, err
