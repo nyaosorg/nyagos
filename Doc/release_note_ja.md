@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.9\_1
+===============
+(2020.12.21)
+
 * パス引数なしの`make install` が失敗する不具合を修正
 * (#396) Ctrl-W で左へのスクロールが必要な時に panic する不具合を修正
 * コンソール入力の more/clip/type がエコーバックしない時がある不具合を修正
