@@ -7,6 +7,7 @@ on Dec.21,2020
 * Fix: the first `make install` without path parameter fails.
 * (#396) Fix: panic on Ctrl-W when left-scrool are required.
 * Fix: sometimes more, clip & type from console did not echo input
+* (#342) Improve Ctrl-C Interrupt handling to prevent from crash
 
 NYAGOS 4.4.9\_0
 ===============
