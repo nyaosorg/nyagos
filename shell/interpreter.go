@@ -341,20 +341,6 @@ func startAndWaitProcess(ctx context.Context, name string, args []string, procAt
 		onExec(process.Pid)
 	}
 
-	if ctx != nil {
-		done := make(chan struct{})
-		go func() {
-			select {
-			case <-ctx.Done():
-				os.Stderr.WriteString("^C\n")
-				process.Kill()
-			case <-done:
-			}
-		}()
-		defer func() {
-			close(done)
-		}()
-	}
 	processState, err := process.Wait()
 
 	if onDone != nil {
