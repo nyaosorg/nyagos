@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#342) Stop killing child process on Ctrl-C pressed.
+
 NYAGOS 4.4.9\_1
 ===============
 on Dec.21,2020

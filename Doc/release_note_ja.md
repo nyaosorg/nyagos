@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* (#342) Ctrl-C 押下時に子プロセスを kill しないようにした
+
 NYAGOS 4.4.9\_1
 ===============
 (2020.12.21)
