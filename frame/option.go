@@ -244,7 +244,7 @@ func Title() {
 		runtime.GOOS,
 		runtime.GOARCH,
 		runtime.Version())
-	fmt.Println("(c) 2014-2020 NYAOS.ORG <http://www.nyaos.org>")
+	fmt.Println("(c) 2014-2021 NYAOS.ORG <http://www.nyaos.org>")
 }
 
 func help(p *optionArg) (func(context.Context) error, error) {
