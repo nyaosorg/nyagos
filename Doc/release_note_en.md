@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* readline on WindowsTerminal: Support Variation Selectors of Unicode
+
 NYAGOS 4.4.9\_2
 ===============
 on Jan.8,2021

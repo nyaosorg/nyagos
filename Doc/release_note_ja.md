@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* WindowsTerminal利用下の一行入力で Unicode の異体字をサポート
+
 NYAGOS 4.4.9\_2
 ===============
 (2021.01.08)
