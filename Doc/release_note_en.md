@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * readline on WindowsTerminal: Support Variation Selectors of Unicode
+* (#397) Add scoop subcommand completion ( `use "subcomplete.lua"` )
 
 NYAGOS 4.4.9\_2
 ===============
