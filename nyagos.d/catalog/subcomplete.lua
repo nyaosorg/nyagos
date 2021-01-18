@@ -221,6 +221,26 @@ local function update_cache()
         "mod", "run", "test", "tool", "version", "vet"
     }
 
+    -- scoop
+    share.maincmds["scoop"] = load_subcommands_cache("scoop-subcommands.txt")
+    if not share.maincmds["scoop"] then
+        local fd=io.popen("scoop help", "r")
+        if fd then
+            local list = {}
+            for line in fd:lines() do
+                local m=string.match(line,"^(%w+)%s+%w+")
+                if m then
+                    list[#list+1] = m
+                end
+            end
+            fd:close()
+            if #list >= 1 then
+                share.maincmds["scoop"] = list
+                save_subcommands_cache("scoop-subcommands.txt", list)
+            end
+        end
+    end
+
     for cmd,subcmdData in pairs(share.maincmds or {}) do
         if not nyagos.complete_for[cmd] then
             nyagos.complete_for[cmd] = function(args)
