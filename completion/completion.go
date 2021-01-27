@@ -226,7 +226,10 @@ func CommonPrefix(list []string) string {
 	}
 	common := list[0]
 	var cr, fr *strings.Reader
-	for _, f := range list[1:] {
+	// to make English case of completed word to the shortest candidate
+	minimumLength := len(list[0])
+	minimumIndex := 0
+	for index, f := range list[1:] {
 		if cr != nil {
 			cr.Reset(common)
 		} else {
@@ -252,8 +255,12 @@ func CommonPrefix(list []string) string {
 			i++
 		}
 		common = buffer.String()
+		if len(f) < minimumLength {
+			minimumLength = len(f)
+			minimumIndex = index + 1
+		}
 	}
-	return common
+	return list[minimumIndex][:len(common)]
 }
 
 func endWithRoot(path string) bool {
