@@ -120,43 +120,82 @@ func utf8len(L *lua.LState) int {
 func utf8offset(L *lua.LState) int {
 	_s, ok := L.Get(1).(lua.LString)
 	if !ok {
-		return lerror(L, "utf8.offset: not string")
+		return lerror(L, "utf8.offset(s,n,i): s is not string")
 	}
 	s := string(_s)
 	_n, ok := L.Get(2).(lua.LNumber)
 	if !ok {
-		return lerror(L, "utf8.offset: not a number")
+		return lerror(L, "utf8.offset(s,n,i): n is not a number")
 	}
 	n := int(_n)
 
-	_i, ok := L.Get(3).(lua.LNumber)
 	i := 1
-	if ok {
+	if L.GetTop() >= 3 {
+		_i, ok := L.Get(3).(lua.LNumber)
+		if !ok {
+			return lerror(L, "utf8.offset(s,n,i): i is not a number")
+		}
 		i = int(_i)
+		if i < 0 {
+			i += len(s) + 1
+		}
+	} else {
+		if n >= 0 {
+			i = 1
+		} else {
+			i = len(s) + 1
+		}
 	}
-	if i == 0 {
-		i = 1
-	} else if i < 0 {
-		i += len(s) + 1
-	}
-	for i > 0 && i < len(s) && !utf8.RuneStart(s[i-1]) {
-		i++
-	}
-	s = s[i-1:]
 
-	if n < 0 {
-		n = utf8.RuneCountInString(s) + n
-	} else if n > 0 {
-		n--
+	if i < 1 || i > len(s)+1 {
+		return lerror(L, "utf8.offset(s,n,i): i is out of range")
 	}
+
+	if n == 0 {
+		// This is a special case.
+		// when n is 0 the function returns the start of the encoding of
+		// the character that contains the i-th byte of s.
+		if i == len(s)+1 {
+			L.Push(lua.LNumber(i))
+			return 1
+		}
+		for i > 0 && !utf8.RuneStart(s[i-1]) {
+			i--
+		}
+		L.Push(lua.LNumber(i))
+		return 1
+	}
+
+	if i < len(s)+1 && !utf8.RuneStart(s[i-1]) {
+		return lerror(L, "utf8.offset(s,n,i): i is invalid start position")
+	}
+
+	offset := 0
+	if n > 0 {
+		s = s[i-1:]
+		offset = i - 1
+	} else {
+		s = s[:i-1]
+		n += utf8.RuneCountInString(s) + 1
+	}
+	n--
+	if n < 0 {
+		L.Push(lua.LNil)
+		return 1
+	}
+
 	for pos := range s {
 		if n <= 0 {
-			L.Push(lua.LNumber(pos + 1 + i - 1))
+			L.Push(lua.LNumber(pos + 1 + offset))
 			return 1
 		}
 		n--
 	}
-	L.Push(lua.LNumber(len(s)))
+	if n == 0 {
+		L.Push(lua.LNumber(len(s) + 1 + offset))
+		return 1
+	}
+	L.Push(lua.LNil)
 	return 1
 }
 
