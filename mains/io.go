@@ -185,7 +185,7 @@ func ioPOpen(L *lua.LState) int {
 	}
 	mode, ok := L.Get(2).(lua.LString)
 	if !ok {
-		return lerror(L, "io.popen: mode is not a string")
+		mode = lua.LString("r")
 	}
 	xcmd := newCommand(string(command))
 	// Append one space to enclose with double quotation by exec.Command
