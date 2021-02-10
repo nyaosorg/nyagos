@@ -4,6 +4,8 @@
 * (#397) scoopコマンドのサブコマンド補完を追加 (`use "subcomplete.lua"`)
 * 補完時に最も短い候補に英大文字/小文字をあわせるようにした
 * (#398) io.popen の第二引数のデフォルトが機能していなかった
+* (#399) utf8 offset の改良 (Thx @masamitsu-murase)
+* ALT-/ キーバインドのサポート (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
 
 NYAGOS 4.4.9\_2
 ===============
