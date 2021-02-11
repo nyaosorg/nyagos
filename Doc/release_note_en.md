@@ -6,6 +6,7 @@ English / [Japanese](release_note_ja.md)
 * (#398) Fix: the default value for io.popen's second parameter did not work
 * (#399) Improve utf8 offset (Thx @masamitsu-murase)
 * Support ALT-/ key bind (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
+* temporaly replace go-tty with forked version to support emoji in WindowsTerminal 1.5
 
 NYAGOS 4.4.9\_2
 ===============
