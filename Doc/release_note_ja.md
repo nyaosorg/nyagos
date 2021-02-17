@@ -6,7 +6,7 @@
 * (#398) io.popen の第二引数のデフォルトが機能していなかった
 * (#399) utf8 offset の改良 (Thx @masamitsu-murase)
 * ALT-/ キーバインドのサポート (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
-* WindowsTerminal 1.5 での絵文字サポートのため、一時的に go-tty を fork 版にした
+* WindowsTerminal 1.5 で絵文字が入力できなくなっていた問題を修正
 
 NYAGOS 4.4.9\_2
 ===============

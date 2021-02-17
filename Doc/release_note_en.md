@@ -1,12 +1,12 @@
 English / [Japanese](release_note_ja.md)
 
-* readline on WindowsTerminal: Support Variation Selectors of Unicode
+* readline: on WindowsTerminal: Support Variation Selectors of Unicode
 * (#397) Add scoop subcommand completion ( `use "subcomplete.lua"` )
 * Completion: make English case of completed word to the shortest candidate
 * (#398) Fix: the default value for io.popen's second parameter did not work
 * (#399) Improve utf8 offset (Thx @masamitsu-murase)
 * Support ALT-/ key bind (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
-* temporaly replace go-tty with forked version to support emoji in WindowsTerminal 1.5
+* readline: Fix the problem that emoji could not be input in WindowsTerminal 1.5
 
 NYAGOS 4.4.9\_2
 ===============
