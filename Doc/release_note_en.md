@@ -10,7 +10,7 @@ on Feb.17,2021
 * (#398) Fix: the default value for io.popen's second parameter did not work
 * (#399) Improve utf8 offset (Thx @masamitsu-murase)
 * Support ALT-/ key bind (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
-* readline: Fix the problem that emoji could not be input in WindowsTerminal 1.5
+* readline: Fix the problem that emoji and circled digits could not be input in WindowsTerminal 1.5
 
 NYAGOS 4.4.9\_2
 ===============
