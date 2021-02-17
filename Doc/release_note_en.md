@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.9\_3
+===============
+on Feb.17,2021
+
 * readline: on WindowsTerminal: Support Variation Selectors of Unicode
 * (#397) Add scoop subcommand completion ( `use "subcomplete.lua"` )
 * Completion: make English case of completed word to the shortest candidate

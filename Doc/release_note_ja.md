@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.9\_3
+===============
+(2021.02.17)
+
 * WindowsTerminal利用下の一行入力で Unicode の異体字をサポート
 * (#397) scoopコマンドのサブコマンド補完を追加 (`use "subcomplete.lua"`)
 * 補完時に最も短い候補に英大文字/小文字をあわせるようにした
