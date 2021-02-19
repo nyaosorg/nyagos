@@ -122,6 +122,24 @@ List the directory. Supported options are below:
 * `-?` Display help
 * `-L` Show information for the file refernces rather than for the link it self.
 
+Example of `ls -al`
+
+```
+drwx-sh    0 Feb 19 20:16:53 System Volume Information/
+drwxa--    0 Sep  3 2016     TDM-GCC-64/
+```
+
+What FLAGs are meaning
+
+- `d` - Directory
+- `r` - Readable
+- `w` - Writable (not read-only file)
+- `x` - Executable
+- `a` - Ready for archiving
+- `s` - System file
+- `h` - Hidden file
+
+
 ### `more`
 
 Support both UTF8 and ANSI-text (auto detected)
