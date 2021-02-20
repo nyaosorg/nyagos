@@ -44,14 +44,20 @@ local function save_subcommands_cache(fname,list)
     fd:close()
 end
 
--- git
 
 local function update_cache()
+    -- git
     share.maincmds["git"] = load_subcommands_cache("git-subcommands.txt")
     share.maincmds["hub"] = load_subcommands_cache("hub-subcommands.txt")
     if not share.maincmds["git"] then
-        local githelp=io.popen("git help -a 2>nul","r")
-        local hubhelp=io.popen("hub help -a 2>nul","r")
+        local githelp
+        if nyagos.which("git.exe") then
+            githelp=io.popen("git help -a 2>nul","r")
+        end
+        local hubhelp
+        if nyagos.which("hub.exe") then
+            hubhelp=io.popen("hub help -a 2>nul","r")
+        end
         if githelp then
             local gitcmds={ "update-git-for-windows" }
             local hub=false
@@ -98,31 +104,29 @@ local function update_cache()
         end
     end
 
-    -- gh comand
+    -- gh command
     share.maincmds["gh"] = load_subcommands_cache("gh-subcommands.txt")
-    if not share.maincmds["gh"] then
-        if nyagos.which("gh.exe") then
-            local ghhelp=io.popen("gh -a 2>&1","r")
-            local ghcmds={}
-            for line in ghhelp:lines() do
-                local word = string.match(line,"^ +(%S+)")
-                if nil ~= word then
-                    ghcmds[ #ghcmds+1 ] = word
-                end
+    if (not share.maincmds["gh"]) and nyagos.which("gh.exe") then
+        local ghhelp=io.popen("gh -a 2>&1","r")
+        local ghcmds={}
+        for line in ghhelp:lines() do
+            local word = string.match(line,"^ +(%S+)")
+            if nil ~= word then
+                ghcmds[ #ghcmds+1 ] = word
             end
-            ghhelp:close()
-            if #ghcmds > 1 then
-                local maincmds = share.maincmds
-                maincmds["gh"] =  ghcmds
-                save_subcommands_cache("gh-subcommands.txt",ghcmds)
-                share.maincmds = maincmds
-            end
+        end
+        ghhelp:close()
+        if #ghcmds > 1 then
+            local maincmds = share.maincmds
+            maincmds["gh"] =  ghcmds
+            save_subcommands_cache("gh-subcommands.txt",ghcmds)
+            share.maincmds = maincmds
         end
     end
 
     -- Subversion
     share.maincmds["svn"] = load_subcommands_cache("svn-subcommands.txt")
-    if not share.maincmds["svn"] then
+    if (not share.maincmds["svn"]) and nyagos.which("svn.exe") then
         local svnhelp=nyagos.eval("svn help 2>nul","r")
         if string.len(svnhelp) > 5 then
             local svncmds={}
@@ -143,7 +147,7 @@ local function update_cache()
 
     -- Mercurial
     share.maincmds["hg"] = load_subcommands_cache("hg-subcommands.txt")
-    if not share.maincmds["hg"] then
+    if (not share.maincmds["hg"]) and nyagos.which("hg.exe") then
         local hghelp=nyagos.eval("hg debugcomplete 2>nul","r")
         if string.len(hghelp) > 5 then
             local hgcmds={}
@@ -162,9 +166,8 @@ local function update_cache()
     end
 
     -- Rclone
-
     share.maincmds["rclone"] = load_subcommands_cache("rclone-subcommands.txt")
-    if not share.maincmds["rclone"] then
+    if (not share.maincmds["rclone"]) and nyagos.which("rclone.exe") then
         local rclonehelp=io.popen("rclone --help 2>nul","r")
         if rclonehelp then
             local rclonecmds={}
@@ -196,8 +199,9 @@ local function update_cache()
         end
     end
 
+    -- fsutil command
     share.maincmds["fsutil"] = load_subcommands_cache("fsutil-subcommands.txt")
-    if not share.maincmds["fsutil"] then
+    if (not share.maincmds["fsutil"]) and nyagos.which("fsutil.exe") then
         local fd=io.popen("fsutil","r")
         if fd then
             local list = {}
@@ -215,6 +219,7 @@ local function update_cache()
         end
     end
 
+    -- golang
     share.maincmds["go"] = {
         "bug", "build", "clean", "doc", "env", "fix",
         "fmt", "generate", "get", "install", "list",
@@ -223,7 +228,7 @@ local function update_cache()
 
     -- scoop
     share.maincmds["scoop"] = load_subcommands_cache("scoop-subcommands.txt")
-    if not share.maincmds["scoop"] then
+    if (not share.maincmds["scoop"]) and nyagos.which("scoop.exe") then
         local fd=io.popen("scoop help", "r")
         if fd then
             local list = {}
