@@ -246,6 +246,40 @@ local function update_cache()
         end
     end
 
+    -- chocolatey
+    share.maincmds["choco"] = load_subcommands_cache("choco-subcommands.txt")
+    if (not share.maincmds["choco"]) and nyagos.which("choco.exe") then
+        local fd=io.popen("choco -? 2>nul", "r")
+        if fd then
+            local list = {}
+            local startflag = false
+            local flagsfound=false
+            for line in fd:lines() do
+                if not flagsfound then
+                    if string.match(line,"Commands") then
+                        startflag = true
+                    end
+                    if string.match(line,"How To Pass Options / Switches") then
+                        flagsfound = true
+                    end
+                    if startflag then
+                        local m=string.match(line,"^%s+%*%s+(%w+)%s+%-")
+                        if m then
+                            list[#list+1] = m
+                        end
+                    end
+                end
+            end
+
+            fd:close()
+            if #list >= 1 then
+                share.maincmds["choco"] = list
+                save_subcommands_cache("choco-subcommands.txt", list)
+            end
+        end
+    end
+    share.maincmds["chocolatey"] = share.maincmds["choco"]
+
     for cmd,subcmdData in pairs(share.maincmds or {}) do
         if not nyagos.complete_for[cmd] then
             nyagos.complete_for[cmd] = function(args)
