@@ -56,32 +56,32 @@ local function update_cache()
             local gitcmds={ "update-git-for-windows" }
             local hub=false
             if hubhelp then
-              hub=true
-              local startflag = false
-              local found=false
-              for line in hubhelp:lines() do
-                if not found then
-                  if startflag then
-                    -- skip blank line
-                    if string.match(line,"%S") then
-                      -- found commands
-                      for word in string.gmatch(line, "%S+") do
-                        gitcmds[ #gitcmds+1 ] = word
-                      end
-                      found = true
+                hub=true
+                local startflag = false
+                local found=false
+                for line in hubhelp:lines() do
+                    if not found then
+                        if startflag then
+                            -- skip blank line
+                            if string.match(line,"%S") then
+                                -- found commands
+                                for word in string.gmatch(line, "%S+") do
+                                    gitcmds[ #gitcmds+1 ] = word
+                                end
+                                found = true
+                            end
+                        end
+                        if string.match(line,"hub custom") then
+                            startflag = true
+                        end
                     end
-                  end
-                  if string.match(line,"hub custom") then
-                    startflag = true
-                  end
                 end
-              end
-              hubhelp:close()
+                hubhelp:close()
             end
             for line in githelp:lines() do
                 local word = string.match(line,"^ +(%S+)")
                 if nil ~= word then
-                  gitcmds[ #gitcmds+1 ] = word
+                    gitcmds[ #gitcmds+1 ] = word
                 end
             end
             githelp:close()
@@ -90,8 +90,8 @@ local function update_cache()
                 maincmds["git"] = gitcmds
                 save_subcommands_cache("git-subcommands.txt",gitcmds)
                 if hub then
-                  maincmds["hub"] = gitcmds
-                  save_subcommands_cache("hub-subcommands.txt",gitcmds)
+                    maincmds["hub"] = gitcmds
+                    save_subcommands_cache("hub-subcommands.txt",gitcmds)
                 end
                 share.maincmds = maincmds
             end
@@ -167,32 +167,32 @@ local function update_cache()
     if not share.maincmds["rclone"] then
         local rclonehelp=io.popen("rclone --help 2>nul","r")
         if rclonehelp then
-          local rclonecmds={}
-          local startflag = false
-          local flagsfound=false
-          for line in rclonehelp:lines() do
-              if not flagsfound then
-                  if string.match(line,"Available Commands:") then
-                    startflag = true
-                  end
-                  if string.match(line,"Flags:") then
-                      flagsfound = true
-                  end
-                  if startflag then
-                    local m=string.match(line,"^%s+([a-z]+)")
-                    if m then
-                        rclonecmds[ #rclonecmds+1 ] = m
+            local rclonecmds={}
+            local startflag = false
+            local flagsfound=false
+            for line in rclonehelp:lines() do
+                if not flagsfound then
+                    if string.match(line,"Available Commands:") then
+                        startflag = true
                     end
-                  end
-              end
-          end
-          rclonehelp:close()
-          if #rclonecmds > 1 then
-              local maincmds=share.maincmds
-              maincmds["rclone"] = rclonecmds
-              share.maincmds = maincmds
-              save_subcommands_cache("rclone-subcommands.txt",rclonecmds)
-          end
+                    if string.match(line,"Flags:") then
+                        flagsfound = true
+                    end
+                    if startflag then
+                        local m=string.match(line,"^%s+([a-z]+)")
+                        if m then
+                            rclonecmds[ #rclonecmds+1 ] = m
+                        end
+                    end
+                end
+            end
+            rclonehelp:close()
+            if #rclonecmds > 1 then
+                local maincmds=share.maincmds
+                maincmds["rclone"] = rclonecmds
+                share.maincmds = maincmds
+                save_subcommands_cache("rclone-subcommands.txt",rclonecmds)
+            end
         end
     end
 
