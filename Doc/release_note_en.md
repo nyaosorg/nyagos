@@ -5,9 +5,9 @@ NYAGOS 4.4.9\_3
 on Feb.20,2021
 
 * readline: on WindowsTerminal: Support Variation Selectors of Unicode
-* (#397) Add scoop subcommand completion ( `use "subcomplete.lua"` )
+* (#397) Add scoop subcommand completion ( `use "subcomplete.lua"` ) (Thx @tomato3713)
 * Completion: make English case of completed word to the shortest candidate
-* (#398) Fix: the default value for io.popen's second parameter did not work
+* (#398) Fix: the default value for io.popen's second parameter did not work (Thx @ironsand)
 * (#399) Improve utf8 offset (Thx @masamitsu-murase)
 * Support ALT-/ key bind (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
 * readline: Fix the problem that emoji and circled digits could not be input in WindowsTerminal 1.5

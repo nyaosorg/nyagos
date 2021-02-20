@@ -5,9 +5,9 @@ NYAGOS 4.4.9\_3
 (2021.02.20)
 
 * WindowsTerminal利用下の一行入力で Unicode の異体字をサポート
-* (#397) scoopコマンドのサブコマンド補完を追加 (`use "subcomplete.lua"`)
+* (#397) scoopコマンドのサブコマンド補完を追加 (`use "subcomplete.lua"`) (Thx @tomato3713)
 * 補完時に最も短い候補に英大文字/小文字をあわせるようにした
-* (#398) io.popen の第二引数のデフォルトが機能していなかった
+* (#398) io.popen の第二引数のデフォルトが機能していなかった (Thx @ironsand)
 * (#399) utf8 offset の改良 (Thx @masamitsu-murase)
 * ALT-/ キーバインドのサポート (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
 * WindowsTerminal 1.5 で絵文字や丸数字が入力できなくなっていた問題を修正
