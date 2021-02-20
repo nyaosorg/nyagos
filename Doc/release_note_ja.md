@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* (#401) choco/chocolaty 向けサブコマンド名補完追加(Thx @tsuyoshicho )
+
 NYAGOS 4.4.9\_3
 ===============
 (2021.02.20)

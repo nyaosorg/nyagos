@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* (#401) add subcompletion choco/chocolaty (Thx @tsuyoshicho )
+
 NYAGOS 4.4.9\_3
 ===============
 on Feb.20,2021
