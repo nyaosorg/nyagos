@@ -1,5 +1,6 @@
 [English](release_note_en.md) / Japanese
 
+* (#400) サブコマンド補完向けのコマンドの存在チェック追加(Thx @tsuyoshicho )
 * (#401) choco/chocolaty 向けサブコマンド名補完追加(Thx @tsuyoshicho )
 * WindowsTerminal で ls や Ctrl-Oの選択時のレイアウトが崩れる問題を修正
 
