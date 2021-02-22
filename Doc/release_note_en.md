@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * (#401) add subcompletion choco/chocolaty (Thx @tsuyoshicho )
+* Fix: the layout on ls and Ctrl-O selection was broken in WindowsTerminal
 
 NYAGOS 4.4.9\_3
 ===============

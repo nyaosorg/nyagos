@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * (#401) choco/chocolaty 向けサブコマンド名補完追加(Thx @tsuyoshicho )
+* WindowsTerminal で ls や Ctrl-Oの選択時のレイアウトが崩れる問題を修正
 
 NYAGOS 4.4.9\_3
 ===============
