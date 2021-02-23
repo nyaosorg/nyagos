@@ -12,8 +12,8 @@ import (
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
-	"github.com/mattn/go-tty"
 
+	"github.com/zetamatta/go-readline-ny"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -32,7 +32,7 @@ func isTerminalIn(in io.Reader) bool {
 }
 
 func getkey() (rune, error) {
-	tty1, err := tty.Open()
+	tty1, err := readline.NewDefaultTty()
 	if err != nil {
 		return 0, err
 	}
@@ -90,7 +90,7 @@ func more(r io.Reader, cmd Param) error {
 func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
 
-	tty1, err := tty.Open()
+	tty1, err := readline.NewDefaultTty()
 	if err != nil {
 		return 1, err
 	}

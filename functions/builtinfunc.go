@@ -14,7 +14,6 @@ import (
 	"strings"
 
 	"github.com/mattn/go-isatty"
-	"github.com/mattn/go-tty"
 
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
@@ -101,7 +100,7 @@ func CmdGetwd(args []any_t) []any_t {
 }
 
 func CmdGetKey(args []any_t) []any_t {
-	tty1, err := tty.Open()
+	tty1, err := readline.NewDefaultTty()
 	if err != nil {
 		return []any_t{nil, err.Error()}
 	}
@@ -118,7 +117,7 @@ func CmdGetKey(args []any_t) []any_t {
 }
 
 func CmdGetViewWidth(args []any_t) []any_t {
-	tty1, err := tty.Open()
+	tty1, err := readline.NewDefaultTty()
 	if err != nil {
 		return []any_t{nil, err.Error()}
 	}
