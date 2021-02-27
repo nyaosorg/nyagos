@@ -5,6 +5,7 @@ English / [Japanese](release_note_ja.md)
 * Fix: the layout on ls and Ctrl-O selection was broken in WindowsTerminal
 * go-readline-ny v0.4.4: Fix: When ANYCHARACTER + Ctrl-B + ZeroWidthJoin Sequence are typed, view was broken
 * go-readline-ny v0.4.5: Variation Selector Sequence can include ZeroWidthJoinerSequence
+* go-readline-ny v0.4.6: Editing Combining Enclosing Keycap after Variation Selector (&#x0023;&#xFE0F;&#x20E3;)
 
 NYAGOS 4.4.9\_3
 ===============
