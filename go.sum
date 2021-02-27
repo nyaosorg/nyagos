@@ -70,8 +70,8 @@ github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341 h1:+909lH9Jn
 github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341/go.mod h1:AQ8WFEcO67SfKYGUZlT77HVJ6n+ZSKFLLBIwdOTmzm0=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n50N7PRFw06uZq3KBYye4wq/t860QEQQXNJVWppdOgc=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
-github.com/zetamatta/go-readline-ny v0.4.4 h1:B6jTTbbY75OaB3YVbAWIu6yzl8aApOcKcG2QGqlcnAw=
-github.com/zetamatta/go-readline-ny v0.4.4/go.mod h1:6G3jMhq6ydHG7Yis1cmMqzWzth+0nKpqWiXKQtchB/U=
+github.com/zetamatta/go-readline-ny v0.4.5 h1:QrAVrJB+6mUiT0vm3885J38uAv3C16gE/b+/qAvgubA=
+github.com/zetamatta/go-readline-ny v0.4.5/go.mod h1:6G3jMhq6ydHG7Yis1cmMqzWzth+0nKpqWiXKQtchB/U=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
