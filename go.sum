@@ -70,8 +70,8 @@ github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341 h1:+909lH9Jn
 github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341/go.mod h1:AQ8WFEcO67SfKYGUZlT77HVJ6n+ZSKFLLBIwdOTmzm0=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n50N7PRFw06uZq3KBYye4wq/t860QEQQXNJVWppdOgc=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
-github.com/zetamatta/go-readline-ny v0.4.5 h1:QrAVrJB+6mUiT0vm3885J38uAv3C16gE/b+/qAvgubA=
-github.com/zetamatta/go-readline-ny v0.4.5/go.mod h1:6G3jMhq6ydHG7Yis1cmMqzWzth+0nKpqWiXKQtchB/U=
+github.com/zetamatta/go-readline-ny v0.4.6 h1:YWResfll8qf3eP6N2ubmruie1wd0ePMKAaUiDUcbhUk=
+github.com/zetamatta/go-readline-ny v0.4.6/go.mod h1:6G3jMhq6ydHG7Yis1cmMqzWzth+0nKpqWiXKQtchB/U=
 github.com/zetamatta/go-texts v1.0.0/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlRYfc=
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
@@ -101,8 +101,8 @@ golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201218084310-7d0127a74742/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20210226181700-f36f78243c0c h1:Stq64DYWAFeYzD3+NSVDBisCYn5P9VyxxgHIov440m8=
-golang.org/x/sys v0.0.0-20210226181700-f36f78243c0c/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20210227040730-b0d1d43c014d h1:9fH9JvLNoSpsDWcXJ4dSE3lZW99Z3OCUZLr07g60U6o=
+golang.org/x/sys v0.0.0-20210227040730-b0d1d43c014d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.5 h1:i6eZZ+zk0SOf0xgBpEpPD18qWcJda6q1sxt3S0kzyUQ=
 golang.org/x/text v0.3.5/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
