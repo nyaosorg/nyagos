@@ -3,7 +3,8 @@
 * (#400) サブコマンド補完向けのコマンドの存在チェック追加(Thx @tsuyoshicho )
 * (#401) choco/chocolaty 向けサブコマンド名補完追加(Thx @tsuyoshicho )
 * WindowsTerminal で ls や Ctrl-Oの選択時のレイアウトが崩れる問題を修正
-* 任意の一字 + Ctrl-B + 合字が入力された時、表示が乱れる問題を修正
+* go-readline-ny v0.4.4: 任意の一字 + Ctrl-B + 合字が入力された時、表示が乱れる問題を修正
+* go-readline-ny v0.4.5: 合字の異体字サポート
 
 NYAGOS 4.4.9\_3
 ===============
