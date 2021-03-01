@@ -54,7 +54,7 @@ function ForEach-GoDir{
 
 function Go-Fmt{
     $status = $true
-    git status -s | %{
+    git.exe status -s | %{
         $fname = $_.Substring(3)
         $arrow = $fname.IndexOf(" -> ")
         if( $arrow -ge 0 ){
@@ -89,7 +89,7 @@ function Make-SysO($version) {
 
 function Build([string]$version="",[string]$tags="",[string]$target="") {
     if( $version -eq "" ){
-        $version = (git describe --tags)
+        $version = (git.exe describe --tags)
     }
 
     Write-Verbose "Build as version='$version' tags='$tags'"
