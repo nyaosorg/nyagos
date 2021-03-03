@@ -20,7 +20,7 @@ require (
 	github.com/zetamatta/go-box/v2 v2.0.8
 	github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
-	github.com/zetamatta/go-readline-ny v0.4.7
+	github.com/zetamatta/go-readline-ny v0.4.8
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
