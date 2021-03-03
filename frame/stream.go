@@ -76,7 +76,8 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 		var isReplaced bool
 		line, isReplaced, err = this.History.Replace(line)
 		if err != nil {
-			return ctx, line, err
+			fmt.Fprintln(os.Stderr, err.Error())
+			continue
 		}
 		if isReplaced {
 			fmt.Fprintln(os.Stdout, line)
