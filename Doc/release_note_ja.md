@@ -6,6 +6,7 @@
 * go-readline-ny v0.4.4: 任意の一字 + Ctrl-B + 合字が入力された時、表示が乱れる問題を修正
 * go-readline-ny v0.4.5: 合字の異体字サポート
 * go-readline-ny v0.4.6: 異体字の後の囲み記号の編集をサポート(&#x0023;&#xFE0F;&#x20E3;)
+* (#402) "echo !xxx" でシェルがいきなり終了してしまう問題を修正 (Thx @masamitsu-murase)
 
 NYAGOS 4.4.9\_3
 ===============
