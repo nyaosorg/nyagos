@@ -8,6 +8,8 @@
 * go-readline-ny v0.4.6: 異体字の後の囲み記号の編集をサポート(&#x0023;&#xFE0F;&#x20E3;)
 * (#402) "echo !xxx" でシェルがいきなり終了してしまう問題を修正 (Thx @masamitsu-murase)
 * go-readline-ny v0.4.7: REGIONAL INDICATOR (U+1F1E6..U+1F1FF) でカーソル位置が狂わないようにした
+* go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)
+* go-readline-ny v0.4.8: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)
 
 NYAGOS 4.4.9\_3
 ===============
