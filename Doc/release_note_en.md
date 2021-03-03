@@ -7,6 +7,7 @@ English / [Japanese](release_note_ja.md)
 * go-readline-ny v0.4.5: Variation Selector Sequence can include ZeroWidthJoinerSequence
 * go-readline-ny v0.4.6: Editing Combining Enclosing Keycap after Variation Selector (&#x0023;&#xFE0F;&#x20E3;)
 * Fix: (#402) "echo !xxx" causes unexpected end of nyagos (Thx @masamitsu-murase)
+* go-readline-ny v0.4.7: REGIONAL INDICATOR (U+1F1E6..U+1F1FF)
 
 NYAGOS 4.4.9\_3
 ===============
