@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.9\_4
+===============
+on Mar.06,2021
+
 * (#400) add check the existance of commands for subcomplete.lua (Thx @tsuyoshicho )
 * (#401) add subcompletion choco/chocolaty (Thx @tsuyoshicho )
 * Fix: the layout on ls and Ctrl-O selection was broken in WindowsTerminal
