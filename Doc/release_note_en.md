@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+* go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.
+
 NYAGOS 4.4.9\_4
 ===============
 on Mar.06,2021
@@ -13,7 +15,7 @@ on Mar.06,2021
 * Fix: (#402) "echo !xxx" causes unexpected end of nyagos (Thx @masamitsu-murase)
 * go-readline-ny v0.4.7: REGIONAL INDICATOR (U+1F1E6..U+1F1FF)
 * go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)
-* go-readline-ny v0.4.8: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)
+* go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)
 
 NYAGOS 4.4.9\_3
 ===============

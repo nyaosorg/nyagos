@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+* go-readline-ny v0.4.10: Yes/Noの回答のYが次のコマンドラインに入力される不具合を修正
+
 NYAGOS 4.4.9\_4
 ===============
 (2021.03.06)
@@ -13,7 +15,7 @@ NYAGOS 4.4.9\_4
 * (#402) "echo !xxx" でシェルがいきなり終了してしまう問題を修正 (Thx @masamitsu-murase)
 * go-readline-ny v0.4.7: REGIONAL INDICATOR (U+1F1E6..U+1F1FF) でカーソル位置が狂わないようにした
 * go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)
-* go-readline-ny v0.4.8: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)
+* go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)
 
 NYAGOS 4.4.9\_3
 ===============
