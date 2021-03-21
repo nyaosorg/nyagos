@@ -5,7 +5,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strconv"
@@ -48,13 +47,13 @@ func main1() error {
 	if err := json.NewDecoder(os.Stdin).Decode(&v); err != nil {
 		return err
 	}
-	fileVerBin, err := ioutil.ReadFile(os.Args[1])
+	fileVerBin, err := os.ReadFile(os.Args[1])
 	if err != nil {
 		return err
 	}
 	fileVer := strings.TrimSpace(string(fileVerBin))
 
-	prodVerBin, err := ioutil.ReadFile(os.Args[2])
+	prodVerBin, err := os.ReadFile(os.Args[2])
 	if err != nil {
 		return err
 	}

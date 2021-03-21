@@ -2,7 +2,7 @@ package commands
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -10,7 +10,7 @@ import (
 
 func correct(path string) (string, string, error) {
 	dirname, fname := filepath.Split(filepath.Clean(path))
-	fi, err := ioutil.ReadDir(dirname)
+	fi, err := os.ReadDir(dirname)
 	if err != nil {
 		return dirname, fname, err
 	}

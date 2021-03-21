@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"path/filepath"
 
 	"github.com/zetamatta/nyagos/nodos"
@@ -12,7 +12,7 @@ import (
 )
 
 func cmdSource(ctx context.Context, cmd Param) (int, error) {
-	verbose := ioutil.Discard
+	verbose := io.Discard
 	args := cmd.Args()[1:]
 	rawargs := cmd.RawArgs()[1:]
 	debug := false

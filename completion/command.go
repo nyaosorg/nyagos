@@ -2,7 +2,6 @@ package completion
 
 import (
 	"context"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -21,7 +20,7 @@ func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, e
 			default:
 			}
 		}
-		files, err := ioutil.ReadDir(dir1)
+		files, err := os.ReadDir(dir1)
 		if err != nil {
 			continue
 		}

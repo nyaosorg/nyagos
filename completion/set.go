@@ -2,7 +2,6 @@ package completion
 
 import (
 	"context"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -38,7 +37,7 @@ func completionCd(ctx context.Context, ua UncCompletion, params []string) ([]Ele
 	}
 	base := strings.ToUpper(source)
 	for _, cdpath1 := range filepath.SplitList(cdpath) {
-		if files, err := ioutil.ReadDir(cdpath1); err == nil {
+		if files, err := os.ReadDir(cdpath1); err == nil {
 			for _, file1 := range files {
 				if file1.IsDir() {
 					name := strings.ToUpper(file1.Name())

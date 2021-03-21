@@ -2,7 +2,7 @@ package commands
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 	"unicode/utf8"
 
 	"github.com/atotto/clipboard"
@@ -19,7 +19,7 @@ func cmdClip(ctx context.Context, cmd Param) (int, error) {
 		}
 		defer c()
 	}
-	data, err := ioutil.ReadAll(cmd.In())
+	data, err := io.ReadAll(cmd.In())
 	if err != nil {
 		return 1, err
 	}

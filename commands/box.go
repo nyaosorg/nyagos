@@ -4,14 +4,14 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"strings"
 
 	"github.com/zetamatta/go-box/v2"
 )
 
 func cmdBox(ctx context.Context, cmd Param) (int, error) {
-	data, err := ioutil.ReadAll(cmd.In())
+	data, err := io.ReadAll(cmd.In())
 	if err != nil {
 		fmt.Fprintln(cmd.Err(), err.Error())
 		return 1, err

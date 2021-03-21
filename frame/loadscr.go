@@ -3,7 +3,6 @@ package frame
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -38,7 +37,7 @@ func loadScriptDir(dir string,
 	shellEngine func(string) error,
 	langEngine func(string) ([]byte, error)) error {
 
-	files, err := ioutil.ReadDir(dir)
+	files, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
 			return DirNotFound{err: err}
@@ -123,7 +122,7 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 	if err != nil || chank == nil {
 		return err
 	}
-	return ioutil.WriteFile(cachePath, chank, os.FileMode(0644))
+	return os.WriteFile(cachePath, chank, os.FileMode(0644))
 }
 
 func barNyagos(shellEngine func(string) error, folder string) {

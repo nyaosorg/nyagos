@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/signal"
 	"runtime/debug"
@@ -67,7 +66,7 @@ func PanicHandler() {
 	fmt.Fprintln(w, "*** Please copy these error message ***")
 	fmt.Fprintln(w, "*** And hit ENTER key to quit.      ***")
 
-	ioutil.WriteFile("nyagos.dump", dump.Bytes(), 0666)
+	os.WriteFile("nyagos.dump", dump.Bytes(), 0666)
 
 	var dummy [1]byte
 	os.Stdin.Read(dummy[:])

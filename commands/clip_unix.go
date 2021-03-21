@@ -4,13 +4,13 @@ package commands
 
 import (
 	"context"
-	"io/ioutil"
+	"io"
 
 	"github.com/atotto/clipboard"
 )
 
 func cmdClip(ctx context.Context, cmd Param) (int, error) {
-	data, err := ioutil.ReadAll(cmd.In())
+	data, err := io.ReadAll(cmd.In())
 	if err != nil {
 		return 1, err
 	}

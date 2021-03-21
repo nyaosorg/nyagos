@@ -3,7 +3,7 @@ package nodos
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 
 	"golang.org/x/sys/windows"
@@ -17,7 +17,7 @@ func truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 	}
 	if (attr & REPARSE_POINT) == 0 {
 		// Only not junction, delete files under folder.
-		files, err := ioutil.ReadDir(folder)
+		files, err := os.ReadDir(folder)
 		if err != nil {
 			return err
 		}

@@ -5,7 +5,6 @@ package mains
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"strings"
 
@@ -369,7 +368,7 @@ func fileRead(L *lua.LState) int {
 				break
 			case "*a":
 				var all []byte
-				all, err = ioutil.ReadAll(r.reader())
+				all, err = io.ReadAll(r.reader())
 				if err != nil {
 					if err == io.EOF {
 						r.SetEof()

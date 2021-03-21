@@ -7,7 +7,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 
@@ -181,7 +181,7 @@ func cmdEval(L Lua) int {
 		w.Close()
 	}(string(statement), w)
 
-	result, err := ioutil.ReadAll(r)
+	result, err := io.ReadAll(r)
 	r.Close()
 	if err == nil {
 		L.Push(lua.LString(string(bytes.Trim(result, "\r\n\t "))))

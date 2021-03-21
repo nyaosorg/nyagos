@@ -3,7 +3,6 @@ package completion
 import (
 	"bufio"
 	"errors"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -43,7 +42,7 @@ func getServerCache() []string {
 		end := animation.Progress()
 		serverCache = getServers()
 		if cachePath := getCachePath(); cachePath != "" {
-			ioutil.WriteFile(cachePath, []byte(strings.Join(serverCache, "\n")), 0666)
+			os.WriteFile(cachePath, []byte(strings.Join(serverCache, "\n")), 0666)
 		}
 		end()
 	}
@@ -75,7 +74,7 @@ func hasServerCache() bool {
 		go func() {
 			//outputdebug.String("begin searching servers at " + time.Now().String())
 			tmp := getServers()
-			ioutil.WriteFile(cachePath, []byte(strings.Join(tmp, "\n")), 0666)
+			os.WriteFile(cachePath, []byte(strings.Join(tmp, "\n")), 0666)
 			serverCache = tmp
 			//outputdebug.String("update cache at " + time.Now().String())
 		}()
