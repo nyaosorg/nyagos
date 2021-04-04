@@ -229,9 +229,17 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 			(flag&O_INDICATOR) != 0 {
 			indicator = "@"
 		}
-		nodes_[key] = prefix + val.Name() + postfix + indicator
+		if indicator != "" {
+			nodes_[key] = prefix + val.Name() + postfix + indicator
+		} else {
+			nodes_[key] = prefix + val.Name()
+		}
 	}
-	if !box.Print(ctx, nodes_, out) {
+	isSucceeded := box.Print(ctx, nodes_, out)
+	if (flag & O_COLOR) != 0 {
+		io.WriteString(out, ANSI_END)
+	}
+	if !isSucceeded {
 		return ctx.Err()
 	}
 	return nil
