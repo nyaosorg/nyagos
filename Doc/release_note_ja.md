@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 * go-readline-ny v0.4.10: Yes/Noの回答のYが次のコマンドラインに入力される不具合を修正
+* Windows 8.1でCPU負荷が高い時のカラーlsの速度を改善した
 
 NYAGOS 4.4.9\_4
 ===============

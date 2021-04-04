@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.
+* Improve colored-ls's speed on Windows8.1 when CPU load is high.
 
 NYAGOS 4.4.9\_4
 ===============
