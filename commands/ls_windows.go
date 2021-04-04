@@ -541,19 +541,18 @@ func (this OptionError) Error() string {
 	return fmt.Sprintf("-%c: No such option", this.Option)
 }
 
-// ls 機能のエントリ:引数をオプションとパスに分離する
-func lsMain(ctx context.Context, args []string, out io.Writer, err io.Writer) error {
+func cmdLs(ctx context.Context, cmd Param) (int, error) {
 	flag := 0
 	paths := make([]string, 0)
-	for _, arg := range args {
+	for _, arg := range cmd.Args()[1:] {
 		if strings.HasPrefix(arg, "-") {
 			for _, o := range arg[1:] {
 				setter, ok := option[o]
 				if !ok {
-					return OptionError{Option: o}
+					return 1, OptionError{Option: o}
 				}
 				if err := setter(&flag); err != nil {
-					return err
+					return 1, err
 				}
 			}
 		} else {
@@ -567,31 +566,30 @@ func lsMain(ctx context.Context, args []string, out io.Writer, err io.Writer) er
 			message.WriteRune(optKey)
 		}
 		message.WriteString("] [PATH(s)]...")
-		return errors.New(message.String())
+		return 1, errors.New(message.String())
 	}
-	if _, ok := out.(io.Closer); ok {
-		// output is a not colorable instance.
-		flag &^= O_COLOR
+
+	out := cmd.Out()
+	err := cmd.Err()
+
+	if file, ok := out.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
+		flag |= O_ONE
+	}
+
+	// cmd.Term() is colorableTerminal which is not fast.
+	if (flag & O_COLOR) == 0 {
+		_out := bufio.NewWriter(cmd.Out())
+		defer _out.Flush()
+		out = _out
+	} else if out == os.Stdout {
+		_out := bufio.NewWriter(cmd.Term())
+		defer _out.Flush()
+		out = _out
 	}
 	if (flag & O_COLOR) != 0 {
 		io.WriteString(out, ANSI_END)
 	}
-	if file, ok := out.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
-		flag |= O_ONE
-	}
-	return lsCore(ctx, paths, flag, out, err)
-}
-
-func cmdLs(ctx context.Context, cmd Param) (int, error) {
-	var out io.Writer
-	if cmd.Out() == os.Stdout {
-		cout := bufio.NewWriter(cmd.Term())
-		defer cout.Flush()
-		out = cout
-	} else {
-		out = cmd.Out()
-	}
-	return 0, lsMain(ctx, cmd.Args()[1:], out, cmd.Err())
+	return 0, lsCore(ctx, paths, flag, out, err)
 }
 
 // vim:set fenc=utf8 ts=4 sw=4 noet:
