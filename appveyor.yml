@@ -5,6 +5,9 @@
 #      general configuration      #
 #---------------------------------#
 
+image:
+  - Visual Studio 2019
+
 branches:
   except:
     - gh-pages
