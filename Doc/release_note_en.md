@@ -1,6 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
 * go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.
+* go-readline-ny v0.4.11: Support Emoji Moifier Sequence (skin tone)
 * Improve colored-ls's speed on Windows8.1 when CPU load is high.
 * ( Do not use "io/ioutil" )
 
