@@ -1,14 +1,13 @@
 module github.com/zetamatta/nyagos
 
 require (
-	github.com/Microsoft/go-winio v0.4.16 // indirect
+	github.com/Microsoft/go-winio v0.4.17 // indirect
 	github.com/akavel/rsrc v0.10.1 // indirect
 	github.com/atotto/clipboard v0.1.4
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.5
 	github.com/google/uuid v1.1.2
 	github.com/josephspurrier/goversioninfo v1.2.0
-	github.com/kr/text v0.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-isatty v0.0.12
 	github.com/mattn/go-runewidth v0.0.12
@@ -20,7 +19,7 @@ require (
 	github.com/zetamatta/go-box/v2 v2.0.9-0.20210404125024-b2a04c3a9976
 	github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
-	github.com/zetamatta/go-readline-ny v0.4.10
+	github.com/zetamatta/go-readline-ny v0.4.11
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
@@ -29,9 +28,8 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.3
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57
+	golang.org/x/sys v0.0.0-20210414055047-fe65e336abe0
 	golang.org/x/text v0.3.6 // indirect
-	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
 
