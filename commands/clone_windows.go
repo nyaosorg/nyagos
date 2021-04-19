@@ -13,6 +13,8 @@ import (
 	"github.com/zetamatta/go-windows-netresource"
 	"github.com/zetamatta/go-windows-su"
 	"github.com/zetamatta/go-windows-subst"
+
+	"github.com/zetamatta/nyagos/shell"
 )
 
 var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
@@ -53,7 +55,7 @@ func _clone(action string, out io.Writer) (int, error) {
 		if process, err := os.FindProcess(pid); err == nil {
 			go func() {
 				process.Wait()
-				fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+				shell.Message("[%d]+ Done\n", pid)
 			}()
 		}
 	}

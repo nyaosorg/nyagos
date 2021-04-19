@@ -19,6 +19,13 @@ var WildCardExpansionAlways = false
 
 var outputMutex sync.Mutex
 
+func Message(format string, a ...interface{}) {
+	outputMutex.Lock()
+	fmt.Fprintf(os.Stderr, format, a...)
+	os.Stderr.Sync()
+	outputMutex.Unlock()
+}
+
 type CommandNotFound struct {
 	Name string
 	Err  error
@@ -512,31 +519,19 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				} else {
 					cmd.UseShellExecute = true
 					cmd.OnBackExec = func(pid int) {
-						outputMutex.Lock()
-						fmt.Fprintf(os.Stderr, "[%d]\n", pid)
-						os.Stderr.Sync()
-						outputMutex.Unlock()
+						Message("[%d]\n", pid)
 					}
 					cmd.OnBackDone = func(pid int) {
-						outputMutex.Lock()
-						fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
-						os.Stderr.Sync()
-						outputMutex.Unlock()
+						Message("[%d]+ Done\n", pid)
 					}
 				}
 			}
 			if i == len(pipeline)-1 && state.Term == "&" {
 				cmd.OnBackExec = func(pid int) {
-					outputMutex.Lock()
-					fmt.Fprintf(os.Stderr, "[%d]\n", pid)
-					os.Stderr.Sync()
-					outputMutex.Unlock()
+					Message("[%d]\n", pid)
 				}
 				cmd.OnBackDone = func(pid int) {
-					outputMutex.Lock()
-					fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
-					os.Stderr.Sync()
-					outputMutex.Unlock()
+					Message("[%d]+ Done\n", pid)
 				}
 			}
 			if i == len(pipeline)-1 && state.Term != "&" {

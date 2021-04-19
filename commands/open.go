@@ -7,6 +7,8 @@ import (
 	"os"
 
 	"github.com/zetamatta/go-windows-su"
+
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func open1(fname string, out io.Writer) {
@@ -18,7 +20,7 @@ func open1(fname string, out io.Writer) {
 		if process, err := os.FindProcess(pid); err == nil {
 			go func() {
 				process.Wait()
-				fmt.Fprintf(os.Stderr, "[%d]+ Done\n", pid)
+				shell.Message("[%d]+ Done\n", pid)
 			}()
 		}
 	}
