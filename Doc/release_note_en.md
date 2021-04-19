@@ -4,6 +4,7 @@ English / [Japanese](release_note_ja.md)
 * go-readline-ny v0.4.11: Support Emoji Moifier Sequence (skin tone)
 * Improve colored-ls's speed on Windows8.1 when CPU load is high.
 * ( Do not use "io/ioutil" )
+* Prevent from the message break the commandline when the process finishes which is started by `open` command.
 
 NYAGOS 4.4.9\_4
 ===============

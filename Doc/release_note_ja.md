@@ -4,6 +4,7 @@
 * go-readline-ny v0.4.11: Emoji Moifier Sequence (skin tone) をサポート
 * Windows 8.1でCPU負荷が高い時のカラーlsの速度を改善した
 * ( "io/ioutil" を使わないようにした )
+* open で開いたプロセスが閉じる時のメッセージがコマンドラインに重ならないようにした
 
 NYAGOS 4.4.9\_4
 ===============
