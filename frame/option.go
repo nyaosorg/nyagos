@@ -240,7 +240,7 @@ var optionMap = map[string]optionT{
 
 func Title() {
 	fmt.Printf("Nihongo Yet Another GOing Shell %s-%s-%s by %s\n",
-		VersionOrStamp(),
+		Version,
 		runtime.GOOS,
 		runtime.GOARCH,
 		runtime.Version())

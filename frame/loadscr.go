@@ -11,15 +11,8 @@ import (
 	"github.com/zetamatta/nyagos/nodos"
 )
 
+// Version is to show title display.
 var Version string
-
-func VersionOrStamp() string {
-	if Version != "" {
-		return Version
-	} else {
-		return "snapshot"
-	}
-}
 
 type DirNotFound struct {
 	err error

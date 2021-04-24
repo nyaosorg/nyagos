@@ -67,7 +67,7 @@ func Main() error {
 	if !frame.OptionNorc {
 		if !frame.SilentMode {
 			fmt.Printf("Nihongo Yet Another GOing Shell %s-%s by %s\n",
-				frame.VersionOrStamp(),
+				frame.Version,
 				runtime.GOARCH,
 				runtime.Version())
 			fmt.Println("(c) 2014-2021 NYAOS.ORG <http://www.nyaos.org>")
