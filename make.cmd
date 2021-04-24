@@ -276,6 +276,7 @@ switch( $args[0] ){
     }
     "get" {
         go get -u
+        go get -u github.com/zetamatta/go-readline-ny@master
         go mod tidy
     }
     "fmt" {
