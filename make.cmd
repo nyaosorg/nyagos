@@ -87,11 +87,11 @@ function Make-SysO($version) {
     }
 }
 
-function Build([string]$version="",[string]$tags="",[string]$target="") {
-    if( $version -eq "" ){
-        $version = (git.exe describe --tags)
-    }
+function BuildSnapshot([string]$tags="",[string]$target=""){
+    Build -version (git.exe describe --tags) -tags $tags -target $target
+}
 
+function Build([string]$version="",[string]$tags="",[string]$target="") {
     Write-Verbose "Build as version='$version' tags='$tags'"
 
     if( $tags -ne "" ){
@@ -114,7 +114,11 @@ function Build([string]$version="",[string]$tags="",[string]$target="") {
     Make-SysO $version
 
     Write-Verbose "$ go build -o '$target'"
-    go build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
+    if( $version -ne "" ){
+        go build "-o" $target -ldflags "-s -w -X main.version=$version" $tags
+    }else{
+        go build "-o" $target -ldflags "-s -w" $tags
+    }
     if( $LastExitCode -eq 0 ){
         Do-Copy $target (Join-Path "." ([System.IO.Path]::GetFileName($target)))
     }
@@ -146,12 +150,12 @@ function Make-Package($arch){
 
 switch( $args[0] ){
     "" {
-        Build
+        BuildSnapshot
     }
     "386"{
         $private:save = $env:GOARCH
         $env:GOARCH = "386"
-        Build
+        BuildSnapshot
         $env:GOARCH = $save
     }
     "debug" {
@@ -159,18 +163,18 @@ switch( $args[0] ){
         if( $args[1] ){
             $env:GOARCH = $args[1]
         }
-        Build -tags "debug"
+        BuildSnapshot -tags "debug"
         $env:GOARCH = $save
     }
     "vanilla" {
-        Build -tags "vanilla"
+        BuildSnapshot -tags "vanilla"
     }
     "release" {
         $private:save = $env:GOARCH
         if( $args[1] ){
             $env:GOARCH = $args[1]
         }
-        Build -version (Get-Content Etc\version.txt)
+        Build
         $env:GOARCH = $save
     }
     "linux" {
@@ -178,7 +182,7 @@ switch( $args[0] ){
         $private:arch = $env:GOARCH
         $env:GOOS="linux"
         $env:GOARCH="amd64"
-        Build -target "bin\linux\nyagos" -version (Get-Content Etc\version.txt)
+        Build -target "bin\linux\nyagos"
         $env:GOOS = $os
         $env:GOARCH=$arch
     }
