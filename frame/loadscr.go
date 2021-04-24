@@ -14,15 +14,15 @@ import (
 // Version is to show title display.
 var Version string
 
-type DirNotFound struct {
+type _DirNotFound struct {
 	err error
 }
 
-func (e DirNotFound) Error() string {
+func (e _DirNotFound) Error() string {
 	return e.err.Error()
 }
 
-func (e DirNotFound) Unwrap() error {
+func (e _DirNotFound) Unwrap() error {
 	return e.err
 }
 
@@ -33,7 +33,7 @@ func loadScriptDir(dir string,
 	files, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return DirNotFound{err: err}
+			return _DirNotFound{err: err}
 		}
 		return err
 	}
@@ -56,6 +56,7 @@ func loadScriptDir(dir string,
 	return nil
 }
 
+// LoadScripts loads ".nyagos" an "_nyagos"
 func LoadScripts(
 	shellEngine func(string) error,
 	langEngine func(string) ([]byte, error)) error {
@@ -72,7 +73,7 @@ func LoadScripts(
 		dir := filepath.Join(appDir, "NYAOS_ORG/nyagos.d")
 		err := loadScriptDir(dir, shellEngine, langEngine)
 		if err != nil {
-			if _, ok := err.(DirNotFound); ok {
+			if _, ok := err.(_DirNotFound); ok {
 				os.MkdirAll(dir, 0755)
 			} else {
 				fmt.Fprintln(os.Stderr, err.Error())
@@ -95,8 +96,8 @@ func LoadScripts(
 }
 
 func dotNyagos(langEngine func(string) ([]byte, error)) error {
-	dot_nyagos := filepath.Join(nodos.GetHome(), ".nyagos")
-	dotStat, err := os.Stat(dot_nyagos)
+	dotNyagos := filepath.Join(nodos.GetHome(), ".nyagos")
+	dotStat, err := os.Stat(dotNyagos)
 	if err != nil {
 		return nil
 	}
@@ -111,7 +112,7 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 		}
 		os.Remove(cachePath)
 	}
-	chank, err := langEngine(dot_nyagos)
+	chank, err := langEngine(dotNyagos)
 	if err != nil || chank == nil {
 		return err
 	}
@@ -119,12 +120,12 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 }
 
 func barNyagos(shellEngine func(string) error, folder string) {
-	bar_nyagos := filepath.Join(folder, "_nyagos")
-	fd, err := os.Open(bar_nyagos)
+	barNyagos := filepath.Join(folder, "_nyagos")
+	fd, err := os.Open(barNyagos)
 	if err != nil {
 		return
 	}
-	err = shellEngine(bar_nyagos)
+	err = shellEngine(barNyagos)
 	if err != nil {
 		io.WriteString(os.Stderr, err.Error())
 	}
