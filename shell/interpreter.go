@@ -26,13 +26,13 @@ func Message(format string, a ...interface{}) {
 	outputMutex.Unlock()
 }
 
-type CommandNotFound struct {
+type _CommandNotFound struct {
 	Name string
 	Err  error
 }
 
-func (this CommandNotFound) Error() string {
-	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", this.Name)
+func (err _CommandNotFound) Error() string {
+	return fmt.Sprintf("'%s' is not recognized as an internal or external command,\noperable program or batch file", err.Name)
 }
 
 type session struct {
@@ -198,7 +198,7 @@ func (sh *Shell) Close() {}
 
 func New() *Shell {
 	return &Shell{
-		Stream:  NulStream,
+		Stream:  &_NulStream{},
 		History: &_NulHistory{},
 		LineHook: func(ctx context.Context, cmd1 *Cmd) (int, bool, error) {
 			if hook != nil {
@@ -243,8 +243,8 @@ var argsHook = func(ctx context.Context, sh *Shell, args []string) ([]string, er
 	return args, nil
 }
 
-func SetArgsHook(argsHook_ ArgsHookT) (rv ArgsHookT) {
-	rv, argsHook = argsHook, argsHook_
+func SetArgsHook(_argsHook ArgsHookT) (rv ArgsHookT) {
+	rv, argsHook = argsHook, _argsHook
 	return
 }
 
@@ -254,13 +254,13 @@ var hook = func(context.Context, *Cmd) (int, bool, error) {
 	return 0, false, nil
 }
 
-func SetHook(hook_ HookT) (rv HookT) {
-	rv, hook = hook, hook_
+func SetHook(_hook HookT) (rv HookT) {
+	rv, hook = hook, _hook
 	return
 }
 
 var OnCommandNotFound = func(ctx context.Context, cmd *Cmd, err error) error {
-	err = &CommandNotFound{cmd.args[0], err}
+	err = &_CommandNotFound{cmd.args[0], err}
 	return err
 }
 
@@ -361,11 +361,11 @@ type AlreadyReportedError struct {
 	Err error
 }
 
-func (_ AlreadyReportedError) Error() string {
+func (AlreadyReportedError) Error() string {
 	return ""
 }
 
-func IsAlreadyReported(err error) bool {
+func isAlreadyReported(err error) bool {
 	_, ok := err.(AlreadyReportedError)
 	return ok
 }
@@ -390,7 +390,7 @@ func (cmd *Cmd) Spawnvp(ctx context.Context) (int, error) {
 		PostExecHook(_ctx, cmd)
 	}
 
-	if err != nil && err != io.EOF && !IsAlreadyReported(err) {
+	if err != nil && err != io.EOF && !isAlreadyReported(err) {
 		if defined.DBG {
 			fmt.Fprintf(cmd.Err(), "error-type=%T\n", err)
 		}
@@ -409,12 +409,12 @@ func (sh *Shell) Spawnlpe(ctx context.Context, args, rawargs []string, env map[s
 	return cmd.Spawnvp(ctx)
 }
 
-type TmpCloser struct {
+type _TmpCloser struct {
 	Closer func()
 }
 
-func (this *TmpCloser) Close() error {
-	this.Closer()
+func (t *_TmpCloser) Close() error {
+	t.Closer()
 	return nil
 }
 
@@ -454,7 +454,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 	for _, pipeline := range statements {
 		for i, state := range pipeline {
 			if state.Term == "|" && (i+1 >= len(pipeline) || len(pipeline[i+1].Args) <= 0) {
-				return 255, errors.New("The syntax of the command is incorrect.")
+				return 255, errors.New("The syntax of the command is incorrect")
 			}
 		}
 	}
@@ -470,7 +470,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 			}
 		}
 		var wg sync.WaitGroup
-		shutdown_immediately := false
+		shutdownImmediately := false
 		for i, state := range pipeline {
 			if defined.DBG {
 				print(i, ": pipeline loop(", state.Args[0], ")\n")
@@ -503,7 +503,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 				if err != nil {
 					return 0, err
 				}
-				cmd.Closers = append(cmd.Closers, &TmpCloser{Closer: c})
+				cmd.Closers = append(cmd.Closers, &_TmpCloser{Closer: c})
 			}
 
 			cmd.args = state.Args
@@ -557,9 +557,8 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 					if newctx, newtag, err = tag.Clone(newctx); err != nil {
 						fmt.Fprintln(os.Stderr, err.Error())
 						return -1, err
-					} else {
-						cmd.SetTag(newtag)
 					}
+					cmd.SetTag(newtag)
 				}
 				go func(ctx1 context.Context, cmd1 *Cmd) {
 					if !isBackGround {
@@ -577,7 +576,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 		}
 		if !isBackGround {
 			wg.Wait()
-			if shutdown_immediately {
+			if shutdownImmediately {
 				return errorlevel, nil
 			}
 			if len(pipeline) > 0 {

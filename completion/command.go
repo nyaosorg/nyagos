@@ -30,8 +30,8 @@ func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, e
 			}
 			name := file1.Name()
 			if isExecutable(name) {
-				name_ := path.Base(name)
-				element := Element1(name_)
+				_name := path.Base(name)
+				element := Element1(_name)
 				list = append(list, element)
 			}
 		}

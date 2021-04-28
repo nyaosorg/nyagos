@@ -50,8 +50,8 @@ func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completi
 	L.SetField(tbl, "field", field)
 	L.SetField(tbl, "left", lua.LString(rv.Left))
 
-	defer setContext(L, getContext(L))
-	setContext(L, ctx)
+	defer setContext(getContext(L), L)
+	setContext(ctx, L)
 
 	L.Push(f)
 	L.Push(tbl)

@@ -101,7 +101,7 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 	if err != nil {
 		return nil
 	}
-	cachePath := filepath.Join(AppDataDir(), runtime.GOARCH+".nyagos.luac")
+	cachePath := filepath.Join(appDataDir(), runtime.GOARCH+".nyagos.luac")
 	cacheStat, err := os.Stat(cachePath)
 	if err == nil {
 		if cacheStat.Size() != 0 && !dotStat.ModTime().After(cacheStat.ModTime()) {

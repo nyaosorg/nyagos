@@ -47,9 +47,8 @@ func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
 	if !scan.Scan() {
 		if err := scan.Err(); err != nil {
 			return err
-		} else {
-			return io.EOF
 		}
+		return io.EOF
 	}
 	line := strings.TrimSpace(scan.Text())
 	if verbose != nil {
@@ -71,24 +70,24 @@ type Source struct {
 	Debug   bool
 }
 
-func (this Source) Call() (int, error) {
+func (source Source) Call() (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d-%d.tmp", pid, rand.Int()))
 
-	errorlevel, err := this.callBatch(tmpfile)
+	errorlevel, err := source.callBatch(tmpfile)
 
 	if err != nil {
 		return errorlevel, err
 	}
 
-	if !this.Debug {
+	if !source.Debug {
 		defer os.Remove(tmpfile)
 	}
 
-	if errorlevel, err = loadTmpFile(tmpfile, this.Verbose); err != nil {
+	if errorlevel, err = loadTmpFile(tmpfile, source.Verbose); err != nil {
 		if os.IsNotExist(err) {
-			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", this.Args[0])
+			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", source.Args[0])
 		}
 		return 1, err
 	}
@@ -118,6 +117,6 @@ type CmdExe struct {
 	OnDone  func(int)
 }
 
-func (this CmdExe) Run() (int, error) {
-	return this.run()
+func (cmdExe CmdExe) Run() (int, error) {
+	return cmdExe.run()
 }

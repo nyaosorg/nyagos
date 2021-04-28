@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	STD_SLASH = string(os.PathSeparator)
-	OPT_SLASH = "/"
+	stdSlash = string(os.PathSeparator)
+	optSlash = "/"
 )
 
 var IncludeHidden = false
@@ -34,30 +34,30 @@ const (
 	DoUncCompletion
 )
 
-var ErrAskRetry = errors.New("Complete Network Path ?")
+var errAskRetry = errors.New("Complete Network Path ?")
 
 func listUpWithFilter(ctx context.Context, str string, ua UncCompletion, filter func(*findfile.FileInfo) bool) ([]Element, error) {
 	if ua != DoNotUncCompletion {
 		if r, err := uncComplete(str, ua == DoUncCompletion); err == nil {
 			return r, nil
-		} else if err == ErrAskRetry {
+		} else if err == errAskRetry {
 			return nil, err
 		}
 	}
-	orgSlash := STD_SLASH[0]
+	orgSlash := stdSlash[0]
 	if UseSlash {
-		orgSlash = OPT_SLASH[0]
+		orgSlash = optSlash[0]
 	}
-	if pos := strings.IndexAny(str, STD_SLASH+OPT_SLASH); pos >= 0 {
+	if pos := strings.IndexAny(str, stdSlash+optSlash); pos >= 0 {
 		orgSlash = str[pos]
 	}
-	str = strings.Replace(strings.Replace(str, OPT_SLASH, STD_SLASH, -1), `"`, "", -1)
+	str = strings.Replace(strings.Replace(str, optSlash, stdSlash, -1), `"`, "", -1)
 	directory := DirName(str)
 	wildcard := join(findfile.ExpandEnv(directory), "*")
 
 	// Drive letter
 	cutprefix := 0
-	if strings.HasPrefix(directory, STD_SLASH) {
+	if strings.HasPrefix(directory, stdSlash) {
 		wd, _ := os.Getwd()
 		directory = wd[0:2] + directory
 		cutprefix = 2
@@ -86,16 +86,16 @@ func listUpWithFilter(ctx context.Context, str string, ua UncCompletion, filter 
 		listname := fd.Name()
 		name := join(directory, fd.Name())
 		if fd.IsDir() {
-			name += STD_SLASH
-			listname += OPT_SLASH
+			name += stdSlash
+			listname += optSlash
 		}
 		if cutprefix > 0 {
 			name = name[2:]
 		}
 		nameUpr := strings.ToUpper(name)
 		if strings.HasPrefix(nameUpr, STR) {
-			if orgSlash != STD_SLASH[0] {
-				name = strings.Replace(name, STD_SLASH, OPT_SLASH, -1)
+			if orgSlash != stdSlash[0] {
+				name = strings.Replace(name, stdSlash, optSlash, -1)
 			}
 			element := Element2{name, listname}
 			commons = append(commons, element)

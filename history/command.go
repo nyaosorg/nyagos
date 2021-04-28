@@ -10,7 +10,7 @@ import (
 	"github.com/mattn/go-isatty"
 )
 
-type HistoryDumper interface {
+type Dumper interface {
 	Len() int
 	DumpAt(int) string
 }
@@ -22,7 +22,7 @@ type Param interface {
 	Err() io.Writer
 }
 
-func CmdHistory(ctx context.Context, cmd Param, historyObj HistoryDumper) (int, error) {
+func CmdHistory(ctx context.Context, cmd Param, historyObj Dumper) (int, error) {
 	if ctx == nil {
 		fmt.Fprintln(cmd.Err(), "history not found (case1)")
 		return 1, nil

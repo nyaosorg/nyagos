@@ -9,7 +9,7 @@ import (
 
 var appdatapath_ string
 
-func AppDataDir() string {
+func appDataDir() string {
 	if appdatapath_ == "" {
 		appdatapath_ = filepath.Join(os.Getenv("HOME"), ".nyaos_org")
 		os.Mkdir(appdatapath_, 0700)

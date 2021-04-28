@@ -1,7 +1,7 @@
 package nodos
 
 const (
-	REPARSE_POINT = _REPARSE_POINT
+	REPARSE_POINT = reparsePoint
 )
 
 func GetFileAttributes(path string) (uint32, error) {

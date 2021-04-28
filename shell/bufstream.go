@@ -12,19 +12,19 @@ type BufStream struct {
 
 func (*BufStream) DisableHistory(value bool) bool { return false }
 
-func (this *BufStream) ReadLine(c context.Context) (context.Context, string, error) {
-	if this.n >= len(this.line) {
+func (bufStream *BufStream) ReadLine(c context.Context) (context.Context, string, error) {
+	if bufStream.n >= len(bufStream.line) {
 		return c, "", io.EOF
 	}
-	this.n++
-	return c, this.line[this.n-1], nil
+	bufStream.n++
+	return c, bufStream.line[bufStream.n-1], nil
 }
 
-func (this *BufStream) SetPos(n int) error {
-	this.n = n
+func (bufStream *BufStream) SetPos(n int) error {
+	bufStream.n = n
 	return nil
 }
 
-func (this *BufStream) Add(line string) {
-	this.line = append(this.line, line)
+func (bufStream *BufStream) Add(line string) {
+	bufStream.line = append(bufStream.line, line)
 }

@@ -18,7 +18,7 @@ type CmdStreamFile struct {
 	Scanner *bufio.Scanner
 }
 
-func (this *CmdStreamFile) DisableHistory(value bool) bool {
+func (*CmdStreamFile) DisableHistory(value bool) bool {
 	return false
 }
 
@@ -32,23 +32,22 @@ func NewCmdStreamFile(r io.Reader) *CmdStreamFile {
 	}
 }
 
-func (this *CmdStreamFile) ReadLine(ctx context.Context) (context.Context, string, error) {
-	if this.Pointer >= 0 {
-		if this.Pointer < len(this.PlainHistory) {
-			this.Pointer++
-			return ctx, this.PlainHistory[this.Pointer-1], nil
+func (stream *CmdStreamFile) ReadLine(ctx context.Context) (context.Context, string, error) {
+	if stream.Pointer >= 0 {
+		if stream.Pointer < len(stream.PlainHistory) {
+			stream.Pointer++
+			return ctx, stream.PlainHistory[stream.Pointer-1], nil
 		}
-		this.Pointer = -1
+		stream.Pointer = -1
 	}
-	if !this.Scanner.Scan() {
-		if err := this.Scanner.Err(); err != nil {
+	if !stream.Scanner.Scan() {
+		if err := stream.Scanner.Err(); err != nil {
 			return ctx, "", err
-		} else {
-			return ctx, "", io.EOF
 		}
+		return ctx, "", io.EOF
 	}
-	text := strings.TrimRight(this.Scanner.Text(), "\r\n")
-	this.PlainHistory = append(this.PlainHistory, text)
+	text := strings.TrimRight(stream.Scanner.Text(), "\r\n")
+	stream.PlainHistory = append(stream.PlainHistory, text)
 	return ctx, text, nil
 }
 
@@ -62,7 +61,6 @@ func (sh *Shell) Source(ctx context.Context, fname string) error {
 	fd.Close()
 	if err == io.EOF {
 		return nil
-	} else {
-		return err
 	}
+	return err
 }

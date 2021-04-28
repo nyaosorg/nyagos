@@ -22,5 +22,5 @@ func setFileAttributes(path string, attr uint32) error {
 }
 
 const (
-	_REPARSE_POINT = os.ModeSymlink
+	reparsePoint = os.ModeSymlink
 )

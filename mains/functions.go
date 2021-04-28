@@ -16,22 +16,22 @@ import (
 	"github.com/zetamatta/nyagos/shell"
 )
 
-type LuaBinaryChank struct {
+type _LuaBinaryChank struct {
 	Chank *lua.LFunction
 }
 
-func (this LuaBinaryChank) String() string {
-	return this.Chank.String()
+func (lbc _LuaBinaryChank) String() string {
+	return lbc.Chank.String()
 }
 
-func (this *LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, error) {
+func (lbc *_LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, error) {
 	luawrapper, ok := cmd.Tag().(*luaWrapper)
 	if !ok {
-		return 255, errors.New("LuaBinaryChank.Call: Lua instance not found")
+		return 255, errors.New("_LuaBinaryChank.Call: Lua instance not found")
 	}
 	L := luawrapper.Lua
 	ctx = context.WithValue(ctx, luaKey, L)
-	L.Push(this.Chank)
+	L.Push(lbc.Chank)
 
 	table := L.NewTable()
 	for i, arg1 := range cmd.Args() {
@@ -80,7 +80,7 @@ func cmdSetAlias(L Lua) int {
 	case lua.LTString:
 		alias.Table[key] = alias.New(L.ToString(-1))
 	case lua.LTFunction:
-		alias.Table[key] = &LuaBinaryChank{Chank: L.ToFunction(-1)}
+		alias.Table[key] = &_LuaBinaryChank{Chank: L.ToFunction(-1)}
 	case lua.LTNil:
 		delete(alias.Table, key)
 	}
@@ -95,7 +95,7 @@ func cmdGetAlias(L Lua) int {
 		return 1
 	}
 	switch v := value.(type) {
-	case *LuaBinaryChank:
+	case *_LuaBinaryChank:
 		L.Push(v.Chank)
 	default:
 		L.Push(lua.LString(v.String()))

@@ -16,7 +16,7 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
-type KeyLuaFuncT struct {
+type _KeyLuaFunc struct {
 	Chank *lua.LFunction
 }
 
@@ -46,11 +46,11 @@ func callReplace(L Lua) int {
 		return lerror(L, "not a number")
 	}
 	str := L.ToString(-1)
-	pos_zero_base := int(pos) - 1
-	if pos_zero_base > len(buffer.Buffer) {
+	posZeroBase := int(pos) - 1
+	if posZeroBase > len(buffer.Buffer) {
 		return lerror(L, fmt.Sprintf(":replace: pos=%d: Too big.", pos))
 	}
-	buffer.ReplaceAndRepaint(pos_zero_base, string(str))
+	buffer.ReplaceAndRepaint(posZeroBase, string(str))
 	L.Push(lua.LTrue)
 	L.Push(lua.LNil)
 	return 2
@@ -135,16 +135,16 @@ func callBoxListing(L Lua) int {
 	return 0
 }
 
-func (this KeyLuaFuncT) String() string {
-	return this.Chank.String()
+func (f _KeyLuaFunc) String() string {
+	return f.Chank.String()
 }
-func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
+func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
-		println("(*mains.KeyLuaFuncT)Call: lua instance not found")
+		println("(*mains._KeyLuaFunc)Call: lua instance not found")
 		return readline.CONTINUE
 	}
-	L.Push(this.Chank)
+	L.Push(f.Chank)
 	pos := -1
 	var text strings.Builder
 	for i, c := range buffer.Buffer {
@@ -170,8 +170,8 @@ func (this *KeyLuaFuncT) Call(ctx context.Context, buffer *readline.Buffer) read
 	L.SetField(table, "firstword", L.NewFunction(callFirstWord))
 	L.SetField(table, "boxprint", L.NewFunction(callBoxListing))
 
-	defer setContext(L, getContext(L))
-	setContext(L, ctx)
+	defer setContext(getContext(L), L)
+	setContext(ctx, L)
 
 	L.Push(table)
 	err := L.PCall(1, 1, nil)
@@ -199,20 +199,18 @@ func cmdBindKey(L Lua) int {
 	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
 	switch value := L.Get(-1).(type) {
 	case *lua.LFunction:
-		if err := readline.GlobalKeyMap.BindKeyFunc(key, &KeyLuaFuncT{value}); err != nil {
+		if err := readline.GlobalKeyMap.BindKeyFunc(key, &_KeyLuaFunc{value}); err != nil {
 			return lerror(L, err.Error())
-		} else {
-			L.Push(lua.LTrue)
-			return 1
 		}
+		L.Push(lua.LTrue)
+		return 1
 	default:
 		val := L.ToString(-1)
 		err := readline.GlobalKeyMap.BindKeySymbol(key, val)
 		if err != nil {
 			return lerror(L, err.Error())
-		} else {
-			L.Push(lua.LTrue)
-			return 1
 		}
+		L.Push(lua.LTrue)
+		return 1
 	}
 }

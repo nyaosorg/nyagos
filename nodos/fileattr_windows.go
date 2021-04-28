@@ -5,7 +5,7 @@ import (
 )
 
 const (
-	_REPARSE_POINT = windows.FILE_ATTRIBUTE_REPARSE_POINT
+	reparsePoint = windows.FILE_ATTRIBUTE_REPARSE_POINT
 )
 
 // GetFileAttributes calls Win32-API's GetFileAttributes.

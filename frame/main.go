@@ -25,7 +25,7 @@ import (
 var DefaultHistory *history.Container
 
 func Start(mainHandler func() error) error {
-	defer PanicHandler()
+	defer panicHandler()
 
 	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
 		rc, done, err := commands.Exec(ctx, it)
@@ -52,7 +52,7 @@ func Start(mainHandler func() error) error {
 	return mainHandler()
 }
 
-func PanicHandler() {
+func panicHandler() {
 	err := recover()
 	if err == nil {
 		return

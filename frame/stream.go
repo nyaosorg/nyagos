@@ -25,34 +25,34 @@ type CmdStreamConsole struct {
 
 func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	history1 := &history.Container{}
-	this := &CmdStreamConsole{
+	stream := &CmdStreamConsole{
 		History: history1,
 		Editor: &readline.Editor{
 			History: history1,
 			Prompt:  doPrompt,
 			Writer:  colorable.NewColorableStdout()},
-		HistPath: filepath.Join(AppDataDir(), "nyagos.history"),
+		HistPath: filepath.Join(appDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},
 			Pointer:      -1,
 		},
 	}
-	history1.Load(this.HistPath)
-	history1.Save(this.HistPath)
-	return this
+	history1.Load(stream.HistPath)
+	history1.Save(stream.HistPath)
+	return stream
 }
 
-func (this *CmdStreamConsole) DisableHistory(value bool) bool {
-	return this.History.IgnorePush(value)
+func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
+	return stream.History.IgnorePush(value)
 }
 
-func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
-	if this.Pointer >= 0 {
-		if this.Pointer < len(this.PlainHistory) {
-			this.Pointer++
-			return ctx, this.PlainHistory[this.Pointer-1], nil
+func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
+	if stream.Pointer >= 0 {
+		if stream.Pointer < len(stream.PlainHistory) {
+			stream.Pointer++
+			return ctx, stream.PlainHistory[stream.Pointer-1], nil
 		}
-		this.Pointer = -1
+		stream.Pointer = -1
 	}
 	var line string
 	var err error
@@ -60,7 +60,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 		disabler := colorable.EnableColorsStdout(nil)
 		clean, err2 := consoleicon.SetFromExe()
 		for {
-			line, err = this.Editor.ReadLine(ctx)
+			line, err = stream.Editor.ReadLine(ctx)
 			if err != readline.CtrlC {
 				break
 			}
@@ -74,7 +74,7 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 			return ctx, line, err
 		}
 		var isReplaced bool
-		line, isReplaced, err = this.History.Replace(line)
+		line, isReplaced, err = stream.History.Replace(line)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 			continue
@@ -87,14 +87,14 @@ func (this *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, st
 		}
 	}
 	row := history.NewHistoryLine(line)
-	this.History.PushLine(row)
-	fd, err := os.OpenFile(this.HistPath, os.O_APPEND|os.O_CREATE, 0600)
+	stream.History.PushLine(row)
+	fd, err := os.OpenFile(stream.HistPath, os.O_APPEND|os.O_CREATE, 0600)
 	if err == nil {
 		fmt.Fprintln(fd, row.String())
 		fd.Close()
 	} else {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	this.PlainHistory = append(this.PlainHistory, line)
+	stream.PlainHistory = append(stream.PlainHistory, line)
 	return ctx, line, err
 }

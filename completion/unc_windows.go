@@ -85,7 +85,7 @@ func hasServerCache() bool {
 func uncComplete(str string, force bool) ([]Element, error) {
 	if rxUNCPattern1.MatchString(str) {
 		if !force && !hasServerCache() {
-			return nil, ErrAskRetry
+			return nil, errAskRetry
 		}
 		server := strings.ToUpper(str)
 		result := []Element{}

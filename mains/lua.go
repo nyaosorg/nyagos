@@ -458,7 +458,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 const ctxkey = "github.com/zetamatta/nyagos"
 
 // setContext
-func setContext(L Lua, ctx context.Context) {
+func setContext(ctx context.Context, L Lua) {
 	reg := L.Get(lua.RegistryIndex)
 	if ctx != nil {
 		u := L.NewUserData()
@@ -495,7 +495,7 @@ func dispose(L *lua.LState, val lua.LValue) {
 	}
 }
 
-type XFile struct {
+type _XFile struct {
 	File      *os.File
 	br        *bufio.Reader
 	dontClose bool
@@ -503,26 +503,26 @@ type XFile struct {
 	eof       bool
 }
 
-func (xf *XFile) reader() *bufio.Reader {
+func (xf *_XFile) reader() *bufio.Reader {
 	if xf.br == nil {
 		if xf.File != nil {
 			xf.br = bufio.NewReader(xf.File)
 		} else {
-			panic("XFile.reader() not found reader object")
+			panic("_XFile.reader() not found reader object")
 		}
 	}
 	return xf.br
 }
 
-func (xf *XFile) Write(b []byte) (int, error) { return xf.File.Write(b) }
-func (xf *XFile) Read(b []byte) (int, error)  { return xf.reader().Read(b) }
-func (xf *XFile) ReadByte() (byte, error)     { return xf.reader().ReadByte() }
-func (xf *XFile) UnreadByte() error           { return xf.reader().UnreadByte() }
-func (xf *XFile) ReadString(d byte) (string, error) {
+func (xf *_XFile) Write(b []byte) (int, error) { return xf.File.Write(b) }
+func (xf *_XFile) Read(b []byte) (int, error)  { return xf.reader().Read(b) }
+func (xf *_XFile) ReadByte() (byte, error)     { return xf.reader().ReadByte() }
+func (xf *_XFile) UnreadByte() error           { return xf.reader().UnreadByte() }
+func (xf *_XFile) ReadString(d byte) (string, error) {
 	return xf.reader().ReadString(d)
 }
 
-func (xf *XFile) Seek(offset int64, whence int) (int64, error) {
+func (xf *_XFile) Seek(offset int64, whence int) (int64, error) {
 	xf.eof = false
 	if xf.br != nil {
 		back := xf.br.Buffered()
@@ -534,21 +534,21 @@ func (xf *XFile) Seek(offset int64, whence int) (int64, error) {
 	return xf.File.Seek(offset, whence)
 }
 
-func (this *XFile) Close() error {
-	this.br = nil
-	if !this.dontClose && !this.closed {
-		this.closed = true
-		return this.File.Close()
+func (xf *_XFile) Close() error {
+	xf.br = nil
+	if !xf.dontClose && !xf.closed {
+		xf.closed = true
+		return xf.File.Close()
 	}
 	return nil
 }
 
-func (this *XFile) IsClosed() bool { return this.closed }
-func (this *XFile) Eof() bool      { return this.eof }
-func (this *XFile) SetEof()        { this.eof = true }
+func (xf *_XFile) IsClosed() bool { return xf.closed }
+func (xf *_XFile) EOF() bool      { return xf.eof }
+func (xf *_XFile) SetEOF()        { xf.eof = true }
 
-func (this *XFile) Sync() error {
-	return this.File.Sync()
+func (xf *_XFile) Sync() error {
+	return xf.File.Sync()
 }
 
 func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, callback func() error) error {
@@ -558,9 +558,9 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 	orgStdout := L.GetField(ioTbl, "stdout")
 	orgStderr := L.GetField(ioTbl, "stderr")
 
-	stdin := newXFile(L, &XFile{File: _stdin, dontClose: true}, true, false)
-	stdout := newXFile(L, &XFile{File: _stdout, dontClose: true}, false, true)
-	stderr := newXFile(L, &XFile{File: _stderr, dontClose: true}, false, true)
+	stdin := newXFile(L, &_XFile{File: _stdin, dontClose: true}, true, false)
+	stdout := newXFile(L, &_XFile{File: _stdout, dontClose: true}, false, true)
+	stderr := newXFile(L, &_XFile{File: _stderr, dontClose: true}, false, true)
 
 	L.SetField(ioTbl, "stdin", stdin)
 	L.SetField(ioTbl, "stdout", stdout)
@@ -578,9 +578,9 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 }
 
 func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
-	defer setContext(L, getContext(L))
+	defer setContext(getContext(L), L)
 	ctx = context.WithValue(ctx, shellKey, sh)
-	setContext(L, ctx)
+	setContext(ctx, L)
 
 	return luaRedirect(ctx, sh.Stdio[0], sh.Stdio[1], sh.Stdio[2], L, func() error {
 		return L.PCall(nargs, nresult, nil)

@@ -15,6 +15,7 @@ import (
 	"github.com/zetamatta/nyagos/texts"
 )
 
+// ReadStdinAsFile is the flat to read commands from stdin as a file stream
 var ReadStdinAsFile = false
 
 type optionT struct {

@@ -63,9 +63,8 @@ func hook(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
 	newcmd.LineHook = func(_ctx context.Context, _cmd *shell.Cmd) (int, bool, error) {
 		if strings.EqualFold(_cmd.Arg(0), lowerName) {
 			return nextHook(_ctx, _cmd)
-		} else {
-			return hook(_ctx, _cmd)
 		}
+		return hook(_ctx, _cmd)
 	}
 	next, err := callee.Call(ctx, &newcmd)
 	return next, true, err

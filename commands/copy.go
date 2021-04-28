@@ -56,11 +56,11 @@ func cmdLn(ctx context.Context, cmd Param) (int, error) {
 			if stat, err := os.Stat(src); err != nil {
 				return err
 			} else if stat.IsDir() {
-				if fullpath, err := filepath.Abs(src); err != nil {
+				fullpath, err := filepath.Abs(src)
+				if err != nil {
 					return err
-				} else {
-					return junction.Create(fullpath, dst)
 				}
+				return junction.Create(fullpath, dst)
 			} else {
 				return os.Link(src, dst)
 			}
@@ -106,8 +106,8 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 
 	_dst := args[len(args)-1]
 	if strings.ToLower(filepath.Ext(_dst)) == ".lnk" {
-		if __dst, _, err := shortcut.Read(_dst); err == nil {
-			_dst = __dst
+		if _dst1, _, err := shortcut.Read(_dst); err == nil {
+			_dst = _dst1
 		}
 	}
 

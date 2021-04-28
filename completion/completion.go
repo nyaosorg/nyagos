@@ -97,7 +97,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	cmdline_recover := func() {}
+	cmdlineRecover := func() {}
 
 	var err error
 	rv := &List{
@@ -112,26 +112,25 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 		rv.Field = append(rv.Field, rv.Left[p[0]:p[1]])
 	}
 	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
-	default_delimiter := rune(readline.Delimiters[0])
+	defaultDelimiter := rune(readline.Delimiters[0])
 	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
 		rv.RawWord = rv.AllLine[rv.Pos:]
 		rv.Word = rv.RawWord
-		return rv, default_delimiter, cmdline_recover, nil
+		return rv, defaultDelimiter, cmdlineRecover, nil
 	}
 
 	// filename or commandname completion
 	rv.RawWord, rv.Pos = this.CurrentWord()
-	found_delimter := false
+	foundDelimiter := false
 	rv.Word = strings.Map(func(c rune) rune {
 		if strings.ContainsRune(readline.Delimiters, c) {
-			if !found_delimter {
-				default_delimiter = c
+			if !foundDelimiter {
+				defaultDelimiter = c
 			}
-			found_delimter = true
+			foundDelimiter = true
 			return -1
-		} else {
-			return c
 		}
+		return c
 	}, rv.RawWord)
 
 	start := strings.LastIndexAny(rv.Word, ";=") + 1
@@ -163,12 +162,12 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 			} else {
 				rv.List, err = ListUpFiles(ctx, ua, rv.Word[start:])
 			}
-			if err != ErrAskRetry {
+			if err != errAskRetry {
 				break
 			}
 			fmt.Fprintf(this.Out, "\n%s [y/n] ", err.Error())
 			this.Out.Flush()
-			cmdline_recover = func() {
+			cmdlineRecover = func() {
 				fmt.Fprintln(this.Out)
 				this.RepaintAll()
 				this.Out.Flush()
@@ -179,13 +178,13 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 				this.Out.Flush()
 			}
 			if err1 != nil || !strings.EqualFold(key, "y") {
-				return rv, default_delimiter, cmdline_recover, errors.New("Canceled.")
+				return rv, defaultDelimiter, cmdlineRecover, errors.New("Canceled")
 			}
 			ua = DoUncCompletion
 		}
 	}
 	if err != nil {
-		return rv, default_delimiter, cmdline_recover, err
+		return rv, defaultDelimiter, cmdlineRecover, err
 	}
 	if !replace {
 		for i := 0; i < len(rv.List); i++ {
@@ -201,7 +200,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 			break
 		}
 	}
-	return rv, default_delimiter, cmdline_recover, err
+	return rv, defaultDelimiter, cmdlineRecover, err
 }
 
 func toComplete(source []Element) []string {
@@ -286,26 +285,26 @@ func showCompList(ctx context.Context, this *readline.Buffer, comp *List) {
 }
 
 func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Result {
-	comp, default_delimiter, cmdline_recover, err := listUpComplete(ctx, this)
+	comp, defaultDelimiter, cmdlineRecover, err := listUpComplete(ctx, this)
 	if err != nil {
 		fmt.Fprintf(this.Out, "\n%s\n", err)
 		this.RepaintAll()
 		return readline.CONTINUE
 	}
 	if comp.List == nil || len(comp.List) <= 0 {
-		cmdline_recover()
+		cmdlineRecover()
 		return readline.CONTINUE
 	}
 
-	complete_list := toComplete(comp.List)
-	commonStr := CommonPrefix(complete_list)
+	completionList := toComplete(comp.List)
+	commonStr := CommonPrefix(completionList)
 	quotechar := byte(0)
 	if i := strings.IndexAny(comp.Word, readline.Delimiters); i >= 0 {
 		quotechar = comp.Word[i]
 	} else {
-		for _, node := range complete_list {
+		for _, node := range completionList {
 			if strings.ContainsAny(node, " &!") {
-				quotechar = byte(default_delimiter)
+				quotechar = byte(defaultDelimiter)
 				break
 			}
 		}
@@ -336,9 +335,8 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		}
 		showCompList(nil, this, comp)
 		return readline.CONTINUE
-	} else {
-		cmdline_recover()
 	}
+	cmdlineRecover()
 	this.ReplaceAndRepaint(comp.Pos, commonStr)
 	return readline.CONTINUE
 }

@@ -24,7 +24,7 @@ func isSpace(c rune) bool {
 	return strings.IndexRune(" \t\n\r\v\f", c) >= 0
 }
 
-type StatementT struct {
+type _Statement struct {
 	Args     []string
 	RawArgs  []string
 	Term     string
@@ -36,9 +36,8 @@ var PercentFunc = map[string]func() string{
 		wd, err := os.Getwd()
 		if err == nil {
 			return wd
-		} else {
-			return ""
 		}
+		return ""
 	},
 	"ERRORLEVEL": func() string {
 		return fmt.Sprintf("%d", LastErrorLevel)
@@ -129,23 +128,23 @@ func chomp(buffer *bytes.Buffer) {
 	buffer.Truncate(buffer.Len() - 1)
 }
 
-const NOTQUOTED = '\000'
+const _NotQuoted = '\000'
 
 var TildeExpansion = true
 
-func string2word(source_ string, removeQuote bool) string {
+func string2word(_source string, removeQuote bool) string {
 	var buffer strings.Builder
-	source := strings.NewReader(source_)
+	source := strings.NewReader(_source)
 
 	lastchar := ' '
-	quoteNow := NOTQUOTED
+	quoteNow := _NotQuoted
 	yenCount := 0
 	for {
 		ch, _, err := source.ReadRune()
 		if err != nil {
 			break
 		}
-		if TildeExpansion && ch == '~' && isSpace(lastchar) && quoteNow == NOTQUOTED {
+		if TildeExpansion && ch == '~' && isSpace(lastchar) && quoteNow == _NotQuoted {
 			var name strings.Builder
 			var undo strings.Builder
 			undo.WriteByte('~')
@@ -156,10 +155,10 @@ func string2word(source_ string, removeQuote bool) string {
 					break
 				} else if ch == '"' {
 					undo.WriteByte('"')
-					if quoteNow == NOTQUOTED {
+					if quoteNow == _NotQuoted {
 						quoteNow = ch
 					} else {
-						quoteNow = NOTQUOTED
+						quoteNow = _NotQuoted
 					}
 				} else if !unicode.IsLetter(ch) {
 					source.UnreadRune()
@@ -225,7 +224,7 @@ func string2word(source_ string, removeQuote bool) string {
 			continue
 		}
 
-		if quoteNow != NOTQUOTED && ch == quoteNow && yenCount%2 == 0 {
+		if quoteNow != _NotQuoted && ch == quoteNow && yenCount%2 == 0 {
 			if !removeQuote {
 				buffer.WriteRune(ch)
 			}
@@ -233,8 +232,8 @@ func string2word(source_ string, removeQuote bool) string {
 			for ; yenCount >= 2; yenCount -= 2 {
 				buffer.WriteByte('\\')
 			}
-			quoteNow = NOTQUOTED
-		} else if (ch == '\'' || ch == '"') && quoteNow == NOTQUOTED && yenCount%2 == 0 {
+			quoteNow = _NotQuoted
+		} else if (ch == '\'' || ch == '"') && quoteNow == _NotQuoted && yenCount%2 == 0 {
 			if !removeQuote {
 				buffer.WriteRune(ch)
 			}
@@ -271,93 +270,92 @@ func string2word(source_ string, removeQuote bool) string {
 }
 
 const (
-	_ANDALSO   = '\uE000' + iota // &&
-	_ORELSE                      // ||
-	_REDIRECT0                   // 0<
-	_REDIRECT1                   // 1>
-	_REDIRECT2                   // 2>
-	_APPEND1                     // 1>>
-	_APPEND2                     // 2>>
-	_APPEND                      // >>
-	_FORCE                       // >!
-	_FORCE1                      // 1>!
-	_FORCE2                      // 2>!
-	_FORCE11                     // 1>|
-	_FORCE22                     // 2>|
-	_YPIPE                       // |&
+	_AndAlso   = '\uE000' + iota // &&
+	_OrElse                      // ||
+	_Redirect0                   // 0<
+	_Redirect1                   // 1>
+	_Redirect2                   // 2>
+	_Append1                     // 1>>
+	_Append2                     // 2>>
+	_Append                      // >>
+	_Force                       // >!
+	_Force1                      // 1>!
+	_Force2                      // 2>!
+	_Force11                     // 1>|
+	_Force22                     // 2>|
+	_Ypipe                       // |&
 	_TO2                         // >&2
-	_1TO2                        // 1>&2
-	_2TO1                        // 2>&1
-	_HEREDOC                     // <<
+	_1To2                        // 1>&2
+	_2To1                        // 2>&1
+	_HereDoc                     // <<
 )
 
 var replacer = strings.NewReplacer(
-	"1>&2", string(_1TO2),
-	"2>&1", string(_2TO1),
+	"1>&2", string(_1To2),
+	"2>&1", string(_2To1),
 	">&2", string(_TO2),
-	"1>!", string(_FORCE1),
-	"2>!", string(_FORCE2),
-	"1>|", string(_FORCE11),
-	"2>|", string(_FORCE22),
-	"1>>", string(_APPEND1),
-	"2>>", string(_APPEND2),
-	"0<", string(_REDIRECT0),
-	"1>", string(_REDIRECT1),
-	"2>", string(_REDIRECT2),
-	"&&", string(_ANDALSO),
-	"||", string(_ORELSE),
-	">>", string(_APPEND),
-	">!", string(_FORCE),
-	"|&", string(_YPIPE),
-	"<<", string(_HEREDOC))
+	"1>!", string(_Force1),
+	"2>!", string(_Force2),
+	"1>|", string(_Force11),
+	"2>|", string(_Force22),
+	"1>>", string(_Append1),
+	"2>>", string(_Append2),
+	"0<", string(_Redirect0),
+	"1>", string(_Redirect1),
+	"2>", string(_Redirect2),
+	"&&", string(_AndAlso),
+	"||", string(_OrElse),
+	">>", string(_Append),
+	">!", string(_Force),
+	"|&", string(_Ypipe),
+	"<<", string(_HereDoc))
 
 var reverse = strings.NewReplacer(
-	string(_1TO2), "1>&2",
-	string(_2TO1), "2>&1",
+	string(_1To2), "1>&2",
+	string(_2To1), "2>&1",
 	string(_TO2), ">&2",
-	string(_FORCE1), "1>!",
-	string(_FORCE2), "2>!",
-	string(_FORCE11), "1>|",
-	string(_FORCE22), "2>|",
-	string(_APPEND1), "1>>",
-	string(_APPEND2), "2>>",
-	string(_REDIRECT0), "0<",
-	string(_REDIRECT1), "1>",
-	string(_REDIRECT2), "2>",
-	string(_ANDALSO), "&&",
-	string(_ORELSE), "||",
-	string(_APPEND), ">>",
-	string(_FORCE), ">!",
-	string(_YPIPE), "|&",
-	string(_HEREDOC), "<<")
+	string(_Force1), "1>!",
+	string(_Force2), "2>!",
+	string(_Force11), "1>|",
+	string(_Force22), "2>|",
+	string(_Append1), "1>>",
+	string(_Append2), "2>>",
+	string(_Redirect0), "0<",
+	string(_Redirect1), "1>",
+	string(_Redirect2), "2>",
+	string(_AndAlso), "&&",
+	string(_OrElse), "||",
+	string(_Append), ">>",
+	string(_Force), ">!",
+	string(_Ypipe), "|&",
+	string(_HereDoc), "<<")
 
 func openSeeNoClobber(fname string) (*os.File, error) {
 	if NoClobber {
 		return os.OpenFile(fname, os.O_EXCL|os.O_CREATE, 0666)
-	} else {
-		return os.Create(fname)
 	}
+	return os.Create(fname)
 }
 
-func parse1(stream Stream, text string) ([]*StatementT, error) {
+func parse1(stream Stream, text string) ([]*_Statement, error) {
 	text = replacer.Replace(text)
-	quoteNow := NOTQUOTED
+	quoteNow := _NotQuoted
 	yenCount := 0
-	statements := make([]*StatementT, 0)
+	statements := make([]*_Statement, 0)
 	args := make([]string, 0)
 	rawArgs := make([]string, 0)
 	lastchar := ' '
 	var buffer bytes.Buffer
-	var todo_nextword func(string)
+	var toDoNextWord func(string)
 
-	todo_redirect := make([]func([]*os.File) (func(), error), 0, 3)
+	toDoRedirect := make([]func([]*os.File) (func(), error), 0, 3)
 
-	term_line := func(term string) {
-		statement1 := new(StatementT)
+	termLine := func(term string) {
+		statement1 := new(_Statement)
 		if buffer.Len() > 0 {
-			if todo_nextword != nil {
-				todo_nextword(buffer.String())
-				todo_nextword = nil
+			if toDoNextWord != nil {
+				toDoNextWord(buffer.String())
+				toDoNextWord = nil
 				statement1.RawArgs = rawArgs
 				statement1.Args = args
 			} else {
@@ -371,19 +369,19 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 			statement1.RawArgs = rawArgs
 			statement1.Args = args
 		}
-		statement1.Redirect = todo_redirect
+		statement1.Redirect = toDoRedirect
 		statement1.Term = term
 		statements = append(statements, statement1)
 
-		todo_redirect = make([]func([]*os.File) (func(), error), 0, 3)
+		toDoRedirect = make([]func([]*os.File) (func(), error), 0, 3)
 		rawArgs = make([]string, 0)
 		args = make([]string, 0)
 	}
 
-	term_word := func() {
-		if todo_nextword != nil {
-			todo_nextword(buffer.String())
-			todo_nextword = nil
+	termWord := func() {
+		if toDoNextWord != nil {
+			toDoNextWord(buffer.String())
+			toDoNextWord = nil
 		} else {
 			if buffer.Len() > 0 {
 				rawArgs = append(rawArgs, string2word(buffer.String(), false))
@@ -402,55 +400,55 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 		if chErr != nil {
 			return nil, chErr
 		}
-		if quoteNow == NOTQUOTED {
+		if quoteNow == _NotQuoted {
 			if yenCount%2 == 0 && (ch == '"' || ch == '\'') {
 				quoteNow = ch
 			}
 		} else if yenCount%2 == 0 && ch == quoteNow {
-			quoteNow = NOTQUOTED
+			quoteNow = _NotQuoted
 		}
-		if quoteNow != NOTQUOTED {
+		if quoteNow != _NotQuoted {
 			buffer.WriteRune(ch)
 		} else if isSpace(ch) {
 			if buffer.Len() > 0 {
-				term_word()
+				termWord()
 			}
 		} else if isSpace(lastchar) && ch == '#' {
 			break
 		} else if isSpace(lastchar) && ch == ';' {
-			term_line(";")
-		} else if ch == _ORELSE {
-			term_line("||")
+			termLine(";")
+		} else if ch == _OrElse {
+			termLine("||")
 		} else if ch == '|' {
-			term_line("|")
+			termLine("|")
 		} else if ch == '&' {
-			term_line("&")
-		} else if ch == _ANDALSO {
-			term_line("&&")
-		} else if ch == _YPIPE {
-			term_line("|&")
-		} else if ch == _2TO1 {
-			term_word()
-			todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+			termLine("&")
+		} else if ch == _AndAlso {
+			termLine("&&")
+		} else if ch == _Ypipe {
+			termLine("|&")
+		} else if ch == _2To1 {
+			termWord()
+			toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 				fds[2] = fds[1]
 				return func() {}, nil
 			})
-		} else if ch == _1TO2 || ch == _TO2 {
-			term_word()
-			todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+		} else if ch == _1To2 || ch == _TO2 {
+			termWord()
+			toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 				fds[1] = fds[2]
 				return func() {}, nil
 			})
-		} else if ch == _HEREDOC {
-			term_word()
+		} else if ch == _HereDoc {
+			termWord()
 
-			todo_nextword = func(word string) {
-				dont_expand_env := (word[0] == '"')
+			toDoNextWord = func(word string) {
+				dontExpandEnv := (word[0] == '"')
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					lines := make([]string, 0, 20)
 					prompt := os.Getenv("PROMPT")
-					if dont_expand_env {
+					if dontExpandEnv {
 						os.Setenv("PROMPT", fmt.Sprintf("\"%s\">", word))
 					} else {
 						os.Setenv("PROMPT", fmt.Sprintf("%s>", word))
@@ -470,16 +468,15 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 						if strings.HasPrefix(line, word) {
 							break
 						}
-						if !dont_expand_env {
+						if !dontExpandEnv {
 							line = rxPercent.ReplaceAllStringFunc(
 								line,
 								func(s string) string {
 									name := s[1 : len(s)-1]
 									if val, ok := OurGetEnv(name); ok {
 										return val
-									} else {
-										return s
 									}
+									return s
 								})
 						}
 						lines = append(lines, line)
@@ -500,11 +497,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { r.Close() }, nil
 				})
 			}
-		} else if ch == '<' || ch == _REDIRECT0 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == '<' || ch == _Redirect0 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := os.Open(word)
 					if err != nil {
 						return func() {}, err
@@ -513,11 +510,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { fd.Close() }, nil
 				})
 			}
-		} else if ch == '>' || ch == _REDIRECT1 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == '>' || ch == _Redirect1 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := openSeeNoClobber(word)
 					if err != nil {
 						return func() {}, err
@@ -526,11 +523,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { fd.Close() }, nil
 				})
 			}
-		} else if ch == _FORCE || ch == _FORCE1 || ch == _FORCE11 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == _Force || ch == _Force1 || ch == _Force11 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := os.Create(word)
 					if err != nil {
 						return func() {}, err
@@ -539,11 +536,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { fd.Close() }, nil
 				})
 			}
-		} else if ch == _REDIRECT2 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == _Redirect2 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := openSeeNoClobber(word)
 					if err != nil {
 						return func() {}, err
@@ -552,11 +549,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { fd.Close() }, nil
 				})
 			}
-		} else if ch == _FORCE2 || ch == _FORCE22 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == _Force2 || ch == _Force22 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := os.Create(word)
 					if err != nil {
 						return func() {}, err
@@ -565,11 +562,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { fd.Close() }, nil
 				})
 			}
-		} else if ch == _APPEND || ch == _APPEND1 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == _Append || ch == _Append1 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := os.OpenFile(word, os.O_APPEND|os.O_CREATE, 0666)
 					if err != nil {
 						return func() {}, err
@@ -578,11 +575,11 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 					return func() { fd.Close() }, nil
 				})
 			}
-		} else if ch == _APPEND2 {
-			term_word()
-			todo_nextword = func(word string) {
+		} else if ch == _Append2 {
+			termWord()
+			toDoNextWord = func(word string) {
 				word = string2word(word, true)
-				todo_redirect = append(todo_redirect, func(fds []*os.File) (func(), error) {
+				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
 					fd, err := os.OpenFile(word, os.O_APPEND|os.O_CREATE, 0666)
 					if err != nil {
 						return func() {}, err
@@ -601,20 +598,20 @@ func parse1(stream Stream, text string) ([]*StatementT, error) {
 		}
 		lastchar = ch
 	}
-	term_line(" ")
+	termLine(" ")
 	return statements, nil
 }
 
 // Make arrays whose elements are pipelines
-func parse2(statements []*StatementT) [][]*StatementT {
-	result := make([][]*StatementT, 1)
+func parse2(statements []*_Statement) [][]*_Statement {
+	result := make([][]*_Statement, 1)
 	for _, statement1 := range statements {
 		result[len(result)-1] = append(result[len(result)-1], statement1)
 		switch statement1.Term {
 		case "|", "|&":
 
 		default:
-			result = append(result, make([]*StatementT, 0))
+			result = append(result, make([]*_Statement, 0))
 		}
 	}
 	if len(result[len(result)-1]) <= 0 {
@@ -623,7 +620,7 @@ func parse2(statements []*StatementT) [][]*StatementT {
 	return result
 }
 
-func parse(stream Stream, text string) ([][]*StatementT, error) {
+func parse(stream Stream, text string) ([][]*_Statement, error) {
 	result1, err := parse1(stream, text)
 	if err != nil {
 		return nil, err

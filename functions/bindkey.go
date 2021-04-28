@@ -6,14 +6,14 @@ import (
 )
 
 // CmdGetBindKey is the getter for nyagos.key table.
-func CmdGetBindKey(args []any_t) []any_t {
+func CmdGetBindKey(args []anyT) []anyT {
 	if len(args) < 1 {
-		return []any_t{nil, "too few arguments"}
+		return []anyT{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[len(args)-1])
 	fnc := readline.GlobalKeyMap.GetBindKey(key)
 	if fnc != nil {
-		return []any_t{fmt.Sprint(fnc)}
+		return []anyT{fmt.Sprint(fnc)}
 	}
-	return []any_t{nil}
+	return []anyT{nil}
 }

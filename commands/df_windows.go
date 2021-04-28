@@ -44,9 +44,9 @@ func df(rootPathName string) ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", rootPathName, err)
 	}
-	driveTypeId, driveTypeStr := driveType(rootPathName)
+	driveTypeID, driveTypeStr := driveType(rootPathName)
 	var uncPath string
-	if driveTypeId == windows.DRIVE_REMOTE {
+	if driveTypeID == windows.DRIVE_REMOTE {
 		uncPath, _ = netresource.WNetGetConnectionUTF16a(uint16(rootPathName[0]))
 	}
 

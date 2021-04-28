@@ -25,7 +25,7 @@ func cmdMklink(_ context.Context, cmd Param) (rc int, err error) {
 			f = os.Link
 			label = "Hardlink"
 		default:
-			return 1, fmt.Errorf("Invalid switch - \"%s\".", args[1][1:])
+			return 1, fmt.Errorf("Invalid switch - \"%s\"", args[1][1:])
 		}
 		args = args[1:]
 	}

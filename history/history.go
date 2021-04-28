@@ -44,7 +44,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 	var buffer strings.Builder
 	isReplaced := false
 	reader := strings.NewReader(line)
-	history_count := hisObj.Len()
+	historyCount := hisObj.Len()
 
 	quotedChar := '\000'
 
@@ -71,16 +71,16 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		}
 		if n := strings.IndexRune("^$:*@", ch); n >= 0 {
 			reader.UnreadRune()
-			if history_count >= 1 {
-				line := hisObj.GetAt(history_count - 1)
+			if historyCount >= 1 {
+				line := hisObj.GetAt(historyCount - 1)
 				expandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
 		}
 		if ch == mark { // !!
-			if history_count >= 1 {
-				line := hisObj.GetAt(history_count - 1)
+			if historyCount >= 1 {
+				line := hisObj.GetAt(historyCount - 1)
 				expandMacro(&buffer, reader, line)
 				isReplaced = true
 				continue
@@ -92,7 +92,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			reader.UnreadRune()
 			var backno int
 			fmt.Fscan(reader, &backno)
-			if 0 <= backno && backno < history_count {
+			if 0 <= backno && backno < historyCount {
 				line := hisObj.GetAt(backno)
 				expandMacro(&buffer, reader, line)
 				isReplaced = true
@@ -104,8 +104,8 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		if ch == '-' && reader.Len() > 0 { // !-n
 			var number int
 			if _, err := fmt.Fscan(reader, &number); err == nil {
-				backno := history_count - number
-				if 0 <= backno && backno < history_count {
+				backno := historyCount - number
+				if 0 <= backno && backno < historyCount {
 					line := hisObj.GetAt(backno)
 					expandMacro(&buffer, reader, line)
 					isReplaced = true
@@ -130,7 +130,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			}
 			seekStr := seekStrBuf.String()
 			found := false
-			for i := history_count - 1; i >= 0; i-- {
+			for i := historyCount - 1; i >= 0; i-- {
 				his1 := hisObj.GetAt(i)
 				if strings.Contains(his1.Text, seekStr) {
 					expandMacro(&buffer, reader, his1)
@@ -142,9 +142,8 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			if !found {
 				if lastCharIsQuestionMark {
 					return "", false, fmt.Errorf("?%s?: event not found", seekStr)
-				} else {
-					return "", false, fmt.Errorf("?%s: event not found", seekStr)
 				}
+				return "", false, fmt.Errorf("?%s: event not found", seekStr)
 			}
 			continue
 		}
@@ -161,7 +160,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		}
 		seekStr := seekStrBuf.String()
 		found := false
-		for i := history_count - 1; i >= 0; i-- {
+		for i := historyCount - 1; i >= 0; i-- {
 			his1 := hisObj.GetAt(i)
 			if strings.HasPrefix(his1.Text, seekStr) {
 				expandMacro(&buffer, reader, his1)

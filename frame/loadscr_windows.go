@@ -5,12 +5,12 @@ import (
 	"path/filepath"
 )
 
-var appdatapath_ string
+var _appDataPath string
 
-func AppDataDir() string {
-	if appdatapath_ == "" {
-		appdatapath_ = filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
-		os.Mkdir(appdatapath_, 0777)
+func appDataDir() string {
+	if _appDataPath == "" {
+		_appDataPath = filepath.Join(os.Getenv("APPDATA"), "NYAOS_ORG")
+		os.Mkdir(_appDataPath, 0777)
 	}
-	return appdatapath_
+	return _appDataPath
 }

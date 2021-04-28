@@ -26,13 +26,13 @@ type luaKeyT struct{}
 
 var luaKey luaKeyT
 
-type ScriptEngineForOptionImpl struct {
+type _ScriptEngineForOptionImpl struct {
 	L  Lua
 	Sh *shell.Shell
 }
 
-func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
-	if L := this.L; L != nil {
+func (impl *_ScriptEngineForOptionImpl) SetArg(args []string) {
+	if L := impl.L; L != nil {
 		table := L.NewTable()
 		for i, arg1 := range args {
 			L.SetTable(table, lua.LNumber(i), lua.LString(arg1))
@@ -41,7 +41,7 @@ func (this *ScriptEngineForOptionImpl) SetArg(args []string) {
 	}
 }
 
-func DoFileExceptForAtmarkLines(L *lua.LState, fname string) error {
+func doFileExceptAtMarkLines(L *lua.LState, fname string) error {
 	fd, err := os.Open(fname)
 	if err != nil {
 		return err
@@ -68,26 +68,26 @@ func DoFileExceptForAtmarkLines(L *lua.LState, fname string) error {
 	return L.PCall(0, 0, nil)
 }
 
-func (this *ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
+func (*_ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
-		return nil, errors.New("Script is not supported.")
+		return nil, errors.New("Script is not supported")
 	}
-	defer setContext(L, getContext(L))
-	setContext(L, ctx)
+	defer setContext(getContext(L), L)
+	setContext(ctx, L)
 	return nil, luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
-		return DoFileExceptForAtmarkLines(L, fname)
+		return doFileExceptAtMarkLines(L, fname)
 	})
 }
 
-func (this *ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
+func (impl *_ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
-		return errors.New("Script is not supported.")
+		return errors.New("Script is not supported")
 	}
-	ctx = context.WithValue(ctx, shellKey, this.Sh)
-	defer setContext(L, getContext(L))
-	setContext(L, ctx)
+	ctx = context.WithValue(ctx, shellKey, impl.Sh)
+	defer setContext(getContext(L), L)
+	setContext(ctx, L)
 	return luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
 		return L.DoString(code)
 	})
@@ -97,8 +97,8 @@ type luaWrapper struct {
 	Lua
 }
 
-func (this *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
-	newL, err := Clone(this.Lua)
+func (lw *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
+	newL, err := Clone(lw.Lua)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -106,11 +106,12 @@ func (this *luaWrapper) Clone(ctx context.Context) (context.Context, shell.Clone
 	return ctx, &luaWrapper{newL}, nil
 }
 
-func (this *luaWrapper) Close() error {
-	this.Lua.Close()
+func (lw *luaWrapper) Close() error {
+	lw.Lua.Close()
 	return nil
 }
 
+// Main is the entry of this package.
 func Main() error {
 	ctx := context.Background()
 	completion.HookToList = append(completion.HookToList, luaHookForComplete)
@@ -133,8 +134,8 @@ func Main() error {
 
 	langEngine := func(fname string) ([]byte, error) {
 		ctxTmp := context.WithValue(ctx, shellKey, sh)
-		defer setContext(L, getContext(L))
-		setContext(L, ctxTmp)
+		defer setContext(getContext(L), L)
+		setContext(ctxTmp, L)
 		return nil, L.DoFile(fname)
 	}
 	shellEngine := func(fname string) error {
@@ -144,12 +145,11 @@ func Main() error {
 	alias.LineFilter = func(ctx context.Context, line string) string {
 		if L, ok := ctx.Value(luaKey).(Lua); ok {
 			return luaLineFilter(ctx, L, line)
-		} else {
-			return line
 		}
+		return line
 	}
 
-	script, err := frame.OptionParse(ctx, sh, &ScriptEngineForOptionImpl{L: L, Sh: sh})
+	script, err := frame.OptionParse(ctx, sh, &_ScriptEngineForOptionImpl{L: L, Sh: sh})
 	if err != nil {
 		return err
 	}
@@ -171,9 +171,8 @@ func Main() error {
 		if err := script(ctx); err != nil {
 			if err != io.EOF {
 				return err
-			} else {
-				return nil
 			}
+			return nil
 		}
 	}
 
@@ -183,17 +182,16 @@ func Main() error {
 			func() (int, error) {
 				if L != nil {
 					return printPrompt(ctx, sh, L)
-				} else {
-					functions.Prompt(
-						&functions.Param{
-							Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
-							In:   os.Stdin,
-							Out:  os.Stdout,
-							Err:  os.Stderr,
-							Term: colorable.NewColorableStdout(),
-						})
-					return 0, nil
 				}
+				functions.Prompt(
+					&functions.Param{
+						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
+						In:   os.Stdin,
+						Out:  os.Stdout,
+						Err:  os.Stderr,
+						Term: colorable.NewColorableStdout(),
+					})
+				return 0, nil
 			})
 		stream1 = constream
 		frame.DefaultHistory = constream.History
@@ -204,7 +202,6 @@ func Main() error {
 	}
 	if L != nil {
 		return sh.ForEver(ctx, &luaFilterStream{Stream: stream1, L: L})
-	} else {
-		return sh.ForEver(ctx, stream1)
 	}
+	return sh.ForEver(ctx, stream1)
 }

@@ -21,9 +21,8 @@ func encloseWithQuote(fullpath string) string {
 		f.WriteString(fullpath)
 		f.WriteByte('"')
 		return f.String()
-	} else {
-		return fullpath
 	}
+	return fullpath
 }
 
 func (cmd *Cmd) lookpath() string {

@@ -13,7 +13,7 @@ import (
 
 const ioTblName = "io"
 
-func newXFile(L *lua.LState, fd *XFile, read, write bool) *lua.LUserData {
+func newXFile(L *lua.LState, fd *_XFile, read, write bool) *lua.LUserData {
 	ud := L.NewUserData()
 	ud.Value = fd
 	index := L.NewTable()
@@ -56,8 +56,8 @@ func ioLinesIter(L *lua.LState) int {
 		L.Push(lua.LNil)
 		return 1
 	}
-	r, ok := ud.Value.(*XFile)
-	if !ok || r.Eof() || r.closed {
+	r, ok := ud.Value.(*_XFile)
+	if !ok || r.EOF() || r.closed {
 		L.Push(lua.LNil)
 		return 1
 	}
@@ -66,7 +66,7 @@ func ioLinesIter(L *lua.LState) int {
 		L.Push(lua.LString(strings.TrimSuffix(text, "\n")))
 	} else {
 		if err == io.EOF {
-			r.SetEof()
+			r.SetEOF()
 			if len(text) > 0 {
 				L.Push(lua.LString(text))
 				r.Close()
@@ -87,7 +87,7 @@ func ioLines(L *lua.LState) int {
 			//   requires close()
 			if fd, err := os.Open(string(filename)); err == nil {
 				ud = L.NewUserData()
-				ud.Value = &XFile{File: fd}
+				ud.Value = &_XFile{File: fd}
 			} else {
 				return lerror(L, fmt.Sprintf("%s: can not open", filename))
 			}
@@ -160,7 +160,7 @@ func ioOpen(L *lua.LState) int {
 	if err != nil {
 		return lerror(L, err.Error())
 	}
-	L.Push(newXFile(L, &XFile{File: fd}, read, write))
+	L.Push(newXFile(L, &_XFile{File: fd}, read, write))
 	return 1
 }
 
@@ -202,7 +202,7 @@ func ioPOpen(L *lua.LState) int {
 			out.Close()
 			return lerror(L, err.Error())
 		}
-		L.Push(newXFile(L, &XFile{File: in}, true, false))
+		L.Push(newXFile(L, &_XFile{File: in}, true, false))
 		go func() {
 			xcmd.Wait()
 			out.Close()
@@ -220,7 +220,7 @@ func ioPOpen(L *lua.LState) int {
 			out.Close()
 			return lerror(L, err.Error())
 		}
-		L.Push(newXFile(L, &XFile{File: out}, false, true))
+		L.Push(newXFile(L, &_XFile{File: out}, false, true))
 		go func() {
 			xcmd.Wait()
 			in.Close()
@@ -254,7 +254,7 @@ func fileFlush(L *lua.LState) int {
 
 func ioType(L *lua.LState) int {
 	if ud, ok := L.Get(1).(*lua.LUserData); ok {
-		if x, ok := ud.Value.(*XFile); ok {
+		if x, ok := ud.Value.(*_XFile); ok {
 			if x.closed {
 				L.Push(lua.LString("closed file"))
 			} else {
@@ -280,17 +280,12 @@ func openIo(L *lua.LState) *lua.LTable {
 	L.SetField(ioTable, "popen", L.NewFunction(ioPOpen))
 	L.SetField(ioTable, "type", L.NewFunction(ioType))
 	L.SetField(ioTable, "stdin",
-		newXFile(L, &XFile{File: os.Stdin, dontClose: true}, true, false))
+		newXFile(L, &_XFile{File: os.Stdin, dontClose: true}, true, false))
 	L.SetField(ioTable, "stdout",
-		newXFile(L, &XFile{File: os.Stdout, dontClose: true}, false, true))
+		newXFile(L, &_XFile{File: os.Stdout, dontClose: true}, false, true))
 	L.SetField(ioTable, "stderr",
-		newXFile(L, &XFile{File: os.Stderr, dontClose: true}, false, true))
+		newXFile(L, &_XFile{File: os.Stderr, dontClose: true}, false, true))
 	return ioTable
-}
-
-type Eofer interface {
-	SetEof()
-	Eof() bool
 }
 
 func fileRead(L *lua.LState) int {
@@ -300,7 +295,7 @@ func fileRead(L *lua.LState) int {
 		L.ArgError(1, "not a file-handle")
 		return 0
 	}
-	r, ok := ud.Value.(*XFile)
+	r, ok := ud.Value.(*_XFile)
 	if !ok {
 		L.ArgError(1, "not a xfile-handle")
 		return 0
@@ -313,7 +308,7 @@ func fileRead(L *lua.LState) int {
 	}
 	result := make([]lua.LValue, 0, end-1)
 	for i := 2; i <= end; i++ {
-		if r.Eof() {
+		if r.EOF() {
 			break
 		}
 		val := L.Get(i)
@@ -321,7 +316,7 @@ func fileRead(L *lua.LState) int {
 			if num == 0 {
 				_, err = r.ReadByte()
 				if err == io.EOF {
-					r.SetEof()
+					r.SetEOF()
 					result = append(result, lua.LNil)
 					goto normalreturn
 				}
@@ -331,7 +326,7 @@ func fileRead(L *lua.LState) int {
 			for len(data) < cap(data) {
 				b, err := r.ReadByte()
 				if err == io.EOF {
-					r.SetEof()
+					r.SetEOF()
 					if len(data) == 0 {
 						result = append(result, lua.LNil)
 					} else {
@@ -353,7 +348,7 @@ func fileRead(L *lua.LState) int {
 				line, err := r.ReadString('\n')
 				if err != nil {
 					if err == io.EOF {
-						r.SetEof()
+						r.SetEOF()
 						if line == "" {
 							result = append(result, lua.LNil)
 							goto normalreturn
@@ -371,7 +366,7 @@ func fileRead(L *lua.LState) int {
 				all, err = io.ReadAll(r.reader())
 				if err != nil {
 					if err == io.EOF {
-						r.SetEof()
+						r.SetEOF()
 						if len(all) <= 0 {
 							result = append(result, lua.LString(""))
 							goto normalreturn

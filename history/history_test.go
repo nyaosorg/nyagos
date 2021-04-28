@@ -5,24 +5,24 @@ import (
 	"testing"
 )
 
-type history_t struct {
+type historyT struct {
 	List []string
 }
 
-func (this *history_t) Len() int {
-	return len(this.List)
+func (h *historyT) Len() int {
+	return len(h.List)
 }
 
-func (this *history_t) At(n int) string {
-	return this.List[n]
+func (h *historyT) At(n int) string {
+	return h.List[n]
 }
 
-func (this *history_t) Push(line string) {
-	this.List = append(this.List, line)
+func (h *historyT) Push(line string) {
+	h.List = append(h.List, line)
 }
 
 func TestReplace(t *testing.T) {
-	testdata := &history_t{
+	testdata := &historyT{
 		List: []string{
 			"aaa0 aaa1 aaa2",
 			"bbb0 bbb1 bbb2",

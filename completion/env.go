@@ -14,11 +14,11 @@ type IVariable interface {
 type EnvironmentVariable struct {
 }
 
-func (this *EnvironmentVariable) Lookup(name string) string {
+func (*EnvironmentVariable) Lookup(name string) string {
 	return os.Getenv(name)
 }
 
-func (this *EnvironmentVariable) EachKey(f func(name string)) {
+func (*EnvironmentVariable) EachKey(f func(name string)) {
 	for _, envEquation := range os.Environ() {
 		equalPos := strings.IndexRune(envEquation, '=')
 		if equalPos >= 0 {
@@ -41,8 +41,8 @@ func listUpEnv(cmdline string) ([]Element, int, error) {
 	var name string
 
 	// %ENVNAME%
-	percent_count := strings.Count(cmdline, "%")
-	if percent_count%2 == 1 {
+	percentCount := strings.Count(cmdline, "%")
+	if percentCount%2 == 1 {
 		replaceStartPos = strings.LastIndex(cmdline, "%")
 		if replaceStartPos < 0 {
 			return nil, -1, nil

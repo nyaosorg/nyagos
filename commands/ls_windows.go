@@ -24,21 +24,21 @@ import (
 )
 
 const (
-	_           = iota
-	O_STRIP_DIR = (1 << iota)
-	O_LONG
-	O_INDICATOR
-	O_COLOR
-	O_ALL
-	O_TIME
-	O_REVERSE
-	O_RECURSIVE
-	O_ONE
-	O_HELP
-	O_SIZESORT
-	O_HUMAN
-	O_NOT_RECURSIVE
-	O_DEREFERENCE
+	_              = iota
+	optionStripDir = (1 << iota)
+	optionLong
+	optionIndicator
+	optionColor
+	optionAll
+	optionTime
+	optionReserve
+	optionRecursive
+	optionOne
+	optionHelp
+	optionSizeSort
+	optionHuman
+	optionNotRecursive
+	optionDereference
 )
 
 type fileInfoT struct {
@@ -47,12 +47,12 @@ type fileInfoT struct {
 }
 
 const (
-	ANSI_EXEC     = "\x1B[35;1m"
-	ANSI_DIR      = "\x1B[32;1m"
-	ANSI_NORM     = "\x1B[37;1m"
-	ANSI_READONLY = "\x1B[33;1m"
-	ANSI_HIDDEN   = "\x1B[34;1m"
-	ANSI_END      = "\x1B[0m"
+	ansiExec     = "\x1B[35;1m"
+	ansiDir      = "\x1B[32;1m"
+	ansiNorm     = "\x1B[37;1m"
+	ansiReadOnly = "\x1B[33;1m"
+	ansiHidden   = "\x1B[34;1m"
+	ansiEnd      = "\x1B[0m"
 )
 
 func chkCancel(ctx context.Context) error {
@@ -66,7 +66,7 @@ func chkCancel(ctx context.Context) error {
 	return nil
 }
 
-func (this fileInfoT) Name() string { return this.name }
+func (f fileInfoT) Name() string { return f.name }
 
 func putFlag(value, flag uint32, c string, out io.Writer) {
 	if (value & flag) != 0 {
@@ -80,16 +80,16 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	indicator := " "
 	prefix := ""
 	postfix := ""
-	if (flag & O_COLOR) != 0 {
-		prefix = ANSI_NORM
-		postfix = ANSI_END
+	if (flag & optionColor) != 0 {
+		prefix = ansiNorm
+		postfix = ansiEnd
 	}
 	if status.IsDir() {
 		io.WriteString(out, "d")
 		indicator = "/"
-		if (flag & O_COLOR) != 0 {
-			prefix = ANSI_DIR
-			postfix = ANSI_END
+		if (flag & optionColor) != 0 {
+			prefix = ansiDir
+			postfix = ansiEnd
 		}
 	} else {
 		io.WriteString(out, "-")
@@ -103,9 +103,9 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	if (perm & 2) > 0 {
 		io.WriteString(out, "w")
 	} else {
-		if (flag & O_COLOR) != 0 {
-			prefix = ANSI_READONLY
-			postfix = ANSI_END
+		if (flag & optionColor) != 0 {
+			prefix = ansiReadOnly
+			postfix = ansiEnd
 		}
 		io.WriteString(out, "-")
 	}
@@ -114,9 +114,9 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	} else if nodos.IsExecutableSuffix(filepath.Ext(name)) {
 		io.WriteString(out, "x")
 		indicator = "*"
-		if (flag & O_COLOR) != 0 {
-			prefix = ANSI_EXEC
-			postfix = ANSI_END
+		if (flag & optionColor) != 0 {
+			prefix = ansiExec
+			postfix = ansiEnd
 		}
 	} else {
 		io.WriteString(out, "-")
@@ -126,14 +126,14 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 	putFlag(attr, windows.FILE_ATTRIBUTE_HIDDEN, "h", out)
 
 	if (attr&windows.FILE_ATTRIBUTE_HIDDEN) != 0 &&
-		(flag&O_COLOR) != 0 {
-		prefix = ANSI_HIDDEN
-		postfix = ANSI_END
+		(flag&optionColor) != 0 {
+		prefix = ansiHidden
+		postfix = ansiEnd
 	}
-	if (flag & O_STRIP_DIR) > 0 {
+	if (flag & optionStripDir) > 0 {
 		name = filepath.Base(name)
 	}
-	if (flag & O_HUMAN) != 0 {
+	if (flag & optionHuman) != 0 {
 		fmt.Fprintf(out, " %*s", width, formatByHumanize(status.Size()))
 	} else {
 		fmt.Fprintf(out, " %*d", width, status.Size())
@@ -166,7 +166,7 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 			linkTo = ""
 		}
 	}
-	if (flag & O_INDICATOR) > 0 {
+	if (flag & optionIndicator) > 0 {
 		io.WriteString(out, indicator)
 	}
 	if linkTo != "" {
@@ -186,58 +186,58 @@ func lsOneLong(folder string, status os.FileInfo, flag int, width int, out io.Wr
 }
 
 func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
-	nodes_ := make([]string, len(nodes))
+	_nodes := make([]string, len(nodes))
 	for key, val := range nodes {
 		prefix := ""
 		postfix := ""
-		if (flag & O_COLOR) != 0 {
-			prefix = ANSI_NORM
-			postfix = ANSI_END
+		if (flag & optionColor) != 0 {
+			prefix = ansiNorm
+			postfix = ansiEnd
 		}
 		indicator := ""
 		if val.IsDir() {
-			if (flag & O_COLOR) != 0 {
-				prefix = ANSI_DIR
-				postfix = ANSI_END
+			if (flag & optionColor) != 0 {
+				prefix = ansiDir
+				postfix = ansiEnd
 			}
-			if (flag & O_INDICATOR) != 0 {
+			if (flag & optionIndicator) != 0 {
 				indicator = "/"
 			}
 		}
 		if (val.Mode().Perm() & 2) == 0 {
-			if (flag & O_COLOR) != 0 {
-				prefix = ANSI_READONLY
-				postfix = ANSI_END
+			if (flag & optionColor) != 0 {
+				prefix = ansiReadOnly
+				postfix = ansiEnd
 			}
 		}
 		if !val.IsDir() && nodos.IsExecutableSuffix(filepath.Ext(val.Name())) {
-			if (flag & O_COLOR) != 0 {
-				prefix = ANSI_EXEC
-				postfix = ANSI_END
+			if (flag & optionColor) != 0 {
+				prefix = ansiExec
+				postfix = ansiEnd
 			}
-			if (flag & O_INDICATOR) != 0 {
+			if (flag & optionIndicator) != 0 {
 				indicator = "*"
 			}
 		}
 		attr := findfile.GetFileAttributes(val)
 		if (attr&windows.FILE_ATTRIBUTE_HIDDEN) != 0 &&
-			(flag&O_COLOR) != 0 {
-			prefix = ANSI_HIDDEN
-			postfix = ANSI_END
+			(flag&optionColor) != 0 {
+			prefix = ansiHidden
+			postfix = ansiEnd
 		}
 		if (attr&windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 &&
-			(flag&O_INDICATOR) != 0 {
+			(flag&optionIndicator) != 0 {
 			indicator = "@"
 		}
 		if indicator != "" {
-			nodes_[key] = prefix + val.Name() + postfix + indicator
+			_nodes[key] = prefix + val.Name() + postfix + indicator
 		} else {
-			nodes_[key] = prefix + val.Name()
+			_nodes[key] = prefix + val.Name()
 		}
 	}
-	isSucceeded := box.Print(ctx, nodes_, out)
-	if (flag & O_COLOR) != 0 {
-		io.WriteString(out, ANSI_END)
+	isSucceeded := box.Print(ctx, _nodes, out)
+	if (flag & optionColor) != 0 {
+		io.WriteString(out, ansiEnd)
 	}
 	if !isSucceeded {
 		return ctx.Err()
@@ -256,7 +256,7 @@ func keta(n int64) int {
 
 func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	var width int = 0
-	if (flag & O_HUMAN) != 0 {
+	if (flag & optionHuman) != 0 {
 		for _, finfo := range nodes {
 			width1 := len(formatByHumanize(finfo.Size()))
 			if width1 > width {
@@ -284,7 +284,7 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int, out io.Writer) error {
 	for _, f := range nodes {
 		io.WriteString(out, f.Name())
-		if (flag & O_INDICATOR) != 0 {
+		if (flag & optionIndicator) != 0 {
 			if attr := findfile.GetFileAttributes(f); (attr & windows.FILE_ATTRIBUTE_REPARSE_POINT) != 0 {
 				io.WriteString(out, "@")
 			} else if f.IsDir() {
@@ -306,46 +306,46 @@ type fileInfoCollection struct {
 	nodes []os.FileInfo
 }
 
-func (this fileInfoCollection) Len() int {
-	return len(this.nodes)
+func (f fileInfoCollection) Len() int {
+	return len(f.nodes)
 }
 
-func (this fileInfoCollection) Less(i, j int) bool {
+func (f fileInfoCollection) Less(i, j int) bool {
 	var result bool
-	if (this.flag & O_TIME) != 0 {
-		result = this.nodes[i].ModTime().After(this.nodes[j].ModTime())
-		if !result && !this.nodes[i].ModTime().Before(this.nodes[j].ModTime()) {
-			result = (this.nodes[i].Name() < this.nodes[j].Name())
+	if (f.flag & optionTime) != 0 {
+		result = f.nodes[i].ModTime().After(f.nodes[j].ModTime())
+		if !result && !f.nodes[i].ModTime().Before(f.nodes[j].ModTime()) {
+			result = (f.nodes[i].Name() < f.nodes[j].Name())
 		}
-	} else if (this.flag & O_SIZESORT) != 0 {
-		diff := this.nodes[i].Size() - this.nodes[j].Size()
+	} else if (f.flag & optionSizeSort) != 0 {
+		diff := f.nodes[i].Size() - f.nodes[j].Size()
 		if diff != 0 {
 			result = (diff < 0)
 		} else {
-			result = (this.nodes[i].Name() < this.nodes[j].Name())
+			result = (f.nodes[i].Name() < f.nodes[j].Name())
 		}
 	} else {
-		result = (this.nodes[i].Name() < this.nodes[j].Name())
+		result = (f.nodes[i].Name() < f.nodes[j].Name())
 	}
-	if (this.flag & O_REVERSE) != 0 {
+	if (f.flag & optionReserve) != 0 {
 		result = !result
 	}
 	return result
 }
-func (this fileInfoCollection) Swap(i, j int) {
-	this.nodes[i], this.nodes[j] = this.nodes[j], this.nodes[i]
+func (f fileInfoCollection) Swap(i, j int) {
+	f.nodes[i], f.nodes[j] = f.nodes[j], f.nodes[i]
 }
 
 func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error {
-	var folder_ string
+	var _folder string
 	if rxDriveOnly.MatchString(folder) {
-		folder_ = folder + "."
+		_folder = folder + "."
 	} else {
-		folder_ = folder
+		_folder = folder
 	}
 	nodesArray := fileInfoCollection{flag: flag}
 	var folders []string = nil
-	if (flag & O_RECURSIVE) != 0 {
+	if (flag & optionRecursive) != 0 {
 		folders = make([]string, 0)
 	}
 	tmp := make([]os.FileInfo, 0)
@@ -363,7 +363,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 			canceled = err
 			return false
 		}
-		if (flag & O_ALL) == 0 {
+		if (flag & optionAll) == 0 {
 			if strings.HasPrefix(f.Name(), ".") {
 				return true
 			}
@@ -386,12 +386,12 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	nodesArray.nodes = tmp
 	sort.Sort(nodesArray)
 	var err error
-	if (flag & O_LONG) != 0 {
-		err = lsLong(_ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
-	} else if (flag & O_ONE) != 0 {
-		err = lsSimple(_ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+	if (flag & optionLong) != 0 {
+		err = lsLong(_ctx, _folder, nodesArray.nodes, optionStripDir|flag, out)
+	} else if (flag & optionOne) != 0 {
+		err = lsSimple(_ctx, _folder, nodesArray.nodes, optionStripDir|flag, out)
 	} else {
-		err = lsBox(_ctx, folder_, nodesArray.nodes, O_STRIP_DIR|flag, out)
+		err = lsBox(_ctx, _folder, nodesArray.nodes, optionStripDir|flag, out)
 	}
 	cancel()
 	if err != nil {
@@ -433,7 +433,7 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 		}
 		var status os.FileInfo
 		var err error
-		if (flag & O_DEREFERENCE) != 0 {
+		if (flag & optionDereference) != 0 {
 			status, err = os.Stat(nameStat)
 		} else {
 			status, err = os.Lstat(nameStat)
@@ -447,7 +447,7 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 				fmt.Fprintf(errout, "ls: %s\n", err.Error())
 			}
 			continue
-		} else if status.IsDir() && (flag&O_NOT_RECURSIVE) == 0 {
+		} else if status.IsDir() && (flag&optionNotRecursive) == 0 {
 			dirs = append(dirs, name)
 		} else {
 			files = append(files, &fileInfoT{filepath.Clean(name), status})
@@ -457,9 +457,9 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 		nodesArray := fileInfoCollection{flag: flag, nodes: files}
 		sort.Sort(nodesArray)
 		var err error
-		if (flag & O_LONG) != 0 {
+		if (flag & optionLong) != 0 {
 			err = lsLong(ctx, ".", files, flag, out)
-		} else if (flag & O_ONE) != 0 {
+		} else if (flag & optionOne) != 0 {
 			err = lsSimple(ctx, ".", files, flag, out)
 		} else {
 			err = lsBox(ctx, ".", files, flag, out)
@@ -487,66 +487,66 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 
 var option = map[rune](func(*int) error){
 	'l': func(flag *int) error {
-		*flag |= O_LONG
+		*flag |= optionLong
 		return nil
 	},
 	'F': func(flag *int) error {
-		*flag |= O_INDICATOR
+		*flag |= optionIndicator
 		return nil
 	},
 	'o': func(flag *int) error {
-		*flag |= O_COLOR
+		*flag |= optionColor
 		return nil
 	},
 	'a': func(flag *int) error {
-		*flag |= O_ALL
+		*flag |= optionAll
 		return nil
 	},
 	't': func(flag *int) error {
-		*flag |= O_TIME
+		*flag |= optionTime
 		return nil
 	},
 	'r': func(flag *int) error {
-		*flag |= O_REVERSE
+		*flag |= optionReserve
 		return nil
 	},
 	'R': func(flag *int) error {
-		*flag |= O_RECURSIVE
+		*flag |= optionRecursive
 		return nil
 	},
 	'1': func(flag *int) error {
-		*flag |= O_ONE
+		*flag |= optionOne
 		return nil
 	},
 	'h': func(flag *int) error {
-		*flag |= O_HUMAN
+		*flag |= optionHuman
 		return nil
 	},
 	'?': func(flag *int) error {
-		*flag |= O_HELP
+		*flag |= optionHelp
 		return nil
 	},
 	'S': func(flag *int) error {
-		*flag |= O_SIZESORT
+		*flag |= optionSizeSort
 		return nil
 	},
 	'd': func(flag *int) error {
-		*flag |= O_NOT_RECURSIVE
+		*flag |= optionNotRecursive
 		return nil
 	},
 	'L': func(flag *int) error {
-		*flag |= O_DEREFERENCE
+		*flag |= optionDereference
 		return nil
 	},
 }
 
-// 存在しないオプションに関するエラー
+// OptionError is the error when the given option does not exist in the specification.
 type OptionError struct {
 	Option rune
 }
 
-func (this OptionError) Error() string {
-	return fmt.Sprintf("-%c: No such option", this.Option)
+func (err OptionError) Error() string {
+	return fmt.Sprintf("-%c: No such option", err.Option)
 }
 
 func cmdLs(ctx context.Context, cmd Param) (int, error) {
@@ -567,7 +567,7 @@ func cmdLs(ctx context.Context, cmd Param) (int, error) {
 			paths = append(paths, arg)
 		}
 	}
-	if (flag & O_HELP) != 0 {
+	if (flag & optionHelp) != 0 {
 		var message strings.Builder
 		message.WriteString("Usage: ls [-")
 		for optKey := range option {
@@ -581,11 +581,11 @@ func cmdLs(ctx context.Context, cmd Param) (int, error) {
 	err := cmd.Err()
 
 	if file, ok := out.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
-		flag |= O_ONE
+		flag |= optionOne
 	}
 
 	// cmd.Term() is colorableTerminal which is not fast.
-	if (flag & O_COLOR) == 0 {
+	if (flag & optionColor) == 0 {
 		_out := bufio.NewWriter(cmd.Out())
 		defer _out.Flush()
 		out = _out
@@ -594,8 +594,8 @@ func cmdLs(ctx context.Context, cmd Param) (int, error) {
 		defer _out.Flush()
 		out = _out
 	}
-	if (flag & O_COLOR) != 0 {
-		io.WriteString(out, ANSI_END)
+	if (flag & optionColor) != 0 {
+		io.WriteString(out, ansiEnd)
 	}
 	return 0, lsCore(ctx, paths, flag, out, err)
 }
