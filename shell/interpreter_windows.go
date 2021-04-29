@@ -32,7 +32,7 @@ func (cmd *Cmd) lookpath() string {
 func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 	if cmd.UseShellExecute {
 		// GUI Application
-		cmdline := makeCmdline(cmd.args[1:], cmd.rawArgs[1:])
+		cmdline := makeCmdline(cmd.rawArgs[1:])
 		truepath := cmd.args[0]
 		if _truepath, err := filepath.Abs(truepath); err == nil {
 			truepath = _truepath
@@ -86,7 +86,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 		}
 	}
 
-	cmdline := makeCmdline(cmd.args, cmd.rawArgs)
+	cmdline := makeCmdline(cmd.rawArgs)
 
 	procAttr := &os.ProcAttr{
 		Env:   cmd.DumpEnv(),

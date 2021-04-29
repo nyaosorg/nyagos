@@ -266,19 +266,8 @@ var OnCommandNotFound = func(ctx context.Context, cmd *Cmd, err error) error {
 
 var LastErrorLevel int
 
-func makeCmdline(args, rawargs []string) string {
-	var buffer strings.Builder
-	for i, s := range args {
-		if i > 0 {
-			buffer.WriteByte(' ')
-		}
-		if (len(rawargs) > i && len(rawargs[i]) > 0 && rawargs[i][0] == '"') || strings.ContainsAny(s, " &|<>\t\"") {
-			fmt.Fprintf(&buffer, `"%s"`, strings.Replace(s, `"`, `\"`, -1))
-		} else {
-			buffer.WriteString(s)
-		}
-	}
-	return buffer.String()
+func makeCmdline(rawargs []string) string {
+	return strings.Join(rawargs, " ")
 }
 
 var UseSourceRunBatch = true
