@@ -68,6 +68,8 @@ github.com/zetamatta/go-texts v1.0.1 h1:TdLhskYFx3BnE5f52XfbHPAMiGZjlbBKgNKY6TlR
 github.com/zetamatta/go-texts v1.0.1/go.mod h1:O9zzMOmj7Ug2ZK6PrIX0blac2V5/0xrjqhq4yzvJTsY=
 github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab h1:HSqU95qOOZxV1t9pZw6jiG+bvNbDssNIRXJEl0iv2cg=
 github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab/go.mod h1:6F5d7H+8arzFAg018o96dqhBxbnwG69z3yQVkg+MS+0=
+github.com/zetamatta/go-windows-commandline v0.0.0-20210429164539-cb2469a40c44 h1:Bn6YX7EOE4yRDKrlGfXdzW7CgQw6HIWML1MxXnP/MQk=
+github.com/zetamatta/go-windows-commandline v0.0.0-20210429164539-cb2469a40c44/go.mod h1:if2KYGFHL+i7urrtPnddgIlxjFW9VMIgUo2ND7uSC6Y=
 github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf h1:bm1E5aNg05yjXojl7h7HIybtPUlzZ6v5KKIZqPTjmCw=
 github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf/go.mod h1:H9lSm59TPbbdGAjEkYzqkVZM86GAXljktexMjsbZS+Y=
 github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:wl3g2w4/zcybfI+tSVLef0SrKG7Xl23AUxhCPdeSek0=
@@ -92,9 +94,10 @@ golang.org/x/sys v0.0.0-20200116001909-b77594299b42/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20200223170610-d5e6a3e2c0ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20201218084310-7d0127a74742/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210124154548-22da62e12c0c/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20210309074719-68d13333faf2/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210403161142-5e06dd20ab57/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20210423185535-09eb48e85fd7 h1:iGu644GcxtEcrInvDsQRCwJjtCIOlT2V7IRt6ah2Whw=
-golang.org/x/sys v0.0.0-20210423185535-09eb48e85fd7/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 h1:dXfMednGJh/SUUFjTLsWJz3P+TQt9qnR11GgeI3vWKs=
+golang.org/x/sys v0.0.0-20210426230700-d19ff857e887/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.6 h1:aRYxNxv6iGQlyVaZmk6ZgYEDa+Jg18DxebPSrd6bg1M=
 golang.org/x/text v0.3.6/go.mod h1:5Zoc/QRtKVWzQhOtBMvqHzDpF6irO9z98xDceosuGiQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=

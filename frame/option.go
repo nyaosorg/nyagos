@@ -7,9 +7,12 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/zetamatta/go-windows-commandline/args"
 
 	"github.com/zetamatta/nyagos/commands"
 	"github.com/zetamatta/nyagos/nodos"
@@ -28,6 +31,7 @@ type ScriptEngineForOption interface {
 
 type optionArg struct {
 	args []string
+	raws []string
 	sh   *shell.Shell
 	e    ScriptEngineForOption
 	ctx  context.Context // ctx is the Context object at parsing
@@ -56,6 +60,56 @@ func shellJoin(args []string) string {
 		}
 	}
 	return buffer.String()
+}
+
+var singleArgument = false
+
+func isEnableQuotationCommandline(args, raws []string) bool {
+	if len(raws) <= 0 || len(raws[0]) <= 0 || raws[0][0] != '"' {
+		return true
+	}
+	if singleArgument {
+		return false
+	}
+	if strings.Count(raws[0], `"`) < 2 {
+		return false
+	}
+	if strings.ContainsAny(args[0], "&<>()@^|") {
+		return false
+	}
+	if !strings.Contains(args[0], " ") {
+		return false
+	}
+	if _, err := exec.LookPath(args[0]); err != nil {
+		return false
+	}
+	return true
+}
+
+func makeCommandline(p *optionArg) string {
+	args := p.args
+	raws := p.raws
+	if isEnableQuotationCommandline(args, raws) {
+		// Arguments are given with multi strings.
+		// println("MultiMode:", strings.Join(raws, " "))
+		return strings.Join(raws, " ")
+	}
+	// Arguments are given with a single string.
+	text := strings.Join(raws, " ")
+	lastQuoteIndex := strings.LastIndex(text, `"`)
+	rest := ""
+	if lastQuoteIndex >= 0 {
+		text = text[:lastQuoteIndex]
+		if lastQuoteIndex+1 < len(text) {
+			rest = text[lastQuoteIndex+1:]
+		}
+	}
+	firstQuoteIndex := strings.Index(text, `"`)
+	if firstQuoteIndex >= 0 {
+		text = text[firstQuoteIndex+1:]
+	}
+	// println("SingleMode:", text+rest)
+	return text + rest
 }
 
 var optionMap = map[string]optionT{
@@ -97,6 +151,12 @@ var optionMap = map[string]optionT{
 			return nil, nil
 		},
 	},
+	"-s": {
+		U: "Use a single argument with -c or -k",
+		F: func() {
+			singleArgument = true
+		},
+	},
 	"-k": {
 		U: "\"COMMAND\"\nExecute \"COMMAND\" and continue the command-line.",
 		V: func(p *optionArg) (func(context.Context) error, error) {
@@ -104,7 +164,7 @@ var optionMap = map[string]optionT{
 				return nil, errors.New("-k: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				p.sh.Interpret(ctx, shellJoin(p.args))
+				p.sh.Interpret(ctx, makeCommandline(p))
 				return nil
 			}, nil
 		},
@@ -116,7 +176,7 @@ var optionMap = map[string]optionT{
 				return nil, errors.New("-c: requires parameters")
 			}
 			return func(ctx context.Context) error {
-				p.sh.Interpret(ctx, shellJoin(p.args))
+				p.sh.Interpret(ctx, makeCommandline(p))
 				return io.EOF
 			}, nil
 		},
@@ -289,7 +349,11 @@ func isDefault(value bool) string {
 }
 
 func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption) (func(context.Context) error, error) {
-	args := os.Args[1:]
+	raws, args := args.Parse()
+	raws = raws[1:]
+	args = args[1:]
+	// println("raws:", strings.Join(raws, "|"))
+	// println("args:", strings.Join(args, "|"))
 	optionMap["-h"] = optionT{V: help, U: "\nPrint this usage"}
 	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
 
@@ -332,6 +396,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 			if f.V != nil {
 				return f.V(&optionArg{
 					args: args[i+1:],
+					raws: raws[i+1:],
 					sh:   sh,
 					e:    e,
 					ctx:  _ctx,
