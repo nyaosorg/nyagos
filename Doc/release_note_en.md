@@ -6,6 +6,8 @@ English / [Japanese](release_note_ja.md)
 * ( Do not use "io/ioutil" )
 * Prevent from the message break the commandline when the process finishes which is started by `open` command.
 * go-readline-ny v0.4.11+: Disable emoji editing in the terminal of VisualStudioCode
+* Support -S,-C and -K options like CMD.EXE
+* Fix: some irregular double-quotations in the commandline were removed when the parameter is sent to the external commands.
 
 NYAGOS 4.4.9\_4
 ===============
