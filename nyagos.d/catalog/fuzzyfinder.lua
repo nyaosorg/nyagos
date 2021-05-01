@@ -3,13 +3,22 @@ if not nyagos then
     os.exit()
 end
 
-share.fuzzyfinder         = share.fuzzyfinder or {}
-share.fuzzyfinder.cmd     = share.fuzzyfinder.cmd   or "fzf.exe"
-share.fuzzyfinder.args    = share.fuzzyfinder.args  or {}
-share.fuzzyfinder.args.dir     = share.fuzzyfinder.args.dir     or "--preview='dir {1}'"
+local fzf = {}
+fzf.cmd          =  "fzf.exe"
+fzf.args         =  {}
+fzf.args.dir     =  ""
+fzf.args.cmdhist =  ""
+fzf.args.cdhist  =  ""
+fzf.args.gitlog  =  "--preview='git show {1}'"
+
+share.fuzzyfinder = share.fuzzyfinder or fzf
+
+share.fuzzyfinder.cmd          = share.fuzzyfinder.cmd          or "fzf.exe"
+share.fuzzyfinder.args         = share.fuzzyfinder.args         or {}
+share.fuzzyfinder.args.dir     = share.fuzzyfinder.args.dir     or ""
 share.fuzzyfinder.args.cmdhist = share.fuzzyfinder.args.cmdhist or ""
-share.fuzzyfinder.args.cdhist  = share.fuzzyfinder.args.cdhist  or "--preview='dir {1}'"
-share.fuzzyfinder.args.gitlog  = share.fuzzyfinder.args.gitlog  or "--preview='git show {1} | cat'"
+share.fuzzyfinder.args.cdhist  = share.fuzzyfinder.args.cdhist  or ""
+share.fuzzyfinder.args.gitlog  = share.fuzzyfinder.args.gitlog  or ""
 
 nyagos.alias.dump_temp_out = function()
     for _,val in ipairs(share.dump_temp_out) do
