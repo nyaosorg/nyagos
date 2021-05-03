@@ -8,6 +8,7 @@ English / [Japanese](release_note_ja.md)
 * go-readline-ny v0.4.11+: Disable emoji editing in the terminal of VisualStudioCode
 * Support -S,-C and -K options like CMD.EXE
 * Fix: some irregular double-quotations in the commandline were removed when the parameter is sent to the external commands.
+* Add fuzzyfinder catalog module (Thx @tsuyoshicho)
 
 NYAGOS 4.4.9\_4
 ===============

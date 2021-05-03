@@ -8,6 +8,7 @@
 * go-readline-ny v0.4.11+: VisualStudioCodeのターミナルでは絵文字編集はオフにするようにした
 * CMD.EXE のような -S,-C,-K オプションをサポート
 * コマンドラインの不規則な二重引用符が外部コマンドに渡される時に削除される問題を修正
+* fuzzyfinder catalog module を追加 (Thx @tsuyoshicho)
 
 NYAGOS 4.4.9\_4
 ===============
