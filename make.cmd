@@ -138,14 +138,11 @@ function Make-Package($arch){
         .nyagos `
         _nyagos `
         makeicon.cmd `
-        LICENSE `
-        readme_ja.md `
-        readme.md
+        LICENSE
 
     zip -9 $zipname `
         nyagos.d\*.lua `
-        nyagos.d\catalog\*.lua `
-        Doc\*.md
+        nyagos.d\catalog\*.lua
 }
 
 switch( $args[0] ){
