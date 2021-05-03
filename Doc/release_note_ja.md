@@ -6,9 +6,9 @@
 * ( "io/ioutil" を使わないようにした )
 * open で開いたプロセスが閉じる時のメッセージがコマンドラインに重ならないようにした
 * go-readline-ny v0.4.12: VisualStudioCodeのターミナルでは絵文字編集はオフにするようにした
-* CMD.EXE のような -S,-C,-K オプションをサポート
-* コマンドラインの不規則な二重引用符が外部コマンドに渡される時に削除される問題を修正
-* fuzzyfinder catalog module を追加 (Thx @tsuyoshicho)
+* (#403) CMD.EXE のような -S,-C,-K オプションをサポート
+* (#403) コマンドラインの不規則な二重引用符が外部コマンドに渡される時に削除される問題を修正
+* (#405) fuzzyfinder catalog module を追加 (Thx @tsuyoshicho)
 
 NYAGOS 4.4.9\_4
 ===============
