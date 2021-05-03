@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.9\_5
+===============
+(2021.05.03)
+
 * go-readline-ny v0.4.10: Yes/Noの回答のYが次のコマンドラインに入力される不具合を修正
 * go-readline-ny v0.4.11: Emoji Moifier Sequence (skin tone) をサポート
 * Windows 8.1でCPU負荷が高い時のカラーlsの速度を改善した
