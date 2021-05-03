@@ -19,7 +19,7 @@ require (
 	github.com/zetamatta/go-box/v2 v2.0.9-0.20210404125024-b2a04c3a9976
 	github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
-	github.com/zetamatta/go-readline-ny v0.4.12-0.20210424145723-8cefc07f322b
+	github.com/zetamatta/go-readline-ny v0.4.12
 	github.com/zetamatta/go-texts v1.0.1 // indirect
 	github.com/zetamatta/go-texts/mbcs v0.0.0-20190203090026-c78cd0bc5aab
 	github.com/zetamatta/go-windows-commandline v0.0.0-20210429164539-cb2469a40c44
@@ -29,7 +29,7 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.3
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20210426230700-d19ff857e887
+	golang.org/x/sys v0.0.0-20210502180810-71e4cd670f79
 	golang.org/x/text v0.3.6 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
