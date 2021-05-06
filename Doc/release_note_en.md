@@ -1,6 +1,6 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
-* (#406) Fix: nyagos.argsfilter(suffix command) did not work (raw args were not converted)
+* (#406) Fix: nyagos.argsfilter did not work, raw arguments were not converted and suffix command did not work as expected. (Thx @tGqmJHoJKqgK)
 
 NYAGOS 4.4.9\_5
 ===============

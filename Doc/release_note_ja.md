@@ -1,6 +1,6 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-* (#406) nyagos.argsfilter (suffixコマンド)が機能しなくなっていた不具合を修正 (生引数がコンバートされていなかった)
+* (#406) nyagos.argsfilter で生引数がコンバートされず、suffixコマンドが期待どおり機能しなくなっていた不具合を修正 (Thx @tGqmJHoJKqgK)
 
 NYAGOS 4.4.9\_5
 ===============

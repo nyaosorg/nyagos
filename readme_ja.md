@@ -138,6 +138,7 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 * [Takmg](https://github.com/Takmg)
 * [nu8](https://github.com/nu8)
 * [tomato3713](https://github.com/tomato3713)
+* [tGqmJHoJKqgK](https://github.com/tGqmJHoJKqgK)
 
 開発者
 ------
