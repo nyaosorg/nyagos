@@ -32,6 +32,14 @@ package:
 	for %%N in (%%~nD-%%V-windows-%%A.zip) do \
 	    zip -9j "%%N" "bin\%%A\nyagos.exe" nyagos _nyagos makeicon.cmd LICENSE & \
 	    zip -9  "%%N" nyagos.d\*.lua nyagos.d\catalog\*.lua
+	for /F %%V in ('type Etc\version.txt') do \
+	for %%D in (%CD%) do \
+	for %%A in (amd64) do \
+	    tar -zcvf "nyagos-%%V-linux-%%A.tar.gz" -C .. \
+		%%~nD/nyagos \
+		%%~nD/.nyagos \
+		%%~nD/_nyagos \
+		%%~nD/nyagos.d
 
 _install:
 	for /F "skip=1" %%I in ('where nyagos.exe') do \
