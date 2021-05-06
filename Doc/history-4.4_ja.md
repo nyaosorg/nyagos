@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](history-4.4_en.md) / Japanese
 
+* (#406) nyagos.argsfilter (suffixコマンド)が機能しなくなっていた不具合を修正 (生引数がコンバートされていなかった)
+
 NYAGOS 4.4.9\_5
 ===============
 (2021.05.03)

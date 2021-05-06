@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](history-4.4_ja.md)
 
+* (#406) Fix: nyagos.argsfilter(suffix command) did not work (raw args were not converted)
+
 NYAGOS 4.4.9\_5
 ===============
 on May.03,2021
