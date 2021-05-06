@@ -30,7 +30,7 @@ package:
 	for %%D in (%CD%) do \
 	for %%A in (386 amd64) do \
 	for %%N in (%%~nD-%%V-windows-%%A.zip) do \
-	    zip -9j "%%N" "bin\%%A\nyagos.exe" nyagos _nyagos makeicon.cmd LICENSE & \
+	    zip -9j "%%N" "bin\%%A\nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE & \
 	    zip -9  "%%N" nyagos.d\*.lua nyagos.d\catalog\*.lua
 	for /F %%V in ('type Etc\version.txt') do \
 	for %%D in (%CD%) do \
