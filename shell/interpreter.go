@@ -60,7 +60,7 @@ type Shell struct {
 	Stream
 	History  History
 	LineHook func(context.Context, *Cmd) (int, bool, error)
-	ArgsHook func(context.Context, *Shell, []string) ([]string, error)
+	ArgsHook func(context.Context, *Shell, []string, []string) ([]string, []string, error)
 	*session
 	Stdio        [3]*os.File
 	Console      io.Writer
@@ -206,11 +206,11 @@ func New() *Shell {
 			}
 			return 0, false, nil
 		},
-		ArgsHook: func(ctx context.Context, sh *Shell, args []string) ([]string, error) {
+		ArgsHook: func(ctx context.Context, sh *Shell, args, rawargs []string) ([]string, []string, error) {
 			if argsHook != nil {
-				return argsHook(ctx, sh, args)
+				return argsHook(ctx, sh, args, rawargs)
 			}
-			return args, nil
+			return args, rawargs, nil
 		},
 		Stdio:   [3]*os.File{os.Stdin, os.Stdout, os.Stderr},
 		session: &session{},
@@ -237,10 +237,10 @@ func (sh *Shell) Command() *Cmd {
 	return cmd
 }
 
-type ArgsHookT func(ctx context.Context, sh *Shell, args []string) ([]string, error)
+type ArgsHookT func(ctx context.Context, sh *Shell, args, rawargs []string) ([]string, []string, error)
 
-var argsHook = func(ctx context.Context, sh *Shell, args []string) ([]string, error) {
-	return args, nil
+var argsHook = func(ctx context.Context, sh *Shell, args, rawargs []string) ([]string, []string, error) {
+	return args, rawargs, nil
 }
 
 func SetArgsHook(_argsHook ArgsHookT) (rv ArgsHookT) {
@@ -433,7 +433,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 		for _, pipeline := range statements {
 			for _, state := range pipeline {
 				var err error
-				state.Args, err = sh.ArgsHook(ctx, sh, state.Args)
+				state.Args, state.RawArgs, err = sh.ArgsHook(ctx, sh, state.Args, state.RawArgs)
 				if err != nil {
 					return 255, err
 				}
