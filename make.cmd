@@ -212,8 +212,7 @@ switch( $args[0] ){
                 nyagos/_nyagos `
                 nyagos/readme.md `
                 nyagos/readme_ja.md `
-                nyagos/nyagos.d `
-                nyagos/Doc/*.md
+                nyagos/nyagos.d
             popd
         }elseif( $args[1] -ne $null -and $args[1] -ne "" ){
             Make-Package $args[1]
