@@ -15,13 +15,16 @@ type Stream interface {
 	DisableHistory(value bool) bool
 }
 
-type _NulStream struct{}
+// NulStream is the null implementation for the interface Stream.
+type NulStream struct{}
 
-func (stream *_NulStream) ReadLine(ctx context.Context) (context.Context, string, error) {
+// ReadLine always returns "" and io.EOF.
+func (stream *NulStream) ReadLine(ctx context.Context) (context.Context, string, error) {
 	return ctx, "", io.EOF
 }
 
-func (stream *_NulStream) DisableHistory(value bool) bool {
+// DisableHistory do nothing.
+func (stream *NulStream) DisableHistory(value bool) bool {
 	return false
 }
 

@@ -15,12 +15,3 @@ func TestInterpret(t *testing.T) {
 		fmt.Println("no error")
 	}
 }
-
-func TestMain(t *testing.T) {
-	in := []string{`ahahaha ihhihi`, `foo bar`, `"foo bar"`}
-	out := makeCmdline(in, in)
-	tst := `"ahahaha ihhihi" "foo bar" "\"foo bar\""`
-	if out != tst {
-		t.Fatalf(`Fail "%s" != "%s"`, out, tst)
-	}
-}

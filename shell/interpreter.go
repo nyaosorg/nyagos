@@ -198,7 +198,7 @@ func (sh *Shell) Close() {}
 
 func New() *Shell {
 	return &Shell{
-		Stream:  &_NulStream{},
+		Stream:  &NulStream{},
 		History: &_NulHistory{},
 		LineHook: func(ctx context.Context, cmd1 *Cmd) (int, bool, error) {
 			if hook != nil {
@@ -422,7 +422,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 	errorlevel = 0
 	finalerr = nil
 
-	statements, statementsErr := parse(sh.Stream, text)
+	statements, statementsErr := Parse(sh.Stream, text)
 	if statementsErr != nil {
 		if defined.DBG {
 			print("Parse Error:", statementsErr.Error(), "\n")

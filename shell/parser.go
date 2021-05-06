@@ -620,7 +620,8 @@ func parse2(statements []*_Statement) [][]*_Statement {
 	return result
 }
 
-func parse(stream Stream, text string) ([][]*_Statement, error) {
+// Parse parses the string and make Statement objects.
+func Parse(stream Stream, text string) ([][]*_Statement, error) {
 	result1, err := parse1(stream, text)
 	if err != nil {
 		return nil, err

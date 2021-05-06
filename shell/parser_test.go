@@ -1,14 +1,16 @@
-package shell
+package shell_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/zetamatta/nyagos/shell"
 )
 
 func TestParser(t *testing.T) {
 	text := "gawk \"{ print(\"\"ahaha ihihi ufufu\"\") }\" <\"ddd\"\"ddd\"|ahaha \"ihihi |ufufu\" ; ohoho gegee&&hogehogeo >ihihi"
 	fmt.Println(text)
-	result, _ := Parse(text)
+	result, _ := shell.Parse(new(shell.NulStream), text)
 	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
 		for _, stsub := range st {
@@ -18,7 +20,7 @@ func TestParser(t *testing.T) {
 			fmt.Println()
 		}
 	}
-	result, _ = Parse("")
+	result, _ = shell.Parse(new(shell.NulStream), "")
 	fmt.Println("<empty-line>")
 	for i, st := range result {
 		fmt.Printf("pipeline-%d:\n", i)
