@@ -1,5 +1,9 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.9\_6
+===============
+on May.07,2021
+
 * (#406) Fix: nyagos.argsfilter did not work, raw arguments were not converted and suffix command did not work as expected. (Thx @tGqmJHoJKqgK)
 
 NYAGOS 4.4.9\_5
