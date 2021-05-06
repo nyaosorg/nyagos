@@ -1,4 +1,4 @@
-[top](..) &gt; English / [Japanese](history-4.4_ja.md)
+[top](..) &gt; English / [Japanese](release_note_ja.md)
 
 * (#406) Fix: nyagos.argsfilter(suffix command) did not work (raw args were not converted)
 

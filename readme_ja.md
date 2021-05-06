@@ -66,7 +66,7 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 
 ### リリースノート
 
-- [4.4.x](Doc/history-4.4_ja.md)
+- [4.4.x](Doc/release_note_ja.md)
 - [4.3.x](Doc/history-4.3_ja.md)
 - [4.2.x](Doc/history-4.2_ja.md)
 - [4.1.x](Doc/history-4.1_ja.md)
