@@ -21,8 +21,8 @@ clean:
 # Without ( and ) , set is called as an external command in nmake
 
 fmt:
-	- for /F %%I in ('dir /b /s /AA *.go') do \
-	    go fmt "%%I" & attrib -A "%%I"
+	- for /F "tokens=2" %%I in ('git status -s ^| more.com ^| findstr /R ".M.*\.go$$" ') do \
+	     go fmt "%%I"
 
 syso:
 	pushd $(MAKEDIR)\Etc & go generate & popd
