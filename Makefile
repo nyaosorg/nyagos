@@ -1,5 +1,3 @@
-# This Makefile is prototype for nmake.exe
-
 PROMPT=$$$$$$S
 
 snapshot:
@@ -53,3 +51,6 @@ _install:
 
 install:
 	start "" "$(MAKE)" _install
+
+batch:
+	makefile2batch > make.bat
