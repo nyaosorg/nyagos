@@ -9,12 +9,18 @@ snapshot:
 
 release:
 	$(MAKE) fmt
+	if not exist bin mkdir bin
+	for %%I in (386 amd64) do \
+	    if not exist bin\%%I mkdir bin\%%I
 	for %%D in (%CD%) do \
 	for %%I in (386 amd64) do \
 	    set "GOARCH=%%I" & go build -o bin/%%I/%%~nD.exe -ldflags "-s -w"
 	( set "GOOS=linux" & go build -ldflags "-s -w" )
 
-# Without ( and ) , set is called as an external command.
+clean:
+	if exist bin rmdir /s bin
+
+# Without ( and ) , set is called as an external command in nmake
 
 fmt:
 	- for /F %%I in ('dir /b /s /AA *.go') do \
