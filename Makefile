@@ -24,6 +24,9 @@ fmt:
 	- for /F %%I in ('dir /b /s /AA *.go') do \
 	    go fmt "%%I" & attrib -A "%%I"
 
+syso:
+	pushd $(MAKEDIR)\Etc & go generate & popd
+
 get:
 	go get -u
 #	go get -u github.com/zetamatta/go-readline-ny@master
