@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* (#409) set -o glob が効かなくなっていた不具合を修正
+
 NYAGOS 4.4.9\_6
 ===============
 (2021.05.07)

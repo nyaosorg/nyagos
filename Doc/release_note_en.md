@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+* (#409) Fix: glob doesn't work for command alias
+
 NYAGOS 4.4.9\_6
 ===============
 on May.07,2021
