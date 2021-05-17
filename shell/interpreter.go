@@ -313,8 +313,16 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 
 	if WildCardExpansionAlways {
 		saveArgs := cmd.args
-		defer func() { cmd.args = saveArgs }()
+		saveRaws := cmd.rawArgs
+		defer func() {
+			cmd.args = saveArgs
+			cmd.rawArgs = saveRaws
+		}()
 		cmd.args = findfile.Globs(cmd.args)
+		cmd.rawArgs = make([]string, len(cmd.args))
+		for i, s := range cmd.args {
+			cmd.rawArgs[i] = argToRawArg(s)
+		}
 	}
 	return cmd.startProcess(ctx)
 }
