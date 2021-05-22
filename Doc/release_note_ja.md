@@ -1,5 +1,9 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.9\_7
+===============
+(2021.05.22)
+
 * (#409) `set -o glob` や `nyagos.option.glob=true` による外部コマンド向けワイルドカード展開が効かなくなっていた不具合を修正 (Thx @juggler999)
 
 NYAGOS 4.4.9\_6

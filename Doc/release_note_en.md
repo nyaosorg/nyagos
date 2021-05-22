@@ -1,5 +1,9 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.9\_7
+===============
+on May.22,2021
+
 * (#409) Fix: the wildcards expansion with `set -o glob` or `nyagos.option.glob=true` did not work for command alias (Thx @juggler999)
 
 NYAGOS 4.4.9\_6
