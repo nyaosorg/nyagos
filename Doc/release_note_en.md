@@ -1,6 +1,6 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
-* (#409) Fix: glob doesn't work for command alias
+* (#409) Fix: the wildcards expansion with `set -o glob` or `nyagos.option.glob=true` did not work for command alias (Thx @juggler999)
 
 NYAGOS 4.4.9\_6
 ===============
