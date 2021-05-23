@@ -1,4 +1,5 @@
 PROMPT=$$$$$$S
+SHELL:=CMD.EXE
 
 snapshot:
 	$(MAKE) fmt
