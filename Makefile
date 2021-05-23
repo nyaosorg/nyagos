@@ -48,12 +48,17 @@ package:
 		%%~nD/_nyagos \
 		%%~nD/nyagos.d
 
-_install:
-	for /F "skip=1" %%I in ('where nyagos.exe') do \
-	    copy /-Y nyagos.exe "%%I"
-
+ifdef INSTALLDIR
 install:
-	start "" "$(MAKE)" _install
+	-robocopy  nyagos.d    "$(INSTALLDIR)\nyagos.d" /E
+	copy /-Y  _nyagos     "$(INSTALLDIR)\."
+	copy /-Y  nyagos.exe  "$(INSTALLDIR)\." || ( \
+	    move "$(INSTALLDIR)\nyagos.exe" "$(INSTALLDIR)\nyagos.exe-%RANDOM%" & \
+	    copy nyagos.exe  "$(INSTALLDIR)\." )
+else
+install:
+	set /P "INSTALLDIR=Install Dir ? " & $(MAKE) install
+endif
 
-batch:
-	makefile2batch > make.bat
+upgrade:
+	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
