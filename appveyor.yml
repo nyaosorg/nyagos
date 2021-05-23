@@ -12,13 +12,9 @@ branches:
   except:
     - gh-pages
 
-
 #---------------------------------#
 #    environment configuration    #
 #---------------------------------#
-
-init:
-  - git config --global core.autocrlf true
 
 clone_folder: C:\Users\appveyor\go\src\github.com\zetamatta\nyagos
 
@@ -26,7 +22,6 @@ environment:
   global:
     dest_dir: bin
     gopath: C:\Users\appveyor\go
-    go_shortv: 16
   matrix:
     - platform: i386
     - platform: amd64
@@ -35,18 +30,10 @@ install:
   #- rd C:\Go /s /q
   #- appveyor DownloadFile https://dl.google.com/go/go1.12.windows-386.zip
   #- 7z x go1.12.windows-386.zip -oC:\ >nul
-  - set INSTALL_DIR=%APPVEYOR_BUILD_FOLDER%\%DEST_DIR%\%PLATFORM%
-  - ps: |
-      if ($env:PLATFORM -eq "i386") {
-        $env:PATH="C:\msys64\mingw32\bin;C:\go" + $env:GO_SHORTV + "-x86;" + $env:PATH
-        $script:bit = 32
-        $env:GOARCH = "386"
-      } else {
-        $env:PATH="C:\msys64\mingw64\bin;C:\go" + $env:GO_SHORTV + ";" + $env:PATH
-        $script:bit = 64
-        $env:GOARCH = "amd64"
-      }
-  - md %INSTALL_DIR% > nul 2>&1
+  - set "INSTALLDIR=%APPVEYOR_BUILD_FOLDER%\%DEST_DIR%\%PLATFORM%"
+  - set "PATH=C:\msys64\mingw64\bin;C:\go\bin;%PATH%"
+  - set "GOARCH=%PLATFORM:i386=386%"
+  - mkdir "%INSTALLDIR%" > nul 2>&1
 
 
 #---------------------------------#
@@ -54,8 +41,8 @@ install:
 #---------------------------------#
 
 build_script:
-  - make.cmd
-  - make.cmd install %INSTALL_DIR%
+  - mingw32-make
+  - mingw32-make install
 
 
 #---------------------------------#
