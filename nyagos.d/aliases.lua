@@ -54,8 +54,11 @@ function nyagos.alias.abspath(args)
     local cwd = nyagos.getwd()
     for i = 1,#args do
         local path1 = nyagos.pathjoin(cwd,args[i])
-        nyagos.write(path1)
-        nyagos.write("\n")
+        local files = nyagos.glob(path1)
+        for j=1,#files do
+            nyagos.write(files[j])
+            nyagos.write("\n")
+        end
     end
 end
 
