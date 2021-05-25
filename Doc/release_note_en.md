@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+* nyagos.d/aliases.lua: abspath can be given wildcard names
+
 NYAGOS 4.4.9\_7
 ===============
 on May.22,2021

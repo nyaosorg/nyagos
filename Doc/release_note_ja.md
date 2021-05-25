@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* nyagos.d/aliases.lua: abspath をワイルドカード対応にした
+
 NYAGOS 4.4.9\_7
 ===============
 (2021.05.22)
