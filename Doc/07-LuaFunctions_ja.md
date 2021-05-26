@@ -372,8 +372,11 @@ OLEオブジェクトを作成します。OLEオブジェクトはメソッド�
 - メソッド
     - `OLEOBJECT:METHOD(PARAMETERS)`.
 - プロパティ
-    - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
+    - `OLEOBJECT:_set('PROPERTYNAME',value)`
+- その他
+    - `OLEOBJECT:_iter()` : コレクションのイタレーターを得る
+    - `OLEOBJECT:_release()` COM-instanceを解放する
 
 ### `INTEGER_FOR_OLE = nyagos.to_ole_integer(10)`
 
