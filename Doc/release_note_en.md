@@ -1,6 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
 * nyagos.d/aliases.lua: abspath can be given wildcard names
+* Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:released()` on Lua script by updating the package glua-ole.
 
 NYAGOS 4.4.9\_7
 ===============

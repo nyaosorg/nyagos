@@ -348,8 +348,11 @@ Create OLEObject. OLEOBJECTs have methods and property.
 - Method
     - `OLEOBJECT:METHOD(PARAMETERS)`.
 - Property
-    - `OLEOBJECT:_set('PROPERTYNAME',value)`
     - `value = OLEOBJECT:_get('PROPERTYNAME')`
+    - `OLEOBJECT:_set('PROPERTYNAME',value)`
+- Others
+    - `OLEOBJECT:_iter() returns an enumerator of the collection.`
+    - `OLEOBJECT:_release() releases the COM-instance.`
 
 ### `INTEGER_FOR_OLE = nyagos.to_ole_integer(10)`
 
