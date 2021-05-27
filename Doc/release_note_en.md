@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+* Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:released()` on Lua script by updating the package glua-ole.
+
 NYAGOS 4.4.9\_7
 ===============
 on May.22,2021
