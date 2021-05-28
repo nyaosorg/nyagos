@@ -61,5 +61,5 @@ install:
 	    move "$(INSTALLDIR)\nyagos.exe" "$(INSTALLDIR)\nyagos.exe-%RANDOM%" & \
 	    copy nyagos.exe  "$(INSTALLDIR)\." )
 
-upgrade:
+update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
