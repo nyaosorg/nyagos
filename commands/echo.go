@@ -10,7 +10,7 @@ import (
 )
 
 func cmdEcho(ctx context.Context, cmd Param) (int, error) {
-	io.WriteString(cmd.Out(), strings.Join(cmd.Args()[1:], " "))
+	io.WriteString(cmd.Out(), strings.Join(cmd.RawArgs()[1:], " "))
 	if f, ok := cmd.Out().(*os.File); ok && isatty.IsTerminal(f.Fd()) {
 		io.WriteString(f, "\n")
 	} else {
