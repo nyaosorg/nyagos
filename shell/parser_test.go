@@ -1,7 +1,6 @@
 package shell_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/zetamatta/nyagos/shell"
@@ -25,26 +24,31 @@ func TestParserForAwk(t *testing.T) {
 
 func TestParser(t *testing.T) {
 	text := `gawk "{ print(""ahaha ihihi ufufu"") }" <"ddd""ddd"|ahaha "ihihi |ufufu" ; ohoho gegee&&hogehogeo >ihihi`
-	fmt.Println(text)
 	result, _ := shell.Parse(new(shell.NulStream), text)
-	for i, st := range result {
-		fmt.Printf("pipeline-%d:\n", i)
-		for _, stsub := range st {
-			for _, word := range stsub.Args {
-				fmt.Printf("  [%s]", word)
-			}
-			fmt.Println()
-		}
+
+	if result[0][0].Args[0] != `gawk` {
+		t.Fatal("Check-1")
+	}
+	if result[0][0].Args[1] != `{ print("ahaha ihihi ufufu") }` {
+		t.Fatal("Check-2")
+	}
+	if result[0][1].Args[0] != `ahaha` {
+		t.Fatal("Check-3")
+	}
+	if result[0][1].Args[1] != `ihihi |ufufu` {
+		t.Fatal("Check-4")
+	}
+	if result[1][0].Args[0] != `ohoho` {
+		t.Fatal("Check-5")
+	}
+	if result[1][0].Args[1] != `gegee` {
+		t.Fatal("Check-6")
+	}
+	if result[2][0].Args[0] != `hogehogeo` {
+		t.Fatal("Check-7")
 	}
 	result, _ = shell.Parse(new(shell.NulStream), "")
-	fmt.Println("<empty-line>")
-	for i, st := range result {
-		fmt.Printf("pipeline-%d:\n", i)
-		for _, stsub := range st {
-			for _, word := range stsub.Args {
-				fmt.Printf("  [%s]", word)
-			}
-			fmt.Println()
-		}
+	if len(result) > 0 {
+		t.Fatal("Check-8")
 	}
 }
