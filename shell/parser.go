@@ -132,7 +132,19 @@ const _NotQuoted = '\000'
 
 var TildeExpansion = true
 
-func string2word(_source string, removeQuote bool) string {
+func writeRootRep(yenCount *int, cooked bool, buffer *strings.Builder) {
+	if cooked {
+		for ; *yenCount >= 2; *yenCount -= 2 {
+			buffer.WriteByte('\\')
+		}
+	} else {
+		for ; *yenCount >= 1; *yenCount-- {
+			buffer.WriteByte('\\')
+		}
+	}
+}
+
+func string2word(_source string, cooked bool) string {
 	var buffer strings.Builder
 	source := strings.NewReader(_source)
 
@@ -172,13 +184,13 @@ func string2word(_source string, removeQuote bool) string {
 			if len(nameStr) > 0 {
 				u, err := user.Lookup(nameStr)
 				if err == nil {
-					if !removeQuote && strings.Count(undo.String(), `"`)%2 != 0 {
+					if !cooked && strings.Count(undo.String(), `"`)%2 != 0 {
 						buffer.WriteByte('"')
 					}
 					buffer.WriteString(u.HomeDir)
 					lastchar = rune(u.HomeDir[len(u.HomeDir)-1])
 				} else {
-					if !removeQuote {
+					if !cooked {
 						buffer.WriteByte('~')
 					}
 					undoStr := undo.String()
@@ -188,7 +200,7 @@ func string2word(_source string, removeQuote bool) string {
 				continue
 			}
 			if home := nodos.GetHome(); home != "" {
-				if !removeQuote && strings.Count(undo.String(), `"`)%2 != 0 {
+				if !cooked && strings.Count(undo.String(), `"`)%2 != 0 {
 					buffer.WriteByte('"')
 				}
 				buffer.WriteString(home)
@@ -225,22 +237,19 @@ func string2word(_source string, removeQuote bool) string {
 		}
 
 		if quoteNow != _NotQuoted && ch == quoteNow && yenCount%2 == 0 {
-			if !removeQuote {
+			if !cooked {
 				buffer.WriteRune(ch)
 			}
 			// Close Quotation.
-			for ; yenCount >= 2; yenCount -= 2 {
-				buffer.WriteByte('\\')
-			}
+			writeRootRep(&yenCount, cooked, &buffer)
+
 			quoteNow = _NotQuoted
 		} else if (ch == '\'' || ch == '"') && quoteNow == _NotQuoted && yenCount%2 == 0 {
-			if !removeQuote {
+			if !cooked {
 				buffer.WriteRune(ch)
 			}
 			// Open Qutation.
-			for ; yenCount >= 2; yenCount -= 2 {
-				buffer.WriteByte('\\')
-			}
+			writeRootRep(&yenCount, cooked, &buffer)
 			quoteNow = ch
 			if ch == lastchar {
 				buffer.WriteRune(ch)
@@ -249,9 +258,7 @@ func string2word(_source string, removeQuote bool) string {
 			if ch == '\\' {
 				yenCount++
 			} else if ch == '\'' || ch == '"' {
-				for ; yenCount >= 2; yenCount -= 2 {
-					buffer.WriteByte('\\')
-				}
+				writeRootRep(&yenCount, cooked, &buffer)
 				yenCount = 0
 				buffer.WriteRune(ch)
 			} else {
