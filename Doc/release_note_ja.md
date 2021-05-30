@@ -2,6 +2,7 @@
 
 * nyagos.d/aliases.lua: abspath をワイルドカード対応にした
 * Luaで、`OLEOBJECT:released()` ではなく、 `OLEOBJECT._release()` が使われた時に適切なエラーが起こされるようにした(glua-oleパッケージを更新)
+* CMD.EXE と同様、echo で二重引用符を出力させるようにした
 
 NYAGOS 4.4.9\_7
 ===============
