@@ -3,6 +3,7 @@
 * nyagos.d/aliases.lua: abspath can be given wildcard names
 * Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:released()` on Lua script by updating the package glua-ole.
 * echo outputs a double-quatation same as CMD.EXE does
+* Fix that `"..\"..\".."` was changed to `"..\"..".."` as raw-string on parsing.
 
 NYAGOS 4.4.9\_7
 ===============
