@@ -80,7 +80,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 	}()
 
 	sigint := make(chan os.Signal)
-	signal.Notify(sigint, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	signal.Notify(sigint, os.Interrupt, syscall.SIGINT)
 
 	defer func() {
 		signal.Stop(sigint)

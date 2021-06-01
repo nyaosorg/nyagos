@@ -47,7 +47,7 @@ func Start(mainHandler func() error) error {
 		defer clean(true)
 	}
 
-	signal.Ignore(os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
+	signal.Ignore(os.Interrupt, syscall.SIGINT)
 
 	return mainHandler()
 }
