@@ -40,7 +40,8 @@ func _clone(action string, out io.Writer) (int, error) {
 		me = _me
 	}
 	if isWindowsTerminal {
-		pid, err = su.ShellExecute(action, "wt.exe", fmt.Sprintf(`new-tab "%s"`, me), wd)
+		pid, err = su.ShellExecute(action, "wt.exe",
+			fmt.Sprintf(`--window 1 new-tab -- "%s" -k ""cd "%s"""`, me, wd), wd)
 	} else {
 		pid, err = su.ShellExecute(action, me, "", wd)
 	}
