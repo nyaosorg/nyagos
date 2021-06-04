@@ -5,6 +5,7 @@
 * echo outputs a double-quatation same as CMD.EXE does
 * Fix that `"..\"..\".."` was changed to `"..\"..".."` as raw-string on parsing.
 * (#410) Stop to ignore SIGTERM to shutdown immediately when terminal's close button is pressed (Thx @nocd5)
+* On WindowsTerminal (1.8~) , `clone` starts a new shell in the same Window's other tab
 
 NYAGOS 4.4.9\_7
 ===============
