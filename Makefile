@@ -50,9 +50,9 @@ package:
 		%%~nD/nyagos.d
 
 install:
-	if "%INSTALLDIR%" == "" ( \
-	    set /P "INSTALLDIR=Install Dir ? " & \
-	    $(MAKE) install & \
+	@if "%INSTALLDIR%" == "" ( \
+	    echo Please do $(MAKE) INSTALLDIR=... & \
+	    echo or set INSTALLDIR=... & \
 	    exit /b 1 \
 	)
 	-robocopy  nyagos.d    "$(INSTALLDIR)\nyagos.d" /E
