@@ -1,13 +1,11 @@
 PROMPT=$$$$$$S
 SHELL:=CMD.EXE
 
-snapshot:
-	$(MAKE) fmt
+snapshot: fmt
 	for /F %%V in ('git.exe describe --tags') do \
 	    go build -ldflags "-s -w -X main.version=%%V"
 
-release:
-	$(MAKE) fmt
+release: fmt
 	if not exist bin mkdir bin
 	for %%I in (386 amd64) do \
 	    if not exist bin\%%I mkdir bin\%%I
