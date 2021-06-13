@@ -1,8 +1,8 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
 * nyagos.d/aliases.lua: abspath can be given wildcard names
-* Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:released()` on Lua script by updating the package glua-ole.
-* echo outputs a double-quatation same as CMD.EXE does
+* Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:_release()` on Lua script by updating the package glua-ole.
+* `echo` outputs a double-quatation same as CMD.EXE does
 * Fix that `"..\"..\".."` was changed to `"..\"..".."` as raw-string on parsing.
 * (#410) Stop to ignore SIGTERM to shutdown immediately when terminal's close button is pressed (Thx @nocd5)
 * On WindowsTerminal (1.8~) , `clone` starts a new shell in the same Window's other tab

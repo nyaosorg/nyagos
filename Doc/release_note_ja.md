@@ -1,7 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * nyagos.d/aliases.lua: abspath をワイルドカード対応にした
-* Luaで、`OLEOBJECT:released()` ではなく、 `OLEOBJECT._release()` が使われた時に適切なエラーが起こされるようにした(glua-oleパッケージを更新)
+* Luaで、`OLEOBJECT:_release()` ではなく、 `OLEOBJECT._release()` が使われた時に適切なエラーが起こされるようにした(glua-oleパッケージを更新)
 * CMD.EXE と同様、echo で二重引用符を出力させるようにした
 * `"..\"..\".."` という文字列が字句解析の結果、`"..\"..".."` になってしまう不具合を修正
 * (#410) 端末の閉じるボタンが押された時にただちに終了させるため SIGTERM を無視しないようにした (Thx @nocd5)
