@@ -69,22 +69,6 @@ func cmdClone(ctx context.Context, cmd Param) (int, error) {
 	return _clone("open", cmd.Err())
 }
 
-func runAsByWindowsTerminal(me, arguments string) (int, error) {
-	// We can not launch wt.exe as admin-mode directly because of OS's bug.
-	// (See also https://github.com/microsoft/terminal/issues/3145 )
-	var param strings.Builder
-	param.WriteString("/c wt.exe new-tab \"")
-	param.WriteString(me)
-	param.WriteString("\" ")
-	param.WriteString(arguments)
-	return su.Param{
-		Action: "runas",
-		Path:   "cmd.exe",
-		Param:  param.String(),
-		Show:   su.HIDE,
-	}.ShellExecute()
-}
-
 func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	me, err := os.Executable()
 	if err != nil {
@@ -125,7 +109,8 @@ func cmdSu(ctx context.Context, cmd Param) (int, error) {
 	var pid int
 
 	if isWindowsTerminal {
-		pid, err = runAsByWindowsTerminal(me, buffer.String())
+		pid, err = su.ShellExecute("runas", wtExePath,
+			fmt.Sprintf(`--window 0 new-tab -- "%s" %s`, me, buffer.String()), "")
 	} else {
 		pid, err = su.ShellExecute("runas", me, buffer.String(), "")
 	}
