@@ -6,6 +6,7 @@
 * Fix that `"..\"..\".."` was changed to `"..\"..".."` as raw-string on parsing.
 * (#410) Stop to ignore SIGTERM to shutdown immediately when terminal's close button is pressed (Thx @nocd5)
 * On WindowsTerminal (1.8~) , `clone` starts a new shell in the same Window's other tab
+* Fix: clone command did not work on WindowsTerminal because wt.exe was not available via apppath
 
 NYAGOS 4.4.9\_7
 ===============
