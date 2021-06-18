@@ -7,6 +7,7 @@
 * (#410) Stop to ignore SIGTERM to shutdown immediately when terminal's close button is pressed (Thx @nocd5)
 * On WindowsTerminal (1.8~) , `clone` starts a new shell in the same Window's other tab
 * Fix: clone command did not work on WindowsTerminal because wt.exe was not available via apppath
+* Fix: su: the network drives were not connected
 
 NYAGOS 4.4.9\_7
 ===============
