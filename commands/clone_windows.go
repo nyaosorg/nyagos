@@ -19,6 +19,8 @@ import (
 
 var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""
 
+var wtExePath = filepath.Join(os.Getenv("LOCALAPPDATA"), `Microsoft\WindowsApps\wt.exe`)
+
 func _getwd() string {
 	wd, err := os.Getwd()
 	if err != nil {
@@ -40,7 +42,7 @@ func _clone(action string, out io.Writer) (int, error) {
 		me = _me
 	}
 	if isWindowsTerminal {
-		pid, err = su.ShellExecute(action, "wt.exe",
+		pid, err = su.ShellExecute(action, wtExePath,
 			fmt.Sprintf(`--window 0 new-tab -- "%s" -k ""cd "%s"""`, me, wd), wd)
 	} else {
 		pid, err = su.ShellExecute(action, me, "", wd)
