@@ -1,30 +1,44 @@
 PROMPT=$$$$$$S
-SHELL:=CMD.EXE
+ifeq ($(OS),Windows_NT)
+    SHELL=CMD.EXE
+    NUL=NUL
+    DELTREE=rmdir /s
+    SET=set
+    D=\\
+else
+    NUL=/dev/null
+    D=/
+    SET=export
+    DELTREE=rm -r
+endif
 
 snapshot: fmt
-	for /F %%V in ('git.exe describe --tags') do \
-	    go build -ldflags "-s -w -X main.version=%%V"
+	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)"
 
 release: fmt
-	if not exist bin mkdir bin
-	for %%I in (386 amd64) do \
-	    if not exist bin\%%I mkdir bin\%%I
-	for %%D in (%CD%) do \
-	for %%I in (386 amd64) do \
-	    set "GOARCH=%%I" & go build -o bin/%%I/%%~nD.exe -ldflags "-s -w"
-	( set "GOOS=linux" & go build -ldflags "-s -w" )
+	cd bin          2>$(NUL) || mkdir bin
+	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
+	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
+ifeq ($(OS),Windows_NT)
+	$(SET) "GOOS=windows"  && $(SET) "GOARCH=386"   && go build -o bin/386/nyagos.exe   -ldflags "-s -w"
+endif
+	$(SET) "GOOS=windows"  && $(SET) "GOARCH=amd64" && go build -o bin/amd64/nyagos.exe -ldflags "-s -w"
+	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build -ldflags "-s -w"
 
 clean:
-	if exist bin rmdir /s bin
-
-# Without ( and ) , set is called as an external command in nmake
+	$(DELTREE) bin 2>$(NUL)
 
 fmt:
+ifeq ($(OS),Windows_NT)
 	- for /F "tokens=2" %%I in ('git status -s ^| more.com ^| findstr /R ".M.*\.go$$" ') do \
 	     go fmt "%%I"
 
+else
+	git status -s | gawk '/^.M.*\.go/{ system("go fmt " $$2) }'
+endif
+
 syso:
-	pushd $(MAKEDIR)\Etc & go generate & popd
+	pushd $(MAKEDIR)$(D)Etc && go generate & popd
 
 get:
 	go get -u
