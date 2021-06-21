@@ -19,9 +19,7 @@ release: fmt
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
 	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
-ifeq ($(OS),Windows_NT)
 	$(SET) "GOOS=windows"  && $(SET) "GOARCH=386"   && go build -o bin/386/nyagos.exe   -ldflags "-s -w"
-endif
 	$(SET) "GOOS=windows"  && $(SET) "GOARCH=amd64" && go build -o bin/amd64/nyagos.exe -ldflags "-s -w"
 	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build -ldflags "-s -w"
 
