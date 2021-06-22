@@ -60,16 +60,16 @@ package:
 	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
 
 install:
-	@if "%INSTALLDIR%" == "" ( \
-	    echo Please do $(MAKE) INSTALLDIR=... & \
-	    echo or set INSTALLDIR=... & \
-	    exit /b 1 \
-	)
-	-robocopy  nyagos.d    "$(INSTALLDIR)\nyagos.d" /E
-	copy /-Y  _nyagos     "$(INSTALLDIR)\."
-	copy /-Y  nyagos.exe  "$(INSTALLDIR)\." || ( \
-	    move "$(INSTALLDIR)\nyagos.exe" "$(INSTALLDIR)\nyagos.exe-%RANDOM%" & \
-	    copy nyagos.exe  "$(INSTALLDIR)\." )
+ifeq ($(INSTALLDIR),)
+	@echo Please do $(MAKE) INSTALLDIR=...
+	@echo or set INSTALLDIR=...
+else
+	copy /-Y  _nyagos    "$(INSTALLDIR)$(D)."
+	-robocopy nyagos.d   "$(INSTALLDIR)$(D)nyagos.d" /E
+	copy /-Y  nyagos.exe "$(INSTALLDIR)$(D)." || ( \
+	move "$(INSTALLDIR)$(D)nyagos.exe" "$(INSTALLDIR)$(D)nyagos.exe-%RANDOM%" && \
+	copy nyagos.exe  "$(INSTALLDIR)$(D)." )
+endif
 
 update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
