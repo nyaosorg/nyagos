@@ -5,11 +5,13 @@ ifeq ($(OS),Windows_NT)
     DELTREE=rmdir /s
     SET=set
     D=\\
+    TYPE=type
 else
     NUL=/dev/null
     D=/
     SET=export
     DELTREE=rm -r
+    TYPE=cat
 endif
 
 snapshot: fmt
@@ -43,21 +45,19 @@ get:
 #	go get -u github.com/zetamatta/go-readline-ny@master
 	go mod tidy
 
+VERSION=$(shell $(TYPE) Etc$(D)version.txt)
+
+_zip:
+	zip -9j "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
+	    "bin$(D)$(GOARCH)$(D)nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE
+	zip -9  "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
+	    nyagos.d$(D)*.lua nyagos.d$(D)catalog$(D)*.lua
+
 package:
-	for /F %%V in ('type Etc\version.txt') do \
-	for %%D in (%CD%) do \
-	for %%A in (386 amd64) do \
-	for %%N in (%%~nD-%%V-windows-%%A.zip) do \
-	    zip -9j "%%N" "bin\%%A\nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE & \
-	    zip -9  "%%N" nyagos.d\*.lua nyagos.d\catalog\*.lua
-	for /F %%V in ('type Etc\version.txt') do \
-	for %%D in (%CD%) do \
-	for %%A in (amd64) do \
-	    tar -zcvf "nyagos-%%V-linux-%%A.tar.gz" -C .. \
-		%%~nD/nyagos \
-		%%~nD/.nyagos \
-		%%~nD/_nyagos \
-		%%~nD/nyagos.d
+	make _zip GOARCH=386
+	make _zip GOARCH=amd64
+	tar zcvf "nyagos-$(VERSION)-linux-amd64.tar.gz" -C .. \
+	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
 
 install:
 	@if "%INSTALLDIR%" == "" ( \
