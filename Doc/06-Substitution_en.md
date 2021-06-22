@@ -1,4 +1,4 @@
-English / [Japanese](./06-Substitution_ja.md)
+[top](../readme.md) &gt; English / [Japanese](./06-Substitution_ja.md)
 
 ## Substitution
 

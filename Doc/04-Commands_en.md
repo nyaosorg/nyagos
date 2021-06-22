@@ -1,4 +1,4 @@
-English / [Japanese](./04-Commands_ja.md)
+[top](../readme.md) &gt; English / [Japanese](./04-Commands_ja.md)
 
 ## Built-in commands
 

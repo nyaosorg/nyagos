@@ -1,4 +1,4 @@
-[English](./05-Startup_en.md) / Japanese
+[top](../readme_ja.md) &gt; [English](./05-Startup_en.md) / Japanese
 
 ## 起動処理
 

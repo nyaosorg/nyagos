@@ -1,4 +1,4 @@
-[English](./08-Uninstall_en.md) / Japanese
+[top](../readme_ja.md) &gt; [English](./08-Uninstall_en.md) / Japanese
 
 アンインストール
 ----------------
