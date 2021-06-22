@@ -59,13 +59,14 @@ package:
 	tar zcvf "nyagos-$(VERSION)-linux-amd64.tar.gz" -C .. \
 	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
 
+ifeq ($(OS),Windows_NT)
 install:
 ifeq ($(INSTALLDIR),)
 	@echo Please do $(MAKE) INSTALLDIR=...
 	@echo or set INSTALLDIR=...
 else
 	copy /-Y  _nyagos    "$(INSTALLDIR)$(D)."
-	-robocopy nyagos.d   "$(INSTALLDIR)$(D)nyagos.d" /E
+	xcopy nyagos.d$(D)*  "$(INSTALLDIR)$(D)nyagos.d" /E /I /Y
 	copy /-Y  nyagos.exe "$(INSTALLDIR)$(D)." || ( \
 	move "$(INSTALLDIR)$(D)nyagos.exe" "$(INSTALLDIR)$(D)nyagos.exe-%RANDOM%" && \
 	copy nyagos.exe  "$(INSTALLDIR)$(D)." )
@@ -73,3 +74,4 @@ endif
 
 update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
+endif
