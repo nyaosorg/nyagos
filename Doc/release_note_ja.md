@@ -8,6 +8,8 @@
 * WindowsTerminal 1.8 以降で、cloneコマンドは同じウインドウの別タブで起動するようにした
 * アプリ実行エイリアス経由で wt.exe が呼べず、WindowsTerminal下で clone コマンドが動かなくなっていた問題を修正
 * suでネットワークドライブが引き継がれてない不具合を修正
+* ビルドするのに PowerShell(make.cmd) ではなく Makefile(GNU Make)を使うようにした
+* Linux でもビルドできるようにした
 
 NYAGOS 4.4.9\_7
 ===============
