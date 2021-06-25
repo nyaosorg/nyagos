@@ -1,5 +1,9 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.10\_0
+===============
+on Jun.25,2021
+
 * nyagos.d/aliases.lua: abspath can be given wildcard names
 * Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:_release()` on Lua script by updating the package glua-ole.
 * `echo` outputs a double-quatation same as CMD.EXE does

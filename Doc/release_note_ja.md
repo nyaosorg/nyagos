@@ -1,5 +1,9 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.10\_0
+================
+(2021.06.25)
+
 * nyagos.d/aliases.lua: abspath をワイルドカード対応にした
 * Luaで、`OLEOBJECT:_release()` ではなく、 `OLEOBJECT._release()` が使われた時に適切なエラーが起こされるようにした(glua-oleパッケージを更新)
 * CMD.EXE と同様、echo で二重引用符を出力させるようにした
