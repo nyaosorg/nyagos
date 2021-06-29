@@ -35,6 +35,15 @@ func completionCd(ctx context.Context, ua UncCompletion, params []string) ([]Ele
 	if cdpath == "" {
 		return list, err
 	}
+	duplicatedCheckTable := make(map[string]struct{})
+	for _, element := range list {
+		name := element.String()
+		if name[len(name)-1] == '/' || name[len(name)-1] == '\\' {
+			name = name[:len(name)-1]
+		}
+		duplicatedCheckTable[strings.ToUpper(name)] = struct{}{}
+	}
+
 	base := strings.ToUpper(source)
 	for _, cdpath1 := range filepath.SplitList(cdpath) {
 		if files, err := os.ReadDir(cdpath1); err == nil {
@@ -42,7 +51,9 @@ func completionCd(ctx context.Context, ua UncCompletion, params []string) ([]Ele
 				if file1.IsDir() {
 					name := strings.ToUpper(file1.Name())
 					if strings.HasPrefix(name, base) {
-						list = append(list, Element1(file1.Name()))
+						if _, ok := duplicatedCheckTable[name]; !ok {
+							list = append(list, Element1(file1.Name()))
+						}
 					}
 				}
 			}
