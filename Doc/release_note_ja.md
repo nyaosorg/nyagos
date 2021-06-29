@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* `./dll` というフォルダが存在して、CDPATH上に DLL がある時、入力されたパス `dll` が補完で DLL に置き変わっていた動作を修正(英大文字・小文字が変わってしまうのが問題)
+
 NYAGOS 4.4.10\_0
 ================
 (2021.06.25)

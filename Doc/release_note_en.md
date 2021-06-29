@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+* Fix: When the folder `./dll` existed and the folder `DLL` existed on CDPATH, typed path dll was replaced to `DLL` with completion (The problem is that the path's cases were changed)
+
 NYAGOS 4.4.10\_0
 ===============
 on Jun.25,2021
