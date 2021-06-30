@@ -17,6 +17,9 @@ endif
 snapshot: fmt
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)"
 
+debug:
+	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
+
 release: fmt
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
