@@ -15,6 +15,7 @@ import (
 	"github.com/zetamatta/go-windows-commandline/args"
 
 	"github.com/zetamatta/nyagos/commands"
+	"github.com/zetamatta/nyagos/defined"
 	"github.com/zetamatta/nyagos/nodos"
 	"github.com/zetamatta/nyagos/shell"
 	"github.com/zetamatta/nyagos/texts"
@@ -125,7 +126,7 @@ var optionMap = map[string]optionT{
 		U: "\"DIRECTORY\"\nchange directory on startup",
 		F1: func(arg string) {
 			if err := os.Chdir(arg); err != nil {
-				println("chdir:", err.Error())
+				fmt.Fprintf(os.Stderr, "--chdir: %s\n", err.Error())
 			}
 		},
 	},
@@ -352,8 +353,10 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 	raws, args := args.Parse()
 	raws = raws[1:]
 	args = args[1:]
-	// println("raws:", strings.Join(raws, "|"))
-	// println("args:", strings.Join(args, "|"))
+	if defined.DBG {
+		println("raws:", strings.Join(raws, "|"))
+		println("args:", strings.Join(args, "|"))
+	}
 	optionMap["-h"] = optionT{V: help, U: "\nPrint this usage"}
 	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
 
