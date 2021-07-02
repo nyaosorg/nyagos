@@ -1,5 +1,9 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.10\_1
+================
+on Jul.02,2021
+
 * Fix: When the folder `./dll` existed and the folder `DLL` existed on CDPATH, typed path dll was replaced to `DLL` with completion (The problem is that the path's cases were changed)
 * Fix: clone: the current directory was not kept when the current directory name has a space
 
