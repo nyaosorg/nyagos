@@ -41,7 +41,7 @@ else
 endif
 
 syso:
-	pushd $(MAKEDIR)$(D)Etc && go generate & popd
+	pushd Etc && go generate & popd
 
 get:
 	go get -u
