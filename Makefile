@@ -20,14 +20,14 @@ snapshot: fmt
 debug:
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
 
-test:
-	cd alias    && go test -v
-	cd commands && go test -v
-	cd history  && go test -v
-	cd mains    && go test -v
-	cd nodos    && go test -v
-	cd shell    && go test -v
-	cd texts    && go test -v
+test: tstlua
+	cd alias    && go test
+	cd commands && go test
+	cd history  && go test
+	cd mains    && go test
+	cd nodos    && go test
+	cd shell    && go test
+	cd texts    && go test
 
 tstlua:
 ifeq ($(OS),Windows_NT)
