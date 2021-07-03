@@ -1,18 +1,18 @@
 package commands
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
+	"github.com/zetamatta/go-windows-mbcs"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
 func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
-	scanner := bufio.NewScanner(newMbcsReader(r))
+	scanner := mbcs.NewFilter(r, mbcs.ConsoleCP())
 	for scanner.Scan() {
 		if done := ctx.Done(); done != nil {
 			select {

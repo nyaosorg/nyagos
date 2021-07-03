@@ -1,14 +1,13 @@
 package shell
 
 import (
-	"bufio"
 	"io"
 	"os"
 	"os/exec"
 	"strings"
 	"syscall"
 
-	"github.com/zetamatta/go-texts/mbcs"
+	"github.com/zetamatta/go-windows-mbcs"
 	"github.com/zetamatta/go-windows-netresource"
 )
 
@@ -20,7 +19,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	}
 	defer fp.Close()
 
-	scan := bufio.NewScanner(mbcs.NewAtoUReader(fp, mbcs.ConsoleCP()))
+	scan := mbcs.NewFilter(fp, mbcs.ConsoleCP())
 	if err := readPwd(scan, verbose); err != nil {
 		return -1, err
 	}

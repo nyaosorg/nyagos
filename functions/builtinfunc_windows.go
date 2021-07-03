@@ -5,7 +5,7 @@ import (
 	"os/exec"
 
 	"github.com/mattn/msgbox"
-	"github.com/zetamatta/go-texts/mbcs"
+	"github.com/zetamatta/go-windows-mbcs"
 	"github.com/zetamatta/go-windows-su"
 )
 
@@ -73,7 +73,7 @@ func CmdUtoA(args []anyT) []anyT {
 		return []anyT{nil, TooFewArguments}
 	}
 	utf8 := fmt.Sprint(args[0])
-	bin, err := mbcs.UtoA(utf8, mbcs.ConsoleCP(), true)
+	bin, err := mbcs.UtoA(utf8, mbcs.ConsoleCP())
 	if err != nil {
 		return []anyT{nil, err}
 	}

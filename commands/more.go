@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -14,6 +13,7 @@ import (
 	"github.com/mattn/go-runewidth"
 
 	"github.com/zetamatta/go-readline-ny"
+	"github.com/zetamatta/go-windows-mbcs"
 	"github.com/zetamatta/nyagos/nodos"
 )
 
@@ -49,7 +49,7 @@ func getkey() (rune, error) {
 }
 
 func more(r io.Reader, cmd Param) error {
-	scanner := bufio.NewScanner(newMbcsReader(r))
+	scanner := mbcs.NewFilter(r, mbcs.ConsoleCP())
 	count := 0
 
 	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {

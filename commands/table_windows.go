@@ -2,11 +2,8 @@ package commands
 
 import (
 	"context"
-	"io"
 
 	"golang.org/x/sys/windows"
-
-	"github.com/zetamatta/go-texts/mbcs"
 
 	"github.com/zetamatta/nyagos/nodos"
 )
@@ -62,10 +59,6 @@ func init() {
 		"type":     cmdType,
 		"which":    cmdWhich,
 	}
-}
-
-func newMbcsReader(r io.Reader) io.Reader {
-	return mbcs.NewAutoDetectReader(r, mbcs.ConsoleCP())
 }
 
 func setWritable(path string) error {

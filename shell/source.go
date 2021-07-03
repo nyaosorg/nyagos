@@ -1,7 +1,6 @@
 package shell
 
 import (
-	"bufio"
 	"fmt"
 	"io"
 	"math/rand"
@@ -11,7 +10,13 @@ import (
 	"strings"
 )
 
-func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
+type scannerT interface {
+	Scan() bool
+	Err() error
+	Text() string
+}
+
+func readEnv(scan scannerT, verbose io.Writer) (int, error) {
 	errorlevel := -1
 	for scan.Scan() {
 		line := strings.TrimSpace(scan.Text())
@@ -43,7 +48,7 @@ func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
 	return errorlevel, scan.Err()
 }
 
-func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
+func readPwd(scan scannerT, verbose io.Writer) error {
 	if !scan.Scan() {
 		if err := scan.Err(); err != nil {
 			return err

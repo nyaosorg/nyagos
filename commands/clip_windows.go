@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/atotto/clipboard"
-	"github.com/zetamatta/go-texts/mbcs"
+	"github.com/zetamatta/go-windows-mbcs"
 
 	"github.com/zetamatta/nyagos/nodos"
 )
