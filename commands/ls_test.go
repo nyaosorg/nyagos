@@ -2,18 +2,18 @@ package commands_test
 
 import (
 	"context"
-	"os"
+	"io"
 	"testing"
 
 	"github.com/zetamatta/nyagos/commands"
 )
 
 func TestLsMain(t *testing.T) {
-	_, err := commands.Ls(context.Background(), []string{"."}, os.Stdout, os.Stderr, os.Stdout)
+	_, err := commands.Ls(context.Background(), []string{"."}, io.Discard, io.Discard, io.Discard)
 	if err != nil {
 		t.Fatalf("ls .: %s", err.Error())
 	}
-	_, err = commands.Ls(context.Background(), []string{"-l", "ls_test.go"}, os.Stdout, os.Stderr, os.Stdout)
+	_, err = commands.Ls(context.Background(), []string{"-l", "ls_test.go"}, io.Discard, io.Discard, io.Discard)
 	if err != nil {
 		t.Fatalf("ls *: %s", err.Error())
 	}
