@@ -20,6 +20,15 @@ snapshot: fmt
 debug:
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
 
+test:
+	cd alias    && go test -v
+	cd commands && go test -v
+	cd history  && go test -v
+	cd mains    && go test -v
+	cd nodos    && go test -v
+	cd shell    && go test -v
+	cd texts    && go test -v
+
 release: fmt
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
