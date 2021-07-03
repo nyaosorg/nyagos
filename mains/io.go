@@ -153,7 +153,7 @@ func ioOpen(L *lua.LState) int {
 			read = true
 			write = true
 		default:
-			return lerror(L, fmt.Sprintf("io.open (nyagos compatible version) does not support mode=\"%s\" yet.", string(mode)))
+			return lerror(L, fmt.Sprintf("io.open (nyagos compatible version) does not support mode=\"%v\" yet.", mode))
 		}
 	}
 	fd, err := os.OpenFile(string(fname), mode, 0666)
