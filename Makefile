@@ -29,6 +29,13 @@ test:
 	cd shell    && go test -v
 	cd texts    && go test -v
 
+tstlua:
+ifeq ($(OS),Windows_NT)
+	for %%I in (luatst\*.lua) do echo %%~I && nyagos --norc -f "%%~I" || exit /b 1
+else
+	for i in luatst/*.lua ; do echo $$i ; nyagos --norc -f $$i || exit 1 ; done
+endif
+
 release: fmt
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
