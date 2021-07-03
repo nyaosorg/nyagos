@@ -3,6 +3,7 @@ package history
 import (
 	"strings"
 	"testing"
+	"time"
 )
 
 type historyT struct {
@@ -47,24 +48,33 @@ func TestReplace(t *testing.T) {
 	}
 }
 
+func newLine(text string) *Line {
+	return &Line{
+		Text:  text,
+		Dir:   ".",
+		Stamp: time.Now(),
+		Pid:   0,
+	}
+}
+
 func TestExpandMacro(t *testing.T) {
 	var buffer strings.Builder
 
-	expandMacro(&buffer, strings.NewReader("^"), "aaa bbb ccc")
+	expandMacro(&buffer, strings.NewReader("^"), newLine("aaa bbb ccc"))
 	if buffer.String() != "bbb" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	expandMacro(&buffer, strings.NewReader("$"), "aaa bbb ccc ddd")
+	expandMacro(&buffer, strings.NewReader("$"), newLine("aaa bbb ccc ddd"))
 	if buffer.String() != "ddd" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	expandMacro(&buffer, strings.NewReader(":1"), `aaa "b bb" ccc ddd`)
+	expandMacro(&buffer, strings.NewReader(":1"), newLine(`aaa "b bb" ccc ddd`))
 	if buffer.String() != `"b bb"` {
 		t.Fail()
 		return
@@ -79,10 +89,21 @@ bbbb
 cccc`
 	hisObj := &Container{}
 	hisObj.LoadViaReader(strings.NewReader(source))
-	if hisObj.Len() != 3 || hisObj.At(0) != "aaaa" ||
-		hisObj.At(1) != "bbbb" || hisObj.At(2) != "cccc" {
+	if hisObj.Len() != 5 ||
+		hisObj.At(0) != "aaaa" ||
+		hisObj.At(1) != "aaaa" ||
+		hisObj.At(2) != "bbbb" ||
+		hisObj.At(3) != "bbbb" ||
+		hisObj.At(4) != "cccc" {
 
-		t.Fail()
+		var buffer strings.Builder
+		for i := 0; i < hisObj.Len(); i++ {
+			if i > 0 {
+				buffer.WriteString(",")
+			}
+			buffer.WriteString(hisObj.At(i))
+		}
+		t.Fatalf("Failed: [%s]", buffer.String())
 	}
 }
 
