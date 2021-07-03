@@ -24,30 +24,15 @@ func osDateLayout() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if strings.HasSuffix(layout, "d") {
-		return tableForMMDD.Replace(layout), nil
-	} else {
-		return tableForDDMM.Replace(layout), nil
-	}
+	return table.Replace(layout), nil
 }
 
-var tableForMMDD = strings.NewReplacer(
+var table = strings.NewReplacer(
 	"yyyy", "2006",
 	"MM", "01",
 	"dd", "02",
-	"d", "02 Mon",
-	"M", "01",
-	"H", "15",
-	"mm", "04",
-	"ss", "05",
-)
-
-var tableForDDMM = strings.NewReplacer(
-	"yyyy", "2006",
-	"MM", "01",
-	"dd", "02",
-	"d", "Mon 02",
-	"M", "01",
+	"d", "2",
+	"M", "1",
 	"H", "15",
 	"mm", "04",
 	"ss", "05",
