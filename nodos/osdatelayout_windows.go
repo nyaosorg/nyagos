@@ -25,7 +25,7 @@ func international(key string) (string, error) {
 var rxHasSingleD = regexp.MustCompile(`\bd\b`)
 
 func osDateLayout() (string, error) {
-	layout, err := international("sShortDate")
+	shortDate, err := international("sShortDate")
 	if err != nil {
 		return "", err
 	}
@@ -35,14 +35,16 @@ func osDateLayout() (string, error) {
 	// on the codepage 437, the weekday is inserted at the head.
 	// The source of the information is
 	// https://kurasaba.hatenablog.com/entries/2006/01/31
-	if rxHasSingleD.MatchString(layout) {
+
+	layout := table.Replace(shortDate)
+	if rxHasSingleD.MatchString(shortDate) {
 		if windows.GetACP() == 932 {
 			layout = layout + " Mon"
 		} else {
 			layout = "Mon " + layout
 		}
 	}
-	return table.Replace(layout), nil
+	return layout, nil
 }
 
 var table = strings.NewReplacer(
