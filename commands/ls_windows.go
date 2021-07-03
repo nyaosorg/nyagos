@@ -550,9 +550,13 @@ func (err OptionError) Error() string {
 }
 
 func cmdLs(ctx context.Context, cmd Param) (int, error) {
+	return Ls(ctx, cmd.Args(), cmd.Out(), cmd.Err(), cmd.Term())
+}
+
+func Ls(ctx context.Context, args []string, stdout io.Writer, stderr io.Writer, term io.Writer) (int, error) {
 	flag := 0
 	paths := make([]string, 0)
-	for _, arg := range cmd.Args()[1:] {
+	for _, arg := range args[1:] {
 		if strings.HasPrefix(arg, "-") {
 			for _, o := range arg[1:] {
 				setter, ok := option[o]
@@ -577,27 +581,24 @@ func cmdLs(ctx context.Context, cmd Param) (int, error) {
 		return 1, errors.New(message.String())
 	}
 
-	out := cmd.Out()
-	err := cmd.Err()
-
-	if file, ok := out.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
+	if file, ok := stdout.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
 		flag |= optionOne
 	}
 
 	// cmd.Term() is colorableTerminal which is not fast.
 	if (flag & optionColor) == 0 {
-		_out := bufio.NewWriter(cmd.Out())
+		_out := bufio.NewWriter(stdout)
 		defer _out.Flush()
-		out = _out
-	} else if out == os.Stdout {
-		_out := bufio.NewWriter(cmd.Term())
+		stdout = _out
+	} else if stdout == os.Stdout {
+		_out := bufio.NewWriter(term)
 		defer _out.Flush()
-		out = _out
+		stdout = _out
 	}
 	if (flag & optionColor) != 0 {
-		io.WriteString(out, ansiEnd)
+		io.WriteString(stdout, ansiEnd)
 	}
-	return 0, lsCore(ctx, paths, flag, out, err)
+	return 0, lsCore(ctx, paths, flag, stdout, stderr)
 }
 
 // vim:set fenc=utf8 ts=4 sw=4 noet:
