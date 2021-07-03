@@ -22,7 +22,7 @@ func testOsDateLayout() error {
 	//println("expect:",expect)
 	//println("result:",result)
 	if expect != result {
-		return fmt.Errorf("OsDatelayout: differs: '%s' != '%s'", expect, result)
+		return fmt.Errorf("OsDatelayout: differs: '%s' != '%s' (OsDatelayout=%s)", expect, result, d)
 	}
 	return err
 }
