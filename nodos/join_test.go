@@ -1,11 +1,13 @@
-package nodos
+package nodos_test
 
 import (
 	"testing"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func _testJoin(t *testing.T, a, b, expect string) {
-	result := Join(a, b)
+	result := nodos.Join(a, b)
 	if result != expect {
 		t.Fatalf("'%s'+'%s' should be '%s',but '%s'\n", a, b, expect, result)
 	}

@@ -1,19 +1,22 @@
-package texts
+package texts_test
 
 import (
 	"fmt"
 	"testing"
+
+	"github.com/zetamatta/nyagos/texts"
+
 )
 
 func TestFirstWord(t *testing.T) {
 	fmt.Println("--- FirstWord ---")
 
-	if value := FirstWord("aaaa bbbb cccc"); value != "aaaa" {
+	if value := texts.FirstWord("aaaa bbbb cccc"); value != "aaaa" {
 		t.Error("Case-1: failed")
 	} else {
 		fmt.Println(value)
 	}
-	if value := FirstWord("\"12 34\" bbb"); value != "\"12 34\"" {
+	if value := texts.FirstWord("\"12 34\" bbb"); value != "\"12 34\"" {
 		t.Error("Case-2: failed")
 	} else {
 		fmt.Println(value)
@@ -22,7 +25,7 @@ func TestFirstWord(t *testing.T) {
 
 func TestSplitLikeShellString(t *testing.T) {
 	fmt.Println("*** Test SplitLikeShellString() ***")
-	values := SplitLikeShellString("\"a b\" bbb ccc \"1 2 3\" 'a  b' c")
+	values := texts.SplitLikeShellString("\"a b\" bbb ccc \"1 2 3\" 'a  b' c")
 	for key, val := range values {
 		fmt.Printf("[%d]=\"%s\"\n", key, val)
 	}

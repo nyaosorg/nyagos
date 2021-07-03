@@ -1,6 +1,10 @@
-package commands
+package commands_test
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/zetamatta/nyagos/commands"
+)
 
 type testListT struct {
 	r bool
@@ -19,7 +23,7 @@ func TestStampIsValid(t *testing.T) {
 	}
 	for _, p := range testlist {
 		d := p.d
-		if p.r != stampIsValid(d[0], d[1], d[2], d[3], d[4], d[5]) {
+		if p.r != commands.StampIsValid(d[0], d[1], d[2], d[3], d[4], d[5]) {
 			t.Fatalf("[NG] %d/%d/%d %d:%d:%d\n", d[0], d[1], d[2], d[3], d[4], d[5])
 			t.Fail()
 		}

@@ -45,7 +45,7 @@ func readTimeStamp(s string) *time.Time {
 	hour := atoiOr(m[5], 0)
 	min := atoiOr(m[6], 0)
 	sec := atoiOr(m[7], 0)
-	if !stampIsValid(year, month, mday, hour, min, sec) {
+	if !StampIsValid(year, month, mday, hour, min, sec) {
 		return nil
 	}
 	stamp := time.Date(year, time.Month(month), mday, hour, min, sec, 0, time.Local)

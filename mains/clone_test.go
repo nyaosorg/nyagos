@@ -1,11 +1,16 @@
 // +build !vanilla
 
-package mains
+package mains_test
 
 import (
-	"github.com/yuin/gopher-lua"
 	"testing"
+
+	"github.com/yuin/gopher-lua"
+
+	"github.com/zetamatta/nyagos/mains"
 )
+
+type Lua = mains.Lua
 
 func makeSource(L Lua) {
 	tbl := L.NewTable()
@@ -30,7 +35,7 @@ func TestClone(t *testing.T) {
 	L1 := lua.NewState()
 
 	makeSource(L1)
-	L2, err := Clone(L1)
+	L2, err := mains.Clone(L1)
 	if err != nil {
 		t.Fatalf("Failed to create instance: %s", err.Error())
 		return

@@ -1,13 +1,15 @@
-package commands
+package commands_test
 
 import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/zetamatta/nyagos/commands"
 )
 
 func testFixPathCase(t *testing.T, path string) {
-	newpath, err := CorrectCase(path)
+	newpath, err := commands.CorrectCase(path)
 	if err != nil {
 		t.Errorf("CorrectCase: %v", err)
 	}

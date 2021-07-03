@@ -1,12 +1,14 @@
-package texts
+package texts_test
 
 import (
 	"testing"
+
+	"github.com/zetamatta/nyagos/texts"
 )
 
 func TestSplitLikeShell(t *testing.T) {
 	s := `1 2 "3 \" 4 5" 6 7`
-	indexes := SplitLikeShell(s)
+	indexes := texts.SplitLikeShell(s)
 	if len(indexes) < 5 {
 		t.Fatal("len error")
 		return

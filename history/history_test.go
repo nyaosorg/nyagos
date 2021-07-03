@@ -1,9 +1,11 @@
-package history
+package history_test
 
 import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/zetamatta/nyagos/history"
 )
 
 type historyT struct {
@@ -48,8 +50,8 @@ func TestReplace(t *testing.T) {
 	}
 }
 
-func newLine(text string) *Line {
-	return &Line{
+func newLine(text string) *history.Line {
+	return &history.Line{
 		Text:  text,
 		Dir:   ".",
 		Stamp: time.Now(),
@@ -60,21 +62,21 @@ func newLine(text string) *Line {
 func TestExpandMacro(t *testing.T) {
 	var buffer strings.Builder
 
-	expandMacro(&buffer, strings.NewReader("^"), newLine("aaa bbb ccc"))
+	history.ExpandMacro(&buffer, strings.NewReader("^"), newLine("aaa bbb ccc"))
 	if buffer.String() != "bbb" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	expandMacro(&buffer, strings.NewReader("$"), newLine("aaa bbb ccc ddd"))
+	history.ExpandMacro(&buffer, strings.NewReader("$"), newLine("aaa bbb ccc ddd"))
 	if buffer.String() != "ddd" {
 		t.Fail()
 		return
 	}
 
 	buffer.Reset()
-	expandMacro(&buffer, strings.NewReader(":1"), newLine(`aaa "b bb" ccc ddd`))
+	history.ExpandMacro(&buffer, strings.NewReader(":1"), newLine(`aaa "b bb" ccc ddd`))
 	if buffer.String() != `"b bb"` {
 		t.Fail()
 		return
@@ -87,7 +89,7 @@ aaaa
 bbbb
 bbbb
 cccc`
-	hisObj := &Container{}
+	hisObj := &history.Container{}
 	hisObj.LoadViaReader(strings.NewReader(source))
 	if hisObj.Len() != 5 ||
 		hisObj.At(0) != "aaaa" ||

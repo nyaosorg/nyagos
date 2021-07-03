@@ -73,7 +73,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			reader.UnreadRune()
 			if historyCount >= 1 {
 				line := hisObj.GetAt(historyCount - 1)
-				expandMacro(&buffer, reader, line)
+				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
 			}
 			continue
@@ -81,7 +81,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		if ch == mark { // !!
 			if historyCount >= 1 {
 				line := hisObj.GetAt(historyCount - 1)
-				expandMacro(&buffer, reader, line)
+				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
 				continue
 			} else {
@@ -94,7 +94,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			fmt.Fscan(reader, &backno)
 			if 0 <= backno && backno < historyCount {
 				line := hisObj.GetAt(backno)
-				expandMacro(&buffer, reader, line)
+				ExpandMacro(&buffer, reader, line)
 				isReplaced = true
 			} else {
 				return "", false, fmt.Errorf("!%d: event not found", backno)
@@ -107,7 +107,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 				backno := historyCount - number
 				if 0 <= backno && backno < historyCount {
 					line := hisObj.GetAt(backno)
-					expandMacro(&buffer, reader, line)
+					ExpandMacro(&buffer, reader, line)
 					isReplaced = true
 				} else {
 					return "", false, fmt.Errorf("!-%d: event not found", number)
@@ -133,7 +133,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 			for i := historyCount - 1; i >= 0; i-- {
 				his1 := hisObj.GetAt(i)
 				if strings.Contains(his1.Text, seekStr) {
-					expandMacro(&buffer, reader, his1)
+					ExpandMacro(&buffer, reader, his1)
 					isReplaced = true
 					found = true
 					break
@@ -163,7 +163,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 		for i := historyCount - 1; i >= 0; i-- {
 			his1 := hisObj.GetAt(i)
 			if strings.HasPrefix(his1.Text, seekStr) {
-				expandMacro(&buffer, reader, his1)
+				ExpandMacro(&buffer, reader, his1)
 				isReplaced = true
 				found = true
 				break
@@ -176,7 +176,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 	return buffer.String(), isReplaced, nil
 }
 
-func expandMacro(buffer *strings.Builder, reader *strings.Reader, row *Line) {
+func ExpandMacro(buffer *strings.Builder, reader *strings.Reader, row *Line) {
 	line := row.Text
 	dir := row.Dir
 

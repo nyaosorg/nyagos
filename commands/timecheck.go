@@ -15,7 +15,7 @@ func doesYearHave366Days(year int) bool {
 }
 
 // stampIsOk returns true if year,month,mday,hour,min,sec isnot invalid.
-func stampIsValid(year, month, mday, hour, min, sec int) bool {
+func StampIsValid(year, month, mday, hour, min, sec int) bool {
 	if sec < 0 || sec > 60 {
 		return false
 	}

@@ -1,4 +1,4 @@
-package nodos
+package nodos_test
 
 import (
 	"fmt"
@@ -6,10 +6,12 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"github.com/zetamatta/nyagos/nodos"
 )
 
 func testOsDateLayout() error {
-	d, err := OsDateLayout()
+	d, err := nodos.OsDateLayout()
 	if err != nil {
 		return fmt.Errorf("OsDatelayout: %s", err)
 	}

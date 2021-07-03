@@ -1,7 +1,9 @@
-package texts
+package texts_test
 
 import (
 	"testing"
+
+	"github.com/zetamatta/nyagos/texts"
 )
 
 func TestSortedKeys(t *testing.T) {
@@ -9,7 +11,7 @@ func TestSortedKeys(t *testing.T) {
 		"a": 1, "b": 2, "c": 3,
 	}
 
-	result := SortedKeys(example)
+	result := texts.SortedKeys(example)
 
 	if result[0] != "a" ||
 		result[1] != "b" ||
