@@ -1,6 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
 * Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437
+* go-readline-ny v0.4.13: Support Mathematical Bold Capital (U+1D400 - U+1D7FF) on the Windows Terminal
 
 NYAGOS 4.4.10\_1
 ================

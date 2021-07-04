@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * コードページ437 で、%DATE% の置換結果が CMD.EXE 非互換になっている不具合を修正
+* go-readline-ny v0.4.13: Windows Terminal で Mathematical Bold Capital (U+1D400 - U+1D7FF) の編集をサポート
 
 NYAGOS 4.4.10\_1
 ================
