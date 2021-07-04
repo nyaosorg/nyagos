@@ -6,9 +6,7 @@ nyagos.alias.tst20180504 = function(args)
 end
 
 local result = nyagos.eval("tst20180504")
-if result == "ahaha" then
-    print("OK",result)
-else
+if result ~= "ahaha" then
     print("NG:",result)
 end
 
@@ -17,9 +15,7 @@ nyagos.alias.tst20180504b = function(args)
 end
 
 result = nyagos.eval("tst20180504b")
-if result == "ihihi" then
-    print("OK:",result)
-else
+if result ~= "ihihi" then
     print("NG:",result)
 end
 
@@ -29,9 +25,7 @@ end
 
 nyagos.exec("tst20180504c")
 result = nyagos.env.errorlevel 
-if result == "3" then
-    print("OK",result)
-else
+if result ~= "3" then
     print("NG",result)
 end
 
