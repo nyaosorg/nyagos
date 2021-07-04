@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* コードページ437 で、%DATE% の置換結果が CMD.EXE 非互換になっている不具合を修正
+
 NYAGOS 4.4.10\_1
 ================
 (2021.07.02)

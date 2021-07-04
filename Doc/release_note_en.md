@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+* Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437
+
 NYAGOS 4.4.10\_1
 ================
 on Jul.02,2021
