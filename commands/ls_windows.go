@@ -583,6 +583,7 @@ func Ls(ctx context.Context, args []string, stdout io.Writer, stderr io.Writer, 
 
 	if file, ok := stdout.(*os.File); ok && !isatty.IsTerminal(file.Fd()) {
 		flag |= optionOne
+		flag &^= optionColor
 	}
 
 	// cmd.Term() is colorableTerminal which is not fast.
