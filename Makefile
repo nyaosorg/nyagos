@@ -30,11 +30,7 @@ test: tstlua
 	cd texts    && go test
 
 tstlua:
-ifeq ($(OS),Windows_NT)
-	for %%I in (luatst\*.lua) do echo %%~I && nyagos --norc -f "%%~I" || exit /b 1
-else
-	for i in luatst/*.lua ; do echo $$i ; nyagos --norc -f $$i || exit 1 ; done
-endif
+	$(foreach I,$(wildcard luatst/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
 
 release: fmt
 	cd bin          2>$(NUL) || mkdir bin
