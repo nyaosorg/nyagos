@@ -20,6 +20,7 @@ If you do not have GNU Make,
     (for Linux)
     CGO_ENABLED=0 go build
 
-Makefile を使わない場合、起動時のバージョン表記に Git コミットがつきません。
+When you do not use Makefile, the displayed version do not contain the git 
+commit hash.
 
 <!-- vim:set fenc=utf8: -->
