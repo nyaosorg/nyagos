@@ -1,5 +1,9 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.10\_2
+================
+on Jul.23,2021
+
 * Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437
 * go-readline-ny v0.4.13: Support Mathematical Bold Capital (U+1D400 - U+1D7FF) on the Windows Terminal
 * Even if the option -o is given, remove ESC[0m from the output of redirected ls
