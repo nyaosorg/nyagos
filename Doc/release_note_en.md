@@ -4,6 +4,7 @@
 * go-readline-ny v0.4.13: Support Mathematical Bold Capital (U+1D400 - U+1D7FF) on the Windows Terminal
 * Even if the option -o is given, remove ESC[0m from the output of redirected ls
 * Fix: (#411) the document that English part and Japanese were written in inverse places (Thx! @tomato3713)
+* Organize and automate the test-codes
 
 NYAGOS 4.4.10\_1
 ================

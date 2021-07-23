@@ -4,6 +4,7 @@
 * go-readline-ny v0.4.13: Windows Terminal で Mathematical Bold Capital (U+1D400 - U+1D7FF) の編集をサポート
 * -oオプションがついていも、リダイレクトされた ls の出力から ESC[0m を除くようにした
 * (#411) 英語部と日本語部が入れ変わっていたドキュメントを修正 (Thx! @tomato3713)
+* テストコードの整理、自動化
 
 NYAGOS 4.4.10\_1
 ================
