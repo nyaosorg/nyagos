@@ -31,7 +31,7 @@ func isOtherDrivesRelative(path string) bool {
 	if path[1] != ':' {
 		return false
 	}
-	return len(path) == 2 || (path[2] != '/' && path[2] != os.PathSeparator)
+	return len(path) == 2 || !os.IsPathSeparator(path[2])
 }
 
 // chDriveRune changes drive and returns the previous working directory.
