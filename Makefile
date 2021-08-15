@@ -19,7 +19,7 @@ else
     AWK=gawk
 endif
 
-snapshot: fmt
+snapshot: fmt nyagos.syso
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)"
 
 debug:
@@ -37,7 +37,7 @@ test: tstlua
 tstlua:
 	$(foreach I,$(wildcard luatst/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
 
-release: fmt
+release: fmt nyagos.syso
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
 	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
@@ -47,13 +47,13 @@ release: fmt
 
 clean:
 	-$(DELTREE) bin 2>$(NUL)
-	-$(DEL) nyagos.exe nyagos 2>$(NUL)
+	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
 
 fmt:
 	git status -s | $(AWK) "/^.M.*\.go/{ system(\"go fmt \" $$2) }"
 
-syso:
-	pushd Etc && go generate & popd
+nyagos.syso:
+	cd Etc && go generate
 
 get:
 	go get -u
