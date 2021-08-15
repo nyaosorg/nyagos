@@ -50,7 +50,7 @@ clean:
 	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
 
 fmt:
-	git status -s | $(AWK) "/^.M.*\.go/{ system(\"go fmt \" $$2) }"
+	git status -s | $(AWK) "/^.M.*\.go/{ system(\"go fmt \" $$NF) }"
 
 nyagos.syso:
 	cd Etc && go generate
