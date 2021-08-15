@@ -2,6 +2,7 @@ PROMPT=$$$$$$S
 ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     NUL=NUL
+    DEL=del
     DELTREE=rmdir /s
     SET=set
     D=\\
@@ -12,6 +13,7 @@ else
     NUL=/dev/null
     D=/
     SET=export
+    DEL=rm
     DELTREE=rm -r
     TYPE=cat
     AWK=gawk
@@ -44,7 +46,8 @@ release: fmt
 	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build -ldflags "-s -w"
 
 clean:
-	$(DELTREE) bin 2>$(NUL)
+	-$(DELTREE) bin 2>$(NUL)
+	-$(DEL) nyagos.exe nyagos 2>$(NUL)
 
 fmt:
 	git status -s | $(AWK) "/^.M.*\.go/{ system(\"go fmt \" $$2) }"
