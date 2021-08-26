@@ -17,7 +17,7 @@ require (
 	github.com/zetamatta/go-box/v2 v2.0.9-0.20210404125024-b2a04c3a9976
 	github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
-	github.com/zetamatta/go-readline-ny v0.4.13
+	github.com/zetamatta/go-readline-ny v0.4.14
 	github.com/zetamatta/go-windows-commandline v0.0.0-20210618141940-44732fb342e3
 	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
 	github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc
@@ -26,7 +26,7 @@ require (
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.3
 	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
-	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c
+	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
 
