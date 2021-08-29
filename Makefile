@@ -64,7 +64,8 @@ VERSION=$(shell $(TYPE) Etc$(D)version.txt)
 
 _zip:
 	zip -9j "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
-	    "bin$(D)$(GOARCH)$(D)nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE
+	    "bin$(D)$(GOARCH)$(D)nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE \
+	    "Etc$(D)*.ico"
 	zip -9  "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
 	    nyagos.d$(D)*.lua nyagos.d$(D)catalog$(D)*.lua
 
