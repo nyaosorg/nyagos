@@ -1,5 +1,9 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.10\_3
+================
+on Aug.30,2021
+
 * (#412) Fix: The widths of Box Drawing (U+2500-257F) were incorrect on the legacy terminals (on not Windows Terminal in Windows10)
 * Attach the package some new icon files
 
