@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * (#412) Windows10の、WindowsTerminalでない端末で、罫線キャラクターの幅が不正確になっていた問題に対応
+* パッケージに新しいアイコンファイルを添付
 
 NYAGOS 4.4.10\_2
 ================
