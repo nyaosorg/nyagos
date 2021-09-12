@@ -44,6 +44,8 @@ github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:iU
 github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc/go.mod h1:PopkWFKgaYs3nWjSMdZf8Amet5bCbaF8FOlxbP7H0Lg=
 github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2 h1:dwOvPisAc+n+Nyeo6wbDM31+MUSW+cFJFXM1+J/I9gI=
 github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2/go.mod h1:/l55u68Ky+4wQuWDHSkAjKbwryygKU8+vJYaGT+gn58=
+github.com/nyaosorg/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c h1:IRArDa9BT8Lp7hAgYQnCaY4u5F3dg0ZhXTEUH827I6I=
+github.com/nyaosorg/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c/go.mod h1:IqbIX/DpP/flSlsdObVOk7kYl4jI1Wj6fXyt37S7Ooc=
 github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34 h1:rmY5GidQQHJvydWXiDM34E+YPHfMTEm4bLIQ8CaGXr8=
 github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34/go.mod h1:1DOljCJPx9ab6YbQNlBA0m6bfSdxfXs7v75QD9V8ZkU=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

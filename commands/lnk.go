@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zetamatta/go-windows-shortcut"
+	"github.com/nyaosorg/go-windows-shortcut"
 )
 
 func printShortcut(s, t, d string, out io.Writer) {

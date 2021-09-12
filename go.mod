@@ -16,6 +16,7 @@ require (
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210912122026-907e8af42a66
 	github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc
 	github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2
+	github.com/nyaosorg/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	github.com/zetamatta/glua-ole v0.0.0-20210527021603-b547ffc88fd3
@@ -24,7 +25,6 @@ require (
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
 	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
 	github.com/zetamatta/go-windows-mbcs v0.0.0-20210628140241-28bccc005d0f
-	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.3
 	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0
 )
@@ -36,4 +36,5 @@ require (
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc // indirect
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2 // indirect
+	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c // indirect
 )

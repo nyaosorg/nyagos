@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zetamatta/go-windows-shortcut"
+	"github.com/nyaosorg/go-windows-shortcut"
 
 	"github.com/nyaosorg/nyagos/nodos"
 )

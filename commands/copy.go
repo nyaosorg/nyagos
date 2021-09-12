@@ -11,7 +11,7 @@ import (
 	"unicode"
 
 	"github.com/nyaosorg/go-windows-junction"
-	"github.com/zetamatta/go-windows-shortcut"
+	"github.com/nyaosorg/go-windows-shortcut"
 
 	"github.com/nyaosorg/nyagos/nodos"
 )
