@@ -38,6 +38,8 @@ github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc
 github.com/mitchellh/go-ps v1.0.0/go.mod h1:J4lOc8z8yJs6vUwklHw2XEIiT4z4C40KtWVN3nvg8Pg=
 github.com/nyaosorg/go-readline-ny v0.5.0 h1:7ooB/7/OkHbK6NrRvqi0yM81DxasGmdDYZNfvyL/6r4=
 github.com/nyaosorg/go-readline-ny v0.5.0/go.mod h1:Erw4lUMc6CHO06+ypXfbi4mHMDAhcEg9ZuD+iLPylBY=
+github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:iUbuSHJdUTo4mB2uL1zRcx5r3JIoRtFY/ZUuRcgYcN0=
+github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc/go.mod h1:PopkWFKgaYs3nWjSMdZf8Amet5bCbaF8FOlxbP7H0Lg=
 github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34 h1:rmY5GidQQHJvydWXiDM34E+YPHfMTEm4bLIQ8CaGXr8=
 github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34/go.mod h1:1DOljCJPx9ab6YbQNlBA0m6bfSdxfXs7v75QD9V8ZkU=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=

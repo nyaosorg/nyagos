@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zetamatta/go-windows-junction"
+	"github.com/nyaosorg/go-windows-junction"
 )
 
 func cmdMklink(_ context.Context, cmd Param) (rc int, err error) {
