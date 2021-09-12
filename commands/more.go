@@ -12,8 +12,8 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
 
+	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/nyagos/nodos"
-	"github.com/zetamatta/go-readline-ny"
 	"github.com/zetamatta/go-windows-mbcs"
 )
 

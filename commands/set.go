@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/nodos"

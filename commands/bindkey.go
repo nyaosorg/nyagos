@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 )
 
 func cmdBindkey(ctx context.Context, cmd Param) (int, error) {

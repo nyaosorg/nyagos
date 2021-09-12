@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 
 	"github.com/nyaosorg/nyagos/frame"
 )

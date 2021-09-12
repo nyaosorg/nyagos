@@ -2,7 +2,7 @@ package completion
 
 import (
 	"context"
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 )
 
 var commandListUpper = []func(context.Context) ([]Element, error){

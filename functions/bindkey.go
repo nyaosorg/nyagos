@@ -2,7 +2,7 @@ package functions
 
 import (
 	"fmt"
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 )
 
 // CmdGetBindKey is the getter for nyagos.key table.

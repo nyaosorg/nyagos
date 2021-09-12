@@ -11,7 +11,7 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
-	"github.com/zetamatta/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny"
 
 	"github.com/nyaosorg/nyagos/completion"
 )
