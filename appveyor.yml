@@ -16,7 +16,7 @@ branches:
 #    environment configuration    #
 #---------------------------------#
 
-clone_folder: C:\Users\appveyor\go\src\github.com\zetamatta\nyagos
+clone_folder: C:\Users\appveyor\go\src\github.com\nyaosorg\nyagos
 
 environment:
   global:
