@@ -1,3 +1,4 @@
+//go:build !vanilla
 // +build !vanilla
 
 package mains_test
