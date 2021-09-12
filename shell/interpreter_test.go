@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 func TestInterpret(t *testing.T) {

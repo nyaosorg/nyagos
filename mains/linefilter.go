@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/nyaosorg/nyagos/shell"
 	"github.com/yuin/gopher-lua"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 type luaFilterStream struct {

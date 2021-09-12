@@ -3,7 +3,7 @@ package shell_test
 import (
 	"testing"
 
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 func TestQuote(t *testing.T) {

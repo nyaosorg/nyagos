@@ -11,7 +11,7 @@ import (
 
 	"github.com/zetamatta/go-windows-shortcut"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 var cdHistory = make([]string, 0, 100)

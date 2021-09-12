@@ -13,7 +13,7 @@ import (
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-readline-ny"
 
-	"github.com/zetamatta/nyagos/texts"
+	"github.com/nyaosorg/nyagos/texts"
 )
 
 type Element interface {

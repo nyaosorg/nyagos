@@ -12,9 +12,9 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
 
+	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/zetamatta/go-readline-ny"
 	"github.com/zetamatta/go-windows-mbcs"
-	"github.com/zetamatta/nyagos/nodos"
 )
 
 var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")

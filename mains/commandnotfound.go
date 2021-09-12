@@ -7,8 +7,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/nyaosorg/nyagos/shell"
 	"github.com/yuin/gopher-lua"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var orgOnCommandNotFound func(context.Context, *shell.Cmd, error) error

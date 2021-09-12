@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/alias"
+	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 const (

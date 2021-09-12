@@ -15,11 +15,11 @@ import (
 
 	"github.com/zetamatta/go-windows-consoleicon"
 
-	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/alias"
+	"github.com/nyaosorg/nyagos/commands"
+	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/history"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 var DefaultHistory *history.Container

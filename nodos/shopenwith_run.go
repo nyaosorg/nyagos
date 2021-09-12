@@ -6,7 +6,7 @@ package main
 import (
 	"os"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 func main() {

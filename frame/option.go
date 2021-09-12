@@ -14,11 +14,11 @@ import (
 
 	"github.com/zetamatta/go-windows-commandline/args"
 
-	"github.com/zetamatta/nyagos/commands"
-	"github.com/zetamatta/nyagos/defined"
-	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/shell"
-	"github.com/zetamatta/nyagos/texts"
+	"github.com/nyaosorg/nyagos/commands"
+	"github.com/nyaosorg/nyagos/defined"
+	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/texts"
 )
 
 // OptionNorc is true, then rcfiles are not executed.

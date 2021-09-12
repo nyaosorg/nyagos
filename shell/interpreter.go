@@ -11,8 +11,8 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"github.com/zetamatta/nyagos/defined"
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/defined"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 var WildCardExpansionAlways = false

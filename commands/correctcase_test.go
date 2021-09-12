@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/zetamatta/nyagos/commands"
+	"github.com/nyaosorg/nyagos/commands"
 )
 
 func testFixPathCase(t *testing.T, path string) string {

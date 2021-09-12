@@ -1,8 +1,8 @@
 package frame
 
 import (
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 type _ShellVariable struct {

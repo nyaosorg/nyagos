@@ -2,7 +2,7 @@ package commands
 
 import (
 	"context"
-	"github.com/zetamatta/nyagos/history"
+	"github.com/nyaosorg/nyagos/history"
 )
 
 func cmdHistory(ctx context.Context, args Param) (int, error) {

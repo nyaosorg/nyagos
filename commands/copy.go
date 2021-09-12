@@ -13,7 +13,7 @@ import (
 	"github.com/zetamatta/go-windows-junction"
 	"github.com/zetamatta/go-windows-shortcut"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 type copyMoveT struct {

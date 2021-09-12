@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/zetamatta/nyagos/history"
+	"github.com/nyaosorg/nyagos/history"
 )
 
 type historyT struct {

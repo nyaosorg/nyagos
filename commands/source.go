@@ -7,8 +7,8 @@ import (
 	"io"
 	"path/filepath"
 
-	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 func cmdSource(ctx context.Context, cmd Param) (int, error) {

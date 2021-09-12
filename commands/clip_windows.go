@@ -8,7 +8,7 @@ import (
 	"github.com/atotto/clipboard"
 	"github.com/zetamatta/go-windows-mbcs"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 func cmdClip(ctx context.Context, cmd Param) (int, error) {

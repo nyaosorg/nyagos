@@ -19,11 +19,11 @@ import (
 	"github.com/zetamatta/glua-ole"
 	"github.com/zetamatta/go-readline-ny"
 
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/frame"
-	"github.com/zetamatta/nyagos/functions"
-	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/frame"
+	"github.com/nyaosorg/nyagos/functions"
+	"github.com/nyaosorg/nyagos/history"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 // Lua is the alias for Lua's state type.
@@ -456,7 +456,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 	}
 }
 
-const ctxkey = "github.com/zetamatta/nyagos"
+const ctxkey = "github.com/nyaosorg/nyagos"
 
 // setContext
 func setContext(ctx context.Context, L Lua) {

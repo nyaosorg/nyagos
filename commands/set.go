@@ -9,10 +9,10 @@ import (
 
 	"github.com/zetamatta/go-readline-ny"
 
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/shell"
-	"github.com/zetamatta/nyagos/texts"
+	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/texts"
 )
 
 // ReadStdinAsFile is the flat to read commands from stdin as a file stream

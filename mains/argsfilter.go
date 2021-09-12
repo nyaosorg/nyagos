@@ -10,8 +10,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nyaosorg/nyagos/shell"
 	"github.com/yuin/gopher-lua"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 var orgArgHook func(context.Context, *shell.Shell, []string, []string) ([]string, []string, error)

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/zetamatta/nyagos/alias"
+	"github.com/nyaosorg/nyagos/alias"
 )
 
 func cmdAlias(ctx context.Context, cmd Param) (int, error) {

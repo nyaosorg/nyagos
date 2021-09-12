@@ -12,7 +12,7 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
-	"github.com/zetamatta/nyagos/completion"
+	"github.com/nyaosorg/nyagos/completion"
 )
 
 func complete4getter(L Lua) int {

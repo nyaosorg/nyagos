@@ -8,9 +8,9 @@ import (
 	"errors"
 	"os"
 
+	"github.com/nyaosorg/nyagos/functions"
+	"github.com/nyaosorg/nyagos/shell"
 	"github.com/yuin/gopher-lua"
-	"github.com/zetamatta/nyagos/functions"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {

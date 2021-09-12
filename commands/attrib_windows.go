@@ -10,7 +10,7 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 func getbit(c byte) uint32 {

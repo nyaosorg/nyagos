@@ -3,7 +3,7 @@ package commands_test
 import (
 	"testing"
 
-	"github.com/zetamatta/nyagos/commands"
+	"github.com/nyaosorg/nyagos/commands"
 )
 
 type testListT struct {

@@ -17,10 +17,10 @@ import (
 
 	"github.com/mattn/go-isatty"
 
+	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
 	"github.com/zetamatta/go-windows-shortcut"
-	"github.com/zetamatta/nyagos/nodos"
 )
 
 const (

@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/zetamatta/go-windows-mbcs"
-	"github.com/zetamatta/nyagos/nodos"
 )
 
 func cat(ctx context.Context, r io.Reader, w io.Writer) bool {

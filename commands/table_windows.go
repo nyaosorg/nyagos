@@ -5,7 +5,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 func init() {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/zetamatta/go-windows-su"
 
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 func open1(fname string, out io.Writer) {

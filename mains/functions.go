@@ -12,9 +12,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nyaosorg/nyagos/alias"
+	"github.com/nyaosorg/nyagos/shell"
 	"github.com/yuin/gopher-lua"
-	"github.com/zetamatta/nyagos/alias"
-	"github.com/zetamatta/nyagos/shell"
 )
 
 type _LuaBinaryChank struct {

@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/zetamatta/go-findfile"
-	"github.com/zetamatta/nyagos/nodos"
 )
 
 const (

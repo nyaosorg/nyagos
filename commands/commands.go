@@ -8,9 +8,9 @@ import (
 
 	"github.com/zetamatta/go-findfile"
 
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 // Param is the interface for built-in command

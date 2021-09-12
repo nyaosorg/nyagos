@@ -3,7 +3,7 @@ package completion
 import (
 	"path/filepath"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 func isExecutable(path string) bool {

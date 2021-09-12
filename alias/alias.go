@@ -4,8 +4,8 @@ import (
 	"context"
 	"strings"
 
-	"github.com/zetamatta/nyagos/completion"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 var dbg = false

@@ -11,7 +11,7 @@ import (
 
 	"github.com/zetamatta/go-windows-su"
 
-	"github.com/zetamatta/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/nodos"
 )
 
 func encloseWithQuote(fullpath string) string {

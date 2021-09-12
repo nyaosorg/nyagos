@@ -14,8 +14,8 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	"github.com/zetamatta/nyagos/nodos"
-	"github.com/zetamatta/nyagos/texts"
+	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/texts"
 )
 
 var NoClobber = false

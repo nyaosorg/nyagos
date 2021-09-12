@@ -11,8 +11,8 @@ import (
 	"github.com/zetamatta/go-readline-ny"
 	"github.com/zetamatta/go-windows-consoleicon"
 
-	"github.com/zetamatta/nyagos/history"
-	"github.com/zetamatta/nyagos/shell"
+	"github.com/nyaosorg/nyagos/history"
+	"github.com/nyaosorg/nyagos/shell"
 )
 
 type CmdStreamConsole struct {
