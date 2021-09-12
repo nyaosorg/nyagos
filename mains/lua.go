@@ -16,8 +16,8 @@ import (
 	"github.com/mattn/go-colorable"
 	"github.com/yuin/gopher-lua"
 
+	"github.com/nyaosorg/glua-ole"
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/zetamatta/glua-ole"
 
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/frame"

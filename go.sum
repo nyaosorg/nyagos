@@ -36,6 +36,8 @@ github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51 h1:mwbFlx48BwWB/EhRYM
 github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51/go.mod h1:yw034Lj7L3R1c5PK+5wgId2p8GOMqhqMwpkW/kQBOvo=
 github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc=
 github.com/mitchellh/go-ps v1.0.0/go.mod h1:J4lOc8z8yJs6vUwklHw2XEIiT4z4C40KtWVN3nvg8Pg=
+github.com/nyaosorg/glua-ole v0.0.0-20210912145209-915bf8bfc951 h1:KBf8assOhMUduDCJg5VTIKiD5BzNKy19WN+MEAXfAwI=
+github.com/nyaosorg/glua-ole v0.0.0-20210912145209-915bf8bfc951/go.mod h1:g0bEXRGlv+8WK5ZbNAP3bNwWYJV5qHMWUXRnzO6JcB8=
 github.com/nyaosorg/go-readline-ny v0.5.0 h1:7ooB/7/OkHbK6NrRvqi0yM81DxasGmdDYZNfvyL/6r4=
 github.com/nyaosorg/go-readline-ny v0.5.0/go.mod h1:Erw4lUMc6CHO06+ypXfbi4mHMDAhcEg9ZuD+iLPylBY=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210912122026-907e8af42a66 h1:CgT2Lxc6DCQl1O4FV6/8jOjPQDOkmBCDqz+wXy/AlGo=
@@ -62,8 +64,6 @@ github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/
 github.com/yuin/gopher-lua v0.0.0-20200816102855-ee81675732da/go.mod h1:E1AXubJBdNmFERAOucpDIxNzeGfLzg0mYh+UfMWdChA=
 github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9 h1:k/gmLsJDWwWqbLCur2yWnJzwQEKRcAHXo6seXGuSwWw=
 github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9/go.mod h1:E1AXubJBdNmFERAOucpDIxNzeGfLzg0mYh+UfMWdChA=
-github.com/zetamatta/glua-ole v0.0.0-20210527021603-b547ffc88fd3 h1:dXo2axuIj4GjAsnO3SxmMDbcuKuAgiUKFNaz1cEQCrc=
-github.com/zetamatta/glua-ole v0.0.0-20210527021603-b547ffc88fd3/go.mod h1:ZoIu+JK6brp2Oafg0Teu9JHHPSM4MZVDJ90HC70HdvU=
 github.com/zetamatta/go-box/v2 v2.0.8 h1:natSt3HKiicWOuf1oR8wW2H9+U0ZFuXCoUXPRpPo3bc=
 github.com/zetamatta/go-box/v2 v2.0.8/go.mod h1:IX5sBRWItgkG9VRsT2IhbnJjA3bSt2B3RL2yG0/wWBQ=
 github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341 h1:+909lH9JnpFkjC6mbTfSkfzELdHscniUm3JwBbwE7YQ=
