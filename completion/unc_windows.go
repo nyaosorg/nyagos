@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/nyaosorg/go-windows-netresource"
 	"github.com/zetamatta/go-inline-animation"
-	"github.com/zetamatta/go-windows-netresource"
 )
 
 var rxUNCPattern1 = regexp.MustCompile(`^\\\\[^\\/]*$`)

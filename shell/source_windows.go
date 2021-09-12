@@ -7,8 +7,8 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/nyaosorg/go-windows-netresource"
 	"github.com/zetamatta/go-windows-mbcs"
-	"github.com/zetamatta/go-windows-netresource"
 )
 
 // loadTmpFile - read update the current-directory and environment-variables from tmp-file.

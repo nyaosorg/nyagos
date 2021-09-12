@@ -9,7 +9,7 @@ import (
 
 	"github.com/dustin/go-humanize"
 
-	"github.com/zetamatta/go-windows-netresource"
+	"github.com/nyaosorg/go-windows-netresource"
 )
 
 func driveType(rootPathName string) (uint32, string) {

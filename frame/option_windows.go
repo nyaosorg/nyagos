@@ -3,8 +3,8 @@ package frame
 import (
 	"strings"
 
+	"github.com/nyaosorg/go-windows-netresource"
 	"github.com/nyaosorg/go-windows-subst"
-	"github.com/zetamatta/go-windows-netresource"
 )
 
 func optionNetUse(arg string) {
