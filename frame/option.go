@@ -12,7 +12,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/zetamatta/go-windows-commandline/args"
+	"github.com/nyaosorg/go-windows-commandline/args"
 
 	"github.com/nyaosorg/nyagos/commands"
 	"github.com/nyaosorg/nyagos/defined"
