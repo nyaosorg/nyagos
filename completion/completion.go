@@ -10,8 +10,8 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/zetamatta/go-box/v2"
 
 	"github.com/nyaosorg/nyagos/texts"
 )

@@ -15,8 +15,8 @@ import (
 
 	"github.com/mattn/go-isatty"
 
+	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/zetamatta/go-box/v2"
 	"github.com/zetamatta/go-findfile"
 
 	"github.com/nyaosorg/nyagos/commands"
