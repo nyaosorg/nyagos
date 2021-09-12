@@ -10,9 +10,9 @@ import (
 
 	"golang.org/x/sys/windows"
 
+	"github.com/nyaosorg/go-windows-subst"
 	"github.com/zetamatta/go-windows-netresource"
 	"github.com/zetamatta/go-windows-su"
-	"github.com/zetamatta/go-windows-subst"
 
 	"github.com/nyaosorg/nyagos/shell"
 )

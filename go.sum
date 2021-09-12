@@ -38,6 +38,8 @@ github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc
 github.com/mitchellh/go-ps v1.0.0/go.mod h1:J4lOc8z8yJs6vUwklHw2XEIiT4z4C40KtWVN3nvg8Pg=
 github.com/nyaosorg/go-readline-ny v0.5.0 h1:7ooB/7/OkHbK6NrRvqi0yM81DxasGmdDYZNfvyL/6r4=
 github.com/nyaosorg/go-readline-ny v0.5.0/go.mod h1:Erw4lUMc6CHO06+ypXfbi4mHMDAhcEg9ZuD+iLPylBY=
+github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34 h1:rmY5GidQQHJvydWXiDM34E+YPHfMTEm4bLIQ8CaGXr8=
+github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34/go.mod h1:1DOljCJPx9ab6YbQNlBA0m6bfSdxfXs7v75QD9V8ZkU=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
@@ -74,8 +76,6 @@ github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c h1:A
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c/go.mod h1:buJWG/mCpNkeABgIeEaX6b+6qh3wBhioplFV6K6ZPo8=
 github.com/zetamatta/go-windows-su v0.1.3 h1:voHOy5s8KnWY6Wtq2BsF+6kogClfIlovPHrV8yTFm1U=
 github.com/zetamatta/go-windows-su v0.1.3/go.mod h1:4n9f0mFNFXFahrF27dl2PyawsOg5I+F7gbhXzop+SPc=
-github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34 h1:NAMg+8eAh9stJ1MOa54mk/GQKdqvdlP2KadXlNN+8Ns=
-github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34/go.mod h1:ZLHt7lS384NeG9Z+9JsvukLJIYgiMP+p9mXyCY+AsO0=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20190204203706-41f3e6584952/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=

@@ -13,6 +13,7 @@ require (
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/go-readline-ny v0.5.0
+	github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	github.com/zetamatta/glua-ole v0.0.0-20210527021603-b547ffc88fd3
 	github.com/zetamatta/go-box/v2 v2.0.8
@@ -25,7 +26,6 @@ require (
 	github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2
 	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c
 	github.com/zetamatta/go-windows-su v0.1.3
-	github.com/zetamatta/go-windows-subst v0.0.0-20200919123620-edca79a47a34
 	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0
 )
 
