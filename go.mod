@@ -1,4 +1,4 @@
-module github.com/zetamatta/nyagos
+module github.com/nyaosorg/nyagos
 
 require (
 	github.com/Microsoft/go-winio v0.5.0 // indirect
