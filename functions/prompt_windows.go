@@ -1,7 +1,7 @@
 package functions
 
 import (
-	"github.com/zetamatta/go-windows-su"
+	"github.com/nyaosorg/go-windows-su"
 )
 
 func isElevated() bool {

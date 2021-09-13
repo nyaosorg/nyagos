@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/sys/windows"
 
-	"github.com/zetamatta/go-windows-su"
+	"github.com/nyaosorg/go-windows-su"
 
 	"github.com/nyaosorg/nyagos/nodos"
 )

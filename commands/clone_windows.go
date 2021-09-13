@@ -11,8 +11,8 @@ import (
 	"golang.org/x/sys/windows"
 
 	"github.com/nyaosorg/go-windows-netresource"
+	"github.com/nyaosorg/go-windows-su"
 	"github.com/nyaosorg/go-windows-subst"
-	"github.com/zetamatta/go-windows-su"
 
 	"github.com/nyaosorg/nyagos/shell"
 )

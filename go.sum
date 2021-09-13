@@ -53,6 +53,8 @@ github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2 h1
 github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2/go.mod h1:/l55u68Ky+4wQuWDHSkAjKbwryygKU8+vJYaGT+gn58=
 github.com/nyaosorg/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c h1:IRArDa9BT8Lp7hAgYQnCaY4u5F3dg0ZhXTEUH827I6I=
 github.com/nyaosorg/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c/go.mod h1:IqbIX/DpP/flSlsdObVOk7kYl4jI1Wj6fXyt37S7Ooc=
+github.com/nyaosorg/go-windows-su v0.2.0 h1:/w9XziPy3/zT/AJ/F8Yof0dQ+lGoEThb1aVRvM2Ki7U=
+github.com/nyaosorg/go-windows-su v0.2.0/go.mod h1:sJe4Z6t7CJQNDt96SahOBpcYjwPZ5JCaT5ocmWsuQxs=
 github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34 h1:rmY5GidQQHJvydWXiDM34E+YPHfMTEm4bLIQ8CaGXr8=
 github.com/nyaosorg/go-windows-subst v0.0.0-20200919123620-edca79a47a34/go.mod h1:1DOljCJPx9ab6YbQNlBA0m6bfSdxfXs7v75QD9V8ZkU=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
@@ -85,8 +87,6 @@ github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2 h
 github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2/go.mod h1:zcM57zYz2gjmxUmMZCbzex7+XgSPXm2/Rl2nrTUScMw=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c h1:AF5xWROLzLP4Nco97nXs2SSU6fq3Y8SL5TXnXhkldKI=
 github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c/go.mod h1:buJWG/mCpNkeABgIeEaX6b+6qh3wBhioplFV6K6ZPo8=
-github.com/zetamatta/go-windows-su v0.1.3 h1:voHOy5s8KnWY6Wtq2BsF+6kogClfIlovPHrV8yTFm1U=
-github.com/zetamatta/go-windows-su v0.1.3/go.mod h1:4n9f0mFNFXFahrF27dl2PyawsOg5I+F7gbhXzop+SPc=
 golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20190204203706-41f3e6584952/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190222072716-a9d3bda3a223/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=

@@ -6,7 +6,7 @@ import (
 
 	"github.com/mattn/msgbox"
 	"github.com/nyaosorg/go-windows-mbcs"
-	"github.com/zetamatta/go-windows-su"
+	"github.com/nyaosorg/go-windows-su"
 )
 
 func CmdMsgBox(args []anyT) []anyT {
