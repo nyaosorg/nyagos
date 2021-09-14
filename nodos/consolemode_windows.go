@@ -3,7 +3,7 @@ package nodos
 import (
 	"fmt"
 	"golang.org/x/sys/windows"
-	// "github.com/zetamatta/go-windows-dbg"
+	// "github.com/nyaosorg/go-windows-dbg"
 )
 
 type Handle = windows.Handle
