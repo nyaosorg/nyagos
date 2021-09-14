@@ -13,7 +13,7 @@ import (
 	"github.com/go-ole/go-ole"
 	"github.com/mattn/go-colorable"
 
-	"github.com/zetamatta/go-windows-consoleicon"
+	"github.com/nyaosorg/go-windows-consoleicon"
 
 	"github.com/nyaosorg/nyagos/alias"
 	"github.com/nyaosorg/nyagos/commands"

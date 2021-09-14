@@ -9,7 +9,7 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/zetamatta/go-windows-consoleicon"
+	"github.com/nyaosorg/go-windows-consoleicon"
 
 	"github.com/nyaosorg/nyagos/history"
 	"github.com/nyaosorg/nyagos/shell"

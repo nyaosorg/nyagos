@@ -45,6 +45,8 @@ github.com/nyaosorg/go-readline-ny v0.5.0 h1:7ooB/7/OkHbK6NrRvqi0yM81DxasGmdDYZN
 github.com/nyaosorg/go-readline-ny v0.5.0/go.mod h1:Erw4lUMc6CHO06+ypXfbi4mHMDAhcEg9ZuD+iLPylBY=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210912122026-907e8af42a66 h1:CgT2Lxc6DCQl1O4FV6/8jOjPQDOkmBCDqz+wXy/AlGo=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210912122026-907e8af42a66/go.mod h1:htF2oC1Ezpvaew+/cyJKex559A2TA86svovywkVN4ss=
+github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af h1:CaekS9qYgBC8K+eNXTynOJPpcGzwPLp0Sgj6FjLgP0I=
+github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af/go.mod h1:4LfCXQBErqxzunYq+1MRpePh6On3RFDzfUatd64eInA=
 github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:iUbuSHJdUTo4mB2uL1zRcx5r3JIoRtFY/ZUuRcgYcN0=
 github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc/go.mod h1:PopkWFKgaYs3nWjSMdZf8Amet5bCbaF8FOlxbP7H0Lg=
 github.com/nyaosorg/go-windows-mbcs v0.0.0-20210912155616-72ce6b748345 h1:pwa8EToVtIunF8dNr8LPVaYEm7U33Htjb2W781gdmyU=
@@ -77,8 +79,6 @@ github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341 h1:+909lH9Jn
 github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341/go.mod h1:AQ8WFEcO67SfKYGUZlT77HVJ6n+ZSKFLLBIwdOTmzm0=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc h1:n50N7PRFw06uZq3KBYye4wq/t860QEQQXNJVWppdOgc=
 github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc/go.mod h1:zyNzCk8IbCms8BVBd61LTid6jNslzC4ral0Wi7q+BdU=
-github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf h1:bm1E5aNg05yjXojl7h7HIybtPUlzZ6v5KKIZqPTjmCw=
-github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf/go.mod h1:H9lSm59TPbbdGAjEkYzqkVZM86GAXljktexMjsbZS+Y=
 github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc h1:wl3g2w4/zcybfI+tSVLef0SrKG7Xl23AUxhCPdeSek0=
 github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc/go.mod h1:Z9Oob8fSU9i1JvP5c+gaX957/ZKeqBdNuDI2XfEhuRU=
 github.com/zetamatta/go-windows-mbcs v0.0.0-20210628140241-28bccc005d0f h1:h0DY7p5nwv887DMw/Q1tpbFkA0BMkICHnHq3xytS7qA=

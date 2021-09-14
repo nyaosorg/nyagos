@@ -16,6 +16,7 @@ require (
 	github.com/nyaosorg/go-box/v2 v2.1.2
 	github.com/nyaosorg/go-readline-ny v0.5.0
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210912122026-907e8af42a66
+	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af
 	github.com/nyaosorg/go-windows-junction v0.0.0-20200324093801-0af6bce363dc
 	github.com/nyaosorg/go-windows-mbcs v0.0.0-20210912155616-72ce6b748345
 	github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2
@@ -25,7 +26,6 @@ require (
 	github.com/yuin/gopher-lua v0.0.0-20210529063254-f4c35e4016d9
 	github.com/zetamatta/go-findfile v0.0.0-20201218175335-310ba9190341
 	github.com/zetamatta/go-inline-animation v0.0.0-20190601165454-6648860353dc
-	github.com/zetamatta/go-windows-consoleicon v0.0.0-20200130064042-7fa97dd4a5cf
 	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0
 )
 
