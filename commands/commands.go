@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/zetamatta/go-findfile"
+	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/nodos"

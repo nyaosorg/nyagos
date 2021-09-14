@@ -18,9 +18,9 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-windows-findfile"
 	"github.com/nyaosorg/go-windows-shortcut"
 	"github.com/nyaosorg/nyagos/nodos"
-	"github.com/zetamatta/go-findfile"
 )
 
 const (

@@ -17,7 +17,7 @@ import (
 
 	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
-	"github.com/zetamatta/go-findfile"
+	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/commands"
 	"github.com/nyaosorg/nyagos/completion"

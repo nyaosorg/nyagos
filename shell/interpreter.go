@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/zetamatta/go-findfile"
+	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/defined"
 	"github.com/nyaosorg/nyagos/nodos"

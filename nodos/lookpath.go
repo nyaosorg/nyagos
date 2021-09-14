@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/zetamatta/go-findfile"
+	"github.com/nyaosorg/go-windows-findfile"
 )
 
 func lookPath(dir1, targetPath string) (foundpath string) {
