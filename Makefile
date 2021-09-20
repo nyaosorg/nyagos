@@ -5,18 +5,18 @@ ifeq ($(OS),Windows_NT)
     DEL=del
     DELTREE=rmdir /s
     SET=set
-    D=\\
     TYPE=type
     GITDIR=$(or $(GIT_INSTALL_ROOT),$(shell for %%I in (git.exe) do echo %%~dp$$PATH:I..))
     AWK="$(GITDIR)\usr\bin\gawk.exe"
+    D=$\\
 else
     NUL=/dev/null
-    D=/
     SET=export
     DEL=rm
     DELTREE=rm -r
     TYPE=cat
     AWK=gawk
+    D=/
 endif
 
 snapshot: fmt nyagos.syso
