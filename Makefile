@@ -82,7 +82,7 @@ ifeq ($(INSTALLDIR),)
 	@echo or set INSTALLDIR=...
 else
 	copy /-Y  _nyagos    "$(INSTALLDIR)$(D)."
-	xcopy nyagos.d$(D)*  "$(INSTALLDIR)$(D)nyagos.d" /E /I /Y
+	xcopy "nyagos.d$(D)*"  "$(INSTALLDIR)$(D)nyagos.d" /E /I /Y
 	copy /-Y  nyagos.exe "$(INSTALLDIR)$(D)." || ( \
 	move "$(INSTALLDIR)$(D)nyagos.exe" "$(INSTALLDIR)$(D)nyagos.exe-%RANDOM%" && \
 	copy nyagos.exe  "$(INSTALLDIR)$(D)." )
