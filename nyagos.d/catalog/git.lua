@@ -119,19 +119,23 @@ gitsubcommands["svn"]={"init", "fetch", "clone", "rebase", "dcommit", "log", "fi
 gitsubcommands["worktree"]={"add", "list", "lock", "prune", "unlock"}
 
 -- branch
+-- checkout
 gitsubcommands["checkout"]=checkoutlist
+-- branch select only
+gitsubcommands["branch"]=branchlist
+gitsubcommands["switch"]=branchlist
 gitsubcommands["reset"]=branchlist
 gitsubcommands["merge"]=branchlist
 gitsubcommands["rebase"]=branchlist
 gitsubcommands["revert"]=branchlist
-
+-- current branch's commit
 gitsubcommands["show"]=getcommits
-
+-- add unstage file
 gitsubcommands["add"]=addlist
-
 
 local gitvar=share.git
 gitvar.subcommand=gitsubcommands
+gitvar.commit=getcommits
 gitvar.branch=branchlist
 gitvar.currentbranch=currentbranch
 share.git=gitvar
