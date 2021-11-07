@@ -108,17 +108,25 @@ end
 -- subcommands
 local gitsubcommands={}
 
--- keyword
-gitsubcommands["bisect"]={"start", "bad", "good", "skip", "reset", "visualize", "replay", "log", "run"}
-gitsubcommands["notes"]={"add", "append", "copy", "edit", "list", "prune", "remove", "show"}
-gitsubcommands["reflog"]={"show", "delete", "expire"}
-gitsubcommands["rerere"]={"clear", "forget", "diff", "remaining", "status", "gc"}
-gitsubcommands["stash"]={"save", "list", "show", "apply", "clear", "drop", "pop", "create", "branch"}
-gitsubcommands["submodule"]={"add", "status", "init", "deinit", "update", "summary", "foreach", "sync"}
-gitsubcommands["svn"]={"init", "fetch", "clone", "rebase", "dcommit", "log", "find-rev", "set-tree", "commit-diff", "info", "create-ignore", "propget", "proplist", "show-ignore", "show-externals", "branch", "tag", "blame", "migrate", "mkdirs", "reset", "gc"}
-gitsubcommands["worktree"]={"add", "list", "lock", "prune", "unlock"}
+-- completion keyword (sort alphabetical, currently manual pickup)
+gitsubcommands["bisect"]={"bad", "good", "help", "log", "new", "old", "replay", "reset", "run", "skip", "start", "terms", "view", "visualize"}
+gitsubcommands["notes"]={"add", "append", "copy", "edit", "get-ref", "list", "merge", "merge", "merge", "prune", "remove", "show"}
+gitsubcommands["reflog"]={"delete", "exists", "expire", "show"}
+gitsubcommands["remote"]={"add", "get-url", "prune", "remove", "rename", "set-branches", "set-head", "set-url", "show", "update"}
+gitsubcommands["rerere"]={"clear", "diff", "forget", "gc", "remaining", "status"}
+gitsubcommands["sparse-checkout"]={"add", "disable", "init", "list", "reapply", "set"}
+gitsubcommands["stash"]={"apply", "branch", "clear", "create", "drop", "list", "pop", "push", "show", "store"}
+gitsubcommands["submodule"]={"absorbgitdirs", "add", "deinit", "foreach", "init", "set-branch", "set-url", "status", "summary", "sync", "update"}
+gitsubcommands["svn"]={"blame", "branch", "clone", "commit-diff", "create-ignore", "dcommit", "fetch", "find-rev", "gc", "info", "init", "log", "mkdirs", "propget", "proplist", "propset", "rebase", "reset", "set-tree", "show-externals", "show-ignore", "tag"}
+gitsubcommands["worktree"]={"add", "list", "lock", "move", "prune", "remove", "repair", "unlock"}
 
--- branch
+-- completion apply function
+-- see https://github.com/git/git/blob/master/command-list.txt
+-- list-up `$git --list-cmds=list-history` for history group subcommands.
+-- TODO: feature working in the future
+-- 1. List up subcommands for each groups.
+-- 2. Assign function for these subcommands, that function is completion function worked as supported multi groups type.
+
 -- checkout
 gitsubcommands["checkout"]=checkoutlist
 -- branch select only
