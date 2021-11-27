@@ -2,6 +2,8 @@ module github.com/nyaosorg/nyagos
 
 go 1.17
 
+replace github.com/nyaosorg/go-readline-ny => ../go-readline-ny
+
 require (
 	github.com/atotto/clipboard v0.1.4
 	github.com/dustin/go-humanize v1.0.0
