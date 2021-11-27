@@ -152,7 +152,7 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 		if i == buffer.Cursor {
 			pos = text.Len() + 1
 		}
-		c.WriteTo(&text)
+		c.Moji.WriteTo(&text)
 	}
 	if pos < 0 {
 		pos = text.Len() + 1
