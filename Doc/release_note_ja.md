@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* コマンドラインをカラー化した
+
 NYAGOS 4.4.10\_3
 ================
 (2021.08.30)

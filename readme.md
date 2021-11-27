@@ -52,6 +52,7 @@ So, I created a new shell like below:
   * `copy`,`move` and some dos-like built-in commands work.
   * No additional DLL are required.
   * Registry are not used.
+* Color command-line
 * Support Unicode. Windows unicode APIs are used.
   * Can paste unicode character on clipboard and edit them.
   * Unicode-literal %U+XXXX%

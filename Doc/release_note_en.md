@@ -1,5 +1,7 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
+* Color command-line
+
 NYAGOS 4.4.10\_3
 ================
 on Aug.30,2021
