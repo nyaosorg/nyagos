@@ -12,7 +12,7 @@ func (s *_Coloring) Init() {
 	s.bits = 0
 }
 
-func (s *_Coloring) Get(codepoint rune) int {
+func (s *_Coloring) Next(codepoint rune) int {
 	const (
 		backquotedBit = 1
 		percentBit    = 2
