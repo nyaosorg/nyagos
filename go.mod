@@ -15,7 +15,7 @@ require (
 	github.com/nyaosorg/glua-ole v0.0.0-20210914102918-563689ba7584
 	github.com/nyaosorg/go-box/v2 v2.1.2
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
-	github.com/nyaosorg/go-readline-ny v0.6.0
+	github.com/nyaosorg/go-readline-ny v0.6.1
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20210914121648-32cd570b169f
@@ -36,7 +36,4 @@ require (
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/zetamatta/go-box/v2 v2.0.8 // indirect
 	github.com/zetamatta/go-windows-junction v0.0.0-20200324093801-0af6bce363dc // indirect
-	github.com/zetamatta/go-windows-mbcs v0.0.0-20210628140241-28bccc005d0f // indirect
-	github.com/zetamatta/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2 // indirect
-	github.com/zetamatta/go-windows-shortcut v0.0.0-20200826154755-11707f2ef14c // indirect
 )
