@@ -33,6 +33,8 @@ func (s *_Coloring) Next(codepoint rune) int {
 		newbits ^= optionBit
 	} else if (s.bits&optionBit) != 0 && !unicode.IsLetter(codepoint) {
 		newbits &^= optionBit
+	} else if s.last == '%' && (s.bits&percentBit) != 0 && unicode.IsDigit(codepoint) {
+		newbits &^= percentBit
 	}
 	bits := s.bits | newbits
 	color := readline.White
