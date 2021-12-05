@@ -1,11 +1,14 @@
 package frame
 
 import (
+	"unicode"
+
 	"github.com/nyaosorg/go-readline-ny"
 )
 
 type _Coloring struct {
 	bits int
+	last rune
 }
 
 func (s *_Coloring) Init() {
@@ -17,6 +20,7 @@ func (s *_Coloring) Next(codepoint rune) int {
 		backquotedBit = 1
 		percentBit    = 2
 		quotedBit     = 4
+		optionBit     = 8
 	)
 	newbits := s.bits
 	if codepoint == '`' {
@@ -25,18 +29,27 @@ func (s *_Coloring) Next(codepoint rune) int {
 		newbits ^= percentBit
 	} else if codepoint == '"' {
 		newbits ^= quotedBit
+	} else if s.last == ' ' && (codepoint == '/' || codepoint == '-') {
+		newbits ^= optionBit
+	} else if (s.bits&optionBit) != 0 && !unicode.IsLetter(codepoint) {
+		newbits &^= optionBit
 	}
 	bits := s.bits | newbits
 	color := readline.White
-	if (bits & backquotedBit) != 0 {
+	if unicode.IsControl(codepoint) {
+		color = readline.Blue
+	} else if (bits & backquotedBit) != 0 {
 		color = readline.Red
 	} else if (bits & percentBit) != 0 {
 		color = readline.Cyan
 	} else if (bits & quotedBit) != 0 {
 		color = readline.Magenta
+	} else if (bits & optionBit) != 0 {
+		color = readline.Yellow
 	} else {
 		color = readline.White
 	}
 	s.bits = newbits
+	s.last = codepoint
 	return color
 }
