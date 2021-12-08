@@ -40,10 +40,10 @@ func (s *_Coloring) Next(codepoint rune) int {
 	color := readline.White
 	if unicode.IsControl(codepoint) {
 		color = readline.Blue
-	} else if (bits & backquotedBit) != 0 {
-		color = readline.Red
 	} else if (bits & percentBit) != 0 {
 		color = readline.Cyan
+	} else if (bits & backquotedBit) != 0 {
+		color = readline.Red
 	} else if (bits & quotedBit) != 0 {
 		color = readline.Magenta
 	} else if (bits & optionBit) != 0 {
