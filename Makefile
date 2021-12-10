@@ -67,7 +67,7 @@ _zip:
 	    "bin$(D)$(GOARCH)$(D)nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE \
 	    "Etc$(D)*.ico"
 	zip -9  "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
-	    nyagos.d$(D)*.lua nyagos.d$(D)catalog$(D)*.lua
+	    "nyagos.d$(D)*.lua" "nyagos.d$(D)catalog$(D)*.lua"
 
 package:
 	make _zip GOARCH=386
