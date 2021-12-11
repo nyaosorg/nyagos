@@ -40,6 +40,8 @@ func (s *_Coloring) Next(codepoint rune) int {
 	color := readline.White
 	if unicode.IsControl(codepoint) {
 		color = readline.Blue
+	} else if codepoint == '\u3000' {
+		color = 41
 	} else if (bits & percentBit) != 0 {
 		color = readline.Cyan
 	} else if (bits & backquotedBit) != 0 {
