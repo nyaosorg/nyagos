@@ -46,8 +46,8 @@ github.com/nyaosorg/go-box/v2 v2.1.2 h1:BZFUuahLeuPh5Jz0vMnyy3IurMZNmwwLWgbRnxYg
 github.com/nyaosorg/go-box/v2 v2.1.2/go.mod h1:6kjrp9YI//sSkuvbMI0nHntPVXIDOztGNvXNQMUo+eA=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16XkjcdkjWTJX3jfFiP987ougN3RrK7oNr+rvau5INs=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
-github.com/nyaosorg/go-readline-ny v0.6.1 h1:k8UyTChkkR/j04KVN4OBXSCx7ri+nbJPLSZLWa8Nlwc=
-github.com/nyaosorg/go-readline-ny v0.6.1/go.mod h1:Erw4lUMc6CHO06+ypXfbi4mHMDAhcEg9ZuD+iLPylBY=
+github.com/nyaosorg/go-readline-ny v0.6.2 h1:AK9e2iocHpyJYQi/SBbcbqS9E3Wmr4ipyprdblalLNo=
+github.com/nyaosorg/go-readline-ny v0.6.2/go.mod h1:Erw4lUMc6CHO06+ypXfbi4mHMDAhcEg9ZuD+iLPylBY=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022 h1:4WxrzYVJcE2jPDRFs8qXrhPLDt9Bm78WiTm6bTt2xZc=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022/go.mod h1:htF2oC1Ezpvaew+/cyJKex559A2TA86svovywkVN4ss=
 github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af h1:CaekS9qYgBC8K+eNXTynOJPpcGzwPLp0Sgj6FjLgP0I=
@@ -104,8 +104,8 @@ golang.org/x/sys v0.0.0-20210616094352-59db8d763f22/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.0.0-20210927094055-39ccf1dd6fa6/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.0.0-20211124211545-fe61309f8881 h1:TyHqChC80pFkXWraUUf6RuB5IqFdQieMLwwCJokV2pc=
-golang.org/x/sys v0.0.0-20211124211545-fe61309f8881/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.0.0-20211210111614-af8b64212486 h1:5hpz5aRr+W1erYCL5JRhSUBJRph7l9XkNveoExlrKYk=
+golang.org/x/sys v0.0.0-20211210111614-af8b64212486/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c h1:dUUwHk2QECo/6vqA44rthZ8ie2QXMNeKRTHCNY2nXvo=
 gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
