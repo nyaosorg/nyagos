@@ -49,7 +49,7 @@ func (s *_Coloring) Next(codepoint rune) int {
 	} else if (bits & quotedBit) != 0 {
 		color = readline.Magenta
 	} else if (bits & optionBit) != 0 {
-		color = readline.Yellow
+		color = readline.DarkYellow
 	} else if codepoint == '&' || codepoint == '|' || codepoint == '<' || codepoint == '>' || (s.last == ' ' && codepoint == ';') {
 		color = readline.Green
 	} else {
