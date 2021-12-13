@@ -31,7 +31,7 @@ func (s *_Coloring) Next(codepoint rune) int {
 		newbits ^= quotedBit
 	} else if s.last == ' ' && (codepoint == '/' || codepoint == '-') {
 		newbits ^= optionBit
-	} else if (s.bits&optionBit) != 0 && !unicode.IsLetter(codepoint) {
+	} else if (s.bits&optionBit) != 0 && !unicode.IsLetter(codepoint) && codepoint != '-' {
 		newbits &^= optionBit
 	} else if s.last == '%' && (s.bits&percentBit) != 0 && unicode.IsDigit(codepoint) {
 		newbits &^= percentBit
@@ -48,7 +48,7 @@ func (s *_Coloring) Next(codepoint rune) int {
 		color = readline.Red
 	} else if (bits & quotedBit) != 0 {
 		color = readline.Magenta
-	} else if (bits & optionBit) != 0 {
+	} else if (newbits & optionBit) != 0 {
 		color = readline.DarkYellow
 	} else if codepoint == '&' || codepoint == '|' || codepoint == '<' || codepoint == '>' || (s.last == ' ' && codepoint == ';') {
 		color = readline.Green
