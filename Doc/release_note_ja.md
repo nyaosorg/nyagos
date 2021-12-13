@@ -1,6 +1,6 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-* オプション文字列の色を黄土色へ変更
+* オプション文字列の色を黄土色へ変更し、範囲を修正
 * 全角空白の背景色を赤へ変更
 
 NYAGOS 4.4.11\_0

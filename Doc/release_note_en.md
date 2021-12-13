@@ -1,6 +1,6 @@
 [top](..) &gt; English / [Japanese](release_note_ja.md)
 
-* Change the color of the option-string dark-yellow
+* Change the color of the option-string dark-yellow and fix the range
 * Change the background-color of the Ideographic Space (U+3000) red
 
 NYAGOS 4.4.11\_0
