@@ -28,10 +28,12 @@ func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
 	stream := &CmdStreamConsole{
 		History: history1,
 		Editor: &readline.Editor{
-			History:  history1,
-			Prompt:   doPrompt,
-			Writer:   colorable.NewColorableStdout(),
-			Coloring: &_Coloring{}},
+			History:        history1,
+			Prompt:         doPrompt,
+			Writer:         colorable.NewColorableStdout(),
+			Coloring:       &_Coloring{},
+			HistoryCycling: true,
+		},
 		HistPath: filepath.Join(appDataDir(), "nyagos.history"),
 		CmdSeeker: shell.CmdSeeker{
 			PlainHistory: []string{},
