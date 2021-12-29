@@ -83,7 +83,7 @@ var CustomCompletion = map[string]CustomCompleter{
 	"rd":       &customComplete{Func: completionDir, Name: "Built-in `rmdir` completer"},
 	"killall":  &customComplete{Func: completionProcessName, Name: "Built-in `kill` completer"},
 	"taskkill": &customComplete{Func: completionTaskKill, Name: "Built-in `taskkill` completer"},
-	"start":    &customComplete{Func: completionWhich, Name: "built-in `start` completer"},
+	"start":    &customComplete{Func: completionStart, Name: "built-in `start` completer"},
 }
 
 func lookupCustomCompletion(s string) (CustomCompleter, bool) {

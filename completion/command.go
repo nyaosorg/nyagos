@@ -2,13 +2,14 @@ package completion
 
 import (
 	"context"
+	"io/fs"
 	"os"
 	"path"
 	"path/filepath"
 	"strings"
 )
 
-func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, error) {
+func listUpAllFilesOnEnv(ctx context.Context, envName string, filter func(fs.DirEntry) bool) ([]Element, error) {
 	list := make([]Element, 0, 100)
 	pathEnv := os.Getenv(envName)
 	dirList := filepath.SplitList(pathEnv)
@@ -25,11 +26,8 @@ func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, e
 			continue
 		}
 		for _, file1 := range files {
-			if file1.IsDir() {
-				continue
-			}
-			name := file1.Name()
-			if isExecutable(name) {
+			if filter(file1) {
+				name := file1.Name()
 				_name := path.Base(name)
 				element := Element1(_name)
 				list = append(list, element)
@@ -37,6 +35,12 @@ func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, e
 		}
 	}
 	return list, nil
+}
+
+func listUpAllExecutableOnEnv(ctx context.Context, envName string) ([]Element, error) {
+	return listUpAllFilesOnEnv(ctx, envName, func(file1 fs.DirEntry) bool {
+		return !file1.IsDir() && isExecutable(file1.Name())
+	})
 }
 
 func listUpCurrentAllExecutable(ctx context.Context, str string) ([]Element, error) {
@@ -66,23 +70,28 @@ func removeDup(list []Element) []Element {
 	return result
 }
 
+func filterElementWithPrefix(dest, source []Element, prefix string) []Element {
+	upperPrefix := strings.ToUpper(prefix)
+	for _, element := range source {
+		name1Upr := strings.ToUpper(element.String())
+		if strings.HasPrefix(name1Upr, upperPrefix) {
+			dest = append(dest, element)
+		}
+	}
+	return dest
+}
+
 func listUpCommands(ctx context.Context, str string) ([]Element, error) {
 	list, listErr := listUpCurrentAllExecutable(ctx, str)
 	if listErr != nil {
 		return nil, listErr
 	}
-	strUpr := strings.ToUpper(str)
 	for _, f := range commandListUpper {
 		files, err := f(ctx)
 		if err != nil {
 			return nil, err
 		}
-		for _, element := range files {
-			name1Upr := strings.ToUpper(element.String())
-			if strings.HasPrefix(name1Upr, strUpr) {
-				list = append(list, element)
-			}
-		}
+		list = filterElementWithPrefix(list, files, str)
 	}
 	return removeDup(list), nil
 }
