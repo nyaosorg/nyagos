@@ -13,10 +13,9 @@ NYAGOS is the commandline-shell written with the Programming Language GO and Lua
 
 ![demo-animation](./demo.gif)
 
-There are some shells in Windows compatible with ones in UNIX.  
-But, most of them do not support Windows's traditional PATH-style
-like `X:\DIR\FILE.EXT` though a lot of applications need them
-as arguments.
+There are some shells in Windows compatible with ones in UNIX.
+Most of them do not support Windows's traditional PATH-style
+like `X:\DIR\FILE.EXT` that many applications require as arguments.
 
 So, I created a new shell like below:
 
@@ -61,7 +60,7 @@ So, I created a new shell like below:
   * color support (-o option)
   * print hard-link,symbolic-link and junction's target-path
 * Support OS:
-  * Windows 8.1 & 10
+  * Windows 8.1 or later
   * Linux (experimental)
 
 Download Binary

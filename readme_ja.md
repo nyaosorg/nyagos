@@ -10,7 +10,13 @@ The Nihongo Yet Another GOing Shell
 
 NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 
-<img src="./demo.gif" alt="demo-animation" />
+![demo-animation](./demo.gif)
+
+Windows には UNIXと互換性のあるシェルがありますが、ほとんどのシェルは
+多くのアプリケーションが引数にとる `X:\DIR\FILE.EXT` のような Windows の
+パス形式をサポートしていません。
+
+ゆえに、次のような機能を持つ新シェルを作成しました。
 
 * UNIX風シェル
   * キーバインド
@@ -45,6 +51,7 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
   * `copy`,`move` など DOS 風の内蔵コマンドが動作
   * ランタイムDLL不要
   * レジストリ無使用
+* カラーコマンドライン
 * Unicodeサポート
   * Unicode文字をコピペ・編集可能
   * Unicodeリテラル %U+XXXX%
@@ -53,7 +60,7 @@ NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
   * カラーサポート(-oオプション)
   * ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示
 * サポート OS
-  * Windows 8.1 & 10
+  * Windows 8.1以降
   * Linux (試験的サポート)
 
 ダウンロード
