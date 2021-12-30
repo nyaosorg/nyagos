@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/bh7866s6oasvchpj?svg=true)](https://ci.appveyor.com/project/nyaosorg/nyagos)
+[![Build status](https://ci.appveyor.com/api/projects/status/bh7866s6oasvchpj?svg=true)](https://ci.appveyor.com/project/zetamatta/nyagos)
 [![GoDoc](https://godoc.org/github.com/nyaosorg/nyagos?status.svg)](https://godoc.org/github.com/nyaosorg/nyagos)
 [![Go Report Card](https://goreportcard.com/badge/github.com/nyaosorg/nyagos)](https://goreportcard.com/report/github.com/nyaosorg/nyagos)
 [![Github latest Releases](https://img.shields.io/github/downloads/nyaosorg/nyagos/latest/total.svg)](https://github.com/nyaosorg/nyagos/releases/latest)
