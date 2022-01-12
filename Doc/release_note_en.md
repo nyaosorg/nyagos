@@ -3,6 +3,7 @@
 * Change the color of the option-string dark-yellow and fix the range
 * Change the background-color of the Ideographic Space (U+3000) red
 * (#416) Complete for `start` to any files and directories on %PATH%
+* Fix coloring: -0 .. -9 were not colored for options.
 
 NYAGOS 4.4.11\_0
 ================
