@@ -39,16 +39,20 @@ func cmdRmdir(ctx context.Context, cmd Param) (int, error) {
 	quiet := false
 	message := "%s: Rmdir Are you sure? [Yes/No/Quit] "
 	errorcount := 0
+
+	args := make([]string, 0, len(cmd.Args()))
 	for _, arg1 := range cmd.Args()[1:] {
 		switch arg1 {
 		case "/s":
 			sOption = true
 			message = "%s : Delete Tree. Are you sure? [Yes/No/Quit] "
-			continue
 		case "/q":
 			quiet = true
-			continue
+		default:
+			args = append(args, arg1)
 		}
+	}
+	for _, arg1 := range args {
 		stat, err := os.Lstat(arg1)
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
