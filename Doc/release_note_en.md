@@ -4,6 +4,7 @@
 * Change the background-color of the Ideographic Space (U+3000) red
 * (#416) Complete for `start` to any files and directories on %PATH%
 * Fix coloring: -0 .. -9 were not colored for options.
+* `rmdir /s` can remove readonly-folder like cmd.exe
 
 NYAGOS 4.4.11\_0
 ================
