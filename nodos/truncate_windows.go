@@ -13,7 +13,7 @@ import (
 func truncate(folder string, whenError func(string, error) bool, out io.Writer) error {
 	attr, err := GetFileAttributes(folder)
 	if err != nil {
-		return fmt.Errorf("%s: %s", folder, err)
+		return fmt.Errorf("%s: %w", folder, err)
 	}
 	if (attr & REPARSE_POINT) == 0 {
 		// Only not junction, delete files under folder.
@@ -42,8 +42,11 @@ func truncate(folder string, whenError func(string, error) bool, out io.Writer) 
 			}
 		}
 	}
+	if (attr & windows.FILE_ATTRIBUTE_READONLY) != 0 {
+		SetFileAttributes(folder, attr&^windows.FILE_ATTRIBUTE_READONLY)
+	}
 	if err := windows.Rmdir(folder); err != nil {
-		return fmt.Errorf("%s: %s", folder, err.Error())
+		return fmt.Errorf("%s: %w", folder, err)
 	}
 	return nil
 }
