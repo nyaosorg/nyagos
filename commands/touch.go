@@ -87,7 +87,7 @@ func cmdTouch(ctx context.Context, this Param) (int, error) {
 				"%s: built-in touch: Not implemented.\n",
 				arg1)
 		} else {
-			fd, err := os.OpenFile(arg1, os.O_APPEND|os.O_CREATE, 0666)
+			fd, err := os.OpenFile(arg1, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0666)
 			if err == nil {
 				if err = fd.Close(); err != nil {
 					fmt.Fprintln(this.Err(), err.Error())

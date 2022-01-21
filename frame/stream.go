@@ -91,7 +91,7 @@ func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, 
 	}
 	row := history.NewHistoryLine(line)
 	stream.History.PushLine(row)
-	fd, err := os.OpenFile(stream.HistPath, os.O_APPEND|os.O_CREATE, 0600)
+	fd, err := os.OpenFile(stream.HistPath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0600)
 	if err == nil {
 		fmt.Fprintln(fd, row.String())
 		fd.Close()

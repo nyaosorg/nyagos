@@ -339,7 +339,7 @@ var reverse = strings.NewReplacer(
 
 func openSeeNoClobber(fname string) (*os.File, error) {
 	if NoClobber {
-		return os.OpenFile(fname, os.O_EXCL|os.O_CREATE, 0666)
+		return os.OpenFile(fname, os.O_EXCL|os.O_WRONLY|os.O_CREATE, 0666)
 	}
 	return os.Create(fname)
 }
@@ -574,7 +574,7 @@ func parse1(stream Stream, text string) ([]*_Statement, error) {
 			toDoNextWord = func(word string) {
 				word = string2word(word, true)
 				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
-					fd, err := os.OpenFile(word, os.O_APPEND|os.O_CREATE, 0666)
+					fd, err := os.OpenFile(word, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
 						return func() {}, err
 					}
@@ -587,7 +587,7 @@ func parse1(stream Stream, text string) ([]*_Statement, error) {
 			toDoNextWord = func(word string) {
 				word = string2word(word, true)
 				toDoRedirect = append(toDoRedirect, func(fds []*os.File) (func(), error) {
-					fd, err := os.OpenFile(word, os.O_APPEND|os.O_CREATE, 0666)
+					fd, err := os.OpenFile(word, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0666)
 					if err != nil {
 						return func() {}, err
 					}
