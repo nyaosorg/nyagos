@@ -6,6 +6,8 @@
 * Fix coloring: -0 .. -9 were not colored for options.
 * `rmdir /s` can remove readonly-folder like cmd.exe
 * Support `rmdir FOLDER /s` (`/s` option can be put after folder list)
+* Fix: On Linux version and `set -o noclobber`, redirect output was always zero bytes.
+* Fix: On Linux version, histories were not saved to the file.
 
 NYAGOS 4.4.11\_0
 ================
