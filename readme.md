@@ -73,23 +73,23 @@ Contents
 
 ### Release note
 
-- [4.4.x](Doc/release_note_en.md)
-- [4.3.x](Doc/history-4.3_en.md)
-- [4.2.x](Doc/history-4.2_en.md)
-- [4.1.x](Doc/history-4.1_en.md)
-- [4.0.x](Doc/history-4.0_en.md)
+- [4.4.x](docs/release_note_en.md)
+- [4.3.x](docs/history-4.3_en.md)
+- [4.2.x](docs/history-4.2_en.md)
+- [4.1.x](docs/history-4.1_en.md)
+- [4.0.x](docs/history-4.0_en.md)
 
 ### Documents
 
-1. [Install](Doc/01-Install_en.md)
-2. [Option for NYAGOS](Doc/02-Options_en.md)
-3. [Editor](Doc/03-Readline_en.md)
-4. [Built-in commands](Doc/04-Commands_en.md)
-5. [What is done on the Startup](Doc/05-Startup_en.md)
-6. [Substitution](Doc/06-Substitution_en.md)
-7. [Lua functions extenteded by NYAGOS](Doc/07-LuaFunctions_en.md)
-8. [Uninstall](Doc/08-Uninstall_en.md)
-9. [How To Build](Doc/09-Build_en.md)
+1. [Install](docs/01-Install_en.md)
+2. [Option for NYAGOS](docs/02-Options_en.md)
+3. [Editor](docs/03-Readline_en.md)
+4. [Built-in commands](docs/04-Commands_en.md)
+5. [What is done on the Startup](docs/05-Startup_en.md)
+6. [Substitution](docs/06-Substitution_en.md)
+7. [Lua functions extenteded by NYAGOS](docs/07-LuaFunctions_en.md)
+8. [Uninstall](docs/08-Uninstall_en.md)
+9. [How To Build](docs/09-Build_en.md)
 
 License
 -------
