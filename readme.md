@@ -151,4 +151,4 @@ Acknowledgement
 Author
 ------
 
-* [zetamatta](https://github.com/zetamatta)
+* [hymkor - HAYAMA Kaoru](https://github.com/hymkor) (a.k.a zetamatta)
