@@ -3,15 +3,15 @@
 Build
 -----
 
-Git, [Go 1.16 or later](http://golang.org) and GNU Make are required
+Git, [Go 1.17 or later](http://golang.org) and GNU Make are required
 
-    git clone https://github.com/zetamatta/nyagos
+    git clone https://github.com/nyaosorg/nyagos
     cd nyagos
     make
 
 If you do not have GNU Make,
 
-    git clone https://github.com/zetamatta/nyagos
+    git clone https://github.com/nyaosorg/nyagos
     cd nyagos
 
     (for Windows)

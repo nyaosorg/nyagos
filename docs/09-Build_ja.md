@@ -3,15 +3,15 @@
 ビルド方法
 ----------
 
-Git, [Go 1.16~](http://golang.org), GNU Make が必要となります
+Git, [Go 1.17~](http://golang.org), GNU Make が必要となります
 
-    git clone https://github.com/zetamatta/nyagos
+    git clone https://github.com/nyaosorg/nyagos
     cd nyagos
     make
 
 GNU Make がない場合は
 
-    git clone https://github.com/zetamatta/nyagos
+    git clone https://github.com/nyaosorg/nyagos
     cd nyagos
 
     (Windowsの場合)

@@ -3,7 +3,7 @@
 インストール
 ------------
 
-バイナリファイルは https://github.com/zetamatta/nyagos/releases よりダウンロード可能です。
+バイナリファイルは https://github.com/nyaosorg/nyagos/releases よりダウンロード可能です。
 
     mkdir PATH\TO\INSTALLDIR
     cd PATH\TO\INSTALLDIR

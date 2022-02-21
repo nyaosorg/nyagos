@@ -2,7 +2,7 @@
 
 ## Install
 
-The binary files can be downloaded on [Release](https://github.com/zetamatta/nyagos/releases).
+The binary files can be downloaded on [Release](https://github.com/nyaosorg/nyagos/releases).
 
     mkdir PATH\TO\INSTALLDIR
     cd PATH\TO\INSTALLDIR
