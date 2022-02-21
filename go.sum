@@ -47,8 +47,8 @@ github.com/nyaosorg/go-readline-ny v0.6.3 h1:Pz+dITtHnhlkGVg+KhxhjmG15520jrbsQGV
 github.com/nyaosorg/go-readline-ny v0.6.3/go.mod h1:FrkeBvooDs5L6EoWfeCpCZDltaeLzb3sSOV51Tj8nVU=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022 h1:4WxrzYVJcE2jPDRFs8qXrhPLDt9Bm78WiTm6bTt2xZc=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022/go.mod h1:htF2oC1Ezpvaew+/cyJKex559A2TA86svovywkVN4ss=
-github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af h1:CaekS9qYgBC8K+eNXTynOJPpcGzwPLp0Sgj6FjLgP0I=
-github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af/go.mod h1:4LfCXQBErqxzunYq+1MRpePh6On3RFDzfUatd64eInA=
+github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b h1:lqJjHpjXwfKC+N9EgLhGoYwuFHOXEyXcjotgq2hq8Qk=
+github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b/go.mod h1:4LfCXQBErqxzunYq+1MRpePh6On3RFDzfUatd64eInA=
 github.com/nyaosorg/go-windows-findfile v0.0.0-20210914121648-32cd570b169f h1:poT6odwcYhXYemqc3dm2ehVlfyy55DiB88Kb7WtQDEg=
 github.com/nyaosorg/go-windows-findfile v0.0.0-20210914121648-32cd570b169f/go.mod h1:FyGAaz0B1idJA1cuP6Ydx3LgSnnwR9RHvCPp1JT84N4=
 github.com/nyaosorg/go-windows-junction v0.1.0 h1:Hf5G65zAyhnUjyKexucS+KAAPZXtie7DPOn6IBGsOU8=
@@ -56,8 +56,8 @@ github.com/nyaosorg/go-windows-junction v0.1.0/go.mod h1:mSQE2VnZxBCeDhRgMunrvIq
 github.com/nyaosorg/go-windows-mbcs v0.0.0-20210914102041-eb1f2d0081b2 h1:63zq43tW5SOajzXe4Q3/S3JERIfiPJQEedLNQkSK+nM=
 github.com/nyaosorg/go-windows-mbcs v0.0.0-20210914102041-eb1f2d0081b2/go.mod h1:crZALOAOrrYt3D/d//MNN700AD3btyUBI+PeHT1zQg4=
 github.com/nyaosorg/go-windows-netresource v0.0.0-20200329084136-43063a7e4cd2/go.mod h1:/l55u68Ky+4wQuWDHSkAjKbwryygKU8+vJYaGT+gn58=
-github.com/nyaosorg/go-windows-netresource v0.0.0-20210914111819-6c37ed46c17d h1:TuWSbK5EQcofaHJzTQN0nUJMoXLepONrbSo3JP11JZk=
-github.com/nyaosorg/go-windows-netresource v0.0.0-20210914111819-6c37ed46c17d/go.mod h1:V/cHQHB7jxJ7KXZHErsIodC0FAYWaXaMj5R2v+FeLqw=
+github.com/nyaosorg/go-windows-netresource v0.0.0-20220221182809-c0ac5c14520d h1:MgjquaYtOhVi6Fsc0a35jAmoAd6bMM3aNvsxlvzEoj0=
+github.com/nyaosorg/go-windows-netresource v0.0.0-20220221182809-c0ac5c14520d/go.mod h1:ROtUv+AQZIMmFan3yORXf6Ugfqn2x2cw/oizBG5Kgmk=
 github.com/nyaosorg/go-windows-shortcut v0.0.0-20210914105108-6045794cece9 h1:Eok75NWccZL1Z8DVVXbZ0/ll3+YUb+mo1AHUWLelVDk=
 github.com/nyaosorg/go-windows-shortcut v0.0.0-20210914105108-6045794cece9/go.mod h1:aJpsUS2X8mUEtAwtFezpv0Gk9M+Umr3V5+omZukKX3c=
 github.com/nyaosorg/go-windows-su v0.2.0 h1:/w9XziPy3/zT/AJ/F8Yof0dQ+lGoEThb1aVRvM2Ki7U=

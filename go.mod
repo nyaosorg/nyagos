@@ -17,11 +17,11 @@ require (
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
 	github.com/nyaosorg/go-readline-ny v0.6.3
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
-	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20210914114615-5067f0b996af
+	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20210914121648-32cd570b169f
 	github.com/nyaosorg/go-windows-junction v0.1.0
 	github.com/nyaosorg/go-windows-mbcs v0.0.0-20210914102041-eb1f2d0081b2
-	github.com/nyaosorg/go-windows-netresource v0.0.0-20210914111819-6c37ed46c17d
+	github.com/nyaosorg/go-windows-netresource v0.0.0-20220221182809-c0ac5c14520d
 	github.com/nyaosorg/go-windows-shortcut v0.0.0-20210914105108-6045794cece9
 	github.com/nyaosorg/go-windows-su v0.2.0
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
