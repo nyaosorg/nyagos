@@ -11,8 +11,9 @@ type _Coloring struct {
 	last rune
 }
 
-func (s *_Coloring) Init() {
+func (s *_Coloring) Init() int {
 	s.bits = 0
+	return readline.White
 }
 
 func (s *_Coloring) Next(codepoint rune) int {

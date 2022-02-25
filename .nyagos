@@ -20,9 +20,9 @@ nyagos.prompt = function(this)
     end
     local title = wd .. " - NYAGOS"
     if nyagos.elevated() then
-        return nyagos.default_prompt('$e[40;31;1m'..this..'$e[37;1m',title)
+        return nyagos.default_prompt('$e[49;31;1m'..this..'$e[37;1m',title)
     else
-        return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
+        return nyagos.default_prompt('$e[49;36;1m'..this..'$e[37;1m',title)
     end
 end
 
