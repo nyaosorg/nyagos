@@ -1,4 +1,4 @@
-[top](..) &gt; English / [Japanese](release_note_ja.md)
+[top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
 * Change the color of the option-string dark-yellow and fix the range
 * Change the background-color of the Ideographic Space (U+3000) red
