@@ -1,4 +1,4 @@
-[top](..) &gt; English / [Japanese](history-4.1_ja.md)
+[top](../readme.md) &gt; English / [Japanese](history-4.1_ja.md)
 
 Since 4.1
 =========

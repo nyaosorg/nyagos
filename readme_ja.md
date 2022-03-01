@@ -73,23 +73,23 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 
 ### リリースノート
 
-- [4.4.x](Doc/release_note_ja.md)
-- [4.3.x](Doc/history-4.3_ja.md)
-- [4.2.x](Doc/history-4.2_ja.md)
-- [4.1.x](Doc/history-4.1_ja.md)
-- [4.0.x](Doc/history-4.0_ja.md)
+- [4.4.x](docs/release_note_ja.md)
+- [4.3.x](docs/history-4.3_ja.md)
+- [4.2.x](docs/history-4.2_ja.md)
+- [4.1.x](docs/history-4.1_ja.md)
+- [4.0.x](docs/history-4.0_ja.md)
 
 ### ドキュメント
 
-1. [インストール](Doc/01-Install_ja.md)
-2. [起動オプション](Doc/02-Options_ja.md)
-3. [編集機能](Doc/03-Readline_ja.md)
-4. [内蔵コマンド](Doc/04-Commands_ja.md)
-5. [起動処理](Doc/05-Startup_ja.md)
-6. [コマンドライン置換](Doc/06-Substitution_ja.md)
-7. [Lua拡張](Doc/07-LuaFunctions_ja.md)
-8. [アンインストール](Doc/08-Uninstall_ja.md)
-9. [ビルド方法](Doc/09-Build_ja.md)
+1. [インストール](docs/01-Install_ja.md)
+2. [起動オプション](docs/02-Options_ja.md)
+3. [編集機能](docs/03-Readline_ja.md)
+4. [内蔵コマンド](docs/04-Commands_ja.md)
+5. [起動処理](docs/05-Startup_ja.md)
+6. [コマンドライン置換](docs/06-Substitution_ja.md)
+7. [Lua拡張](docs/07-LuaFunctions_ja.md)
+8. [アンインストール](docs/08-Uninstall_ja.md)
+9. [ビルド方法](docs/09-Build_ja.md)
 
 ライセンス
 ----------
