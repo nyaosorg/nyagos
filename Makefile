@@ -57,7 +57,7 @@ nyagos.syso:
 
 get:
 	go get -u
-#	go get -u github.com/zetamatta/go-readline-ny@master
+	go get -u github.com/nyaosorg/go-readline-ny@master
 	go mod tidy
 
 VERSION=$(shell $(TYPE) Etc$(D)version.txt)
