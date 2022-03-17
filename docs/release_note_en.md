@@ -8,6 +8,8 @@
 * Support `rmdir FOLDER /s` (`/s` option can be put after folder list)
 * Fix: On Linux version and `set -o noclobber`, redirect output was always zero bytes.
 * Fix: On Linux version, histories were not saved to the file.
+* WezTerm: enable surrogate-pair
+* To enable transparency of terminal, use default-bgcolor(ESC[49m) instead of black(ESC[40m) (go-readline-ny v0.7.0)
 
 NYAGOS 4.4.11\_0
 ================
