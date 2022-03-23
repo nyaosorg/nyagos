@@ -75,6 +75,13 @@ package:
 	tar zcvf "nyagos-$(VERSION)-linux-amd64.tar.gz" -C .. \
 	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
 
+workspace:
+	cd .. && go work init go-readline-ny nyagos
+
+unworkspace:
+	$(DEL) ..$(D)go.work
+	$(MAKE) get
+
 ifeq ($(OS),Windows_NT)
 install:
 ifeq ($(INSTALLDIR),)
