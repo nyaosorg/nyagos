@@ -1,15 +1,17 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-* Change the color of the option-string dark-yellow and fix the range
-* Change the background-color of the Ideographic Space (U+3000) red
+* Modified colored commandline
+    * Change the color of the option-string dark-yellow and fix the range
+    * Change the background-color of the Ideographic Space (U+3000) red
+    * To enable transparency of terminal, use default-bgcolor(ESC[49m) instead of black(ESC[40m) (go-readline-ny v0.7.0)
+    * Fix coloring: -0 .. -9 were not colored for options.
+    * WezTerm: enable surrogate-pair
+* Fix for Linux version only
+    * Fix: `set -o noclobber`, redirect output was always zero bytes.
+    * Fix: histories were not saved to the file.
 * (#416) Complete for `start` to any files and directories on %PATH%
-* Fix coloring: -0 .. -9 were not colored for options.
 * `rmdir /s` can remove readonly-folder like cmd.exe
 * Support `rmdir FOLDER /s` (`/s` option can be put after folder list)
-* Fix: On Linux version and `set -o noclobber`, redirect output was always zero bytes.
-* Fix: On Linux version, histories were not saved to the file.
-* WezTerm: enable surrogate-pair
-* To enable transparency of terminal, use default-bgcolor(ESC[49m) instead of black(ESC[40m) (go-readline-ny v0.7.0)
 
 NYAGOS 4.4.11\_0
 ================
