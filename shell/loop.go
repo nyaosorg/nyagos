@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
 )
 
@@ -48,20 +47,6 @@ func (ses *session) pop() (string, bool) {
 	return line, true
 }
 
-// endsWithSep returns
-//     false when line does not end with `^`
-//     true when line ends with `^`
-//     false when line ends with `^^`
-//     true when line ends with `^^^`
-func endsWithSep(line string, contMark byte) bool {
-	markCount := 0
-	for len(line) > 0 && line[len(line)-1] == contMark {
-		markCount++
-		line = line[:len(line)-1]
-	}
-	return markCount%2 != 0
-}
-
 // ReadCommand reads completed one command from `stream`.
 func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, error) {
 	stream := sh.Stream
@@ -70,26 +55,13 @@ func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, erro
 
 	line, ok := sh.pop()
 	if !ok {
-		for {
-			outputMutex.Lock()
-			os.Stderr.Sync()
-			os.Stdout.Sync()
-			var line1 string
-			ctx, line1, err = stream.ReadLine(ctx)
-			outputMutex.Unlock()
-			line += line1
-			if err != nil {
-				return ctx, line, err
-			}
-			if endsWithSep(line, '^') {
-				line = line[:len(line)-1] + "\r\n"
-				continue
-			}
-			if strings.Count(line, "\"")%2 != 0 {
-				line = line + "\r\n"
-				continue
-			}
-			break
+		outputMutex.Lock()
+		os.Stderr.Sync()
+		os.Stdout.Sync()
+		ctx, line, err = stream.ReadLine(ctx)
+		outputMutex.Unlock()
+		if err != nil {
+			return ctx, line, err
 		}
 
 		texts := splitToStatement(line)
