@@ -1,6 +1,7 @@
 package frame
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -49,6 +50,53 @@ func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
 	return stream.History.IgnorePush(value)
 }
 
+// endsWithSep returns
+//     false when line does not end with `^`
+//     true when line ends with `^`
+//     false when line ends with `^^`
+//     true when line ends with `^^^`
+func endsWithSep(line []byte, contMark byte) bool {
+	markCount := 0
+	for len(line) > 0 && line[len(line)-1] == contMark {
+		markCount++
+		line = line[:len(line)-1]
+	}
+	return markCount%2 != 0
+}
+
+func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, error) {
+	continued := false
+	originalPrompt := os.Getenv("PROMPT")
+	defer func() {
+		if continued {
+			os.Setenv("PROMPT", originalPrompt)
+		}
+	}()
+
+	buffer := make([]byte, 0, 256)
+	for {
+		line, err := stream.Editor.ReadLine(ctx)
+		buffer = append(buffer, line...)
+		if err != nil {
+			return string(buffer), err
+		}
+		if endsWithSep(buffer, '^') {
+			buffer = buffer[:len(buffer)-1]
+			buffer = append(buffer, '\r', '\n')
+			continued = true
+			os.Setenv("PROMPT", "> ")
+			continue
+		}
+		if bytes.Count(buffer, []byte{'"'})%2 != 0 {
+			buffer = append(buffer, '\r', '\n')
+			continued = true
+			os.Setenv("PROMPT", "> ")
+			continue
+		}
+		return string(buffer), err
+	}
+}
+
 func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
 	if stream.Pointer >= 0 {
 		if stream.Pointer < len(stream.PlainHistory) {
@@ -63,7 +111,7 @@ func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, 
 		disabler := colorable.EnableColorsStdout(nil)
 		clean, err2 := consoleicon.SetFromExe()
 		for {
-			line, err = stream.Editor.ReadLine(ctx)
+			line, err = stream.readLineContinued(ctx)
 			if err != readline.CtrlC {
 				break
 			}
