@@ -70,6 +70,13 @@ func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, erro
 
 	line, ok := sh.pop()
 	if !ok {
+		continued := false
+		originalPrompt := os.Getenv("PROMPT")
+		defer func() {
+			if continued {
+				os.Setenv("PROMPT", originalPrompt)
+			}
+		}()
 		for {
 			outputMutex.Lock()
 			os.Stderr.Sync()
@@ -83,10 +90,14 @@ func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, erro
 			}
 			if endsWithSep(line, '^') {
 				line = line[:len(line)-1] + "\r\n"
+				continued = true
+				os.Setenv("PROMPT", "> ")
 				continue
 			}
 			if strings.Count(line, "\"")%2 != 0 {
 				line = line + "\r\n"
+				continued = true
+				os.Setenv("PROMPT", "> ")
 				continue
 			}
 			break
