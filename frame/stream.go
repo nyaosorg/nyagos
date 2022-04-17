@@ -70,6 +70,7 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 	defer func() {
 		if continued {
 			os.Setenv("PROMPT", originalPrompt)
+			stream.Editor.Coloring.(*_Coloring).defaultBits &^= quotedBit
 		}
 	}()
 
@@ -91,6 +92,7 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 			buffer = append(buffer, '\r', '\n')
 			continued = true
 			os.Setenv("PROMPT", "> ")
+			stream.Editor.Coloring.(*_Coloring).defaultBits |= quotedBit
 			continue
 		}
 		return string(buffer), err

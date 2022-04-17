@@ -7,22 +7,24 @@ import (
 )
 
 type _Coloring struct {
-	bits int
-	last rune
+	bits        int
+	last        rune
+	defaultBits int
 }
 
 func (s *_Coloring) Init() int {
-	s.bits = 0
+	s.bits = s.defaultBits
 	return readline.White
 }
 
+const (
+	backquotedBit = 1
+	percentBit    = 2
+	quotedBit     = 4
+	optionBit     = 8
+)
+
 func (s *_Coloring) Next(codepoint rune) int {
-	const (
-		backquotedBit = 1
-		percentBit    = 2
-		quotedBit     = 4
-		optionBit     = 8
-	)
 	newbits := s.bits
 	if codepoint == '`' {
 		newbits ^= backquotedBit
