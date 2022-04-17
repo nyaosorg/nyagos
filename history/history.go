@@ -237,6 +237,30 @@ func (hisObj *Container) Save(path string) error {
 	return fd.Close()
 }
 
+func encodeTextToPrivate(s string) string {
+	var buffer strings.Builder
+	for _, r := range s {
+		if r < ' ' {
+			buffer.WriteRune('\uE000' + r)
+		} else {
+			buffer.WriteRune(r)
+		}
+	}
+	return buffer.String()
+}
+
+func decodeTextFromPrivate(s string) string {
+	var buffer strings.Builder
+	for _, r := range s {
+		if '\uE000' <= r && r < '\uE020' {
+			buffer.WriteRune(r - '\uE000')
+		} else {
+			buffer.WriteRune(r)
+		}
+	}
+	return buffer.String()
+}
+
 func (hisObj *Container) LoadViaReader(reader io.Reader) {
 	sc := bufio.NewScanner(reader)
 	for sc.Scan() {
@@ -254,7 +278,7 @@ func (hisObj *Container) LoadViaReader(reader io.Reader) {
 			}
 		}
 		hisObj.PushLine(Line{
-			Text:  p[0],
+			Text:  decodeTextFromPrivate(p[0]),
 			Dir:   dir,
 			Stamp: stamp,
 			Pid:   pid})

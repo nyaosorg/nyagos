@@ -62,7 +62,7 @@ func (c *Container) PushLine(row Line) {
 // String returns self as printable text
 func (row *Line) String() string {
 	return fmt.Sprintf("%s\t%s\t%s\t%d",
-		row.Text,
+		encodeTextToPrivate(row.Text),
 		row.Dir,
 		row.Stamp.Format("2006-01-02 15:04:05"),
 		row.Pid)
