@@ -12,6 +12,7 @@
 * (#416) Complete for `start` to any files and directories on %PATH%
 * `rmdir /s` can remove readonly-folder like cmd.exe
 * Support `rmdir FOLDER /s` (`/s` option can be put after folder list)
+* (#418) When the command-line ends with ^ or "..." is not closed, continue line-input after enter-key is input.
 
 NYAGOS 4.4.11\_0
 ================
