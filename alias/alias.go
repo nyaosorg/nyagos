@@ -6,6 +6,8 @@ import (
 
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/shell"
+
+	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"
 )
 
 var dbg = false
@@ -39,13 +41,13 @@ func (f *Func) Call(ctx context.Context, cmd *shell.Cmd) (next int, err error) {
 }
 
 // Table is the ALL ALIAS table !
-var Table = map[string]callableT{}
+var Table ignoreCaseSorted.Dictionary[callableT]
 
 // AllNames returns all-alias names for completion
 func AllNames(ctx context.Context) ([]completion.Element, error) {
-	names := make([]completion.Element, 0, len(Table))
-	for name1 := range Table {
-		names = append(names, completion.Element1(name1))
+	names := make([]completion.Element, 0, Table.Len())
+	for p := Table.Each(); p.Range(); {
+		names = append(names, completion.Element1(p.Key))
 	}
 	return names, nil
 }
@@ -53,15 +55,14 @@ func AllNames(ctx context.Context) ([]completion.Element, error) {
 var nextHook shell.HookT
 
 func hook(ctx context.Context, cmd *shell.Cmd) (int, bool, error) {
-	lowerName := strings.ToLower(cmd.Arg(0))
-	callee, ok := Table[lowerName]
+	callee, ok := Table.Load(cmd.Arg(0))
 	if !ok {
 		return nextHook(ctx, cmd)
 	}
 	// Do not refer same name as alias.
 	newcmd := *cmd
 	newcmd.LineHook = func(_ctx context.Context, _cmd *shell.Cmd) (int, bool, error) {
-		if strings.EqualFold(_cmd.Arg(0), lowerName) {
+		if strings.EqualFold(_cmd.Arg(0), cmd.Arg(0)) {
 			return nextHook(_ctx, _cmd)
 		}
 		return hook(_ctx, _cmd)

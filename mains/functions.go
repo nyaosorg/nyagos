@@ -10,7 +10,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 
 	"github.com/nyaosorg/nyagos/alias"
 	"github.com/nyaosorg/nyagos/shell"
@@ -76,21 +75,21 @@ func (lbc *_LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 }
 
 func cmdSetAlias(L Lua) int {
-	key := strings.ToLower(L.ToString(-2))
+	key := L.ToString(-2)
 	switch L.Get(-1).Type() {
 	case lua.LTString:
-		alias.Table[key] = alias.New(L.ToString(-1))
+		alias.Table.Store(key, alias.New(L.ToString(-1)))
 	case lua.LTFunction:
-		alias.Table[key] = &_LuaBinaryChank{Chank: L.ToFunction(-1)}
+		alias.Table.Store(key, &_LuaBinaryChank{Chank: L.ToFunction(-1)})
 	case lua.LTNil:
-		delete(alias.Table, key)
+		alias.Table.Delete(key)
 	}
 	L.Push(lua.LTrue)
 	return 1
 }
 
 func cmdGetAlias(L Lua) int {
-	value, ok := alias.Table[strings.ToLower(L.ToString(-1))]
+	value, ok := alias.Table.Load(L.ToString(-1))
 	if !ok {
 		L.Push(lua.LNil)
 		return 1

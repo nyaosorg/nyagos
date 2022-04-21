@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/nyaosorg/nyagos/alias"
 	"github.com/nyaosorg/nyagos/nodos"
@@ -37,7 +36,7 @@ func cmdWhich(ctx context.Context, cmd Param) (int, error) {
 			extList = envToList("", "PATHEXT")
 			continue
 		}
-		if a, ok := alias.Table[strings.ToLower(name)]; ok {
+		if a, ok := alias.Table.Load(name); ok {
 			fmt.Fprintf(cmd.Out(), "%s: aliased to %s\n", name, a.String())
 			if !all {
 				continue

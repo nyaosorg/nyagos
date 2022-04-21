@@ -10,8 +10,8 @@ import (
 
 func cmdAlias(ctx context.Context, cmd Param) (int, error) {
 	if len(cmd.Args()) <= 1 {
-		for key, val := range alias.Table {
-			fmt.Fprintf(cmd.Out(), "%s=%s\n", key, val.String())
+		for p := alias.Table.Each(); p.Range(); {
+			fmt.Fprintf(cmd.Out(), "%s=%s\n", p.Key, p.Value.String())
 		}
 		return 0, nil
 	}
@@ -20,15 +20,14 @@ func cmdAlias(ctx context.Context, cmd Param) (int, error) {
 			key := args[0:eqlPos]
 			val := args[eqlPos+1:]
 			if len(val) > 0 {
-				alias.Table[strings.ToLower(key)] = alias.New(val)
+				alias.Table.Store(key, alias.New(val))
 			} else {
-				delete(alias.Table, strings.ToLower(key))
+				alias.Table.Delete(key)
 			}
 		} else {
-			key := strings.ToLower(args)
-			val, ok := alias.Table[key]
+			val, ok := alias.Table.Load(args)
 			if ok {
-				fmt.Fprintf(cmd.Out(), "%s=%s\n", key, val.String())
+				fmt.Fprintf(cmd.Out(), "%s=%s\n", args, val.String())
 			}
 		}
 	}
