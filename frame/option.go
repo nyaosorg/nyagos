@@ -18,7 +18,8 @@ import (
 	"github.com/nyaosorg/nyagos/defined"
 	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/nyaosorg/nyagos/shell"
-	"github.com/nyaosorg/nyagos/texts"
+
+	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"
 )
 
 // OptionNorc is true, then rcfiles are not executed.
@@ -113,7 +114,7 @@ func makeCommandline(p *optionArg) string {
 	return text + rest
 }
 
-var optionMap = map[string]optionT{
+var optionMap = ignoreCaseSorted.New(map[string]optionT{
 	"--subst": {
 		U:  "\"DRIVE:=PATH\"\nassign DRIVE to PATH by subst on startup",
 		F1: optionSubst,
@@ -297,7 +298,7 @@ var optionMap = map[string]optionT{
 			shell.LookCurdirOrder = nodos.LookCurdirNever
 		},
 	},
-}
+})
 
 func Title() {
 	fmt.Printf("Nihongo Yet Another GOing Shell %s-%s-%s by %s\n",
@@ -313,9 +314,8 @@ func help(p *optionArg) (func(context.Context) error, error) {
 	return func(context.Context) error {
 		Title()
 		fmt.Println()
-		for _, key := range texts.SortedKeys(optionMap) {
-			val := optionMap[key]
-			fmt.Printf("%s %s\n", key, strings.Replace(val.U, "\n", "\n\t", -1))
+		for p := optionMap.Each(); p.Range(); {
+			fmt.Printf("%s %s\n", p.Key, strings.Replace(p.Value.U, "\n", "\n\t", -1))
 		}
 
 		fmt.Println("\nThese script are called on startup")
@@ -357,13 +357,15 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 		println("raws:", strings.Join(raws, "|"))
 		println("args:", strings.Join(args, "|"))
 	}
-	optionMap["-h"] = optionT{V: help, U: "\nPrint this usage"}
-	optionMap["--help"] = optionT{V: help, U: "\nPrint this usage"}
+	optionMap.Store("-h", optionT{V: help, U: "\nPrint this usage"})
+	optionMap.Store("--help", optionT{V: help, U: "\nPrint this usage"})
 
-	for key, val := range commands.BoolOptions {
+	for p := commands.BoolOptions.Each(); p.Range(); {
+		key := p.Key
+		val := p.Value
 		_key := strings.Replace(key, "_", "-", -1)
 		_val := val
-		optionMap["--"+_key] = optionT{
+		optionMap.Store("--"+_key, optionT{
 			F: func() {
 				*_val.V = true
 			},
@@ -371,8 +373,8 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 				key,
 				isDefault(*val.V),
 				_val.Usage),
-		}
-		optionMap["--no-"+_key] = optionT{
+		})
+		optionMap.Store("--no-"+_key, optionT{
 			F: func() {
 				*_val.V = false
 			},
@@ -380,11 +382,11 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 				key,
 				isDefault(!*val.V),
 				_val.NoUsage),
-		}
+		})
 	}
 
 	for i := 0; i < len(args); i++ {
-		if f, ok := optionMap[args[i]]; ok {
+		if f, ok := optionMap.Load(args[i]); ok {
 			if f.F != nil {
 				f.F()
 			}

@@ -12,7 +12,8 @@ import (
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/nyaosorg/nyagos/shell"
-	"github.com/nyaosorg/nyagos/texts"
+
+	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"
 )
 
 // ReadStdinAsFile is the flat to read commands from stdin as a file stream
@@ -25,7 +26,7 @@ type optionT struct {
 }
 
 // BoolOptions are the all global option list.
-var BoolOptions = map[string]*optionT{
+var BoolOptions = ignoreCaseSorted.New(map[string]*optionT{
 	"completion_hidden": {
 		V:       &completion.IncludeHidden,
 		Usage:   "Include hidden files on completion",
@@ -66,17 +67,18 @@ var BoolOptions = map[string]*optionT{
 		Usage:   "Output surrogate pair characters as it is",
 		NoUsage: "Output surrogate pair characters like <NNNNN>",
 	},
-}
+})
 
 func dumpBoolOptions(out io.Writer) {
 	max := 0
-	for key := range BoolOptions {
-		if L := len(key); L > max {
+	for p := BoolOptions.Each(); p.Range(); {
+		if L := len(p.Key); L > max {
 			max = L
 		}
 	}
-	for _, key := range texts.SortedKeys(BoolOptions) {
-		val := BoolOptions[key]
+	for p := BoolOptions.Each(); p.Range(); {
+		key := p.Key
+		val := p.Value
 		if *val.V {
 			fmt.Fprint(out, "-o ")
 		} else {
@@ -106,7 +108,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 			if len(args) < 1 {
 				dumpBoolOptions(cmd.Out())
 			} else {
-				if ptr, ok := BoolOptions[args[0]]; ok {
+				if ptr, ok := BoolOptions.Load(args[0]); ok {
 					*ptr.V = true
 				} else {
 					fmt.Fprintf(cmd.Err(), "-o %s: no such option\n", args[0])
@@ -118,7 +120,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 			if len(args) < 1 {
 				dumpBoolOptions(cmd.Out())
 			} else {
-				if ptr, ok := BoolOptions[args[0]]; ok {
+				if ptr, ok := BoolOptions.Load(args[0]); ok {
 					*ptr.V = false
 				} else {
 					fmt.Fprintf(cmd.Err(), "+o %s: no such option\n", args[0])

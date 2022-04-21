@@ -426,7 +426,7 @@ func GetOption(args []anyT) []anyT {
 		return []anyT{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
-	ptr, ok := commands.BoolOptions[key]
+	ptr, ok := commands.BoolOptions.Load(key)
 	if !ok {
 		return []anyT{nil, fmt.Sprintf("key: %s: not found", key)}
 	}
@@ -438,7 +438,7 @@ func SetOption(args []anyT) []anyT {
 		return []anyT{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
-	ptr, ok := commands.BoolOptions[key]
+	ptr, ok := commands.BoolOptions.Load(key)
 	if !ok || ptr == nil {
 		return []anyT{nil, "key: %s: not found"}
 	}

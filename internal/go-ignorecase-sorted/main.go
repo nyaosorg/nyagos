@@ -106,3 +106,11 @@ func (e *Enumerator[T]) Range() bool {
 	e.Value = p.Value
 	return true
 }
+
+func New[T any](source map[string]T) *Dictionary[T] {
+	var d Dictionary[T]
+	for key, val := range source {
+		d.Store(key, val)
+	}
+	return &d
+}
