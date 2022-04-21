@@ -11,6 +11,8 @@ import (
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/nyaosorg/nyagos/shell"
+
+	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"
 )
 
 // Param is the interface for built-in command
@@ -32,24 +34,24 @@ type Param interface {
 	GetHistory() shell.History
 }
 
-var buildInCommand map[string]func(context.Context, Param) (int, error)
+var buildInCommand ignoreCaseSorted.Dictionary[func(context.Context, Param) (int, error)]
 var unscoNamePattern = regexp.MustCompile("^__(.*)__$")
 var backslashPattern = regexp.MustCompile(`^\\(\w*)$`)
 
 // Exec is the entry function to call built-in functions from Shell
 func Exec(ctx context.Context, cmd Param) (int, bool, error) {
-	name := strings.ToLower(cmd.Arg(0))
+	name := cmd.Arg(0)
 	if len(name) == 2 && strings.HasSuffix(name, ":") {
 		pushCdHistory()
 		_, err := nodos.Chdrive(name)
 		return 0, true, err
 	}
-	function, ok := buildInCommand[name]
+	function, ok := buildInCommand.Load(name)
 	if !ok {
 		m := unscoNamePattern.FindStringSubmatch(name)
 		if m != nil {
 			name = m[1]
-			function, ok = buildInCommand[name]
+			function, ok = buildInCommand.Load(name)
 			if !ok {
 				return 0, false, nil
 			}
@@ -59,7 +61,7 @@ func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 				return 0, false, nil
 			}
 			name = n[1]
-			function, ok = buildInCommand[name]
+			function, ok = buildInCommand.Load(name)
 			if !ok {
 				return 0, false, nil
 			}
@@ -72,9 +74,9 @@ func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 
 // AllNames returns all command-names for completion package.
 func AllNames(ctx context.Context) ([]completion.Element, error) {
-	names := make([]completion.Element, 0, len(buildInCommand))
-	for name1 := range buildInCommand {
-		names = append(names, completion.Element1(name1))
+	names := make([]completion.Element, 0, buildInCommand.Len())
+	for p := buildInCommand.Each(); p.Range(); {
+		names = append(names, completion.Element1(p.Key))
 	}
 	return names, nil
 }

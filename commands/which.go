@@ -42,7 +42,7 @@ func cmdWhich(ctx context.Context, cmd Param) (int, error) {
 				continue
 			}
 		}
-		if _, ok := buildInCommand[name]; ok {
+		if _, ok := buildInCommand.Load(name); ok {
 			fmt.Fprintf(cmd.Out(), "%s: built-in command\n", name)
 			if !all {
 				continue

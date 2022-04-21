@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	buildInCommand = map[string]func(context.Context, Param) (int, error){
+	data := map[string]func(context.Context, Param) (int, error){
 		".":        cmdSource,
 		"alias":    cmdAlias,
 		"attrib":   cmdAttrib,
@@ -59,6 +59,9 @@ func init() {
 		"touch":    cmdTouch,
 		"type":     cmdType,
 		"which":    cmdWhich,
+	}
+	for key, val := range data {
+		buildInCommand.Store(key, val)
 	}
 }
 
