@@ -67,35 +67,24 @@ func endsWithSep(line []byte, contMark byte) bool {
 func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, error) {
 	continued := false
 	originalPrompt := os.Getenv("PROMPT")
-	defer func() {
-		if continued {
-			os.Setenv("PROMPT", originalPrompt)
-			stream.Editor.Coloring.(*_Coloring).defaultBits &^= quotedBit
-		}
-	}()
-
 	buffer := make([]byte, 0, 256)
 	for {
 		line, err := stream.Editor.ReadLine(ctx)
 		buffer = append(buffer, line...)
-		if err != nil {
+		if err != nil || !endsWithSep(buffer, '^') {
+			if continued {
+				os.Setenv("PROMPT", originalPrompt)
+				stream.Editor.Coloring.(*_Coloring).defaultBits &^= quotedBit
+			}
 			return string(buffer), err
 		}
-		if endsWithSep(buffer, '^') {
-			buffer = buffer[:len(buffer)-1]
-			buffer = append(buffer, '\r', '\n')
-			continued = true
-			os.Setenv("PROMPT", "> ")
-			continue
-		}
+		buffer = buffer[:len(buffer)-1]
+		buffer = append(buffer, '\r', '\n')
+		continued = true
+		os.Setenv("PROMPT", "> ")
 		if bytes.Count(buffer, []byte{'"'})%2 != 0 {
-			buffer = append(buffer, '\r', '\n')
-			continued = true
-			os.Setenv("PROMPT", "> ")
 			stream.Editor.Coloring.(*_Coloring).defaultBits |= quotedBit
-			continue
 		}
-		return string(buffer), err
 	}
 }
 
