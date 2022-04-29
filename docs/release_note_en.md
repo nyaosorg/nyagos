@@ -1,5 +1,9 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.12\_0
+================
+on Apr.29,2022
+
 * Modified colored commandline
     * Change the color of the option-string dark-yellow and fix the range
     * Change the background-color of the Ideographic Space (U+3000) red
