@@ -114,7 +114,7 @@ func makeCommandline(p *optionArg) string {
 	return text + rest
 }
 
-var optionMap = ignoreCaseSorted.New(map[string]optionT{
+var optionMap = ignoreCaseSorted.MapToDictionary(map[string]optionT{
 	"--subst": {
 		U:  "\"DRIVE:=PATH\"\nassign DRIVE to PATH by subst on startup",
 		F1: optionSubst,

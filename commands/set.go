@@ -26,7 +26,7 @@ type optionT struct {
 }
 
 // BoolOptions are the all global option list.
-var BoolOptions = ignoreCaseSorted.New(map[string]*optionT{
+var BoolOptions = ignoreCaseSorted.MapToDictionary(map[string]*optionT{
 	"completion_hidden": {
 		V:       &completion.IncludeHidden,
 		Usage:   "Include hidden files on completion",
