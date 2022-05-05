@@ -124,3 +124,35 @@ func MapToDictionary[T any](source map[string]T) *Dictionary[T] {
 	}
 	return &d
 }
+
+type Ascending[T any] struct {
+	Key   string
+	Value T
+	maps  map[string]KeyValue[T]
+	order []string
+}
+
+func (d *Dictionary[T]) Ascend() *Ascending[T] {
+	d.makeOrder()
+	if d.maps == nil || len(d.maps) <= 0 {
+		return nil
+	}
+	p := d.maps[d.order[0]]
+	return &Ascending[T]{
+		maps:  d.maps,
+		order: d.order[1:],
+		Key:   p.Key,
+		Value: p.Value,
+	}
+}
+
+func (a *Ascending[T]) Next() *Ascending[T] {
+	if a == nil || a.order == nil || len(a.order) < 1 {
+		return nil
+	}
+	p := a.maps[a.order[0]]
+	a.Key = p.Key
+	a.Value = p.Value
+	a.order = a.order[1:]
+	return a
+}
