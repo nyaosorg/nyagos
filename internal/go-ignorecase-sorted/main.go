@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-type KeyValue[T any] struct {
+type _Pair[T any] struct {
 	Key   string
 	Value T
 }
 
 type Dictionary[T any] struct {
-	maps  map[string]KeyValue[T]
+	maps  map[string]_Pair[T]
 	order []string
 }
 
@@ -27,9 +27,9 @@ func (d *Dictionary[T]) Store(key string, val T) {
 func (d *Dictionary[T]) Set(key string, val T) {
 	lowerKey := strings.ToLower(key)
 	if d.maps == nil {
-		d.maps = make(map[string]KeyValue[T])
+		d.maps = make(map[string]_Pair[T])
 	}
-	d.maps[lowerKey] = KeyValue[T]{Key: key, Value: val}
+	d.maps[lowerKey] = _Pair[T]{Key: key, Value: val}
 	if d.order != nil && len(d.order) > 0 {
 		d.order = d.order[:0]
 	}
@@ -56,7 +56,7 @@ func (d *Dictionary[T]) Get(key string) (val T, ok bool) {
 		return
 	}
 	lowerKey := strings.ToLower(key)
-	var v KeyValue[T]
+	var v _Pair[T]
 	v, ok = d.maps[lowerKey]
 	if ok {
 		val = v.Value
@@ -97,7 +97,7 @@ func MapToDictionary[T any](source map[string]T) *Dictionary[T] {
 type Ascending[T any] struct {
 	Key   string
 	Value T
-	maps  map[string]KeyValue[T]
+	maps  map[string]_Pair[T]
 	order []string
 }
 
