@@ -19,7 +19,12 @@ func (d *Dictionary[T]) Len() int {
 	return len(d.maps)
 }
 
+// Store is same as Set that is a compatible method with "sync".Map
 func (d *Dictionary[T]) Store(key string, val T) {
+	d.Set(key, val)
+}
+
+func (d *Dictionary[T]) Set(key string, val T) {
 	lowerKey := strings.ToLower(key)
 	if d.maps == nil {
 		d.maps = make(map[string]KeyValue[T])
@@ -41,7 +46,12 @@ func (d *Dictionary[T]) Delete(key string) {
 	}
 }
 
+// Load is same as Get that is a compatible method with "sync".Map
 func (d *Dictionary[T]) Load(key string) (val T, ok bool) {
+	return d.Get(key)
+}
+
+func (d *Dictionary[T]) Get(key string) (val T, ok bool) {
 	if d.maps == nil {
 		return
 	}
@@ -110,7 +120,7 @@ func (e *Enumerator[T]) Range() bool {
 func MapToDictionary[T any](source map[string]T) *Dictionary[T] {
 	var d Dictionary[T]
 	for key, val := range source {
-		d.Store(key, val)
+		d.Set(key, val)
 	}
 	return &d
 }
