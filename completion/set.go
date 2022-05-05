@@ -38,7 +38,7 @@ func completionCd(ctx context.Context, ua UncCompletion, params []string) ([]Ele
 	duplicatedCheckTable := make(map[string]struct{})
 	for _, element := range list {
 		name := element.String()
-		if name[len(name)-1] == '/' || name[len(name)-1] == '\\' {
+		if os.IsPathSeparator(name[len(name)-1]) {
 			name = name[:len(name)-1]
 		}
 		duplicatedCheckTable[strings.ToUpper(name)] = struct{}{}

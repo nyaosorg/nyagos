@@ -13,16 +13,15 @@ func joinPath2(a, b string) string {
 	if len(a) <= 0 || strings.HasPrefix(b, `\\`) || rxDrive.MatchString(b) {
 		return b
 	}
-	if b[0] == '\\' || b[0] == '/' {
+	if os.IsPathSeparator(b[0]) {
 		if rxDrive.MatchString(a) {
 			return a[:2] + b
 		}
 		return b
 	}
-	switch a[len(a)-1] {
-	case '\\', '/', ':':
+	if tail := a[len(a)-1]; os.IsPathSeparator(tail) || tail == ':' {
 		return a + b
-	default:
+	} else {
 		return fmt.Sprintf("%s%c%s", a, os.PathSeparator, b)
 	}
 }

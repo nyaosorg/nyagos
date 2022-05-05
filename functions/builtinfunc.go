@@ -130,8 +130,7 @@ func CmdGetViewWidth(args []anyT) []anyT {
 var rxEnv = regexp.MustCompile("%[^%]+%")
 
 func expandEnv(str string) string {
-	if (len(str) >= 2 && str[0] == '~' && (str[1] == '\\' || str[1] == '/')) ||
-		str == "~" {
+	if (len(str) >= 2 && str[0] == '~' && os.IsPathSeparator(str[1])) || str == "~" {
 		home := os.Getenv("HOME")
 		if home == "" {
 			home = os.Getenv("USERPROFILE")
