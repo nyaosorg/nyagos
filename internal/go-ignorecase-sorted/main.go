@@ -76,11 +76,6 @@ func (d *Dictionary[t]) makeOrder() {
 	sort.Strings(d.order)
 }
 
-func (d *Dictionary[T]) Keys() []string {
-	d.makeOrder()
-	return d.order
-}
-
 func (d *Dictionary[T]) Range(f func(string, T) bool) {
 	d.makeOrder()
 	for _, lowerKey := range d.order {
