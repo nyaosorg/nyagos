@@ -314,7 +314,7 @@ func help(p *optionArg) (func(context.Context) error, error) {
 	return func(context.Context) error {
 		Title()
 		fmt.Println()
-		for p := optionMap.Each(); p.Range(); {
+		for p := optionMap.Ascend(); p != nil; p = p.Next() {
 			fmt.Printf("%s %s\n", p.Key, strings.Replace(p.Value.U, "\n", "\n\t", -1))
 		}
 
@@ -360,7 +360,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 	optionMap.Store("-h", optionT{V: help, U: "\nPrint this usage"})
 	optionMap.Store("--help", optionT{V: help, U: "\nPrint this usage"})
 
-	for p := commands.BoolOptions.Each(); p.Range(); {
+	for p := commands.BoolOptions.Ascend(); p != nil; p = p.Next() {
 		key := p.Key
 		val := p.Value
 		_key := strings.Replace(key, "_", "-", -1)

@@ -46,7 +46,7 @@ var Table ignoreCaseSorted.Dictionary[callableT]
 // AllNames returns all-alias names for completion
 func AllNames(ctx context.Context) ([]completion.Element, error) {
 	names := make([]completion.Element, 0, Table.Len())
-	for p := Table.Each(); p.Range(); {
+	for p := Table.Ascend(); p != nil; p = p.Next() {
 		names = append(names, completion.Element1(p.Key))
 	}
 	return names, nil

@@ -10,7 +10,7 @@ import (
 
 func cmdAlias(ctx context.Context, cmd Param) (int, error) {
 	if len(cmd.Args()) <= 1 {
-		for p := alias.Table.Each(); p.Range(); {
+		for p := alias.Table.Ascend(); p != nil; p = p.Next() {
 			fmt.Fprintf(cmd.Out(), "%s=%s\n", p.Key, p.Value.String())
 		}
 		return 0, nil
