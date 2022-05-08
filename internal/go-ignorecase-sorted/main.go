@@ -45,7 +45,11 @@ func (d *Dictionary[T]) Delete(key string) {
 	lowerKey := strings.ToLower(key)
 	delete(d.maps, lowerKey)
 	if d.order != nil && len(d.order) > 0 {
-		d.order = d.order[:0]
+		at := sort.Search(len(d.order), func(i int) bool { return d.order[i] >= lowerKey })
+		if at < len(d.order) && d.order[at] == lowerKey {
+			copy(d.order[at:], d.order[at+1:])
+			d.order = d.order[:len(d.order)-1]
+		}
 	}
 }
 
