@@ -119,3 +119,29 @@ func (iter *Iterator[T]) Next() *Iterator[T] {
 	iter.Value = p.Value
 	return iter
 }
+
+func (d *Dictionary[T]) Descend() *Iterator[T] {
+	if d.maps == nil || len(d.maps) <= 0 {
+		return nil
+	}
+	index := len(d.order) - 1
+	p := d.maps[d.order[index]]
+	return &Iterator[T]{
+		dic:   d,
+		index: index,
+		Key:   p.Key,
+		Value: p.Value,
+	}
+}
+
+func (iter *Iterator[T]) Prev() *Iterator[T] {
+	iter.index--
+	if iter.index < 0 {
+		return nil
+	}
+	dic := iter.dic
+	p := dic.maps[dic.order[iter.index]]
+	iter.Key = p.Key
+	iter.Value = p.Value
+	return iter
+}
