@@ -88,33 +88,34 @@ func MapToDictionary[T any](source map[string]T) *Dictionary[T] {
 	return &d
 }
 
-type Ascending[T any] struct {
+type Iterator[T any] struct {
+	dic   *Dictionary[T]
+	index int
 	Key   string
 	Value T
-	maps  map[string]_Pair[T]
-	order []string
 }
 
-func (d *Dictionary[T]) Ascend() *Ascending[T] {
+func (d *Dictionary[T]) Ascend() *Iterator[T] {
 	if d.maps == nil || len(d.maps) <= 0 {
 		return nil
 	}
 	p := d.maps[d.order[0]]
-	return &Ascending[T]{
-		maps:  d.maps,
-		order: d.order[1:],
+	return &Iterator[T]{
+		dic:   d,
+		index: 0,
 		Key:   p.Key,
 		Value: p.Value,
 	}
 }
 
-func (a *Ascending[T]) Next() *Ascending[T] {
-	if a == nil || a.order == nil || len(a.order) < 1 {
+func (iter *Iterator[T]) Next() *Iterator[T] {
+	iter.index++
+	dic := iter.dic
+	if iter.index >= len(dic.order) {
 		return nil
 	}
-	p := a.maps[a.order[0]]
-	a.Key = p.Key
-	a.Value = p.Value
-	a.order = a.order[1:]
-	return a
+	p := dic.maps[dic.order[iter.index]]
+	iter.Key = p.Key
+	iter.Value = p.Value
+	return iter
 }
