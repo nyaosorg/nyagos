@@ -71,20 +71,7 @@ func (d *Dictionary[T]) Get(key string) (val T, ok bool) {
 	return
 }
 
-func (d *Dictionary[t]) makeOrder() {
-	if d.order == nil {
-		d.order = make([]string, 0, len(d.maps))
-	} else if len(d.order) > 0 {
-		return
-	}
-	for key := range d.maps {
-		d.order = append(d.order, key)
-	}
-	sort.Strings(d.order)
-}
-
 func (d *Dictionary[T]) Range(f func(string, T) bool) {
-	d.makeOrder()
 	for _, lowerKey := range d.order {
 		p := d.maps[lowerKey]
 		if !f(p.Key, p.Value) {
@@ -109,7 +96,6 @@ type Ascending[T any] struct {
 }
 
 func (d *Dictionary[T]) Ascend() *Ascending[T] {
-	d.makeOrder()
 	if d.maps == nil || len(d.maps) <= 0 {
 		return nil
 	}
