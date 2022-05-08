@@ -29,10 +29,13 @@ func (d *Dictionary[T]) Set(key string, val T) {
 	if d.maps == nil {
 		d.maps = make(map[string]_Pair[T])
 	}
-	d.maps[lowerKey] = _Pair[T]{Key: key, Value: val}
-	if d.order != nil && len(d.order) > 0 {
-		d.order = d.order[:0]
+	if _, ok := d.maps[lowerKey]; !ok {
+		at := sort.Search(len(d.order), func(i int) bool { return d.order[i] >= lowerKey })
+		d.order = append(d.order, "")
+		copy(d.order[at+1:], d.order[at:])
+		d.order[at] = lowerKey
 	}
+	d.maps[lowerKey] = _Pair[T]{Key: key, Value: val}
 }
 
 func (d *Dictionary[T]) Delete(key string) {
