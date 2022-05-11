@@ -71,12 +71,12 @@ var BoolOptions = ignoreCaseSorted.MapToDictionary(map[string]*optionT{
 
 func dumpBoolOptions(out io.Writer) {
 	max := 0
-	for p := BoolOptions.Ascend(); p != nil; p = p.Next() {
+	for p := BoolOptions.Front(); p != nil; p = p.Next() {
 		if L := len(p.Key); L > max {
 			max = L
 		}
 	}
-	for p := BoolOptions.Ascend(); p != nil; p = p.Next() {
+	for p := BoolOptions.Front(); p != nil; p = p.Next() {
 		key := p.Key
 		val := p.Value
 		if *val.V {

@@ -75,7 +75,7 @@ func Exec(ctx context.Context, cmd Param) (int, bool, error) {
 // AllNames returns all command-names for completion package.
 func AllNames(ctx context.Context) ([]completion.Element, error) {
 	names := make([]completion.Element, 0, buildInCommand.Len())
-	for p := buildInCommand.Ascend(); p != nil; p = p.Next() {
+	for p := buildInCommand.Front(); p != nil; p = p.Next() {
 		names = append(names, completion.Element1(p.Key))
 	}
 	return names, nil

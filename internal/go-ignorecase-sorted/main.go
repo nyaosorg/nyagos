@@ -95,7 +95,7 @@ type Iterator[T any] struct {
 	Value T
 }
 
-func (d *Dictionary[T]) Ascend() *Iterator[T] {
+func (d *Dictionary[T]) Front() *Iterator[T] {
 	if d.maps == nil || len(d.maps) <= 0 {
 		return nil
 	}
@@ -120,7 +120,7 @@ func (iter *Iterator[T]) Next() *Iterator[T] {
 	return iter
 }
 
-func (d *Dictionary[T]) Descend() *Iterator[T] {
+func (d *Dictionary[T]) Back() *Iterator[T] {
 	if d.maps == nil || len(d.maps) <= 0 {
 		return nil
 	}

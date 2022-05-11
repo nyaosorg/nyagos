@@ -21,7 +21,7 @@ func TestAscend(t *testing.T) {
 		{key: "y", value: 8},
 		{key: "Z", value: 9},
 	}
-	for p := dic.Ascend(); p != nil; p = p.Next() {
+	for p := dic.Front(); p != nil; p = p.Next() {
 		if expect[0].key != p.Key {
 			t.Fatalf("'%s' != '%s'", expect[0].key, p.Key)
 			return
@@ -49,7 +49,7 @@ func TestDesend(t *testing.T) {
 		{key: "y", value: 8},
 		{key: "x", value: 7},
 	}
-	for p := dic.Descend(); p != nil; p = p.Prev() {
+	for p := dic.Back(); p != nil; p = p.Prev() {
 		if expect[0].key != p.Key {
 			t.Fatalf("'%s' != '%s'", expect[0].key, p.Key)
 			return
