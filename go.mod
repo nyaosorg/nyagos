@@ -21,12 +21,12 @@ require (
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20210914121648-32cd570b169f
 	github.com/nyaosorg/go-windows-junction v0.1.0
 	github.com/nyaosorg/go-windows-mbcs v0.0.0-20210914102041-eb1f2d0081b2
-	github.com/nyaosorg/go-windows-netresource v0.0.0-20220221182809-c0ac5c14520d
-	github.com/nyaosorg/go-windows-shortcut v0.0.0-20210914105108-6045794cece9
-	github.com/nyaosorg/go-windows-su v0.2.0
+	github.com/nyaosorg/go-windows-netresource v0.1.0
+	github.com/nyaosorg/go-windows-shortcut v0.0.0-20220529122037-8b0c89bca4c4
+	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
-	github.com/yuin/gopher-lua v0.0.0-20220413183635-c841877397d8
-	golang.org/x/sys v0.0.0-20220422013727-9388b58f7150
+	github.com/yuin/gopher-lua v0.0.0-20220504180219-658193537a64
+	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a
 )
 
 require (
