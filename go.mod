@@ -6,7 +6,6 @@ require (
 	github.com/atotto/clipboard v0.1.4
 	github.com/dustin/go-humanize v1.0.0
 	github.com/go-ole/go-ole v1.2.6
-	github.com/josephspurrier/goversioninfo v1.3.0
 	github.com/mattn/go-colorable v0.1.12
 	github.com/mattn/go-isatty v0.0.14
 	github.com/mattn/go-runewidth v0.0.13
@@ -31,7 +30,6 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
-	github.com/akavel/rsrc v0.10.2 // indirect
 	github.com/mattn/go-tty v0.0.4 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 )

@@ -4,39 +4,94 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
-
-	"github.com/josephspurrier/goversioninfo"
 )
+
+var jsonTemplate = `{
+	"FixedFileInfo":
+	{
+		"FileVersion": {
+			"Major": %d,
+			"Minor": %d,
+			"Patch": %d,
+			"Build": %d
+		},
+		"ProductVersion": {
+			"Major": %d,
+			"Minor": %d,
+			"Patch": %d,
+			"Build": %d
+		},
+		"FileFlagsMask": "3f",
+		"FileFlags ": "00",
+		"FileOS": "040004",
+		"FileType": "01",
+		"FileSubType": "00"
+	},
+	"StringFileInfo":
+	{
+		"Comments": "",
+		"CompanyName": "NYAOS.ORG",
+		"FileDescription": "Nihongo Yet Another GOing Shell",
+		"FileVersion": "%s",
+		"InternalName": "",
+		"LegalCopyright": "Copyright (C) 2014-2022 HAYAMA_Kaoru",
+		"LegalTrademarks": "",
+		"OriginalFilename": "NYAGOS.EXE",
+		"PrivateBuild": "",
+		"ProductName": "Nihongo Yet Another GOing Shell",
+		"ProductVersion": "%s",
+		"SpecialBuild": ""
+	},
+	"VarFileInfo":
+	{
+		"Translation": {
+			"LangID": "0411",
+			"CharsetID": "04E4"
+		}
+	}
+}
+`
 
 var de = regexp.MustCompile(`[\._]`)
 
-func newVersion(versionString string) (*goversioninfo.FileVersion, error) {
+func versionStrToNum(versionString string) ([]int, error) {
 	v := de.Split(versionString, -1)
 	if len(v) < 4 {
 		return nil, fmt.Errorf("%s: too short version string", versionString)
 	}
-	var err error
-	var fv goversioninfo.FileVersion
 
-	if fv.Major, err = strconv.Atoi(v[0]); err != nil {
+	var vn [4]int
+	var err error
+
+	if vn[0], err = strconv.Atoi(v[0]); err != nil {
 		return nil, fmt.Errorf("%s: invalid major version", versionString)
 	}
-	if fv.Minor, err = strconv.Atoi(v[1]); err != nil {
+	if vn[1], err = strconv.Atoi(v[1]); err != nil {
 		return nil, fmt.Errorf("%s: invalid minor version", versionString)
 	}
-	if fv.Patch, err = strconv.Atoi(v[2]); err != nil {
+	if vn[2], err = strconv.Atoi(v[2]); err != nil {
 		return nil, fmt.Errorf("%s: invalid patch version", versionString)
 	}
-	if fv.Build, err = strconv.Atoi(v[3]); err != nil {
+	if vn[3], err = strconv.Atoi(v[3]); err != nil {
 		return nil, fmt.Errorf("%s: invalid build version", versionString)
 	}
-	return &fv, nil
+	return vn[:], nil
+}
+
+func getVersionData(fname string) (string, []int, error) {
+	bin, err := os.ReadFile(fname)
+	if err != nil {
+		return "", nil, err
+	}
+	str := strings.TrimSpace(string(bin))
+
+	num, err := versionStrToNum(str)
+	return str, num, err
 }
 
 func main1() error {
@@ -44,38 +99,28 @@ func main1() error {
 		return fmt.Errorf("Usage: %s FileVerFile ProdVerFile < base-json > final-json", os.Args[0])
 	}
 
-	var v goversioninfo.VersionInfo
-	if err := json.NewDecoder(os.Stdin).Decode(&v); err != nil {
-		return err
-	}
-	fileVerBin, err := os.ReadFile(os.Args[1])
+	fileVerStr, fileVerNum, err := getVersionData(os.Args[1])
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", os.Args[1], err)
 	}
-	fileVer := strings.TrimSpace(string(fileVerBin))
 
-	prodVerBin, err := os.ReadFile(os.Args[2])
+	prodVerStr, prodVerNum, err := getVersionData(os.Args[2])
 	if err != nil {
-		return err
+		return fmt.Errorf("%s: %w", os.Args[2], err)
 	}
-	prodVer := strings.TrimSpace(string(prodVerBin))
 
-	v.StringFileInfo.FileVersion = fileVer
-	v.StringFileInfo.ProductVersion = prodVer
-	nv, err := newVersion(fileVer)
-	if err != nil {
-		return err
-	}
-	v.FixedFileInfo.FileVersion = *nv
+	fmt.Printf(jsonTemplate,
+		fileVerNum[0],
+		fileVerNum[1],
+		fileVerNum[2],
+		fileVerNum[3],
+		prodVerNum[0],
+		prodVerNum[1],
+		prodVerNum[2],
+		prodVerNum[3],
+		fileVerStr,
+		prodVerStr)
 
-	nv, err = newVersion(prodVer)
-	if err != nil {
-		return err
-	}
-	v.FixedFileInfo.ProductVersion = *nv
-	enc := json.NewEncoder(os.Stdout)
-	enc.SetIndent("", "  ")
-	enc.Encode(&v)
 	return nil
 }
 
