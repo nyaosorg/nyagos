@@ -21,8 +21,8 @@ import (
 
 	"github.com/nyaosorg/nyagos/commands"
 	"github.com/nyaosorg/nyagos/completion"
-	"github.com/nyaosorg/nyagos/defined"
 	"github.com/nyaosorg/nyagos/frame"
+	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/nodos"
 	"github.com/nyaosorg/nyagos/shell"
 )

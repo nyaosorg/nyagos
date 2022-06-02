@@ -11,7 +11,7 @@ import (
 
 	"github.com/nyaosorg/go-windows-findfile"
 
-	"github.com/nyaosorg/nyagos/defined"
+	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/nodos"
 )
 
