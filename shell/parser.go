@@ -15,7 +15,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/nyaosorg/nyagos/nodos"
-	"github.com/nyaosorg/nyagos/texts"
 )
 
 var NoClobber = false
@@ -82,7 +81,7 @@ func ourGetenvSub(name string) (string, bool) {
 		if !ok {
 			return "", false
 		}
-		return texts.ReplaceIgnoreCase(base, m[2], m[3]), true
+		return ReplaceIgnoreCase(base, m[2], m[3]), true
 	}
 	m = rxSubstring.FindStringSubmatch(name)
 	if m != nil {

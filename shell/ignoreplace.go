@@ -1,4 +1,4 @@
-package texts
+package shell
 
 import (
 	"strings"

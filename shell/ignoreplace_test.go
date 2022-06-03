@@ -1,13 +1,11 @@
-package texts_test
+package shell
 
 import (
 	"testing"
-
-	"github.com/nyaosorg/nyagos/texts"
 )
 
 func TestReplaceIgnoreCase(t *testing.T) {
-	result := texts.ReplaceIgnoreCase("AHAHAahahaAhaha", "aHaha", "<>")
+	result := ReplaceIgnoreCase("AHAHAahahaAhaha", "aHaha", "<>")
 	if result != "<><><>" {
 		t.Fatal("Error: " + result)
 		return
