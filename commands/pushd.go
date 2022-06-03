@@ -7,7 +7,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 var dirstack = make([]string, 0, 20)

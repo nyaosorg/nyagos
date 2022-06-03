@@ -7,7 +7,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 // Format2Prompt converts format-string to output-string

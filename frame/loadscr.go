@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 // Version is to show title display.

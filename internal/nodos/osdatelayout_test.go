@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 func testOsDateLayout() error {

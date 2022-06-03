@@ -16,7 +16,7 @@ import (
 
 	"github.com/nyaosorg/nyagos/commands"
 	"github.com/nyaosorg/nyagos/internal/defined"
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/shell"
 
 	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"

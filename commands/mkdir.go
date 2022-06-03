@@ -6,7 +6,7 @@ import (
 	"os"
 	"syscall"
 
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 func cmdMkdir(ctx context.Context, cmd Param) (int, error) {

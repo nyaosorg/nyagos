@@ -3,7 +3,7 @@ package nodos_test
 import (
 	"testing"
 
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 func _testJoin(t *testing.T, a, b, expect string) {

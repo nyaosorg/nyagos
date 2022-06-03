@@ -9,7 +9,7 @@ import (
 	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/completion"
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/shell"
 
 	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"

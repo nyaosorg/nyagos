@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/nyaosorg/go-windows-mbcs"
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 func cat(ctx context.Context, r io.Reader, w io.Writer) bool {

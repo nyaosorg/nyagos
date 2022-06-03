@@ -20,7 +20,7 @@ import (
 	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-windows-findfile"
 	"github.com/nyaosorg/go-windows-shortcut"
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 const (

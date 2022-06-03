@@ -30,7 +30,7 @@ test: tstlua
 	cd commands && go test
 	cd history  && go test
 	cd mains    && go test
-	cd nodos    && go test
+	cd internal/nodos    && go test
 	cd shell    && go test
 	cd internal/texts    && go test
 

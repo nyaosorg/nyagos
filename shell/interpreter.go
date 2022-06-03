@@ -12,7 +12,7 @@ import (
 	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/internal/defined"
-	"github.com/nyaosorg/nyagos/nodos"
+	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 var WildCardExpansionAlways = false
