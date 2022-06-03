@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/yuin/gopher-lua"
 )
 

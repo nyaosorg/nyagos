@@ -8,7 +8,7 @@ import (
 
 	"github.com/nyaosorg/nyagos/alias"
 	"github.com/nyaosorg/nyagos/internal/nodos"
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 const (

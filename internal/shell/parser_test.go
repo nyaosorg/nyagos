@@ -3,7 +3,7 @@ package shell_test
 import (
 	"testing"
 
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 func TestParserForAwk(t *testing.T) {

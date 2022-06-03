@@ -13,7 +13,7 @@ import (
 	"github.com/nyaosorg/go-windows-consoleicon"
 
 	"github.com/nyaosorg/nyagos/history"
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 type CmdStreamConsole struct {

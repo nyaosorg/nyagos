@@ -19,7 +19,7 @@ import (
 	"github.com/nyaosorg/nyagos/commands"
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/history"
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 var DefaultHistory *history.Container

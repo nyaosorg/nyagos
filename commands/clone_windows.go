@@ -14,7 +14,7 @@ import (
 	"github.com/nyaosorg/go-windows-su"
 	"github.com/nyaosorg/go-windows-subst"
 
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 var isWindowsTerminal = os.Getenv("WT_SESSION") != "" && os.Getenv("WT_PROFILE_ID") != ""

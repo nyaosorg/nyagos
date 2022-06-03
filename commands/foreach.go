@@ -6,8 +6,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/nyaosorg/nyagos/internal/texts"
-	"github.com/nyaosorg/nyagos/shell"
 )
 
 var startList = map[string]bool{

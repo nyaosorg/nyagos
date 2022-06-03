@@ -7,7 +7,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/yuin/gopher-lua"
 )
 

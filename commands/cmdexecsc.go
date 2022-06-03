@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 func cmdExeSc(ctx context.Context, cmd Param) (int, error) {

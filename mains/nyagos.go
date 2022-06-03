@@ -20,7 +20,7 @@ import (
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/frame"
 	"github.com/nyaosorg/nyagos/functions"
-	"github.com/nyaosorg/nyagos/shell"
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 type luaKeyT struct{}

@@ -31,7 +31,7 @@ test: tstlua
 	cd history  && go test
 	cd mains    && go test
 	cd internal/nodos    && go test
-	cd shell    && go test
+	cd internal/shell    && go test
 	cd internal/texts    && go test
 
 tstlua:
