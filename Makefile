@@ -35,7 +35,7 @@ test: tstlua
 	cd texts    && go test
 
 tstlua:
-	$(foreach I,$(wildcard luatst/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
+	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
 
 release: fmt nyagos.syso
 	cd bin          2>$(NUL) || mkdir bin
