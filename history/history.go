@@ -13,7 +13,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/nyaosorg/nyagos/texts"
+	"github.com/nyaosorg/nyagos/internal/texts"
 )
 
 var Mark = "!"

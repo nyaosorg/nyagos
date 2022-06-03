@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/nyaosorg/nyagos/internal/texts"
 	"github.com/nyaosorg/nyagos/shell"
-	"github.com/nyaosorg/nyagos/texts"
 )
 
 var rxElse = regexp.MustCompile(`(?i)^\s*else`)
