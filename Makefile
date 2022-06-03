@@ -32,7 +32,7 @@ test: tstlua
 	cd mains    && go test
 	cd nodos    && go test
 	cd shell    && go test
-	cd texts    && go test
+	cd internal/texts    && go test
 
 tstlua:
 	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :

@@ -3,7 +3,7 @@ package texts_test
 import (
 	"testing"
 
-	"github.com/nyaosorg/nyagos/texts"
+	"github.com/nyaosorg/nyagos/internal/texts"
 )
 
 func TestFirstWord(t *testing.T) {
