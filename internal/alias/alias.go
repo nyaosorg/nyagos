@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/shell"
 
 	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"

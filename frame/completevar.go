@@ -1,7 +1,7 @@
 package frame
 
 import (
-	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 

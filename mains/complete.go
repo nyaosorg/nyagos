@@ -13,7 +13,7 @@ import (
 
 	"github.com/nyaosorg/go-readline-ny"
 
-	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/internal/completion"
 )
 
 func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {

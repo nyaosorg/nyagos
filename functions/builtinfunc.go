@@ -19,9 +19,9 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-windows-findfile"
 
-	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/frame"
 	"github.com/nyaosorg/nyagos/internal/commands"
+	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"

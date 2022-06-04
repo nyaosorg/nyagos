@@ -9,7 +9,7 @@ import (
 
 	"github.com/nyaosorg/go-readline-ny"
 
-	"github.com/nyaosorg/nyagos/completion"
+	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"
 
