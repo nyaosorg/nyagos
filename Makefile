@@ -29,7 +29,7 @@ test: tstlua
 	cd internal/alias    && go test
 	cd internal/commands && go test
 	cd internal/history  && go test
-	cd mains    && go test
+	cd internal/mains    && go test
 	cd internal/nodos    && go test
 	cd internal/shell    && go test
 	cd internal/texts    && go test

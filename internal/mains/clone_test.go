@@ -8,7 +8,7 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
-	"github.com/nyaosorg/nyagos/mains"
+	"github.com/nyaosorg/nyagos/internal/mains"
 )
 
 type Lua = mains.Lua

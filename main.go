@@ -9,7 +9,7 @@ import (
 
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/frame"
-	"github.com/nyaosorg/nyagos/mains"
+	"github.com/nyaosorg/nyagos/internal/mains"
 )
 
 //go:embed etc/version.txt
