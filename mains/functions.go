@@ -11,7 +11,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/nyaosorg/nyagos/alias"
+	"github.com/nyaosorg/nyagos/internal/alias"
 	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/yuin/gopher-lua"
 )

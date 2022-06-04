@@ -15,11 +15,11 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/yuin/gopher-lua"
 
-	"github.com/nyaosorg/nyagos/alias"
 	"github.com/nyaosorg/nyagos/commands"
 	"github.com/nyaosorg/nyagos/completion"
 	"github.com/nyaosorg/nyagos/frame"
 	"github.com/nyaosorg/nyagos/functions"
+	"github.com/nyaosorg/nyagos/internal/alias"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 

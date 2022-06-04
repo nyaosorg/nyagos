@@ -26,7 +26,7 @@ debug:
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
 
 test: tstlua
-	cd alias    && go test
+	cd internal/alias    && go test
 	cd commands && go test
 	cd history  && go test
 	cd mains    && go test

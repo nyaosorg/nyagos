@@ -3,7 +3,7 @@ package alias_test
 import (
 	"testing"
 
-	"github.com/nyaosorg/nyagos/alias"
+	"github.com/nyaosorg/nyagos/internal/alias"
 )
 
 func TestExpandMacro(t *testing.T) {
