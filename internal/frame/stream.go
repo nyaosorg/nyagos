@@ -12,7 +12,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-windows-consoleicon"
 
-	"github.com/nyaosorg/nyagos/history"
+	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 

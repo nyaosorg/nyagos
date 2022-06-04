@@ -15,10 +15,10 @@ import (
 
 	"github.com/nyaosorg/go-windows-consoleicon"
 
-	"github.com/nyaosorg/nyagos/history"
 	"github.com/nyaosorg/nyagos/internal/alias"
 	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/completion"
+	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
