@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/frame"
 	"github.com/nyaosorg/nyagos/internal/defined"
+	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/mains"
 )
 

@@ -19,10 +19,10 @@ import (
 	"github.com/nyaosorg/glua-ole"
 	"github.com/nyaosorg/go-readline-ny"
 
-	"github.com/nyaosorg/nyagos/frame"
 	"github.com/nyaosorg/nyagos/functions"
 	"github.com/nyaosorg/nyagos/history"
 	"github.com/nyaosorg/nyagos/internal/completion"
+	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 

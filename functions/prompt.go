@@ -9,7 +9,7 @@ import (
 
 	"github.com/nyaosorg/go-readline-ny"
 
-	"github.com/nyaosorg/nyagos/frame"
+	"github.com/nyaosorg/nyagos/internal/frame"
 )
 
 var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
