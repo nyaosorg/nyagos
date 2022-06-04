@@ -14,7 +14,7 @@ import (
 
 	"github.com/nyaosorg/go-windows-commandline/args"
 
-	"github.com/nyaosorg/nyagos/commands"
+	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"

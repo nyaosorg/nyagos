@@ -27,7 +27,7 @@ debug:
 
 test: tstlua
 	cd internal/alias    && go test
-	cd commands && go test
+	cd internal/commands && go test
 	cd history  && go test
 	cd mains    && go test
 	cd internal/nodos    && go test

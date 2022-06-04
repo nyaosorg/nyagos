@@ -5,7 +5,7 @@ import (
 	"io"
 	"testing"
 
-	"github.com/nyaosorg/nyagos/commands"
+	"github.com/nyaosorg/nyagos/internal/commands"
 )
 
 func TestLsMain(t *testing.T) {
