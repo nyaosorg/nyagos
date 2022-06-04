@@ -13,8 +13,8 @@ import (
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 
-	"github.com/nyaosorg/nyagos/functions"
 	"github.com/nyaosorg/nyagos/internal/frame"
+	"github.com/nyaosorg/nyagos/internal/functions"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 

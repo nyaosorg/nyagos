@@ -8,7 +8,7 @@ import (
 	"errors"
 	"os"
 
-	"github.com/nyaosorg/nyagos/functions"
+	"github.com/nyaosorg/nyagos/internal/functions"
 	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/yuin/gopher-lua"
 )
