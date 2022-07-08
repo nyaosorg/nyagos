@@ -14,18 +14,18 @@ require (
 	github.com/nyaosorg/glua-ole v0.0.0-20210914102918-563689ba7584
 	github.com/nyaosorg/go-box/v2 v2.1.3
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
-	github.com/nyaosorg/go-readline-ny v0.8.1-0.20220429031920-dc04569d86c9
+	github.com/nyaosorg/go-readline-ny v0.8.1
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
-	github.com/nyaosorg/go-windows-findfile v0.0.0-20210914121648-32cd570b169f
+	github.com/nyaosorg/go-windows-findfile v0.0.0-20220705150213-1048827b11c0
 	github.com/nyaosorg/go-windows-junction v0.1.0
-	github.com/nyaosorg/go-windows-mbcs v0.0.0-20210914102041-eb1f2d0081b2
+	github.com/nyaosorg/go-windows-mbcs v0.0.0-20220625075624-7e48d6c9b323
 	github.com/nyaosorg/go-windows-netresource v0.1.0
 	github.com/nyaosorg/go-windows-shortcut v0.0.0-20220529122037-8b0c89bca4c4
 	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
 	github.com/yuin/gopher-lua v0.0.0-20220504180219-658193537a64
-	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a
+	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e
 )
 
 require (
