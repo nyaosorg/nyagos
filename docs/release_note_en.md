@@ -1,6 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
 * Fix: Unhandled exception in gopkg.in/yaml.v3 ( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
+* (#421) Fix: environemt variables which batchfiles remove were not erased.
 
 NYAGOS 4.4.12\_0
 ================
