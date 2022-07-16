@@ -57,14 +57,19 @@ TEXT を空白で分割して、文字列のテーブルとして返します
 ### `errorlevel,errormessage = nyagos.exec("シェルコマンド")`
 ### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2"...}`
 
-シェルコマンドを実行します。エラーが発生した時、
-戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。
-エラーが無い時は (0,nil) が戻ります。
+シェルコマンドを実行します。外部コマンドだけでなく、nyagos内蔵コマンドも
+呼び出せます。バッチファイルを呼び出した時、環境変数の変更も取り込めます。
+
+エラーが発生した時、戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージ
+が入ります。エラーが無い時は (0,nil) が戻ります。
+
 
 ### `errorlevel,errormessage = nyagos.rawexec("外部コマンド名","引数1","引数2"…)`
 ### `errorlevel,errormessage = nyagos.rawexec{"外部コマンド名","引数1","引数2"…}`
 
-外部コマンドを実行します。
+外部コマンドを実行します。OSの API を呼んでいるだけなので、nyagos 内蔵コマンド
+は使えませんが、動作は軽いです。
+
 戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。
 エラーが無い時は (0,nil) が戻ります。
 (os.execute との違いは引数が UTF8 と解釈される点です)

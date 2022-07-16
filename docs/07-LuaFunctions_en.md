@@ -58,7 +58,10 @@ It splits TEXT with white-spaces and returns them as table of strings.
 ### `errorlevel,errormessage = nyagos.exec("COMMAND")`
 ### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2",...}`
 
-It executes "COMMAND" as shell command.
+It executes "COMMAND" as shell command. It can call not only external commands,
+but also nyagos built-in commands. When it calls a batchfile, nyagos imports
+their changes of enviroment variables.
+
 It returns the integer-value for %ERRORLEVEL% and the error-message.
 With no error, they are 0 and nil.
 
