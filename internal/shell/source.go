@@ -16,14 +16,30 @@ type scannerT interface {
 	Text() string
 }
 
+func getCurrentEnvs() map[string]string {
+	result := map[string]string{}
+	for _, env := range os.Environ() {
+		equalPos := strings.IndexByte(env, '=')
+		if equalPos > 0 {
+			name := env[:equalPos]
+			result[strings.ToUpper(name)] = name
+		}
+	}
+	return result
+}
+
 func readEnv(scan scannerT, verbose io.Writer) (int, error) {
 	errorlevel := -1
+	curEnv := getCurrentEnvs()
+
 	for scan.Scan() {
 		line := strings.TrimSpace(scan.Text())
 		eqlPos := strings.Index(line, "=")
 		if eqlPos > 0 {
 			left := line[:eqlPos]
 			right := line[eqlPos+1:]
+			delete(curEnv, strings.ToUpper(left))
+
 			if left == "ERRORLEVEL_" {
 				value, err := strconv.ParseInt(right, 10, 32)
 				if err != nil {
@@ -45,6 +61,11 @@ func readEnv(scan scannerT, verbose io.Writer) (int, error) {
 			}
 		}
 	}
+	for _, name := range curEnv {
+		// println("unsetenv", name)
+		os.Unsetenv(name)
+	}
+
 	return errorlevel, scan.Err()
 }
 
