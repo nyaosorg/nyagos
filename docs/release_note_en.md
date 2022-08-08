@@ -1,8 +1,11 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
 * Fix: Unhandled exception in gopkg.in/yaml.v3 ( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
-* (#421) Fix: environemt variables which batchfiles remove were not erased.
-* (#422) Fix: when %PROMPT% contained $h, the edit start position shifted to the right.
+* (#420) Add: support for building on macOS (Thanks to @zztkm)
+* (#421) Fix: environemt variables which batchfiles remove were not erased.(Thanks to @tsuyoshicho)
+* (#422) Fix: when %PROMPT% contained $h, the edit start position shifted to the right.(Thanks to Matsuyanagi)
+* Move sub-packages into internal folder
+* Use Generics-type for the dictionary that key's cases are ignored.
 
 NYAGOS 4.4.12\_0
 ================

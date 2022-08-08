@@ -1,8 +1,11 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * セキュリティー警告対応のため、gopkg.in/yaml.v3 に依存するモジュールを直接利用しないようにした( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
-* バッチファイルが環境変数を削除した時、それが反映されていない問題を修正
-* (#422) プロンプトに$hを使った時、編集開始位置が右にずれる不具合を修正
+* (#420) macOS でのビルドをサポート (Thanks to @zztkm)
+* (#421) バッチファイルが環境変数を削除した時、それが反映されていない問題を修正(Thanks to @tsuyoshicho)
+* (#422) プロンプトに$hを使った時、編集開始位置が右にずれる不具合を修正(Thanks to Matsuyanagi)
+* サブパッケージを internal フォルダー以下へ移動
+* キーの英大文字・小文字を区別しない辞書に Generics を使用するようにした。
 
 NYAGOS 4.4.12\_0
 ================
