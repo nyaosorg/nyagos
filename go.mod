@@ -1,6 +1,6 @@
 module github.com/nyaosorg/nyagos
 
-go 1.18
+go 1.19
 
 require (
 	github.com/atotto/clipboard v0.1.4
@@ -25,11 +25,11 @@ require (
 	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
 	github.com/yuin/gopher-lua v0.0.0-20220504180219-658193537a64
-	golang.org/x/sys v0.0.0-20220704084225-05e143d24a9e
+	golang.org/x/sys v0.0.0-20220808155132-1c4a2a72c664
 )
 
 require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/mattn/go-tty v0.0.4 // indirect
-	github.com/rivo/uniseg v0.2.0 // indirect
+	github.com/rivo/uniseg v0.3.4 // indirect
 )
