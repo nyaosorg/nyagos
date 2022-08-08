@@ -1,6 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
 * Fix: Unhandled exception in gopkg.in/yaml.v3 ( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
+* (#422) Fix: when %PROMPT% contained $h, the edit start position shifted to the right.
 
 NYAGOS 4.4.12\_0
 ================
