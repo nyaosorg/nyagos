@@ -1,0 +1,18 @@
+package commands
+
+import (
+	"context"
+	"strings"
+
+	"github.com/nyaosorg/nyagos/internal/shell"
+)
+
+func cmdExeSc(ctx context.Context, cmd Param) (int, error) {
+	return shell.CmdExe{
+		Cmdline: strings.Join(cmd.RawArgs()[1:], " "),
+		Stdin:   cmd.In(),
+		Stdout:  cmd.Out(),
+		Stderr:  cmd.Err(),
+		Env:     cmd.DumpEnv(),
+	}.Run()
+}

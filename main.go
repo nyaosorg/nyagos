@@ -7,9 +7,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/defined"
-	"github.com/nyaosorg/nyagos/frame"
-	"github.com/nyaosorg/nyagos/mains"
+	"github.com/nyaosorg/nyagos/internal/defined"
+	"github.com/nyaosorg/nyagos/internal/frame"
+	"github.com/nyaosorg/nyagos/internal/mains"
 )
 
 //go:embed Etc/version.txt

@@ -26,16 +26,16 @@ debug:
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
 
 test: tstlua
-	cd alias    && go test
-	cd commands && go test
-	cd history  && go test
-	cd mains    && go test
-	cd nodos    && go test
-	cd shell    && go test
-	cd texts    && go test
+	cd internal/alias    && go test
+	cd internal/commands && go test
+	cd internal/history  && go test
+	cd internal/mains    && go test
+	cd internal/nodos    && go test
+	cd internal/shell    && go test
+	cd internal/texts    && go test
 
 tstlua:
-	$(foreach I,$(wildcard luatst/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
+	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
 
 release: fmt nyagos.syso
 	cd bin          2>$(NUL) || mkdir bin
