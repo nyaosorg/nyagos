@@ -6,6 +6,8 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 )
 
+var defaultColor = readline.SGR3(0, 1, 39)
+
 type _Coloring struct {
 	bits        int
 	last        rune
@@ -14,7 +16,7 @@ type _Coloring struct {
 
 func (s *_Coloring) Init() int {
 	s.bits = s.defaultBits
-	return readline.White
+	return defaultColor
 }
 
 const (
@@ -40,7 +42,7 @@ func (s *_Coloring) Next(codepoint rune) int {
 		newbits &^= percentBit
 	}
 	bits := s.bits | newbits
-	color := readline.White
+	color := defaultColor
 	if unicode.IsControl(codepoint) {
 		color = readline.Blue
 	} else if codepoint == '\u3000' {
@@ -56,7 +58,7 @@ func (s *_Coloring) Next(codepoint rune) int {
 	} else if codepoint == '&' || codepoint == '|' || codepoint == '<' || codepoint == '>' || (s.last == ' ' && codepoint == ';') {
 		color = readline.Green
 	} else {
-		color = readline.White
+		color = defaultColor
 	}
 	s.bits = newbits
 	s.last = codepoint
