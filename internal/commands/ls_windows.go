@@ -49,7 +49,7 @@ type fileInfoT struct {
 const (
 	ansiExec     = "\x1B[35;1m"
 	ansiDir      = "\x1B[32;1m"
-	ansiNorm     = "\x1B[37;1m"
+	ansiNorm     = "\x1B[39;1m"
 	ansiReadOnly = "\x1B[33;1m"
 	ansiHidden   = "\x1B[34;1m"
 	ansiEnd      = "\x1B[0m"
