@@ -73,11 +73,11 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 
 ### リリースノート
 
-- [4.4.x](docs/release_note_ja.md)
-- [4.3.x](docs/history-4.3_ja.md)
-- [4.2.x](docs/history-4.2_ja.md)
-- [4.1.x](docs/history-4.1_ja.md)
-- [4.0.x](docs/history-4.0_ja.md)
+[4.4.x](docs/release_note_ja.md)
+/ [4.3.x](docs/history-4.3_ja.md)
+/ [4.2.x](docs/history-4.2_ja.md)
+/ [4.1.x](docs/history-4.1_ja.md)
+/ [4.0.x](docs/history-4.0_ja.md)
 
 ### ドキュメント
 

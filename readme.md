@@ -73,11 +73,11 @@ Contents
 
 ### Release note
 
-- [4.4.x](docs/release_note_en.md)
-- [4.3.x](docs/history-4.3_en.md)
-- [4.2.x](docs/history-4.2_en.md)
-- [4.1.x](docs/history-4.1_en.md)
-- [4.0.x](docs/history-4.0_en.md)
+[4.4.x](docs/release_note_en.md)
+/ [4.3.x](docs/history-4.3_en.md)
+/ [4.2.x](docs/history-4.2_en.md)
+/ [4.1.x](docs/history-4.1_en.md)
+/ [4.0.x](docs/history-4.0_en.md)
 
 ### Documents
 
