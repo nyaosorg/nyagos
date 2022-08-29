@@ -9,6 +9,11 @@ ifeq ($(OS),Windows_NT)
     GITDIR=$(or $(GIT_INSTALL_ROOT),$(shell for %%I in (git.exe) do echo %%~dp$$PATH:I..))
     AWK="$(GITDIR)\usr\bin\gawk.exe"
     D=$\\
+ifeq ($(shell go env GOOS),windows)
+    SYSO=nyagos.syso
+else
+    SYSO=
+endif
 else
     NUL=/dev/null
     SET=export
@@ -17,9 +22,10 @@ else
     TYPE=cat
     AWK=gawk
     D=/
+    SYSO=
 endif
 
-snapshot: fmt nyagos.syso
+snapshot: fmt $(SYSO)
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)"
 
 debug:
@@ -37,7 +43,7 @@ test: tstlua
 tstlua:
 	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
 
-release: fmt nyagos.syso
+release: fmt $(SYSO)
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
 	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
@@ -52,8 +58,10 @@ clean:
 fmt:
 	git status -s | $(AWK) "/^.M.*\.go/{ system(\"go fmt \" $$NF) }"
 
+ifneq ($(SYSO),)
 nyagos.syso:
 	cd Etc && go generate
+endif
 
 get:
 	go get -u
