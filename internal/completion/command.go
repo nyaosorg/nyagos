@@ -9,23 +9,33 @@ import (
 	"strings"
 )
 
+func checkTimeout(ctx context.Context) error {
+	if ctx != nil {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
+	}
+	return nil
+}
+
 func listUpAllFilesOnEnv(ctx context.Context, envName string, filter func(fs.DirEntry) bool) ([]Element, error) {
 	list := make([]Element, 0, 100)
 	pathEnv := os.Getenv(envName)
 	dirList := filepath.SplitList(pathEnv)
 	for _, dir1 := range dirList {
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				return nil, ctx.Err()
-			default:
-			}
+		if err := checkTimeout(ctx); err != nil {
+			return nil, err
 		}
 		files, err := os.ReadDir(dir1)
 		if err != nil {
 			continue
 		}
 		for _, file1 := range files {
+			if err := checkTimeout(ctx); err != nil {
+				return nil, err
+			}
 			if filter(file1) {
 				name := file1.Name()
 				_name := path.Base(name)

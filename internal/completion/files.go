@@ -65,14 +65,10 @@ func listUpWithFilter(ctx context.Context, str string, ua UncCompletion, filter 
 	commons := make([]Element, 0)
 	STR := strings.ToUpper(str)
 	var canceled error = nil
-	err := findfile.Walk(wildcard, func(fd *findfile.FileInfo) bool {
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				canceled = ctx.Err()
-				return false
-			default:
-			}
+	err := findfile.WalkContext(ctx, wildcard, func(fd *findfile.FileInfo) bool {
+		if err := checkTimeout(ctx); err != nil {
+			canceled = ctx.Err()
+			return false
 		}
 		if fd.Name() == "." || fd.Name() == ".." {
 			return true
