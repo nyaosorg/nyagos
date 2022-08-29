@@ -5,6 +5,7 @@
 * (#421) Fix: environemt variables which batchfiles remove were not erased.(Thanks to @tsuyoshicho)
 * (#422) Fix: when %PROMPT% contained $h, the edit start position shifted to the right.(Thanks to Matsuyanagi)
 * Fix: when terminal's background-color was white, characters in the readline was invisible. (Use not white but terminal's default color for foreground color)
+* Improved the problem that timeout does not work well in command name completion.
 * Move sub-packages into internal folder
 * Use Generics-type for the dictionary that key's cases are ignored.
 
