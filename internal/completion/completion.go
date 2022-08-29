@@ -94,7 +94,7 @@ func lookupCustomCompletion(s string) (CustomCompleter, bool) {
 }
 
 func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, func(), error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
 	cmdlineRecover := func() {}
