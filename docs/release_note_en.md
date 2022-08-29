@@ -8,6 +8,7 @@
 * Improved the problem that timeout does not work well in command name completion.
 * Move sub-packages into internal folder
 * Use Generics-type for the dictionary that key's cases are ignored.
+* Fixed Makefile error on non-Windows
 
 NYAGOS 4.4.12\_0
 ================
