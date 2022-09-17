@@ -3,22 +3,27 @@ if not nyagos then
     os.exit()
 end
 
-local fzf = {}
-fzf.cmd          =  "fzf.exe"
-fzf.args         =  {}
-fzf.args.dir     =  ""
-fzf.args.cmdhist =  ""
-fzf.args.cdhist  =  ""
-fzf.args.gitlog  =  "--preview='git show {1}'"
+-- default/non-configured setting: Use fzf(exists)/peco
+local ff = {}
+if nyagos.which("fzf.exe") then
+  ff.cmd        =  "fzf.exe"
+else
+  ff.cmd        =  "peco.exe"
+end
+ff.args         =  {}
+ff.args.dir     =  ""
+ff.args.cmdhist =  ""
+ff.args.cdhist  =  ""
+if nyagos.which("fzf.exe") then
+  ff.args.gitlog  =  "--preview='git show {1}'"
+else
+  ff.args.gitlog  =  ""
+end
 
-share.fuzzyfinder = share.fuzzyfinder or fzf
+share.fuzzyfinder = share.fuzzyfinder or ff
 
-share.fuzzyfinder.cmd          = share.fuzzyfinder.cmd          or "fzf.exe"
-share.fuzzyfinder.args         = share.fuzzyfinder.args         or {}
-share.fuzzyfinder.args.dir     = share.fuzzyfinder.args.dir     or ""
-share.fuzzyfinder.args.cmdhist = share.fuzzyfinder.args.cmdhist or ""
-share.fuzzyfinder.args.cdhist  = share.fuzzyfinder.args.cdhist  or ""
-share.fuzzyfinder.args.gitlog  = share.fuzzyfinder.args.gitlog  or ""
+-- Compatibility settings with old settings
+share.selector = share.fuzzyfinder.cmd
 
 nyagos.alias.dump_temp_out = function()
     for _,val in ipairs(share.dump_temp_out) do
