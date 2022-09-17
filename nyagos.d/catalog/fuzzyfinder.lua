@@ -3,14 +3,22 @@ if not nyagos then
     os.exit()
 end
 
--- default/non-configured setting: Use fzf
+-- default/non-configured setting: Use fzf(exists)/peco
 local ff = {}
-ff.cmd          =  "fzf.exe"
+if nyagos.which("fzf.exe") then
+  ff.cmd        =  "fzf.exe"
+else
+  ff.cmd        =  "peco.exe"
+end
 ff.args         =  {}
 ff.args.dir     =  ""
 ff.args.cmdhist =  ""
 ff.args.cdhist  =  ""
-ff.args.gitlog  =  "--preview='git show {1}'"
+if nyagos.which("fzf.exe") then
+  ff.args.gitlog  =  "--preview='git show {1}'"
+else
+  ff.args.gitlog  =  ""
+end
 
 share.fuzzyfinder = share.fuzzyfinder or ff
 
