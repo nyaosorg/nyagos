@@ -9,6 +9,7 @@
 * サブパッケージを internal フォルダー以下へ移動
 * キーの英大文字・小文字を区別しない辞書に Generics を使用するようにした。
 * Windows以外で Makefile がエラーになる問題を修正
+* (#424) fuzzy finder 拡張機能の統合 (Thx @tsuyoshicho)
 
 NYAGOS 4.4.12\_0
 ================

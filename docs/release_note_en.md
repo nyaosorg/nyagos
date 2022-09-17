@@ -9,6 +9,7 @@
 * Move sub-packages into internal folder
 * Use Generics-type for the dictionary that key's cases are ignored.
 * Fixed Makefile error on non-Windows
+* (#424) fuzzy finder extension integration(catalog) (Thx @tsuyoshicho)
 
 NYAGOS 4.4.12\_0
 ================
