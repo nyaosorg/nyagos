@@ -1,9 +1,13 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.13\_0
+================
+(2022.09.24)
+
 * セキュリティー警告対応のため、gopkg.in/yaml.v3 に依存するモジュールを直接利用しないようにした( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
 * (#420) macOS でのビルドをサポート (Thanks to @zztkm)
 * (#421) バッチファイルが環境変数を削除した時、それが反映されていない問題を修正(Thanks to @tsuyoshicho)
-* (#422) プロンプトに$hを使った時、編集開始位置が右にずれる不具合を修正(Thanks to Matsuyanagi)
+* (#422) プロンプトに$hを使った時、編集開始位置が右にずれる不具合を修正(Thanks to @Matsuyanagi)
 * 端末の背景色が白の時、入力文字が全く見えない不具合を修正(端末デフォルト文字色を使用)
 * コマンド名補完において、タイムアウトが効きづらい問題を改善
 * サブパッケージを internal フォルダー以下へ移動
