@@ -58,7 +58,7 @@ func newArgHook(ctx context.Context, it *shell.Shell, args, rawargs []string) ([
 	for i := 0; i <= size; i++ {
 		arg1 := L.GetTable(result, lua.LNumber(i)).String()
 		newargs[i] = arg1
-		if strings.ContainsAny(arg1, ` "&|<>`) {
+		if len(arg1) <= 0 || strings.ContainsAny(arg1, ` "&|<>`) {
 			arg1 = shell.Quote(arg1)
 		}
 		newrawargs[i] = arg1
