@@ -1,5 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+* (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed.
+
 NYAGOS 4.4.13\_0
 ================
 on Sep.24,2022
