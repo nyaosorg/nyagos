@@ -7,17 +7,6 @@ share._suffixes={}
 
 share._setsuffix = function(suffix,cmdline)
     suffix=string.gsub(string.lower(suffix),"^%.","")
-    if not share._suffixes[suffix] then
-        local newext="."..suffix
-        local orgpathext = nyagos.env.PATHEXT
-        if orgpathext then
-            if not string.find(";"..orgpathext..";",";"..newext..";",1,true) then
-                nyagos.env.PATHEXT = orgpathext..";"..newext
-            end
-        else
-            nyagos.env.PATHEXT = newext
-        end
-    end
     share._suffixes[suffix]=cmdline
 end
 
