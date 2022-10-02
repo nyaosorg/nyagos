@@ -1,6 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
 * (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed.
+* (#425) Do not append the extensions defined by the lua-function: nyagos.suffix into the environment variable PATHEXT
 
 NYAGOS 4.4.13\_0
 ================

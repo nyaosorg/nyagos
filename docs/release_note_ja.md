@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * (#426) nyagos.argsfilter でコマンドラインが変換された時、空パラメータ("") が消えてしまう問題を修正
+* (#425) nyagos.suffix 関数で設定した拡張子を環境変数 PATHEXT に自動で登録しないようにした
 
 NYAGOS 4.4.13\_0
 ================
