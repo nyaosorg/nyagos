@@ -95,7 +95,7 @@ func (cmd *Cmd) RawArgs() []string     { return cmd.rawArgs }
 func (cmd *Cmd) SetRawArgs(s []string) { cmd.rawArgs = s }
 
 func argToRawArg(s string) string {
-	if !strings.ContainsAny(s, " &|<>\t\"") {
+	if len(s) > 0 && !strings.ContainsAny(s, " &|<>\t\"") {
 		return s
 	}
 	var buffer strings.Builder
