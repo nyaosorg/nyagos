@@ -1,8 +1,8 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-* (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed.
-* (#425) Do not append the extensions defined by the lua-function: nyagos.suffix into the environment variable PATHEXT
-* (#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed.
+* (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed. (Thx. @juggler999)
+* (#425) Do not append the extensions defined by the lua-function: nyagos.suffix into the environment variable PATHEXT (Thx. @tsuyoshicho)
+* (#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed. (Thx. @juggler999)
 
 NYAGOS 4.4.13\_0
 ================
