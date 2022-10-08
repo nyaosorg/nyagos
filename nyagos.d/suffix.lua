@@ -5,8 +5,28 @@ end
 
 share._suffixes={}
 
+local function member(list,m)
+    if not list then
+        return false
+    end
+    return string.find(";"..list..";",";"..m..";",1,true)
+end
+
 share._setsuffix = function(suffix,cmdline)
     suffix=string.gsub(string.lower(suffix),"^%.","")
+    if not share._suffixes[suffix] then
+        local newext="."..suffix
+        if not member(nyagos.env.PATHEXT,newext) then
+            local orgpathext = nyagos.env.NYAGOSPATHEXT
+            if orgpathext then
+                if not member(orgpathext,newext) then
+                    nyagos.env.NYAGOSPATHEXT = orgpathext..";"..newext
+                end
+            else
+                nyagos.env.NYAGOSPATHEXT = newext
+            end
+        end
+    end
     share._suffixes[suffix]=cmdline
 end
 
