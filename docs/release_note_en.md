@@ -1,7 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+* (#425) nyagos.d/suffix.lua appends the extensions into %NYAGOSPATHEXT% instead of %PATHEXT% and the command-name completion now looks both %PATHEXT% and %NYAGOSPATHEXT% (Thx. @tsuyoshicho)
 * (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed. (Thx. @juggler999)
-* (#425) Do not append the extensions defined by the lua-function: nyagos.suffix into the environment variable PATHEXT (Thx. @tsuyoshicho)
 * (#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed. (Thx. @juggler999)
 * (#427) Fix: '""' was replaced to '(DIGIT)' with BEEP (Thx. @hogewest)
 
