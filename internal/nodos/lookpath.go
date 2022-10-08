@@ -11,8 +11,10 @@ import (
 func lookPath(dir1, targetPath string) (foundpath string) {
 	targetName := filepath.Base(targetPath)
 	names := map[string]int{strings.ToUpper(targetName): 0}
-	for i, ext1 := range filepath.SplitList(os.Getenv("PATHEXT")) {
-		names[strings.ToUpper(targetName+ext1)] = i + 1
+	for _, envName := range pathExtEnvNames {
+		for i, ext1 := range filepath.SplitList(os.Getenv(envName)) {
+			names[strings.ToUpper(targetName+ext1)] = i + 1
+		}
 	}
 	foundIndex := 999
 	findfile.Walk(targetPath+"*", func(f *findfile.FileInfo) bool {
