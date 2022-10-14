@@ -25,13 +25,13 @@ require (
 	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
 	github.com/yuin/gopher-lua v0.0.0-20220504180219-658193537a64
-	golang.org/x/sys v0.0.0-20220919091848-fb04ddd9f9c8
+	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43
 )
 
 require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/mattn/go-tty v0.0.4 // indirect
 	github.com/rivo/uniseg v0.4.2 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20220922195421-2adab6b8c60e // indirect
+	golang.org/x/mod v0.6.0-dev.0.20221012134637-aac77cd49169 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 )
