@@ -1,5 +1,9 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.13\_1
+================
+on Oct.15,2022
+
 * (#425) nyagos.d/suffix.lua appends the extensions into %NYAGOSPATHEXT% instead of %PATHEXT% and the command-name completion now looks both %PATHEXT% and %NYAGOSPATHEXT% (Thx. @tsuyoshicho)
 * (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed. (Thx. @juggler999)
 * (#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed. (Thx. @juggler999)

@@ -1,5 +1,9 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.13\_1
+================
+(2022.10.15)
+
 * (#425) nyagos.d/suffix.lua で設定した拡張子を環境変数 PATHEXT ではなく、NYAGOSPATHEXT に登録するようにした。コマンド名補完は PATHEXT に加え、NYAGOSPATHEXT も参照するようにした  (Thx. @tsuyoshicho)
 * (#426) nyagos.argsfilter でコマンドラインが変換された時、空パラメータ("") が消えてしまう問題を修正 (Thx. @juggler999)
 * (#426) 外部コマンドに対するワイルドカード展開が有効になっている時、空パラメータ("")が消えてしまう問題を修正 (Thx. @juggler999)
