@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* (#428) `rmdir /s` でシンボリックリンクやジャンクションの削除に失敗する
+
 NYAGOS 4.4.13\_1
 ================
 (2022.10.15)

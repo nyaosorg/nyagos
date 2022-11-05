@@ -1,5 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+* (#428) `rmdir /s` fails to remove symbolic links and junctions (reparse point)
+
 NYAGOS 4.4.13\_1
 ================
 on Oct.15,2022
