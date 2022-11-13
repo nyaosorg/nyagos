@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * (#428) `rmdir /s` でシンボリックリンクやジャンクションの削除に失敗する
+* \" で引用領域の色を反転させないようにした
 
 NYAGOS 4.4.13\_1
 ================
