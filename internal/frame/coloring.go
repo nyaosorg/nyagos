@@ -24,15 +24,16 @@ const (
 	percentBit    = 2
 	quotedBit     = 4
 	optionBit     = 8
+	backSlash     = 16
 )
 
 func (s *_Coloring) Next(codepoint rune) int {
-	newbits := s.bits
+	newbits := s.bits &^ backSlash
 	if codepoint == '`' {
 		newbits ^= backquotedBit
 	} else if codepoint == '%' {
 		newbits ^= percentBit
-	} else if codepoint == '"' {
+	} else if codepoint == '"' && (s.bits&backSlash) == 0 {
 		newbits ^= quotedBit
 	} else if s.last == ' ' && (codepoint == '/' || codepoint == '-') {
 		newbits ^= optionBit
@@ -40,6 +41,8 @@ func (s *_Coloring) Next(codepoint rune) int {
 		newbits &^= optionBit
 	} else if s.last == '%' && (s.bits&percentBit) != 0 && unicode.IsDigit(codepoint) {
 		newbits &^= percentBit
+	} else if codepoint == '\\' && (s.bits&backSlash) == 0 {
+		newbits |= backSlash
 	}
 	bits := s.bits | newbits
 	color := defaultColor
