@@ -56,11 +56,11 @@ func Chdir(folder string) (err error) {
 	if isOtherDrivesRelative(folder) {
 		folder = filepath.Join(getLastDirOfdrive(folder[0]), folder[2:])
 	}
-	if err := os.Chdir(folder); err != nil {
-		return err
-	}
 	if absFolder, err := filepath.Abs(folder); err == nil {
 		folder = absFolder
+	}
+	if err := os.Chdir(folder); err != nil {
+		return err
 	}
 	saveLastDirOfDriveToEnv(folder)
 	return nil
