@@ -1,8 +1,8 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-* (#428) `rmdir /s` fails to remove symbolic links and junctions (reparse point)
+* (#428) Fix: `rmdir /s` fails to remove symbolic links and junctions (reparse point)
 * Do not toggle the quotation area color on \" now
-* (#429) `cd c:` fails when the current directory is `C:`
+* (#429) Fix `cd c:` fails when the current directory is `C:`
 
 NYAGOS 4.4.13\_1
 ================
