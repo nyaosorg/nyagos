@@ -4,10 +4,10 @@ go 1.19
 
 require (
 	github.com/atotto/clipboard v0.1.4
-	github.com/dustin/go-humanize v1.0.0
+	github.com/dustin/go-humanize v1.0.1
 	github.com/go-ole/go-ole v1.2.6
 	github.com/mattn/go-colorable v0.1.13
-	github.com/mattn/go-isatty v0.0.16
+	github.com/mattn/go-isatty v0.0.17
 	github.com/mattn/go-runewidth v0.0.14
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v1.0.0
@@ -19,19 +19,19 @@ require (
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20220829145728-e979453bedae
 	github.com/nyaosorg/go-windows-junction v0.1.0
-	github.com/nyaosorg/go-windows-mbcs v0.0.0-20220625075624-7e48d6c9b323
+	github.com/nyaosorg/go-windows-mbcs v0.2.0
 	github.com/nyaosorg/go-windows-netresource v0.1.0
 	github.com/nyaosorg/go-windows-shortcut v0.0.0-20220529122037-8b0c89bca4c4
 	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
-	github.com/yuin/gopher-lua v0.0.0-20220504180219-658193537a64
-	golang.org/x/sys v0.0.0-20221013171732-95e765b1cc43
+	github.com/yuin/gopher-lua v1.1.0
+	golang.org/x/sys v0.5.0
 )
 
 require (
 	github.com/Microsoft/go-winio v0.6.0 // indirect
 	github.com/mattn/go-tty v0.0.4 // indirect
-	github.com/rivo/uniseg v0.4.2 // indirect
-	golang.org/x/mod v0.6.0-dev.0.20221012134637-aac77cd49169 // indirect
-	golang.org/x/tools v0.1.12 // indirect
+	github.com/rivo/uniseg v0.4.3 // indirect
+	golang.org/x/mod v0.7.0 // indirect
+	golang.org/x/tools v0.5.0 // indirect
 )
