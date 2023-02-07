@@ -1,30 +1,13 @@
 package shell
 
 import (
-	"io"
 	"os"
 	"os/exec"
 	"strings"
 	"syscall"
 
-	"github.com/nyaosorg/go-windows-mbcs"
 	"github.com/nyaosorg/go-windows-netresource"
 )
-
-// loadTmpFile - read update the current-directory and environment-variables from tmp-file.
-func loadTmpFile(fname string, verbose io.Writer) (int, error) {
-	fp, err := os.Open(fname)
-	if err != nil {
-		return -1, err
-	}
-	defer fp.Close()
-
-	scan := mbcs.NewFilter(fp, mbcs.ConsoleCP())
-	if err := readPwd(scan, verbose); err != nil {
-		return -1, err
-	}
-	return readEnv(scan, verbose)
-}
 
 func (cmdExe *CmdExe) run() (int, error) {
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {

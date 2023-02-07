@@ -1,6 +1,7 @@
 package shell
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"math/rand"
@@ -8,13 +9,11 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-)
 
-type scannerT interface {
-	Scan() bool
-	Err() error
-	Text() string
-}
+	"golang.org/x/text/transform"
+
+	"github.com/nyaosorg/go-windows-mbcs"
+)
 
 func getCurrentEnvs() map[string]string {
 	result := map[string]string{}
@@ -28,7 +27,7 @@ func getCurrentEnvs() map[string]string {
 	return result
 }
 
-func readEnv(scan scannerT, verbose io.Writer) (int, error) {
+func readEnv(scan *bufio.Scanner, verbose io.Writer) (int, error) {
 	errorlevel := -1
 	curEnv := getCurrentEnvs()
 
@@ -69,7 +68,7 @@ func readEnv(scan scannerT, verbose io.Writer) (int, error) {
 	return errorlevel, scan.Err()
 }
 
-func readPwd(scan scannerT, verbose io.Writer) error {
+func readPwd(scan *bufio.Scanner, verbose io.Writer) error {
 	if !scan.Scan() {
 		if err := scan.Err(); err != nil {
 			return err
@@ -94,6 +93,22 @@ type Source struct {
 	Args    []string
 	Verbose io.Writer
 	Debug   bool
+}
+
+// loadTmpFile - read update the current-directory and environment-variables from tmp-file.
+func loadTmpFile(fname string, verbose io.Writer) (int, error) {
+	fp, err := os.Open(fname)
+	if err != nil {
+		return -1, err
+	}
+	defer fp.Close()
+
+	r := transform.NewReader(fp, mbcs.Decoder{CP: mbcs.ConsoleCP()})
+	scan := bufio.NewScanner(r)
+	if err := readPwd(scan, verbose); err != nil {
+		return -1, err
+	}
+	return readEnv(scan, verbose)
 }
 
 func (source Source) Call() (int, error) {
