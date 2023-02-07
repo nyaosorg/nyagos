@@ -115,7 +115,7 @@ func cmdMore(ctx context.Context, cmd Param) (int, error) {
 		}
 		if err := more(r, cmd); err != nil {
 			r.Close()
-			if err != io.EOF {
+			if err == io.EOF {
 				return 0, nil
 			}
 			return 1, err

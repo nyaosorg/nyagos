@@ -14,13 +14,13 @@ import (
 	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
-func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
+func cat(ctx context.Context, r io.Reader, w io.Writer) error {
 	scanner := bufio.NewScanner(transform.NewReader(r, mbcs.AutoDecoder{CP: mbcs.ConsoleCP()}))
 	for scanner.Scan() {
 		if done := ctx.Done(); done != nil {
 			select {
 			case <-done:
-				return false
+				return ctx.Err()
 			default:
 
 			}
@@ -29,7 +29,10 @@ func cat(ctx context.Context, r io.Reader, w io.Writer) bool {
 		text = strings.Replace(text, "\xEF\xBB\xBF", "", 1)
 		fmt.Fprintln(w, text)
 	}
-	return true
+	if err := scanner.Err(); err != io.EOF {
+		return err
+	}
+	return nil
 }
 
 func cmdType(ctx context.Context, cmd Param) (int, error) {
@@ -41,7 +44,9 @@ func cmdType(ctx context.Context, cmd Param) (int, error) {
 			}
 			defer c()
 		}
-		cat(ctx, cmd.In(), cmd.Out())
+		if err := cat(ctx, cmd.In(), cmd.Out()); err != nil {
+			return 1, err
+		}
 	} else {
 		for _, arg1 := range cmd.Args()[1:] {
 			r, err := os.Open(arg1)
@@ -57,10 +62,10 @@ func cmdType(ctx context.Context, cmd Param) (int, error) {
 				r.Close()
 				return 3, fmt.Errorf("%s: Permission denied", arg1)
 			}
-			cont := cat(ctx, r, cmd.Out())
+			err = cat(ctx, r, cmd.Out())
 			r.Close()
-			if !cont {
-				return 0, nil
+			if err != nil {
+				return 0, err
 			}
 		}
 	}
