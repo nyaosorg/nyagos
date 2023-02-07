@@ -152,5 +152,5 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 開発者
 ------
 
-* [zetamatta](https://github.com/zetamatta)
+* [hymkor - HAYAMA Kaoru](https://github.com/hymkor) (a.k.a zetamatta)
 <!-- vim:set fenc=utf8 -->
