@@ -19,7 +19,7 @@ require (
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20220829145728-e979453bedae
 	github.com/nyaosorg/go-windows-junction v0.1.0
-	github.com/nyaosorg/go-windows-mbcs v0.2.0
+	github.com/nyaosorg/go-windows-mbcs v0.3.0
 	github.com/nyaosorg/go-windows-netresource v0.1.0
 	github.com/nyaosorg/go-windows-shortcut v0.0.0-20220529122037-8b0c89bca4c4
 	github.com/nyaosorg/go-windows-su v0.2.1
@@ -33,5 +33,6 @@ require (
 	github.com/mattn/go-tty v0.0.4 // indirect
 	github.com/rivo/uniseg v0.4.3 // indirect
 	golang.org/x/mod v0.7.0 // indirect
+	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/tools v0.5.0 // indirect
 )
