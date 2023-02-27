@@ -41,7 +41,10 @@ test: tstlua
 	cd internal/texts    && go test
 
 tstlua:
-	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) :
+	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && nyagos --norc -f "$(I)" && ) echo OK
+ifeq ($(OS),Windows_NT)
+	$(foreach I,$(wildcard t/cmd/*.cmd),echo $(I) && "$(I)" && ) echo OK
+endif
 
 release: fmt $(SYSO)
 	cd bin          2>$(NUL) || mkdir bin
