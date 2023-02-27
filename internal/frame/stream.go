@@ -51,10 +51,11 @@ func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
 }
 
 // endsWithSep returns
-//     false when line does not end with `^`
-//     true when line ends with `^`
-//     false when line ends with `^^`
-//     true when line ends with `^^^`
+//
+//	false when line does not end with `^`
+//	true when line ends with `^`
+//	false when line ends with `^^`
+//	true when line ends with `^^^`
 func endsWithSep(line []byte, contMark byte) bool {
 	markCount := 0
 	for len(line) > 0 && line[len(line)-1] == contMark {
