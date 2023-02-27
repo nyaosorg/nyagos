@@ -4,12 +4,13 @@
 package mains
 
 import (
-	"bufio"
 	"context"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+
+	"golang.org/x/text/transform"
 
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
@@ -42,26 +43,18 @@ func (impl *_ScriptEngineForOptionImpl) SetArg(args []string) {
 	}
 }
 
+// doFileExceptAtMarkLines reads and executes a Lua script file, but ignores
+// lines starting with `@` until a line not starting with `@` is found.
+// This function is used in `nyagos --norc --lua-file FILENAME.CMD`
 func doFileExceptAtMarkLines(L *lua.LState, fname string) error {
 	fd, err := os.Open(fname)
 	if err != nil {
 		return err
 	}
-	reader, writer := io.Pipe()
-	go func() {
-		scan := bufio.NewScanner(fd)
-		for scan.Scan() {
-			line := scan.Text()
-			if len(line) > 0 && line[0] == '@' {
-				line = ""
-			}
-			fmt.Fprintln(writer, line)
-		}
-		writer.Close()
-		fd.Close()
-	}()
+	defer fd.Close()
+
+	reader := transform.NewReader(fd, &_AtShebangFilter{})
 	f, err := L.Load(reader, fname)
-	reader.Close()
 	if err != nil {
 		return err
 	}
