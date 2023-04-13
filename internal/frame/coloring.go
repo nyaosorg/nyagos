@@ -14,7 +14,7 @@ type _Coloring struct {
 	defaultBits int
 }
 
-func (s *_Coloring) Init() int {
+func (s *_Coloring) Init() readline.ColorSequence {
 	s.bits = s.defaultBits
 	return defaultColor
 }
@@ -27,7 +27,7 @@ const (
 	backSlash     = 16
 )
 
-func (s *_Coloring) Next(codepoint rune) int {
+func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
 	newbits := s.bits &^ backSlash
 	if codepoint == '`' {
 		newbits ^= backquotedBit
