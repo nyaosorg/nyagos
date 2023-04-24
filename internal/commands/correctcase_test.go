@@ -23,7 +23,7 @@ func TestFixPathCase(t *testing.T) {
 	if err != nil {
 		t.Errorf("os.Getwd(): %v", err)
 	}
-	chgPath := filepath.Join(filepath.Dir(orgPath),strings.ToUpper(filepath.Base(orgPath)))
+	chgPath := filepath.Join(filepath.Dir(orgPath), strings.ToUpper(filepath.Base(orgPath)))
 	actPath := testFixPathCase(t, chgPath)
 	if actPath != orgPath {
 		t.Fatalf("CorrectCase('%s') == %s", chgPath, actPath)
