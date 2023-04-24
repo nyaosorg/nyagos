@@ -6,6 +6,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"regexp"
 	"strconv"
 	"strings"
@@ -57,7 +58,7 @@ var jsonTemplate = `{
 }
 `
 
-var de = regexp.MustCompile(`[\._]`)
+var de = regexp.MustCompile(`[-\._]`)
 
 func versionStrToNum(versionString string) ([]int, error) {
 	v := de.Split(versionString, -1)
@@ -83,30 +84,21 @@ func versionStrToNum(versionString string) ([]int, error) {
 	return vn[:], nil
 }
 
-func getVersionData(fname string) (string, []int, error) {
-	bin, err := os.ReadFile(fname)
+func getVersionData() (string, []int, error) {
+	bin, err := exec.Command("git", "describe", "--tags").Output()
 	if err != nil {
-		return "", nil, err
+		return "", nil, fmt.Errorf("Could not get version string from git (%w)", err)
 	}
 	str := strings.TrimSpace(string(bin))
-
 	num, err := versionStrToNum(str)
 	return str, num, err
 }
 
-func main1() error {
-	if len(os.Args) < 3 {
-		return fmt.Errorf("Usage: %s FileVerFile ProdVerFile < base-json > final-json", os.Args[0])
-	}
-
-	fileVerStr, fileVerNum, err := getVersionData(os.Args[1])
+func main() {
+	fileVerStr, fileVerNum, err := getVersionData()
 	if err != nil {
-		return fmt.Errorf("%s: %w", os.Args[1], err)
-	}
-
-	prodVerStr, prodVerNum, err := getVersionData(os.Args[2])
-	if err != nil {
-		return fmt.Errorf("%s: %w", os.Args[2], err)
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
 
 	fmt.Printf(jsonTemplate,
@@ -114,19 +106,10 @@ func main1() error {
 		fileVerNum[1],
 		fileVerNum[2],
 		fileVerNum[3],
-		prodVerNum[0],
-		prodVerNum[1],
-		prodVerNum[2],
-		prodVerNum[3],
+		fileVerNum[0],
+		fileVerNum[1],
+		fileVerNum[2],
+		fileVerNum[3],
 		fileVerStr,
-		prodVerStr)
-
-	return nil
-}
-
-func main() {
-	if err := main1(); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
-		os.Exit(1)
-	}
+		fileVerStr)
 }

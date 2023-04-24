@@ -12,7 +12,6 @@ import (
 	"github.com/nyaosorg/nyagos/internal/mains"
 )
 
-//go:embed Etc/version.txt
 var version string
 
 func main() {

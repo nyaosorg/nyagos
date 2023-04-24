@@ -24,12 +24,16 @@ else
     D=/
     SYSO=
 endif
+NAME=$(notdir $(abspath .))
+VERSION=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
+GOOPT=-ldflags "-s -w -X main.version=$(VERSION)"
+EXE=$(shell go env GOEXE)
 
-snapshot: fmt $(SYSO)
-	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)"
+snapshot: fmt
+	$(SET) "CGO_ENABLED=0" && go build $(GOOPT)
 
 debug:
-	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
+	$(SET) "CGO_ENABLED=0" && go build $(GOOPT) -tags=debug
 
 test: tstlua
 	$(foreach I,$(wildcard internal/*),pushd "$(I)" &&  go test && popd && ) echo OK
@@ -40,31 +44,27 @@ ifeq ($(OS),Windows_NT)
 	$(foreach I,$(wildcard t/cmd/*.cmd),echo $(I) && "$(I)" && ) echo OK
 endif
 
-all: fmt $(SYSO)
+all: fmt
+ifneq ($(SYSO),)
+	cd Etc && go generate
+endif
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
 	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
-	$(SET) "GOOS=windows"  && $(SET) "GOARCH=386"   && go build -o bin/386/nyagos.exe   -ldflags "-s -w"
-	$(SET) "GOOS=windows"  && $(SET) "GOARCH=amd64" && go build -o bin/amd64/nyagos.exe -ldflags "-s -w"
-	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build -ldflags "-s -w"
+	$(SET) "GOOS=windows"  && $(SET) "GOARCH=386"   && go build -o bin/386/nyagos.exe   $(GOOPT)
+	$(SET) "GOOS=windows"  && $(SET) "GOARCH=amd64" && go build -o bin/amd64/nyagos.exe $(GOOPT)
+	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build $(GOOPT)
 
 clean:
 	-$(DELTREE) bin 2>$(NUL)
 	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
 
 fmt:
-	git status -s | $(AWK) "/^.M.*\.go/{ system(\"go fmt \" $$NF) }"
-
-ifneq ($(SYSO),)
-nyagos.syso:
-	cd Etc && go generate
-endif
+	$(foreach I,$(shell git status -s | $(AWK) "/^.M.*\.go$$/{ print $$NF }"),gofmt -w $(I) && ) echo OK
 
 get:
 	go get -u
 	go mod tidy
-
-VERSION=$(shell $(TYPE) Etc$(D)version.txt)
 
 _zip:
 	zip -9j "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
@@ -78,13 +78,6 @@ package:
 	make _zip GOARCH=amd64
 	tar zcvf "nyagos-$(VERSION)-linux-amd64.tar.gz" -C .. \
 	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
-
-workspace:
-	cd .. && go work init go-readline-ny nyagos
-
-unworkspace:
-	$(DEL) ..$(D)go.work
-	$(MAKE) get
 
 ifeq ($(OS),Windows_NT)
 install:
