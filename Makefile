@@ -46,7 +46,7 @@ ifeq ($(OS),Windows_NT)
 	$(foreach I,$(wildcard t/cmd/*.cmd),echo $(I) && "$(I)" && ) echo OK
 endif
 
-release: fmt $(SYSO)
+all: fmt $(SYSO)
 	cd bin          2>$(NUL) || mkdir bin
 	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
 	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
@@ -68,7 +68,6 @@ endif
 
 get:
 	go get -u
-	go get -u github.com/nyaosorg/go-readline-ny@master
 	go mod tidy
 
 VERSION=$(shell $(TYPE) Etc$(D)version.txt)
