@@ -32,13 +32,7 @@ debug:
 	$(SET) "CGO_ENABLED=0" && go build -ldflags "-s -w -X main.version=$(shell git.exe describe --tags)" -tags=debug
 
 test: tstlua
-	cd internal/alias    && go test
-	cd internal/commands && go test
-	cd internal/history  && go test
-	cd internal/mains    && go test
-	cd internal/nodos    && go test
-	cd internal/shell    && go test
-	cd internal/texts    && go test
+	$(foreach I,$(wildcard internal/*),pushd "$(I)" &&  go test && popd && ) echo OK
 
 tstlua:
 	$(foreach I,$(wildcard t/lua/*.lua),echo $(I) && "./nyagos" --norc -f "$(I)" && ) echo OK
