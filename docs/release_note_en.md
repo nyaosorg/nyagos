@@ -3,7 +3,7 @@
 * (#428) Fix: `rmdir /s` fails to remove symbolic links and junctions (reparse point)
 * Do not toggle the quotation area color on \" now
 * (#429) Fix `cd c:` fails when the current directory is `C:`
-* To convert between ANSI and UTF8 strings, use go-windows-mbcs v0.3.0 and golang.org/x/text/transform now
+* To convert between ANSI and UTF8 strings, use go-windows-mbcs v0.4 and golang.org/x/text/transform now
 
 NYAGOS 4.4.13\_1
 ================

@@ -3,7 +3,7 @@
 * (#428) `rmdir /s` でシンボリックリンクやジャンクションの削除に失敗する問題を修正
 * \" で引用領域の色を反転させないようにした
 * (#429) カレントディレクトリが `C:` の時、`cd c:` が失敗する不具合を修正
-* ANSIとUTF8間の変換に go-windows-mbcs v0.3.0 とgolang.org/x/text/transform を使うようにした
+* ANSIとUTF8間の変換に go-windows-mbcs v0.4 とgolang.org/x/text/transform を使うようにした
 
 NYAGOS 4.4.13\_1
 ================
