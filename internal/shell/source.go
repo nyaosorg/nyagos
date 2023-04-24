@@ -103,7 +103,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	}
 	defer fp.Close()
 
-	r := transform.NewReader(fp, mbcs.Decoder{CP: mbcs.ConsoleCP()})
+	r := transform.NewReader(fp, mbcs.NewDecoder(mbcs.ConsoleCP()))
 	scan := bufio.NewScanner(r)
 	if err := readPwd(scan, verbose); err != nil {
 		return -1, err
