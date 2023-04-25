@@ -79,6 +79,9 @@ package:
 	tar zcvf "nyagos-$(VERSION)-linux-amd64.tar.gz" -C .. \
 	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
 
+release:
+	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*)
+
 ifeq ($(OS),Windows_NT)
 install:
 ifeq ($(INSTALLDIR),)
