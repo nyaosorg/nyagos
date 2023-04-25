@@ -12,6 +12,9 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"unicode/utf8"
+
+	"golang.org/x/term"
 
 	"github.com/mattn/go-isatty"
 
@@ -98,29 +101,33 @@ func CmdGetwd(args []anyT) []anyT {
 }
 
 func CmdGetKey(args []anyT) []anyT {
-	tty1, err := readline.NewDefaultTty()
+	stdin := int(os.Stdin.Fd())
+	state, err := term.MakeRaw(stdin)
 	if err != nil {
 		return []anyT{nil, err.Error()}
 	}
-	defer tty1.Close()
+	defer term.Restore(stdin, state)
+
 	for {
-		r, err := tty1.ReadRune()
+		var buffer [256]byte
+
+		n, err := os.Stdin.Read(buffer[:])
 		if err != nil {
 			return []anyT{nil, err.Error()}
 		}
-		if r != 0 {
-			return []anyT{r, 0, 0}
+		key := buffer[:n]
+		for len(key) > 0 {
+			r, size := utf8.DecodeRune(key)
+			if r != 0 {
+				return []anyT{r, 0, 0}
+			}
+			key = key[size:]
 		}
 	}
 }
 
 func CmdGetViewWidth(args []anyT) []anyT {
-	tty1, err := readline.NewDefaultTty()
-	if err != nil {
-		return []anyT{nil, err.Error()}
-	}
-	defer tty1.Close()
-	width, height, err := tty1.Size()
+	width, height, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		return []anyT{nil, err.Error()}
 	}
