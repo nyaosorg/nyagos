@@ -371,7 +371,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 			},
 			U: fmt.Sprintf("(lua: `nyagos.option.%s=true`)%s\n%s",
 				key,
-				isDefault(*val.V),
+				isDefault(val.Get()),
 				_val.Usage),
 		})
 		optionMap.Store("--no-"+_key, optionT{
@@ -380,7 +380,7 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 			},
 			U: fmt.Sprintf("(lua: `nyagos.option.%s=false`)%s\n%s",
 				key,
-				isDefault(!*val.V),
+				isDefault(!val.Get()),
 				_val.NoUsage),
 		})
 	}

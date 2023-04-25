@@ -21,8 +21,26 @@ var ReadStdinAsFile = false
 
 type optionT struct {
 	V       *bool
+	Setter  func(value bool)
+	Getter  func() bool
 	Usage   string
 	NoUsage string
+}
+
+func (o *optionT) Set(value bool) {
+	if o.Setter != nil {
+		o.Setter(value)
+	} else {
+		*o.V = value
+	}
+}
+
+func (o *optionT) Get() bool {
+	if o.Getter != nil {
+		return o.Getter()
+	} else {
+		return *o.V
+	}
 }
 
 // BoolOptions are the all global option list.
@@ -63,7 +81,8 @@ var BoolOptions = ignoreCaseSorted.MapToDictionary(map[string]*optionT{
 		NoUsage: "Read commands from stdin as Windows Console(tty). Enable to edit line",
 	},
 	"output_surrogate_pair": {
-		V:       &readline.SurrogatePairOk,
+		Setter:  readline.EnableSurrogatePair,
+		Getter:  readline.IsSurrogatePairEnabled,
 		Usage:   "Output surrogate pair characters as it is",
 		NoUsage: "Output surrogate pair characters like <NNNNN>",
 	},
@@ -79,13 +98,13 @@ func dumpBoolOptions(out io.Writer) {
 	for p := BoolOptions.Front(); p != nil; p = p.Next() {
 		key := p.Key
 		val := p.Value
-		if *val.V {
+		if val.Get() {
 			fmt.Fprint(out, "-o ")
 		} else {
 			fmt.Fprint(out, "+o ")
 		}
 		fmt.Fprintf(out, "%-*s", max, key)
-		if *val.V {
+		if val.Get() {
 			fmt.Fprintf(out, " (%s)\n", val.Usage)
 		} else {
 			fmt.Fprintf(out, " (%s)\n", val.NoUsage)
@@ -109,7 +128,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				dumpBoolOptions(cmd.Out())
 			} else {
 				if ptr, ok := BoolOptions.Load(args[0]); ok {
-					*ptr.V = true
+					ptr.Set(true)
 				} else {
 					fmt.Fprintf(cmd.Err(), "-o %s: no such option\n", args[0])
 				}
@@ -121,7 +140,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 				dumpBoolOptions(cmd.Out())
 			} else {
 				if ptr, ok := BoolOptions.Load(args[0]); ok {
-					*ptr.V = false
+					ptr.Set(false)
 				} else {
 					fmt.Fprintf(cmd.Err(), "+o %s: no such option\n", args[0])
 				}
