@@ -8,7 +8,6 @@ ifeq ($(OS),Windows_NT)
     TYPE=type
     GITDIR=$(or $(GIT_INSTALL_ROOT),$(shell for %%I in (git.exe) do echo %%~dp$$PATH:I..))
     AWK="$(GITDIR)\usr\bin\gawk.exe"
-    D=$\\
 ifeq ($(shell go env GOOS),windows)
     SYSO=nyagos.syso
 else
@@ -21,7 +20,6 @@ else
     DELTREE=rm -r
     TYPE=cat
     AWK=gawk
-    D=/
     SYSO=
 endif
 NAME=$(notdir $(abspath .))
@@ -45,12 +43,10 @@ ifeq ($(OS),Windows_NT)
 endif
 
 all: fmt
-ifneq ($(SYSO),)
 	cd Etc && go generate
-endif
-	cd bin          2>$(NUL) || mkdir bin
-	cd bin$(D)386   2>$(NUL) || mkdir bin$(D)386
-	cd bin$(D)amd64 2>$(NUL) || mkdir bin$(D)amd64
+	cd bin         2>$(NUL) || mkdir bin
+	cd "bin/386"   2>$(NUL) || mkdir "bin/386"
+	cd "bin/amd64" 2>$(NUL) || mkdir "bin/amd64"
 	$(SET) "GOOS=windows"  && $(SET) "GOARCH=386"   && go build -o bin/386/nyagos.exe   $(GOOPT)
 	$(SET) "GOOS=windows"  && $(SET) "GOARCH=amd64" && go build -o bin/amd64/nyagos.exe $(GOOPT)
 	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build $(GOOPT)
@@ -68,10 +64,10 @@ get:
 
 _zip:
 	zip -9j "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
-	    "bin$(D)$(GOARCH)$(D)nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE \
-	    "Etc$(D)*.ico"
+	    "bin/$(GOARCH)/nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE \
+	    "Etc/*.ico"
 	zip -9  "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
-	    "nyagos.d$(D)*.lua" "nyagos.d$(D)catalog$(D)*.lua"
+	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua"
 
 package:
 	make _zip GOARCH=386
@@ -88,11 +84,11 @@ ifeq ($(INSTALLDIR),)
 	@echo Please do $(MAKE) INSTALLDIR=...
 	@echo or set INSTALLDIR=...
 else
-	copy /-Y  _nyagos    "$(INSTALLDIR)$(D)."
-	xcopy "nyagos.d$(D)*"  "$(INSTALLDIR)$(D)nyagos.d" /E /I /Y
-	copy /-Y  nyagos.exe "$(INSTALLDIR)$(D)." || ( \
-	move "$(INSTALLDIR)$(D)nyagos.exe" "$(INSTALLDIR)$(D)nyagos.exe-%RANDOM%" && \
-	copy nyagos.exe  "$(INSTALLDIR)$(D)." )
+	copy /-Y  _nyagos    "$(INSTALLDIR)\."
+	xcopy "nyagos.d\*"   "$(INSTALLDIR)\nyagos.d" /E /I /Y
+	copy /-Y  nyagos.exe "$(INSTALLDIR)\." || ( \
+	move "$(INSTALLDIR)\nyagos.exe" "$(INSTALLDIR)\nyagos.exe-%RANDOM%" && \
+	copy nyagos.exe  "$(INSTALLDIR)\." )
 endif
 
 update:
