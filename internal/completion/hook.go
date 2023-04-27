@@ -2,7 +2,9 @@ package completion
 
 import (
 	"context"
+
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/keys"
 )
 
 var commandListUpper = []func(context.Context) ([]Element, error){
@@ -23,9 +25,8 @@ func AppendCommandLister(f func(context.Context) ([]Element, error)) {
 var HookToList = []func(context.Context, *readline.Buffer, *List) (*List, error){}
 
 func init() {
-	f := readline.KeyGoFuncT{Func: KeyFuncCompletion, Name: "COMPLETE"}
-	err := readline.GlobalKeyMap.BindKeyFunc(readline.K_CTRL_I, &f)
-	if err != nil {
-		panic(err.Error())
-	}
+	readline.GlobalKeyMap.BindKey(keys.CtrlI, readline.NewGoCommand(
+		"COMPLETE",
+		KeyFuncCompletion,
+	))
 }
