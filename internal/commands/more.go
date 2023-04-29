@@ -7,7 +7,7 @@ import (
 	"io"
 	"math"
 	"os"
-	"regexp"
+	"strings"
 	"unicode/utf8"
 
 	"golang.org/x/term"
@@ -18,8 +18,6 @@ import (
 	"github.com/nyaosorg/go-windows-mbcs"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 )
-
-var ansiStrip = regexp.MustCompile("\x1B[^a-zA-Z]*[A-Za-z]")
 
 var bold = false
 var screenWidth int
@@ -58,6 +56,37 @@ func getkey() (rune, error) {
 	}
 }
 
+func splitLinesWithWidth(text string, screenWidth int) (lines []string) {
+	var buffer strings.Builder
+	w := 0
+	ansiStrip := false
+	for _, c := range text {
+		if ansiStrip {
+			if ('A' <= c && c <= 'Z') || ('a' <= c && c <= 'z') {
+				ansiStrip = false
+			}
+		} else if c == '\x1B' {
+			ansiStrip = true
+		} else {
+			w1 := runewidth.RuneWidth(c)
+			if w+w1 >= screenWidth {
+				lines = append(lines, buffer.String())
+				buffer.Reset()
+				w = 0
+			}
+			w += w1
+		}
+		buffer.WriteRune(c)
+	}
+	if buffer.Len() > 0 {
+		lines = append(lines, buffer.String())
+	}
+	if len(lines) <= 0 {
+		lines = []string{""}
+	}
+	return
+}
+
 func more(r io.Reader, cmd Param) error {
 	scanner := mbcs.NewFilter(r, mbcs.ConsoleCP())
 	count := 0
@@ -67,32 +96,33 @@ func more(r io.Reader, cmd Param) error {
 	}
 	for scanner.Scan() {
 		text := scanner.Text()
-		width := runewidth.StringWidth(ansiStrip.ReplaceAllString(text, ""))
-		lines := (width + screenWidth) / screenWidth
-		for count+lines >= screenHeight {
-			io.WriteString(cmd.Err(), "more>")
-			ch, err := getkey()
-			if err != nil {
-				return err
+		lines := splitLinesWithWidth(text, screenWidth)
+		for _, line := range lines {
+			if count+1 >= screenHeight {
+				io.WriteString(cmd.Err(), "more>")
+				ch, err := getkey()
+				if err != nil {
+					return err
+				}
+				if ch == '\x03' {
+					fmt.Fprintln(cmd.Err(), "^C")
+					return io.EOF
+				}
+				io.WriteString(cmd.Err(), "\r     \b\b\b\b\b")
+				if ch == 'q' {
+					return io.EOF
+				} else if ch == '\r' {
+					count--
+				} else {
+					count = 0
+				}
+				if bold {
+					io.WriteString(cmd.Out(), "\x1B[1m")
+				}
 			}
-			if ch == '\x03' {
-				fmt.Fprintln(cmd.Err(), "^C")
-				return io.EOF
-			}
-			io.WriteString(cmd.Err(), "\r     \b\b\b\b\b")
-			if ch == 'q' {
-				return io.EOF
-			} else if ch == '\r' {
-				count--
-			} else {
-				count = 0
-			}
+			fmt.Fprintln(cmd.Out(), line)
+			count++
 		}
-		if bold {
-			io.WriteString(cmd.Out(), "\x1B[1m")
-		}
-		fmt.Fprintln(cmd.Out(), text)
-		count += lines
 	}
 	return scanner.Err()
 }
