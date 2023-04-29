@@ -1,21 +1,18 @@
 package commands
 
 import (
-	"bufio"
 	"context"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	"golang.org/x/text/transform"
-
 	"github.com/nyaosorg/go-windows-mbcs"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 func cat(ctx context.Context, r io.Reader, w io.Writer) error {
-	scanner := bufio.NewScanner(transform.NewReader(r, mbcs.AutoDecoder{CP: mbcs.ConsoleCP()}))
+	scanner := mbcs.NewFilter(r, mbcs.ConsoleCP())
 	for scanner.Scan() {
 		if done := ctx.Done(); done != nil {
 			select {

@@ -4,12 +4,28 @@
 package shell
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
 )
+
+func loadTmpFile(fname string, verbose io.Writer) (int, error) {
+	fp, err := os.Open(fname)
+	if err != nil {
+		return -1, err
+	}
+	defer fp.Close()
+
+	scan := bufio.NewScanner(fp)
+	if err := readPwd(scan, verbose); err != nil {
+		return -1, err
+	}
+	return readEnv(scan, verbose)
+}
 
 func (this *CmdExe) run() (int, error) {
 	args := []string{

@@ -1,7 +1,6 @@
 package commands
 
 import (
-	"bufio"
 	"context"
 	"errors"
 	"fmt"
@@ -12,7 +11,6 @@ import (
 	"unicode/utf8"
 
 	"golang.org/x/term"
-	"golang.org/x/text/transform"
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
@@ -61,7 +59,7 @@ func getkey() (rune, error) {
 }
 
 func more(r io.Reader, cmd Param) error {
-	scanner := bufio.NewScanner(transform.NewReader(r, mbcs.AutoDecoder{CP: mbcs.ConsoleCP()}))
+	scanner := mbcs.NewFilter(r, mbcs.ConsoleCP())
 	count := 0
 
 	if f, ok := cmd.Out().(*os.File); !ok || !isatty.IsTerminal(f.Fd()) {
