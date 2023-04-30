@@ -3,9 +3,7 @@ ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     NUL=NUL
     DEL=del
-    DELTREE=rmdir /s
     SET=set
-    TYPE=type
     GITDIR=$(or $(GIT_INSTALL_ROOT),$(shell for %%I in (git.exe) do echo %%~dp$$PATH:I..))
     AWK="$(GITDIR)\usr\bin\gawk.exe"
 ifeq ($(shell go env GOOS),windows)
@@ -17,8 +15,6 @@ else
     NUL=/dev/null
     SET=export
     DEL=rm
-    DELTREE=rm -r
-    TYPE=cat
     AWK=gawk
     SYSO=
 endif
@@ -42,17 +38,7 @@ ifeq ($(OS),Windows_NT)
 	$(foreach I,$(wildcard t/cmd/*.cmd),echo $(I) && "$(I)" && ) echo OK
 endif
 
-all: fmt
-	cd Etc && go generate
-	cd bin         2>$(NUL) || mkdir bin
-	cd "bin/386"   2>$(NUL) || mkdir "bin/386"
-	cd "bin/amd64" 2>$(NUL) || mkdir "bin/amd64"
-	$(SET) "GOOS=windows"  && $(SET) "GOARCH=386"   && go build -o bin/386/nyagos.exe   $(GOOPT)
-	$(SET) "GOOS=windows"  && $(SET) "GOARCH=amd64" && go build -o bin/amd64/nyagos.exe $(GOOPT)
-	$(SET) "CGO_ENABLED=0" && $(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && go build $(GOOPT)
-
 clean:
-	-$(DELTREE) bin 2>$(NUL)
 	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
 
 fmt:
@@ -62,21 +48,21 @@ get:
 	go get -u
 	go mod tidy
 
-_zip:
-	zip -9j "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
-	    "bin/$(GOARCH)/nyagos.exe" .nyagos _nyagos makeicon.cmd LICENSE \
-	    "Etc/*.ico"
-	zip -9  "nyagos-$(VERSION)-windows-$(GOARCH).zip" \
-	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua"
+_package:
+	$(SET) "CGO_ENABLED=0" && go build $(GOOPT)
+	zip -9 "nyagos-$(VERSION)-$(GOOS)-$(GOARCH).zip" \
+	    "nyagos$(EXE)" .nyagos _nyagos LICENSE \
+	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua" \
+	    $(FILES)
 
 package:
-	make _zip GOARCH=386
-	make _zip GOARCH=amd64
-	tar zcvf "nyagos-$(VERSION)-linux-amd64.tar.gz" -C .. \
-	    nyagos/nyagos nyagos/.nyagos nyagos/_nyagos nyagos/nyagos.d
+	cd Etc && go generate
+	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _package "FILES=Etc/*.ico makeicon.cmd"
+	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _package "FILES=Etc/*.ico makeicon.cmd"
+	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _package
 
 release:
-	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*)
+	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
 
 ifeq ($(OS),Windows_NT)
 install:
