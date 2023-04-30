@@ -6,7 +6,7 @@
 
 NYAGOS 4.4.13\_2
 ================
-on Apr.25,2023
+Apr 25, 2023
 
 * (#428) Fix: `rmdir /s` fails to remove symbolic links and junctions (reparse point)
 * Do not toggle the quotation area color on \" now
@@ -15,7 +15,7 @@ on Apr.25,2023
 
 NYAGOS 4.4.13\_1
 ================
-on Oct.15,2022
+Oct 15, 2022
 
 * (#425) nyagos.d/suffix.lua appends the extensions into %NYAGOSPATHEXT% instead of %PATHEXT% and the command-name completion now looks both %PATHEXT% and %NYAGOSPATHEXT% (Thx. @tsuyoshicho)
 * (#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed. (Thx. @juggler999)
@@ -24,7 +24,7 @@ on Oct.15,2022
 
 NYAGOS 4.4.13\_0
 ================
-on Sep.24,2022
+Sep 24, 2022
 
 * Fix: Unhandled exception in gopkg.in/yaml.v3 ( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
 * (#420) Add: support for building on macOS (Thanks to @zztkm)
@@ -39,7 +39,7 @@ on Sep.24,2022
 
 NYAGOS 4.4.12\_0
 ================
-on Apr.29,2022
+Apr 29, 2022
 
 * Modified colored commandline
     * Change the color of the option-string dark-yellow and fix the range
@@ -57,20 +57,20 @@ on Apr.29,2022
 
 NYAGOS 4.4.11\_0
 ================
-on Dec.10,2021
+Dec 10, 2021
 
 * Color command-line
 
 NYAGOS 4.4.10\_3
 ================
-on Aug.30,2021
+Aug 30, 2021
 
 * (#412) Fix: The widths of Box Drawing (U+2500-257F) were incorrect on the legacy terminals (on not Windows Terminal in Windows10)
 * Attach the package some new icon files
 
 NYAGOS 4.4.10\_2
 ================
-on Jul.23,2021
+Jul 23, 2021
 
 * Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437
 * go-readline-ny v0.4.13: Support Mathematical Bold Capital (U+1D400 - U+1D7FF) on the Windows Terminal
@@ -80,14 +80,14 @@ on Jul.23,2021
 
 NYAGOS 4.4.10\_1
 ================
-on Jul.02,2021
+Jul 02, 2021
 
 * Fix: When the folder `./dll` existed and the folder `DLL` existed on CDPATH, typed path dll was replaced to `DLL` with completion (The problem is that the path's cases were changed)
 * Fix: clone: the current directory was not kept when the current directory name has a space
 
 NYAGOS 4.4.10\_0
 ===============
-on Jun.25,2021
+Jun 25, 2021
 
 * nyagos.d/aliases.lua: abspath can be given wildcard names
 * Raise a suitable error when `OLEOBJECT._release()` is used instead of `OLEOBJECT:_release()` on Lua script by updating the package glua-ole.
@@ -102,19 +102,19 @@ on Jun.25,2021
 
 NYAGOS 4.4.9\_7
 ===============
-on May.22,2021
+May 22, 2021
 
 * (#409) Fix: the wildcards expansion with `set -o glob` or `nyagos.option.glob=true` did not work for command alias (Thx @juggler999)
 
 NYAGOS 4.4.9\_6
 ===============
-on May.07,2021
+May 07, 2021
 
 * (#406) Fix: nyagos.argsfilter did not work, raw arguments were not converted and suffix command did not work as expected. (Thx @tGqmJHoJKqgK)
 
 NYAGOS 4.4.9\_5
 ===============
-on May.03,2021
+May 03, 2021
 
 * go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.
 * go-readline-ny v0.4.11: Support Emoji Moifier Sequence (skin tone)
@@ -128,7 +128,7 @@ on May.03,2021
 
 NYAGOS 4.4.9\_4
 ===============
-on Mar.06,2021
+Mar 06, 2021
 
 * (#400) add check the existance of commands for subcomplete.lua (Thx @tsuyoshicho )
 * (#401) add subcompletion choco/chocolaty (Thx @tsuyoshicho )
@@ -143,7 +143,7 @@ on Mar.06,2021
 
 NYAGOS 4.4.9\_3
 ===============
-on Feb.20,2021
+Feb 20, 2021
 
 * readline: on WindowsTerminal: Support Variation Selectors of Unicode
 * (#397) Add scoop subcommand completion ( `use "subcomplete.lua"` ) (Thx @tomato3713)
@@ -155,13 +155,13 @@ on Feb.20,2021
 
 NYAGOS 4.4.9\_2
 ===============
-on Jan.8,2021
+Jan 8, 2021
 
 * (#342) Stop killing child process on Ctrl-C pressed.
 
 NYAGOS 4.4.9\_1
 ===============
-on Dec.21,2020
+Dec 21, 2020
 
 * Fix: the first `make install` without path parameter fails.
 * (#396) Fix: panic on Ctrl-W when left-scrool are required.
@@ -170,7 +170,7 @@ on Dec.21,2020
 
 NYAGOS 4.4.9\_0
 ===============
-on Dec.5,2020
+Dec 5, 2020
 
 * (#390) Support zero-width-join sequence for WindowsTerminal
 * Fix the cursor position broken on VARIATION SELECTOR-1..16  
@@ -185,7 +185,7 @@ on Dec.5,2020
 
 NYAGOS 4.4.8\_0
 ===============
-on Oct.3,2020
+Oct 3, 2020
 
 * git.lua: completion for `git add`: 
     - unquoto filenames like "\343\201\202\343\201\257\343\201\257"
@@ -203,7 +203,7 @@ on Oct.3,2020
 
 NYAGOS 4.4.7\_0
 ===============
-on Jul.18,2020
+Jul 18, 2020
 
 * cd,push and their completion supports %CDPATH% like bash
 * load scripts on `%APPDATA%\NYAOS_ORG\nyagos.d`
@@ -224,13 +224,13 @@ on Jul.18,2020
 
 NYAGOS 4.4.6\_2
 ===============
-on Jun.09,2020
+Jun 09, 2020
 
 * Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at `4.4.6_0`)
 
 NYAGOS 4.4.6\_1
 ===============
-on May.31,2020
+May 31, 2020
 
 * (#385) Fix: Can not move to any folder in the other drive whose last folder is removed.
 * Fix: cd's history did not ignore filepath's case.(see `cd -h`)
@@ -239,7 +239,7 @@ on May.31,2020
 
 NYAGOS 4.4.6\_0
 ===============
-on May.08,2020
+May 08, 2020
 
 * Implement: %DATE% and %TIME%
 * nyagos.envdel now returns removed directories.
@@ -251,7 +251,7 @@ on May.08,2020
 
 NYAGOS 4.4.5\_4
 ===============
-on Mar.13,2020
+Mar 13, 2020
 
 * box.lua: fixed C-xC-r, C-xC-h & C-xC-g did not work because github.com/BixData/gluabit32 disappeared.
 * (#319) Add bit32.band , bor & bxor again.
@@ -261,7 +261,7 @@ on Mar.13,2020
 
 NYAGOS 4.4.5\_3
 ===============
-on Mar.08,2020
+Mar 08, 2020
 
 * UNC Path Cache is saved to `~/appdata/local/nyaos_org/computers.txt` rather than `~/appdata/local/nyaos.org/computers.txt` because other features use `nyaos_org` folder.
 * Sub command completion(`complete_for`) now matches command-name ignoring its suffix
@@ -272,14 +272,14 @@ on Mar.08,2020
 
 NYAGOS 4.4.5\_2
 ===============
-on Oct.26,2019
+Oct 26, 2019
 
 * (#375) Fix: `~randomstring` causes panic
 * (#374) Fix: `ls -l` for future timestamp's files do not print year.
 
 NYAGOS 4.4.5\_1
 ===============
-on Oct.20,2019
+Oct 20, 2019
 
 * Fix that built-in `box` command did not support selecting multi-items.
 * Do not move cursor at drawing [PID] when process starts or shutdowns
@@ -288,7 +288,7 @@ on Oct.20,2019
 
 NYAGOS 4.4.5\_0
 ===============
-on Sep.01,2019
+Sep 01, 2019
 
 * Implement `nyagos.dirname()` as a Lua function.
 * C-o supports selecting multi-files by Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up
@@ -299,26 +299,26 @@ on Sep.01,2019
 
 NYAGOS 4.4.4\_3
 ===============
-on Jul.07,2019
+Jul 07, 2019
 
 * (#371) Could not execute `foo.bar.exe` as `foo.bar`
 * diskfree shows UNCPath assigned network drive
 
 NYAGOS 4.4.4\_2
 ===============
-on Jun.14,2019
+Jun 14, 2019
 
 * Speed up the completion for `\\host-name` by updating the cache on background.
 
 NYAGOS 4.4.4\_1
 ===============
-on May.30,2019
+May 30, 2019
 
 * Fix: executable for Linux could not be built.
 
 NYAGOS 4.4.4\_0 the Reiwa edition
 =================================
-on May.27,2019
+May 27, 2019
 
 * (#233) Completion for `\\host-name\share-name`
 * (#238) copy: drawing progress
@@ -342,7 +342,7 @@ on May.27,2019
 
 NYAGOS 4.4.3\_0
 ===============
-on Apr.27,2019
+Apr 27, 2019
 
 * (#116) readline: implement UNDO on Ctrl-Z,Ctrl-`_`
 * (#194) Update Console Window's ICON (LEFT-TOP-CORNER)
@@ -352,7 +352,7 @@ on Apr.27,2019
 
 NYAGOS 4.4.2\_2
 ===============
-on Apr.13,2019
+Apr 13, 2019
 
 * Implement Ctrl-RIGHT,ALT-F(forward-word) and Ctrl-LEFT,ALT-B(backward-word)
 * Fix: wrong the count of backspaces to move top on starting incremental-search
@@ -360,14 +360,14 @@ on Apr.13,2019
 
 NYAGOS 4.4.2\_1
 ===============
-on Apr.05,2019
+Apr 05, 2019
 
 * diskfree: trim spaces from the end of line
 * Fix: on`~"\Program Files"`, the first quotation disappeared and `Files` was not contained in the argument.
 
 NYAGOS 4.4.2\_0
 ===============
-on Apr.02,2019
+Apr 02, 2019
 
 * Fix converting OLE-Object to Lua-Object causes panic on `VT_DATE` and some types.
 * Fix: lua.LNumber was treated as integer. It should be as float64
@@ -397,7 +397,7 @@ on Apr.02,2019
 
 NYAGOS 4.4.1\_1
 ===============
-on Feb.15,2019
+Feb 15, 2019
 
 * Made `print(nyagos.complete_for["COMMAND"])` work
 * Fix (#356) `type` could output the last line which does not contain LF. (Thx! @spiegel-im-spiegel)
@@ -412,7 +412,7 @@ on Feb.15,2019
 
 NYAGOS 4.4.1\_0
 ===============
-on Feb.02,2019
+Feb 02, 2019
 
 * Support completion for `which`,`set`,`cd`,`pushd`,`rmdir` and `env` command. (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
 * Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command) (Thx! [beepcap](https://twitter.com/beepcap))
@@ -425,7 +425,7 @@ on Feb.02,2019
 
 NYAGOS 4.4.0\_1
 ===============
-on Jan.19,2019
+Jan 19, 2019
 
 * Abolished "--go-colorable" and "--enable-virtual-terminal-processing"
 * Implemented `killall`
@@ -434,13 +434,13 @@ on Jan.19,2019
 
 NYAGOS 4.4.0\_0
 ===============
-on Jan.12,2019
+Jan 12, 2019
 
 * To call a batchfile, stop to use `/V:ON` for CMD.EXE
 
 NYAGOS 4.4.0\_beta
 ==================
-on Jan.02,2019
+Jan 02, 2019
 
 * Support Linux (experimental)
 * Fix the problem that current directories per drive were not inherited to child processes.
