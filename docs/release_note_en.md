@@ -1,5 +1,9 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.13\_3
+================
+Apr 30, 2023
+
 * (#431) Fixed a bug that failed to convert lines exceeding 4096 bytes when changing from non-UTF8 to UTF8 such as environment variables changed by batch file execution or output of more/type. (Thx. @8exBCYJi5ATL)
 * Fix: `more` sometimes printed no lines when the size of the line was too large.
     ( Due to a different issue than #431 )
