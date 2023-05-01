@@ -1,4 +1,3 @@
-PROMPT=$$$$$$S
 ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     NUL=NUL
@@ -63,20 +62,3 @@ package:
 
 release:
 	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
-
-ifeq ($(OS),Windows_NT)
-install:
-ifeq ($(INSTALLDIR),)
-	@echo Please do $(MAKE) INSTALLDIR=...
-	@echo or set INSTALLDIR=...
-else
-	copy /-Y  _nyagos    "$(INSTALLDIR)\."
-	xcopy "nyagos.d\*"   "$(INSTALLDIR)\nyagos.d" /E /I /Y
-	copy /-Y  nyagos.exe "$(INSTALLDIR)\." || ( \
-	move "$(INSTALLDIR)\nyagos.exe" "$(INSTALLDIR)\nyagos.exe-%RANDOM%" && \
-	copy nyagos.exe  "$(INSTALLDIR)\." )
-endif
-
-update:
-	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
-endif
