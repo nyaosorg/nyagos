@@ -62,3 +62,5 @@ package:
 
 release:
 	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
+
+.PHONY: snapshot debug test tstlua clean fmt get _package package release
