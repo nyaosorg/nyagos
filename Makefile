@@ -4,8 +4,6 @@ ifeq ($(OS),Windows_NT)
     NUL=NUL
     DEL=del
     SET=set
-    GITDIR=$(or $(GIT_INSTALL_ROOT),$(shell for %%I in (git.exe) do echo %%~dp$$PATH:I..))
-    AWK="$(GITDIR)\usr\bin\gawk.exe"
 ifeq ($(shell go env GOOS),windows)
     SYSO=nyagos.syso
 else
@@ -15,7 +13,6 @@ else
     NUL=/dev/null
     SET=export
     DEL=rm
-    AWK=gawk
     SYSO=
 endif
 NAME=$(notdir $(abspath .))
@@ -23,7 +20,8 @@ VERSION=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
 GOOPT=-ldflags "-s -w -X main.version=$(VERSION)"
 EXE=$(shell go env GOEXE)
 
-snapshot: fmt
+snapshot:
+	go fmt ./...
 	$(SET) "CGO_ENABLED=0" && go build $(GOOPT)
 
 debug:
@@ -40,9 +38,6 @@ endif
 
 clean:
 	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
-
-fmt:
-	$(foreach I,$(shell git status -s | $(AWK) "/^.M.*\.go$$/{ print $$NF }"),gofmt -w $(I) && ) echo OK
 
 get:
 	go get -u
@@ -81,4 +76,4 @@ update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
 endif
 
-.PHONY: snapshot debug test tstlua clean fmt get _package package release install
+.PHONY: snapshot debug test tstlua clean get _package package release install
