@@ -166,7 +166,6 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 				break
 			}
 			fmt.Fprintf(this.Out, "\n%s [y/n] ", err.Error())
-			this.Out.Flush()
 			cmdlineRecover = func() {
 				fmt.Fprintln(this.Out)
 				this.RepaintAll()
@@ -269,7 +268,6 @@ func endWithRoot(path string) bool {
 func showCompList(ctx context.Context, this *readline.Buffer, comp *List) {
 	if len(comp.List) > 100 {
 		fmt.Fprintf(this.Out, "Display all %d possibilities ? [y/n] ", len(comp.List))
-		this.Out.Flush()
 		key, err := this.GetKey()
 		if err == nil {
 			fmt.Fprintln(this.Out, key)
