@@ -27,13 +27,28 @@ snapshot:
 debug:
 	$(SET) "CGO_ENABLED=0" && go build $(GOOPT) -tags=debug
 
+define test1
+	pushd "$(1)" && go test && popd
+
+endef
+
 test: tstlua
-	$(foreach I,$(wildcard internal/*),pushd "$(I)" &&  go test && popd && ) echo OK
+	$(foreach I,$(wildcard internal/*),$(call test1,$(I)))
+
+define tstlua1
+	"./nyagos" --norc -f "$(1)"
+
+endef
+
+define tstlua2
+	"$(1)"
+
+endef
 
 tstlua:
-	$(foreach I,$(wildcard test/lua/*.lua),echo $(I) && "./nyagos" --norc -f "$(I)" && ) echo OK
+	$(foreach I,$(wildcard test/lua/*.lua),$(call tstlua1,$(I)))
 ifeq ($(OS),Windows_NT)
-	$(foreach I,$(wildcard test/cmd/*.cmd),echo $(I) && "$(I)" && ) echo OK
+	$(foreach I,$(wildcard test/cmd/*.cmd),$(call tstlua2,$(I)))
 endif
 
 clean:
