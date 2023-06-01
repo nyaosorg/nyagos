@@ -36,6 +36,29 @@ suffix = setmetatable({},{
     __index = function(t,k) return share._suffixes[k] end
 })
 
+share._expand_wildcard = function(args)
+    local env = os.getenv("NYAGOSEXPANDWILDCARD")
+    if not env then
+        return
+    end
+    local env = string.upper(env)
+    local name = string.upper(args[0])
+    for env1 in string.gmatch(env,"[^;]+") do
+        if env1 == name then
+            local newargs = {}
+            for i=1,#args do
+                local tmp = nyagos.glob(args[i])
+                for j=1,#tmp do
+                    newargs[ #newargs+1] = tmp[j]
+                end
+            end
+            newargs[0] = args[0]
+            return newargs
+        end
+    end
+    return
+end
+
 share._org_suffix_argsfilter=nyagos.argsfilter
 nyagos.argsfilter = function(args)
     if share._org_suffix_argsfilter then
@@ -46,15 +69,15 @@ nyagos.argsfilter = function(args)
     end
     local m = string.match(args[0],"%.(%w+)$")
     if not m then
-        return
+        return share._expand_wildcard(args)
     end
     local cmdline = share._suffixes[ string.lower(m) ]
     if not cmdline then
-        return
+        return share._expand_wildcard(args)
     end
     local path=nyagos.which(args[0])
     if not path then
-        return
+        return share._expand_wildcard(args)
     end
     local newargs={}
     if type(cmdline) == 'table' then
