@@ -1,5 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+* nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in %NYAGOSEXPANDWILDCARD%
+
 NYAGOS 4.4.13\_3
 ================
 Apr 30, 2023

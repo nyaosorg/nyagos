@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした。
+
 NYAGOS 4.4.13\_3
 ================
 (2023.04.30)
