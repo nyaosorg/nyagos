@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 * nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした。
+* (#432) `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
 
 NYAGOS 4.4.13\_3
 ================
