@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -287,6 +288,31 @@ func hasWildCard(s string) bool {
 	return false
 }
 
+func shouldWildcardBeExpanded(name string) bool {
+	if WildCardExpansionAlways {
+		return true
+	}
+	env, ok := os.LookupEnv("NYAGOSEXPANDWILDCARD")
+	if !ok {
+		return false
+	}
+	name = filepath.Base(name)
+	name = name[:len(name)-len(filepath.Ext(name))]
+	for {
+		var env1 string
+		var found bool
+
+		env1, env, found = strings.Cut(env, ";")
+
+		if strings.EqualFold(env1, name) {
+			return true
+		}
+		if !found {
+			return false
+		}
+	}
+}
+
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	for {
 		// command is empty.
@@ -326,7 +352,7 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 		print("exec.LookPath(", cmd.args[0], ")==", fullpath, "\n")
 	}
 
-	if WildCardExpansionAlways {
+	if shouldWildcardBeExpanded(cmd.args[0]) {
 		saveArgs := cmd.args
 		saveRaws := cmd.rawArgs
 		defer func() {
