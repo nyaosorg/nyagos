@@ -272,6 +272,21 @@ func makeCmdline(rawargs []string) string {
 
 var UseSourceRunBatch = true
 
+func hasWildCard(s string) bool {
+	quoted := false
+	for _, r := range s {
+		switch r {
+		case '"':
+			quoted = !quoted
+		case '*', '?':
+			if !quoted {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	for {
 		// command is empty.
@@ -318,11 +333,24 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 			cmd.args = saveArgs
 			cmd.rawArgs = saveRaws
 		}()
-		cmd.args = findfile.Globs(cmd.args)
-		cmd.rawArgs = make([]string, len(cmd.args))
-		for i, s := range cmd.args {
-			cmd.rawArgs[i] = argToRawArg(s)
+		newArgs := make([]string, 0, len(cmd.args))
+		newRaws := make([]string, 0, len(cmd.rawArgs))
+		for i := range saveArgs {
+			if hasWildCard(saveRaws[i]) {
+				list, err := findfile.Glob(saveArgs[i])
+				if err == nil {
+					newArgs = append(newArgs, list...)
+					for _, s := range list {
+						newRaws = append(newRaws, argToRawArg(s))
+					}
+					continue
+				}
+			}
+			newArgs = append(newArgs, saveArgs[i])
+			newRaws = append(newRaws, saveRaws[i])
 		}
+		cmd.args = newArgs
+		cmd.rawArgs = newRaws
 	}
 	return cmd.startProcess(ctx)
 }
