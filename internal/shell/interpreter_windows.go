@@ -75,7 +75,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 				args[i] = rawargs[i]
 			}
 			// Batch files
-			return source.Source{
+			return source.Batch{
 				Args:   args,
 				Stdin:  cmd.Stdio[0],
 				Stdout: cmd.Stdio[1],

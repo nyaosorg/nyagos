@@ -64,19 +64,19 @@ func (system *System) run() (int, error) {
 	return cmd.ProcessState.ExitCode(), nil
 }
 
-func (this *Source) callBatch(tmpfile string) (int, error) {
+func (batch *Batch) call(tmpfile string) (int, error) {
 	var cmdline strings.Builder
 
 	cmdline.WriteByte('.')
 
-	if fullpath, err := filepath.Abs(strings.ReplaceAll(this.Args[0], `"`, ``)); err == nil {
+	if fullpath, err := filepath.Abs(strings.ReplaceAll(batch.Args[0], `"`, ``)); err == nil {
 		fmt.Fprintf(&cmdline, ` "%s"`, fullpath)
 	} else {
 		cmdline.WriteByte(' ')
-		cmdline.WriteString(this.Args[0])
+		cmdline.WriteString(batch.Args[0])
 	}
 
-	for _, arg1 := range this.Args[1:] {
+	for _, arg1 := range batch.Args[1:] {
 		cmdline.WriteByte(' ')
 		cmdline.WriteString(arg1)
 	}
@@ -86,11 +86,11 @@ func (this *Source) callBatch(tmpfile string) (int, error) {
 
 	return System{
 		Cmdline: cmdline.String(),
-		Stdin:   this.Stdin,
-		Stdout:  this.Stdout,
-		Stderr:  this.Stderr,
-		Env:     this.Env,
-		OnExec:  this.OnExec,
-		OnDone:  this.OnDone,
+		Stdin:   batch.Stdin,
+		Stdout:  batch.Stdout,
+		Stderr:  batch.Stderr,
+		Env:     batch.Env,
+		OnExec:  batch.OnExec,
+		OnDone:  batch.OnDone,
 	}.Run()
 }

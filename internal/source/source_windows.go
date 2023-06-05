@@ -80,11 +80,11 @@ func (system *System) run() (int, error) {
 	return cmd.ProcessState.ExitCode(), nil
 }
 
-func (source *Source) callBatch(tmpfile string) (int, error) {
+func (batch *Batch) call(tmpfile string) (int, error) {
 	var cmdline strings.Builder
 
 	cmdline.WriteString(`call`)
-	for _, arg1 := range source.Args {
+	for _, arg1 := range batch.Args {
 		cmdline.WriteByte(' ')
 		cmdline.WriteString(arg1)
 	}
@@ -94,11 +94,11 @@ func (source *Source) callBatch(tmpfile string) (int, error) {
 
 	return System{
 		Cmdline: cmdline.String(),
-		Stdin:   source.Stdin,
-		Stdout:  source.Stdout,
-		Stderr:  source.Stderr,
-		Env:     source.Env,
-		OnExec:  source.OnExec,
-		OnDone:  source.OnDone,
+		Stdin:   batch.Stdin,
+		Stdout:  batch.Stdout,
+		Stderr:  batch.Stderr,
+		Env:     batch.Env,
+		OnExec:  batch.OnExec,
+		OnDone:  batch.OnDone,
 	}.Run()
 }

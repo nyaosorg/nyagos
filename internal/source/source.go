@@ -84,7 +84,8 @@ func readPwd(scan scannerT, verbose io.Writer) error {
 	return nil
 }
 
-type Source struct {
+// Batch is the type that contains the condition when the batchfile executes.
+type Batch struct {
 	Stdin   io.Reader
 	Stdout  io.Writer
 	Stderr  io.Writer
@@ -96,33 +97,34 @@ type Source struct {
 	Debug   bool
 }
 
-func (source Source) Call() (int, error) {
+// Call calls the batchfiles and load the changed variable the batchfile has done.
+func (batch Batch) Call() (int, error) {
 	tempDir := os.TempDir()
 	pid := os.Getpid()
 	tmpfile := filepath.Join(tempDir, fmt.Sprintf("nyagos-%d-%d.tmp", pid, rand.Int()))
 
-	errorlevel, err := source.callBatch(tmpfile)
+	errorlevel, err := batch.call(tmpfile)
 
 	if err != nil {
 		return errorlevel, err
 	}
 
-	if !source.Debug {
+	if !batch.Debug {
 		defer os.Remove(tmpfile)
 	}
 
-	if errorlevel, err = loadTmpFile(tmpfile, source.Verbose); err != nil {
+	if errorlevel, err = loadTmpFile(tmpfile, batch.Verbose); err != nil {
 		if os.IsNotExist(err) {
-			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", source.Args[0])
+			return 1, fmt.Errorf("%s: the batch file may use `exit` without `/b` option. Could not find the change of the environment variables", batch.Args[0])
 		}
 		return 1, err
 	}
 	return errorlevel, err
 }
 
-// RawSource calls the batchfiles and load the changed variable the batchfile has done.
-func Call(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
-	return Source{
+// ExecBatch calls the batchfiles and load the changed variable the batchfile has done.
+func ExecBatch(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
+	return Batch{
 		Args:    args,
 		Verbose: verbose,
 		Debug:   debug,
