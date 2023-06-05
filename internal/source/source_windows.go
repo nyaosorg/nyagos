@@ -26,7 +26,7 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-func (cmdExe *CmdExe) run() (int, error) {
+func (system *System) run() (int, error) {
 	if wd, err := os.Getwd(); err == nil && strings.HasPrefix(wd, `\\`) {
 		netdrive, closer := netresource.UNCtoNetDrive(wd)
 		defer closer(false, false)
@@ -45,15 +45,15 @@ func (cmdExe *CmdExe) run() (int, error) {
 
 	var buffer strings.Builder
 	buffer.WriteString(`/S /C "`)
-	buffer.WriteString(cmdExe.Cmdline)
+	buffer.WriteString(system.Cmdline)
 	buffer.WriteString(` "`)
 
-	cmd := exec.Cmd{
+	cmd := &exec.Cmd{
 		Path:        cmdexe,
-		Stdin:       cmdExe.Stdin,
-		Stdout:      cmdExe.Stdout,
-		Stderr:      cmdExe.Stderr,
-		Env:         cmdExe.Env,
+		Stdin:       system.Stdin,
+		Stdout:      system.Stdout,
+		Stderr:      system.Stderr,
+		Env:         system.Env,
 		SysProcAttr: &syscall.SysProcAttr{CmdLine: buffer.String()},
 	}
 	if cmd.Stdin == nil {
@@ -68,14 +68,14 @@ func (cmdExe *CmdExe) run() (int, error) {
 	if err := cmd.Start(); err != nil {
 		return -1, err
 	}
-	if cmdExe.OnExec != nil && cmd.Process != nil {
-		cmdExe.OnExec(cmd.Process.Pid)
+	if system.OnExec != nil && cmd.Process != nil {
+		system.OnExec(cmd.Process.Pid)
 	}
 	if err := cmd.Wait(); err != nil {
 		return -1, err
 	}
-	if cmdExe.OnDone != nil && cmd.Process != nil {
-		cmdExe.OnDone(cmd.Process.Pid)
+	if system.OnDone != nil && cmd.Process != nil {
+		system.OnDone(cmd.Process.Pid)
 	}
 	return cmd.ProcessState.ExitCode(), nil
 }
@@ -92,7 +92,7 @@ func (source *Source) callBatch(tmpfile string) (int, error) {
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`"`)
 
-	return CmdExe{
+	return System{
 		Cmdline: cmdline.String(),
 		Stdin:   source.Stdin,
 		Stdout:  source.Stdout,

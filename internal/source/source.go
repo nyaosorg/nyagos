@@ -133,7 +133,10 @@ func Call(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout,
 	}.Call()
 }
 
-type CmdExe struct {
+// System is the type that simulates `system` function of the Programming language C.
+// Note: This type does not pick up environment variables or current directories
+// that have changed in child processes.
+type System struct {
 	Cmdline string
 	Stdin   io.Reader
 	Stdout  io.Writer
@@ -143,6 +146,7 @@ type CmdExe struct {
 	OnDone  func(int)
 }
 
-func (cmdExe CmdExe) Run() (int, error) {
-	return cmdExe.run()
+// Run executes the process as System specifies.
+func (system System) Run() (int, error) {
+	return system.run()
 }

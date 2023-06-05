@@ -8,7 +8,7 @@ import (
 )
 
 func cmdExeSc(ctx context.Context, cmd Param) (int, error) {
-	return source.CmdExe{
+	return source.System{
 		Cmdline: strings.Join(cmd.RawArgs()[1:], " "),
 		Stdin:   cmd.In(),
 		Stdout:  cmd.Out(),

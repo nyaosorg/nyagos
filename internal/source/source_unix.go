@@ -27,18 +27,18 @@ func loadTmpFile(fname string, verbose io.Writer) (int, error) {
 	return readEnv(scan, verbose)
 }
 
-func (this *CmdExe) run() (int, error) {
+func (system *System) run() (int, error) {
 	args := []string{
 		"/bin/sh",
 		"-c",
-		this.Cmdline,
+		system.Cmdline,
 	}
-	cmd := exec.Cmd{
+	cmd := &exec.Cmd{
 		Path:   "/bin/sh",
 		Args:   args,
-		Stdin:  this.Stdin,
-		Stdout: this.Stdout,
-		Stderr: this.Stderr,
+		Stdin:  system.Stdin,
+		Stdout: system.Stdout,
+		Stderr: system.Stderr,
 	}
 	if cmd.Stdin == nil {
 		cmd.Stdin = os.Stdin
@@ -52,14 +52,14 @@ func (this *CmdExe) run() (int, error) {
 	if err := cmd.Start(); err != nil {
 		return -1, err
 	}
-	if this.OnExec != nil && cmd.Process != nil {
-		this.OnExec(cmd.Process.Pid)
+	if system.OnExec != nil && cmd.Process != nil {
+		system.OnExec(cmd.Process.Pid)
 	}
 	if err := cmd.Wait(); err != nil {
 		return -1, err
 	}
-	if this.OnDone != nil && cmd.Process != nil {
-		this.OnDone(cmd.Process.Pid)
+	if system.OnDone != nil && cmd.Process != nil {
+		system.OnDone(cmd.Process.Pid)
 	}
 	return cmd.ProcessState.ExitCode(), nil
 }
@@ -84,7 +84,7 @@ func (this *Source) callBatch(tmpfile string) (int, error) {
 	cmdline.WriteString(tmpfile)
 	cmdline.WriteString(`'`)
 
-	return CmdExe{
+	return System{
 		Cmdline: cmdline.String(),
 		Stdin:   this.Stdin,
 		Stdout:  this.Stdout,
