@@ -313,6 +313,8 @@ func shouldWildcardBeExpanded(name string) bool {
 	}
 }
 
+var GlobUseSlash = false
+
 func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 	for {
 		// command is empty.
@@ -365,8 +367,11 @@ func (cmd *Cmd) spawnvpSilent(ctx context.Context) (int, error) {
 			if hasWildCard(saveRaws[i]) {
 				list, err := findfile.Glob(saveArgs[i])
 				if err == nil {
-					newArgs = append(newArgs, list...)
 					for _, s := range list {
+						if GlobUseSlash {
+							s = filepath.ToSlash(s)
+						}
+						newArgs = append(newArgs, s)
 						newRaws = append(newRaws, argToRawArg(s))
 					}
 					continue

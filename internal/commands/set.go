@@ -60,6 +60,11 @@ var BoolOptions = ignoreCaseSorted.MapToDictionary(map[string]*optionT{
 		Usage:   "Enable to expand wildcards",
 		NoUsage: "Disable to expand wildcards",
 	},
+	"glob_slash": {
+		V:       &shell.GlobUseSlash,
+		Usage:   "Use forward slash on wildcard expansion",
+		NoUsage: "Do not Use forward slash on wildcard expansion",
+	},
 	"noclobber": {
 		V:       &shell.NoClobber,
 		Usage:   "forbide to overwrite files on redirect",
