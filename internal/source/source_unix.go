@@ -1,7 +1,7 @@
 //go:build !windows
 // +build !windows
 
-package shell
+package source
 
 import (
 	"bufio"

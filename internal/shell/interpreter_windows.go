@@ -12,6 +12,7 @@ import (
 	"github.com/nyaosorg/go-windows-su"
 
 	"github.com/nyaosorg/nyagos/internal/nodos"
+	"github.com/nyaosorg/nyagos/internal/source"
 )
 
 func encloseWithQuote(fullpath string) string {
@@ -74,7 +75,7 @@ func (cmd *Cmd) startProcess(ctx context.Context) (int, error) {
 				args[i] = rawargs[i]
 			}
 			// Batch files
-			return Source{
+			return source.Source{
 				Args:   args,
 				Stdin:  cmd.Stdio[0],
 				Stdout: cmd.Stdio[1],

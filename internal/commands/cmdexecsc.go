@@ -4,11 +4,11 @@ import (
 	"context"
 	"strings"
 
-	"github.com/nyaosorg/nyagos/internal/shell"
+	"github.com/nyaosorg/nyagos/internal/source"
 )
 
 func cmdExeSc(ctx context.Context, cmd Param) (int, error) {
-	return shell.CmdExe{
+	return source.CmdExe{
 		Cmdline: strings.Join(cmd.RawArgs()[1:], " "),
 		Stdin:   cmd.In(),
 		Stdout:  cmd.Out(),

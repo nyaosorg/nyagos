@@ -1,4 +1,4 @@
-package shell
+package source
 
 import (
 	"fmt"
@@ -121,7 +121,7 @@ func (source Source) Call() (int, error) {
 }
 
 // RawSource calls the batchfiles and load the changed variable the batchfile has done.
-func RawSource(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
+func Call(args []string, verbose io.Writer, debug bool, stdin io.Reader, stdout, stderr io.Writer, env []string) (int, error) {
 	return Source{
 		Args:    args,
 		Verbose: verbose,
