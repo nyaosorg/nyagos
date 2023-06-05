@@ -17,6 +17,9 @@
 ### --glob (lua: `nyagos.option.glob=true`)
 外部コマンドにおいても、ワイルドカード展開を有効にします。
 
+### --glob-slash (lua: `nyagos.option.glob_slash=true`,`set -o glob_slash`)
+外部コマンド向けのワイルドカード展開で、ディレクトリ名区切りに `\` を使わず、`/` を使います。
+
 ### --help
 ヘルプを表示します。
 
@@ -51,6 +54,9 @@
 
 ### --no-glob (lua: `nyagos.option.glob=false`) [default]
 外部コマンドで、ワイルドカード展開をしません。
+
+### --no-glob-slash (lua: `nyagos.option.glob_slash=false`,`set +o glob_slash`)
+外部コマンド向けのワイルドカード展開で、ディレクトリ名区切りに `\` を使います。
 
 ### --no-output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=false`) [default]
 サロゲートペアな文字を `<NNNN>` と表記します。

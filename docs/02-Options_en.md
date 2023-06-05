@@ -19,6 +19,9 @@ use forward slash on completion
 ### --glob (lua: `nyagos.option.glob=true`)
 Enable to expand wildcards
 
+### --glob-slash (lua: `nyagos.option.glob_slash=true`,`set -o glob_slash`)
+Use forward slash `/` on wildcard expansion instead of `\`
+
 ### --help
 Print this usage
 
@@ -54,6 +57,9 @@ Do not use slash on completion
 
 ### --no-glob (lua: `nyagos.option.glob=false`) [default]
 Disable to expand wildcards
+
+### --no-glob-slash (lua: `nyagos.option.glob_slash=false`,`set +o glob_slash`)
+Do not use slash on wildcard expansion.
 
 ### --no-output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=false`) [default]
 Output surrogate pair characters like `<NNNNN>`
