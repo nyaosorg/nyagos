@@ -65,17 +65,14 @@ func cmdLnk(_ context.Context, cmd1 Param) (int, error) {
 			return 1, err
 		}
 		printShortcut(target, fn, dir, cmd1.Out())
-		break
 	case 3:
 		if err := makeShortcut(cmd1.Arg(1), cmd1.Arg(2), "", cmd1.Out()); err != nil {
 			return 1, err
 		}
-		break
 	case 4:
 		if err := makeShortcut(cmd1.Arg(1), cmd1.Arg(2), cmd1.Arg(3), cmd1.Out()); err != nil {
 			return 1, err
 		}
-		break
 	}
 	return 0, nil
 }

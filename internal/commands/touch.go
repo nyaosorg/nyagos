@@ -10,7 +10,7 @@ import (
 )
 
 var timePattern = regexp.MustCompile(
-	"^(?:(\\d\\d)?(\\d\\d))?(\\d\\d)(\\d\\d)(?:(\\d\\d)(\\d\\d))(?:\\.(\\d\\d))?$")
+	`^(?:(\d\d)?(\d\d))?(\d\d)(\d\d)(?:(\d\d)(\d\d))(?:\.(\d\d))?$`)
 
 func atoiOr(s string, orelse int) int {
 	val, err := strconv.Atoi(s)

@@ -14,7 +14,7 @@ var rxEqu = regexp.MustCompile(`^([aogu]+)([\-\+\=])([rwx]+)$`)
 
 func _cmdChmod(args []string) error {
 	if len(args) < 2 {
-		return errors.New("Usage: chmod ooo (files...)")
+		return errors.New("usage: chmod ooo (files...)")
 	}
 	var f func(string) error
 	if rxOOO.MatchString(args[0]) {

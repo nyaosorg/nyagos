@@ -484,7 +484,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 		print("Interpret('", text, "')\n")
 	}
 	if sh == nil {
-		return 255, errors.New("Fatal Error: Interpret: instance is nil")
+		return 255, errors.New("fatal Error: Interpret: instance is nil")
 	}
 	errorlevel = 0
 	finalerr = nil
@@ -510,7 +510,7 @@ func (sh *Shell) Interpret(ctx context.Context, text string) (errorlevel int, fi
 	for _, pipeline := range statements {
 		for i, state := range pipeline {
 			if state.Term == "|" && (i+1 >= len(pipeline) || len(pipeline[i+1].Args) <= 0) {
-				return 255, errors.New("The syntax of the command is incorrect")
+				return 255, errors.New("the syntax of the command is incorrect")
 			}
 		}
 	}

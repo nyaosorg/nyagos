@@ -26,7 +26,7 @@ func cmdClip(ctx context.Context, cmd Param) (int, error) {
 	if utf8.Valid(data) {
 		clipboard.WriteAll(string(data))
 	} else {
-		str, err := mbcs.AtoU(data, mbcs.ConsoleCP())
+		str, err := mbcs.AnsiToUtf8(data, mbcs.ConsoleCP())
 		if err == nil {
 			clipboard.WriteAll(str)
 		} else {

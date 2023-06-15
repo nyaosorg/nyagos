@@ -29,7 +29,7 @@ func (stream *NulStream) DisableHistory(value bool) bool {
 }
 
 func (ses *session) push(lines []string) {
-	if lines != nil && len(lines) >= 1 {
+	if len(lines) >= 1 {
 		ses.unreadline = append(ses.unreadline, lines...)
 	}
 }

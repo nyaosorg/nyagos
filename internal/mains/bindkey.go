@@ -131,7 +131,7 @@ func callBoxListing(L Lua) int {
 	for i := 0; i < size; i++ {
 		list[i] = L.GetTable(table, lua.LNumber(i+1)).String()
 	}
-	box.Print(nil, list, os.Stdout)
+	box.Print(context.TODO(), list, os.Stdout)
 	this.RepaintAll()
 	return 0
 }

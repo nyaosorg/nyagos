@@ -66,7 +66,7 @@ func cmdAttrib(ctx context.Context, cmd Param) (int, error) {
 				continue
 			}
 		}
-		if arg1s := globfile(arg1); arg1s != nil && len(arg1s) > 0 {
+		if arg1s := globfile(arg1); len(arg1s) > 0 {
 			files = append(files, arg1s...)
 		} else {
 			files = append(files, arg1)

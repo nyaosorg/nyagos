@@ -25,7 +25,7 @@ func newArgHook(ctx context.Context, it *shell.Shell, args, rawargs []string) ([
 
 	luawrapper, ok := it.Tag().(*luaWrapper)
 	if !ok {
-		return nil, nil, errors.New("Could not get lua instance(newArgHook)")
+		return nil, nil, errors.New("could not get lua instance(newArgHook)")
 	}
 	L := luawrapper.Lua
 	nyagosTable := L.GetGlobal("nyagos")

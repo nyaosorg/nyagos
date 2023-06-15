@@ -14,7 +14,7 @@ import (
 func cmdKill(ctx context.Context, cmd Param) (int, error) {
 	args := cmd.Args()
 	if len(args) < 2 {
-		return 1, fmt.Errorf("Usage: %s PID", args[0])
+		return 1, fmt.Errorf("usage: %s PID", args[0])
 	}
 
 	pid, err := strconv.Atoi(cmd.Arg(1))
@@ -22,7 +22,7 @@ func cmdKill(ctx context.Context, cmd Param) (int, error) {
 		return 1, fmt.Errorf("%s: arguments must be process ID", args[0])
 	}
 	if pid == os.Getpid() {
-		return 1, errors.New("Can not kill the killer self")
+		return 1, errors.New("can not kill the killer self")
 	}
 	process, err := os.FindProcess(pid)
 	if err != nil {
@@ -39,7 +39,7 @@ func cmdKill(ctx context.Context, cmd Param) (int, error) {
 func cmdKillAll(ctx context.Context, cmd Param) (int, error) {
 	args := cmd.Args()
 	if len(args) < 2 {
-		return 1, fmt.Errorf("Usage: %s {ExecutableName...}", args[0])
+		return 1, fmt.Errorf("usage: %s {ExecutableName...}", args[0])
 	}
 	processes, err := ps.Processes()
 	if err != nil {

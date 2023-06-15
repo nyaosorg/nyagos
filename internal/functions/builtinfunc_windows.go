@@ -59,7 +59,7 @@ func CmdAtoU(args []anyT) []anyT {
 		return []anyT{nil, TooFewArguments}
 	}
 	if s, ok := args[0].(string); ok {
-		val, err := mbcs.AtoU([]byte(s), mbcs.ConsoleCP())
+		val, err := mbcs.AnsiToUtf8([]byte(s), mbcs.ConsoleCP())
 		if err != nil {
 			return []anyT{nil, err}
 		}
@@ -73,7 +73,7 @@ func CmdUtoA(args []anyT) []anyT {
 		return []anyT{nil, TooFewArguments}
 	}
 	utf8 := fmt.Sprint(args[0])
-	bin, err := mbcs.UtoA(utf8, mbcs.ConsoleCP())
+	bin, err := mbcs.Utf8ToAnsi(utf8, mbcs.ConsoleCP())
 	if err != nil {
 		return []anyT{nil, err}
 	}

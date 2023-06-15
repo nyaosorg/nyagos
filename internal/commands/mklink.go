@@ -25,12 +25,12 @@ func cmdMklink(_ context.Context, cmd Param) (rc int, err error) {
 			f = os.Link
 			label = "Hardlink"
 		default:
-			return 1, fmt.Errorf("Invalid switch - \"%s\"", args[1][1:])
+			return 1, fmt.Errorf("invalid switch - \"%s\"", args[1][1:])
 		}
 		args = args[1:]
 	}
 	if len(args) < 3 {
-		return 2, fmt.Errorf("The syntax of the command is incorrect")
+		return 2, fmt.Errorf("the syntax of the command is incorrect")
 	}
 	err = f(args[2], args[1])
 	if err != nil {

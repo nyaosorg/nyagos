@@ -46,24 +46,6 @@ type optionT struct {
 	U  string
 }
 
-func shellJoin(args []string) string {
-	var buffer strings.Builder
-	for i, s := range args {
-		if i > 0 {
-			buffer.WriteRune(' ')
-		}
-		if strings.ContainsRune(s, ' ') {
-			buffer.WriteRune('"')
-			r := strings.Replace(s, "\"", "\\\"", -1)
-			buffer.WriteString(r)
-			buffer.WriteRune('"')
-		} else {
-			buffer.WriteString(s)
-		}
-	}
-	return buffer.String()
-}
-
 var singleArgument = false
 
 func isEnableQuotationCommandline(args, raws []string) bool {

@@ -18,7 +18,7 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 	rawargs := cmd.RawArgs()[1:]
 	debug := false
 
-	for args != nil && len(args) > 0 && args[0][0] == '-' {
+	for len(args) > 0 && args[0][0] == '-' {
 		switch args[0] {
 		case "-v":
 			verbose = cmd.Err()

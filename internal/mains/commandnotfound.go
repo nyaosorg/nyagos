@@ -16,7 +16,7 @@ var orgOnCommandNotFound func(context.Context, *shell.Cmd, error) error
 func onCommandNotFound(ctx context.Context, sh *shell.Cmd, err error) error {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
-		return errors.New("Could get lua instance(on_command_not_found)")
+		return errors.New("could get lua instance(on_command_not_found)")
 	}
 
 	nyagosTbl := L.GetGlobal("nyagos")

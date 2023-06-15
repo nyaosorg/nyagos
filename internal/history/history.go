@@ -50,7 +50,7 @@ func (hisObj *Container) Replace(line string) (string, bool, error) {
 
 	for reader.Len() > 0 {
 		ch, _, _ := reader.ReadRune()
-		if quotedChar == '\000' && strings.IndexRune(DisableMarks, ch) >= 0 {
+		if quotedChar == '\000' && strings.ContainsRune(DisableMarks, ch) {
 			quotedChar = ch
 			buffer.WriteRune(ch)
 			continue

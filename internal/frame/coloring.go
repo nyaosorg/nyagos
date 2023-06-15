@@ -60,8 +60,6 @@ func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
 		color = readline.DarkYellow
 	} else if codepoint == '&' || codepoint == '|' || codepoint == '<' || codepoint == '>' || (s.last == ' ' && codepoint == ';') {
 		color = readline.Green
-	} else {
-		color = defaultColor
 	}
 	s.bits = newbits
 	s.last = codepoint

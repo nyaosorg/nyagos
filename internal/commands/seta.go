@@ -45,7 +45,7 @@ func skipSpace(r io.RuneScanner) error {
 		if err != nil {
 			return err
 		}
-		if strings.IndexRune(" \t\v\r\n", ch) < 0 {
+		if !strings.ContainsRune(" \t\v\r\n", ch) {
 			r.UnreadRune()
 			return nil
 		}

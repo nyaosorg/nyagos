@@ -65,7 +65,7 @@ func doFileExceptAtMarkLines(L *lua.LState, fname string) error {
 func (*_ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([]byte, error) {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
-		return nil, errors.New("Script is not supported")
+		return nil, errors.New("script is not supported")
 	}
 	defer setContext(getContext(L), L)
 	setContext(ctx, L)
@@ -77,7 +77,7 @@ func (*_ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([
 func (impl *_ScriptEngineForOptionImpl) RunString(ctx context.Context, code string) error {
 	L, ok := ctx.Value(luaKey).(Lua)
 	if !ok {
-		return errors.New("Script is not supported")
+		return errors.New("script is not supported")
 	}
 	ctx = context.WithValue(ctx, shellKey, impl.Sh)
 	defer setContext(getContext(L), L)

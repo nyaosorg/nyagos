@@ -62,9 +62,7 @@ func seekCdPath(dir string) string {
 func cmdCdSub(dir string) (int, error) {
 	const fileHead = "file:///"
 
-	if strings.HasPrefix(dir, fileHead) {
-		dir = dir[len(fileHead):]
-	}
+	dir = strings.TrimPrefix(dir, fileHead)
 	if strings.HasSuffix(strings.ToLower(dir), ".lnk") {
 		newdir, _, err := shortcut.Read(dir)
 		if err == nil && newdir != "" {

@@ -6,7 +6,6 @@ import (
 )
 
 var rxEscape = regexp.MustCompile(`\\["'\\]`)
-var rxDoubleQuoted = regexp.MustCompile(`"[^"]*"`)
 var rxSingleQuoted = regexp.MustCompile(`'[^']*'`)
 var rxSpace = regexp.MustCompile(`\s`)
 var rxNonSpaces = regexp.MustCompile(`\S+`)

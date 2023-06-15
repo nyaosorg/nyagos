@@ -20,7 +20,7 @@ import (
 var NoClobber = false
 
 func isSpace(c rune) bool {
-	return strings.IndexRune(" \t\n\r\v\f", c) >= 0
+	return strings.ContainsRune(" \t\n\r\v\f", c)
 }
 
 type _Statement struct {
@@ -53,7 +53,7 @@ var PercentFunc = map[string]func() string{
 	},
 }
 
-var rxUnicode = regexp.MustCompile("^[uU]\\+?([0-9a-fA-F]+)$")
+var rxUnicode = regexp.MustCompile(`^[uU]\+?([0-9a-fA-F]+)$`)
 
 var rxSubstitute = regexp.MustCompile(`^([^\:]+)\:([^\=]+)=(.*)$`)
 
@@ -121,10 +121,6 @@ func OurGetEnv(name string) (string, bool) {
 	} else {
 		return "", false
 	}
-}
-
-func chomp(buffer *bytes.Buffer) {
-	buffer.Truncate(buffer.Len() - 1)
 }
 
 const _NotQuoted = '\000'

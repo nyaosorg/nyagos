@@ -95,13 +95,13 @@ func nyagosSetter(L Lua) int {
 	if ptr, ok := numberProperty[key]; ok {
 		val, ok := L.Get(3).(lua.LNumber)
 		if !ok {
-			return lerror(L, fmt.Sprintf("nyagos[]: val is not a number"))
+			return lerror(L, "nyagos[]: val is not a number")
 		}
 		*ptr = int(val)
 	} else if ptr, ok := stringProperty[key]; ok {
 		val, ok := L.Get(3).(lua.LString)
 		if !ok {
-			return lerror(L, fmt.Sprintf("nyagos[]: val is not a string"))
+			return lerror(L, "nyagos[]: val is not a string")
 		}
 		*ptr = string(val)
 	} else if ptr, ok := boolProperty[key]; ok {

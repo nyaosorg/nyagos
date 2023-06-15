@@ -10,8 +10,6 @@ import (
 	"github.com/nyaosorg/nyagos/internal/go-ignorecase-sorted"
 )
 
-var dbg = false
-
 type callableT interface {
 	String() string
 	Call(ctx context.Context, cmd *shell.Cmd) (int, error)

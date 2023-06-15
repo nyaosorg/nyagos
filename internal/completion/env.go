@@ -54,7 +54,7 @@ func listUpEnv(cmdline string) ([]Element, int, error) {
 	} else {
 		// $ENVNAME
 		m := rxDollar.FindStringIndex(cmdline)
-		if m != nil && len(m) > 0 {
+		if len(m) > 0 {
 			replaceStartPos = m[0]
 			name = cmdline[m[0]+1:]
 			makeCandidateStr = func(name string) string {

@@ -361,7 +361,6 @@ func fileRead(L *lua.LState) int {
 				line = strings.TrimSuffix(line, "\n")
 				line = strings.TrimSuffix(line, "\r")
 				result = append(result, lua.LString(line))
-				break
 			case "*a":
 				var all []byte
 				all, err = io.ReadAll(r.reader())
@@ -378,7 +377,6 @@ func fileRead(L *lua.LState) int {
 				}
 				text := strings.Replace(string(all), "\r\n", "\n", -1)
 				result = append(result, lua.LString(text))
-				break
 			case "*n":
 				var n int
 				if _, err = fmt.Fscan(r, &n); err != nil {

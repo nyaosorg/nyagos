@@ -15,13 +15,13 @@ func ExpandMacro(base string, args []string, rawargs []string) string {
 	cmdline := paramMatch.ReplaceAllStringFunc(base, func(s string) string {
 		if s == "$~*" {
 			isReplaced = true
-			if args != nil && len(args) >= 2 {
+			if len(args) >= 2 {
 				return strings.Join(args[1:], " ")
 			}
 			return ""
 		} else if s == "$*" {
 			isReplaced = true
-			if args != nil && len(args) >= 2 {
+			if len(args) >= 2 {
 				return strings.Join(rawargs[1:], " ")
 			}
 			return ""

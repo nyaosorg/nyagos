@@ -331,7 +331,7 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		if err != nil {
 			fmt.Fprintf(this.Out, "(warning) %s\n", err.Error())
 		}
-		showCompList(nil, this, comp)
+		showCompList(context.Background(), this, comp)
 		return readline.CONTINUE
 	}
 	cmdlineRecover()

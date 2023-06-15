@@ -397,7 +397,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	if err != nil {
 		return err
 	}
-	if folders != nil && len(folders) > 0 {
+	if len(folders) > 0 {
 		for _, f1 := range folders {
 			if err := chkCancel(ctx); err != nil {
 				return err
