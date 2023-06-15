@@ -79,7 +79,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		sh.Stream = backup
 	}()
 
-	sigint := make(chan os.Signal)
+	sigint := make(chan os.Signal, 1)
 	signal.Notify(sigint, os.Interrupt, syscall.SIGINT)
 
 	defer func() {
