@@ -10,11 +10,14 @@ import (
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/internal/mains"
+	"github.com/nyaosorg/nyagos/internal/onexit"
 )
 
 var version string
 
 func main() {
+	defer onexit.Done()
+
 	frame.Version = strings.TrimSpace(version)
 	if err := frame.Start(mains.Main); err != nil && err != io.EOF {
 		fmt.Fprintln(os.Stderr, err)
