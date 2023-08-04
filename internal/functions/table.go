@@ -25,6 +25,7 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"setenv":             CmdSetEnv,
 	"setrunewidth":       CmdSetRuneWidth,
 	"shellexecute":       CmdShellExecute,
+	"skk":                CmdSkk,
 	"stat":               CmdStat,
 	"utoa":               CmdUtoA,
 	"which":              CmdWhich,
