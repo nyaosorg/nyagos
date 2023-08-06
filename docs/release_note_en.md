@@ -4,6 +4,9 @@
 * (#432) When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
 * (#432) Add new option: `glob_slash`. When it is set, `/` is used on wildcard expansion.
 * Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
+* Support [SKK] \(Simple Kana Kanji conversion program\)
+
+[SKK]: https://ja.wikipedia.org/wiki/SKK
 
 NYAGOS 4.4.13\_3
 ================
