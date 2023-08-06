@@ -5,6 +5,7 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"envadd":             CmdEnvAdd,
 	"envdel":             CmdEnvDel,
 	"atou":               CmdAtoU,
+	"atou_if_needed":     CmdAnsiToUtf8IfNeeded,
 	"bitand":             CmdBitAnd,
 	"bitor":              CmdBitOr,
 	"chdir":              CmdChdir,

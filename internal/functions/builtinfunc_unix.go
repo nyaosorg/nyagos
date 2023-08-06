@@ -22,3 +22,6 @@ func CmdAtoU(args []anyT) []anyT {
 func CmdUtoA(args []anyT) []anyT {
 	return args
 }
+func CmdAnsiToUtf8IfNeeded(args []anyT) []anyT {
+	return args
+}

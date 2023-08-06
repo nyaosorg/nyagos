@@ -3,6 +3,7 @@ package functions
 import (
 	"fmt"
 	"os/exec"
+	"unicode/utf8"
 
 	"github.com/mattn/msgbox"
 	"github.com/nyaosorg/go-windows-mbcs"
@@ -78,4 +79,21 @@ func CmdUtoA(args []anyT) []anyT {
 		return []anyT{nil, err}
 	}
 	return []anyT{bin, nil}
+}
+
+func CmdAnsiToUtf8IfNeeded(args []anyT) []anyT {
+	if len(args) < 1 {
+		return []anyT{nil, TooFewArguments}
+	}
+	if s, ok := args[0].(string); ok {
+		if utf8.ValidString(s) {
+			return []anyT{s}
+		}
+		val, err := mbcs.AnsiToUtf8([]byte(s), mbcs.ConsoleCP())
+		if err != nil {
+			return []anyT{nil, err}
+		}
+		return []anyT{val}
+	}
+	return []anyT{fmt.Sprint(args[0])}
 }
