@@ -475,4 +475,17 @@ nyagos.postexechook = nil
 
 nyagos.exe のフルパスが格納されています。
 
+### `nyagos.skk`
+
+SKK のセットアップを行います。
+
+```
+nyagos.skk{
+    user="~/.go-skk-jisyo" , -- ユーザ辞書
+    "~/Share/Etc/SKK-JISYO.L", -- システム辞書
+    "~/Share/Etc/SKK-JISYO.emoji",-- システム辞書
+    ctrlj="C-J", -- 日本語切り替えキー(省略時は Ctrl-J)
+}
+```
+
 <!-- set:fenc=utf8: -->

@@ -448,3 +448,16 @@ nyagos.postexechook = nil
 ### `nyagos.exe`
 
 This string variable has the value of the fullpath of nyagos.exe.
+
+### `nyagos.skk`
+
+Setup SKK
+
+```
+nyagos.skk{
+    user="~/.go-skk-jisyo" , -- user dictionary
+    "~/Share/Etc/SKK-JISYO.L", -- system dictionary(1st)
+    "~/Share/Etc/SKK-JISYO.emoji",-- system dictionary(2nd)
+    ctrlj="C-J", -- key to switch Japanese input mode (default:ctrl-j)
+}
+```
