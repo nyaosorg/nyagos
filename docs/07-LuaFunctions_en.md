@@ -107,6 +107,11 @@ It converts UTF8 string to the current code page multibyte string.
 
 It converts the current codepage multibyte string to UTF8 string.
 
+### `UTF8STRING = nyagos.atou_if_needed(STRING)`
+
+If STRING is not a valid UTF8 string, try convert it
+as the current codepage multibyte string to UTF8 string.
+
 ### `FILES = nyagos.glob("WILDCARD-PATTERN1","WILDCARD-PATTERN2"...)`
 
 It returns the table which includes files matching the wildcard pattern(s).
