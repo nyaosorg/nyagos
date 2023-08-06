@@ -5,6 +5,7 @@
 * (#432) 新オプション `glob_slash` を追加。設定されている時、ワイルドカード展開で `/` を使う
 * Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
 * [SKK] \(Simple Kana Kanji conversion program\) サポート
+* 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 
