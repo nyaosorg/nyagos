@@ -6,6 +6,7 @@
 * Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
 * Support [SKK] \(Simple Kana Kanji conversion program\)
 * Add the lua-function: `nyagos.atou_if_needed` that converts the string that is not valid utf8 one to utf8-string as the current codepage string.
+* (#433) To avoid garbled characters, backquote uses `nyagos.atou_if_needed` to prevent UTF8 from being further converted to UTF8.
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 
