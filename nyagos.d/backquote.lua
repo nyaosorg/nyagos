@@ -11,7 +11,7 @@ backquote = {
         if not r then
             return false
         end
-        r = nyagos.atou(r)
+        r = nyagos.atou_if_needed(r)
         r = string.gsub(r,'["|&<>!]',function(m)
             return string.format('%%u+%04X%%',string.byte(m,1,1))
         end)
