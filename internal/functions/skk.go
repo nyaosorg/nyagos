@@ -8,12 +8,12 @@ import (
 	"github.com/nyaosorg/nyagos/internal/onexit"
 )
 
-func CmdSkk(args []anyT) []anyT {
+func CmdSkk(args []any) []any {
 	cfg := &skk.Config{
 		BindTo: readline.GlobalKeyMap,
 	}
 	for len(args) > 0 {
-		if table, ok := args[0].(map[anyT]anyT); ok {
+		if table, ok := args[0].(map[any]any); ok {
 			if value, okok := table["user"].(string); okok {
 				cfg.UserJisyoPath = value
 				// println("user:", value)
@@ -24,7 +24,7 @@ func CmdSkk(args []anyT) []anyT {
 					// println("ctrlj:", value)
 					cfg.CtrlJ = code
 				} else {
-					return []anyT{nil, "key name not found"}
+					return []any{nil, "key name not found"}
 				}
 			}
 			i := 0
@@ -48,5 +48,5 @@ func CmdSkk(args []anyT) []anyT {
 		return []any{nil, err.Error()}
 	}
 	onexit.Register(func() { skkMode.SaveUserJisyo() })
-	return []anyT{true}
+	return []any{true}
 }

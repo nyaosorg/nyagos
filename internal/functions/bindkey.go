@@ -7,9 +7,9 @@ import (
 )
 
 // CmdGetBindKey is the getter for nyagos.key table.
-func CmdGetBindKey(args []anyT) []anyT {
+func CmdGetBindKey(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, "too few arguments"}
+		return []any{nil, "too few arguments"}
 	}
 	name := keys.NormalizeName(fmt.Sprint(args[len(args)-1]))
 	code, ok := keys.NameToCode[name]
@@ -18,7 +18,7 @@ func CmdGetBindKey(args []anyT) []anyT {
 	}
 	command, ok := readline.GlobalKeyMap.Lookup(code)
 	if ok {
-		return []anyT{command.String()}
+		return []any{command.String()}
 	}
-	return []anyT{nil}
+	return []any{nil}
 }

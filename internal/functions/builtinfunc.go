@@ -30,9 +30,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
-type anyT = interface{}
-
-func toNumber(value anyT) (int, bool) {
+func toNumber(value any) (int, bool) {
 	if f, ok := value.(float64); ok {
 		return int(f), true
 	}
@@ -41,7 +39,7 @@ func toNumber(value anyT) (int, bool) {
 
 const TooFewArguments = "Too few arguments"
 
-func toStr(arr []anyT, n int) string {
+func toStr(arr []any, n int) string {
 	if n < len(arr) {
 		if defined.DBG {
 			println(fmt.Sprint(arr[n]))
@@ -54,25 +52,25 @@ func toStr(arr []anyT, n int) string {
 	return ""
 }
 
-func CmdChdir(args []anyT) []anyT {
+func CmdChdir(args []any) []any {
 	if len(args) >= 1 {
 		nodos.Chdir(fmt.Sprint(args[0]))
-		return []anyT{true}
+		return []any{true}
 	}
-	return []anyT{nil, "directory is required"}
+	return []any{nil, "directory is required"}
 }
 
-func CmdBox(this *Param) []anyT {
+func CmdBox(this *Param) []any {
 	args := this.Args
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
-	t, ok := args[0].(map[anyT]anyT)
+	t, ok := args[0].(map[any]any)
 	if !ok {
-		return []anyT{nil, "Not a table"}
+		return []any{nil, "Not a table"}
 	}
 	if len(t) == 0 {
-		return []anyT{}
+		return []any{}
 	}
 	sources := make([]string, 0, len(t))
 	for i, _i := 1, len(t); i <= _i; i++ {
@@ -80,31 +78,31 @@ func CmdBox(this *Param) []anyT {
 			sources = append(sources, fmt.Sprint(val))
 		}
 	}
-	values := make([]anyT, 0)
+	values := make([]any, 0)
 	for _, s := range box.ChoiceMulti(sources, this.Term) {
 		values = append(values, s)
 	}
 	return values
 }
 
-func CmdResetCharWidth(args []anyT) []anyT {
+func CmdResetCharWidth(args []any) []any {
 	readline.ResetCharWidth()
-	return []anyT{}
+	return []any{}
 }
 
-func CmdGetwd(args []anyT) []anyT {
+func CmdGetwd(args []any) []any {
 	wd, err := os.Getwd()
 	if err != nil {
-		return []anyT{nil, err}
+		return []any{nil, err}
 	}
-	return []anyT{wd}
+	return []any{wd}
 }
 
-func CmdGetKey(args []anyT) []anyT {
+func CmdGetKey(args []any) []any {
 	stdin := int(os.Stdin.Fd())
 	state, err := term.MakeRaw(stdin)
 	if err != nil {
-		return []anyT{nil, err.Error()}
+		return []any{nil, err.Error()}
 	}
 	defer term.Restore(stdin, state)
 
@@ -113,25 +111,25 @@ func CmdGetKey(args []anyT) []anyT {
 
 		n, err := os.Stdin.Read(buffer[:])
 		if err != nil {
-			return []anyT{nil, err.Error()}
+			return []any{nil, err.Error()}
 		}
 		key := buffer[:n]
 		for len(key) > 0 {
 			r, size := utf8.DecodeRune(key)
 			if r != 0 {
-				return []anyT{r, 0, 0}
+				return []any{r, 0, 0}
 			}
 			key = key[size:]
 		}
 	}
 }
 
-func CmdGetViewWidth(args []anyT) []anyT {
+func CmdGetViewWidth(args []any) []any {
 	width, height, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
-		return []anyT{nil, err.Error()}
+		return []any{nil, err.Error()}
 	}
-	return []anyT{width, height}
+	return []any{width, height}
 }
 
 var rxEnv = regexp.MustCompile("%[^%]+%")
@@ -150,41 +148,41 @@ func expandEnv(str string) string {
 	})
 }
 
-func CmdPathJoin(args []anyT) []anyT {
+func CmdPathJoin(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{""}
+		return []any{""}
 	}
 	path := expandEnv(fmt.Sprint(args[0]))
 	for i, _i := 1, len(args); i < _i; i++ {
 		sub := expandEnv(fmt.Sprint(args[i]))
 		path = filepath.Join(path, sub)
 	}
-	return []anyT{path}
+	return []any{path}
 }
 
-func CmdDirName(args []anyT) []anyT {
+func CmdDirName(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{""}
+		return []any{""}
 	}
-	result := []anyT{}
+	result := []any{}
 	for _, arg1 := range args {
 		if s, ok := arg1.(string); ok {
-			result = append(result, anyT(filepath.Dir(s)))
+			result = append(result, any(filepath.Dir(s)))
 		} else {
-			result = append(result, anyT(""))
+			result = append(result, any(""))
 		}
 	}
 	return result
 }
 
-func CmdAccess(args []anyT) []anyT {
+func CmdAccess(args []any) []any {
 	if len(args) < 2 {
-		return []anyT{nil, "nyagos.access requilres two arguments"}
+		return []any{nil, "nyagos.access requilres two arguments"}
 	}
 	path := fmt.Sprint(args[0])
 	mode, ok := toNumber(args[1])
 	if !ok {
-		return []anyT{nil, "mode value must be interger"}
+		return []any{nil, "mode value must be interger"}
 	}
 	if defined.DBG {
 		fmt.Fprintf(os.Stderr, "given mode==%o\n", mode)
@@ -208,12 +206,12 @@ func CmdAccess(args []anyT) []anyT {
 			result = ((fi.Mode().Perm() & 0400) != 0)
 		}
 	}
-	return []anyT{result}
+	return []any{result}
 }
 
-func CmdStat(args []anyT) []anyT {
+func CmdStat(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	path := expandEnv(fmt.Sprint(args[0]))
 	var stat os.FileInfo
@@ -228,18 +226,18 @@ func CmdStat(args []anyT) []anyT {
 		return false
 	})
 	if statErr != nil {
-		return []anyT{nil, statErr}
+		return []any{nil, statErr}
 	}
 	if stat == nil {
-		return []anyT{nil, fmt.Errorf("%s: failed to stat", path)}
+		return []any{nil, fmt.Errorf("%s: failed to stat", path)}
 	}
 	t := stat.ModTime()
-	return []anyT{
-		map[string]anyT{
+	return []any{
+		map[string]any{
 			"name":  stat.Name(),
 			"size":  stat.Size(),
 			"isdir": stat.IsDir(),
-			"mtime": map[string]anyT{
+			"mtime": map[string]any{
 				"year":   t.Year(),
 				"month":  t.Month(),
 				"day":    t.Day(),
@@ -251,9 +249,9 @@ func CmdStat(args []anyT) []anyT {
 	}
 }
 
-func CmdSetEnv(args []anyT) []anyT {
+func CmdSetEnv(args []any) []any {
 	if len(args) < 2 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[len(args)-2])
 	value := fmt.Sprint(args[len(args)-1])
@@ -262,34 +260,34 @@ func CmdSetEnv(args []anyT) []anyT {
 	} else {
 		os.Unsetenv(name)
 	}
-	return []anyT{true}
+	return []any{true}
 }
 
-func CmdGetEnv(args []anyT) []anyT {
+func CmdGetEnv(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[len(args)-1])
 	value, ok := shell.OurGetEnv(name)
 	if ok && len(value) > 0 {
-		return []anyT{value}
+		return []any{value}
 	}
-	return []anyT{nil}
+	return []any{nil}
 }
 
-func CmdWhich(args []anyT) []anyT {
+func CmdWhich(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	name := fmt.Sprint(args[0])
 	path := nodos.LookPath(shell.LookCurdirOrder, name, "NYAGOSPATH")
 	if path != "" {
-		return []anyT{path}
+		return []any{path}
 	}
-	return []anyT{nil, name + ": Path not found"}
+	return []any{nil, name + ": Path not found"}
 }
 
-func CmdGlob(args []anyT) []anyT {
+func CmdGlob(args []any) []any {
 	result := make([]string, 0)
 	for _, arg1 := range args {
 		wildcard := fmt.Sprint(arg1)
@@ -301,71 +299,71 @@ func CmdGlob(args []anyT) []anyT {
 		}
 	}
 	sort.StringSlice(result).Sort()
-	return []anyT{result}
+	return []any{result}
 }
 
-func CmdGetHistory(args []anyT) []anyT {
+func CmdGetHistory(args []any) []any {
 	if frame.DefaultHistory == nil {
-		return []anyT{}
+		return []any{}
 	}
 	if len(args) >= 1 {
 		if n, ok := toNumber(args[len(args)-1]); ok {
-			return []anyT{frame.DefaultHistory.At(n)}
+			return []any{frame.DefaultHistory.At(n)}
 		}
 	}
-	return []anyT{frame.DefaultHistory.Len()}
+	return []any{frame.DefaultHistory.Len()}
 }
 
-func CmdLenHistory(args []anyT) []anyT {
+func CmdLenHistory(args []any) []any {
 	if frame.DefaultHistory == nil {
-		return []anyT{}
+		return []any{}
 	}
-	return []anyT{frame.DefaultHistory.Len()}
+	return []any{frame.DefaultHistory.Len()}
 }
 
-func CmdRawEval(this *Param) []anyT {
+func CmdRawEval(this *Param) []any {
 	argv := stackToSlice(this)
 	cmd1 := exec.Command(argv[0], argv[1:]...)
 	out, err := cmd1.Output()
 	if err != nil {
-		return []anyT{nil, err.Error()}
+		return []any{nil, err.Error()}
 	}
-	return []anyT{out}
+	return []any{out}
 }
 
-func CmdSetRuneWidth(args []anyT) []anyT {
+func CmdSetRuneWidth(args []any) []any {
 	if len(args) < 2 {
-		return []anyT{nil, "too few aruments"}
+		return []any{nil, "too few aruments"}
 	}
 	char, ok := toNumber(args[0])
 	if !ok {
-		return []anyT{nil, "not a number"}
+		return []any{nil, "not a number"}
 	}
 	width, ok := toNumber(args[1])
 	if !ok {
-		return []anyT{nil, "not a number"}
+		return []any{nil, "not a number"}
 	}
 	readline.SetCharWidth(rune(char), width)
-	return []anyT{true}
+	return []any{true}
 }
 
-func CmdCommonPrefix(args []anyT) []anyT {
+func CmdCommonPrefix(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, "too few arguments"}
+		return []any{nil, "too few arguments"}
 	}
 	list := []string{}
 
-	table, ok := args[0].(map[anyT]anyT)
+	table, ok := args[0].(map[any]any)
 	if !ok {
-		return []anyT{nil, "not a table"}
+		return []any{nil, "not a table"}
 	}
 	for _, val := range table {
 		list = append(list, fmt.Sprint(val))
 	}
-	return []anyT{completion.CommonPrefix(list)}
+	return []any{completion.CommonPrefix(list)}
 }
 
-func CmdWriteSub(this *Param, out io.Writer) []anyT {
+func CmdWriteSub(this *Param, out io.Writer) []any {
 	args := this.Args
 	if f, ok := out.(*os.File); ok && isatty.IsTerminal(f.Fd()) {
 		cout := bufio.NewWriter(this.Term)
@@ -393,18 +391,18 @@ func CmdWriteSub(this *Param, out io.Writer) []anyT {
 		}
 		io.WriteString(out, str)
 	}
-	return []anyT{true}
+	return []any{true}
 }
 
-func CmdWrite(this *Param) []anyT {
+func CmdWrite(this *Param) []any {
 	return CmdWriteSub(this, this.Out)
 }
 
-func CmdWriteErr(this *Param) []anyT {
+func CmdWriteErr(this *Param) []any {
 	return CmdWriteSub(this, this.Err)
 }
 
-func CmdPrint(this *Param) []anyT {
+func CmdPrint(this *Param) []any {
 	rc := CmdWrite(this)
 	fmt.Fprintln(this.Out)
 	return rc
@@ -427,26 +425,26 @@ func stackToSlice(this *Param) []string {
 	return argv
 }
 
-func GetOption(args []anyT) []anyT {
+func GetOption(args []any) []any {
 	if len(args) < 2 {
-		return []anyT{nil, "too few arguments"}
+		return []any{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
 	ptr, ok := commands.BoolOptions.Load(key)
 	if !ok {
-		return []anyT{nil, fmt.Sprintf("key: %s: not found", key)}
+		return []any{nil, fmt.Sprintf("key: %s: not found", key)}
 	}
-	return []anyT{*ptr.V}
+	return []any{*ptr.V}
 }
 
-func SetOption(args []anyT) []anyT {
+func SetOption(args []any) []any {
 	if len(args) < 3 {
-		return []anyT{nil, "too few arguments"}
+		return []any{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
 	ptr, ok := commands.BoolOptions.Load(key)
 	if !ok || ptr == nil {
-		return []anyT{nil, "key: %s: not found"}
+		return []any{nil, "key: %s: not found"}
 	}
 	val := args[2]
 	if val == nil {
@@ -458,41 +456,41 @@ func SetOption(args []anyT) []anyT {
 	} else {
 		*ptr.V = true
 	}
-	return []anyT{true}
+	return []any{true}
 }
 
-func bitOperators(args []anyT, result int, f func(int, int) int) []anyT {
+func bitOperators(args []any, result int, f func(int, int) int) []any {
 	for _, arg1tmp := range args {
 		if arg1, ok := toNumber(arg1tmp); ok {
 			result = f(result, arg1)
 		} else {
-			return []anyT{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
+			return []any{nil, fmt.Sprintf("%s : not a number", arg1tmp)}
 		}
 	}
-	return []anyT{result}
+	return []any{result}
 }
 
-func CmdBitAnd(args []anyT) []anyT {
+func CmdBitAnd(args []any) []any {
 	return bitOperators(args, ^0, func(r, v int) int { return r & v })
 }
 
-func CmdBitOr(args []anyT) []anyT {
+func CmdBitOr(args []any) []any {
 	return bitOperators(args, 0, func(r, v int) int { return r | v })
 }
 
-func CmdBitXor(args []anyT) []anyT {
+func CmdBitXor(args []any) []any {
 	return bitOperators(args, 0, func(r, v int) int { return r ^ v })
 }
 
-func CmdFields(args []anyT) []anyT {
+func CmdFields(args []any) []any {
 	if len(args) <= 0 {
-		return []anyT{nil}
+		return []any{nil}
 	}
 	fields := strings.Fields(fmt.Sprint(args[0]))
-	return []anyT{fields}
+	return []any{fields}
 }
 
-func CmdEnvAdd(args []anyT) []anyT {
+func CmdEnvAdd(args []any) []any {
 	if len(args) >= 1 {
 		list := make([]string, 1, len(args))
 		name := strings.ToUpper(fmt.Sprint(args[0]))
@@ -502,10 +500,10 @@ func CmdEnvAdd(args []anyT) []anyT {
 		}
 		os.Setenv(name, nodos.JoinList(list...))
 	}
-	return []anyT{}
+	return []any{}
 }
 
-func CmdEnvDel(args []anyT) (result []anyT) {
+func CmdEnvDel(args []any) (result []any) {
 	if len(args) >= 1 {
 		name := strings.ToUpper(fmt.Sprint(args[0]))
 		list := filepath.SplitList(os.Getenv(name))
@@ -531,9 +529,9 @@ func CmdEnvDel(args []anyT) (result []anyT) {
 	return
 }
 
-func CmdCompleteForFiles(args []anyT) []anyT {
+func CmdCompleteForFiles(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, errors.New("too few arguments")}
+		return []any{nil, errors.New("too few arguments")}
 	}
 	if s, ok := args[0].(string); ok {
 		elements, err := completion.ListUpFiles(
@@ -541,13 +539,13 @@ func CmdCompleteForFiles(args []anyT) []anyT {
 			completion.DoNotUncCompletion,
 			s)
 		if err != nil {
-			return []anyT{nil, err.Error()}
+			return []any{nil, err.Error()}
 		}
 		result := make([]string, len(elements))
 		for i := 0; i < len(elements); i++ {
 			result[i] = elements[i].String()
 		}
-		return []anyT{result}
+		return []any{result}
 	}
-	return []anyT{nil, errors.New("invalid arguments")}
+	return []any{nil, errors.New("invalid arguments")}
 }

@@ -10,7 +10,7 @@ import (
 	"github.com/nyaosorg/go-windows-su"
 )
 
-func CmdMsgBox(args []anyT) []anyT {
+func CmdMsgBox(args []any) []any {
 	var message string
 	title := "nyagos"
 	if len(args) >= 1 {
@@ -20,27 +20,27 @@ func CmdMsgBox(args []anyT) []anyT {
 		title = fmt.Sprint(args[1])
 	}
 	msgbox.Show(0, message, title, msgbox.OK)
-	return []anyT{}
+	return []any{}
 }
 
-func CmdElevated([]anyT) []anyT {
+func CmdElevated([]any) []any {
 	flag, _ := su.IsElevated()
-	return []anyT{flag}
+	return []any{flag}
 }
 
-func CmdShellExecute(args []anyT) []anyT {
+func CmdShellExecute(args []any) []any {
 	pid, err := su.ShellExecute(
 		toStr(args, 0),
 		toStr(args, 1),
 		toStr(args, 2),
 		toStr(args, 3))
 	if err != nil {
-		return []anyT{nil, err}
+		return []any{nil, err}
 	}
-	return []anyT{pid}
+	return []any{pid}
 }
 
-func CmdRawExec(this *Param) []anyT {
+func CmdRawExec(this *Param) []any {
 	argv := stackToSlice(this)
 	xcmd := exec.Command(argv[0], argv[1:]...)
 	xcmd.Stdin = this.In
@@ -50,50 +50,50 @@ func CmdRawExec(this *Param) []anyT {
 	errorlevel := xcmd.ProcessState.ExitCode()
 	if err != nil {
 		fmt.Fprintln(xcmd.Stderr, err.Error())
-		return []anyT{errorlevel, err.Error()}
+		return []any{errorlevel, err.Error()}
 	}
-	return []anyT{errorlevel}
+	return []any{errorlevel}
 }
 
-func CmdAtoU(args []anyT) []anyT {
+func CmdAtoU(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	if s, ok := args[0].(string); ok {
 		val, err := mbcs.AnsiToUtf8([]byte(s), mbcs.ConsoleCP())
 		if err != nil {
-			return []anyT{nil, err}
+			return []any{nil, err}
 		}
-		return []anyT{val}
+		return []any{val}
 	}
-	return []anyT{fmt.Sprint(args[0])}
+	return []any{fmt.Sprint(args[0])}
 }
 
-func CmdUtoA(args []anyT) []anyT {
+func CmdUtoA(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	utf8 := fmt.Sprint(args[0])
 	bin, err := mbcs.Utf8ToAnsi(utf8, mbcs.ConsoleCP())
 	if err != nil {
-		return []anyT{nil, err}
+		return []any{nil, err}
 	}
-	return []anyT{bin, nil}
+	return []any{bin, nil}
 }
 
-func CmdAnsiToUtf8IfNeeded(args []anyT) []anyT {
+func CmdAnsiToUtf8IfNeeded(args []any) []any {
 	if len(args) < 1 {
-		return []anyT{nil, TooFewArguments}
+		return []any{nil, TooFewArguments}
 	}
 	if s, ok := args[0].(string); ok {
 		if utf8.ValidString(s) {
-			return []anyT{s}
+			return []any{s}
 		}
 		val, err := mbcs.AnsiToUtf8([]byte(s), mbcs.ConsoleCP())
 		if err != nil {
-			return []anyT{nil, err}
+			return []any{nil, err}
 		}
-		return []anyT{val}
+		return []any{val}
 	}
-	return []anyT{fmt.Sprint(args[0])}
+	return []any{fmt.Sprint(args[0])}
 }
