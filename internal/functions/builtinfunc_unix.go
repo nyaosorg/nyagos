@@ -17,8 +17,8 @@ func CmdRawExec(this *Param) []anyT {
 	return []anyT{nil, "not support"}
 }
 func CmdAtoU(args []anyT) []anyT {
-	return []anyT{nil, "not support"}
+	return args
 }
 func CmdUtoA(args []anyT) []anyT {
-	return []anyT{nil, "not support"}
+	return args
 }
