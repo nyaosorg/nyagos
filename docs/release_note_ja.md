@@ -7,11 +7,12 @@
 * (#432) `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
 * (#432) 新オプション `glob_slash` を追加。設定されている時、ワイルドカード展開で `/` を使う
 * Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
-* [SKK] \(Simple Kana Kanji conversion program\) サポート
+* [SKK] \(Simple Kana Kanji conversion program\) サポート :[設定方法][SKKSetUp]
 * 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
 * (#433) 文字化けを避けるために、逆クォートでは `nyagos.atou_if_needed` を使って、UTF8 を更に UTF8 化させないようにした
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
+[SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
 
 NYAGOS 4.4.13\_3
 ================
