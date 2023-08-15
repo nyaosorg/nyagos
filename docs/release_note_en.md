@@ -1,5 +1,8 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+The binaries of this version are built with Go 1.20.7.  
+They support Windows 7, 8.1, 10, 11, WindowsServer 2012R or later, and Linux.
+
 * nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in %NYAGOSEXPANDWILDCARD%
 * (#432) When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
 * (#432) Add new option: `glob_slash`. When it is set, `/` is used on wildcard expansion.
