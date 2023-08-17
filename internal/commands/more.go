@@ -8,12 +8,10 @@ import (
 	"math"
 	"os"
 	"strings"
-	"unicode/utf8"
-
-	"golang.org/x/term"
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-runewidth"
+	"github.com/mattn/go-tty"
 
 	"github.com/nyaosorg/go-windows-mbcs"
 	"github.com/nyaosorg/nyagos/internal/nodos"
@@ -32,26 +30,18 @@ func isTerminalIn(in io.Reader) bool {
 }
 
 func getkey() (rune, error) {
-	stdin := int(os.Stdin.Fd())
-	state, err := term.MakeRaw(stdin)
+	tty1, err := tty.Open()
 	if err != nil {
 		return 0, err
 	}
-	defer term.Restore(stdin, state)
-
+	defer tty1.Close()
 	for {
-		var buffer [256]byte
-		n, err := os.Stdin.Read(buffer[:])
+		ch, err := tty1.ReadRune()
 		if err != nil {
 			return 0, err
 		}
-		key := buffer[:n]
-		for len(key) > 0 {
-			r, size := utf8.DecodeRune(key)
-			if r != 0 {
-				return r, nil
-			}
-			key = key[size:]
+		if ch != 0 {
+			return ch, nil
 		}
 	}
 }
@@ -129,8 +119,13 @@ func more(r io.Reader, cmd Param) error {
 
 func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
-	var err error
-	screenWidth, screenHeight, err = term.GetSize(int(os.Stdout.Fd()))
+
+	tty1, err := tty.Open()
+	if err != nil {
+		return 1, err
+	}
+	screenWidth, screenHeight, err = tty1.Size()
+	tty1.Close()
 	if err != nil {
 		return 1, err
 	}
