@@ -12,11 +12,9 @@ import (
 	"regexp"
 	"sort"
 	"strings"
-	"unicode/utf8"
-
-	"golang.org/x/term"
 
 	"github.com/mattn/go-isatty"
+	"github.com/mattn/go-tty"
 
 	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
@@ -99,33 +97,29 @@ func CmdGetwd(args []any) []any {
 }
 
 func CmdGetKey(args []any) []any {
-	stdin := int(os.Stdin.Fd())
-	state, err := term.MakeRaw(stdin)
+	tty1, err := tty.Open()
 	if err != nil {
 		return []any{nil, err.Error()}
 	}
-	defer term.Restore(stdin, state)
-
+	defer tty1.Close()
 	for {
-		var buffer [256]byte
-
-		n, err := os.Stdin.Read(buffer[:])
+		r, err := tty1.ReadRune()
 		if err != nil {
 			return []any{nil, err.Error()}
 		}
-		key := buffer[:n]
-		for len(key) > 0 {
-			r, size := utf8.DecodeRune(key)
-			if r != 0 {
-				return []any{r, 0, 0}
-			}
-			key = key[size:]
+		if r != 0 {
+			return []any{r, 0, 0}
 		}
 	}
 }
 
 func CmdGetViewWidth(args []any) []any {
-	width, height, err := term.GetSize(int(os.Stdout.Fd()))
+	tty1, err := tty.Open()
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	defer tty1.Close()
+	width, height, err := tty1.Size()
 	if err != nil {
 		return []any{nil, err.Error()}
 	}
