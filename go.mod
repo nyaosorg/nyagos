@@ -9,6 +9,7 @@ require (
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mattn/go-isatty v0.0.19
 	github.com/mattn/go-runewidth v0.0.15
+	github.com/mattn/go-tty v0.0.5
 	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/glua-ole v0.0.0-20210914102918-563689ba7584
@@ -33,7 +34,6 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
-	github.com/mattn/go-tty v0.0.5 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/tools v0.12.0 // indirect
