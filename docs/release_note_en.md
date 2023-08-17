@@ -10,6 +10,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2012R or later, and Linux.
 * Support [SKK] \(Simple Kana Kanji conversion program\) :[How To Setup][SKKSetUp]
 * Add the lua-function: `nyagos.atou_if_needed` that converts the string that is not valid utf8 one to utf8-string as the current codepage string.
 * (#433) To avoid garbled characters, backquote uses `nyagos.atou_if_needed` to prevent UTF8 from being further converted to UTF8.
+* Fix the problem that `more`, `nyagos.getkey`, and `nyagos.getviewwidth` might not work on Windows 7, 8.1 and Windows Server 2012. They were using "golang.org/x/term" that depends on the terminal feature of Windows10,11
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
