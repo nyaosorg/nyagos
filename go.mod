@@ -28,7 +28,6 @@ require (
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
 	github.com/yuin/gopher-lua v1.1.0
 	golang.org/x/sys v0.11.0
-	golang.org/x/term v0.11.0
 	golang.org/x/text v0.12.0
 )
 
