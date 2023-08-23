@@ -1,7 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 当バージョンのバイナリは Go 1.20.7 でビルド。  
-サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2012R以降, Linux となります。
+サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
 
 * nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした。
 * (#432) `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
