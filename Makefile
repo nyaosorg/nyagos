@@ -1,4 +1,7 @@
 PROMPT=$$$$$$S
+ifndef GO
+GO=go1.20.7
+endif
 ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     NUL=NUL
@@ -15,20 +18,20 @@ else
     DEL=rm
     SYSO=
 endif
-NAME=$(notdir $(abspath .))
+NAME=$(notdir $(CURDIR))
 VERSION=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
 GOOPT=-ldflags "-s -w -X main.version=$(VERSION)"
 EXE=$(shell go env GOEXE)
 
 snapshot:
-	go fmt ./...
-	$(SET) "CGO_ENABLED=0" && go build $(GOOPT)
+	$(GO) fmt ./...
+	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 
 debug:
-	$(SET) "CGO_ENABLED=0" && go build $(GOOPT) -tags=debug
+	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT) -tags=debug
 
 define test1
-	pushd "$(1)" && go test && popd
+	pushd "$(1)" && $(GO) test && popd
 
 endef
 
@@ -55,18 +58,18 @@ clean:
 	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
 
 get:
-	go get -u
-	go mod tidy
+	$(GO) get -u
+	$(GO) mod tidy
 
 _package:
-	$(SET) "CGO_ENABLED=0" && go build $(GOOPT)
+	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 	zip -9 "nyagos-$(VERSION)-$(GOOS)-$(GOARCH).zip" \
 	    "nyagos$(EXE)" .nyagos _nyagos LICENSE \
 	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua" \
 	    $(FILES)
 
 package:
-	cd Etc && go generate
+	cd Etc && $(GO) generate
 	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _package "FILES=Etc/*.ico makeicon.cmd"
 	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _package "FILES=Etc/*.ico makeicon.cmd"
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _package
@@ -90,5 +93,9 @@ endif
 update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
 endif
+
+$(GO):
+	go install golang.org/dl/$(GO)@latest
+	$(GO) download
 
 .PHONY: snapshot debug test tstlua clean get _package package release install
