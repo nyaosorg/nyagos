@@ -1,12 +1,10 @@
 PROMPT=$$$$$$S
-ifndef GO
-GO=go1.20.7
-endif
 ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     NUL=NUL
     DEL=del
     SET=set
+    WHICH=where.exe
 ifeq ($(shell go env GOOS),windows)
     SYSO=nyagos.syso
 else
@@ -15,9 +13,15 @@ endif
 else
     NUL=/dev/null
     SET=export
+    WHICH=which
     DEL=rm
     SYSO=
 endif
+
+ifndef GO
+GO=$(shell $(WHICH) go1.20.7 2>$(NUL) || echo go)
+endif
+
 NAME=$(notdir $(CURDIR))
 VERSION=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
 GOOPT=-ldflags "-s -w -X main.version=$(VERSION)"
