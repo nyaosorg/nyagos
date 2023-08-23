@@ -19,7 +19,7 @@ else
 endif
 
 ifndef GO
-GO=$(shell $(WHICH) go1.20.7 2>$(NUL) || echo go)
+    GO:=$(shell $(WHICH) go1.20.7 2>$(NUL) || echo go)
 endif
 
 NAME=$(notdir $(CURDIR))
