@@ -98,8 +98,9 @@ update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
 endif
 
-$(GO):
-	go install golang.org/dl/$(GO)@latest
-	$(GO) download
+SUPPORTGO=go1.20.7
+$(SUPPORTGO):
+	go install golang.org/dl/$(SUPPORTGO)@latest
+	$(SUPPORTGO) download
 
 .PHONY: snapshot debug test tstlua clean get _package package release install
