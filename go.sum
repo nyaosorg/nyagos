@@ -8,8 +8,8 @@ github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMn
 github.com/dustin/go-humanize v1.0.1 h1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkpeCY=
 github.com/dustin/go-humanize v1.0.1/go.mod h1:Mu1zIs6XwVuF/gI1OepvI0qD18qycQx+mFykh5fBlto=
 github.com/go-ole/go-ole v1.2.5/go.mod h1:pprOEPIfldk/42T2oK7lQ4v4JSDwmV0As9GaiUsvbm0=
-github.com/go-ole/go-ole v1.2.6 h1:/Fpf6oFPoeFik9ty7siob0G6Ke8QvQEuVcuChpwXzpY=
-github.com/go-ole/go-ole v1.2.6/go.mod h1:pprOEPIfldk/42T2oK7lQ4v4JSDwmV0As9GaiUsvbm0=
+github.com/go-ole/go-ole v1.3.0 h1:Dt6ye7+vXGIKZ7Xtk4s6/xVdGDQynvom7xCFEdWr6uE=
+github.com/go-ole/go-ole v1.3.0/go.mod h1:5LS6F96DhAwUc7C+1HLexzMXY1xGRSryjyPPKW6zv78=
 github.com/mattn/go-colorable v0.1.4/go.mod h1:U0ppj6V5qS13XJ6of8GYAs25YV2eR4EVcfRqFIhoBtE=
 github.com/mattn/go-colorable v0.1.13 h1:fFA4WZxdEF4tXPZVKMLwD8oUnCTTo08duU7wxecdEvA=
 github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovkB8vQcUbaXHg=
@@ -35,8 +35,8 @@ github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
 github.com/nyaosorg/go-readline-ny v0.13.2 h1:/ReAmwslL8r+RSF3MhwkoH3rERhZXndJ0w3SQeHxRX8=
 github.com/nyaosorg/go-readline-ny v0.13.2/go.mod h1:/JojGEnLMPy6g+oHBMqy1/AEUDUgjiG2lUYOalhtQpY=
-github.com/nyaosorg/go-readline-skk v0.0.0-20230813100822-0f02824705dd h1:0VDReXA21DKDjx9cQQ+G1GnDEzEoCD58Xrlj1StM02o=
-github.com/nyaosorg/go-readline-skk v0.0.0-20230813100822-0f02824705dd/go.mod h1:h1HbP/jBnKnhlXzZfRnCGPKjBXhOuNV/w0mGiMhLZnQ=
+github.com/nyaosorg/go-readline-skk v0.0.0-20230827144924-4619ebc6d300 h1:CbuEMim3CydaDnjer7IFT7maBX4UOCTXw0bCfjdlEIw=
+github.com/nyaosorg/go-readline-skk v0.0.0-20230827144924-4619ebc6d300/go.mod h1:CWLzqcid06nNll7dxEqQGK1+uPWzP4xZRFp2Mi05FN4=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022 h1:4WxrzYVJcE2jPDRFs8qXrhPLDt9Bm78WiTm6bTt2xZc=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022/go.mod h1:htF2oC1Ezpvaew+/cyJKex559A2TA86svovywkVN4ss=
 github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b h1:lqJjHpjXwfKC+N9EgLhGoYwuFHOXEyXcjotgq2hq8Qk=
@@ -72,6 +72,7 @@ golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20201218084310-7d0127a74742/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20210309074719-68d13333faf2/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20220811171246-fbc7d0a398ab/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
+golang.org/x/sys v0.1.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.11.0 h1:eG7RXZHdqOJ1i+0lgLgCpSXAp6M3LYlAo6osgSi0xOM=
 golang.org/x/sys v0.11.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=

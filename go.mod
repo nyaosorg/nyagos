@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/atotto/clipboard v0.1.4
 	github.com/dustin/go-humanize v1.0.1
-	github.com/go-ole/go-ole v1.2.6
+	github.com/go-ole/go-ole v1.3.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mattn/go-isatty v0.0.19
 	github.com/mattn/go-runewidth v0.0.15
@@ -16,7 +16,7 @@ require (
 	github.com/nyaosorg/go-box/v2 v2.1.4
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
 	github.com/nyaosorg/go-readline-ny v0.13.2
-	github.com/nyaosorg/go-readline-skk v0.0.0-20230813100822-0f02824705dd
+	github.com/nyaosorg/go-readline-skk v0.0.0-20230827144924-4619ebc6d300
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20220829145728-e979453bedae
