@@ -173,9 +173,9 @@ func Main() error {
 	var stream1 shell.Stream
 	if !commands.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
-			func() (int, error) {
+			func(w io.Writer) (int, error) {
 				if L != nil {
-					return printPrompt(ctx, sh, L)
+					return printPrompt(ctx, sh, L, w)
 				}
 				functions.Prompt(
 					&functions.Param{

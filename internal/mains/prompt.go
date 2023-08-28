@@ -6,6 +6,7 @@ package mains
 import (
 	"context"
 	"errors"
+	"io"
 	"os"
 
 	"github.com/nyaosorg/nyagos/internal/functions"
@@ -13,7 +14,7 @@ import (
 	"github.com/yuin/gopher-lua"
 )
 
-func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
+func printPrompt(ctx context.Context, sh *shell.Shell, L Lua, w io.Writer) (int, error) {
 	nyagosTbl := L.GetGlobal("nyagos")
 	prompt := L.GetField(nyagosTbl, "prompt")
 	if promptHook, ok := prompt.(*lua.LFunction); ok {
@@ -23,10 +24,10 @@ func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
 		if err := execLuaKeepContextAndShell(ctx, sh, L, 1, 1); err != nil {
 			return 0, err
 		}
-
-		length, ok := L.Get(-1).(lua.LNumber)
-		L.Pop(1)
-		if ok {
+		defer L.Pop(1)
+		if promptString, ok := L.Get(-1).(lua.LString); ok {
+			return io.WriteString(w, string(promptString))
+		} else if length, ok := L.Get(-1).(lua.LNumber); ok {
 			return int(length), nil
 		}
 		return 0, errors.New("nyagos.prompt: return-value(length) is not a number")
@@ -37,5 +38,5 @@ func printPrompt(ctx context.Context, sh *shell.Shell, L Lua) (int, error) {
 	} else {
 		promptStr = os.Getenv("PROMPT")
 	}
-	return functions.PromptCore(sh.Term(), promptStr), nil
+	return io.WriteString(w, functions.PromptCore(w, promptStr))
 }

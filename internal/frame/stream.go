@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -18,19 +19,19 @@ import (
 
 type CmdStreamConsole struct {
 	shell.CmdSeeker
-	DoPrompt func() (int, error)
+	DoPrompt func(io.Writer) (int, error)
 	History  *history.Container
 	Editor   *readline.Editor
 	HistPath string
 }
 
-func NewCmdStreamConsole(doPrompt func() (int, error)) *CmdStreamConsole {
+func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsole {
 	history1 := &history.Container{}
 	stream := &CmdStreamConsole{
 		History: history1,
 		Editor: &readline.Editor{
 			History:        history1,
-			Prompt:         doPrompt,
+			PromptWriter:   doPrompt,
 			Writer:         colorable.NewColorableStdout(),
 			Coloring:       &_Coloring{},
 			HistoryCycling: true,
