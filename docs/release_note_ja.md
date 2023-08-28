@@ -11,6 +11,7 @@
 * 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
 * (#433) 文字化けを避けるために、逆クォートでは `nyagos.atou_if_needed` を使って、UTF8 を更に UTF8 化させないようにした
 * `more`, `nyagos.getkey`, `nyagos.getviewwidth` が Windows 7, 8.1 や WindowsServer 2012 で動かない可能性があった問題を修正。それらは Windows10,11 の新端末に依存する "golang.org/x/term" を使用していました。(本件は v4.4.13\_3 のみに含まれていた)
+* `nyagos.default_prompt` や `nyagos.prompt` は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。(go-readline-ny.Editor の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
