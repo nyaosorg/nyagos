@@ -239,11 +239,13 @@ suffix というコマンドを作成しています。
 これはコマンドに特定の拡張子がついた時に、インタプリタ名を
 先頭に挿入するものです。
 
-### `length = nyagos.prompt(template)`
+### `s = nyagos.prompt(template)`
 
 通常ユーザが直接呼び出すことはありません。
 引数のプロンプトのテンプレート(=%PROMPT%)を展開して、プロンプト文字列を
-生成して表示、文字の桁数を戻り値を返す関数が格納されています。
+生成して、戻り値として返す関数が格納されています。
+(注意：4.4.13 までは、prompt 関数の中で表示し、文字の桁数を返す仕様でした)
+
 ユーザはこれを横取りして独自のプロンプト表示を改造することができます。
 
     nyagos.prompt = function(this)
@@ -251,7 +253,7 @@ suffix というコマンドを作成しています。
         return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
     end
 
-`nyagos.default_prompt` はデフォルトのプロンプト表示関数です。
+`nyagos.default_prompt` はデフォルトのプロンプト生成関数です。
 第二引数でターミナルのタイトルを変更することができます。
 
 ### `nyagos.gethistory(N)` もしくは `nyagos.history[N]`

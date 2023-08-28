@@ -217,9 +217,13 @@ If it returns string, NYAGOS.exe replace the command-line-string it.
 not a string but a table as string array which has each command
 arguments.
 
-### `length = nyagos.prompt(template)`
+### `s = nyagos.prompt(template)`
 
-`nyagos.prompt` is assigned function which draw prompt.
+`nyagos.prompt` should be assigned the function which creates and
+returns the string for prompt.
+( Until v4.4.13, `nyagos.prompt` is expected to output the prompt string 
+  directly and return the width of prompt-string )
+
 You can swap the prompt-function as below.
 
     nyagos.prompt = function(this)
