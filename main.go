@@ -16,14 +16,15 @@ import (
 var version string
 
 func main() {
-	defer onexit.Done()
-
+	rc := 0
 	frame.Version = strings.TrimSpace(version)
 	if err := frame.Start(mains.Main); err != nil && err != io.EOF {
-		fmt.Fprintln(os.Stderr, err)
-		defer os.Exit(1)
+		fmt.Fprintln(os.Stderr, err.Error())
+		rc = 1
 	}
 	if defined.DBG {
 		os.Stdin.Read(make([]byte, 1))
 	}
+	onexit.Done()
+	os.Exit(rc)
 }
