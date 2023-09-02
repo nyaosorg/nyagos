@@ -1,9 +1,7 @@
 package nodos
 
 import (
-	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/nyaosorg/go-windows-findfile"
 )
