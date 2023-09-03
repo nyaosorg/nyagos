@@ -18,7 +18,7 @@ func lookPath(dir1, targetPath string) (foundpath string) {
 	}
 	foundIndex := 999
 	findfile.Walk(targetPath+"*", func(f *findfile.FileInfo) bool {
-		if f.IsDir() || filepath.Ext(f.Name()) == "" {
+		if lookPathSkip(f) {
 			return true
 		}
 		if i, ok := names[strings.ToUpper(f.Name())]; ok && i < foundIndex {
