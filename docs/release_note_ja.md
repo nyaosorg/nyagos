@@ -16,8 +16,8 @@
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
-[#432]: https://github.com/nyaosorg/nyagos/pull/432
-[#433]: https://github.com/nyaosorg/nyagos/pull/433
+[#432]: https://github.com/nyaosorg/nyagos/issues/432
+[#433]: https://github.com/nyaosorg/nyagos/discussions/433
 [#434]: https://github.com/nyaosorg/nyagos/pull/434
 [@ousttrue]: https://github.com/ousttrue
 
