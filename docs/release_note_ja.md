@@ -7,11 +7,11 @@
 * [#432] `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
 * [#432] 新オプション `glob_slash` を追加。設定されている時、ワイルドカード展開で `/` を使う
 * Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
-* [SKK] \(Simple Kana Kanji conversion program\) サポート :[設定方法][SKKSetUp]
+* [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUp]
 * 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
 * [#433] 文字化けを避けるために、逆クォートでは `nyagos.atou_if_needed` を使って、UTF8 を更に UTF8 化させないようにした
-* `more`, `nyagos.getkey`, `nyagos.getviewwidth` が Windows 7, 8.1 や WindowsServer 2012 で動かない可能性があった問題を修正。それらは Windows10,11 の新端末に依存する "golang.org/x/term" を使用していました。(本件は v4.4.13\_3 のみに含まれていた)
-* `nyagos.default_prompt` や `nyagos.prompt` は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。(go-readline-ny.Editor の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)
+* [v4.4.13\_3] で、`more`, `nyagos.getkey`, `nyagos.getviewwidth` が Windows 7, 8.1 や WindowsServer 2008 で動かない問題を修正
+* `nyagos.default_prompt` や `nyagos.prompt` は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。([go-readline-ny.Editor] の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)
 * [#434] Lua で `nyagos.which('cp')` が機能しない問題を修正 (Thanks to [@ousttrue])
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
@@ -20,6 +20,8 @@
 [#433]: https://github.com/nyaosorg/nyagos/discussions/433
 [#434]: https://github.com/nyaosorg/nyagos/pull/434
 [@ousttrue]: https://github.com/ousttrue
+[v4.4.13\_3]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.13_3
+[go-readline-ny.Editor]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny#Editor
 
 NYAGOS 4.4.13\_3
 ================
