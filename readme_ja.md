@@ -149,6 +149,7 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 / [juggler999](https://github.com/juggler999)
 / [zztkm](https://github.com/zztkm)
 / [8exBCYJi5ATL](https://github.com/8exBCYJi5ATL)
+/ [ousttrue](https://github.com/ousttrue)
 
 開発者
 ------
