@@ -4,18 +4,20 @@ The binaries of this version are built with Go 1.20.7.
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
 * nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in %NYAGOSEXPANDWILDCARD%
-* (#432) When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
-* (#432) Add new option: `glob_slash`. When it is set, `/` is used on wildcard expansion.
+* [#432] When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
+* [#432] Add new option: `glob_slash`. When it is set, `/` is used on wildcard expansion.
 * Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
 * Support [SKK] \(Simple Kana Kanji conversion program\) :[How To Setup][SKKSetUp]
 * Add the lua-function: `nyagos.atou_if_needed` that converts the string that is not valid utf8 one to utf8-string as the current codepage string.
-* (#433) To avoid garbled characters, backquote uses `nyagos.atou_if_needed` to prevent UTF8 from being further converted to UTF8.
+* [#433] To avoid garbled characters, backquote uses `nyagos.atou_if_needed` to prevent UTF8 from being further converted to UTF8.
 * Fix the problem that `more`, `nyagos.getkey`, and `nyagos.getviewwidth` might not work on Windows 7, 8.1 and Windows Server 2012. They were using "golang.org/x/term" that depends on the terminal feature of Windows10,11 (This issue was only in v4.4.13\_3)
 * `nyagos.default_prompt` and `nyagos.prompt` returns the prompt-string instead of output it to the terminal directly. This modifying is to use the new field `PromptWriter` of the `go-readline-ny.Editor` instead of `Prompt` that is deprecated.
 * [#434] Fix: `nyagos.which('cp')` does not work as expect on Linux (Thanks to [@ousttrue])
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
+[#432]: https://github.com/nyaosorg/nyagos/pull/432
+[#433]: https://github.com/nyaosorg/nyagos/pull/433
 [#434]: https://github.com/nyaosorg/nyagos/pull/434
 [@ousttrue]: https://github.com/ousttrue
 
