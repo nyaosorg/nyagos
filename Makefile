@@ -19,7 +19,8 @@ else
 endif
 
 ifndef GO
-    GO:=$(shell $(WHICH) go1.20.7 2>$(NUL) || echo go)
+    SUPPORTGO=go1.20.8
+    GO:=$(shell $(WHICH) $(SUPPORTGO) 2>$(NUL) || echo go)
 endif
 
 NAME=$(notdir $(CURDIR))
@@ -98,7 +99,6 @@ update:
 	for /F "skip=1" %%I in ('where nyagos.exe') do $(MAKE) install INSTALLDIR=%%~dpI
 endif
 
-SUPPORTGO=go1.20.7
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	$(SUPPORTGO) download
