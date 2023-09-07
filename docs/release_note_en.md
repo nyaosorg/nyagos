@@ -1,6 +1,6 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-The binaries of this version are built with Go 1.20.7.  
+The binaries of this version are built with Go 1.20.8.  
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
 * nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in %NYAGOSEXPANDWILDCARD%
