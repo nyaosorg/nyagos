@@ -7,7 +7,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * [#432] When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
 * [#432] Add new option: `glob_slash`. When it is set, `/` is used on wildcard expansion.
 * Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
-* Support [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUp]
+* Support [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
 * Add the lua-function: `nyagos.atou_if_needed` that converts the string that is not valid utf8 one to utf8-string as the current codepage string.
 * [#433] To avoid garbled characters, backquote uses `nyagos.atou_if_needed` to prevent UTF8 from being further converted to UTF8.
 * Fix the problem that `more`, `nyagos.getkey`, and `nyagos.getviewwidth` might not work on Windows 7, 8.1 and Windows Server 2008 at [v4.4.13\_3].
@@ -15,7 +15,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * [#434] Fix: `nyagos.which('cp')` does not work as expect on Linux (Thanks to [@ousttrue])
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
-[SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
+[SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
 [#432]: https://github.com/nyaosorg/nyagos/issues/432
 [#433]: https://github.com/nyaosorg/nyagos/discussions/433
 [#434]: https://github.com/nyaosorg/nyagos/pull/434

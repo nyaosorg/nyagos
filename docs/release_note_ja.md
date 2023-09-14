@@ -7,7 +7,7 @@
 * [#432] `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
 * [#432] 新オプション `glob_slash` を追加。設定されている時、ワイルドカード展開で `/` を使う
 * Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
-* [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUp]
+* [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
 * 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
 * [#433] 文字化けを避けるために、逆クォートでは `nyagos.atou_if_needed` を使って、UTF8 を更に UTF8 化させないようにした
 * [v4.4.13\_3] で、`more`, `nyagos.getkey`, `nyagos.getviewwidth` が Windows 7, 8.1 や WindowsServer 2008 で動かない問題を修正
@@ -15,7 +15,7 @@
 * [#434] Lua で `nyagos.which('cp')` が機能しない問題を修正 (Thanks to [@ousttrue])
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
-[SKKSetUp]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
+[SKKSetUpJa]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
 [#432]: https://github.com/nyaosorg/nyagos/issues/432
 [#433]: https://github.com/nyaosorg/nyagos/discussions/433
 [#434]: https://github.com/nyaosorg/nyagos/pull/434
