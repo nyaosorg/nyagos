@@ -3,7 +3,7 @@
 ビルド方法
 ----------
 
-Git, [Go 1.17~](http://golang.org), GNU Make が必要となります
+Git, [Go 1.20.8~](http://golang.org), GNU Make が必要となります
 
     git clone https://github.com/nyaosorg/nyagos
     cd nyagos
