@@ -90,7 +90,7 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 7. [Lua拡張](docs/07-LuaFunctions_ja.md)
 8. [アンインストール](docs/08-Uninstall_ja.md)
 9. [ビルド方法](docs/09-Build_ja.md)
-10. [SKKの設定](docs/10-SetupSKK_ja.md)
+10. [SKKの設定](docs/10-SetupSKK_ja.md) (v4.4.14以降)
 
 ライセンス
 ----------
