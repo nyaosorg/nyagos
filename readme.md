@@ -89,7 +89,8 @@ Contents
 6. [Substitution](docs/06-Substitution_en.md)
 7. [Lua functions extenteded by NYAGOS](docs/07-LuaFunctions_en.md)
 8. [Uninstall](docs/08-Uninstall_en.md)
-9. [How To Build](docs/09-Build_en.md)
+9. [How To build](docs/09-Build_en.md)
+10. [How to setup SKK](docs/10-SetupSKK_en.md)
 
 License
 -------
