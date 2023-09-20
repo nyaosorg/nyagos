@@ -59,13 +59,13 @@ func CmdSkk(args []any) []any {
 		var buffer strings.Builder
 		for _, value := range cfg.SystemJisyoPaths {
 			if buffer.Len() > 0 {
-				buffer.WriteByte(';')
+				buffer.WriteByte(os.PathListSeparator)
 			}
 			buffer.WriteString(value)
 		}
 		if cfg.UserJisyoPath != "" {
 			if buffer.Len() > 0 {
-				buffer.WriteByte(';')
+				buffer.WriteByte(os.PathListSeparator)
 			}
 			buffer.WriteString("user=")
 			buffer.WriteString(cfg.UserJisyoPath)
