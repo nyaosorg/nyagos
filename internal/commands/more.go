@@ -10,11 +10,11 @@ import (
 	"strings"
 
 	"github.com/mattn/go-isatty"
-	"github.com/mattn/go-runewidth"
 	"github.com/mattn/go-tty"
 
 	"github.com/nyaosorg/go-windows-mbcs"
 	"github.com/nyaosorg/nyagos/internal/nodos"
+	"github.com/nyaosorg/nyagos/internal/textwidth"
 )
 
 var bold = false
@@ -58,7 +58,7 @@ func splitLinesWithWidth(text string, screenWidth int) (lines []string) {
 		} else if c == '\x1B' {
 			ansiStrip = true
 		} else {
-			w1 := runewidth.RuneWidth(c)
+			w1 := textwidth.RuneWidth(c)
 			if w+w1 >= screenWidth {
 				lines = append(lines, buffer.String())
 				buffer.Reset()
