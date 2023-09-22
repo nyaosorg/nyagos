@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/nameutils"
 )
 
 func cmdBindkey(ctx context.Context, cmd Param) (int, error) {
@@ -13,7 +14,7 @@ func cmdBindkey(ctx context.Context, cmd Param) (int, error) {
 			cmd.Arg(0))
 		return 0, nil
 	}
-	err := readline.GlobalKeyMap.BindKeySymbol(cmd.Arg(1), cmd.Arg(2))
+	err := nameutils.BindKeySymbol(readline.GlobalKeyMap, cmd.Arg(1), cmd.Arg(2))
 	if err != nil {
 		return 1, err
 	}

@@ -13,6 +13,7 @@ import (
 
 	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/nameutils"
 
 	"github.com/nyaosorg/nyagos/internal/texts"
 )
@@ -74,7 +75,7 @@ func callKeyFunc(L Lua) int {
 		return stackRc
 	}
 	key := L.ToString(2)
-	function, err := readline.GetFunc(key)
+	function, err := nameutils.GetFunc(key)
 	if err != nil {
 		return lerror(L, err.Error())
 	}
@@ -200,14 +201,14 @@ func cmdBindKey(L Lua) int {
 	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
 	switch value := L.Get(-1).(type) {
 	case *lua.LFunction:
-		if err := readline.GlobalKeyMap.BindKeyFunc(key, &_KeyLuaFunc{value}); err != nil {
+		if err := nameutils.BindKeyFunc(readline.GlobalKeyMap, key, &_KeyLuaFunc{value}); err != nil {
 			return lerror(L, err.Error())
 		}
 		L.Push(lua.LTrue)
 		return 1
 	default:
 		val := L.ToString(-1)
-		err := readline.GlobalKeyMap.BindKeySymbol(key, val)
+		err := nameutils.BindKeySymbol(readline.GlobalKeyMap, key, val)
 		if err != nil {
 			return lerror(L, err.Error())
 		}
