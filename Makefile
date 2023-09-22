@@ -32,6 +32,9 @@ snapshot:
 	$(GO) fmt ./...
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 
+future:
+	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT) -tags=orgxwidth
+
 debug:
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT) -tags=debug
 
