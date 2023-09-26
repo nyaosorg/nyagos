@@ -21,5 +21,6 @@ How to setup SKK
 
 - You should the different path from other SKK applications for user dictionary because they are saved with UTF8.
 - `export=` is to share configuration for the child processes using the [go-readline-skk] library via the environment variable.
+- Wildcards can be used to specify file names for system dictionaries, but not for user dictionaries.
 
 [go-readline-skk]: https://github.com/nyaosorg/go-readline-skk

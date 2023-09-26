@@ -20,5 +20,6 @@ SKK のセットアップの仕方
 
 - ユーザ辞書は UTF8 で保存するので、他のアプリのものと違うものにしておいた方が安全です。
 - `export=` は go-readline-skk ライブラリを使う子プロセスで環境変数経由で設定を共用するために使います。
+- システム辞書のファイル名指定にはワイルドカードが使えますが、ユーザ辞書には使えません。
 
 [go-readline-skk]: https://github.com/nyaosorg/go-readline-skk
