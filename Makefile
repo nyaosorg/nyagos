@@ -23,10 +23,10 @@ ifndef GO
     GO:=$(shell $(WHICH) $(SUPPORTGO) 2>$(NUL) || echo go)
 endif
 
-NAME=$(notdir $(CURDIR))
-VERSION=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
-GOOPT=-ldflags "-s -w -X main.version=$(VERSION)"
-EXE=$(shell go env GOEXE)
+NAME:=$(notdir $(CURDIR))
+VERSION:=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
+GOOPT:=-ldflags "-s -w -X main.version=$(VERSION)"
+EXE:=$(shell go env GOEXE)
 
 snapshot:
 	$(GO) fmt ./...
