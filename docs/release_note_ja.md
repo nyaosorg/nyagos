@@ -13,6 +13,7 @@
 * [v4.4.13\_3] で、`more`, `nyagos.getkey`, `nyagos.getviewwidth` が Windows 7, 8.1 や WindowsServer 2008 で動かない問題を修正
 * `nyagos.default_prompt` や `nyagos.prompt` は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。([go-readline-ny.Editor] の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)
 * [#434] Lua で `nyagos.which('cp')` が機能しない問題を修正 (Thanks to [@ousttrue])
+* 全角空白(U+3000)の背景色が赤くなっていなかった不具合を修正
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpJa]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
