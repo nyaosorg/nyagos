@@ -38,7 +38,6 @@ func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
 		ansiReverse     = 7
 		ansiNotUnderine = 24
 		ansiNotReverse  = 27
-		ansiRedBack     = 41
 	)
 
 	newbits := s.bits &^ backSlash
@@ -67,27 +66,25 @@ func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
 	color := defaultColor
 
 	if unicode.IsControl(codepoint) {
-		color = readline.Blue
+		color = readline.SGR3(0, 1, 34) // Blue
 	} else if codepoint == '\u3000' {
-		color = readline.SGR1(ansiRedBack)
+		color = readline.SGR2(0, 41) // RedBack
 	} else if (bits & percentBit) != 0 {
-		color = readline.Cyan
+		color = readline.SGR3(0, 1, 36) // Cyan
 	} else if (bits & backquotedBit) != 0 {
-		color = readline.Red
+		color = readline.SGR3(0, 1, 31) // Red
 	} else if (bits & quotedBit) != 0 {
-		color = readline.Magenta
+		color = readline.SGR3(0, 1, 35) // Magenta
 	} else if (newbits & optionBit) != 0 {
-		color = readline.DarkYellow
+		color = readline.SGR2(0, 33) // DarkYellow
 	} else if codepoint == '&' || codepoint == '|' || codepoint == '<' || codepoint == '>' || (s.last == ' ' && codepoint == ';') {
-		color = readline.Green
+		color = readline.SGR3(0, 1, 32) // Green
 	}
 
 	if (newbits & whiteMarkerBit) != 0 {
 		color = color.Add(ansiReverse)
 	} else if (newbits & blackMarkerBit) != 0 {
 		color = color.Add(ansiUnderline)
-	} else {
-		color = color.Add(ansiNotReverse).Add(ansiNotUnderine)
 	}
 
 	s.bits = newbits
