@@ -1,6 +1,7 @@
 package functions
 
 import (
+	"fmt"
 	"os"
 	"strings"
 
@@ -52,6 +53,7 @@ func CmdSkk(args []any) []any {
 	}
 	skkMode, err := cfg.Setup()
 	if err != nil {
+		fmt.Fprintln(os.Stderr, err.Error())
 		return []any{nil, err.Error()}
 	}
 	onexit.Register(func() { skkMode.SaveUserJisyo() })
