@@ -5,10 +5,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/frame"
 	"io"
 	"os"
-	"regexp"
 )
-
-var rxAnsiEscCode = regexp.MustCompile("\x1b[^a-zA-Z]*[a-zA-Z]")
 
 func setTitle(w io.Writer, s string) {
 	fmt.Fprintf(w, "\x1B]0;%s\007", s)
