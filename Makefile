@@ -19,7 +19,7 @@ else
 endif
 
 ifndef GO
-    SUPPORTGO=go1.20.8
+    SUPPORTGO=go1.20.9
     GO:=$(shell $(WHICH) $(SUPPORTGO) 2>$(NUL) || echo go)
 endif
 
