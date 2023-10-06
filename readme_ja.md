@@ -59,9 +59,13 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 * 内蔵ls
   * カラーサポート(-oオプション)
   * ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示
+* [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
 * サポート OS
   * Windows 8.1以降
   * Linux (試験的サポート)
+
+[SKK]: https://ja.wikipedia.org/wiki/SKK
+[SKKSetUpJa]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
 
 ダウンロード
 ------------

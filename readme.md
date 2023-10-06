@@ -59,9 +59,13 @@ So, I created a new shell like below:
 * Built-in ls
   * color support (-o option)
   * print hard-link,symbolic-link and junction's target-path
+* Support Japanese input method editor: [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
 * Support OS:
   * Windows 8.1 or later
   * Linux (experimental)
+
+[SKK]: https://ja.wikipedia.org/wiki/SKK
+[SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
 
 Download Binary
 ---------------
