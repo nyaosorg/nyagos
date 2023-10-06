@@ -7,9 +7,10 @@ Oct 06, 2023
 The binaries of this version are built with Go 1.20.9.  
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
-* nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in %NYAGOSEXPANDWILDCARD%
+* nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in `%NYAGOSEXPANDWILDCARD%` (for example: `nyagos.env.NYAGOSEXPANDWILDCARD="gorename;gofmt"` )
 * [#432] When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
-* [#432] Add new option: `glob_slash`. When it is set, `/` is used on wildcard expansion.
+* [#432] Add new option: `glob_slash` to enable with the option of executable `--glob-slash`, calling lua function like `nyagos.option.glob_slash=true`, or executing command `set -o glob_slash`.
+. When it is set, `/` is used on wildcard expansion.
 * Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
 * Support Japanese input method editor: [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
 * Add the lua-function: `nyagos.atou_if_needed` that converts the string that is not valid utf8 one to utf8-string as the current codepage string.

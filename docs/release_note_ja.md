@@ -7,9 +7,9 @@ NYAGOS 4.4.14\_0
 当バージョンのバイナリは Go 1.20.9 でビルド。  
 サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
 
-* nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした。
+* nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした （例：`nyagos.env.NYAGOSEXPANDWILDCARD="gorename;gofmt"` ）
 * [#432] `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
-* [#432] 新オプション `glob_slash` を追加。設定されている時、ワイルドカード展開で `/` を使う
+* [#432] 新オプション `glob_slash` を追加（起動オプション：`--glob-slash`, lua関数： `nyagos.option.glob_slash=true`、コマンドライン：`set -o glob_slash`）。設定されている時、ワイルドカード展開で `/` を使う
 * Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
 * [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
 * 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
