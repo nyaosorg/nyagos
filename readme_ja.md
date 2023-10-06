@@ -151,6 +151,7 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 / [zztkm](https://github.com/zztkm)
 / [8exBCYJi5ATL](https://github.com/8exBCYJi5ATL)
 / [ousttrue](https://github.com/ousttrue)
+/ [kgasawa](https://github.com/kgasawa)
 
 開発者
 ------
