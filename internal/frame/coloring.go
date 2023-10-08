@@ -4,11 +4,13 @@ import (
 	"unicode"
 
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-skk"
 )
 
 var defaultColor = readline.SGR3(0, 1, 39)
 
 type _Coloring struct {
+	skkbits     skk.Coloring
 	bits        int
 	last        rune
 	defaultBits int
@@ -16,38 +18,21 @@ type _Coloring struct {
 
 func (s *_Coloring) Init() readline.ColorSequence {
 	s.bits = s.defaultBits
+	s.skkbits.Init()
 	return defaultColor
 }
 
 const (
-	backquotedBit  = 1
-	percentBit     = 2
-	quotedBit      = 4
-	optionBit      = 8
-	backSlash      = 16
-	whiteMarkerBit = 32
-	blackMarkerBit = 64
+	backquotedBit = 1
+	percentBit    = 2
+	quotedBit     = 4
+	optionBit     = 8
+	backSlash     = 16
 )
 
 func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
-	const (
-		markerWhite = '▽'
-		markerBlack = '▼'
-
-		ansiUnderline   = 4
-		ansiReverse     = 7
-		ansiNotUnderine = 24
-		ansiNotReverse  = 27
-	)
-
 	newbits := s.bits &^ backSlash
-	if codepoint == readline.CursorPositionDummyRune {
-		newbits &^= whiteMarkerBit | blackMarkerBit
-	} else if codepoint == markerWhite {
-		newbits |= whiteMarkerBit
-	} else if codepoint == markerBlack {
-		newbits |= blackMarkerBit
-	} else if codepoint == '`' {
+	if codepoint == '`' {
 		newbits ^= backquotedBit
 	} else if codepoint == '%' {
 		newbits ^= percentBit
@@ -81,11 +66,7 @@ func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
 		color = readline.SGR3(0, 1, 32) // Green
 	}
 
-	if (newbits & whiteMarkerBit) != 0 {
-		color = color.Add(ansiReverse)
-	} else if (newbits & blackMarkerBit) != 0 {
-		color = color.Add(ansiUnderline)
-	}
+	color = color.Chain(s.skkbits.Next(codepoint))
 
 	s.bits = newbits
 	s.last = codepoint
