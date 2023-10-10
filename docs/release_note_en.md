@@ -1,5 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+The binaries of this version are built with Go 1.20.10
+
 - Fix: manually input inverted triangles were recognized as conversion markers
 - Add the following the romaji-kana conversions:
     - `z,`→`‥`, `z-`→`～`, `z.`→`…`, `z/`→`・`, `z[`→`『`, `z]`→`』`,
