@@ -38,8 +38,13 @@ local function save_subcommands_cache(fname,list)
     if not fd then
         return
     end
-    for i=1,#list do
-        fd:write(list[i].."\n")
+    -- make to unique list
+    local hash = {}
+    for _,value in ipairs(list) do
+        hash[value] = true
+    end
+    for key,_ in pairs(hash) do
+        fd:write(key.."\n")
     end
     fd:close()
 end
