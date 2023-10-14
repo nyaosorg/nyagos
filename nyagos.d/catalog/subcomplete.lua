@@ -49,9 +49,8 @@ local function save_subcommands_cache(fname,list)
     fd:close()
 end
 
-
-local function update_cache()
-    -- git
+local function update_cache_git_gh()
+    -- git/hub command
     share.maincmds["git"] = load_subcommands_cache("git-subcommands.txt")
     share.maincmds["hub"] = load_subcommands_cache("hub-subcommands.txt")
     if not share.maincmds["git"] then
@@ -128,7 +127,9 @@ local function update_cache()
             share.maincmds = maincmds
         end
     end
+end
 
+local function update_cache_vcs()
     -- Subversion
     share.maincmds["svn"] = load_subcommands_cache("svn-subcommands.txt")
     if (not share.maincmds["svn"]) and nyagos.which("svn.exe") then
@@ -169,6 +170,72 @@ local function update_cache()
             end
         end
     end
+end
+
+local function update_cache_windows_package_manager()
+    -- scoop
+    share.maincmds["scoop"] = load_subcommands_cache("scoop-subcommands.txt")
+    if (not share.maincmds["scoop"]) and nyagos.which("scoop.exe") then
+        local fd=io.popen("scoop help", "r")
+        if fd then
+            local list = {}
+            for line in fd:lines() do
+                local m=string.match(line,"^(%w+)%s+%w+")
+                if m then
+                    list[#list+1] = m
+                end
+            end
+            fd:close()
+            if #list >= 1 then
+                share.maincmds["scoop"] = list
+                save_subcommands_cache("scoop-subcommands.txt", list)
+            end
+        end
+    end
+
+    -- chocolatey
+    share.maincmds["choco"] = load_subcommands_cache("choco-subcommands.txt")
+    if (not share.maincmds["choco"]) and nyagos.which("choco.exe") then
+        local fd=io.popen("choco -? 2>nul", "r")
+        if fd then
+            local list = {}
+            local startflag = false
+            local flagsfound=false
+            for line in fd:lines() do
+                if not flagsfound then
+                    if string.match(line,"Commands") then
+                        startflag = true
+                    end
+                    if string.match(line,"How To Pass Options / Switches") then
+                        flagsfound = true
+                    end
+                    if startflag then
+                        local m=string.match(line,"^%s+%*%s+(%w+)%s+%-")
+                        if m then
+                            list[#list+1] = m
+                        end
+                    end
+                end
+            end
+
+            fd:close()
+            if #list >= 1 then
+                share.maincmds["choco"] = list
+                save_subcommands_cache("choco-subcommands.txt", list)
+            end
+        end
+    end
+    share.maincmds["chocolatey"] = share.maincmds["choco"]
+end
+
+local function update_cache()
+    -- git/hub command
+    -- gh command
+    update_cache_git_gh()
+
+    -- Subversion
+    -- Mercurial
+    update_cache_vcs()
 
     -- Rclone
     share.maincmds["rclone"] = load_subcommands_cache("rclone-subcommands.txt")
@@ -232,58 +299,8 @@ local function update_cache()
     }
 
     -- scoop
-    share.maincmds["scoop"] = load_subcommands_cache("scoop-subcommands.txt")
-    if (not share.maincmds["scoop"]) and nyagos.which("scoop.exe") then
-        local fd=io.popen("scoop help", "r")
-        if fd then
-            local list = {}
-            for line in fd:lines() do
-                local m=string.match(line,"^(%w+)%s+%w+")
-                if m then
-                    list[#list+1] = m
-                end
-            end
-            fd:close()
-            if #list >= 1 then
-                share.maincmds["scoop"] = list
-                save_subcommands_cache("scoop-subcommands.txt", list)
-            end
-        end
-    end
-
     -- chocolatey
-    share.maincmds["choco"] = load_subcommands_cache("choco-subcommands.txt")
-    if (not share.maincmds["choco"]) and nyagos.which("choco.exe") then
-        local fd=io.popen("choco -? 2>nul", "r")
-        if fd then
-            local list = {}
-            local startflag = false
-            local flagsfound=false
-            for line in fd:lines() do
-                if not flagsfound then
-                    if string.match(line,"Commands") then
-                        startflag = true
-                    end
-                    if string.match(line,"How To Pass Options / Switches") then
-                        flagsfound = true
-                    end
-                    if startflag then
-                        local m=string.match(line,"^%s+%*%s+(%w+)%s+%-")
-                        if m then
-                            list[#list+1] = m
-                        end
-                    end
-                end
-            end
-
-            fd:close()
-            if #list >= 1 then
-                share.maincmds["choco"] = list
-                save_subcommands_cache("choco-subcommands.txt", list)
-            end
-        end
-    end
-    share.maincmds["chocolatey"] = share.maincmds["choco"]
+    update_cache_windows_package_manager()
 
     for cmd,subcmdData in pairs(share.maincmds or {}) do
         if not nyagos.complete_for[cmd] then
