@@ -2,6 +2,7 @@
 
 The binaries of this version are built with Go 1.20.10
 
+- Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
 - Fix: manually input inverted triangles were recognized as conversion markers
 - Add the following the romaji-kana conversions:
     - `z,`→`‥`, `z-`→`～`, `z.`→`…`, `z/`→`・`, `z[`→`『`, `z]`→`』`,
