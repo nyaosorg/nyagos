@@ -291,6 +291,32 @@ local function update_cache()
         end
     end
 
+    -- curl command
+    share.maincmds["curl"] = load_subcommands_cache("curl-subcommands.txt")
+    if (not share.maincmds["curl"]) and nyagos.which("curl.exe") then
+        local fd=io.popen("curl --help all 2>nul", "r")
+        if fd then
+            local list = {}
+            for line in fd:lines() do
+              local m,n=string.match(line, "^%s+([-][A-Za-z]+),%s+([-][-][-A-Za-z0-9.]+).*$")
+              if m and n then
+                list[#list+1] = m
+                list[#list+1] = n
+              end
+              local o=string.match(line, "^%s+([-][-][-A-Za-z0-9.]+).*$")
+              if o then
+                list[#list+1] = o
+              end
+            end
+
+            fd:close()
+            if #list >= 1 then
+                share.maincmds["curl"] = list
+                save_subcommands_cache("curl-subcommands.txt",list)
+            end
+        end
+    end
+
     -- golang
     share.maincmds["go"] = {
         "bug", "build", "clean", "doc", "env", "fix",
