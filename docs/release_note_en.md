@@ -17,6 +17,7 @@ The binaries of this version are built with Go 1.20.10
     - `pya`→`ぴゃ` or `ピャ` ... `pyo`→`ぴょ` or `ピョ`
     - `tha`→`てぁ` or `テァ` ... `tho`→`てょ` or `テョ`
 - Implement `q` that convert mutually between Hiragana and Katakana during conversion.
+- Fix: when `use "subcomplete.lua"` is enabled, the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
 
 NYAGOS 4.4.14\_0
 ================
