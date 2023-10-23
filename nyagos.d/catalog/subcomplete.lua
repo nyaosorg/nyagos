@@ -175,7 +175,7 @@ end
 local function update_cache_windows_package_manager()
     -- scoop
     share.maincmds["scoop"] = load_subcommands_cache("scoop-subcommands.txt")
-    if (not share.maincmds["scoop"]) and nyagos.which("scoop.exe") then
+    if (not share.maincmds["scoop"]) and nyagos.which("scoop.cmd") then
         local fd=io.popen("scoop help", "r")
         if fd then
             local list = {}
