@@ -2,22 +2,27 @@
 
 The binaries of this version are built with Go 1.20.10
 
-- Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
-- Fix: manually input inverted triangles were recognized as conversion markers
-- Add the following the romaji-kana conversions:
-    - `z,`→`‥`, `z-`→`～`, `z.`→`…`, `z/`→`・`, `z[`→`『`, `z]`→`』`,
-        `z1`→`○`, `z2`→`▽`, `z3`→`△`, `z4`→`□`, `z5`→`◇`,
-        `z6`→`☆`, `z7`→`◎`, `z8`→`〔`, `z9`→`〕`, `z0`→`∞`,
-        `z^`→`※`, `z\\`→`￥`, `z@`→`〃`, `z;`→`゛`, `z:`→`゜` ,
-        `z!`→`●`, `z"`→`▼`, `z#`→`▲`, `z$`→`■ `, `z%`→`◆`,
-        `z&`→`★`, `z'`→`♪`, `z(`→`【`, `z)`→`】`, `z=`→`≒`,
-        `z~`→`≠`, `z|`→`〒`, ``z` ``→`“`, `z+`→`±`, `z*`→`×`,
-        `z<`→`≦`, `z>`→`≧`, `z?`→`÷`, `z_`→`―`,
-    - `bya`→`びゃ` or `ビャ` ... `byo`→`びょ` or `ビョ`
-    - `pya`→`ぴゃ` or `ピャ` ... `pyo`→`ぴょ` or `ピョ`
-    - `tha`→`てぁ` or `テァ` ... `tho`→`てょ` or `テョ`
-- Implement `q` that convert mutually between Hiragana and Katakana during conversion.
-- Fix: when `use "subcomplete.lua"` is enabled, the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
+- [SKK]
+    - Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
+    - Fix: manually input inverted triangles were recognized as conversion markers
+    - Add the following the romaji-kana conversions:
+        - `z,`→`‥`, `z-`→`～`, `z.`→`…`, `z/`→`・`, `z[`→`『`, `z]`→`』`,
+            `z1`→`○`, `z2`→`▽`, `z3`→`△`, `z4`→`□`, `z5`→`◇`,
+            `z6`→`☆`, `z7`→`◎`, `z8`→`〔`, `z9`→`〕`, `z0`→`∞`,
+            `z^`→`※`, `z\\`→`￥`, `z@`→`〃`, `z;`→`゛`, `z:`→`゜` ,
+            `z!`→`●`, `z"`→`▼`, `z#`→`▲`, `z$`→`■ `, `z%`→`◆`,
+            `z&`→`★`, `z'`→`♪`, `z(`→`【`, `z)`→`】`, `z=`→`≒`,
+            `z~`→`≠`, `z|`→`〒`, ``z` ``→`“`, `z+`→`±`, `z*`→`×`,
+            `z<`→`≦`, `z>`→`≧`, `z?`→`÷`, `z_`→`―`,
+        - `bya`→`びゃ` or `ビャ` ... `byo`→`びょ` or `ビョ`
+        - `pya`→`ぴゃ` or `ピャ` ... `pyo`→`ぴょ` or `ピョ`
+        - `tha`→`てぁ` or `テァ` ... `tho`→`てょ` or `テョ`
+    - Implement `q` that convert mutually between Hiragana and Katakana during conversion.
+- Sub commands completion (When `use "subcomplete.lua"` is enabled)
+    - Fix: the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
+    - [#436] Support completion for options of curl.
+
+[#436]: https://github.com/nyaosorg/nyagos/pull/436
 
 NYAGOS 4.4.14\_0
 ================
