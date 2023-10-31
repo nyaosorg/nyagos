@@ -495,4 +495,13 @@ nyagos.skk{
 }
 ```
 
+### `nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)`
+
+管理者モードで実行ファイルを起動します。
+
+- `ACTION` … `runas` を指定します(他に `open`, `properties` などが選択できます)
+- `PATH` … 起動する実行ファイルのパスを指定します
+- `PARAM` … 起動コマンドへのパラメータを指定します
+- `DIRECTORY` … コマンドを実行する時のカレントディレクトリを指定します
+
 <!-- set:fenc=utf8: -->

@@ -470,3 +470,14 @@ nyagos.skk{
     ctrlj="C-J", -- key to switch Japanese input mode (default:ctrl-j)
 }
 ```
+
+### `nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)`
+
+Start an executable as administrator-mode
+
+- `ACTION` … `"runas"`, `"open"`, or `"properties"`
+- `PATH` … the path of the executable to start
+- `PARAM` … the parameter for the executable
+- `DIRECTORY` … the working directory
+
+<!-- set:fenc=utf8: -->
