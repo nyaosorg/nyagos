@@ -20,7 +20,7 @@ The binaries of this version are built with Go 1.20.10
     - Implement `q` that convert mutually between Hiragana and Katakana during conversion.
 - Sub commands completion (When `use "subcomplete.lua"` is enabled)
     - Fix: the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
-    - [#436] Support completion for options of curl.
+    - [#436] Support completion for options of curl. ( Thanks to @tsuyoshicho )
 - Documents
     - docs/07-LuaFunctions_\*.md: wrote about `nyagos.shellexecute` (forgotten!)
 
