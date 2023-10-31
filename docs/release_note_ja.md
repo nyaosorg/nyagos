@@ -21,6 +21,9 @@
 - サブコマンド補完(`use "subcomplete.lua"`)関連
     - scoop.cmd であるべき scoop の実行ファイル名が scoop.exe になっていてサブコマンド名補完できない問題を修正した
     - [#436] curl のオプション補完をサポート ( Thanks to @tsuyoshicho )
+- ドキュメント
+    - docs/07-LuaFunctions_\*.md: `nyagos.shellexecute` について記述 (忘れてた!)
+
 
 [#436]: https://github.com/nyaosorg/nyagos/pull/436
 
