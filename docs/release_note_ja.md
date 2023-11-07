@@ -1,6 +1,6 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-当バージョンのバイナリは Go 1.20.10 でビルドしたものになります
+当バージョンのバイナリは Go 1.20.11 でビルドしたものになります
 
 - SKK関連
     - `UTta`,`UTTa` が`打った`ではなく`打っtあ`,`▽う*t*t` になってしまう不具合を修正

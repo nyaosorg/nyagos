@@ -1,6 +1,6 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-The binaries of this version are built with Go 1.20.10
+The binaries of this version are built with Go 1.20.11
 
 - [SKK]
     - Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
