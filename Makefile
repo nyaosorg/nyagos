@@ -1,4 +1,3 @@
-PROMPT=$$$$$$S
 ifeq ($(OS),Windows_NT)
     SHELL=CMD.EXE
     NUL=NUL
