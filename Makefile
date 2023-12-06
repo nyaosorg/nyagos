@@ -68,18 +68,18 @@ get:
 	$(GO) get -u
 	$(GO) mod tidy
 
-_package:
+_dist:
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 	zip -9 "nyagos-$(VERSION)-$(GOOS)-$(GOARCH).zip" \
 	    "nyagos$(EXE)" .nyagos _nyagos LICENSE \
 	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua" \
 	    $(FILES)
 
-package:
+dist:
 	cd Etc && $(GO) generate
-	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _package "FILES=Etc/*.ico makeicon.cmd"
-	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _package "FILES=Etc/*.ico makeicon.cmd"
-	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _package
+	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _dist "FILES=Etc/*.ico makeicon.cmd"
+	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _dist "FILES=Etc/*.ico makeicon.cmd"
+	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
 release:
 	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
@@ -105,4 +105,4 @@ $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	$(SUPPORTGO) download
 
-.PHONY: snapshot debug test tstlua clean get _package package release install
+.PHONY: snapshot debug test tstlua clean get _dist dist release install
