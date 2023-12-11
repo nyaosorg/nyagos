@@ -308,6 +308,19 @@ func CmdGetHistory(args []any) []any {
 	return []any{frame.DefaultHistory.Len()}
 }
 
+func CmdGetHistoryDetail(args []any) []any {
+	if frame.DefaultHistory == nil {
+		return []any{}
+	}
+	if len(args) >= 1 {
+		if n, ok := toNumber(args[len(args)-1]); ok {
+			h := frame.DefaultHistory.GetAt(n)
+			return []any{h.Text, h.Dir, h.Stamp.Format("2006-01-02T15:04:05"), h.Pid}
+		}
+	}
+	return []any{frame.DefaultHistory.Len()}
+}
+
 func CmdLenHistory(args []any) []any {
 	if frame.DefaultHistory == nil {
 		return []any{}
