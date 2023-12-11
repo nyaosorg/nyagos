@@ -238,6 +238,10 @@ change the title of the terminal-window with the second parameter.
 
 Get the n-th command-line history. When N < 0, last (-N)-th history.
 
+### `text,dir,datetime,pid = nyagos.gethistorydetail(N)`
+
+Get the text, the directory, the timestamp, and the pid of the Nth history.
+
 ### `nyagos.gethistory()` and `#nyagos.history`
 
 Get the count of the command-line history.
