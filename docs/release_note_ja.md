@@ -1,6 +1,6 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-当バージョンのバイナリは Go 1.20.11 でビルドしたものになります
+当バージョンのバイナリは Go 1.20.12 でビルドしたものになります
 
 * ヒストリのテキスト、ディレクトリ、日時、プロセスIDを返す Lua 関数 nyagos.gethistorydetail(N) を実装
 * SKK関連

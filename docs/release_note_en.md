@@ -1,6 +1,6 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-The binaries of this version are built with Go 1.20.11
+The binaries of this version are built with Go 1.20.12
 
 * Implement the lua function: nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
 * [SKK]
