@@ -48,25 +48,23 @@ func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
 		newbits |= backSlash
 	}
 	bits := s.bits | newbits
-	color := defaultColor
+	color := s.skkbits.Next(codepoint)
 
 	if unicode.IsControl(codepoint) {
-		color = readline.SGR3(0, 1, 34) // Blue
+		color = color.Add(1).Add(34) // Blue
 	} else if codepoint == '\u3000' {
-		color = readline.SGR2(0, 41) // RedBack
+		color = color.Add(41) // RedBack
 	} else if (bits & percentBit) != 0 {
-		color = readline.SGR3(0, 1, 36) // Cyan
+		color = color.Add(1).Add(36) // Cyan
 	} else if (bits & backquotedBit) != 0 {
-		color = readline.SGR3(0, 1, 31) // Red
+		color = color.Add(1).Add(31) // Red
 	} else if (bits & quotedBit) != 0 {
-		color = readline.SGR3(0, 1, 35) // Magenta
+		color = color.Add(1).Add(35) // Magenta
 	} else if (newbits & optionBit) != 0 {
-		color = readline.SGR2(0, 33) // DarkYellow
+		color = color.Add(33) // DarkYellow
 	} else if codepoint == '&' || codepoint == '|' || codepoint == '<' || codepoint == '>' || (s.last == ' ' && codepoint == ';') {
-		color = readline.SGR3(0, 1, 32) // Green
+		color = color.Add(1).Add(32) // Green
 	}
-
-	color = color.Chain(s.skkbits.Next(codepoint))
 
 	s.bits = newbits
 	s.last = codepoint
