@@ -242,6 +242,10 @@ Get the n-th command-line history. When N < 0, last (-N)-th history.
 
 Get the text, the directory, the timestamp, and the pid of the Nth history.
 
+### `nyagos.pushhistory(cmdline,dir,"2006-01-02T15:04:05",123)`
+
+Add an entry of history. It requires the text of the commandline, the current directory, the date and time, and process-id.
+
 ### `nyagos.gethistory()` and `#nyagos.history`
 
 Get the count of the command-line history.
