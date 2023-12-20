@@ -2,7 +2,9 @@
 
 The binaries of this version are built with Go 1.20.12
 
-* Implement the lua function: nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
+* Implement the lua functions
+    * nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
+    * nyagos.pushhistory() that appends a new entry
 * [SKK]
     * Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
     * Fix: manually input inverted triangles were recognized as conversion markers
