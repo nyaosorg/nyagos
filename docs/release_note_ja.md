@@ -6,6 +6,7 @@
     * nyagos.gethistorydetail(): テキストだけでなく、ディレクトリ、日時、プロセスIDを得る
     * nyagos.pushhistory(): ヒストリを追加する
     * nyaogs.pophistory(): 最後のエントリを削除して、その情報を返す.
+* .nyagos: `%NO_COLOR%` が定義されていたら、プロンプトの色を無効化
 * SKK関連
     * `UTta`,`UTTa` が`打った`ではなく`打っtあ`,`▽う*t*t` になってしまう不具合を修正
     * 手入力した逆三角形が変換マーカーと認識される問題を修正した
