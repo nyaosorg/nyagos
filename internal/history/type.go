@@ -46,6 +46,16 @@ func (c *Container) Push(line string) {
 	c.rows = append(c.rows, Line{Text: line})
 }
 
+func (c *Container) Pop() *Line {
+	i := len(c.rows) - 1
+	if i < 0 {
+		return nil
+	}
+	entry := c.rows[i]
+	c.rows = c.rows[:i]
+	return &entry
+}
+
 func (c *Container) IgnorePush(newvalue bool) bool {
 	rc := c.off
 	c.off = newvalue
