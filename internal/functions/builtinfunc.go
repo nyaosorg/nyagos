@@ -12,6 +12,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"time"
 
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-tty"
@@ -24,6 +25,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/frame"
+	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
@@ -319,6 +321,59 @@ func CmdGetHistoryDetail(args []any) []any {
 		}
 	}
 	return []any{frame.DefaultHistory.Len()}
+}
+
+type errHistory struct {
+	index   int
+	message string
+}
+
+func (e *errHistory) Error() string {
+	return fmt.Sprintf("[%d] %s", e.index, e.message)
+}
+
+func historyFromArgs(args []any) (*history.Line, error) {
+	if len(args) != 4 {
+		return nil, errors.New("too few or too many arguments")
+	}
+	text, ok := args[0].(string)
+	if !ok {
+		return nil, &errHistory{index: 0, message: "expected string for commandline"}
+	}
+	dir, ok := args[1].(string)
+	if !ok {
+		return nil, &errHistory{index: 1, message: "expected string for directory"}
+	}
+	stampStr, ok := args[2].(string)
+	if !ok {
+		return nil, &errHistory{index: 2, message: "expected string"}
+	}
+	stamp, err := time.Parse("2006-01-02T15:04:05", stampStr)
+	if err != nil {
+		return nil, &errHistory{index: 2, message: err.Error()}
+	}
+	pid, ok := toNumber(args[3])
+	if !ok {
+		return nil, &errHistory{index: 3, message: "expected number for process id"}
+	}
+	return &history.Line{
+		Text:  text,
+		Dir:   dir,
+		Stamp: stamp,
+		Pid:   pid,
+	}, nil
+}
+
+func CmdPushHistory(args []any) []any {
+	if frame.DefaultHistory == nil {
+		return []any{nil, "history is not initialized, yet"}
+	}
+	entry, err := historyFromArgs(args)
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	frame.DefaultHistory.PushLine(*entry)
+	return []any{true}
 }
 
 func CmdLenHistory(args []any) []any {
