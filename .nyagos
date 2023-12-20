@@ -19,7 +19,10 @@ nyagos.prompt = function(this)
         wd = "~" .. wd:sub(home_len+1)
     end
     local title = wd .. " - NYAGOS"
-    if nyagos.elevated() then
+    local no_color = nyagos.env.NO_COLOR
+    if no_color and no_color ~= '' then
+        return nyagos.default_prompt(this,title)
+    elseif nyagos.elevated() then
         return nyagos.default_prompt('$e[49;31;1m'..this..'$e[37;1m',title)
     else
         return nyagos.default_prompt('$e[49;36;1m'..this..'$e[37;1m',title)
