@@ -2,8 +2,6 @@ package functions
 
 var Table = map[string]func([]interface{}) []interface{}{
 	"access":             CmdAccess,
-	"envadd":             CmdEnvAdd,
-	"envdel":             CmdEnvDel,
 	"atou":               CmdAtoU,
 	"atou_if_needed":     CmdAnsiToUtf8IfNeeded,
 	"bitand":             CmdBitAnd,
@@ -11,7 +9,10 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"chdir":              CmdChdir,
 	"commonprefix":       CmdCommonPrefix,
 	"complete_for_files": CmdCompleteForFiles,
+	"dirname":            CmdDirName,
 	"elevated":           CmdElevated,
+	"envadd":             CmdEnvAdd,
+	"envdel":             CmdEnvDel,
 	"fields":             CmdFields,
 	"getenv":             CmdGetEnv,
 	"gethistory":         CmdGetHistory,
@@ -22,7 +23,6 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"glob":               CmdGlob,
 	"msgbox":             CmdMsgBox,
 	"pathjoin":           CmdPathJoin,
-	"dirname":            CmdDirName,
 	"resetcharwidth":     CmdResetCharWidth,
 	"setenv":             CmdSetEnv,
 	"setrunewidth":       CmdSetRuneWidth,
