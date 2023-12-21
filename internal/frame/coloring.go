@@ -1,6 +1,7 @@
 package frame
 
 import (
+	"os"
 	"unicode"
 
 	"github.com/nyaosorg/go-readline-ny"
@@ -31,6 +32,9 @@ const (
 )
 
 func (s *_Coloring) Next(codepoint rune) readline.ColorSequence {
+	if os.Getenv("NO_COLOR") != "" {
+		return readline.ColorSequence(0)
+	}
 	newbits := s.bits &^ backSlash
 	if codepoint == '`' {
 		newbits ^= backquotedBit
