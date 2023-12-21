@@ -585,6 +585,9 @@ func Ls(ctx context.Context, args []string, stdout io.Writer, stderr io.Writer, 
 		flag |= optionOne
 		flag &^= optionColor
 	}
+	if os.Getenv("NO_COLOR") != "" {
+		flag &^= optionColor
+	}
 
 	// cmd.Term() is colorableTerminal which is not fast.
 	if (flag & optionColor) == 0 {
