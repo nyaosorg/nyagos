@@ -6,7 +6,7 @@ The binaries of this version are built with Go 1.20.12
     * nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
     * nyagos.pushhistory() that appends a new entry
     * nyagos.pophistory() that removes the last entry and returns its details
-* .nyagos: when `%NO_COLOR%` is defined, disable the color of the prompt.
+* When `%NO_COLOR%` is defined, disable the color of the prompt and the command-line
 * [SKK]
     * Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
     * Fix: manually input inverted triangles were recognized as conversion markers
