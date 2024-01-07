@@ -7,6 +7,9 @@ The binaries of this version are built with Go 1.20.12
     * nyagos.pushhistory() that appends a new entry
     * nyagos.pophistory() that removes the last entry and returns its details
 * When `%NO_COLOR%` is defined, disable the color of the prompt, the command-line, and ls command
+* Add `nyagos.d/catalog` to `package.path`. The function `require` can be used as same as `use`.
+    * The filename extension `.lua` must not be appended to the module name on `require`.
+    * `use` is now deprecated.
 * [SKK]
     * Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
     * Fix: manually input inverted triangles were recognized as conversion markers
@@ -23,7 +26,7 @@ The binaries of this version are built with Go 1.20.12
         * `pya`→`ぴゃ` or `ピャ` ... `pyo`→`ぴょ` or `ピョ`
         * `tha`→`てぁ` or `テァ` ... `tho`→`てょ` or `テョ`
     * Implement `q` that convert mutually between Hiragana and Katakana during conversion.
-* Sub commands completion (When `use "subcomplete.lua"` is enabled)
+* Sub commands completion (When `require "subcomplete"` is enabled)
     * Fix: the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
     * [#436] Support completion for options of curl. ( Thanks to @tsuyoshicho )
 * Documents

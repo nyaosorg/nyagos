@@ -7,6 +7,9 @@
     * nyagos.pushhistory(): ヒストリを追加する
     * nyaogs.pophistory(): 最後のエントリを削除して、その情報を返す.
 * `%NO_COLOR%` が定義されていたら、プロンプト・コマンドライン・ls の着色を無効化
+* Luaの標準検索パス: `package.path` に `nyagos.d/catalog` を追加し、`require` を `use` と同様に使えるようにした
+    - ただし、 `require` では拡張子`.lua` をつけてはいけない
+    - `use` は非推奨関数とする
 * SKK関連
     * `UTta`,`UTTa` が`打った`ではなく`打っtあ`,`▽う*t*t` になってしまう不具合を修正
     * 手入力した逆三角形が変換マーカーと認識される問題を修正した
@@ -23,7 +26,7 @@
         * `pya`→`ぴゃ` or `ピャ` ... `pyo`→`ぴょ` or `ピョ`
         * `tha`→`てぁ` or `テァ` ... `tho`→`てょ` or `テョ`
     * 変換中の q で、入力済みの平仮名・片仮名を相互変換する機能を実装
-* サブコマンド補完(`use "subcomplete.lua"`)関連
+* サブコマンド補完(`require "subcomplete"`)関連
     * scoop.cmd であるべき scoop の実行ファイル名が scoop.exe になっていてサブコマンド名補完できない問題を修正した
     * [#436] curl のオプション補完をサポート ( Thanks to @tsuyoshicho )
 * ドキュメント
