@@ -3,6 +3,15 @@ if not nyagos then
     os.exit()
 end
 
+do
+    local newpath = string.gsub(nyagos.exe,"%.[eE][xX][eE]$",".d\\catalog\\?.lua")
+    if package.path and package.path ~= "" then
+        package.path = package.path .. ";" .. newpath
+    else
+        package.path = newpath
+    end
+end
+
 function use(name)
     local catalog_d = string.gsub(nyagos.exe,"%.[eE][xX][eE]$",".d\\catalog")
     name = string.gsub(name,"%.lua$","") .. ".lua"
