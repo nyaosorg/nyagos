@@ -43,8 +43,7 @@ install:
 build_script:
   - mingw32-make
   - mingw32-make test
-  - mingw32-make install
-
+  - ps: .\install.ps1 $env:INSTALLDIR
 
 #---------------------------------#
 #      artifacts configuration    #
