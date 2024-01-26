@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-当バージョンのバイナリは Go 1.20.12 でビルドしたものになります
+当バージョンのバイナリは Go 1.20.13 でビルドしました。  
+サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
 
 * ヒストリ関連の Lua 関数を追加
     * nyagos.gethistorydetail(): テキストだけでなく、ディレクトリ、日時、プロセスIDを得る

@@ -1,6 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
-The binaries of this version are built with Go 1.20.12
+The binaries of this version are built with Go 1.20.13  
+They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
 * Implement the lua functions
     * nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
