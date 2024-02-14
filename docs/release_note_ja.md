@@ -3,15 +3,25 @@
 当バージョンのバイナリは Go 1.20.14 でビルドしました。  
 サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
 
+## 廃止・非推奨
+
+* Lua 文法ではない設定ファイル `_nyagos` は非推奨とし添付をやめた。使用されている場合は実行するが、警告を表示するようにした
+* `use` は非推奨とした
+    * `use "mmmm.lua"` のかわりに `require "mmmm"` を使用してください
+    * これに伴い、Luaの標準検索パス: `package.path` に `nyagos.d/catalog` を追加しました
+
+## 新機能
+
 * ヒストリ関連の Lua 関数を追加
     * nyagos.gethistorydetail(): テキストだけでなく、ディレクトリ、日時、プロセスIDを得る
     * nyagos.pushhistory(): ヒストリを追加する
     * nyaogs.pophistory(): 最後のエントリを削除して、その情報を返す.
 * `%NO_COLOR%` が定義されていたら、プロンプト・コマンドライン・ls の着色を無効化
-* Luaの標準検索パス: `package.path` に `nyagos.d/catalog` を追加し、`require` を `use` と同様に使えるようにした
-    - ただし、 `require` では拡張子`.lua` をつけてはいけない
-    - `use` は非推奨関数とする
-* Lua 文法ではない設定ファイル `_nyagos` は非推奨とし添付をやめた。使用されている場合は実行するが、警告を表示するようにした
+* サブコマンド補完(`require "subcomplete"`)関連
+    * [#436] curl のオプション補完をサポート ( Thanks to [@tsuyoshicho] )
+
+## 不具合修正
+
 * SKK関連
     * `UTta`,`UTTa` が`打った`ではなく`打っtあ`,`▽う*t*t` になってしまう不具合を修正
     * 手入力した逆三角形が変換マーカーと認識される問題を修正した
@@ -30,11 +40,13 @@
     * 変換中の q で、入力済みの平仮名・片仮名を相互変換する機能を実装
 * サブコマンド補完(`require "subcomplete"`)関連
     * scoop.cmd であるべき scoop の実行ファイル名が scoop.exe になっていてサブコマンド名補完できない問題を修正した
-    * [#436] curl のオプション補完をサポート ( Thanks to @tsuyoshicho )
-* ドキュメント
-    * docs/07-LuaFunctions_\*.md: `nyagos.shellexecute` について記述 (忘れてた!)
+
+## ドキュメント
+
+* docs/07-LuaFunctions_\*.md: `nyagos.shellexecute` について記述 (忘れてた!)
 
 [#436]: https://github.com/nyaosorg/nyagos/pull/436
+[@tsuyoshicho]: https://github.com/tsuyoshicho
 
 NYAGOS 4.4.14\_0
 ================

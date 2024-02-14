@@ -3,15 +3,29 @@
 The binaries of this version are built with Go 1.20.14  
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
+## Deprecations
+
+* The configuration file `_nyagos`, which is not a Lua syntax, is deprecated and no longer attached. When `_nyagos` is used, execute it, but print warning.
+* The Lua function: `use` is now deprecated.
+    * Use `require "mmmm"` instead of `use "mmmm.lua"`
+    * Add `nyagos.d/catalog` to `package.path` of the lua language standard.
+
+## New features
+
 * Implement the lua functions
     * nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
     * nyagos.pushhistory() that appends a new entry
     * nyagos.pophistory() that removes the last entry and returns its details
 * When `%NO_COLOR%` is defined, disable the color of the prompt, the command-line, and ls command
-* Add `nyagos.d/catalog` to `package.path`. The function `require` can be used as same as `use`.
-    * The filename extension `.lua` must not be appended to the module name on `require`.
-    * `use` is now deprecated.
-* The configuration file `_nyagos`, which is not a Lua syntax, is deprecated and no longer attached. When `_nyagos` is used, execute it, but print warning.
+
+* Sub commands completion (When `require "subcomplete"` is enabled)
+    * [#436] Support completion for options of curl. ( Thanks to [@tsuyoshicho] )
+
+[#436]: https://github.com/nyaosorg/nyagos/pull/436
+[@tsuyoshicho]: https://github.com/tsuyoshicho
+
+## Fixed bugs
+
 * [SKK]
     * Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
     * Fix: manually input inverted triangles were recognized as conversion markers
@@ -30,9 +44,10 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
     * Implement `q` that convert mutually between Hiragana and Katakana during conversion.
 * Sub commands completion (When `require "subcomplete"` is enabled)
     * Fix: the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
-    * [#436] Support completion for options of curl. ( Thanks to @tsuyoshicho )
-* Documents
-    * docs/07-LuaFunctions_\*.md: wrote about `nyagos.shellexecute` (forgotten!)
+
+## Documents
+
+* docs/07-LuaFunctions_\*.md: wrote about `nyagos.shellexecute` (forgotten!)
 
 [#436]: https://github.com/nyaosorg/nyagos/pull/436
 
