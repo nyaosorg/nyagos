@@ -1,7 +1,0 @@
-# This is a configuration for NYAGOS
-# The syntax is like a batchfile of command.com.
-
-if     "%OS%" == "Windows_NT" set "PROMPT=$L%COMPUTERNAME%:$P$G$_$$$s"
-if not "%OS%" == "Windows_NT" set "PROMPT=$L%NAME%:$P$G$_$$$s"
-
-rem vim:set ft=dosbatch:

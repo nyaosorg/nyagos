@@ -71,7 +71,7 @@ get:
 _dist:
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 	zip -9 "nyagos-$(VERSION)-$(GOOS)-$(GOARCH).zip" \
-	    "nyagos$(EXE)" .nyagos _nyagos LICENSE \
+	    "nyagos$(EXE)" .nyagos LICENSE \
 	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua" \
 	    $(FILES)
 
