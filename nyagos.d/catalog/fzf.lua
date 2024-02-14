@@ -13,4 +13,4 @@ fzf.args.gitlog  =  "--preview='git show {1}'"
 
 share.fuzzyfinder = fzf
 
-use "fuzzyfinder"
+require "fuzzyfinder"

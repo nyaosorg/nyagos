@@ -13,4 +13,4 @@ peco.args.gitlog  =  ""
 
 share.fuzzyfinder = peco
 
-use "fuzzyfinder"
+require "fuzzyfinder"
