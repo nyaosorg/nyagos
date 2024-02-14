@@ -11,6 +11,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * Add `nyagos.d/catalog` to `package.path`. The function `require` can be used as same as `use`.
     * The filename extension `.lua` must not be appended to the module name on `require`.
     * `use` is now deprecated.
+* The configuration file `_nyagos`, which is not a Lua syntax, is deprecated and no longer attached. When `_nyagos` is used, execute it, but print warning.
 * [SKK]
     * Fix the problem that `UTta` and `UTTa` were converted `打っtあ` and `▽う*t*t` instead of `打った`
     * Fix: manually input inverted triangles were recognized as conversion markers
