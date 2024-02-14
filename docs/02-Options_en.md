@@ -80,8 +80,7 @@ forbide batchfile to change environment variables of nyagos
 forbide to overwrite files on redirect
 
 ### --norc
-Do not load the startup-scripts: `~\.nyagos` , `~\_nyagos`
-and `(BINDIR)\nyagos.d\*`.
+Do not load the startup-scripts: `~\.nyagos` , `(BINDIR)\.nyagos` , `(BINDIR)\nyagos.d\*.lua`, and `%APPDATA%\NYAOS_ORG\nyagos.d\*.lua`.
 
 ### --output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=true`)
 Output surrogate pair characters as it is

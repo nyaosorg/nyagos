@@ -78,7 +78,7 @@
 リダイレクトでの上書きを禁止します。
 
 ### --norc
-`~\.nyagos` , `~\_nyagos` and `(BINDIR)\nyagos.d\*` といった起動スクリプトをロードしないようにします。
+`~\.nyagos`, `(BINDIR)\.nyagos`, `(BINDIR)\nyagos.d\*.lua`, `%APPDATA%\NYAOS_ORG\nyagos.d\*.lua` といった起動スクリプトをロードしないようにします。
 
 ### --output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=true`)
 サロゲートペアな文字をそのまま表示します
