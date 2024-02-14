@@ -56,7 +56,7 @@ func loadScriptDir(dir string,
 	return nil
 }
 
-// LoadScripts loads ".nyagos" an "_nyagos"
+// LoadScripts loads ".nyagos"
 func LoadScripts(
 	shellEngine func(string) error,
 	langEngine func(string) ([]byte, error)) error {
@@ -125,6 +125,7 @@ func barNyagos(shellEngine func(string) error, folder string) {
 	if err != nil {
 		return
 	}
+	fmt.Fprintln(os.Stderr, "****", barNyagos, "is DEPRECATED now. ****")
 	err = shellEngine(barNyagos)
 	if err != nil {
 		io.WriteString(os.Stderr, err.Error())

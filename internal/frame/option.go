@@ -257,7 +257,7 @@ var optionMap = ignoreCaseSorted.MapToDictionary(map[string]optionT{
 		},
 	},
 	"--norc": {
-		U: "\nDo not load the startup-scripts: `~\\.nyagos` , `~\\_nyagos`\nand `(BINDIR)\\nyagos.d\\*`.",
+		U: "\nDo not load the startup-scripts: `~\\.nyagos`,`(BINDIR)\\.nyagos` and `(BINDIR)\\nyagos.d\\*.lua`.",
 		F: func() {
 			OptionNorc = true
 		},
@@ -308,7 +308,7 @@ func help(p *optionArg) (func(context.Context) error, error) {
 			file1 := filepath.Join(binDir, ".nyagos")
 			fmt.Printf("  %s (Lua)\n", file1)
 			file1 = filepath.Join(binDir, "_nyagos")
-			fmt.Printf("  %s (Command-lines)\n", file1)
+			fmt.Printf("  %s (deprecated)\n", file1)
 		}
 
 		home := strings.TrimSpace(os.Getenv("HOME"))
@@ -318,7 +318,7 @@ func help(p *optionArg) (func(context.Context) error, error) {
 		file1 := filepath.Join(home, ".nyagos")
 		fmt.Printf("  %s (Lua)\n", file1)
 		file1 = filepath.Join(home, "_nyagos")
-		fmt.Printf("  %s (Command-lines)\n", file1)
+		fmt.Printf("  %s (deprecated)\n", file1)
 
 		return io.EOF
 	}, nil
