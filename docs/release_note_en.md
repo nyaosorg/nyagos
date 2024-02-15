@@ -9,6 +9,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * The Lua function: `use` is now deprecated.
     * Use `require "mmmm"` instead of `use "mmmm.lua"`
     * Add `nyagos.d/catalog` to `package.path` of the lua language standard.
+* Remove `nyagos.d/catalog/ezoe.lua`
 
 ## New features
 

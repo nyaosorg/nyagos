@@ -9,6 +9,7 @@
 * `use` は非推奨とした
     * `use "mmmm.lua"` のかわりに `require "mmmm"` を使用してください
     * これに伴い、Luaの標準検索パス: `package.path` に `nyagos.d/catalog` を追加しました
+* `nyagos.d/catalog/ezoe.lua` を削除
 
 ## 新機能
 
