@@ -12,6 +12,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * Remove `nyagos.d/catalog/ezoe.lua`
 * Remove aliases: `chompf`, `wordpad`, `abspath`
 * Remove lua functions: `addpath`
+* Move `nyagos.d/aliasandset.lua` to `nyagos/catalog/.` that defines tool lua functions: `set("ENV=VALUE")`, `alias("NAME=DEFINE")`
 
 ## New features
 
