@@ -61,7 +61,7 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
   * ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示
 * [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
 * サポート OS
-  * Windows 8.1以降
+  * Windows 7, Server2008以降
   * Linux (試験的サポート)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK

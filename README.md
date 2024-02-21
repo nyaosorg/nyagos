@@ -61,7 +61,7 @@ So, I created a new shell like below:
   * print hard-link,symbolic-link and junction's target-path
 * Support Japanese input method editor: [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
 * Support OS:
-  * Windows 8.1 or later
+  * Windows 7, Server2008 or later
   * Linux (experimental)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
