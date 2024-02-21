@@ -67,10 +67,24 @@ So, I created a new shell like below:
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
 
-Download Binary
----------------
+Install
+-------
+
+### Download Binary
 
 * https://github.com/nyaosorg/nyagos/releases
+
+### Scoop installer
+
+```
+C:> scoop install nyagos
+```
+
+### Chocolatey installer
+
+```
+C:> choco install nyagos
+```
 
 Contents
 --------
