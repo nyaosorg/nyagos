@@ -13,10 +13,6 @@
 
 ## 新機能
 
-* ヒストリ関連の Lua 関数を追加
-    * nyagos.gethistorydetail(): テキストだけでなく、ディレクトリ、日時、プロセスIDを得る
-    * nyagos.pushhistory(): ヒストリを追加する
-    * nyaogs.pophistory(): 最後のエントリを削除して、その情報を返す.
 * `%NO_COLOR%` が定義されていたら、プロンプト・コマンドライン・ls の着色を無効化
 * サブコマンド補完(`require "subcomplete"`)関連
     * [#436] curl のオプション補完をサポート ( Thanks to [@tsuyoshicho] )

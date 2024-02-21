@@ -13,10 +13,6 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
 ## New features
 
-* Implement the lua functions
-    * nyagos.gethistorydetail(N) that returns the text, directory, timestamp, and process-id of the Nth history.
-    * nyagos.pushhistory() that appends a new entry
-    * nyagos.pophistory() that removes the last entry and returns its details
 * When `%NO_COLOR%` is defined, disable the color of the prompt, the command-line, and ls command
 
 * Sub commands completion (When `require "subcomplete"` is enabled)
