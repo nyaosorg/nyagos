@@ -246,10 +246,6 @@ Get the text, the directory, the timestamp, and the pid of the Nth history.
 
 Add an entry of history. It requires the text of the commandline, the current directory, the date and time, and process-id.
 
-### `text,dir,datetime,pid = nyagos.pophistory(N)`
-
-Removes the last entry in history and returns the command line text, directory, datetime, and PID of the removed entry
-
 ### `nyagos.gethistory()` and `#nyagos.history`
 
 Get the count of the command-line history.
