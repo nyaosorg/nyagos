@@ -323,18 +323,6 @@ func CmdGetHistoryDetail(args []any) []any {
 	return []any{frame.DefaultHistory.Len()}
 }
 
-func CmdPopHistory(args []any) []any {
-	hs := frame.DefaultHistory
-	if hs == nil {
-		return []any{nil, "history is not initialized, yet"}
-	}
-	h := hs.Pop()
-	if h == nil {
-		return []any{nil, "no history entries"}
-	}
-	return []any{h.Text, h.Dir, h.Stamp.Format("2006-01-02T15:04:05"), h.Pid}
-}
-
 type errHistory struct {
 	index   int
 	message string
