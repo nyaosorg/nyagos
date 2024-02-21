@@ -11,6 +11,7 @@
     * これに伴い、Luaの標準検索パス: `package.path` に `nyagos.d/catalog` を追加しました
 * `nyagos.d/catalog/ezoe.lua` を削除
 * エイリアス: `chompf`, `wordpad` を削除
+* Lua関数: `addpath` を削除
 
 ## 新機能
 
