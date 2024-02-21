@@ -21,9 +21,6 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * Sub commands completion (When `require "subcomplete"` is enabled)
     * [#436] Support completion for options of curl. ( Thanks to [@tsuyoshicho] )
 
-[#436]: https://github.com/nyaosorg/nyagos/pull/436
-[@tsuyoshicho]: https://github.com/tsuyoshicho
-
 ## Fixed bugs
 
 * [SKK]
@@ -50,6 +47,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 * docs/07-LuaFunctions_\*.md: wrote about `nyagos.shellexecute` (forgotten!)
 
 [#436]: https://github.com/nyaosorg/nyagos/pull/436
+[@tsuyoshicho]: https://github.com/tsuyoshicho
 
 NYAGOS 4.4.14\_0
 ================
