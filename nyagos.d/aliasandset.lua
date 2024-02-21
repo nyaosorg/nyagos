@@ -38,12 +38,3 @@ end
 function alias(equation)
     set_(nyagos.setalias,equation,function(x) return x end)
 end
-function addpath(...)
-    for _,dir in pairs{...} do
-        dir = expand(dir)
-        local list=nyagos.getenv("PATH")
-        if not string.find(";"..list..";",";"..dir..";",1,true) then
-            nyagos.setenv("PATH",dir..";"..list)
-        end
-    end
-end
