@@ -49,19 +49,6 @@ nyagos.alias.wildcard = function(args)
     nyagos.exec( newargs )
 end
 
--- print the absolute path
-function nyagos.alias.abspath(args)
-    local cwd = nyagos.getwd()
-    for i = 1,#args do
-        local path1 = nyagos.pathjoin(cwd,args[i])
-        local files = nyagos.glob(path1)
-        for j=1,#files do
-            nyagos.write(files[j])
-            nyagos.write("\n")
-        end
-    end
-end
-
 if nyagos.env.OS == "Windows_NT" then
     nyagos.alias.ls="__ls__ -oFh $*"
     nyagos.alias.ll="__ls__ -olFh $*"
