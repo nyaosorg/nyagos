@@ -62,26 +62,6 @@ function nyagos.alias.abspath(args)
     end
 end
 
--- chompf - cut last CRLF of the files and output them to STDOUT
-function nyagos.alias.chompf(args)
-    local lf=""
-    if #args <= 0 then
-        for line in nyagos.lines() do
-            nyagos.write(lf)
-            nyagos.write(line)
-            lf = "\n"
-        end
-    else
-        for i=1,#args do
-            for line in nyagos.lines(args[i]) do
-                nyagos.write(lf)
-                nyagos.write(line)
-                lf = "\n"
-            end
-        end
-    end
-end
-
 if nyagos.env.OS == "Windows_NT" then
     nyagos.alias.ls="__ls__ -oFh $*"
     nyagos.alias.ll="__ls__ -olFh $*"
