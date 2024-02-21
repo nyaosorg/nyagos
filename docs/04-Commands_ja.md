@@ -250,10 +250,6 @@ UAC 昇格させて、コマンドを実行します。
 
 相対パスで表記された引数を絶対パスに変換して出力します。
 
-### `chompf FILE(s)` (nyagos.d\aliases.lua)
-
-ファイルの中身を、EOF直前の CRLF を除いて出力します。
-
 ### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua) 
 
 内蔵Lua で引数の Lua コードを実行します。
