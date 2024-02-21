@@ -1,7 +1,6 @@
 Set-PSDebug -Strict
 
 function Install-Nyagos($dir){
-    Copy-Item _nyagos  -Destination $dir -PassThru
     Copy-Item nyagos.d -Destination $dir -PassThru -Recurse -ErrorAction SilentlyContinue
     Try {
         Copy-Item nyagos.exe -Destination $dir -PassThru -errorAction stop
