@@ -261,10 +261,6 @@ suffix というコマンドを作成しています。
 N 番目のヒストリ内容を返します。N が負の時は現在から(-N)個過去の
 ヒストリを返します。
 
-### `text,dir,datetime,pid = nyagos.gethistorydetail(N)`
-
-N 番目のヒストリのテキスト、ディレクトリ、日時、プロセスID を返します。
-
 ### `nyagos.gethistory()` もしくは `#nyagos.history`
 
 ヒストリの総数を返します。
