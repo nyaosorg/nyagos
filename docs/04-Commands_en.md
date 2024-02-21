@@ -238,10 +238,6 @@ Run another nyagos.exe as Administrator.
 
 ## Commands implemented by Lua
 
-### `abspath ARG(s)...` (nyagos.d\aliases.lua)
-
-Print the absolute path of ARGs which are written in the relative path.
-
 ### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua)
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
