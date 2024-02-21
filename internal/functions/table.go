@@ -16,7 +16,6 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"fields":             CmdFields,
 	"getenv":             CmdGetEnv,
 	"gethistory":         CmdGetHistory,
-	"gethistorydetail":   CmdGetHistoryDetail,
 	"getkey":             CmdGetKey,
 	"getviewwidth":       CmdGetViewWidth,
 	"getwd":              CmdGetwd,
