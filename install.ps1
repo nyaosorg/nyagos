@@ -1,17 +1,17 @@
 Set-PSDebug -Strict
 
 function Install-Nyagos($dir){
-    $random = (Get-Random)
+    $postfix = (Get-Date -UFormat "~%Y%m%dT%H%M%S")
     $new_nyagos_d = (Join-Path $dir "nyagos.d")
     if ( (Test-Path $new_nyagos_d) ){
-        Move-Item $new_nyagos_d ($new_nyagos_d + "-" + $random) -PassThru
+        Move-Item $new_nyagos_d ($new_nyagos_d + $postfix) -PassThru
     }
     Copy-Item nyagos.d -Destination $dir -PassThru -Recurse -ErrorAction SilentlyContinue
     Try {
         Copy-Item nyagos.exe -Destination $dir -PassThru -errorAction stop
     }
     Catch{
-        $backup = (Join-Path $dir ("nyagos.exe-" + $random))
+        $backup = (Join-Path $dir ("nyagos.exe" + $postfix))
         Move-Item (Join-Path $dir "nyagos.exe") $backup -PassThru
         Copy-Item nyagos.exe -Destination $dir -PassThru
     }
