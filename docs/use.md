@@ -5,7 +5,7 @@ peco
 -----
 
 If you have [peco](https://github.com/peco/peco), 
-write `use "peco"` on your `.nyagos` to extend readline with power.
+write `require "peco"` on your `.nyagos` to extend readline with power.
 
 * `C-r` History
 * `C-o` Filename completion
@@ -16,7 +16,7 @@ cho
 ---
 
 If you have [cho](https://github.com/mattn/cho), 
-write `use "cho"` on your `.nyagos` to extend readline with power.
+write `require "cho"` on your `.nyagos` to extend readline with power.
 
 * `C-r` History
 * `C-o` Filename completion
