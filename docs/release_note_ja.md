@@ -52,20 +52,29 @@ NYAGOS 4.4.14\_0
 ================
 (2023.10.06)
 
-当バージョンのバイナリは Go 1.20.9 でビルド。  
-サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
+* 2023年下期版
+* 当バージョンのバイナリは Go 1.20.9 でビルド
+* サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
+
+## 新機能
 
 * nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした （例：`nyagos.env.NYAGOSEXPANDWILDCARD="gorename;gofmt"` ）
-* [#432] `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
 * [#432] 新オプション `glob_slash` を追加（起動オプション：`--glob-slash`, lua関数： `nyagos.option.glob_slash=true`、コマンドライン：`set -o glob_slash`）。設定されている時、ワイルドカード展開で `/` を使う
-* Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
 * [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
 * 適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 `nyagos.atou_if_needed` を追加
+
+## 不具合修正
+
+* [#432] `set -o glob` 時、二重引用符内の`*`,`?` がワイルドカードとして展開されていた(本来されるべきではない)
+* Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に "not supopported" を返していたので、引数と同じ値を戻すようにした)
 * [#433] 文字化けを避けるために、逆クォートでは `nyagos.atou_if_needed` を使って、UTF8 を更に UTF8 化させないようにした
 * [v4.4.13\_3] で、`more`, `nyagos.getkey`, `nyagos.getviewwidth` が Windows 7, 8.1 や WindowsServer 2008 で動かない問題を修正
-* `nyagos.default_prompt` や `nyagos.prompt` は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。([go-readline-ny.Editor] の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)
 * [#434] Lua で `nyagos.which('cp')` が機能しない問題を修正 (Thanks to [@ousttrue])
 * 全角空白(U+3000)の背景色が赤くなっていなかった不具合を修正
+
+## 破壊的変更
+
+* `nyagos.default_prompt` や `nyagos.prompt` は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。([go-readline-ny.Editor] の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpJa]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
@@ -86,6 +95,8 @@ NYAGOS 4.4.13\_3
 NYAGOS 4.4.13\_2
 ================
 (2023.04.25)
+
+2023年上期版
 
 * (#428) `rmdir /s` でシンボリックリンクやジャンクションの削除に失敗する問題を修正
 * \" で引用領域の色を反転させないようにした

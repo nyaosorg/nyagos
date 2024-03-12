@@ -49,25 +49,33 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 [#436]: https://github.com/nyaosorg/nyagos/pull/436
 [@tsuyoshicho]: https://github.com/tsuyoshicho
 
-NYAGOS 4.4.14\_0
+NYAGOS 4.4.14\_0 
 ================
 Oct 06, 2023
 
+The second half of 2023 edition.
 The binaries of this version are built with Go 1.20.9.  
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
+## New features
+
 * nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in `%NYAGOSEXPANDWILDCARD%` (for example: `nyagos.env.NYAGOSEXPANDWILDCARD="gorename;gofmt"` )
-* [#432] When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
-* [#432] Add new option: `glob_slash` to enable with the option of executable `--glob-slash`, calling lua function like `nyagos.option.glob_slash=true`, or executing command `set -o glob_slash`.
-. When it is set, `/` is used on wildcard expansion.
-* Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
+* [#432] Add new option: `glob_slash` to enable with the option of executable `--glob-slash`, calling lua function like `nyagos.option.glob_slash=true`, or executing command `set -o glob_slash`. When it is set, `/` is used on wildcard expansion.
 * Support Japanese input method editor: [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
 * Add the lua-function: `nyagos.atou_if_needed` that converts the string that is not valid utf8 one to utf8-string as the current codepage string.
+
+## Fixed bugs
+
 * [#433] To avoid garbled characters, backquote uses `nyagos.atou_if_needed` to prevent UTF8 from being further converted to UTF8.
+* Fix: On linux version, backquotation failed with error and did not work. ( because the lua function `atou` always returned "not supported", it is changed to returning the same value with given )
+* [#432] When `set -o glob`, `*` and `?` double-quoted were expanded as wildcards (They should not be)
 * Fix the problem that `more`, `nyagos.getkey`, and `nyagos.getviewwidth` might not work on Windows 7, 8.1 and Windows Server 2008 at [v4.4.13\_3].
-* `nyagos.default_prompt` and `nyagos.prompt` return the prompt-string instead of output it to the terminal directly. This modifying is to use the new field `PromptWriter` of the [go-readline-ny.Editor] instead of `Prompt` that is deprecated.
 * [#434] Fix: `nyagos.which('cp')` does not work as expect on Linux (Thanks to [@ousttrue])
 * Fix: the background color of U+3000 was not changed to red
+
+## Breaking changes
+
+* `nyagos.default_prompt` and `nyagos.prompt` return the prompt-string instead of output it to the terminal directly. This modifying is to use the new field `PromptWriter` of the [go-readline-ny.Editor] instead of `Prompt` that is deprecated.
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
@@ -89,6 +97,8 @@ Apr 30, 2023
 NYAGOS 4.4.13\_2
 ================
 Apr 25, 2023
+
+The first half of 2023 edition.
 
 * (#428) Fix: `rmdir /s` fails to remove symbolic links and junctions (reparse point)
 * Do not toggle the quotation area color on \" now
