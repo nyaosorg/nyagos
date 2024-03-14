@@ -6,8 +6,7 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-English
-/ [Japanese](./readme_ja.md)
+**&lt;English&gt;** / [&lt;Japanese&gt;](./readme_ja.md)
 
 NYAGOS is the commandline-shell written with the Programming Language GO and Lua.
 
@@ -61,7 +60,7 @@ So, I created a new shell like below:
   * print hard-link,symbolic-link and junction's target-path
 * Support Japanese input method editor: [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
 * Support OS:
-  * Windows 7, Server2008 or later
+  * Windows 7, 8.1, 10, 11, WindowsServer 2008 or later
   * Linux (experimental)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
@@ -74,13 +73,13 @@ Install
 
 * https://github.com/nyaosorg/nyagos/releases
 
-### Scoop installer
+### Use "Scoop installer"
 
 ```
 C:> scoop install nyagos
 ```
 
-### Chocolatey installer
+### Use "Chocolatey installer"
 
 ```
 C:> choco install nyagos

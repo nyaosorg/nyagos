@@ -6,7 +6,7 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-[English](./readme.md) / Japanese
+[&lt;English&gt;](./readme.md) / **&lt;Japanese&gt;**
 
 NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 
@@ -61,7 +61,7 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
   * ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示
 * [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
 * サポート OS
-  * Windows 7, Server2008以降
+  * Windows 7, 8.1, 10, 11, Windows Server2008以降
   * Linux (試験的サポート)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
@@ -74,13 +74,13 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 
 * https://github.com/nyaosorg/nyagos/releases
 
-### Scoop installer
+### Scoop installer を使う場合
 
 ```
 C:> scoop install nyagos
 ```
 
-### Chocolatey installer
+### Chocolatey installer を使う場合
 
 ```
 C:> choco install nyagos
