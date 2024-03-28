@@ -2,7 +2,17 @@
 -- Edit and put it on %USERPROFILE%, %HOME% or the same folder with nyagos.exe
 
 -- Simple Prompt for CMD.EXE
-nyagos.env.prompt='$L'.. (nyagos.env.COMPUTERNAME or "") .. ':$P$G$_$$$s'
+do
+    local hostname = nyagos.env.COMPUTERNAME
+    if not hostname then
+        local fd = io.open("/etc/hostname")
+        if fd then
+            hostname = fd:read("*l")
+            fd:close()
+        end
+    end
+    nyagos.env.PROMPT='$L'.. (hostname or "").. ':$P$G$_$$$s'
+end
 
 -- Coloring Prompt for NYAGOS.exe
 -- Sample 1: simple prompt string
