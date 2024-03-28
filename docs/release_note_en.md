@@ -41,6 +41,8 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
     * Implement `q` that convert mutually between Hiragana and Katakana during conversion.
 * Sub commands completion (When `require "subcomplete"` is enabled)
     * Fix: the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
+* Fix the problem that prompt is not displayed on Linux  
+  ( The .nyagos sample should have defined nyagos.env.PROMPT, but nyagos.env.prompt was defined )
 
 ## Documents
 

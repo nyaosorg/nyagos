@@ -40,6 +40,8 @@
     * 変換中の q で、入力済みの平仮名・片仮名を相互変換する機能を実装
 * サブコマンド補完(`require "subcomplete"`)関連
     * scoop.cmd であるべき scoop の実行ファイル名が scoop.exe になっていてサブコマンド名補完できない問題を修正した
+* Linux でプロンプトが表示されない問題を修正  
+  (デフォルトの .nyagos で nyagos.env.prompt を設定していたが、Linux では環境変数の英大文字・小文字を区別するので、nyagos.env.PROMPT でなければいけなかった)
 
 ## ドキュメント
 
