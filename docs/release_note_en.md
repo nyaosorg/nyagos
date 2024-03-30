@@ -43,6 +43,14 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
     * Fix: the subcommand completion for scoop did not work because the filename of executable was `scoop.exe` that should be `scoop.cmd`.
 * Fix the problem that prompt is not displayed on Linux  
   ( The .nyagos sample should have defined nyagos.env.PROMPT, but nyagos.env.prompt was defined )
+* Fix: the loop to input commands for `foreach` could not be stopped with Ctrl-C  
+  ( This problem was included in the commit [8bf0a2acb25b152d3d40c188de09858c2ef572ae] of version [4.4.6\_2]. See also issue [#383] and [4.4.6\_0] )
+
+[8bf0a2acb25b152d3d40c188de09858c2ef572ae]: https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae
+[4.4.6\_2]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2
+[4.4.6\_0]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0
+[#383]: https://github.com/nyaosorg/nyagos/issues/383
+
 
 ## Documents
 

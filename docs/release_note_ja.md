@@ -42,6 +42,13 @@
     * scoop.cmd であるべき scoop の実行ファイル名が scoop.exe になっていてサブコマンド名補完できない問題を修正した
 * Linux でプロンプトが表示されない問題を修正  
   (デフォルトの .nyagos で nyagos.env.prompt を設定していたが、Linux では環境変数の英大文字・小文字を区別するので、nyagos.env.PROMPT でなければいけなかった)
+* `foreach` で繰り返すコマンド入力のループ を Ctrl-C で中断できない不具合を修正  
+  (本問題は [4.4.6\_2] のコミット[8bf0a2acb25b152d3d40c188de09858c2ef572ae] で混入した模様。[#383]と[4.4.6\_0] も参照のこと)
+
+[8bf0a2acb25b152d3d40c188de09858c2ef572ae]: https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae
+[4.4.6\_2]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2
+[4.4.6\_0]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0
+[#383]: https://github.com/nyaosorg/nyagos/issues/383
 
 ## ドキュメント
 
