@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/nyaosorg/go-readline-ny"
 )
 
 // Stream is the inteface which can read command-line
@@ -95,6 +97,10 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			cancel()
 			if err == io.EOF {
 				return 0, err
+			}
+			if err == readline.CtrlC {
+				fmt.Fprintln(os.Stderr, err.Error())
+				continue
 			}
 			return 1, err
 		}
