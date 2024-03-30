@@ -1,5 +1,9 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.15\_0
+================
+(2024.04.07)
+
 当バージョンのバイナリは Go 1.20.14 でビルドしました。  
 サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。
 

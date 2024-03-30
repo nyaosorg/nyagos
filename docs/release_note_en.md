@@ -1,5 +1,9 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.15\_0 
+================
+Apr 7, 2024
+
 The binaries of this version are built with Go 1.20.14  
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 
