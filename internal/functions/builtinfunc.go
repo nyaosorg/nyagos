@@ -113,6 +113,19 @@ func CmdGetKey(args []any) []any {
 	}
 }
 
+func CmdGetKeys(args []any) []any {
+	tty1, err := tty.Open()
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	defer tty1.Close()
+	key, err := readline.GetKey(tty1)
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	return []any{key}
+}
+
 func CmdGetViewWidth(args []any) []any {
 	tty1, err := tty.Open()
 	if err != nil {
