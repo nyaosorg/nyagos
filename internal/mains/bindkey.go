@@ -76,7 +76,7 @@ func evalKey(L Lua) int {
 	}
 	key := L.ToString(2)
 	function := buffer.LookupCommand(key)
-	rc := function.Call(context.Background(), buffer)
+	rc := function.Call(L.Context(), buffer)
 	buffer.RepaintLastLine()
 	switch rc {
 	case readline.ENTER:
@@ -103,8 +103,7 @@ func callKeyFunc(L Lua) int {
 	if err != nil {
 		return lerror(L, err.Error())
 	}
-	ctx := context.Background()
-	switch function.Call(ctx, buffer) {
+	switch function.Call(L.Context(), buffer) {
 	case readline.ENTER:
 		L.Push(lua.LTrue)
 		L.Push(lua.LTrue)
