@@ -83,8 +83,8 @@ end
 
 nyagos.key.C_x = function(this)
     nyagos.write("\nC-x: [r]:command-history, [h]:cd-history, [g]:git-revision\n")
-    local ch = nyagos.getkey()
-    local c = string.lower(string.char(ch))
+    local ch = nyagos.getkeys()
+    local c = string.lower(ch)
     local result
     if c == 'r' or ch == nyagos.bitand(string.byte('r'),0x1F) then
         result = nyagos.box(share.__dump_history())
