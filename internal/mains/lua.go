@@ -238,7 +238,7 @@ func NewLua() (Lua, error) {
 		orgArgHook = shell.SetArgsHook(newArgHook)
 
 		orgOnCommandNotFound = shell.OnCommandNotFound
-		shell.OnCommandNotFound = onCommandNotFound
+		shell.OnCommandNotFound = (&_LuaCallBack{Lua: L}).onCommandNotFound
 		isHookSetup = true
 	}
 

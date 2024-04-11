@@ -5,7 +5,6 @@ package mains
 
 import (
 	"context"
-	"errors"
 
 	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/yuin/gopher-lua"
@@ -13,12 +12,7 @@ import (
 
 var orgOnCommandNotFound func(context.Context, *shell.Cmd, error) error
 
-func onCommandNotFound(ctx context.Context, sh *shell.Cmd, err error) error {
-	L, ok := ctx.Value(luaKey).(Lua)
-	if !ok {
-		return errors.New("could get lua instance(on_command_not_found)")
-	}
-
+func (L *_LuaCallBack) onCommandNotFound(ctx context.Context, sh *shell.Cmd, err error) error {
 	nyagosTbl := L.GetGlobal("nyagos")
 	hook, ok := L.GetField(nyagosTbl, "on_command_not_found").(*lua.LFunction)
 	if !ok {
@@ -30,7 +24,7 @@ func onCommandNotFound(ctx context.Context, sh *shell.Cmd, err error) error {
 	}
 	L.Push(hook)
 	L.Push(args)
-	err1 := execLuaKeepContextAndShell(ctx, &sh.Shell, L, 1, 1)
+	err1 := execLuaKeepContextAndShell(ctx, &sh.Shell, L.Lua, 1, 1)
 	if err1 != nil {
 		return err1
 	}

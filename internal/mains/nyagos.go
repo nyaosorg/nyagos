@@ -28,6 +28,10 @@ type luaKeyT struct{}
 
 var luaKey luaKeyT
 
+type _LuaCallBack struct {
+	Lua
+}
+
 type _ScriptEngineForOptionImpl struct {
 	L  Lua
 	Sh *shell.Shell
