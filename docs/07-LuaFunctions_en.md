@@ -193,6 +193,7 @@ When the key is pressed, call the function.
 * `this.pos` ... cursor position counted with bytes (==1 when beginning of line)
 * `this.text` ... all text represented with utf8
 * `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
+* `this:eval("KEYLITERAL")` ... call the function assigned to given key literal (for example: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` means Ctrl-O works as LEFT-ARROW-KEY )
 * `this:insert("TEXT")` ... insert TEXT at the cursor position.
 * `this:firstword()` ... get the first word(=command-name) on the command-line.
 * `this:lastword()` ... get the last word and its position on the command-line.

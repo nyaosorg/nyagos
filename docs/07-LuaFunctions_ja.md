@@ -198,7 +198,8 @@ ENVNAME が示す環境変数の中から PATTERN を含む要素を
 
 * `this.pos` … バイト数で数えたカーソル位置(先頭は 1 になります)
 * `this.text` … utf8 で表現された現在の入力テキスト
-* `this:call("FUNCNAME")` ... `this.call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
+* `this:call("FUNCNAME")` ... `this:call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
+* `this:eval("KEYLITERAL")` ... キー表現に対応する機能を呼び出す(例: `this:call("\027[A")` → "↑" キーに設定されている機能を呼び出す)
 * `this:insert("TEXT")` ... TEXT をカーソル位置に挿入します
 * `this:firstword()` ... コマンドラインの先頭の単語(コマンド名)を返します
 * `this:lastword()` ... コマンドラインの最後の単語とその位置を返します
