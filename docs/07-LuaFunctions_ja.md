@@ -354,9 +354,14 @@ false の時 \ が使われます。
 
 ファイルがない時、STAT は nil です。
 
-### `nyagos.getkey()`
+### `nyagos.getkey()` [Deprecated]
 
-入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
+入力されたキーの Unicode を返します
+
+### `nyagos.getkeys()`
+
+入力されたキーを文字列表現で返します。矢印キーなどは `\027[A` といった表現になります
+エラー時は nil とエラーメッセージの二値が返されます。
 
 ### `nyagos.open(PATH,MODE)`
 

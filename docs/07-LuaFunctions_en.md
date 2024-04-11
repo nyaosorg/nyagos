@@ -310,9 +310,14 @@ usual.
 Since the function runs the other Lua-instance, accesss to variables
 assigned on .nyagos have the same restriction with aliases.
 
-### `nyagos.getkey()`
+### `nyagos.getkey()` [Deprecated]
 
-It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
+It returns three values : typed key's UNICODE
+
+### `nyagos.getkeys()`
+
+Return the string as representation of pressed key. Arrow-keys are strings like `\027[A`
+When an error occurs, getkeys returns nil and error-message.
 
 ### `WIDTH,HEIGHT=nyagos.getviewwidth()`
 
