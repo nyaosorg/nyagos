@@ -22,62 +22,38 @@ type _KeyLuaFunc struct {
 	Chank *lua.LFunction
 }
 
-func getBufferForCallBack(L Lua) (*readline.Buffer, int) {
-	table, ok := L.Get(1).(*lua.LTable)
-	if !ok {
-		return nil, lerror(L, "bindKeyExec: call with : not .")
-	}
-	userdata, ok := L.GetField(table, "buffer").(*lua.LUserData)
-	if !ok {
-		return nil, lerror(L, "bindKey.Call: invalid object")
-	}
-	buffer, ok := userdata.Value.(*readline.Buffer)
-	if !ok {
-		return nil, lerror(L, "can not find readline.Buffer")
-	}
-	return buffer, 0
+type _ReadLineCallBack struct {
+	buffer *readline.Buffer
 }
 
-func callReplace(L Lua) int {
-	buffer, stackRc := getBufferForCallBack(L)
-	if buffer == nil {
-		return stackRc
-	}
+func (rl *_ReadLineCallBack) Replace(L Lua) int {
 	pos, ok := L.Get(-2).(lua.LNumber)
 	if !ok {
 		return lerror(L, "not a number")
 	}
 	str := L.ToString(-1)
 	posZeroBase := int(pos) - 1
-	if posZeroBase > len(buffer.Buffer) {
+	if posZeroBase > len(rl.buffer.Buffer) {
 		return lerror(L, fmt.Sprintf(":replace: pos=%d: Too big.", pos))
 	}
-	buffer.ReplaceAndRepaint(posZeroBase, string(str))
+	rl.buffer.ReplaceAndRepaint(posZeroBase, string(str))
 	L.Push(lua.LTrue)
 	L.Push(lua.LNil)
 	return 2
 }
 
-func callInsert(L Lua) int {
-	buffer, stackRc := getBufferForCallBack(L)
-	if buffer == nil {
-		return stackRc
-	}
+func (rl *_ReadLineCallBack) Insert(L Lua) int {
 	text := L.ToString(2)
-	buffer.InsertAndRepaint(string(text))
+	rl.buffer.InsertAndRepaint(string(text))
 	L.Push(lua.LTrue)
 	return 1
 }
 
-func evalKey(L Lua) int {
-	buffer, stackRc := getBufferForCallBack(L)
-	if buffer == nil {
-		return stackRc
-	}
+func (rl *_ReadLineCallBack) evalKey(L Lua) int {
 	key := L.ToString(2)
-	function := buffer.LookupCommand(key)
-	rc := function.Call(L.Context(), buffer)
-	buffer.RepaintLastLine()
+	function := rl.buffer.LookupCommand(key)
+	rc := function.Call(L.Context(), rl.buffer)
+	rl.buffer.RepaintLastLine()
 	switch rc {
 	case readline.ENTER:
 		L.Push(lua.LTrue)
@@ -93,17 +69,13 @@ func evalKey(L Lua) int {
 	}
 }
 
-func callKeyFunc(L Lua) int {
-	buffer, stackRc := getBufferForCallBack(L)
-	if buffer == nil {
-		return stackRc
-	}
+func (rl *_ReadLineCallBack) KeyFunc(L Lua) int {
 	key := L.ToString(2)
 	function, err := nameutils.GetFunc(key)
 	if err != nil {
 		return lerror(L, err.Error())
 	}
-	switch function.Call(L.Context(), buffer) {
+	switch function.Call(L.Context(), rl.buffer) {
 	case readline.ENTER:
 		L.Push(lua.LTrue)
 		L.Push(lua.LTrue)
@@ -118,36 +90,24 @@ func callKeyFunc(L Lua) int {
 	}
 }
 
-func callLastWord(L Lua) int {
-	this, stackCount := getBufferForCallBack(L)
-	if this == nil {
-		return stackCount
-	}
-	word, pos := this.CurrentWord()
+func (rl *_ReadLineCallBack) LastWord(L Lua) int {
+	word, pos := rl.buffer.CurrentWord()
 	L.Push(lua.LString(word))
 	L.Push(lua.LNumber(pos + 1))
 	return 2
 }
 
-func callFirstWord(L Lua) int {
-	this, stackCount := getBufferForCallBack(L)
-	if this == nil {
-		return stackCount
-	}
-	word := texts.FirstWord(this.String())
+func (rl *_ReadLineCallBack) FirstWord(L Lua) int {
+	word := texts.FirstWord(rl.buffer.String())
 	L.Push(lua.LString(word))
 	L.Push(lua.LNumber(0))
 	return 2
 }
 
-func callBoxListing(L Lua) int {
+func (rl *_ReadLineCallBack) BoxListing(L Lua) int {
 	// stack +1: readline.Buffer
 	// stack +2: table
 	// stack +3: index or value
-	this, stackCount := getBufferForCallBack(L)
-	if this == nil {
-		return stackCount
-	}
 	fmt.Print("\n")
 	table := L.ToTable(2)
 	size := table.Len()
@@ -155,8 +115,8 @@ func callBoxListing(L Lua) int {
 	for i := 0; i < size; i++ {
 		list[i] = L.GetTable(table, lua.LNumber(i+1)).String()
 	}
-	box.Print(context.TODO(), list, os.Stdout)
-	this.RepaintAll()
+	box.Print(L.Context(), list, os.Stdout)
+	rl.buffer.RepaintAll()
 	return 0
 }
 
@@ -182,19 +142,18 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 		pos = text.Len() + 1
 	}
 
+	rl := &_ReadLineCallBack{buffer: buffer}
+
 	table := L.NewTable()
 	L.SetField(table, "pos", lua.LNumber(pos))
 	L.SetField(table, "text", lua.LString(text.String()))
-	userdata := L.NewUserData()
-	userdata.Value = buffer
-	L.SetField(table, "buffer", userdata)
-	L.SetField(table, "call", L.NewFunction(callKeyFunc))
-	L.SetField(table, "eval", L.NewFunction(evalKey))
-	L.SetField(table, "insert", L.NewFunction(callInsert))
-	L.SetField(table, "replacefrom", L.NewFunction(callReplace))
-	L.SetField(table, "lastword", L.NewFunction(callLastWord))
-	L.SetField(table, "firstword", L.NewFunction(callFirstWord))
-	L.SetField(table, "boxprint", L.NewFunction(callBoxListing))
+	L.SetField(table, "call", L.NewFunction(rl.KeyFunc))
+	L.SetField(table, "eval", L.NewFunction(rl.evalKey))
+	L.SetField(table, "insert", L.NewFunction(rl.Insert))
+	L.SetField(table, "replacefrom", L.NewFunction(rl.Replace))
+	L.SetField(table, "lastword", L.NewFunction(rl.LastWord))
+	L.SetField(table, "firstword", L.NewFunction(rl.FirstWord))
+	L.SetField(table, "boxprint", L.NewFunction(rl.BoxListing))
 
 	defer setContext(getContext(L), L)
 	setContext(ctx, L)
