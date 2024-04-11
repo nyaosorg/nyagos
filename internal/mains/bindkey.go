@@ -69,6 +69,30 @@ func callInsert(L Lua) int {
 	return 1
 }
 
+func evalKey(L Lua) int {
+	buffer, stackRc := getBufferForCallBack(L)
+	if buffer == nil {
+		return stackRc
+	}
+	key := L.ToString(2)
+	function := buffer.LookupCommand(key)
+	rc := function.Call(context.Background(), buffer)
+	buffer.RepaintLastLine()
+	switch rc {
+	case readline.ENTER:
+		L.Push(lua.LTrue)
+		L.Push(lua.LTrue)
+		return 2
+	case readline.ABORT:
+		L.Push(lua.LTrue)
+		L.Push(lua.LFalse)
+		return 2
+	default:
+		L.Push(lua.LNil)
+		return 1
+	}
+}
+
 func callKeyFunc(L Lua) int {
 	buffer, stackRc := getBufferForCallBack(L)
 	if buffer == nil {
@@ -166,6 +190,7 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 	userdata.Value = buffer
 	L.SetField(table, "buffer", userdata)
 	L.SetField(table, "call", L.NewFunction(callKeyFunc))
+	L.SetField(table, "eval", L.NewFunction(evalKey))
 	L.SetField(table, "insert", L.NewFunction(callInsert))
 	L.SetField(table, "replacefrom", L.NewFunction(callReplace))
 	L.SetField(table, "lastword", L.NewFunction(callLastWord))
