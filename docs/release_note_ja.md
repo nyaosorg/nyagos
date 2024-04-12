@@ -1,5 +1,15 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+## 廃止・非推奨
+
+* `nyagos.d/catalog/neco.lua` を削除
+* Lua関数: `nyagos.msgbox` を削除
+
+## 新機能
+
+* キー入力の最初のコードの Unicode しか返さなくなっていた nyagos.getkey のかわりに、入力キーを`\027[A` をいった文字列表現で返す nyagos.getkeys() を実装(nyagos.getkey は [Deprecated])
+* nyagos.key.KEYNAME(this) → this:eval("キー文字列") で、そのキー文字列に関連付けられた機能を呼び出せるようにした(例: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` で Ctrl-O が左矢印キーと同じように働くようになる)
+
 NYAGOS 4.4.15\_0
 ================
 (2024.04.07)

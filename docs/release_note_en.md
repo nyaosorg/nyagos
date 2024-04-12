@@ -1,5 +1,15 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+## Deprecations
+
+* Remove `nyagos.d/catalog/neco.lua`
+* Remove Lua function: `nyagos.msgbox`
+
+## New features
+
+* Implement `nyagos.getkeys()` that returns the string as the representation of pressed key instead of `nyagos.getkey()` than returns the first byte of the Unicode.
+* Implement `this:eval` for `nyagos.key.KEYNAME(this)` that calls the function assigned to given key literal (for example: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` means Ctrl-O works same as LEFT-ARROW-KEY )
+
 NYAGOS 4.4.15\_0 
 ================
 Apr 7, 2024
