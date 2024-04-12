@@ -77,7 +77,11 @@ func CmdBox(this *Param) []any {
 		}
 	}
 	values := make([]any, 0)
-	for _, s := range box.ChoiceMulti(sources, this.Term) {
+	choice, err := box.SelectString(sources, true, this.Term)
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	for _, s := range choice {
 		values = append(values, s)
 	}
 	return values
