@@ -18,10 +18,6 @@ import (
 	"github.com/nyaosorg/nyagos/internal/texts"
 )
 
-type _KeyLuaFunc struct {
-	Chank *lua.LFunction
-}
-
 type _ReadLineCallBack struct {
 	buffer *readline.Buffer
 }
@@ -120,15 +116,16 @@ func (rl *_ReadLineCallBack) BoxListing(L Lua) int {
 	return 0
 }
 
+type _KeyLuaFunc struct {
+	Chank *lua.LFunction
+	L     Lua
+}
+
 func (f _KeyLuaFunc) String() string {
 	return f.Chank.String()
 }
 func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
-	L, ok := ctx.Value(luaKey).(Lua)
-	if !ok {
-		println("(*mains._KeyLuaFunc)Call: lua instance not found")
-		return readline.CONTINUE
-	}
+	L := f.L
 	L.Push(f.Chank)
 	pos := -1
 	var text strings.Builder
@@ -184,7 +181,7 @@ func cmdBindKey(L Lua) int {
 	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
 	switch value := L.Get(-1).(type) {
 	case *lua.LFunction:
-		if err := nameutils.BindKeyFunc(readline.GlobalKeyMap, key, &_KeyLuaFunc{value}); err != nil {
+		if err := nameutils.BindKeyFunc(readline.GlobalKeyMap, key, &_KeyLuaFunc{Chank: value, L:L}); err != nil {
 			return lerror(L, err.Error())
 		}
 		L.Push(lua.LTrue)
