@@ -5,23 +5,9 @@ import (
 	"os/exec"
 	"unicode/utf8"
 
-	"github.com/mattn/msgbox"
 	"github.com/nyaosorg/go-windows-mbcs"
 	"github.com/nyaosorg/go-windows-su"
 )
-
-func CmdMsgBox(args []any) []any {
-	var message string
-	title := "nyagos"
-	if len(args) >= 1 {
-		message = fmt.Sprint(args[0])
-	}
-	if len(args) >= 2 {
-		title = fmt.Sprint(args[1])
-	}
-	msgbox.Show(0, message, title, msgbox.OK)
-	return []any{}
-}
 
 func CmdElevated([]any) []any {
 	flag, _ := su.IsElevated()

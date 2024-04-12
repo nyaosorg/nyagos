@@ -181,7 +181,7 @@ func cmdBindKey(L Lua) int {
 	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
 	switch value := L.Get(-1).(type) {
 	case *lua.LFunction:
-		if err := nameutils.BindKeyFunc(readline.GlobalKeyMap, key, &_KeyLuaFunc{Chank: value, L:L}); err != nil {
+		if err := nameutils.BindKeyFunc(readline.GlobalKeyMap, key, &_KeyLuaFunc{Chank: value, L: L}); err != nil {
 			return lerror(L, err.Error())
 		}
 		L.Push(lua.LTrue)
