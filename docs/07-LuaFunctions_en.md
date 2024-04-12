@@ -412,10 +412,6 @@ The string compilation architecture of nyagos.exe.
 
 The string indicating OS name (`windows` or `linux`)
 
-### `nyagos.msgbox(MESSAGE,TITLE)`
-
-Show message-box
-
 ### `nyagos.preexechook`
 
 The hook before calling commands.
