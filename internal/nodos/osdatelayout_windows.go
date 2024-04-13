@@ -3,6 +3,7 @@ package nodos
 import (
 	"regexp"
 	"strings"
+	"time"
 
 	"golang.org/x/sys/windows"
 	"golang.org/x/sys/windows/registry"
@@ -49,6 +50,7 @@ func osDateLayout() (string, error) {
 
 var table = strings.NewReplacer(
 	"yyyy", "2006",
+	"dddd", "Mon",
 	"MM", "01",
 	"dd", "02",
 	"d", "02",
@@ -57,3 +59,25 @@ var table = strings.NewReplacer(
 	"mm", "04",
 	"ss", "05",
 )
+
+var weekDayReplacer = strings.NewReplacer(
+	"Mon", "月",
+	"Tue", "火",
+	"Wed", "水",
+	"Thu", "木",
+	"Fri", "金",
+	"Sat", "土",
+	"Sun", "日",
+)
+
+func timeFormatOsLayout(t time.Time) (string, error) {
+	layout, err := osDateLayout()
+	if err != nil {
+		return "", err
+	}
+	s := t.Format(layout)
+	if windows.GetACP() == 932 {
+		s = weekDayReplacer.Replace(s)
+	}
+	return s, nil
+}

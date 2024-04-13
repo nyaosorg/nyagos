@@ -3,6 +3,10 @@
 
 package nodos
 
-func osDateLayout() (string, error) {
-	return "Jan.02,2006", nil
+import (
+	"time"
+)
+
+func timeFormatOsLayout(t time.Time) (string, error) {
+	return t.Format("Jan.02,2006"), nil
 }
