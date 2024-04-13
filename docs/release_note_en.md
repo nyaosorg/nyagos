@@ -10,6 +10,9 @@
 * Implement `nyagos.getkeys()` that returns the string as the representation of pressed key instead of `nyagos.getkey()` than returns the first byte of the Unicode.
 * Implement `this:eval` for `nyagos.key.KEYNAME(this)` that calls the function assigned to given key literal (for example: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` means Ctrl-O works same as LEFT-ARROW-KEY )
 
+## Documents
+
+* Fix the broken links caused by renaming readme.md to README.md ( Thx @HAYASHI-Masayuki )
 NYAGOS 4.4.15\_0 
 ================
 Apr 7, 2024
