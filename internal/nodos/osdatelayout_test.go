@@ -1,36 +1,36 @@
 package nodos_test
 
 import (
-	"fmt"
 	"os/exec"
 	"strings"
 	"testing"
 	"time"
 
+	"github.com/nyaosorg/go-windows-mbcs"
+
 	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
-func testOsDateLayout() error {
-	d, err := nodos.OsDateLayout()
-	if err != nil {
-		return fmt.Errorf("OsDatelayout: %s", err)
-	}
+// On Windows Terminal once wsl.exe is executed, this test sometimes fails
+// because CMD.EXE outputs with UTF-8 encoding even when code page is 932.
+
+func TestTimeFormatOsLayout(t *testing.T) {
 	expectBin, err := exec.Command("cmd.exe", "/c", "echo", "%DATE%").Output()
 	if err != nil {
-		return fmt.Errorf("exec.Command: %w", err)
+		t.Fatalf("exec.Command: %s", err.Error())
 	}
-	expect := strings.TrimSpace(string(expectBin))
-	result := time.Now().Format(d)
+	expect, err := mbcs.AnsiToUtf8(expectBin, mbcs.ConsoleCP())
+	if err != nil {
+		t.Fatalf("mbcs.AnsiToUTf8: %s", err.Error())
+	}
+	expect = strings.TrimSpace(expect)
+	result, err := nodos.TimeFormatOsLayout(time.Now())
+	if err != nil {
+		t.Fatal(err.Error())
+	}
 	//println("expect:",expect)
 	//println("result:",result)
 	if expect != result {
-		return fmt.Errorf("OsDatelayout: differs: '%s' != '%s' (OsDatelayout=%s)", expect, result, d)
-	}
-	return err
-}
-
-func TestOsDatelayout(t *testing.T) {
-	if err := testOsDateLayout(); err != nil {
-		t.Fatal(err.Error())
+		t.Fatalf("TestOsDateLayout: expect '%s', but '%s'", expect, result)
 	}
 }

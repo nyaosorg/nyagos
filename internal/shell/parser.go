@@ -42,11 +42,11 @@ var PercentFunc = map[string]func() string{
 		return fmt.Sprintf("%d", LastErrorLevel)
 	},
 	"DATE": func() string {
-		layout, err := nodos.OsDateLayout()
+		s, err := nodos.TimeFormatOsLayout(time.Now())
 		if err != nil {
 			return err.Error()
 		}
-		return time.Now().Format(layout)
+		return s
 	},
 	"TIME": func() string {
 		return time.Now().Format("15:04:05.00")
