@@ -1,4 +1,4 @@
-[top](../readme_ja.md) &gt; [English](./history-4.2_en.md) / Japanese
+[top](../README_ja.md) &gt; [English](./history-4.2_en.md) / Japanese
 
 NYAGOS 4.2.5\_1
 ===============

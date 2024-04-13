@@ -6,7 +6,7 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-**&lt;English&gt;** / [&lt;Japanese&gt;](./readme_ja.md)
+**&lt;English&gt;** / [&lt;Japanese&gt;](./README_ja.md)
 
 NYAGOS is the commandline-shell written with the Programming Language GO and Lua.
 

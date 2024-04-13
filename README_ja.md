@@ -6,7 +6,7 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-[&lt;English&gt;](./readme.md) / **&lt;Japanese&gt;**
+[&lt;English&gt;](./README.md) / **&lt;Japanese&gt;**
 
 NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 

@@ -1,4 +1,4 @@
-[top](../readme_ja.md) &gt; [English](./03-Readline_en.md) / Japanese
+[top](../README_ja.md) &gt; [English](./03-Readline_en.md) / Japanese
 
 ## 編集機能
 

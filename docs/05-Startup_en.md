@@ -1,4 +1,4 @@
-[top](../readme.md) &gt; English / [Japanese](./05-Startup_ja.md)
+[top](../README.md) &gt; English / [Japanese](./05-Startup_ja.md)
 
 ## What is done on the Startup
 
