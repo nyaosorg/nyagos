@@ -1,4 +1,4 @@
-[top](../readme.md) &gt; English / [Japanese](./10-SetupSKK_ja.md)
+[top](../README.md) &gt; English / [Japanese](./10-SetupSKK_ja.md)
 
 
 How to setup SKK

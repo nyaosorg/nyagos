@@ -1,4 +1,4 @@
-[top](../readme.md) &gt; English / [Japanese](./08-Uninstall_ja.md)
+[top](../README.md) &gt; English / [Japanese](./08-Uninstall_ja.md)
 
 Uninstall
 ---------

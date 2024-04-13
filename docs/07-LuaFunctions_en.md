@@ -1,4 +1,4 @@
-[top](../readme.md) &gt; English / [Japanese](./07-LuaFunctions_ja.md)
+[top](../README.md) &gt; English / [Japanese](./07-LuaFunctions_ja.md)
 
 ## Lua functions extenteded by NYAGOS
 

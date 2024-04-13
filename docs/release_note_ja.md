@@ -1,4 +1,4 @@
-[top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
+[top](../README_ja.md) &gt; [English](release_note_en.md) / Japanese
 
 ## 廃止・非推奨
 

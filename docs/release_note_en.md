@@ -1,4 +1,4 @@
-[top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
+[top](../README.md) &gt; English / [Japanese](release_note_ja.md)
 
 ## Deprecations
 
