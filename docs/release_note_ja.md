@@ -1,6 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-* #442 4.4.15\_0 で `nyagos.d/catalog` 以下へ移動させて自動ロード対象外とした `nyagos.d/aliasandset.lua` を元の場所へ戻し、Luaコード: `set "ENV=VALUE" `, `alias "NAME=DEFINE"` を再び、そのまま使えるようにした (Thx @naoyaikeda )
+* (#442) 4.4.15\_0 で `nyagos.d/catalog` 以下へ移動させて自動ロード対象外とした `nyagos.d/aliasandset.lua` を元の場所へ戻し、Luaコード: `set "ENV=VALUE" `, `alias "NAME=DEFINE"` を再び、そのまま使えるようにした (Thx @naoyaikeda )
+* Windows の日付の設定に曜日が含まれているとき %DATE% の結果がおかしくなる不具合を修正 (`2024/04/19 金` と出て欲しいのに `2024/04/19 1919` と出てしまう)
 
 NYAGOS 4.4.15\_0
 ================
