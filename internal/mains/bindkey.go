@@ -164,10 +164,11 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 		case lua.LString:
 			buffer.InsertAndRepaint(string(value))
 		case lua.LBool:
-			if !value {
-				buffer.Buffer = buffer.Buffer[:0]
+			if value {
+				return readline.ENTER
+			} else {
+				return readline.INTR
 			}
-			return readline.ENTER
 		}
 	}
 	return readline.CONTINUE
