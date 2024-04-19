@@ -5,6 +5,10 @@
 * `nyagos.d/catalog/neco.lua` を削除
 * Lua関数: `nyagos.msgbox` を削除
 
+## 不具合修正
+
+* Windows の日付の設定に曜日が含まれているとき %DATE% の結果がおかしくなる不具合を修正 (`2024/04/19 金` と出て欲しいのに `2024/04/19 1919` と出てしまう)
+
 ## 新機能
 
 * キー入力の最初のコードの Unicode しか返さなくなっていた nyagos.getkey のかわりに、入力キーを`\027[A` をいった文字列表現で返す nyagos.getkeys() を実装(nyagos.getkey は [Deprecated])

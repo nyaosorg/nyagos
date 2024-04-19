@@ -5,6 +5,11 @@
 * Remove `nyagos.d/catalog/neco.lua`
 * Remove Lua function: `nyagos.msgbox`
 
+## Fixed bugs
+
+* Fix: the day of the week part of %DATE% was incorrect  
+  (%DATE% was expected like `2024/04/19 金`, but `2024/04/19 1919`)
+
 ## New features
 
 * Implement `nyagos.getkeys()` that returns the string as the representation of pressed key instead of `nyagos.getkey()` than returns the first byte of the Unicode.
