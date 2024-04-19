@@ -13,6 +13,7 @@ import (
 
 	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/nameutils"
 
 	"github.com/nyaosorg/nyagos/internal/texts"
@@ -167,25 +168,24 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 }
 
 func cmdBindKey(L Lua) int {
-	keyTmp, ok := L.Get(-2).(lua.LString)
+	key, ok := L.Get(-2).(lua.LString)
 	if !ok {
-		return lerror(L, "bindkey: key error")
+		return lerror(L, "bindkey: key error: "+string(key))
 	}
-	key := strings.Replace(strings.ToUpper(string(keyTmp)), "-", "_", -1)
-	switch value := L.Get(-1).(type) {
-	case *lua.LFunction:
-		if err := nameutils.BindKeyFunc(readline.GlobalKeyMap, key, &_KeyLuaFunc{Chank: value, L: L}); err != nil {
-			return lerror(L, err.Error())
-		}
-		L.Push(lua.LTrue)
-		return 1
-	default:
-		val := L.ToString(-1)
-		err := nameutils.BindKeySymbol(readline.GlobalKeyMap, key, val)
-		if err != nil {
-			return lerror(L, err.Error())
-		}
-		L.Push(lua.LTrue)
-		return 1
+	code, ok := keys.NameToCode[keys.NormalizeName(string(key))]
+	if !ok {
+		code = keys.Code(key)
 	}
+	if f, ok := L.Get(-1).(*lua.LFunction); ok {
+		readline.GlobalKeyMap.BindKey(code, &_KeyLuaFunc{Chank: f, L: L})
+	} else {
+		funcname := L.ToString(-1)
+		f, ok := readline.NameToFunc[funcname]
+		if !ok {
+			return lerror(L, "bindkey: func error: "+funcname)
+		}
+		readline.GlobalKeyMap.BindKey(code, f)
+	}
+	L.Push(lua.LTrue)
+	return 1
 }
