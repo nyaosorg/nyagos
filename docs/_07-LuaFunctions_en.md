@@ -193,6 +193,7 @@ When the key is pressed, call the function.
 * `this.pos` ... cursor position counted with bytes (==1 when beginning of line)
 * `this.text` ... all text represented with utf8
 * `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
+* `this:eval("KEYLITERAL")` ... call the function assigned to given key literal (for example: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` means Ctrl-O works as LEFT-ARROW-KEY )
 * `this:insert("TEXT")` ... insert TEXT at the cursor position.
 * `this:firstword()` ... get the first word(=command-name) on the command-line.
 * `this:lastword()` ... get the last word and its position on the command-line.
@@ -310,9 +311,14 @@ usual.
 Since the function runs the other Lua-instance, accesss to variables
 assigned on .nyagos have the same restriction with aliases.
 
-### `nyagos.getkey()`
+### `nyagos.getkey()` [Deprecated]
 
-It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
+It returns three values : typed key's UNICODE
+
+### `nyagos.getkeys()`
+
+Return the string as representation of pressed key. Arrow-keys are strings like `\027[A`
+When an error occurs, getkeys returns nil and error-message.
 
 ### `WIDTH,HEIGHT=nyagos.getviewwidth()`
 
@@ -405,10 +411,6 @@ The string compilation architecture of nyagos.exe.
 ### `nyagos.goos`
 
 The string indicating OS name (`windows` or `linux`)
-
-### `nyagos.msgbox(MESSAGE,TITLE)`
-
-Show message-box
 
 ### `nyagos.preexechook`
 
