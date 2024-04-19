@@ -53,16 +53,12 @@ func (rl *_ReadLineCallBack) evalKey(L Lua) int {
 	switch rc {
 	case readline.ENTER:
 		L.Push(lua.LTrue)
-		L.Push(lua.LTrue)
-		return 2
-	case readline.ABORT:
-		L.Push(lua.LTrue)
+	case readline.INTR:
 		L.Push(lua.LFalse)
-		return 2
 	default:
 		L.Push(lua.LNil)
-		return 1
 	}
+	return 1
 }
 
 func (rl *_ReadLineCallBack) KeyFunc(L Lua) int {
@@ -74,16 +70,12 @@ func (rl *_ReadLineCallBack) KeyFunc(L Lua) int {
 	switch function.Call(L.Context(), rl.buffer) {
 	case readline.ENTER:
 		L.Push(lua.LTrue)
-		L.Push(lua.LTrue)
-		return 2
-	case readline.ABORT:
-		L.Push(lua.LTrue)
+	case readline.INTR:
 		L.Push(lua.LFalse)
-		return 2
 	default:
 		L.Push(lua.LNil)
-		return 1
 	}
+	return 1
 }
 
 func (rl *_ReadLineCallBack) LastWord(L Lua) int {
