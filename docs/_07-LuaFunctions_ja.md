@@ -177,6 +177,11 @@ ENVNAME が示す環境変数の中から PATTERN を含む要素を
         "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
         "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP",
         "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
+    (端末から送信される、以下のような文字列)
+        " " (空白),
+        "A"(英大文字のA),
+        "\027[A" (↑ と等価)
+            :
 
 機能名として以下が使えます。
 
@@ -199,7 +204,10 @@ ENVNAME が示す環境変数の中から PATTERN を含む要素を
 * `this.pos` … バイト数で数えたカーソル位置(先頭は 1 になります)
 * `this.text` … utf8 で表現された現在の入力テキスト
 * `this:call("FUNCNAME")` ... `this:call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
-* `this:eval("KEYLITERAL")` ... キー表現に対応する機能を呼び出す(例: `this:call("\027[A")` → "↑" キーに設定されている機能を呼び出す)
+* `this:eval("KEYLITERAL")`
+    * キー表現に対応する機能を呼び出す  
+      例: `rc=this:call("\027[OP")`  
+      F1キーに設定されている機能を呼び出す。Enter 相当の場合 `rc==true`, Ctrl-C相当の場合 `rc==false`, その他は `rc==nil` となる
 * `this:insert("TEXT")` ... TEXT をカーソル位置に挿入します
 * `this:firstword()` ... コマンドラインの先頭の単語(コマンド名)を返します
 * `this:lastword()` ... コマンドラインの最後の単語とその位置を返します

@@ -170,6 +170,11 @@ KEYNAME are:
         "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
         "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
         "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
+    ( The string itself sent from the terminal as below )
+        " " (Space)
+        "A" (alphabet)
+        "\027[A" (equivalent to ↑ )
+            :
 
 FUNCNAME are:
 
@@ -193,7 +198,11 @@ When the key is pressed, call the function.
 * `this.pos` ... cursor position counted with bytes (==1 when beginning of line)
 * `this.text` ... all text represented with utf8
 * `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
-* `this:eval("KEYLITERAL")` ... call the function assigned to given key literal (for example: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` means Ctrl-O works as LEFT-ARROW-KEY )
+* `this:eval("KEYLITERAL")`
+    * call the function assigned to given key literal  
+    (for example: `rc = this:eval("\027[OP")`
+    It calls the feature assigned to F1. The case it is equivalent to Enter-Key, rc is set to true, Ctrl-C to false, others to nil.
+    When Enter 
 * `this:insert("TEXT")` ... insert TEXT at the cursor position.
 * `this:firstword()` ... get the first word(=command-name) on the command-line.
 * `this:lastword()` ... get the last word and its position on the command-line.
