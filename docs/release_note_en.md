@@ -3,6 +3,7 @@
 * (#442) Move back `aliasandset.lua` to `nyagos.d/` and enable to use the Lua codes like `set "ENV=VALUE"` and `alias "NAME=DEFINE"`.  In 4.4.15\_0, it was put on `nyagos.d/catalog/` and `require "aliasandset"` was neccessary to use (Thx @naoyaikeda)
 * Fix: the day of the week part of %DATE% was incorrect  
   (%DATE% was expected like `2024/04/19 金`, but `2024/04/19 1919`)
+* Fix the runtime error when `this:replacefrom(0,...)` is called in the key-handling lua-function. Instead, it returns {nil,error-message}
 
 NYAGOS 4.4.15\_0 
 ================

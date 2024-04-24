@@ -2,6 +2,7 @@
 
 * (#442) 4.4.15\_0 で `nyagos.d/catalog` 以下へ移動させて自動ロード対象外とした `nyagos.d/aliasandset.lua` を元の場所へ戻し、Luaコード: `set "ENV=VALUE" `, `alias "NAME=DEFINE"` を再び、そのまま使えるようにした (Thx @naoyaikeda )
 * Windows の日付の設定に曜日が含まれているとき %DATE% の結果がおかしくなる不具合を修正 (`2024/04/19 金` と出て欲しいのに `2024/04/19 1919` と出てしまう)
+* 一行入力のキーハンドル関数の中で `this:replacefrom(0,...)` を呼び出すと、ランタイムエラー: `runtime error: slice bounds out of range [-1:]` でクラッシュする不具合を修正。かわりに {nil,エラーメッセージ} を返すようにした。
 
 NYAGOS 4.4.15\_0
 ================
