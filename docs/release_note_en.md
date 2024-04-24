@@ -13,8 +13,14 @@
 
 ## New features
 
-* Implement `nyagos.getkeys()` that returns the string as the representation of pressed key instead of `nyagos.getkey()` than returns the first byte of the Unicode.
-* Implement `this:eval` for `nyagos.key.KEYNAME(this)` that calls the function assigned to given key literal (for example: `nyagos.key.C_o = function(this) return this:eval("\027[D"); end` means Ctrl-O works same as LEFT-ARROW-KEY )
+* Implement `nyagos.getkeys()` which returns the input key as a [sequence][keyseq] like `"\027[A"` instead of `nyagos.getkey()` which returns unicode.
+* Enhance functions available in `nyagos.key[KEY] = function(this)...end`
+    * [key-sequences][keyseq] like `"\007"` and `"\027[A"` are avaliable as KEY.
+    * Implement `this:eval(KEYSEQUNCE)` that calls the function assigned to [KEYSEQUNCE][keyseq].
+    * Implement `this:repaint()` that updates the screen
+    * `this.pos` and `this.text` are automatically updated when methods are invoked.
+
+[keyseq]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
 
 ## Documents
 
