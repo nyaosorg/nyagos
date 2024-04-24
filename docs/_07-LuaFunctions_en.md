@@ -195,8 +195,8 @@ When the key is pressed, call the function.
 
 `this` is the table which have these members.
 
-* `this.pos` ... cursor position counted with bytes (==1 when beginning of line)
-* `this.text` ... all text represented with utf8
+* `this.pos` ... cursor position counted with bytes (==1 when beginning of line). This field is automatically updated when you call methods below.
+* `this.text` ... all text represented with utf8. This field is automatically updated when you call methods below. 
 * `this:call("FUNCNAME")` ... call function like `this:call("BACKWARD_DELETE_CHAR")`
 * `this:eval("KEYLITERAL")`
     * call the function assigned to given key literal  
