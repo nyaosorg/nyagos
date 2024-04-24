@@ -213,6 +213,7 @@ ENVNAME が示す環境変数の中から PATTERN を含む要素を
 * `this:lastword()` ... コマンドラインの最後の単語とその位置を返します
 * `this:boxprint({...})` ... テーブルの要素を補完候補リスト風に表示します
 * `this:replacefrom(POS,"TEXT")` ... POSからカーソルまでを TEXT と差替えます
+* `this:repaint()` ... 更新内容をただちに画面へ反映します
 
 また、戻り値は次のように使われます。
 
