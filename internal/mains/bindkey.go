@@ -53,8 +53,15 @@ func (rl *_ReadLineCallBack) Insert(L Lua) int {
 }
 
 func (rl *_ReadLineCallBack) evalKey(L Lua) int {
-	key := L.ToString(2)
-	function := rl.buffer.LookupCommand(key)
+	key, ok := L.Get(-1).(lua.LString)
+	if !ok {
+		return lerror(L, "eval: expect string as key name or sequence")
+	}
+	code, ok := keys.NameToCode[keys.NormalizeName(string(key))]
+	if !ok {
+		code = keys.Code(key)
+	}
+	function := rl.buffer.LookupCommand(string(code))
 	rc := function.Call(L.Context(), rl.buffer)
 	rl.buffer.RepaintLastLine()
 	switch rc {
