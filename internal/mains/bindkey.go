@@ -112,6 +112,11 @@ func (rl *_ReadLineCallBack) BoxListing(L Lua) int {
 	return 0
 }
 
+func (rl *_ReadLineCallBack) Repaint(Lua) int {
+	rl.buffer.RepaintLastLine()
+	return 0
+}
+
 type _KeyLuaFunc struct {
 	Chank *lua.LFunction
 	L     Lua
@@ -147,6 +152,7 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 	L.SetField(table, "lastword", L.NewFunction(rl.LastWord))
 	L.SetField(table, "firstword", L.NewFunction(rl.FirstWord))
 	L.SetField(table, "boxprint", L.NewFunction(rl.BoxListing))
+	L.SetField(table, "repaint", L.NewFunction(rl.Repaint))
 
 	defer setContext(getContext(L), L)
 	setContext(ctx, L)
