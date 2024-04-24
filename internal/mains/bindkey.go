@@ -21,6 +21,7 @@ import (
 
 type _ReadLineCallBack struct {
 	buffer *readline.Buffer
+	update func()
 }
 
 func (rl *_ReadLineCallBack) Replace(L Lua) int {
@@ -39,6 +40,7 @@ func (rl *_ReadLineCallBack) Replace(L Lua) int {
 	rl.buffer.ReplaceAndRepaint(posZeroBase, string(str))
 	L.Push(lua.LTrue)
 	L.Push(lua.LNil)
+	rl.update()
 	return 2
 }
 
@@ -46,6 +48,7 @@ func (rl *_ReadLineCallBack) Insert(L Lua) int {
 	text := L.ToString(2)
 	rl.buffer.InsertAndRepaint(string(text))
 	L.Push(lua.LTrue)
+	rl.update()
 	return 1
 }
 
@@ -62,6 +65,7 @@ func (rl *_ReadLineCallBack) evalKey(L Lua) int {
 	default:
 		L.Push(lua.LNil)
 	}
+	rl.update()
 	return 1
 }
 
@@ -79,6 +83,7 @@ func (rl *_ReadLineCallBack) KeyFunc(L Lua) int {
 	default:
 		L.Push(lua.LNil)
 	}
+	rl.update()
 	return 1
 }
 
@@ -125,13 +130,12 @@ type _KeyLuaFunc struct {
 func (f _KeyLuaFunc) String() string {
 	return f.Chank.String()
 }
-func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
-	L := f.L
-	L.Push(f.Chank)
+
+func getPosAndText(b *readline.Buffer) (int, string) {
 	pos := -1
 	var text strings.Builder
-	for i, c := range buffer.Buffer {
-		if i == buffer.Cursor {
+	for i, c := range b.Buffer {
+		if i == b.Cursor {
 			pos = text.Len() + 1
 		}
 		c.Moji.WriteTo(&text)
@@ -139,12 +143,20 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 	if pos < 0 {
 		pos = text.Len() + 1
 	}
+	return pos, text.String()
+}
+
+func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readline.Result {
+	L := f.L
+	L.Push(f.Chank)
+
+	pos, text := getPosAndText(buffer)
 
 	rl := &_ReadLineCallBack{buffer: buffer}
 
 	table := L.NewTable()
 	L.SetField(table, "pos", lua.LNumber(pos))
-	L.SetField(table, "text", lua.LString(text.String()))
+	L.SetField(table, "text", lua.LString(text))
 	L.SetField(table, "call", L.NewFunction(rl.KeyFunc))
 	L.SetField(table, "eval", L.NewFunction(rl.evalKey))
 	L.SetField(table, "insert", L.NewFunction(rl.Insert))
@@ -153,6 +165,12 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 	L.SetField(table, "firstword", L.NewFunction(rl.FirstWord))
 	L.SetField(table, "boxprint", L.NewFunction(rl.BoxListing))
 	L.SetField(table, "repaint", L.NewFunction(rl.Repaint))
+
+	rl.update = func() {
+		_pos, _text := getPosAndText(buffer)
+		L.SetField(table, "pos", lua.LNumber(_pos))
+		L.SetField(table, "text", lua.LString(_text))
+	}
 
 	defer setContext(getContext(L), L)
 	setContext(ctx, L)
