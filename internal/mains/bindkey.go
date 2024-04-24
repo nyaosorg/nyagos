@@ -47,6 +47,9 @@ func callReplace(L Lua) int {
 	if !ok {
 		return lerror(L, "not a number")
 	}
+	if pos <= 0 {
+		return lerror(L, fmt.Sprintf(":replace: pos=%d: Too small.", pos))
+	}
 	str := L.ToString(-1)
 	posZeroBase := int(pos) - 1
 	if posZeroBase > len(buffer.Buffer) {
