@@ -1,5 +1,12 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.15\_1
+================
+May.02, 2024
+
+The binaries of this version are built with Go 1.20.14  
+They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
+
 * (#442) Move back `aliasandset.lua` to `nyagos.d/` and enable to use the Lua codes like `set "ENV=VALUE"` and `alias "NAME=DEFINE"`.  In 4.4.15\_0, it was put on `nyagos.d/catalog/` and `require "aliasandset"` was neccessary to use (Thx @naoyaikeda)
 * Fix: the day of the week part of %DATE% was incorrect  
   (%DATE% was expected like `2024/04/19 金`, but `2024/04/19 1919`)
