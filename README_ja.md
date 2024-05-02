@@ -171,6 +171,7 @@ C:> choco install nyagos
 / [ousttrue](https://github.com/ousttrue)
 / [kgasawa](https://github.com/kgasawa)
 / [HAYASHI-Masayuki](https://github.com/HAYASHI-Masayuki)
+/ [naoyaikeda](https://github.com/naoyaikeda)
 
 開発者
 ------
