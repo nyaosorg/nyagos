@@ -4,6 +4,13 @@
 * Windows の日付の設定に曜日が含まれているとき %DATE% の結果がおかしくなる不具合を修正 (`2024/04/19 金` と出て欲しいのに `2024/04/19 1919` と出てしまう)
 * 一行入力のキーハンドル関数の中で `this:replacefrom(0,...)` を呼び出すと、ランタイムエラー: `runtime error: slice bounds out of range [-1:]` でクラッシュする不具合を修正。かわりに {nil,エラーメッセージ} を返すようにした。
 
+```lua
+-- On 4.4.15, typing C-I causes crash of nyagos.
+nyagos.key["C-I"] = function(this)
+    assert(this:replacefrom(0,"XXXXX"))
+end
+```
+
 NYAGOS 4.4.15\_0
 ================
 (2024.04.07)

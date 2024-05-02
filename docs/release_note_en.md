@@ -5,6 +5,13 @@
   (%DATE% was expected like `2024/04/19 金`, but `2024/04/19 1919`)
 * Fix the runtime error when `this:replacefrom(0,...)` is called in the key-handling lua-function. Instead, it returns {nil,error-message}
 
+```lua
+-- On 4.4.15, typing C-I causes crash of nyagos.
+nyagos.key["C-I"] = function(this)
+    assert(this:replacefrom(0,"XXXXX"))
+end
+```
+
 NYAGOS 4.4.15\_0 
 ================
 Apr 7, 2024
