@@ -67,6 +67,8 @@ Windows には UNIXと互換性のあるシェルがありますが、ほとん�
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpJa]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
 
+[Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
+
 インストール
 ------------
 
@@ -172,6 +174,7 @@ C:> choco install nyagos
 / [kgasawa](https://github.com/kgasawa)
 / [HAYASHI-Masayuki](https://github.com/HAYASHI-Masayuki)
 / [naoyaikeda](https://github.com/naoyaikeda)
+/ [emisjerry](https://github.com/emisjerry)
 
 開発者
 ------

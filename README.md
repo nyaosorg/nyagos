@@ -66,6 +66,8 @@ So, I created a new shell like below:
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
 
+[Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
+
 Install
 -------
 
@@ -171,6 +173,7 @@ Acknowledgement
 / [kgasawa](https://github.com/kgasawa)
 / [HAYASHI-Masayuki](https://github.com/HAYASHI-Masayuki)
 / [naoyaikeda](https://github.com/naoyaikeda)
+/ [emisjerry](https://github.com/emisjerry)
 
 Author
 ------
