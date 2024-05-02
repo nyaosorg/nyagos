@@ -15,9 +15,4 @@ if nyagos.goos == "windows" then
     } do
         nyagos.alias[name] = "cmdexesc " .. name .. " $*"
     end
-
-    local greppath=nyagos.which("grep")
-    if not greppath and not nyagos.alias.grep then
-        nyagos.alias.grep = "findstr.exe"
-    end
 end

@@ -1,5 +1,25 @@
-[top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
+[top](../README.md) &gt; English / [Japanese](release_note_ja.md)
 
+## Deprecations
+
+* Remove `nyagos.d/catalog/neco.lua`
+* Remove Lua function: `nyagos.msgbox`
+* Remove the feature to define `grep` as an alias of `findstr.exe` when `grep.exe` does not exist. It was the undocumented feature.
+
+## New features
+
+* Implement `nyagos.getkeys()` which returns the input key as a [sequence][keyseq] like `"\027[A"` instead of `nyagos.getkey()` which returns unicode.
+* Enhance functions available in `nyagos.key[KEY] = function(this)...end`
+    * [key-sequences][keyseq] like `"\007"` and `"\027[A"` are avaliable as KEY.
+    * Implement `this:eval(KEYSEQUNCE)` that calls the function assigned to [KEYSEQUNCE][keyseq].
+    * Implement `this:repaint()` that updates the screen
+    * `this.pos` and `this.text` are automatically updated when methods are invoked.
+
+[keyseq]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
+
+## Documents
+
+* Fix the broken links caused by renaming readme.md to README.md ( Thx @HAYASHI-Masayuki )
 NYAGOS 4.4.15\_1
 ================
 May.02, 2024
@@ -18,6 +38,7 @@ nyagos.key["C-I"] = function(this)
     assert(this:replacefrom(0,"XXXXX"))
 end
 ```
+
 
 NYAGOS 4.4.15\_0 
 ================

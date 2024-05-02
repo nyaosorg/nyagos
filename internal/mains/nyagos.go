@@ -28,6 +28,10 @@ type luaKeyT struct{}
 
 var luaKey luaKeyT
 
+type _LuaCallBack struct {
+	Lua
+}
+
 type _ScriptEngineForOptionImpl struct {
 	L  Lua
 	Sh *shell.Shell
@@ -108,7 +112,6 @@ func (lw *luaWrapper) Close() error {
 // Main is the entry of this package.
 func Main() error {
 	ctx := context.Background()
-	completion.HookToList = append(completion.HookToList, luaHookForComplete)
 
 	L, err := NewLua()
 	if err != nil {
@@ -117,6 +120,8 @@ func Main() error {
 		ctx = context.WithValue(ctx, luaKey, L)
 		defer L.Close()
 	}
+
+	completion.HookToList = append(completion.HookToList, (&_LuaCallBack{Lua: L}).luaHookForComplete)
 
 	sh := shell.New()
 	if L != nil {

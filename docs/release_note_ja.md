@@ -1,4 +1,25 @@
-[top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
+[top](../README_ja.md) &gt; [English](release_note_en.md) / Japanese
+
+## 廃止・非推奨
+
+* `nyagos.d/catalog/neco.lua` を削除
+* Lua関数: `nyagos.msgbox` を削除
+* grep.exe が存在しない時、勝手に findstr.exe を grep の別名にする動作を削除
+
+## 新機能
+
+* キー入力の最初のコードの Unicode しか返さなくなっていた nyagos.getkey のかわりに、入力キーを`"\027[A"` といった[キーシーケンス]で返す nyagos.getkeys() を実装した
+* `nyagos.key[KEY]=function(this)...end` の中で使える機能を拡充
+    * KEY として従来の`"BACKSPACE"`, `"UP"` などの名前の他、`"\007"`, `"\027[A"` などの[キーシーケンス]も使えるようにした
+    * `this:eval("キーシーケンス")` で[キーシーケンス]に設定された機能を呼び出せるようにした
+    * 更新内容を画面に反映するメソッド`this:repaint()`を追加
+    * 更新系のメソッドを呼び出した際に`this.pos`と`this.text` を自動的に更新するようにした
+
+[キーシーケンス]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
+
+## ドキュメント
+
+* readme.md → README.md でのファイル名変更でドキュメント間のリンクが切れてしまっていた点の修正 ( Thx @HAYASHI-Masayuki )
 
 NYAGOS 4.4.15\_1
 ================

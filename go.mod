@@ -10,12 +10,11 @@ require (
 	github.com/mattn/go-isatty v0.0.20
 	github.com/mattn/go-runewidth v0.0.15
 	github.com/mattn/go-tty v0.0.5
-	github.com/mattn/msgbox v0.0.0-20170906002440-669fc0ad4d51
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/glua-ole v0.0.0-20210914102918-563689ba7584
-	github.com/nyaosorg/go-box/v2 v2.1.4
+	github.com/nyaosorg/go-box/v2 v2.2.1
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
-	github.com/nyaosorg/go-readline-ny v1.2.0
+	github.com/nyaosorg/go-readline-ny v1.3.0
 	github.com/nyaosorg/go-readline-skk v0.3.1
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
@@ -27,14 +26,14 @@ require (
 	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
 	github.com/yuin/gopher-lua v1.1.1
-	golang.org/x/sys v0.18.0
+	golang.org/x/sys v0.19.0
 	golang.org/x/text v0.14.0
 )
 
 require (
 	github.com/Microsoft/go-winio v0.6.1 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
-	golang.org/x/mod v0.16.0 // indirect
-	golang.org/x/term v0.18.0 // indirect
-	golang.org/x/tools v0.19.0 // indirect
+	golang.org/x/mod v0.17.0 // indirect
+	golang.org/x/sync v0.7.0 // indirect
+	golang.org/x/tools v0.20.0 // indirect
 )

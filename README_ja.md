@@ -6,7 +6,7 @@
 The Nihongo Yet Another GOing Shell
 ===================================
 
-[&lt;English&gt;](./readme.md) / **&lt;Japanese&gt;**
+[&lt;English&gt;](./README.md) / **&lt;Japanese&gt;**
 
 NYAGOS は Go と Lua で記述されたコマンドラインシェルです。
 
@@ -162,14 +162,15 @@ C:> choco install nyagos
 / [sambatriste](https://github.com/sambatriste)
 / [terepanda](https://github.com/terepanda)
 / [Takmg](https://github.com/Takmg)
-/ [nu8](https://github.com/nu8)
+/ nu8 <!-- (https://github.com/nu8) -->
 / [tomato3713](https://github.com/tomato3713)
-/ [tGqmJHoJKqgK](https://github.com/tGqmJHoJKqgK)
+/ tGqmJHoJKqgK <!-- (https://github.com/tGqmJHoJKqgK) -->
 / [juggler999](https://github.com/juggler999)
 / [zztkm](https://github.com/zztkm)
 / [8exBCYJi5ATL](https://github.com/8exBCYJi5ATL)
 / [ousttrue](https://github.com/ousttrue)
 / [kgasawa](https://github.com/kgasawa)
+/ [HAYASHI-Masayuki](https://github.com/HAYASHI-Masayuki)
 
 開発者
 ------

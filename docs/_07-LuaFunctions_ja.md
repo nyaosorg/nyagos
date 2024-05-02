@@ -177,6 +177,11 @@ ENVNAME が示す環境変数の中から PATTERN を含む要素を
         "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
         "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP",
         "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
+    (端末から送信される、以下のような文字列)
+        " " (空白),
+        "A"(英大文字のA),
+        "\027[A" (↑ と等価)
+            :
 
 機能名として以下が使えます。
 
@@ -196,14 +201,19 @@ ENVNAME が示す環境変数の中から PATTERN を含む要素を
 キーが押下された時、関数を呼び出します。引数 this は次のような
 メンバーを持ったテーブルです。
 
-* `this.pos` … バイト数で数えたカーソル位置(先頭は 1 になります)
-* `this.text` … utf8 で表現された現在の入力テキスト
-* `this:call("FUNCNAME")` ... `this.call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
+* `this.pos` … バイト数で数えたカーソル位置(先頭は 1 になります)。このフィールドは下記のメソッドを呼び出した時に自動で更新されます
+* `this.text` … utf8 で表現された現在の入力テキスト。このフィールドは以下のメソッドを呼んだ時に自動で更新されます
+* `this:call("FUNCNAME")` ... `this:call("BACKWARD_DELETE_CHAR")` のように機能を呼び出す
+* `this:eval("KEYLITERAL")`
+    * キー表現に対応する機能を呼び出す  
+      例: `rc=this:call("\027[OP")`  
+      F1キーに設定されている機能を呼び出す。Enter 相当の場合 `rc==true`, Ctrl-C相当の場合 `rc==false`, その他は `rc==nil` となる
 * `this:insert("TEXT")` ... TEXT をカーソル位置に挿入します
 * `this:firstword()` ... コマンドラインの先頭の単語(コマンド名)を返します
 * `this:lastword()` ... コマンドラインの最後の単語とその位置を返します
 * `this:boxprint({...})` ... テーブルの要素を補完候補リスト風に表示します
 * `this:replacefrom(POS,"TEXT")` ... POSからカーソルまでを TEXT と差替えます
+* `this:repaint()` ... 更新内容をただちに画面へ反映します
 
 また、戻り値は次のように使われます。
 
@@ -354,9 +364,14 @@ false の時 \ が使われます。
 
 ファイルがない時、STAT は nil です。
 
-### `nyagos.getkey()`
+### `nyagos.getkey()` [Deprecated]
 
-入力されたキーの、Unicode、スキャンコード、シフト状態を返します。
+入力されたキーの Unicode を返します
+
+### `nyagos.getkeys()`
+
+入力されたキーを文字列表現で返します。矢印キーなどは `\027[A` といった表現になります
+エラー時は nil とエラーメッセージの二値が返されます。
 
 ### `nyagos.open(PATH,MODE)`
 
@@ -429,10 +444,6 @@ true の場合、一行入力の前に入力バッファをクリアします。
 ### `nyagos.goos`
 
 OS名 (`windows` or `linux`)
-
-### `nyagos.msgbox(MESSAGE,TITLE)`
-
-メッセージボックスを表示します
 
 ### `nyagos.preexechook`
 

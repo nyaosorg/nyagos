@@ -5,7 +5,6 @@ package mains
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"strings"
 
@@ -16,12 +15,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/completion"
 )
 
-func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {
-	L, ok := ctx.Value(luaKey).(Lua)
-	if !ok {
-		return rv, errors.New("listUpComplete: could not get lua instance")
-	}
-
+func (L *_LuaCallBack) luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completion.List) (*completion.List, error) {
 	nyagosTbl, ok := L.GetGlobal("nyagos").(*lua.LTable)
 	if !ok {
 		return rv, nil
@@ -51,8 +45,8 @@ func luaHookForComplete(ctx context.Context, this *readline.Buffer, rv *completi
 	L.SetField(tbl, "field", field)
 	L.SetField(tbl, "left", lua.LString(rv.Left))
 
-	defer setContext(getContext(L), L)
-	setContext(ctx, L)
+	defer setContext(getContext(L.Lua), L.Lua)
+	setContext(ctx, L.Lua)
 
 	L.Push(f)
 	L.Push(tbl)

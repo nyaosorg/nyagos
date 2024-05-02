@@ -77,7 +77,11 @@ func CmdBox(this *Param) []any {
 		}
 	}
 	values := make([]any, 0)
-	for _, s := range box.ChoiceMulti(sources, this.Term) {
+	choice, err := box.SelectString(sources, true, this.Term)
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	for _, s := range choice {
 		values = append(values, s)
 	}
 	return values
@@ -111,6 +115,19 @@ func CmdGetKey(args []any) []any {
 			return []any{r, 0, 0}
 		}
 	}
+}
+
+func CmdGetKeys(args []any) []any {
+	tty1, err := tty.Open()
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	defer tty1.Close()
+	key, err := readline.GetKey(tty1)
+	if err != nil {
+		return []any{nil, err.Error()}
+	}
+	return []any{key}
 }
 
 func CmdGetViewWidth(args []any) []any {

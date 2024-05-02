@@ -1,4 +1,4 @@
-[top](../readme_ja.md) &gt; [English](./04-Commands_en.md) / Japanese
+[top](../README_ja.md) &gt; [English](./04-Commands_en.md) / Japanese
 
 ## 内蔵コマンド
 
