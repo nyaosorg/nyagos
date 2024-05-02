@@ -4,6 +4,7 @@
 
 * `nyagos.d/catalog/neco.lua` を削除
 * Lua関数: `nyagos.msgbox` を削除
+* grep.exe が存在しない時、勝手に findstr.exe を grep の別名にする動作を削除
 
 ## 不具合修正
 

@@ -4,6 +4,7 @@
 
 * Remove `nyagos.d/catalog/neco.lua`
 * Remove Lua function: `nyagos.msgbox`
+* Remove the feature to define `grep` as an alias of `findstr.exe` when `grep.exe` does not exist. It was the undocumented feature.
 
 ## Fixed bugs
 
