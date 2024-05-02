@@ -1,5 +1,7 @@
 [top](../readme.md) &gt; English / [Japanese](release_note_ja.md)
 
+* (#442) Move back `aliasandset.lua` to `nyagos.d/` and enable to use the Lua codes like `set "ENV=VALUE"` and `alias "NAME=DEFINE"`.  In 4.4.15\_0, it was put on `nyagos.d/catalog/` and `require "aliasandset"` was neccessary to use (Thx @naoyaikeda)
+
 NYAGOS 4.4.15\_0 
 ================
 Apr 7, 2024

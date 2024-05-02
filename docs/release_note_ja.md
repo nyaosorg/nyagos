@@ -1,5 +1,7 @@
 [top](../readme_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+* #442 4.4.15\_0 で `nyagos.d/catalog` 以下へ移動させて自動ロード対象外とした `nyagos.d/aliasandset.lua` を元の場所へ戻し、Luaコード: `set "ENV=VALUE" `, `alias "NAME=DEFINE"` を再び、そのまま使えるようにした (Thx @naoyaikeda )
+
 NYAGOS 4.4.15\_0
 ================
 (2024.04.07)
