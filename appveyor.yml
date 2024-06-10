@@ -36,14 +36,13 @@ install:
   - set "GOARCH=%PLATFORM:i386=386%"
   - mkdir "%INSTALLDIR%" > nul 2>&1
 
-
 #---------------------------------#
 #       build configuration       #
 #---------------------------------#
 
 build_script:
-  - where go.exe
-  - C:\go120\bin\go.exe version
+  #- where go.exe
+  #- C:\go120\bin\go.exe version
   - mingw32-make GO=C:\go120\bin\go.exe
   - mingw32-make GO=C:\go120\bin\go.exe test
   - ps: .\install.ps1 $env:INSTALLDIR
