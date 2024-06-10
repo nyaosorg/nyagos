@@ -8,6 +8,7 @@
 
 ## New features
 
+* Ctrl-P/N: save the modified entry when switching history, and restore when switching again, until Enter is pressed
 * Implement `nyagos.getkeys()` which returns the input key as a [sequence][keyseq] like `"\027[A"` instead of `nyagos.getkey()` which returns unicode.
 * Enhance functions available in `nyagos.key[KEY] = function(this)...end`
     * [key-sequences][keyseq] like `"\007"` and `"\027[A"` are avaliable as KEY.

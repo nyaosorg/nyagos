@@ -8,12 +8,14 @@
 
 ## 新機能
 
+* Ctrl-P/N: 履歴を切り替えるときに変更したエントリを保存し、(Enterが入力されるまでは)再度切り替えたときに復元するようにした
 * キー入力の最初のコードの Unicode しか返さなくなっていた nyagos.getkey のかわりに、入力キーを`"\027[A"` といった[キーシーケンス]で返す nyagos.getkeys() を実装した
 * `nyagos.key[KEY]=function(this)...end` の中で使える機能を拡充
     * KEY として従来の`"BACKSPACE"`, `"UP"` などの名前の他、`"\007"`, `"\027[A"` などの[キーシーケンス]も使えるようにした
     * `this:eval("キーシーケンス")` で[キーシーケンス]に設定された機能を呼び出せるようにした
     * 更新内容を画面に反映するメソッド`this:repaint()`を追加
     * 更新系のメソッドを呼び出した際に`this.pos`と`this.text` を自動的に更新するようにした
+
 
 [キーシーケンス]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
 
