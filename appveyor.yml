@@ -22,6 +22,7 @@ environment:
   global:
     dest_dir: bin
     gopath: C:\Users\appveyor\go
+    goroot: C:\go120
   matrix:
     - platform: i386
     - platform: amd64
