@@ -41,6 +41,7 @@ install:
 #---------------------------------#
 
 build_script:
+  - where go.exe
   - mingw32-make
   - mingw32-make test
   - ps: .\install.ps1 $env:INSTALLDIR
