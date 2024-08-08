@@ -15,6 +15,7 @@
     * Implement `this:eval(KEYSEQUNCE)` that calls the function assigned to [KEYSEQUNCE][keyseq].
     * Implement `this:repaint()` that updates the screen
     * `this.pos` and `this.text` are automatically updated when methods are invoked.
+* Add the completion for `make` that is enabled with `require "makefile-complete"`
 
 [keyseq]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
 
