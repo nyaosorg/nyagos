@@ -283,11 +283,10 @@ var optionMap = ignoreCaseSorted.MapToDictionary(map[string]optionT{
 })
 
 func Title() {
-	fmt.Printf("Nihongo Yet Another GOing Shell %s-%s-%s by %s\n",
+	fmt.Printf("Nihongo Yet Another GOing Shell %s-%s-%s\n",
 		Version,
 		runtime.GOOS,
-		runtime.GOARCH,
-		runtime.Version())
+		runtime.GOARCH)
 	fmt.Println("(c) 2014-2024 NYAOS.ORG <https://github.com/nyaosorg/nyagos>")
 }
 
