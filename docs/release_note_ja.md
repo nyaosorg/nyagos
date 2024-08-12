@@ -15,7 +15,14 @@
     * `this:eval("キーシーケンス")` で[キーシーケンス]に設定された機能を呼び出せるようにした
     * 更新内容を画面に反映するメソッド`this:repaint()`を追加
     * 更新系のメソッドを呼び出した際に`this.pos`と`this.text` を自動的に更新するようにした
-* `make` コマンドの引数補完を追加: `require "makefile-complete"` にて有効化
+* `make` コマンドのエントリ補完を追加: `require "makefile-complete"` にて有効化
+* `jj` コマンドのサブコマンド名補完を追加: `require "complete-jj"` にて有効化
+* `gmnlisp` コマンドの引用機能を追加: `require "gmnlisp"` にて有効化
+    - `@(Lispコマンド)` を gmnlisp で処理した結果に置換
+    - コマンド先頭が `(` で始まっていた場合、gmnlisp.exe で実行
+* UNIX風シングルクォーテーション機能を追加: `require "sq2dq"` にて有効化
+    - `'..".."..'` を `"..\"..\".."` へ置換
+    - `"..'..'.."` はそのまま (二重引用符内の一重引用符は変換しない)
 
 [キーシーケンス]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
 

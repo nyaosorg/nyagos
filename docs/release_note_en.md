@@ -15,7 +15,14 @@
     * Implement `this:eval(KEYSEQUNCE)` that calls the function assigned to [KEYSEQUNCE][keyseq].
     * Implement `this:repaint()` that updates the screen
     * `this.pos` and `this.text` are automatically updated when methods are invoked.
-* Add the completion for `make` that is enabled with `require "makefile-complete"`
+* Add the completion for `make`: Enable by `require "makefile-complete"`
+* Add subcommand name completion for the jj command: Enable by requiring "complete-jj".
+* Add citation feature for the gmnlisp command: Enable by `require "gmnlisp"`
+    * Replaces `@(Lisp command)` with the result processed by gmnlisp.
+    * If the command starts with `(`, it is executed using gmnlisp.exe.
+* Add UNIX-style single quotation feature: Enable by requiring "sq2dq".
+    * Replaces '..".."..' with "..\"..\"..".
+    * Leaves "..'..'.." unchanged (single quotes within double quotes are not converted).
 
 [keyseq]: https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences
 
