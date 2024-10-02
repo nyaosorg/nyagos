@@ -8,13 +8,13 @@ require (
 	github.com/go-ole/go-ole v1.3.0
 	github.com/mattn/go-colorable v0.1.13
 	github.com/mattn/go-isatty v0.0.20
-	github.com/mattn/go-runewidth v0.0.15
-	github.com/mattn/go-tty v0.0.5
+	github.com/mattn/go-runewidth v0.0.16
+	github.com/mattn/go-tty v0.0.7
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/glua-ole v0.0.0-20210914102918-563689ba7584
 	github.com/nyaosorg/go-box/v2 v2.2.1
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
-	github.com/nyaosorg/go-readline-ny v1.3.2-0.20240610084650-61113afa99a8
+	github.com/nyaosorg/go-readline-ny v1.4.1
 	github.com/nyaosorg/go-readline-skk v0.3.1
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
@@ -26,8 +26,8 @@ require (
 	github.com/nyaosorg/go-windows-su v0.2.1
 	github.com/nyaosorg/go-windows-subst v0.0.0-20210914104023-206be1973409
 	github.com/yuin/gopher-lua v1.1.1
-	golang.org/x/sys v0.21.0
-	golang.org/x/text v0.16.0
+	golang.org/x/sys v0.25.0
+	golang.org/x/text v0.18.0
 )
 
 require (
