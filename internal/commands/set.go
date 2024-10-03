@@ -43,6 +43,8 @@ func (o *optionT) Get() bool {
 	}
 }
 
+var OptionPredictColor = true
+
 // BoolOptions are the all global option list.
 var BoolOptions = ignoreCaseSorted.MapToDictionary(map[string]*optionT{
 	"completion_hidden": {
@@ -90,6 +92,11 @@ var BoolOptions = ignoreCaseSorted.MapToDictionary(map[string]*optionT{
 		Getter:  readline.IsSurrogatePairEnabled,
 		Usage:   "Output surrogate pair characters as it is",
 		NoUsage: "Output surrogate pair characters like <NNNNN>",
+	},
+	"predict": {
+		V:       &OptionPredictColor,
+		Usage:   "Enable prediction on readline",
+		NoUsage: "Disable prediction on readline",
 	},
 })
 

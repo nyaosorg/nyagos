@@ -13,6 +13,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-windows-consoleicon"
 
+	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
@@ -41,6 +42,9 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			PlainHistory: []string{},
 			Pointer:      -1,
 		},
+	}
+	if commands.OptionPredictColor {
+		stream.Editor.PredictColor = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
 	}
 	history1.Load(stream.HistPath)
 	history1.Save(stream.HistPath)
