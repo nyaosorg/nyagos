@@ -8,6 +8,10 @@
 
 ## New features
 
+* PowerShell 7-style input prediction
+    - When one or more characters are typed, the most recent entry in the history that starts with the typed characters is displayed inline (in blue italics).
+    - Pressing `→` or `Ctrl-F` accepts the current prediction
+    - Enabled by default. You can disable it with the launch option `--no-predict` or by setting `nyagos.option.prediction=false`
 * Ctrl-P/N: save the modified entry when switching history, and restore when switching again, until Enter is pressed
 * Implement `nyagos.getkeys()` which returns the input key as a [sequence][keyseq] like `"\027[A"` instead of `nyagos.getkey()` which returns unicode.
 * Enhance functions available in `nyagos.key[KEY] = function(this)...end`
