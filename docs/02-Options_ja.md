@@ -43,6 +43,9 @@
 ### --lua-first "LUACODE"
 .nyagos を読み込む前に、引数の LUAコードを実行します
 
+### --predict (lua: `nyagos.option.predict=true`) [default]
+一行入力の予測表示を有効化します(デフォルトは有効)
+
 ### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
 プロンプト表示時にキーバッファをクリアさせません。
 
@@ -76,6 +79,9 @@
 
 ### --noclobber (lua: `nyagos.option.noclobber=true`)
 リダイレクトでの上書きを禁止します。
+
+### --no-predict (lua: `nyagos.option.predict=false`)
+一行入力の予測表示を無効化します(デフォルトは有効)
 
 ### --norc
 `~\.nyagos`, `(BINDIR)\.nyagos`, `(BINDIR)\nyagos.d\*.lua`, `%APPDATA%\NYAOS_ORG\nyagos.d\*.lua` といった起動スクリプトをロードしないようにします。

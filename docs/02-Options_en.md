@@ -46,6 +46,9 @@ Lines starting with `@` are ignored to embed into batchfile.
 ### --lua-first "LUACODE"
 Execute "LUACODE" before processing any rcfiles and continue shell
 
+### --predict (lua: `nyagos.option.predict=true`) [default]
+Enable the prediction on readlines (default: enabled)
+
 ### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
 Do not clean up key buffer at prompt
 
@@ -78,6 +81,9 @@ forbide batchfile to change environment variables of nyagos
 
 ### --noclobber (lua: `nyagos.option.noclobber=true`)
 forbide to overwrite files on redirect
+
+### --no-predict (lua: `nyagos.option.predict=false`)
+Disable the prediction on readlines (default: enabled)
 
 ### --norc
 Do not load the startup-scripts: `~\.nyagos` , `(BINDIR)\.nyagos` , `(BINDIR)\nyagos.d\*.lua`, and `%APPDATA%\NYAOS_ORG\nyagos.d\*.lua`.
