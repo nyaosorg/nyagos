@@ -1,5 +1,9 @@
 [top](../README.md) &gt; English / [Japanese](release_note_ja.md)
 
+NYAGOS 4.4.16\_0
+================
+Oct.13, 2024
+
 ## Removed features and Deprecations
 
 * Remove `nyagos.d/catalog/neco.lua`

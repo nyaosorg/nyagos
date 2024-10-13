@@ -1,5 +1,9 @@
 [top](../README_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+NYAGOS 4.4.16\_0
+================
+(2024.10.14)
+
 ## 廃止・非推奨
 
 * `nyagos.d/catalog/neco.lua` を削除
