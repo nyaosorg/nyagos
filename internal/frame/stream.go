@@ -1,7 +1,6 @@
 package frame
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"io"
@@ -101,7 +100,7 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 		if err != nil || !endsWithSep(buffer, '^') {
 			if continued {
 				os.Setenv("PROMPT", originalPrompt)
-				stream.Editor.Coloring.(*_Coloring).defaultBits &^= quotedBit
+				// stream.Editor.Coloring.(*_Coloring).defaultBits &^= quotedBit
 			}
 			return string(buffer), err
 		}
@@ -109,9 +108,9 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 		buffer = append(buffer, '\r', '\n')
 		continued = true
 		os.Setenv("PROMPT", "> ")
-		if bytes.Count(buffer, []byte{'"'})%2 != 0 {
-			stream.Editor.Coloring.(*_Coloring).defaultBits |= quotedBit
-		}
+		// if bytes.Count(buffer, []byte{'"'})%2 != 0 {
+		// stream.Editor.Coloring.(*_Coloring).defaultBits |= quotedBit
+		// }
 	}
 }
 
