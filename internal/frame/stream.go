@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/mattn/go-colorable"
 
@@ -34,7 +35,6 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			History:        history1,
 			PromptWriter:   doPrompt,
 			Writer:         colorable.NewColorableStdout(),
-			Coloring:       &_Coloring{},
 			HistoryCycling: true,
 		},
 		HistPath: filepath.Join(appDataDir(), "nyagos.history"),
@@ -43,8 +43,29 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			Pointer:      -1,
 		},
 	}
-	if commands.OptionPredictColor {
-		stream.Editor.PredictColor = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
+	if _, ok := os.LookupEnv("NO_COLOR"); !ok {
+		stream.Editor.Highlight = []readline.Highlight{
+			// Options -> Dark Yellow
+			{Pattern: regexp.MustCompile(` \-\w+`), Sequence: "\x1B[33;49;22m"},
+			// Backquotation -> Red
+			{Pattern: regexp.MustCompile("`[^`]*`|`[^`]*$"), Sequence: "\x1B[31;49;1m"},
+			// & | < > ; -> Green
+			{Pattern: regexp.MustCompile(`[&\|<>]| ;`), Sequence: "\x1B[32;49;1m"},
+			// Double quotation -> Magenta
+			{Pattern: regexp.MustCompile(`"([^"]*\\")*[^"]*$|"([^"]*\\")*[^"]*"`), Sequence: "\x1B[35;49;1m"},
+			// Enviroment variable -> Cyan
+			{Pattern: regexp.MustCompile(`%[^%]*$|%[^%]*%`), Sequence: "\x1B[36;49;1m"},
+			// Control characters -> Blue
+			{Pattern: regexp.MustCompile("[\x00-\x1F]+"), Sequence: "\x1B[34;49;1m"},
+			// Wide space -> Background Red
+			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[39;41;22m"},
+		}
+		stream.Editor.ResetColor = "\x1B[0m"
+		stream.Editor.DefaultColor = "\x1B[0;1m"
+
+		if commands.OptionPredictColor {
+			stream.Editor.PredictColor = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
+		}
 	}
 	history1.Load(stream.HistPath)
 	history1.Save(stream.HistPath)
