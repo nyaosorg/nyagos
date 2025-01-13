@@ -40,7 +40,7 @@ var jsonTemplate = `{
 		"FileDescription": "Nihongo Yet Another GOing Shell",
 		"FileVersion": "%s",
 		"InternalName": "",
-		"LegalCopyright": "Copyright (C) 2014-2024 HAYAMA_Kaoru",
+		"LegalCopyright": "Copyright (C) 2014-2025 HAYAMA_Kaoru",
 		"LegalTrademarks": "",
 		"OriginalFilename": "NYAGOS.EXE",
 		"PrivateBuild": "",
