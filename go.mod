@@ -14,7 +14,7 @@ require (
 	github.com/nyaosorg/glua-ole v0.0.0-20210914102918-563689ba7584
 	github.com/nyaosorg/go-box/v2 v2.2.1
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
-	github.com/nyaosorg/go-readline-ny v1.7.0
+	github.com/nyaosorg/go-readline-ny v1.7.1
 	github.com/nyaosorg/go-readline-skk v0.4.2
 	github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20220221183117-826f40ae390b
