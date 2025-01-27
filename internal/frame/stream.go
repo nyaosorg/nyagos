@@ -16,6 +16,8 @@ import (
 	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/shell"
+
+	"github.com/nyaosorg/go-readline-skk"
 )
 
 type CmdStreamConsole struct {
@@ -45,19 +47,22 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 	if _, ok := os.LookupEnv("NO_COLOR"); !ok {
 		stream.Editor.Highlight = []readline.Highlight{
 			// Options -> Dark Yellow
-			{Pattern: regexp.MustCompile(` \-\w+`), Sequence: "\x1B[33;49;22m"},
+			{Pattern: regexp.MustCompile(` \-\w+`), Sequence: "\x1B[0;33m"},
 			// Backquotation -> Red
-			{Pattern: regexp.MustCompile("`[^`]*`|`[^`]*$"), Sequence: "\x1B[31;49;1m"},
+			{Pattern: regexp.MustCompile("`[^`]*`|`[^`]*$"), Sequence: "\x1B[0;31;1m"},
 			// & | < > ; -> Green
-			{Pattern: regexp.MustCompile(`[&\|<>]| ;`), Sequence: "\x1B[32;49;1m"},
+			{Pattern: regexp.MustCompile(`[&\|<>]| ;`), Sequence: "\x1B[0;32;1m"},
 			// Double quotation -> Magenta
-			{Pattern: regexp.MustCompile(`"([^"]*\\")*[^"]*$|"([^"]*\\")*[^"]*"`), Sequence: "\x1B[35;49;1m"},
+			{Pattern: regexp.MustCompile(`"([^"]*\\")*[^"]*$|"([^"]*\\")*[^"]*"`), Sequence: "\x1B[0;35;1m"},
 			// Enviroment variable -> Cyan
-			{Pattern: regexp.MustCompile(`%[^%]*$|%[^%]*%`), Sequence: "\x1B[36;49;1m"},
+			{Pattern: regexp.MustCompile(`%[^%]*$|%[^%]*%`), Sequence: "\x1B[0;36;1m"},
 			// Control characters -> Blue
-			{Pattern: regexp.MustCompile("[\x00-\x1F]+"), Sequence: "\x1B[34;49;1m"},
+			{Pattern: regexp.MustCompile("[\x00-\x1F]+"), Sequence: "\x1B[0;34;1m"},
 			// Wide space -> Background Red
-			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[39;41;22m"},
+			{Pattern: regexp.MustCompile("\u3000"), Sequence: "\x1B[0;41m"},
+
+			skk.WhiteMarkerHighlight,
+			skk.BlackMarkerHighlight,
 		}
 		stream.Editor.ResetColor = "\x1B[0m"
 		stream.Editor.DefaultColor = "\x1B[0;1m"
