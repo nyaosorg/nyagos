@@ -77,8 +77,8 @@ _dist:
 
 dist:
 	cd Etc && $(GO) generate
-	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _dist "FILES=Etc/*.ico Etc/*.png makeicon.cmd"
-	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _dist "FILES=Etc/*.ico Etc/*.png makeicon.cmd"
+	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _dist "FILES=Etc/*.ico makeicon.cmd"
+	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _dist "FILES=Etc/*.ico makeicon.cmd"
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
 release:
