@@ -1,7 +1,5 @@
 [top](../README_ja.md) &gt; [English](release_note_en.md) / Japanese
 
-* (#445) Windows Terminal で使えるように、Windows の配布用の ZIP ファイルに PNG ファイルも含めるようにした。
-
 NYAGOS 4.4.16\_0
 ================
 (2024.10.14)

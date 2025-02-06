@@ -1,7 +1,5 @@
 [top](../README.md) &gt; English / [Japanese](release_note_ja.md)
 
-* (#445) Included PNG images in the released zips for Windows to use as the icon on WindowsTerminal
-
 NYAGOS 4.4.16\_0
 ================
 Oct.13, 2024
