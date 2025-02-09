@@ -1,5 +1,7 @@
 [top](../README_ja.md) &gt; [English](release_note_en.md) / Japanese
 
+- シェルや REPLs は OS のクリップボードから切り離されているのが一般的であるため、OSのクリップボードを使用しないようにした
+
 NYAGOS 4.4.16\_0
 ================
 (2024.10.14)

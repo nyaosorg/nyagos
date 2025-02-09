@@ -1,5 +1,7 @@
 [top](../README.md) &gt; English / [Japanese](release_note_ja.md)
 
+- Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.
+
 NYAGOS 4.4.16\_0
 ================
 Oct.13, 2024
