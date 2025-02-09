@@ -26,8 +26,8 @@ github.com/nyaosorg/go-box/v2 v2.2.1 h1:1SAtgLE+uYCA8oycJGKFrzsYaOWmxXWiqH8PR9wv
 github.com/nyaosorg/go-box/v2 v2.2.1/go.mod h1:IAW2+ri9apF0QTlZ5r5lkU+Rfnsigkmt6yODV7JMZ5E=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16XkjcdkjWTJX3jfFiP987ougN3RrK7oNr+rvau5INs=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
-github.com/nyaosorg/go-readline-ny v1.7.4 h1:9RO8cnGA+pOgcSqNdRJo1/GpQFAjRSLppxkSsaf86GU=
-github.com/nyaosorg/go-readline-ny v1.7.4/go.mod h1:54AzdC//M5EzTWRdvUHv2ChuYgp58mRrStTlpxiCmT0=
+github.com/nyaosorg/go-readline-ny v1.8.0 h1:V02/ACP2URz3XMYS9Ntdb9gFopT+hpp3I5efJjhUCMo=
+github.com/nyaosorg/go-readline-ny v1.8.0/go.mod h1:54AzdC//M5EzTWRdvUHv2ChuYgp58mRrStTlpxiCmT0=
 github.com/nyaosorg/go-readline-skk v0.5.0 h1:+YWtmWveOV2ovchQAP3AHdTa9yfd9rbFn+/ZyqEfw18=
 github.com/nyaosorg/go-readline-skk v0.5.0/go.mod h1:Fe48AMXOmzDXIz9wDu+BnfnALnrZrU1deema5D70sTA=
 github.com/nyaosorg/go-windows-commandline v0.0.0-20210914103131-4bd0300aa022 h1:4WxrzYVJcE2jPDRFs8qXrhPLDt9Bm78WiTm6bTt2xZc=
@@ -60,7 +60,7 @@ golang.org/x/sys v0.0.0-20201218084310-7d0127a74742/go.mod h1:h1NjWce9XRLGQEsW7w
 golang.org/x/sys v0.0.0-20210309074719-68d13333faf2/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.1.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.29.0 h1:TPYlXGxvx1MGTn2GiZDhnjPA9wZzZeGKHHmKhHYvgaU=
-golang.org/x/sys v0.29.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
-golang.org/x/text v0.21.0 h1:zyQAAkrwaneQ066sspRyJaG9VNi/YJ1NfzcGB3hZ/qo=
-golang.org/x/text v0.21.0/go.mod h1:4IBbMaMmOPCJ8SecivzSH54+73PCFmPWxNTLm+vZkEQ=
+golang.org/x/sys v0.30.0 h1:QjkSwP/36a20jFYWkSue1YwXzLmsV5Gfq7Eiy72C1uc=
+golang.org/x/sys v0.30.0/go.mod h1:/VUhepiaJMQUp4+oa/7Zr1D23ma6VTLIYjOOTFZPUcA=
+golang.org/x/text v0.22.0 h1:bofq7m3/HAFvbF51jz3Q9wLg3jkvSPuiZu/pD1XwgtM=
+golang.org/x/text v0.22.0/go.mod h1:YRoo4H8PVmsu+E3Ou7cqLVH8oXWIHVoX0jqUWALQhfY=
