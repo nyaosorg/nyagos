@@ -430,10 +430,6 @@ true の場合、一行入力の前に入力バッファをクリアします。
 
 OS名 (`windows` or `linux`)
 
-### `nyagos.msgbox(MESSAGE,TITLE)`
-
-メッセージボックスを表示します
-
 ### `nyagos.preexechook`
 
 コマンド実行前のフックです。
