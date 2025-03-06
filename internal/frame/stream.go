@@ -55,7 +55,7 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			// Double quotation -> Magenta
 			{Pattern: regexp.MustCompile(`"([^"]*\\")*[^"]*$|"([^"]*\\")*[^"]*"`), Sequence: "\x1B[0;35;1m"},
 			// Enviroment variable -> Cyan
-			{Pattern: regexp.MustCompile(`%[^%]*$|%[^%]*%`), Sequence: "\x1B[0;36;1m"},
+			{Pattern: regexp.MustCompile(`%[A-Za-z][A-Za-z0-9]*$|%[A-Za-z][A-Za-z0-9]*%`), Sequence: "\x1B[0;36;1m"},
 			// Control characters -> Blue
 			{Pattern: regexp.MustCompile("[\x00-\x1F]+"), Sequence: "\x1B[0;34;1m"},
 			// Wide space -> Background Red
