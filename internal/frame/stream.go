@@ -47,7 +47,7 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 	if _, ok := os.LookupEnv("NO_COLOR"); !ok {
 		stream.Editor.Highlight = []readline.Highlight{
 			// Options -> Dark Yellow
-			{Pattern: regexp.MustCompile(` \-\w+`), Sequence: "\x1B[0;33m"},
+			{Pattern: regexp.MustCompile(` \-[-\w]+`), Sequence: "\x1B[0;33m"},
 			// Backquotation -> Red
 			{Pattern: regexp.MustCompile("`[^`]*`|`[^`]*$"), Sequence: "\x1B[0;31;1m"},
 			// & | < > ; -> Green
