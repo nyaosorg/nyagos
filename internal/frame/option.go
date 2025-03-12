@@ -14,7 +14,7 @@ import (
 
 	"github.com/nyaosorg/go-windows-commandline/args"
 
-	"github.com/nyaosorg/nyagos/internal/commands"
+	"github.com/nyaosorg/nyagos/internal/config"
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"
@@ -341,28 +341,28 @@ func OptionParse(_ctx context.Context, sh *shell.Shell, e ScriptEngineForOption)
 	optionMap.Store("-h", optionT{V: help, U: "\nPrint this usage"})
 	optionMap.Store("--help", optionT{V: help, U: "\nPrint this usage"})
 
-	for p := commands.BoolOptions.Front(); p != nil; p = p.Next() {
+	for p := config.Bools.Front(); p != nil; p = p.Next() {
 		key := p.Key
 		val := p.Value
 		_key := strings.Replace(key, "_", "-", -1)
 		_val := val
 		optionMap.Store("--"+_key, optionT{
 			F: func() {
-				*_val.V = true
+				_val.Set(true)
 			},
 			U: fmt.Sprintf("(lua: `nyagos.option.%s=true`)%s\n%s",
 				key,
 				isDefault(val.Get()),
-				_val.Usage),
+				_val.Usage()),
 		})
 		optionMap.Store("--no-"+_key, optionT{
 			F: func() {
-				*_val.V = false
+				_val.Set(false)
 			},
 			U: fmt.Sprintf("(lua: `nyagos.option.%s=false`)%s\n%s",
 				key,
 				isDefault(!val.Get()),
-				_val.NoUsage),
+				_val.NoUsage()),
 		})
 	}
 

@@ -20,8 +20,8 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-windows-findfile"
 
-	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/completion"
+	"github.com/nyaosorg/nyagos/internal/config"
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/internal/nodos"
@@ -441,11 +441,11 @@ func GetOption(args []any) []any {
 		return []any{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
-	ptr, ok := commands.BoolOptions.Load(key)
+	ptr, ok := config.Bools.Load(key)
 	if !ok {
 		return []any{nil, fmt.Sprintf("key: %s: not found", key)}
 	}
-	return []any{*ptr.V}
+	return []any{ptr.Get()}
 }
 
 func SetOption(args []any) []any {
@@ -453,19 +453,19 @@ func SetOption(args []any) []any {
 		return []any{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
-	ptr, ok := commands.BoolOptions.Load(key)
+	ptr, ok := config.Bools.Load(key)
 	if !ok || ptr == nil {
 		return []any{nil, "key: %s: not found"}
 	}
 	val := args[2]
 	if val == nil {
-		*ptr.V = false
+		ptr.Set(false)
 	} else if s, ok := val.(string); ok && s == "" {
-		*ptr.V = false
+		ptr.Set(false)
 	} else if b, ok := val.(bool); ok {
-		*ptr.V = b
+		ptr.Set(b)
 	} else {
-		*ptr.V = true
+		ptr.Set(true)
 	}
 	return []any{true}
 }

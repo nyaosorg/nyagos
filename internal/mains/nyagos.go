@@ -17,8 +17,8 @@ import (
 	"github.com/yuin/gopher-lua"
 
 	"github.com/nyaosorg/nyagos/internal/alias"
-	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/completion"
+	"github.com/nyaosorg/nyagos/internal/config"
 	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/internal/functions"
 	"github.com/nyaosorg/nyagos/internal/shell"
@@ -176,7 +176,7 @@ func Main() error {
 	}
 
 	var stream1 shell.Stream
-	if !commands.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
+	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
 			func(w io.Writer) (int, error) {
 				if L != nil {

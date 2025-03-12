@@ -13,7 +13,7 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-windows-consoleicon"
 
-	"github.com/nyaosorg/nyagos/internal/commands"
+	"github.com/nyaosorg/nyagos/internal/config"
 	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/shell"
 
@@ -67,7 +67,7 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 		stream.Editor.ResetColor = "\x1B[0m"
 		stream.Editor.DefaultColor = "\x1B[0;1m"
 
-		if commands.OptionPredictColor {
+		if config.OptionPredictColor {
 			stream.Editor.PredictColor = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
 		}
 	}
