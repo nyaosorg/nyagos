@@ -4,6 +4,9 @@
 - Syntax highlighting:
     - The highlighted environment variable is now limited to text that starts with a letter and contains only alphanumeric characters.
     - The highlighted option can now contain `-` anywhere, not just at the beginning.
+- Added support for customizing the color of input prediction.
+    - e.g., `nyagos.option.predict_color = "\027[0;31;1m"` (red).
+    - Restart nyagos after modifying `.nyagos` to apply the change.
 
 NYAGOS 4.4.16\_0
 ================
