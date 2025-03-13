@@ -7,6 +7,7 @@
 - Added support for customizing the color of input prediction.
     - e.g., `nyagos.option.predict_color = "\027[0;31;1m"` (red).
     - Restart nyagos after modifying `.nyagos` to apply the change.
+- Removed support for the configuration file `_nyagos`, which had been deprecated since v4.4.15.
 
 NYAGOS 4.4.16\_0
 ================
