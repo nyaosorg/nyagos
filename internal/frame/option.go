@@ -306,8 +306,6 @@ func help(p *optionArg) (func(context.Context) error, error) {
 			fmt.Printf("  %s\\*.lua\n", nyagosD)
 			file1 := filepath.Join(binDir, ".nyagos")
 			fmt.Printf("  %s (Lua)\n", file1)
-			file1 = filepath.Join(binDir, "_nyagos")
-			fmt.Printf("  %s (deprecated)\n", file1)
 		}
 
 		home := strings.TrimSpace(os.Getenv("HOME"))
@@ -316,8 +314,6 @@ func help(p *optionArg) (func(context.Context) error, error) {
 		}
 		file1 := filepath.Join(home, ".nyagos")
 		fmt.Printf("  %s (Lua)\n", file1)
-		file1 = filepath.Join(home, "_nyagos")
-		fmt.Printf("  %s (deprecated)\n", file1)
 
 		return io.EOF
 	}, nil

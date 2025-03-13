@@ -137,9 +137,6 @@ func Main() error {
 		setContext(ctxTmp, L)
 		return nil, L.DoFile(fname)
 	}
-	shellEngine := func(fname string) error {
-		return sh.Source(ctx, fname)
-	}
 
 	alias.LineFilter = func(ctx context.Context, line string) string {
 		if L, ok := ctx.Value(luaKey).(Lua); ok {
@@ -161,7 +158,7 @@ func Main() error {
 		if !frame.SilentMode {
 			frame.Title()
 		}
-		if err := frame.LoadScripts(shellEngine, langEngine); err != nil {
+		if err := frame.LoadScripts(langEngine); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}

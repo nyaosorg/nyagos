@@ -2,7 +2,6 @@ package frame
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -26,10 +25,7 @@ func (e _DirNotFound) Unwrap() error {
 	return e.err
 }
 
-func loadScriptDir(dir string,
-	shellEngine func(string) error,
-	langEngine func(string) ([]byte, error)) error {
-
+func loadScriptDir(dir string, langEngine func(string) ([]byte, error)) error {
 	files, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -43,14 +39,11 @@ func loadScriptDir(dir string,
 		path := filepath.Join(dir, name)
 		lowerName := strings.ToLower(name)
 
-		var err error
 		if strings.HasSuffix(lowerName, ".lua") {
-			_, err = langEngine(path)
-		} else if strings.HasSuffix(lowerName, ".ny") {
-			err = shellEngine(path)
-		}
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "%s: %s\n", path, err.Error())
+			_, err := langEngine(path)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "%s: %s\n", path, err.Error())
+			}
 		}
 	}
 	return nil
@@ -58,7 +51,6 @@ func loadScriptDir(dir string,
 
 // LoadScripts loads ".nyagos"
 func LoadScripts(
-	shellEngine func(string) error,
 	langEngine func(string) ([]byte, error)) error {
 
 	exeName, err := os.Executable()
@@ -66,12 +58,11 @@ func LoadScripts(
 		fmt.Fprintln(os.Stderr, err)
 	}
 	exeFolder := filepath.Dir(exeName)
-	loadScriptDir(filepath.Join(exeFolder, "nyagos.d"),
-		shellEngine, langEngine)
+	loadScriptDir(filepath.Join(exeFolder, "nyagos.d"), langEngine)
 
 	if appDir, err := os.UserConfigDir(); err == nil {
 		dir := filepath.Join(appDir, "NYAOS_ORG/nyagos.d")
-		err := loadScriptDir(dir, shellEngine, langEngine)
+		err := loadScriptDir(dir, langEngine)
 		if err != nil {
 			if _, ok := err.(_DirNotFound); ok {
 				os.MkdirAll(dir, 0755)
@@ -87,11 +78,9 @@ func LoadScripts(
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}
-	barNyagos(shellEngine, exeFolder)
 	if err := dotNyagos(langEngine); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
-	barNyagos(shellEngine, nodos.GetHome())
 	return nil
 }
 
@@ -117,18 +106,4 @@ func dotNyagos(langEngine func(string) ([]byte, error)) error {
 		return err
 	}
 	return os.WriteFile(cachePath, chank, os.FileMode(0644))
-}
-
-func barNyagos(shellEngine func(string) error, folder string) {
-	barNyagos := filepath.Join(folder, "_nyagos")
-	fd, err := os.Open(barNyagos)
-	if err != nil {
-		return
-	}
-	fmt.Fprintln(os.Stderr, "****", barNyagos, "is DEPRECATED now. ****")
-	err = shellEngine(barNyagos)
-	if err != nil {
-		io.WriteString(os.Stderr, err.Error())
-	}
-	fd.Close()
 }
