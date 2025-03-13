@@ -68,7 +68,7 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 		stream.Editor.DefaultColor = "\x1B[0;1m"
 
 		if config.OptionPredictColor {
-			stream.Editor.PredictColor = [...]string{"\x1B[3;22;34m", "\x1B[23;39m"}
+			stream.Editor.PredictColor = config.PredictColor
 		}
 	}
 	history1.Load(stream.HistPath)

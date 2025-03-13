@@ -441,11 +441,13 @@ func GetOption(args []any) []any {
 		return []any{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
-	ptr, ok := config.Bools.Load(key)
-	if !ok {
-		return []any{nil, fmt.Sprintf("key: %s: not found", key)}
+	if ptr, ok := config.Bools.Load(key); ok {
+		return []any{ptr.Get()}
 	}
-	return []any{ptr.Get()}
+	if ptr, ok := config.Strings.Load(key); ok {
+		return []any{ptr.Get()}
+	}
+	return []any{nil, fmt.Sprintf("key: %s: not found", key)}
 }
 
 func SetOption(args []any) []any {
@@ -453,21 +455,28 @@ func SetOption(args []any) []any {
 		return []any{nil, "too few arguments"}
 	}
 	key := fmt.Sprint(args[1])
-	ptr, ok := config.Bools.Load(key)
-	if !ok || ptr == nil {
-		return []any{nil, "key: %s: not found"}
+	if ptr, ok := config.Bools.Load(key); ok {
+		val := args[2]
+		if val == nil {
+			ptr.Set(false)
+		} else if s, ok := val.(string); ok && s == "" {
+			ptr.Set(false)
+		} else if b, ok := val.(bool); ok {
+			ptr.Set(b)
+		} else {
+			ptr.Set(true)
+		}
+		return []any{true}
 	}
-	val := args[2]
-	if val == nil {
-		ptr.Set(false)
-	} else if s, ok := val.(string); ok && s == "" {
-		ptr.Set(false)
-	} else if b, ok := val.(bool); ok {
-		ptr.Set(b)
-	} else {
-		ptr.Set(true)
+	if ptr, ok := config.Strings.Load(key); ok {
+		if s, ok := args[2].(string); ok {
+			ptr.Set(s)
+			return []any{true}
+		} else {
+			return []any{nil, "not string"}
+		}
 	}
-	return []any{true}
+	return []any{nil, "key: %s: not found"}
 }
 
 func bitOperators(args []any, result int, f func(int, int) int) []any {
