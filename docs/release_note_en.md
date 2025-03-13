@@ -1,6 +1,9 @@
 [top](../README.md) &gt; English / [Japanese](release_note_ja.md)
 
 - Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.
+- Syntax highlighting:
+    - The highlighted environment variable is now limited to text that starts with a letter and contains only alphanumeric characters.
+    - The highlighted option can now contain `-` anywhere, not just at the beginning.
 
 NYAGOS 4.4.16\_0
 ================
