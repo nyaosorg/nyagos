@@ -416,6 +416,12 @@ true の時(デフォルト)、バッチファイルで NYAGOS の環境変数�
 
 true の場合、一行入力の前に入力バッファをクリアします。
 
+### `nyagos.option.predict_color`
+
+入力予測機能の色を設定します。
+
+例: `nyagos.option.predict_color = "\027[0;31;1m"` (赤)
+
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。

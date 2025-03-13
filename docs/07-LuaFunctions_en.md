@@ -392,6 +392,12 @@ the environment variables from batchfiles.
 
 When it is true, clean up console input buffer before readline.
 
+### `nyagos.option.predict_color`
+
+It customizes the color of input prediction.  
+
+e.g., `nyagos.option.predict_color = "\027[0;31;1m"` (red).
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe
