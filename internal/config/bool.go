@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/nyaosorg/go-readline-ny"
 
@@ -81,26 +82,31 @@ var Bools = ignoreCaseSorted.MapToDictionary(map[string]Bool{
 	},
 })
 
-func DumpBoolOptions(out io.Writer) {
-	max := 0
-	for p := Bools.Front(); p != nil; p = p.Next() {
-		if L := len(p.Key); L > max {
-			max = L
+func toLuaLiteral(s string) string {
+	var buf strings.Builder
+	for _, c := range s {
+		if c < ' ' {
+			fmt.Fprintf(&buf, "\\%03d", c)
+
+		} else {
+			buf.WriteRune(c)
 		}
 	}
+	return buf.String()
+}
+
+func Dump(w io.Writer) {
 	for p := Bools.Front(); p != nil; p = p.Next() {
-		key := p.Key
-		val := p.Value
-		if val.Get() {
-			fmt.Fprint(out, "-o ")
+		v := p.Value.Get()
+		if v {
+			fmt.Fprintf(w, "-- %s\n", p.Value.Usage())
 		} else {
-			fmt.Fprint(out, "+o ")
+			fmt.Fprintf(w, "-- %s\n", p.Value.NoUsage())
 		}
-		fmt.Fprintf(out, "%-*s", max, key)
-		if val.Get() {
-			fmt.Fprintf(out, " (%s)\n", val.Usage())
-		} else {
-			fmt.Fprintf(out, " (%s)\n", val.NoUsage())
-		}
+		fmt.Fprintf(w, "nyagos.option.%s=%v\n", p.Key, v)
+	}
+	for p := Strings.Front(); p != nil; p = p.Next() {
+		fmt.Fprintf(w, "-- %s\n", p.Value.Usage())
+		fmt.Fprintf(w, "nyagos.option.%s='%s'\n", p.Key, toLuaLiteral(p.Value.Get()))
 	}
 }

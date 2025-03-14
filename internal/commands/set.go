@@ -23,7 +23,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 		if args[0] == "-o" {
 			args = args[1:]
 			if len(args) < 1 {
-				config.DumpBoolOptions(cmd.Out())
+				config.Dump(cmd.Out())
 			} else {
 				if ptr, ok := config.Bools.Load(args[0]); ok {
 					ptr.Set(true)
@@ -35,7 +35,7 @@ func cmdSet(ctx context.Context, cmd Param) (int, error) {
 		} else if args[0] == "+o" {
 			args = args[1:]
 			if len(args) < 1 {
-				config.DumpBoolOptions(cmd.Out())
+				config.Dump(cmd.Out())
 			} else {
 				if ptr, ok := config.Bools.Load(args[0]); ok {
 					ptr.Set(false)
