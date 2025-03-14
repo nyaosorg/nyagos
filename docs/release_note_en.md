@@ -8,6 +8,7 @@
     - e.g., `nyagos.option.predict_color = "\027[0;31;1m"` (red).
     - Restart nyagos after modifying `.nyagos` to apply the change.
 - Removed support for the configuration file `_nyagos`, which had been deprecated since v4.4.15.
+- `set -o` now shows the current configuration in Lua syntax.
 
 NYAGOS 4.4.16\_0
 ================
