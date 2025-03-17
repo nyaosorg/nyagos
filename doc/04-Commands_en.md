@@ -4,7 +4,7 @@ English / [Japanese](./04-Commands_ja.md)
 
 These commands have their alias. For example, `ls` => `__ls__`.
 
-### `bindkey KEYNAME FUNCNAME`
+#### `bindkey KEYNAME FUNCNAME`
 
 Customize the key-binding for line-editing.
 
@@ -24,7 +24,7 @@ FUNCNAME are:
         "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
         "ISEARCH_BACKWARD" "REPAINT_ON_NEWLINE"
 
-### `cd DRIVE:DIRECTORY`
+#### `cd DRIVE:DIRECTORY`
 
 Change the current working drive and directory.
 No arguments, move to %HOME% or %USERPROFILE%.
@@ -39,33 +39,33 @@ If the directory-path does not contain `:`,`/`,`\` and it does not
 exists in the current directory, seek the directory to move in the
 list of %CDPATH%.
 
-### `chmod ooo FILE(s)`
+#### `chmod ooo FILE(s)`
 
-### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
+#### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
 
 While COMMAND is executed, change environment variables.
 
-### `exit`
+#### `exit`
 
 Quit NYAGOS.exe.
 
-### foreach
+#### foreach
 
 `foreach` *VAR* *VAL1* *VAL2* ...
     STATEMENTS
 `end`
 
-### `history [N]`
+#### `history [N]`
 
 Display the history. No arguments, the last ten are displayed.
 
-### if
+#### if
 
-#### inline-if
+##### inline-if
 
 `if` *COND* *THEN-STATEMENT*
 
-#### block-if
+##### block-if
 
 `if` *COND* [`then`]
    *THEN-BLOCK*
@@ -87,25 +87,25 @@ Display the history. No arguments, the last ten are displayed.
 * if *COND* is true, execute *THEN-BLOCK* or *THEN-STATEMENT*
 * if *COND* is false, execute *ELSE-BLOCK* or nothing.
 
-### `kill PID`
+#### `kill PID`
 
 Kill process specified by PID
 
-### `killall NAME...`
+#### `killall NAME...`
 
 Kill process by name
 
-### `ln [-s] SRC DST`
+#### `ln [-s] SRC DST`
 
 Make hardlink or symbolic-link.
 The alias 'lns' defined on `nyagos.d\lns.lua` shows UAC-dialog
 and calls `ln -s`.
 
-### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
+#### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
 
 Make shortcut.
 
-### `ls -OPTION FILES`
+#### `ls -OPTION FILES`
 
 List the directory. Supported options are below:
 
@@ -140,15 +140,15 @@ What FLAGs are meaning
 - `h` - Hidden file
 
 
-### `more`
+#### `more`
 
 Support both UTF8 and ANSI-text (auto detected)
 
-### `ps`
+#### `ps`
 
 Show a list of processes running.
 
-### `pwd`
+#### `pwd`
 
 Print the current woking drive and directory.
 
@@ -156,7 +156,7 @@ Print the current woking drive and directory.
 * `pwd -L` : use PWD from environment, even if it contains symlinks.(default)
 * `pwd -P` : avoid symlinks.
 
-### `set ENV=VAL`
+#### `set ENV=VAL`
 
 Set the environment variable the value. When the value has any spaces,
 you should `set "ENV=VAL"`.
@@ -165,7 +165,7 @@ you should `set "ENV=VAL"`.
 * `set ENV^=VAL` is same as `set ENV=VAL;%ENV%` but removes duplicated VAL.
 * `set ENV+=VAL` is same as `set ENV=%ENV%;VAL` but removes duplicated VAL.
 
-### `set -o OPTION-NAME`, `set +o OPTION-NAME`
+#### `set -o OPTION-NAME`, `set +o OPTION-NAME`
 
 `-o` makes OPTION true, `+o` false.
 
@@ -175,43 +175,43 @@ you should `set "ENV=VAL"`.
 - `+o usesource` you have to use `source BATCHFILE` to read the changes of the environment variables from batchfiles.
 - `-o cleaup_buffer` clean up console input buffer before readline.
 
-### `set -a "EQUATION"`, `set /a "EQUATION"`
+#### `set -a "EQUATION"`, `set /a "EQUATION"`
 
 Same as CMD.EXE. Evalute EQUATION
 
-### `select FILENAME(s)...`
+#### `select FILENAME(s)...`
 
 Open a file with dialog to select application.
 
-### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r ref_file ] FILENAME(s)`
+#### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r ref_file ] FILENAME(s)`
 
 If FILENAME exists, update its timestamp, otherwise create it.
 
-### `which [-a] COMMAND-NAME`
+#### `which [-a] COMMAND-NAME`
 
 Report which file is executed.
 
 * `-a` - report all executable on %PATH%
 
-### `copy SOURCE-FILENAME DESTINATE-FILENAME`
-### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
-### `copy SOURCE-FILENAME(S)... SHORT-CUT(*.lnk)`
-### `move OLD-FILENAME NEW-FILENAME`
-### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
-### `move SOURCE-FILENAME(S)... SHORT-CUT(*.lnk)`
-### `del FILE(S)...`
-### `erase FILE(S)...`
-### `mkdir [/p] NEWDIR(S)...`
-### `rmdir [/s] DIR(S)...`
-### `pushd [DIR]`
-### `popd`
-### `dirs`
-### `diskfree`
-### `diskused`
+#### `copy SOURCE-FILENAME DESTINATE-FILENAME`
+#### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
+#### `copy SOURCE-FILENAME(S)... SHORT-CUT(*.lnk)`
+#### `move OLD-FILENAME NEW-FILENAME`
+#### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
+#### `move SOURCE-FILENAME(S)... SHORT-CUT(*.lnk)`
+#### `del FILE(S)...`
+#### `erase FILE(S)...`
+#### `mkdir [/p] NEWDIR(S)...`
+#### `rmdir [/s] DIR(S)...`
+#### `pushd [DIR]`
+#### `popd`
+#### `dirs`
+#### `diskfree`
+#### `diskused`
 
 These built-in commands are always asking with prompt when files are override or removed.
 
-### `source [-v] [-d] BATCHFILENAME`
+#### `source [-v] [-d] BATCHFILENAME`
 
 Execute the batch-file(`*.cmd`,`*.bat`) by CMD.exe and
 import the environment variables and working directory
@@ -224,32 +224,32 @@ which CMD.exe changed.
 - With option -d, temporary files made by `source` is not to be removed.
 - With option -v, `source` shows the temporari files to STDERR.
 
-### `open FILE(s)`
+#### `open FILE(s)`
 
 Open the file with associated application.
 
-### `clone`
+#### `clone`
 
 Run another nyagos.exe on another console window.
 
-### `su`
+#### `su`
 
 Run another nyagos.exe as Administrator.
 
-## Commands implemented by Lua
+### Commands implemented by Lua
 
-### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua)
+#### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua)
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
 
-### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
+#### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
 
 Execute lua-script.
 
-### `trash FILE(S)` (nyagos.d\trash.lua)
+#### `trash FILE(S)` (nyagos.d\trash.lua)
 
 It throws files into trashbox of Windows.
 
-### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
+#### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
 
 Expand the wildcard included ARG(s) and call COMMAND.

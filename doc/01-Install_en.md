@@ -2,14 +2,23 @@ English / [Japanese](./01-Install_ja.md)
 
 ## Install
 
-The binary files can be downloaded on [Release](https://github.com/nyaosorg/nyagos/releases).
+### Download Binary
 
-    mkdir PATH\TO\INSTALLDIR
-    cd PATH\TO\INSTALLDIR
-    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
-    makeicon.cmd
+* https://github.com/nyaosorg/nyagos/releases
 
-## Customizing
+### Use "Scoop installer"
+
+```
+C:> scoop install nyagos
+```
+
+### Use "Chocolatey installer"
+
+```
+C:> choco install nyagos
+```
+
+### Customizing
 
     copy .nyagos "%USERPROFILE%\."
     notepad "%USERPROFILE%\.nyagos"
@@ -19,14 +28,14 @@ And please customize `%USERPROFILE%\.nyagos`
 `.nyagos` is the configuration file written with Lua.
 (Be careful that the filename starts with `.`(dot)
 
-### Setting environment variables
+#### Setting environment variables
 
 If you want to do `SET PATH="%PATH%;C:\BIN`,
 write this in `%USERPROFILE%\.nyagos`
 
     nyagos.env.path = nyagos.env.path .. ";C:\\bin"
 
-### Setting aliases
+#### Setting aliases
 
 If you want to use `lala` as `ls -al`:
 

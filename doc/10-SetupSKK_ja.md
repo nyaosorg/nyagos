@@ -1,15 +1,14 @@
 [English](./10-SetupSKK_en.md) / Japanese
 
-SKK のセットアップの仕方
-========================
+## SKK のセットアップの仕方
 
-## 1. 辞書をダウンロードします
+### 1. 辞書をダウンロードします
 
     cd (YOUR-JISYO-DIR)
     curl -O https://raw.githubusercontent.com/skk-dev/dict/master/SKK-JISYO.L
     curl -O https://raw.githubusercontent.com/skk-dev/dict/master/SKK-JISYO.emoji
 
-## 2. 辞書のパスを .nyagos に記載します
+### 2. 辞書のパスを .nyagos に記載します
 
     nyagos.skk{
         user="~/.go-skk-jisyo" , -- ユーザ辞書

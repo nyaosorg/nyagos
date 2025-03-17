@@ -1,0 +1,1782 @@
+<html><head>
+<style type="text/css"><!--
+/* light */
+.markdown-body {
+  color-scheme: light;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #1f2328;
+  background-color: #ffffff;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+.markdown-body h1:hover .anchor .octicon-link:before,
+.markdown-body h2:hover .anchor .octicon-link:before,
+.markdown-body h3:hover .anchor .octicon-link:before,
+.markdown-body h4:hover .anchor .octicon-link:before,
+.markdown-body h5:hover .anchor .octicon-link:before,
+.markdown-body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+}
+
+.markdown-body details,
+.markdown-body figcaption,
+.markdown-body figure {
+  display: block;
+}
+
+.markdown-body summary {
+  display: list-item;
+}
+
+.markdown-body [hidden] {
+  display: none !important;
+}
+
+.markdown-body a {
+  background-color: transparent;
+  color: #0969da;
+  text-decoration: none;
+}
+
+.markdown-body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: 600;
+}
+
+.markdown-body dfn {
+  font-style: italic;
+}
+
+.markdown-body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 2em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body mark {
+  background-color: #fff8c5;
+  color: #1f2328;
+}
+
+.markdown-body small {
+  font-size: 90%;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body sup {
+  top: -0.5em;
+}
+
+.markdown-body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.markdown-body figure {
+  margin: 1em 2.5rem;
+}
+
+.markdown-body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: transparent;
+  border-bottom: 1px solid #d1d9e0b3;
+  height: .25em;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #d1d9e0;
+  border: 0;
+}
+
+.markdown-body input {
+  font: inherit;
+  margin: 0;
+  overflow: visible;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.markdown-body [type=button],
+.markdown-body [type=reset],
+.markdown-body [type=submit] {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+.markdown-body [type=checkbox],
+.markdown-body [type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body [type=number]::-webkit-inner-spin-button,
+.markdown-body [type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+.markdown-body [type=search]::-webkit-search-cancel-button,
+.markdown-body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.markdown-body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54;
+}
+
+.markdown-body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  appearance: button;
+  font: inherit;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body ::placeholder {
+  color: #59636e;
+  opacity: 1;
+}
+
+.markdown-body hr::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  font-variant: tabular-nums;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body details summary {
+  cursor: pointer;
+}
+
+.markdown-body a:focus,
+.markdown-body [role=button]:focus,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=checkbox]:focus {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:focus:not(:focus-visible),
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body input[type=radio]:focus:not(:focus-visible),
+.markdown-body input[type=checkbox]:focus:not(:focus-visible) {
+  outline: solid 1px transparent;
+}
+
+.markdown-body a:focus-visible,
+.markdown-body [role=button]:focus-visible,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:not([class]):focus,
+.markdown-body a:not([class]):focus-visible,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline-offset: 0;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 0.25rem;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #1f2328;
+  vertical-align: middle;
+  background-color: #f6f8fa;
+  border: solid 1px #d1d9e0b3;
+  border-bottom-color: #d1d9e0b3;
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 #d1d9e0b3;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-body h2 {
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body h3 {
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+.markdown-body h4 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-weight: 600;
+  font-size: .875em;
+}
+
+.markdown-body h6 {
+  font-weight: 600;
+  font-size: .85em;
+  color: #59636e;
+}
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #59636e;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body tt,
+.markdown-body code,
+.markdown-body samp {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+  word-wrap: normal;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-body input::-webkit-outer-spin-button,
+.markdown-body input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.markdown-body .mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+.markdown-body::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markdown-body .absent {
+  color: #d1242f;
+}
+
+.markdown-body .anchor {
+  float: left;
+  padding-right: 0.25rem;
+  margin-left: -20px;
+  line-height: 1;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body details {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  color: #1f2328;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markdown-body h1 tt,
+.markdown-body h1 code,
+.markdown-body h2 tt,
+.markdown-body h2 code,
+.markdown-body h3 tt,
+.markdown-body h3 code,
+.markdown-body h4 tt,
+.markdown-body h4 code,
+.markdown-body h5 tt,
+.markdown-body h5 code,
+.markdown-body h6 tt,
+.markdown-body h6 code {
+  padding: 0 .2em;
+  font-size: inherit;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2,
+.markdown-body summary h3,
+.markdown-body summary h4,
+.markdown-body summary h5,
+.markdown-body summary h6 {
+  display: inline-block;
+}
+
+.markdown-body summary h1 .anchor,
+.markdown-body summary h2 .anchor,
+.markdown-body summary h3 .anchor,
+.markdown-body summary h4 .anchor,
+.markdown-body summary h5 .anchor,
+.markdown-body summary h6 .anchor {
+  margin-left: -40px;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.markdown-body ul.no-list,
+.markdown-body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.markdown-body ol[type="a s"] {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body ol[type="A s"] {
+  list-style-type: upper-alpha;
+}
+
+.markdown-body ol[type="i s"] {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ol[type="I s"] {
+  list-style-type: upper-roman;
+}
+
+.markdown-body ol[type="1"] {
+  list-style-type: decimal;
+}
+
+.markdown-body div>ol:not([type]) {
+  list-style-type: decimal;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 1rem;
+}
+
+.markdown-body li+li {
+  margin-top: .25em;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.markdown-body dl dd {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body table th {
+  font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body table td>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table tr {
+  background-color: #ffffff;
+  border-top: 1px solid #d1d9e0b3;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+.markdown-body table img {
+  background-color: transparent;
+}
+
+.markdown-body img[align=right] {
+  padding-left: 20px;
+}
+
+.markdown-body img[align=left] {
+  padding-right: 20px;
+}
+
+.markdown-body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent;
+}
+
+.markdown-body span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+.markdown-body span.frame>span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body span.frame span img {
+  display: block;
+  float: left;
+}
+
+.markdown-body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #1f2328;
+}
+
+.markdown-body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-center>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.markdown-body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.markdown-body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-right>span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+
+.markdown-body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-left span {
+  margin: 13px 0 0;
+}
+
+.markdown-body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-right>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body code,
+.markdown-body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #818b981f;
+  border-radius: 6px;
+}
+
+.markdown-body code br,
+.markdown-body tt br {
+  display: none;
+}
+
+.markdown-body del code {
+  text-decoration: inherit;
+}
+
+.markdown-body samp {
+  font-size: 85%;
+}
+
+.markdown-body pre code {
+  font-size: 100%;
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 1rem;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  color: #1f2328;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+}
+
+.markdown-body pre code,
+.markdown-body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body .csv-data td,
+.markdown-body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown-body .csv-data .blob-num {
+  padding: 10px 0.5rem 9px;
+  text-align: right;
+  background: #ffffff;
+  border: 0;
+}
+
+.markdown-body .csv-data tr {
+  border-top: 0;
+}
+
+.markdown-body .csv-data th {
+  font-weight: 600;
+  background: #f6f8fa;
+  border-top: 0;
+}
+
+.markdown-body [data-footnote-ref]::before {
+  content: "[";
+}
+
+.markdown-body [data-footnote-ref]::after {
+  content: "]";
+}
+
+.markdown-body .footnotes {
+  font-size: 12px;
+  color: #59636e;
+  border-top: 1px solid #d1d9e0;
+}
+
+.markdown-body .footnotes ol {
+  padding-left: 1rem;
+}
+
+.markdown-body .footnotes ol ul {
+  display: inline-block;
+  padding-left: 1rem;
+  margin-top: 1rem;
+}
+
+.markdown-body .footnotes li {
+  position: relative;
+}
+
+.markdown-body .footnotes li:target::before {
+  position: absolute;
+  top: calc(0.5rem*-1);
+  right: calc(0.5rem*-1);
+  bottom: calc(0.5rem*-1);
+  left: calc(1.5rem*-1);
+  pointer-events: none;
+  content: "";
+  border: 2px solid #0969da;
+  border-radius: 6px;
+}
+
+.markdown-body .footnotes li:target {
+  color: #1f2328;
+}
+
+.markdown-body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace;
+}
+
+.markdown-body body:has(:modal) {
+  padding-right: var(--dialog-scrollgutter) !important;
+}
+
+.markdown-body .pl-c {
+  color: #59636e;
+}
+
+.markdown-body .pl-c1,
+.markdown-body .pl-s .pl-v {
+  color: #0550ae;
+}
+
+.markdown-body .pl-e,
+.markdown-body .pl-en {
+  color: #6639ba;
+}
+
+.markdown-body .pl-smi,
+.markdown-body .pl-s .pl-s1 {
+  color: #1f2328;
+}
+
+.markdown-body .pl-ent {
+  color: #0550ae;
+}
+
+.markdown-body .pl-k {
+  color: #cf222e;
+}
+
+.markdown-body .pl-s,
+.markdown-body .pl-pds,
+.markdown-body .pl-s .pl-pse .pl-s1,
+.markdown-body .pl-sr,
+.markdown-body .pl-sr .pl-cce,
+.markdown-body .pl-sr .pl-sre,
+.markdown-body .pl-sr .pl-sra {
+  color: #0a3069;
+}
+
+.markdown-body .pl-v,
+.markdown-body .pl-smw {
+  color: #953800;
+}
+
+.markdown-body .pl-bu {
+  color: #82071e;
+}
+
+.markdown-body .pl-ii {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+
+.markdown-body .pl-c2 {
+  color: #f6f8fa;
+  background-color: #cf222e;
+}
+
+.markdown-body .pl-sr .pl-cce {
+  font-weight: bold;
+  color: #116329;
+}
+
+.markdown-body .pl-ml {
+  color: #3b2300;
+}
+
+.markdown-body .pl-mh,
+.markdown-body .pl-mh .pl-en,
+.markdown-body .pl-ms {
+  font-weight: bold;
+  color: #0550ae;
+}
+
+.markdown-body .pl-mi {
+  font-style: italic;
+  color: #1f2328;
+}
+
+.markdown-body .pl-mb {
+  font-weight: bold;
+  color: #1f2328;
+}
+
+.markdown-body .pl-md {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+
+.markdown-body .pl-mi1 {
+  color: #116329;
+  background-color: #dafbe1;
+}
+
+.markdown-body .pl-mc {
+  color: #953800;
+  background-color: #ffd8b5;
+}
+
+.markdown-body .pl-mi2 {
+  color: #d1d9e0;
+  background-color: #0550ae;
+}
+
+.markdown-body .pl-mdr {
+  font-weight: bold;
+  color: #8250df;
+}
+
+.markdown-body .pl-ba {
+  color: #59636e;
+}
+
+.markdown-body .pl-sg {
+  color: #818b98;
+}
+
+.markdown-body .pl-corl {
+  text-decoration: underline;
+  color: #0a3069;
+}
+
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body [role=tabpanel][tabindex="0"]:focus:not(:focus-visible),
+.markdown-body button:focus:not(:focus-visible),
+.markdown-body summary:focus:not(:focus-visible),
+.markdown-body a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.markdown-body [tabindex="0"]:focus:not(:focus-visible),
+.markdown-body details-dialog:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.markdown-body g-emoji {
+  display: inline-block;
+  min-width: 1ch;
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal !important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -0.075em;
+}
+
+.markdown-body g-emoji img {
+  width: 1em;
+  height: 1em;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item label {
+  font-weight: 400;
+}
+
+.markdown-body .task-list-item.enabled label {
+  cursor: pointer;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 0.25rem;
+}
+
+.markdown-body .task-list-item .handle {
+  display: none;
+}
+
+.markdown-body .task-list-item-checkbox {
+  margin: 0 .2em .25em -1.4em;
+  vertical-align: middle;
+}
+
+.markdown-body ul:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body ol:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body .contains-task-list:hover .task-list-item-convert-container,
+.markdown-body .contains-task-list:focus-within .task-list-item-convert-container {
+  display: block;
+  width: auto;
+  height: 24px;
+  overflow: visible;
+  clip: auto;
+}
+
+.markdown-body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%);
+}
+
+.markdown-body .markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  color: inherit;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body .markdown-alert>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body .markdown-alert>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note {
+  border-left-color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important {
+  border-left-color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning {
+  border-left-color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip {
+  border-left-color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution {
+  border-left-color: #cf222e;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: #d1242f;
+}
+
+.markdown-body>*:first-child>.heading-element:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .highlight pre:has(+.zeroclipboard-container) {
+  min-height: 52px;
+}
+
+
+	.markdown-body {
+		box-sizing: border-box;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+	body{
+		display:flex;
+		overflow-y: scroll;
+	}
+	@media screen{
+		div.sidebar{ width:30% }
+		div.main{ width:70% }
+	}
+
+	@media print{
+		div.sidebar,div.footer{ display:none }
+		div.main{ width:100%!}(MISSING)
+	}
+
+// -->
+</style></head><body>
+<div class="main markdown-body">
+<div class="header">
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+</div><!-- "header" -->
+<div class="body">
+<p>English / <a href="release_note_ja.html">Japanese</a></p>
+<ul>
+<li>Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.</li>
+<li>Syntax highlighting:
+<ul>
+<li>The highlighted environment variable is now limited to text that starts with a letter and contains only alphanumeric characters.</li>
+<li>The highlighted option can now contain <code>-</code> anywhere, not just at the beginning.</li>
+</ul>
+</li>
+<li>Added support for customizing the color of input prediction.
+<ul>
+<li>e.g., <code>nyagos.option.predict_color = &quot;\027[0;31;1m&quot;</code> (red).</li>
+<li>Restart nyagos after modifying <code>.nyagos</code> to apply the change.</li>
+</ul>
+</li>
+<li>Removed support for the configuration file <code>_nyagos</code>, which had been deprecated since v4.4.15.</li>
+<li><code>set -o</code> now shows the current configuration in Lua syntax.</li>
+</ul>
+<h1 id="nyagos-4416-0">NYAGOS 4.4.16_0</h1>
+<p>Oct.13, 2024</p>
+<h2 id="removed-features-and-deprecations">Removed features and Deprecations</h2>
+<ul>
+<li>Remove <code>nyagos.d/catalog/neco.lua</code></li>
+<li>Remove Lua function: <code>nyagos.msgbox</code></li>
+<li>Remove the feature to define <code>grep</code> as an alias of <code>findstr.exe</code> when <code>grep.exe</code> does not exist. It was the undocumented feature.</li>
+</ul>
+<h2 id="new-features">New features</h2>
+<h3 id="readline">Readline</h3>
+<ul>
+<li>PowerShell 7-style input prediction
+<ul>
+<li>When one or more characters are typed, the most recent entry in the history that starts with the typed characters is displayed inline (in blue italics).</li>
+<li>Pressing <code>→</code> or <code>Ctrl-F</code> accepts the current prediction</li>
+<li>Enabled by default. You can disable it with the launch option <code>--no-predict</code> or by setting <code>nyagos.option.prediction=false</code></li>
+</ul>
+</li>
+<li>Ctrl-P/N: save the modified entry when switching history, and restore when switching again, until Enter is pressed</li>
+</ul>
+<h3 id="lua-extensions">Lua extensions</h3>
+<ul>
+<li>Implement <code>nyagos.getkeys()</code> which returns the input key as a <a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">sequence</a> like <code>&quot;\027[A&quot;</code> instead of <code>nyagos.getkey()</code> which returns unicode.</li>
+<li>Enhance functions available in <code>nyagos.key[KEY] = function(this)...end</code>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">key-sequences</a> like <code>&quot;\007&quot;</code> and <code>&quot;\027[A&quot;</code> are avaliable as KEY.</li>
+<li>Implement <code>this:eval(KEYSEQUNCE)</code> that calls the function assigned to <a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">KEYSEQUNCE</a>.</li>
+<li>Implement <code>this:repaint()</code> that updates the screen</li>
+<li><code>this.pos</code> and <code>this.text</code> are automatically updated when methods are invoked.</li>
+</ul>
+</li>
+<li>Add the completion for <code>make</code>: Enable by <code>require &quot;makefile-complete&quot;</code></li>
+<li>Add subcommand name completion for the jj command: Enable by requiring &quot;complete-jj&quot;.</li>
+<li>Add citation feature for the gmnlisp command: Enable by <code>require &quot;gmnlisp&quot;</code>
+<ul>
+<li>Replaces <code>@(Lisp command)</code> with the result processed by gmnlisp.</li>
+<li>If the command starts with <code>(</code>, it is executed using gmnlisp.exe.</li>
+</ul>
+</li>
+<li>Add UNIX-style single quotation feature: Enable by requiring &quot;sq2dq&quot;.
+<ul>
+<li>Replaces '..&quot;..&quot;..' with &quot;..&quot;..&quot;..&quot;.</li>
+<li>Leaves &quot;..'..'..&quot; unchanged (single quotes within double quotes are not converted).</li>
+</ul>
+</li>
+</ul>
+<h2 id="documents">Documents</h2>
+<ul>
+<li>Fix the broken links caused by renaming readme.md to README.md ( Thx @HAYASHI-Masayuki )
+NYAGOS 4.4.15_1
+================
+May.02, 2024</li>
+</ul>
+<p>The binaries of this version are built with Go 1.20.14<br>
+They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
+<ul>
+<li>(#442) Move back <code>aliasandset.lua</code> to <code>nyagos.d/</code> and enable to use the Lua codes like <code>set &quot;ENV=VALUE&quot;</code> and <code>alias &quot;NAME=DEFINE&quot;</code>.  In 4.4.15_0, it was put on <code>nyagos.d/catalog/</code> and <code>require &quot;aliasandset&quot;</code> was neccessary to use (Thx @naoyaikeda)</li>
+<li>Fix: the day of the week part of %DATE% was incorrect<br>
+(%DATE% was expected like <code>2024/04/19 金</code>, but <code>2024/04/19 1919</code>)</li>
+<li>Fix the runtime error when <code>this:replacefrom(0,...)</code> is called in the key-handling lua-function. Instead, it returns {nil,error-message}</li>
+</ul>
+<pre><code class="language-lua">-- On 4.4.15, typing C-I causes crash of nyagos.
+nyagos.key[&quot;C-I&quot;] = function(this)
+    assert(this:replacefrom(0,&quot;XXXXX&quot;))
+end
+</code></pre>
+<h1 id="nyagos-4415-0">NYAGOS 4.4.15_0</h1>
+<p>Apr 7, 2024</p>
+<p>The binaries of this version are built with Go 1.20.14<br>
+They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
+<h2 id="deprecations">Deprecations</h2>
+<ul>
+<li>The configuration file <code>_nyagos</code>, which is not a Lua syntax, is deprecated and no longer attached. When <code>_nyagos</code> is used, execute it, but print warning.</li>
+<li>The Lua function: <code>use</code> is now deprecated.
+<ul>
+<li>Use <code>require &quot;mmmm&quot;</code> instead of <code>use &quot;mmmm.lua&quot;</code></li>
+<li>Add <code>nyagos.d/catalog</code> to <code>package.path</code> of the lua language standard.</li>
+</ul>
+</li>
+<li>Remove <code>nyagos.d/catalog/ezoe.lua</code></li>
+<li>Remove aliases: <code>chompf</code>, <code>wordpad</code>, <code>abspath</code></li>
+<li>Remove lua functions: <code>addpath</code></li>
+<li>Move <code>nyagos.d/aliasandset.lua</code> to <code>nyagos/catalog/.</code> that defines tool lua functions: <code>set(&quot;ENV=VALUE&quot;)</code>, <code>alias(&quot;NAME=DEFINE&quot;)</code></li>
+</ul>
+<h2 id="new-features-1">New features</h2>
+<ul>
+<li>
+<p>When <code>%NO_COLOR%</code> is defined, disable the color of the prompt, the command-line, and ls command</p>
+</li>
+<li>
+<p>Sub commands completion (When <code>require &quot;subcomplete&quot;</code> is enabled)</p>
+<ul>
+<li><a href="https://github.com/nyaosorg/nyagos/pull/436">#436</a> Support completion for options of curl. ( Thanks to <a href="https://github.com/tsuyoshicho">@tsuyoshicho</a> )</li>
+</ul>
+</li>
+</ul>
+<h2 id="fixed-bugs">Fixed bugs</h2>
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a>
+<ul>
+<li>Fix the problem that <code>UTta</code> and <code>UTTa</code> were converted <code>打っtあ</code> and <code>▽う*t*t</code> instead of <code>打った</code></li>
+<li>Fix: manually input inverted triangles were recognized as conversion markers</li>
+<li>Add the following the romaji-kana conversions:
+<ul>
+<li><code>z,</code>→<code>‥</code>, <code>z-</code>→<code>～</code>, <code>z.</code>→<code>…</code>, <code>z/</code>→<code>・</code>, <code>z[</code>→<code>『</code>, <code>z]</code>→<code>』</code>,
+<code>z1</code>→<code>○</code>, <code>z2</code>→<code>▽</code>, <code>z3</code>→<code>△</code>, <code>z4</code>→<code>□</code>, <code>z5</code>→<code>◇</code>,
+<code>z6</code>→<code>☆</code>, <code>z7</code>→<code>◎</code>, <code>z8</code>→<code>〔</code>, <code>z9</code>→<code>〕</code>, <code>z0</code>→<code>∞</code>,
+<code>z^</code>→<code>※</code>, <code>z\\</code>→<code>￥</code>, <code>z@</code>→<code>〃</code>, <code>z;</code>→<code>゛</code>, <code>z:</code>→<code>゜</code> ,
+<code>z!</code>→<code>●</code>, <code>z&quot;</code>→<code>▼</code>, <code>z#</code>→<code>▲</code>, <code>z$</code>→<code>■ </code>, <code>z%</code>→<code>◆</code>,
+<code>z&amp;</code>→<code>★</code>, <code>z'</code>→<code>♪</code>, <code>z(</code>→<code>【</code>, <code>z)</code>→<code>】</code>, <code>z=</code>→<code>≒</code>,
+<code>z~</code>→<code>≠</code>, <code>z|</code>→<code>〒</code>, <code>z` </code>→<code>“</code>, <code>z+</code>→<code>±</code>, <code>z*</code>→<code>×</code>,
+<code>z&lt;</code>→<code>≦</code>, <code>z&gt;</code>→<code>≧</code>, <code>z?</code>→<code>÷</code>, <code>z_</code>→<code>―</code>,</li>
+<li><code>bya</code>→<code>びゃ</code> or <code>ビャ</code> ... <code>byo</code>→<code>びょ</code> or <code>ビョ</code></li>
+<li><code>pya</code>→<code>ぴゃ</code> or <code>ピャ</code> ... <code>pyo</code>→<code>ぴょ</code> or <code>ピョ</code></li>
+<li><code>tha</code>→<code>てぁ</code> or <code>テァ</code> ... <code>tho</code>→<code>てょ</code> or <code>テョ</code></li>
+</ul>
+</li>
+<li>Implement <code>q</code> that convert mutually between Hiragana and Katakana during conversion.</li>
+</ul>
+</li>
+<li>Sub commands completion (When <code>require &quot;subcomplete&quot;</code> is enabled)
+<ul>
+<li>Fix: the subcommand completion for scoop did not work because the filename of executable was <code>scoop.exe</code> that should be <code>scoop.cmd</code>.</li>
+</ul>
+</li>
+<li>Fix the problem that prompt is not displayed on Linux<br>
+( The .nyagos sample should have defined nyagos.env.PROMPT, but nyagos.env.prompt was defined )</li>
+<li>Fix: the loop to input commands for <code>foreach</code> could not be stopped with Ctrl-C<br>
+( This problem was included in the commit <a href="https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae">8bf0a2acb25b152d3d40c188de09858c2ef572ae</a> of version <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2">4.4.6_2</a>. See also issue <a href="https://github.com/nyaosorg/nyagos/issues/383">#383</a> and <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0">4.4.6_0</a> )</li>
+</ul>
+<h2 id="documents-1">Documents</h2>
+<ul>
+<li>docs/07-LuaFunctions_*.md: wrote about <code>nyagos.shellexecute</code> (forgotten!)</li>
+</ul>
+<h1 id="nyagos-4414-0">NYAGOS 4.4.14_0</h1>
+<p>Oct 06, 2023</p>
+<p>The second half of 2023 edition.
+The binaries of this version are built with Go 1.20.9.<br>
+They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
+<h2 id="new-features-2">New features</h2>
+<ul>
+<li>nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in <code>%NYAGOSEXPANDWILDCARD%</code> (for example: <code>nyagos.env.NYAGOSEXPANDWILDCARD=&quot;gorename;gofmt&quot;</code> )</li>
+<li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> Add new option: <code>glob_slash</code> to enable with the option of executable <code>--glob-slash</code>, calling lua function like <code>nyagos.option.glob_slash=true</code>, or executing command <code>set -o glob_slash</code>. When it is set, <code>/</code> is used on wildcard expansion.</li>
+<li>Support Japanese input method editor: <a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) - <a href="https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.html">How To Setup</a></li>
+<li>Add the lua-function: <code>nyagos.atou_if_needed</code> that converts the string that is not valid utf8 one to utf8-string as the current codepage string.</li>
+</ul>
+<h2 id="fixed-bugs-1">Fixed bugs</h2>
+<ul>
+<li><a href="https://github.com/nyaosorg/nyagos/discussions/433">#433</a> To avoid garbled characters, backquote uses <code>nyagos.atou_if_needed</code> to prevent UTF8 from being further converted to UTF8.</li>
+<li>Fix: On linux version, backquotation failed with error and did not work. ( because the lua function <code>atou</code> always returned &quot;not supported&quot;, it is changed to returning the same value with given )</li>
+<li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> When <code>set -o glob</code>, <code>*</code> and <code>?</code> double-quoted were expanded as wildcards (They should not be)</li>
+<li>Fix the problem that <code>more</code>, <code>nyagos.getkey</code>, and <code>nyagos.getviewwidth</code> might not work on Windows 7, 8.1 and Windows Server 2008 at <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.13_3">v4.4.13_3</a>.</li>
+<li><a href="https://github.com/nyaosorg/nyagos/pull/434">#434</a> Fix: <code>nyagos.which('cp')</code> does not work as expect on Linux (Thanks to <a href="https://github.com/ousttrue">@ousttrue</a>)</li>
+<li>Fix: the background color of U+3000 was not changed to red</li>
+</ul>
+<h2 id="breaking-changes">Breaking changes</h2>
+<ul>
+<li><code>nyagos.default_prompt</code> and <code>nyagos.prompt</code> return the prompt-string instead of output it to the terminal directly. This modifying is to use the new field <code>PromptWriter</code> of the <a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny#Editor">go-readline-ny.Editor</a> instead of <code>Prompt</code> that is deprecated.</li>
+</ul>
+<h1 id="nyagos-4413-3">NYAGOS 4.4.13_3</h1>
+<p>Apr 30, 2023</p>
+<ul>
+<li>(#431) Fixed a bug that failed to convert lines exceeding 4096 bytes when changing from non-UTF8 to UTF8 such as environment variables changed by batch file execution or output of more/type. (Thx. @8exBCYJi5ATL)</li>
+<li>Fix: <code>more</code> sometimes printed no lines when the size of the line was too large.
+( Due to a different issue than #431 )</li>
+</ul>
+<h1 id="nyagos-4413-2">NYAGOS 4.4.13_2</h1>
+<p>Apr 25, 2023</p>
+<p>The first half of 2023 edition.</p>
+<ul>
+<li>(#428) Fix: <code>rmdir /s</code> fails to remove symbolic links and junctions (reparse point)</li>
+<li>Do not toggle the quotation area color on &quot; now</li>
+<li>(#429) Fix <code>cd c:</code> fails when the current directory is <code>C:</code></li>
+<li>To convert between ANSI and UTF8 strings, use go-windows-mbcs v0.4 and golang.org/x/text/transform now</li>
+</ul>
+<h1 id="nyagos-4413-1">NYAGOS 4.4.13_1</h1>
+<p>Oct 15, 2022</p>
+<ul>
+<li>(#425) nyagos.d/suffix.lua appends the extensions into %NYAGOSPATHEXT% instead of %PATHEXT% and the command-name completion now looks both %PATHEXT% and %NYAGOSPATHEXT% (Thx. @tsuyoshicho)</li>
+<li>(#426) Fix: When command-line was filtered by nyagos.argsfilter, empty parameters were removed. (Thx. @juggler999)</li>
+<li>(#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed. (Thx. @juggler999)</li>
+<li>(#427) Fix: '&quot;&quot;' was replaced to '(DIGIT)' with BEEP (Thx. @hogewest)</li>
+</ul>
+<h1 id="nyagos-4413-0">NYAGOS 4.4.13_0</h1>
+<p>Sep 24, 2022</p>
+<ul>
+<li>Fix: Unhandled exception in gopkg.in/yaml.v3 ( <a href="https://github.com/nyaosorg/nyagos/security/dependabot/1">https://github.com/nyaosorg/nyagos/security/dependabot/1</a> )</li>
+<li>(#420) Add: support for building on macOS (Thanks to @zztkm)</li>
+<li>(#421) Fix: environemt variables which batchfiles remove were not erased.(Thanks to @tsuyoshicho)</li>
+<li>(#422) Fix: when %PROMPT% contained $h, the edit start position shifted to the right.(Thanks to @Matsuyanagi)</li>
+<li>Fix: when terminal's background-color was white, characters in the readline was invisible. (Use not white but terminal's default color for foreground color)</li>
+<li>Improved the problem that timeout does not work well in command name completion.</li>
+<li>Move sub-packages into internal folder</li>
+<li>Use Generics-type for the dictionary that key's cases are ignored.</li>
+<li>Fixed Makefile error on non-Windows</li>
+<li>(#424) fuzzy finder extension integration(catalog) (Thx @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-4412-0">NYAGOS 4.4.12_0</h1>
+<p>Apr 29, 2022</p>
+<ul>
+<li>Modified colored commandline
+<ul>
+<li>Change the color of the option-string dark-yellow and fix the range</li>
+<li>Change the background-color of the Ideographic Space (U+3000) red</li>
+<li>To enable transparency of terminal, use default-bgcolor(ESC[49m) instead of black(ESC[40m) (go-readline-ny v0.7.0)</li>
+<li>Fix coloring: -0 .. -9 were not colored for options.</li>
+<li>WezTerm: enable surrogate-pair</li>
+</ul>
+</li>
+<li>Fix for Linux version only
+<ul>
+<li>Fix: <code>set -o noclobber</code>, redirect output was always zero bytes.</li>
+<li>Fix: histories were not saved to the file.</li>
+</ul>
+</li>
+<li>(#416) Complete for <code>start</code> to any files and directories on %PATH%</li>
+<li><code>rmdir /s</code> can remove readonly-folder like cmd.exe</li>
+<li>Support <code>rmdir FOLDER /s</code> (<code>/s</code> option can be put after folder list)</li>
+<li>(#418) When the command-line ends with ^ , continue line-input after enter-key is input.</li>
+</ul>
+<h1 id="nyagos-4411-0">NYAGOS 4.4.11_0</h1>
+<p>Dec 10, 2021</p>
+<ul>
+<li>Color command-line</li>
+</ul>
+<h1 id="nyagos-4410-3">NYAGOS 4.4.10_3</h1>
+<p>Aug 30, 2021</p>
+<ul>
+<li>(#412) Fix: The widths of Box Drawing (U+2500-257F) were incorrect on the legacy terminals (on not Windows Terminal in Windows10)</li>
+<li>Attach the package some new icon files</li>
+</ul>
+<h1 id="nyagos-4410-2">NYAGOS 4.4.10_2</h1>
+<p>Jul 23, 2021</p>
+<ul>
+<li>Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437</li>
+<li>go-readline-ny v0.4.13: Support Mathematical Bold Capital (U+1D400 - U+1D7FF) on the Windows Terminal</li>
+<li>Even if the option -o is given, remove ESC[0m from the output of redirected ls</li>
+<li>Fix: (#411) the document that English part and Japanese were written in inverse places (Thx! @tomato3713)</li>
+<li>Organize and automate the test-codes</li>
+</ul>
+<h1 id="nyagos-4410-1">NYAGOS 4.4.10_1</h1>
+<p>Jul 02, 2021</p>
+<ul>
+<li>Fix: When the folder <code>./dll</code> existed and the folder <code>DLL</code> existed on CDPATH, typed path dll was replaced to <code>DLL</code> with completion (The problem is that the path's cases were changed)</li>
+<li>Fix: clone: the current directory was not kept when the current directory name has a space</li>
+</ul>
+<h1 id="nyagos-4410-0">NYAGOS 4.4.10_0</h1>
+<p>Jun 25, 2021</p>
+<ul>
+<li>nyagos.d/aliases.lua: abspath can be given wildcard names</li>
+<li>Raise a suitable error when <code>OLEOBJECT._release()</code> is used instead of <code>OLEOBJECT:_release()</code> on Lua script by updating the package glua-ole.</li>
+<li><code>echo</code> outputs a double-quatation same as CMD.EXE does</li>
+<li>Fix that <code>&quot;..\&quot;..\&quot;..&quot;</code> was changed to <code>&quot;..\&quot;..&quot;..&quot;</code> as raw-string on parsing.</li>
+<li>(#410) Stop to ignore SIGTERM to shutdown immediately when terminal's close button is pressed (Thx @nocd5)</li>
+<li>On WindowsTerminal (1.8~) , <code>clone</code> starts a new shell in the same Window's other tab</li>
+<li>Fix: clone command did not work on WindowsTerminal because wt.exe was not available via apppath</li>
+<li>Fix: su: the network drives were not connected</li>
+<li>Use Makefile(GNU Make) to build instead of PowerShell(make.cmd)</li>
+<li>Can build on Linux</li>
+</ul>
+<h1 id="nyagos-449-7">NYAGOS 4.4.9_7</h1>
+<p>May 22, 2021</p>
+<ul>
+<li>(#409) Fix: the wildcards expansion with <code>set -o glob</code> or <code>nyagos.option.glob=true</code> did not work for command alias (Thx @juggler999)</li>
+</ul>
+<h1 id="nyagos-449-6">NYAGOS 4.4.9_6</h1>
+<p>May 07, 2021</p>
+<ul>
+<li>(#406) Fix: nyagos.argsfilter did not work, raw arguments were not converted and suffix command did not work as expected. (Thx @tGqmJHoJKqgK)</li>
+</ul>
+<h1 id="nyagos-449-5">NYAGOS 4.4.9_5</h1>
+<p>May 03, 2021</p>
+<ul>
+<li>go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.</li>
+<li>go-readline-ny v0.4.11: Support Emoji Moifier Sequence (skin tone)</li>
+<li>Improve colored-ls's speed on Windows8.1 when CPU load is high.</li>
+<li>( Do not use &quot;io/ioutil&quot; )</li>
+<li>Prevent from the message break the commandline when the process finishes which is started by <code>open</code> command.</li>
+<li>go-readline-ny v0.4.12: Disable emoji editing in the terminal of VisualStudioCode</li>
+<li>(#403) Support -S,-C and -K options like CMD.EXE</li>
+<li>(#403) Fix: some irregular double-quotations in the commandline were removed when the parameter is sent to the external commands.</li>
+<li>(#405) Add fuzzyfinder catalog module (Thx @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-449-4">NYAGOS 4.4.9_4</h1>
+<p>Mar 06, 2021</p>
+<ul>
+<li>(#400) add check the existance of commands for subcomplete.lua (Thx @tsuyoshicho )</li>
+<li>(#401) add subcompletion choco/chocolaty (Thx @tsuyoshicho )</li>
+<li>Fix: the layout on ls and Ctrl-O selection was broken in WindowsTerminal</li>
+<li>go-readline-ny v0.4.4: Fix: When ANYCHARACTER + Ctrl-B + ZeroWidthJoin Sequence are typed, view was broken</li>
+<li>go-readline-ny v0.4.5: Variation Selector Sequence can include ZeroWidthJoinerSequence</li>
+<li>go-readline-ny v0.4.6: Editing Combining Enclosing Keycap after Variation Selector (#️⃣)</li>
+<li>Fix: (#402) &quot;echo !xxx&quot; causes unexpected end of nyagos (Thx @masamitsu-murase)</li>
+<li>go-readline-ny v0.4.7: REGIONAL INDICATOR (U+1F1E6..U+1F1FF)</li>
+<li>go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)</li>
+<li>go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)</li>
+</ul>
+<h1 id="nyagos-449-3">NYAGOS 4.4.9_3</h1>
+<p>Feb 20, 2021</p>
+<ul>
+<li>readline: on WindowsTerminal: Support Variation Selectors of Unicode</li>
+<li>(#397) Add scoop subcommand completion ( <code>use &quot;subcomplete.lua&quot;</code> ) (Thx @tomato3713)</li>
+<li>Completion: make English case of completed word to the shortest candidate</li>
+<li>(#398) Fix: the default value for io.popen's second parameter did not work (Thx @ironsand)</li>
+<li>(#399) Improve utf8 offset (Thx @masamitsu-murase)</li>
+<li>Support ALT-/ key bind (Thx @masamitsu-murase) <a href="https://github.com/zetamatta/go-readline-ny/pull/1">https://github.com/zetamatta/go-readline-ny/pull/1</a></li>
+<li>readline: Fix the problem that emoji and circled digits could not be input in WindowsTerminal 1.5</li>
+</ul>
+<h1 id="nyagos-449-2">NYAGOS 4.4.9_2</h1>
+<p>Jan 8, 2021</p>
+<ul>
+<li>(#342) Stop killing child process on Ctrl-C pressed.</li>
+</ul>
+<h1 id="nyagos-449-1">NYAGOS 4.4.9_1</h1>
+<p>Dec 21, 2020</p>
+<ul>
+<li>Fix: the first <code>make install</code> without path parameter fails.</li>
+<li>(#396) Fix: panic on Ctrl-W when left-scrool are required.</li>
+<li>Fix: sometimes more, clip &amp; type from console did not echo input</li>
+<li>(#342) Improve Ctrl-C Interrupt handling to prevent from crash</li>
+</ul>
+<h1 id="nyagos-449-0">NYAGOS 4.4.9_0</h1>
+<p>Dec 5, 2020</p>
+<ul>
+<li>(#390) Support zero-width-join sequence for WindowsTerminal</li>
+<li>Fix the cursor position broken on VARIATION SELECTOR-1..16<br>
+( VARIATION SELECTOR-1..16 are shown like &lt;FE0F&gt; )</li>
+<li>su and clone commands supports WindowsTerminal</li>
+<li>The background process start/end message is no longer displayed during editing.</li>
+<li>C-r: Incremental Search: compare case-insensitively</li>
+<li>Fix: Command-name completion did not work after &amp;&amp; and ||.</li>
+<li>C-y: Trim the last CRLF on pasting</li>
+<li>Fix: (#393) the first key after terminal-window activated was input twice. (Thanks to @tostos5963)</li>
+<li>Stop using upx.exe because antivirus software sometimes disjudges as a virus.</li>
+</ul>
+<h1 id="nyagos-448-0">NYAGOS 4.4.8_0</h1>
+<p>Oct 3, 2020</p>
+<ul>
+<li>git.lua: completion for <code>git add</code>:
+<ul>
+<li>unquoto filenames like &quot;\343\201\202\343\201\257\343\201\257&quot;</li>
+<li>support files under untracked directories.</li>
+</ul>
+</li>
+<li>diskused: shows size like <code>ls -h</code></li>
+<li>Fix: diskused can not be stoped by Ctrl-C</li>
+<li>Implement: environment variable substring like %ENV:~10,5%</li>
+<li>(#308) Fix: error: <code>The operation was canceled by the user</code> when the executable is placed on the network folder which is not written by true-UNC-Path</li>
+<li>Fix: <code>clone</code> command showed security error dialog when nyagos exists on network.</li>
+<li>(#389) su: keep drive mounting by SUBST</li>
+<li>(#390) Fixed: Some unicode character from U+2000 to U+2FFF could not be input</li>
+<li>(#390) Fixed: Characters represented by Surrogate pair could not be input</li>
+<li>box.lua: Fix: C-o and ESCAPE erased the user-input-word.</li>
+<li>(#391) subcommand.lua: add gh first level subcommand rule (Thanks to @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-447-0">NYAGOS 4.4.7_0</h1>
+<p>Jul 18, 2020</p>
+<ul>
+<li>cd,push and their completion supports %CDPATH% like bash</li>
+<li>load scripts on <code>%APPDATA%\NYAOS_ORG\nyagos.d</code></li>
+<li>On WindowsTerminal, print surrogate-paired unicode by not escaped like &lt;nnnnn&gt;</li>
+<li>Change the directory put binary from Cmd to bin</li>
+<li>catalog/subcomplete.lua
+<ul>
+<li>Use new completion api:<code>nyagos.complete_for</code></li>
+<li>Caching subcommands to complete to speed-up nyagos starting.</li>
+<li>Implement <code>clear_subcomands_cache</code> to clear cache.</li>
+<li>Subcompletion for <code>fsutil</code> and <code>go</code></li>
+</ul>
+</li>
+<li>catalog/git.lua
+<ul>
+<li>load <code>subcomplete.lua</code> automatically</li>
+<li>Complete commit-hash like branch-name</li>
+<li>Complete commit-hash,branch-name and modified filenames after <code>git checkout</code></li>
+</ul>
+</li>
+<li>(#386) Fix the file size output of <code>ls -h</code> to be displayed in units.(Thx! <a href="https://github.com/Matsuyanagi">@Matsuyanagi</a>)</li>
+<li>Fix: <code>nyagos.exec{ ALIAS-COMMAND-USING $@ }</code> causes panic</li>
+<li>Add: <code>nyagos.complete_for_files </code>(which returns table of completable files)`</li>
+</ul>
+<h1 id="nyagos-446-2">NYAGOS 4.4.6_2</h1>
+<p>Jun 09, 2020</p>
+<ul>
+<li>Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at <code>4.4.6_0</code>)</li>
+</ul>
+<h1 id="nyagos-446-1">NYAGOS 4.4.6_1</h1>
+<p>May 31, 2020</p>
+<ul>
+<li>(#385) Fix: Can not move to any folder in the other drive whose last folder is removed.</li>
+<li>Fix: cd's history did not ignore filepath's case.(see <code>cd -h</code>)</li>
+<li>Fix: change drive(<code>x:</code>) did not push the last directory to directory history</li>
+<li>Fix: The last element of <code>nyagos.rawexec{...}</code> was ignored.</li>
+</ul>
+<h1 id="nyagos-446-0">NYAGOS 4.4.6_0</h1>
+<p>May 08, 2020</p>
+<ul>
+<li>Implement: %DATE% and %TIME%</li>
+<li>nyagos.envdel now returns removed directories.</li>
+<li>use github.com/zetamatta/go-windows-netresource instead of <code>dos/net*.go</code></li>
+<li>(#379) Add: nyagos.preexechook &amp; postexechook</li>
+<li>(#383) Fixed the bug to go into an infinite loop when the terminal crashes</li>
+<li>Tab-key after <code>start</code> completes as a command name as <code>which</code></li>
+<li>Fix: when <code>cd x:\y\z</code> failed, the current directory is moved to x:\ (root)</li>
+</ul>
+<h1 id="nyagos-445-4">NYAGOS 4.4.5_4</h1>
+<p>Mar 13, 2020</p>
+<ul>
+<li>box.lua: fixed C-xC-r, C-xC-h &amp; C-xC-g did not work because github.com/BixData/gluabit32 disappeared.</li>
+<li>(#319) Add bit32.band , bor &amp; bxor again.</li>
+<li>(#378) nyagos.d/catalog/subcomplete.lua: ignore command's case and suffixes by default.</li>
+<li>(#377) Fix: Escape sequence does not work after <code>git gui</code> installed by scoop</li>
+<li>make.cmd: do not compress executable on every building by upx.exe. Use it only on making packages.</li>
+</ul>
+<h1 id="nyagos-445-3">NYAGOS 4.4.5_3</h1>
+<p>Mar 08, 2020</p>
+<ul>
+<li>UNC Path Cache is saved to <code>~/appdata/local/nyaos_org/computers.txt</code> rather than <code>~/appdata/local/nyaos.org/computers.txt</code> because other features use <code>nyaos_org</code> folder.</li>
+<li>Sub command completion(<code>complete_for</code>) now matches command-name ignoring its suffix</li>
+<li>Compressed the executable by upx.exe</li>
+<li>Lua function <code>bit32.*</code> are not available because github.com/BixData/gluabit32 is 404.</li>
+<li>Use Windows10's native ansi-escape-sequence through mattn/go-colorable</li>
+<li>Fix that <code>echo $(gawk &quot;BEGIN{ print \&quot;\x22\x22\&quot; }&quot;)</code> could not print double-quatations</li>
+</ul>
+<h1 id="nyagos-445-2">NYAGOS 4.4.5_2</h1>
+<p>Oct 26, 2019</p>
+<ul>
+<li>(#375) Fix: <code>~randomstring</code> causes panic</li>
+<li>(#374) Fix: <code>ls -l</code> for future timestamp's files do not print year.</li>
+</ul>
+<h1 id="nyagos-445-1">NYAGOS 4.4.5_1</h1>
+<p>Oct 20, 2019</p>
+<ul>
+<li>Fix that built-in <code>box</code> command did not support selecting multi-items.</li>
+<li>Do not move cursor at drawing [PID] when process starts or shutdowns</li>
+<li>Ctrl-O: do not append a quotation after last backslach (NG: <code>&quot;Program Files\&quot;</code> -&gt; OK:<code>&quot;Program Files\</code>)</li>
+<li>nyagos.stat/access can understand ~ and %ENV% now.</li>
+</ul>
+<h1 id="nyagos-445-0">NYAGOS 4.4.5_0</h1>
+<p>Sep 01, 2019</p>
+<ul>
+<li>Implement <code>nyagos.dirname()</code> as a Lua function.</li>
+<li>C-o supports selecting multi-files by Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up</li>
+<li>Alt-Y(paste with quotes) puts quotes around CRLF</li>
+<li>C-o: append <code>\</code>(on Windows) or <code>/</code>(on Linux) after choices when they are directories.</li>
+<li>Implement <code>nyagos.envadd(&quot;ENVNAME&quot;,&quot;DIR&quot;)</code>,<code>nyagos.envdel(&quot;ENVNAME&quot;,&quot;PATTERN&quot;)</code></li>
+<li><code>nyagos.pathjoin()</code> now expands <code>%ENVNAME%</code> and <code>~\</code>,<code>~/</code></li>
+</ul>
+<h1 id="nyagos-444-3">NYAGOS 4.4.4_3</h1>
+<p>Jul 07, 2019</p>
+<ul>
+<li>(#371) Could not execute <code>foo.bar.exe</code> as <code>foo.bar</code></li>
+<li>diskfree shows UNCPath assigned network drive</li>
+</ul>
+<h1 id="nyagos-444-2">NYAGOS 4.4.4_2</h1>
+<p>Jun 14, 2019</p>
+<ul>
+<li>Speed up the completion for <code>\\host-name</code> by updating the cache on background.</li>
+</ul>
+<h1 id="nyagos-444-1">NYAGOS 4.4.4_1</h1>
+<p>May 30, 2019</p>
+<ul>
+<li>Fix: executable for Linux could not be built.</li>
+</ul>
+<h1 id="nyagos-444-0-the-reiwa-edition">NYAGOS 4.4.4_0 the Reiwa edition</h1>
+<p>May 27, 2019</p>
+<ul>
+<li>(#233) Completion for <code>\\host-name\share-name</code></li>
+<li>(#238) copy: drawing progress</li>
+<li>Support <code>ENVVARNAME=VALUE COMMAND PARAMETERS..</code></li>
+<li>Fix the problem temporary filenames on executing batchfile conflict</li>
+<li>(#277) Support set /A</li>
+<li>(#291) Print Process-ID when it is started with <code>&amp;</code> mark like /bin/sh</li>
+<li>(#361) Fix the problem GUI Application's STDOUT could not be redirected</li>
+<li>Implemented <code>.</code> and <code>source</code> for Linux (using /bin/sh)</li>
+<li>readline: fixed cursor-blink-off did not work while user wait.</li>
+<li>Fix: <code>mklink /J mountPt target-relative-path</code> made a broken junction.(Add change path absolute)</li>
+<li>Add options: <code>--chdir &quot;DIR&quot;</code> and <code>--netuse &quot;X:=\\host-name\share-name&quot;</code></li>
+<li>Stop using CMD.EXE on <code>su</code> to set console-windows' icon nyagos'</li>
+<li>Completion: ask completion when more than 100 possibilities exist.</li>
+<li>ps: print <code>[self]</code> the line where nyagos.exe self exists.</li>
+<li>(#272) replace <code>!(historyNo)@</code> to the directory when the command was executed.</li>
+<li>(#130) Support Here Document</li>
+<li>ALT-O expands the path of shortcut(for example: SHORTCUT.lnk) to target-path</li>
+<li>(#368) Fix: Lua function: io.close() did not exist.</li>
+<li>(#332)(#369) Implement r+/w+/a+ mode for io.open</li>
+</ul>
+<h1 id="nyagos-443-0">NYAGOS 4.4.3_0</h1>
+<p>Apr 27, 2019</p>
+<ul>
+<li>(#116) readline: implement UNDO on Ctrl-Z,Ctrl-<code>_</code></li>
+<li>(#194) Update Console Window's ICON (LEFT-TOP-CORNER)</li>
+<li>Add alias for <code>date</code> and <code>time</code> in CMD.EXE</li>
+<li>Fix: the current-dir per each drive was mistaken after <code>cd RELATIVE-PATH</code><br>
+( <code>cd C:\x\y\z ; cd .. ; cd \\localhost\c$ ; c: ; pwd</code> -&gt; <code>C:\x</code> (not <code>C:\x\y</code>) )</li>
+</ul>
+<h1 id="nyagos-442-2">NYAGOS 4.4.2_2</h1>
+<p>Apr 13, 2019</p>
+<ul>
+<li>Implement Ctrl-RIGHT,ALT-F(forward-word) and Ctrl-LEFT,ALT-B(backward-word)</li>
+<li>Fix: wrong the count of backspaces to move top on starting incremental-search</li>
+<li>(#364) Fix: <code>ESC[0A</code> was used.</li>
+</ul>
+<h1 id="nyagos-442-1">NYAGOS 4.4.2_1</h1>
+<p>Apr 05, 2019</p>
+<ul>
+<li>diskfree: trim spaces from the end of line</li>
+<li>Fix: on<code>~&quot;\Program Files&quot;</code>, the first quotation disappeared and <code>Files</code> was not contained in the argument.</li>
+</ul>
+<h1 id="nyagos-442-0">NYAGOS 4.4.2_0</h1>
+<p>Apr 02, 2019</p>
+<ul>
+<li>Fix converting OLE-Object to Lua-Object causes panic on <code>VT_DATE</code> and some types.</li>
+<li>Fix: lua.LNumber was treated as integer. It should be as float64</li>
+<li>Lua: add function: <code>nyagos.to_ole_integer(n)</code> for <code>nyagos.d/trash.lua</code></li>
+<li>Lua: support <code>for p in OLEObject:_iter() do ... end</code></li>
+<li>Lua: add function: <code>OLEObject:_release()</code></li>
+<li>Fix: trash.lua COM leak</li>
+<li>Fix: IUnknown instance created by <code>create_object</code> was not released.</li>
+<li>Implemented: expanding ~username</li>
+<li>Fix: exit status of executables (not batchfile) was not printed</li>
+<li>Fix: aliases using CMD.EXE (ren,mklink,dir...) did not work when %COMSPEC% is not defined.</li>
+<li>Fix: %U+3000% was regarded as a charactor of parameter separators</li>
+<li>(#359) -c and -k option can received multi arguments like CMD.EXE</li>
+<li>Fix: (not exist dir)\something [TAB] -&gt; The system cannot find the path specified.(Thx! <a href="https://github.com/tsuyoshicho">tsuyoshicho</a>)</li>
+<li>(#360) Draw zero-width or surrogate paired characters as <code>&lt;NNNNN&gt;</code> (Thx! <a href="https://github.com/tsuyoshicho">tsuyoshicho</a>)</li>
+<li>Add the option --output-surrogate-pair to output them as it is (not <code>&lt;NNNNN&gt;</code>)</li>
+<li>su: network drives is not lost now after UNC-dialog</li>
+<li>(#197) <code>ln</code> makes Junction when the source-path is directory and -s is not given)</li>
+<li>Implemented built-in <code>mklink</code> command and remove the alias <code>mklink</code> as <code>CMD.exe /c mklink</code></li>
+<li>Remove zero-bytes Lua files (cdlnk.lua, open.lua, su.lua, swapstdfunc.lua )</li>
+<li>(#262) <code>diskfree</code> shows volume label and filesystem</li>
+<li>Enabled to execute batch file even if UNC path is current directory.</li>
+<li>Fix rename,assoc,dir &amp; for did not run when the current directory is UNC-path</li>
+<li>Fix (#363) Fix backquote did not work in nyagos.alias.COMMAND=&quot;string&quot; (Thx! <a href="https://github.com/tostos5963">tostos5963</a> &amp; <a href="https://github.com/sambatriste">sambatriste</a> )</li>
+<li>(#259) Implemented <code>select</code> command to open a file with dialog to select application.</li>
+<li>Fix the format of <code>diskfree</code>'s output</li>
+</ul>
+<h1 id="nyagos-441-1">NYAGOS 4.4.1_1</h1>
+<p>Feb 15, 2019</p>
+<ul>
+<li>Made <code>print(nyagos.complete_for[&quot;COMMAND&quot;])</code> work</li>
+<li>Fix (#356) <code>type</code> could output the last line which does not contain LF. (Thx! @spiegel-im-spiegel)
+<ul>
+<li><a href="https://github.com/zetamatta/go-texts">zetamatta/go-texts</a> v1.0.1 or laster is required</li>
+</ul>
+</li>
+<li>Use <code>Go Modules</code> to build.</li>
+<li>Support completion for <code>killall</code> and <code>taskkill</code>.</li>
+<li><code>kill</code> &amp; <code>killall</code>: Forbide killing self process</li>
+<li>(#261) Set timeout(10sec) for completion and ls(1-folder)</li>
+<li>Fix: lua: ole object's setter(<code>__newindex</code>) did not work.</li>
+<li>(#357) Fix: on a french keyboard, AltGr + anykey did not work (Thx! @crile)</li>
+<li>(#358) Fix: When <code>foo.exe</code> and <code>foo.cmd</code> exist, typing <code>foo</code> calls <code>foo.cmd</code> rather than <code>foo.exe</code></li>
+</ul>
+<h1 id="nyagos-441-0">NYAGOS 4.4.1_0</h1>
+<p>Feb 02, 2019</p>
+<ul>
+<li>Support completion for <code>which</code>,<code>set</code>,<code>cd</code>,<code>pushd</code>,<code>rmdir</code> and <code>env</code> command. (Thx! <a href="https://twitter.com/ChiyosukeF">ChiyosukeF</a>)</li>
+<li>Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command) (Thx! <a href="https://twitter.com/beepcap">beepcap</a>)</li>
+<li>(#350) Stop calling os.Readlink on <code>ls -F</code> without <code>-l</code></li>
+<li>Support <code>nyagos.complete_for[&quot;COMMANDNAME&quot;] = function(args) ... end</code></li>
+<li>Fix (#345) don't work git/svn/hg in subcomplete.lua (Thx! @tsuyoshicho)</li>
+<li>Fix io.popen(lua-function) did not work when redirect was used. (Thx! @tsuyoshicho)</li>
+<li>Fix (#354) box.lua: history completion did not start with C-X h (Thx! @fushihara)</li>
+<li>nyagos.d/catalog/subcomplete.lua supports completion for <code>hub</code> command. (Thx! @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-440-1">NYAGOS 4.4.0_1</h1>
+<p>Jan 19, 2019</p>
+<ul>
+<li>Abolished &quot;--go-colorable&quot; and &quot;--enable-virtual-terminal-processing&quot;</li>
+<li>Implemented <code>killall</code></li>
+<li>Implemented <code>copy</code> and <code>move</code> for Linux</li>
+<li>(#351) Fix that <code>END</code> (and <code>F11</code>) key did not work</li>
+</ul>
+<h1 id="nyagos-440-0">NYAGOS 4.4.0_0</h1>
+<p>Jan 12, 2019</p>
+<ul>
+<li>To call a batchfile, stop to use <code>/V:ON</code> for CMD.EXE</li>
+</ul>
+<h1 id="nyagos-440-beta">NYAGOS 4.4.0_beta</h1>
+<p>Jan 02, 2019</p>
+<ul>
+<li>Support Linux (experimental)</li>
+<li>Fix the problem that current directories per drive were not inherited to child processes.</li>
+<li>Use the library &quot;mattn/go-tty&quot; instead of &quot;zetamatta/go-getch&quot;</li>
+<li>Stop using msvcrt.dll via &quot;syscall&quot; directly</li>
+<li>On linux, the filename NUL equals /dev/null</li>
+<li>Add lua-variable nyagos.goos</li>
+<li>(#341) Fix an unexpected space is inserted after wide characters
+<ul>
+<li>On Windows10, enable stdout virtual terminal processing always</li>
+<li>If <code>git.exe push</code> disable virtual terminal processing, enable again.</li>
+</ul>
+</li>
+<li>(#339) Fix that wildcard pattern <code>.??*</code> matches <code>..</code>
+<ul>
+<li>It requires github.com/zetamatta/go-findfile tagged 20181223-2</li>
+</ul>
+</li>
+</ul>
+</div><!-- "body" -->
+</div><!-- "main" -->
+<div class="sidebar markdown-body">
+<h3 id="contents">Contents</h3>
+<ol>
+<li><a href="./index.html">Top</a></li>
+<li><a href="01-Install_en.html">Install</a></li>
+<li><a href="02-Options_en.html">Option for NYAGOS</a></li>
+<li><a href="03-Readline_en.html">Editor</a></li>
+<li><a href="04-Commands_en.html">Built-in commands</a></li>
+<li><a href="05-Startup_en.html">What is done on the Startup</a></li>
+<li><a href="06-Substitution_en.html">Substitution</a></li>
+<li><a href="07-LuaFunctions_en.html">Lua functions extenteded by NYAGOS</a></li>
+<li><a href="08-Uninstall_en.html">Uninstall</a></li>
+<li><a href="09-Build_en.html">How To build</a></li>
+<li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+</ol>
+<p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
+<h3 id="release-note">Release note</h3>
+<ul>
+<li><a href="release_note_en.html">4.4.x</a></li>
+<li><a href="history-4.3_en.html">4.3.x</a></li>
+<li><a href="history-4.2_en.html">4.2.x</a></li>
+<li><a href="history-4.1_en.html">4.1.x</a></li>
+<li><a href="history-4.0_en.html">4.0.x</a></li>
+</ul>
+</div><!-- "sidebar markdown-body" -->
+</body></html>

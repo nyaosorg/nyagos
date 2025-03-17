@@ -1,0 +1,59 @@
+html{
+	overflow-y: scroll;
+}
+
+.markdown-body{
+	max-width: 980px;
+	margin: 0 auto;
+	display: flex;
+	padding: 35px;
+}
+
+p.centering,big{ font-size:200% }
+
+h2{background-color:#CCF}
+
+h3{border-width:0px 1px 1px 0px;border-style:solid}
+
+h4{border-width:0 0 0 3mm;border-style:solid;border-color:#BBF;padding-left:1mm}
+
+dt,span.commentator{font-weight:bold;padding:1mm}
+
+span.comment_date{font-style:italic}
+
+a{ text-decoration:none }
+
+a:hover{ text-decoration:underline }
+
+pre,blockquote,code{ background-color:#f6f8fa; border:solid 0px #f6f8fa }
+
+table.block{ margin-left:1cm ; border-collapse: collapse;}
+
+table.block th,table.block td{ border:solid 1px gray;padding:1pt}
+
+pre{
+ margin: 5mm;
+ white-space: -moz-pre-wrap; 
+ white-space: -o-pre-wrap; 
+ white-space: pre-wrap; 
+ word-wrap: break-word; 
+}
+
+div.tag{  text-align:right }
+
+a.tag{ font-size:80%; background-color:#CCF }
+
+span.tagnum{ font-size:70% ; color:blue }
+
+span.frozen{ font-size:80% ; color:#008 ; font-weight:bold }
+
+@media screen{
+ div.sidebar{ width:250px; font-size:90%; box-sizing: border-box;
+ padding: 10px; }
+ div.main{ flex:1; box-sizing:border-box; padding: 10px; }
+}
+
+@media print{
+ div.sidebar,div.footer,div.adminmenu{ display:none }
+ div.main{ width:100% }
+}

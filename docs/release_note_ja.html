@@ -1,0 +1,1778 @@
+<html><head>
+<style type="text/css"><!--
+/* light */
+.markdown-body {
+  color-scheme: light;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #1f2328;
+  background-color: #ffffff;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+.markdown-body h1:hover .anchor .octicon-link:before,
+.markdown-body h2:hover .anchor .octicon-link:before,
+.markdown-body h3:hover .anchor .octicon-link:before,
+.markdown-body h4:hover .anchor .octicon-link:before,
+.markdown-body h5:hover .anchor .octicon-link:before,
+.markdown-body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+}
+
+.markdown-body details,
+.markdown-body figcaption,
+.markdown-body figure {
+  display: block;
+}
+
+.markdown-body summary {
+  display: list-item;
+}
+
+.markdown-body [hidden] {
+  display: none !important;
+}
+
+.markdown-body a {
+  background-color: transparent;
+  color: #0969da;
+  text-decoration: none;
+}
+
+.markdown-body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: 600;
+}
+
+.markdown-body dfn {
+  font-style: italic;
+}
+
+.markdown-body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 2em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body mark {
+  background-color: #fff8c5;
+  color: #1f2328;
+}
+
+.markdown-body small {
+  font-size: 90%;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body sup {
+  top: -0.5em;
+}
+
+.markdown-body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.markdown-body figure {
+  margin: 1em 2.5rem;
+}
+
+.markdown-body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: transparent;
+  border-bottom: 1px solid #d1d9e0b3;
+  height: .25em;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #d1d9e0;
+  border: 0;
+}
+
+.markdown-body input {
+  font: inherit;
+  margin: 0;
+  overflow: visible;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.markdown-body [type=button],
+.markdown-body [type=reset],
+.markdown-body [type=submit] {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+.markdown-body [type=checkbox],
+.markdown-body [type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body [type=number]::-webkit-inner-spin-button,
+.markdown-body [type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+.markdown-body [type=search]::-webkit-search-cancel-button,
+.markdown-body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.markdown-body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54;
+}
+
+.markdown-body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  appearance: button;
+  font: inherit;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body ::placeholder {
+  color: #59636e;
+  opacity: 1;
+}
+
+.markdown-body hr::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  font-variant: tabular-nums;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body details summary {
+  cursor: pointer;
+}
+
+.markdown-body a:focus,
+.markdown-body [role=button]:focus,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=checkbox]:focus {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:focus:not(:focus-visible),
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body input[type=radio]:focus:not(:focus-visible),
+.markdown-body input[type=checkbox]:focus:not(:focus-visible) {
+  outline: solid 1px transparent;
+}
+
+.markdown-body a:focus-visible,
+.markdown-body [role=button]:focus-visible,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:not([class]):focus,
+.markdown-body a:not([class]):focus-visible,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline-offset: 0;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 0.25rem;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #1f2328;
+  vertical-align: middle;
+  background-color: #f6f8fa;
+  border: solid 1px #d1d9e0b3;
+  border-bottom-color: #d1d9e0b3;
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 #d1d9e0b3;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-body h2 {
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body h3 {
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+.markdown-body h4 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-weight: 600;
+  font-size: .875em;
+}
+
+.markdown-body h6 {
+  font-weight: 600;
+  font-size: .85em;
+  color: #59636e;
+}
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #59636e;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body tt,
+.markdown-body code,
+.markdown-body samp {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+  word-wrap: normal;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-body input::-webkit-outer-spin-button,
+.markdown-body input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.markdown-body .mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+.markdown-body::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markdown-body .absent {
+  color: #d1242f;
+}
+
+.markdown-body .anchor {
+  float: left;
+  padding-right: 0.25rem;
+  margin-left: -20px;
+  line-height: 1;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body details {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  color: #1f2328;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markdown-body h1 tt,
+.markdown-body h1 code,
+.markdown-body h2 tt,
+.markdown-body h2 code,
+.markdown-body h3 tt,
+.markdown-body h3 code,
+.markdown-body h4 tt,
+.markdown-body h4 code,
+.markdown-body h5 tt,
+.markdown-body h5 code,
+.markdown-body h6 tt,
+.markdown-body h6 code {
+  padding: 0 .2em;
+  font-size: inherit;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2,
+.markdown-body summary h3,
+.markdown-body summary h4,
+.markdown-body summary h5,
+.markdown-body summary h6 {
+  display: inline-block;
+}
+
+.markdown-body summary h1 .anchor,
+.markdown-body summary h2 .anchor,
+.markdown-body summary h3 .anchor,
+.markdown-body summary h4 .anchor,
+.markdown-body summary h5 .anchor,
+.markdown-body summary h6 .anchor {
+  margin-left: -40px;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.markdown-body ul.no-list,
+.markdown-body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.markdown-body ol[type="a s"] {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body ol[type="A s"] {
+  list-style-type: upper-alpha;
+}
+
+.markdown-body ol[type="i s"] {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ol[type="I s"] {
+  list-style-type: upper-roman;
+}
+
+.markdown-body ol[type="1"] {
+  list-style-type: decimal;
+}
+
+.markdown-body div>ol:not([type]) {
+  list-style-type: decimal;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 1rem;
+}
+
+.markdown-body li+li {
+  margin-top: .25em;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.markdown-body dl dd {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body table th {
+  font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body table td>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table tr {
+  background-color: #ffffff;
+  border-top: 1px solid #d1d9e0b3;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+.markdown-body table img {
+  background-color: transparent;
+}
+
+.markdown-body img[align=right] {
+  padding-left: 20px;
+}
+
+.markdown-body img[align=left] {
+  padding-right: 20px;
+}
+
+.markdown-body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent;
+}
+
+.markdown-body span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+.markdown-body span.frame>span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body span.frame span img {
+  display: block;
+  float: left;
+}
+
+.markdown-body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #1f2328;
+}
+
+.markdown-body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-center>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.markdown-body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.markdown-body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-right>span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+
+.markdown-body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-left span {
+  margin: 13px 0 0;
+}
+
+.markdown-body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-right>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body code,
+.markdown-body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #818b981f;
+  border-radius: 6px;
+}
+
+.markdown-body code br,
+.markdown-body tt br {
+  display: none;
+}
+
+.markdown-body del code {
+  text-decoration: inherit;
+}
+
+.markdown-body samp {
+  font-size: 85%;
+}
+
+.markdown-body pre code {
+  font-size: 100%;
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 1rem;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  color: #1f2328;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+}
+
+.markdown-body pre code,
+.markdown-body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body .csv-data td,
+.markdown-body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown-body .csv-data .blob-num {
+  padding: 10px 0.5rem 9px;
+  text-align: right;
+  background: #ffffff;
+  border: 0;
+}
+
+.markdown-body .csv-data tr {
+  border-top: 0;
+}
+
+.markdown-body .csv-data th {
+  font-weight: 600;
+  background: #f6f8fa;
+  border-top: 0;
+}
+
+.markdown-body [data-footnote-ref]::before {
+  content: "[";
+}
+
+.markdown-body [data-footnote-ref]::after {
+  content: "]";
+}
+
+.markdown-body .footnotes {
+  font-size: 12px;
+  color: #59636e;
+  border-top: 1px solid #d1d9e0;
+}
+
+.markdown-body .footnotes ol {
+  padding-left: 1rem;
+}
+
+.markdown-body .footnotes ol ul {
+  display: inline-block;
+  padding-left: 1rem;
+  margin-top: 1rem;
+}
+
+.markdown-body .footnotes li {
+  position: relative;
+}
+
+.markdown-body .footnotes li:target::before {
+  position: absolute;
+  top: calc(0.5rem*-1);
+  right: calc(0.5rem*-1);
+  bottom: calc(0.5rem*-1);
+  left: calc(1.5rem*-1);
+  pointer-events: none;
+  content: "";
+  border: 2px solid #0969da;
+  border-radius: 6px;
+}
+
+.markdown-body .footnotes li:target {
+  color: #1f2328;
+}
+
+.markdown-body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace;
+}
+
+.markdown-body body:has(:modal) {
+  padding-right: var(--dialog-scrollgutter) !important;
+}
+
+.markdown-body .pl-c {
+  color: #59636e;
+}
+
+.markdown-body .pl-c1,
+.markdown-body .pl-s .pl-v {
+  color: #0550ae;
+}
+
+.markdown-body .pl-e,
+.markdown-body .pl-en {
+  color: #6639ba;
+}
+
+.markdown-body .pl-smi,
+.markdown-body .pl-s .pl-s1 {
+  color: #1f2328;
+}
+
+.markdown-body .pl-ent {
+  color: #0550ae;
+}
+
+.markdown-body .pl-k {
+  color: #cf222e;
+}
+
+.markdown-body .pl-s,
+.markdown-body .pl-pds,
+.markdown-body .pl-s .pl-pse .pl-s1,
+.markdown-body .pl-sr,
+.markdown-body .pl-sr .pl-cce,
+.markdown-body .pl-sr .pl-sre,
+.markdown-body .pl-sr .pl-sra {
+  color: #0a3069;
+}
+
+.markdown-body .pl-v,
+.markdown-body .pl-smw {
+  color: #953800;
+}
+
+.markdown-body .pl-bu {
+  color: #82071e;
+}
+
+.markdown-body .pl-ii {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+
+.markdown-body .pl-c2 {
+  color: #f6f8fa;
+  background-color: #cf222e;
+}
+
+.markdown-body .pl-sr .pl-cce {
+  font-weight: bold;
+  color: #116329;
+}
+
+.markdown-body .pl-ml {
+  color: #3b2300;
+}
+
+.markdown-body .pl-mh,
+.markdown-body .pl-mh .pl-en,
+.markdown-body .pl-ms {
+  font-weight: bold;
+  color: #0550ae;
+}
+
+.markdown-body .pl-mi {
+  font-style: italic;
+  color: #1f2328;
+}
+
+.markdown-body .pl-mb {
+  font-weight: bold;
+  color: #1f2328;
+}
+
+.markdown-body .pl-md {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+
+.markdown-body .pl-mi1 {
+  color: #116329;
+  background-color: #dafbe1;
+}
+
+.markdown-body .pl-mc {
+  color: #953800;
+  background-color: #ffd8b5;
+}
+
+.markdown-body .pl-mi2 {
+  color: #d1d9e0;
+  background-color: #0550ae;
+}
+
+.markdown-body .pl-mdr {
+  font-weight: bold;
+  color: #8250df;
+}
+
+.markdown-body .pl-ba {
+  color: #59636e;
+}
+
+.markdown-body .pl-sg {
+  color: #818b98;
+}
+
+.markdown-body .pl-corl {
+  text-decoration: underline;
+  color: #0a3069;
+}
+
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body [role=tabpanel][tabindex="0"]:focus:not(:focus-visible),
+.markdown-body button:focus:not(:focus-visible),
+.markdown-body summary:focus:not(:focus-visible),
+.markdown-body a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.markdown-body [tabindex="0"]:focus:not(:focus-visible),
+.markdown-body details-dialog:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.markdown-body g-emoji {
+  display: inline-block;
+  min-width: 1ch;
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal !important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -0.075em;
+}
+
+.markdown-body g-emoji img {
+  width: 1em;
+  height: 1em;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item label {
+  font-weight: 400;
+}
+
+.markdown-body .task-list-item.enabled label {
+  cursor: pointer;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 0.25rem;
+}
+
+.markdown-body .task-list-item .handle {
+  display: none;
+}
+
+.markdown-body .task-list-item-checkbox {
+  margin: 0 .2em .25em -1.4em;
+  vertical-align: middle;
+}
+
+.markdown-body ul:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body ol:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body .contains-task-list:hover .task-list-item-convert-container,
+.markdown-body .contains-task-list:focus-within .task-list-item-convert-container {
+  display: block;
+  width: auto;
+  height: 24px;
+  overflow: visible;
+  clip: auto;
+}
+
+.markdown-body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%);
+}
+
+.markdown-body .markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  color: inherit;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body .markdown-alert>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body .markdown-alert>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note {
+  border-left-color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important {
+  border-left-color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning {
+  border-left-color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip {
+  border-left-color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution {
+  border-left-color: #cf222e;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: #d1242f;
+}
+
+.markdown-body>*:first-child>.heading-element:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .highlight pre:has(+.zeroclipboard-container) {
+  min-height: 52px;
+}
+
+
+	.markdown-body {
+		box-sizing: border-box;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+	body{
+		display:flex;
+		overflow-y: scroll;
+	}
+	@media screen{
+		div.sidebar{ width:30% }
+		div.main{ width:70% }
+	}
+
+	@media print{
+		div.sidebar,div.footer{ display:none }
+		div.main{ width:100%!}(MISSING)
+	}
+
+// -->
+</style></head><body>
+<div class="main markdown-body">
+<div class="header">
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+</div><!-- "header" -->
+<div class="body">
+<p><a href="release_note_en.html">English</a> / Japanese</p>
+<ul>
+<li>シェルや REPLs は OS のクリップボードから切り離されているのが一般的であるため、OSのクリップボードを使用しないようにした</li>
+<li>シンタックスハイライト
+<ul>
+<li>対象とする環境変数は英字から始まる英数字のみとした</li>
+<li>対象とするオプションは先頭だけでなく、どこでも <code>-</code> を含められるようにした</li>
+</ul>
+</li>
+<li>入力予測機能の色をカスタマイズできるようにした。
+<ul>
+<li>例: <code>nyagos.option.predict_color = &quot;\027[0;31;1m&quot;</code> (赤に設定)</li>
+<li>変更を反映させるには、.nyagos に記載後、nyagos の再起動が必要</li>
+</ul>
+</li>
+<li>v4.4.15 より非推奨としていた設定ファイル <code>_nyagos</code> を廃止</li>
+<li><code>set -o</code> で現在の設定内容を Lua 構文として表示するようになった。</li>
+</ul>
+<h1 id="nyagos-4416-0">NYAGOS 4.4.16_0</h1>
+<p>(2024.10.14)</p>
+<h2 id="heading">廃止・非推奨</h2>
+<ul>
+<li><code>nyagos.d/catalog/neco.lua</code> を削除</li>
+<li>Lua関数: <code>nyagos.msgbox</code> を削除</li>
+<li>grep.exe が存在しない時、勝手に findstr.exe を grep の別名にする動作を削除</li>
+</ul>
+<h2 id="heading-1">新機能</h2>
+<h3 id="heading-2">一行入力</h3>
+<ul>
+<li>PowerShell 7 風の入力予測機能の実装
+<ul>
+<li>一文字以上入力すると、その内容で始まる履歴の最新エントリをインラインで表示(青の斜体)</li>
+<li><code>→</code> もしくは <code>Ctrl-F</code> で今の予測表示内容を採用する</li>
+<li>デフォルトでオン。起動オプション <code>--no-predict</code> もしくは <code>nyagos.option.prediction=false</code> でオフ</li>
+</ul>
+</li>
+<li>Ctrl-P/N: 履歴を切り替えるときに変更したエントリを保存し、(Enterが入力されるまでは)再度切り替えたときに復元するようにした</li>
+</ul>
+<h3 id="lua-">Lua 拡張</h3>
+<ul>
+<li>キー入力の最初のコードの Unicode しか返さなくなっていた nyagos.getkey のかわりに、入力キーを<code>&quot;\027[A&quot;</code> といった<a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">キーシーケンス</a>で返す nyagos.getkeys() を実装した</li>
+<li><code>nyagos.key[KEY]=function(this)...end</code> の中で使える機能を拡充
+<ul>
+<li>KEY として従来の<code>&quot;BACKSPACE&quot;</code>, <code>&quot;UP&quot;</code> などの名前の他、<code>&quot;\007&quot;</code>, <code>&quot;\027[A&quot;</code> などの<a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">キーシーケンス</a>も使えるようにした</li>
+<li><code>this:eval(&quot;キーシーケンス&quot;)</code> で<a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">キーシーケンス</a>に設定された機能を呼び出せるようにした</li>
+<li>更新内容を画面に反映するメソッド<code>this:repaint()</code>を追加</li>
+<li>更新系のメソッドを呼び出した際に<code>this.pos</code>と<code>this.text</code> を自動的に更新するようにした</li>
+</ul>
+</li>
+<li><code>make</code> コマンドのエントリ補完を追加: <code>require &quot;makefile-complete&quot;</code> にて有効化</li>
+<li><code>jj</code> コマンドのサブコマンド名補完を追加: <code>require &quot;complete-jj&quot;</code> にて有効化</li>
+<li><code>gmnlisp</code> コマンドの引用機能を追加: <code>require &quot;gmnlisp&quot;</code> にて有効化
+<ul>
+<li><code>@(Lispコマンド)</code> を gmnlisp で処理した結果に置換</li>
+<li>コマンド先頭が <code>(</code> で始まっていた場合、gmnlisp.exe で実行</li>
+</ul>
+</li>
+<li>UNIX風シングルクォーテーション機能を追加: <code>require &quot;sq2dq&quot;</code> にて有効化
+<ul>
+<li><code>'..&quot;..&quot;..'</code> を <code>&quot;..\&quot;..\&quot;..&quot;</code> へ置換</li>
+<li><code>&quot;..'..'..&quot;</code> はそのまま (二重引用符内の一重引用符は変換しない)</li>
+</ul>
+</li>
+</ul>
+<h2 id="heading-3">ドキュメント</h2>
+<ul>
+<li>readme.md → README.md でのファイル名変更でドキュメント間のリンクが切れてしまっていた点の修正 ( Thx @HAYASHI-Masayuki )</li>
+</ul>
+<h1 id="nyagos-4415-1">NYAGOS 4.4.15_1</h1>
+<p>(2024.05.02)</p>
+<p>当バージョンのバイナリは Go 1.20.14 でビルドしました。<br>
+サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。</p>
+<ul>
+<li>(#442) 4.4.15_0 で <code>nyagos.d/catalog</code> 以下へ移動させて自動ロード対象外とした <code>nyagos.d/aliasandset.lua</code> を元の場所へ戻し、Luaコード: <code>set &quot;ENV=VALUE&quot; </code>, <code>alias &quot;NAME=DEFINE&quot;</code> を再び、そのまま使えるようにした (Thx @naoyaikeda )</li>
+<li>Windows の日付の設定に曜日が含まれているとき %DATE% の結果がおかしくなる不具合を修正 (<code>2024/04/19 金</code> と出て欲しいのに <code>2024/04/19 1919</code> と出てしまう)</li>
+<li>一行入力のキーハンドル関数の中で <code>this:replacefrom(0,...)</code> を呼び出すと、ランタイムエラー: <code>runtime error: slice bounds out of range [-1:]</code> でクラッシュする不具合を修正。かわりに {nil,エラーメッセージ} を返すようにした。</li>
+</ul>
+<pre><code class="language-lua">-- On 4.4.15, typing C-I causes crash of nyagos.
+nyagos.key[&quot;C-I&quot;] = function(this)
+    assert(this:replacefrom(0,&quot;XXXXX&quot;))
+end
+</code></pre>
+<h1 id="nyagos-4415-0">NYAGOS 4.4.15_0</h1>
+<p>(2024.04.07)</p>
+<p>当バージョンのバイナリは Go 1.20.14 でビルドしました。<br>
+サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。</p>
+<h2 id="heading-4">廃止・非推奨</h2>
+<ul>
+<li>Lua 文法ではない設定ファイル <code>_nyagos</code> は非推奨とし添付をやめた。使用されている場合は実行するが、警告を表示するようにした</li>
+<li><code>use</code> は非推奨とした
+<ul>
+<li><code>use &quot;mmmm.lua&quot;</code> のかわりに <code>require &quot;mmmm&quot;</code> を使用してください</li>
+<li>これに伴い、Luaの標準検索パス: <code>package.path</code> に <code>nyagos.d/catalog</code> を追加しました</li>
+</ul>
+</li>
+<li><code>nyagos.d/catalog/ezoe.lua</code> を削除</li>
+<li>エイリアス: <code>chompf</code>, <code>wordpad</code>, <code>abspath</code> を削除</li>
+<li>ツール Lua 関数: <code>set(&quot;ENV=VALUE&quot;)</code>, <code>alias(&quot;NAME=DEFINE&quot;)</code> を定義する nyagos.d/aliasandset.lua を nyagos.d/catalog/ 以下へ移動</li>
+<li>Lua関数: <code>addpath</code> を削除</li>
+</ul>
+<h2 id="heading-5">新機能</h2>
+<ul>
+<li><code>%NO_COLOR%</code> が定義されていたら、プロンプト・コマンドライン・ls の着色を無効化</li>
+<li>サブコマンド補完(<code>require &quot;subcomplete&quot;</code>)関連
+<ul>
+<li><a href="https://github.com/nyaosorg/nyagos/pull/436">#436</a> curl のオプション補完をサポート ( Thanks to <a href="https://github.com/tsuyoshicho">@tsuyoshicho</a> )</li>
+</ul>
+</li>
+</ul>
+<h2 id="heading-6">不具合修正</h2>
+<ul>
+<li>SKK関連
+<ul>
+<li><code>UTta</code>,<code>UTTa</code> が<code>打った</code>ではなく<code>打っtあ</code>,<code>▽う*t*t</code> になってしまう不具合を修正</li>
+<li>手入力した逆三角形が変換マーカーと認識される問題を修正した</li>
+<li>次のローマ字かな変換を追加
+<ul>
+<li><code>z,</code>→<code>‥</code>, <code>z-</code>→<code>～</code>, <code>z.</code>→<code>…</code>, <code>z/</code>→<code>・</code>, <code>z[</code>→<code>『</code>, <code>z]</code>→<code>』</code>,
+<code>z1</code>→<code>○</code>, <code>z2</code>→<code>▽</code>, <code>z3</code>→<code>△</code>, <code>z4</code>→<code>□</code>, <code>z5</code>→<code>◇</code>,
+<code>z6</code>→<code>☆</code>, <code>z7</code>→<code>◎</code>, <code>z8</code>→<code>〔</code>, <code>z9</code>→<code>〕</code>, <code>z0</code>→<code>∞</code>,
+<code>z^</code>→<code>※</code>, <code>z\\</code>→<code>￥</code>, <code>z@</code>→<code>〃</code>, <code>z;</code>→<code>゛</code>, <code>z:</code>→<code>゜</code>,
+<code>z!</code>→<code>●</code>, <code>z&quot;</code>→<code>▼</code>, <code>z#</code>→<code>▲</code>, <code>z$</code>→<code>■ </code>, <code>z%</code>→<code>◆</code>,
+<code>z&amp;</code>→<code>★</code>, <code>z'</code>→<code>♪</code>, <code>z(</code>→<code>【</code>, <code>z)</code>→<code>】</code>, <code>z=</code>→<code>≒</code>,
+<code>z~</code>→<code>≠</code>, <code>z|</code>→<code>〒</code>, <code>z` </code>→<code>“</code>, <code>z+</code>→<code>±</code>, <code>z*</code>→<code>×</code>,
+<code>z&lt;</code>→<code>≦</code>, <code>z&gt;</code>→<code>≧</code>, <code>z?</code>→<code>÷</code>, <code>z_</code>→<code>―</code>,</li>
+<li><code>bya</code>→<code>びゃ</code> or <code>ビャ</code> ... <code>byo</code>→<code>びょ</code> or <code>ビョ</code></li>
+<li><code>pya</code>→<code>ぴゃ</code> or <code>ピャ</code> ... <code>pyo</code>→<code>ぴょ</code> or <code>ピョ</code></li>
+<li><code>tha</code>→<code>てぁ</code> or <code>テァ</code> ... <code>tho</code>→<code>てょ</code> or <code>テョ</code></li>
+</ul>
+</li>
+<li>変換中の q で、入力済みの平仮名・片仮名を相互変換する機能を実装</li>
+</ul>
+</li>
+<li>サブコマンド補完(<code>require &quot;subcomplete&quot;</code>)関連
+<ul>
+<li>scoop.cmd であるべき scoop の実行ファイル名が scoop.exe になっていてサブコマンド名補完できない問題を修正した</li>
+</ul>
+</li>
+<li>Linux でプロンプトが表示されない問題を修正<br>
+(デフォルトの .nyagos で nyagos.env.prompt を設定していたが、Linux では環境変数の英大文字・小文字を区別するので、nyagos.env.PROMPT でなければいけなかった)</li>
+<li><code>foreach</code> で繰り返すコマンド入力のループ を Ctrl-C で中断できない不具合を修正<br>
+(本問題は <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2">4.4.6_2</a> のコミット<a href="https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae">8bf0a2acb25b152d3d40c188de09858c2ef572ae</a> で混入した模様。<a href="https://github.com/nyaosorg/nyagos/issues/383">#383</a>と<a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0">4.4.6_0</a> も参照のこと)</li>
+</ul>
+<h2 id="heading-7">ドキュメント</h2>
+<ul>
+<li>docs/07-LuaFunctions_*.md: <code>nyagos.shellexecute</code> について記述 (忘れてた!)</li>
+</ul>
+<h1 id="nyagos-4414-0">NYAGOS 4.4.14_0</h1>
+<p>(2023.10.06)</p>
+<ul>
+<li>2023年下期版</li>
+<li>当バージョンのバイナリは Go 1.20.9 でビルド</li>
+<li>サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。</li>
+</ul>
+<h2 id="heading-8">新機能</h2>
+<ul>
+<li>nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした （例：<code>nyagos.env.NYAGOSEXPANDWILDCARD=&quot;gorename;gofmt&quot;</code> ）</li>
+<li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> 新オプション <code>glob_slash</code> を追加（起動オプション：<code>--glob-slash</code>, lua関数： <code>nyagos.option.glob_slash=true</code>、コマンドライン：<code>set -o glob_slash</code>）。設定されている時、ワイルドカード展開で <code>/</code> を使う</li>
+<li><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) サポート - <a href="https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.html">設定方法</a></li>
+<li>適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 <code>nyagos.atou_if_needed</code> を追加</li>
+</ul>
+<h2 id="heading-9">不具合修正</h2>
+<ul>
+<li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> <code>set -o glob</code> 時、二重引用符内の<code>*</code>,<code>?</code> がワイルドカードとして展開されていた(本来されるべきではない)</li>
+<li>Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に &quot;not supopported&quot; を返していたので、引数と同じ値を戻すようにした)</li>
+<li><a href="https://github.com/nyaosorg/nyagos/discussions/433">#433</a> 文字化けを避けるために、逆クォートでは <code>nyagos.atou_if_needed</code> を使って、UTF8 を更に UTF8 化させないようにした</li>
+<li><a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.13_3">v4.4.13_3</a> で、<code>more</code>, <code>nyagos.getkey</code>, <code>nyagos.getviewwidth</code> が Windows 7, 8.1 や WindowsServer 2008 で動かない問題を修正</li>
+<li><a href="https://github.com/nyaosorg/nyagos/pull/434">#434</a> Lua で <code>nyagos.which('cp')</code> が機能しない問題を修正 (Thanks to <a href="https://github.com/ousttrue">@ousttrue</a>)</li>
+<li>全角空白(U+3000)の背景色が赤くなっていなかった不具合を修正</li>
+</ul>
+<h2 id="heading-10">破壊的変更</h2>
+<ul>
+<li><code>nyagos.default_prompt</code> や <code>nyagos.prompt</code> は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。(<a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny#Editor">go-readline-ny.Editor</a> の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)</li>
+</ul>
+<h1 id="nyagos-4413-3">NYAGOS 4.4.13_3</h1>
+<p>(2023.04.30)</p>
+<ul>
+<li>(#431) バッチファイル実行で変更した環境変数や、more/typeの出力など非UTF8からUTF8へ変更する時、4096バイトを越えるような行の変換で失敗する不具合を修正 (Thx. @8exBCYJi5ATL)</li>
+<li>(#431 とは別件で) 行のサイズが大きすぎると、more が行を出力しないことがある不具合を修正</li>
+</ul>
+<h1 id="nyagos-4413-2">NYAGOS 4.4.13_2</h1>
+<p>(2023.04.25)</p>
+<p>2023年上期版</p>
+<ul>
+<li>(#428) <code>rmdir /s</code> でシンボリックリンクやジャンクションの削除に失敗する問題を修正</li>
+<li>&quot; で引用領域の色を反転させないようにした</li>
+<li>(#429) カレントディレクトリが <code>C:</code> の時、<code>cd c:</code> が失敗する不具合を修正</li>
+<li>ANSIとUTF8間の変換に go-windows-mbcs v0.4 とgolang.org/x/text/transform を使うようにした</li>
+</ul>
+<h1 id="nyagos-4413-1">NYAGOS 4.4.13_1</h1>
+<p>(2022.10.15)</p>
+<ul>
+<li>(#425) nyagos.d/suffix.lua で設定した拡張子を環境変数 PATHEXT ではなく、NYAGOSPATHEXT に登録するようにした。コマンド名補完は PATHEXT に加え、NYAGOSPATHEXT も参照するようにした  (Thx. @tsuyoshicho)</li>
+<li>(#426) nyagos.argsfilter でコマンドラインが変換された時、空パラメータ(&quot;&quot;) が消えてしまう問題を修正 (Thx. @juggler999)</li>
+<li>(#426) 外部コマンドに対するワイルドカード展開が有効になっている時、空パラメータ(&quot;&quot;)が消えてしまう問題を修正 (Thx. @juggler999)</li>
+<li>(#427) '&quot;&quot;' が BEEP音プラス '(数字)' に置換されてしまう不具合を修正 (Thx.@hogewest)</li>
+</ul>
+<h1 id="nyagos-4413-0">NYAGOS 4.4.13_0</h1>
+<p>(2022.09.24)</p>
+<ul>
+<li>セキュリティー警告対応のため、gopkg.in/yaml.v3 に依存するモジュールを直接利用しないようにした( <a href="https://github.com/nyaosorg/nyagos/security/dependabot/1">https://github.com/nyaosorg/nyagos/security/dependabot/1</a> )</li>
+<li>(#420) macOS でのビルドをサポート (Thanks to @zztkm)</li>
+<li>(#421) バッチファイルが環境変数を削除した時、それが反映されていない問題を修正(Thanks to @tsuyoshicho)</li>
+<li>(#422) プロンプトに$hを使った時、編集開始位置が右にずれる不具合を修正(Thanks to @Matsuyanagi)</li>
+<li>端末の背景色が白の時、入力文字が全く見えない不具合を修正(端末デフォルト文字色を使用)</li>
+<li>コマンド名補完において、タイムアウトが効きづらい問題を改善</li>
+<li>サブパッケージを internal フォルダー以下へ移動</li>
+<li>キーの英大文字・小文字を区別しない辞書に Generics を使用するようにした。</li>
+<li>Windows以外で Makefile がエラーになる問題を修正</li>
+<li>(#424) fuzzy finder 拡張機能の統合 (Thx @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-4412-0">NYAGOS 4.4.12_0</h1>
+<p>(2022.04.29)</p>
+<ul>
+<li>カラー化コマンドラインの修正
+<ul>
+<li>オプション文字列の色を黄土色へ変更し、範囲を修正</li>
+<li>全角空白の背景色を赤へ変更</li>
+<li>-0...-9 にオプション用のカラーがついていなかった</li>
+<li>端末の背景透過が効くように、背景を黒(ESC[40m)からデフォルト色(ESC[49m)にした(go-readline-ny v0.7.0)</li>
+<li>WezTerm ではサロゲートペア表示を有効にした</li>
+</ul>
+</li>
+<li>Linux版のみの不具合修正
+<ul>
+<li>set -o noclobber 設定時のリダイレクト出力がゼロバイトになってしまう不具合を修正</li>
+<li>ヒストリがファイルに保存されず、次回起動の際に復元されない不具合を修正</li>
+</ul>
+</li>
+<li>start コマンドのパラメータは %PATH% 上の任意のファイル・ディレクトリに補完する</li>
+<li>cmd.exe と同様に <code>rmdir /s</code> は readonly のフォルダーも削除できるようにした</li>
+<li><code>rmdir FOLDER /s</code> とオプションをフォルダーの後に書けるようにした</li>
+<li>(#418) コマンドラインが ^ で終わっていた場合、Enter入力後も行入力を継続するようにした</li>
+</ul>
+<h1 id="nyagos-4411-0">NYAGOS 4.4.11_0</h1>
+<p>(2021.12.10)</p>
+<ul>
+<li>コマンドラインをカラー化した</li>
+</ul>
+<h1 id="nyagos-4410-3">NYAGOS 4.4.10_3</h1>
+<p>(2021.08.30)</p>
+<ul>
+<li>(#412) Windows10の、WindowsTerminalでない端末で、罫線キャラクターの幅が不正確になっていた問題に対応</li>
+<li>パッケージに新しいアイコンファイルを添付</li>
+</ul>
+<h1 id="nyagos-4410-2">NYAGOS 4.4.10_2</h1>
+<p>(2021.07.23)</p>
+<ul>
+<li>コードページ437 で、%DATE% の置換結果が CMD.EXE 非互換になっている不具合を修正</li>
+<li>go-readline-ny v0.4.13: Windows Terminal で Mathematical Bold Capital (U+1D400 - U+1D7FF) の編集をサポート</li>
+<li>-oオプションがついていも、リダイレクトされた ls の出力から ESC[0m を除くようにした</li>
+<li>(#411) 英語部と日本語部が入れ変わっていたドキュメントを修正 (Thx! @tomato3713)</li>
+<li>テストコードの整理、自動化</li>
+</ul>
+<h1 id="nyagos-4410-1">NYAGOS 4.4.10_1</h1>
+<p>(2021.07.02)</p>
+<ul>
+<li><code>./dll</code> というフォルダが存在して、CDPATH上に DLL がある時、入力されたパス <code>dll</code> が補完で DLL に置き変わっていた動作を修正(英大文字・小文字が変わってしまうのが問題)</li>
+<li>空白を含むディレクトリでの clone コマンドで、カレントディレクトリが維持されない不具合を修正</li>
+</ul>
+<h1 id="nyagos-4410-0">NYAGOS 4.4.10_0</h1>
+<p>(2021.06.25)</p>
+<ul>
+<li>nyagos.d/aliases.lua: abspath をワイルドカード対応にした</li>
+<li>Luaで、<code>OLEOBJECT:_release()</code> ではなく、 <code>OLEOBJECT._release()</code> が使われた時に適切なエラーが起こされるようにした(glua-oleパッケージを更新)</li>
+<li>CMD.EXE と同様、echo で二重引用符を出力させるようにした</li>
+<li><code>&quot;..\&quot;..\&quot;..&quot;</code> という文字列が字句解析の結果、<code>&quot;..\&quot;..&quot;..&quot;</code> になってしまう不具合を修正</li>
+<li>(#410) 端末の閉じるボタンが押された時にただちに終了させるため SIGTERM を無視しないようにした (Thx @nocd5)</li>
+<li>WindowsTerminal 1.8 以降で、cloneコマンドは同じウインドウの別タブで起動するようにした</li>
+<li>アプリ実行エイリアス経由で wt.exe が呼べず、WindowsTerminal下で clone コマンドが動かなくなっていた問題を修正</li>
+<li>suでネットワークドライブが引き継がれてない不具合を修正</li>
+<li>ビルドするのに PowerShell(make.cmd) ではなく Makefile(GNU Make)を使うようにした</li>
+<li>Linux でもビルドできるようにした</li>
+</ul>
+<h1 id="nyagos-449-7">NYAGOS 4.4.9_7</h1>
+<p>(2021.05.22)</p>
+<ul>
+<li>(#409) <code>set -o glob</code> や <code>nyagos.option.glob=true</code> による外部コマンド向けワイルドカード展開が効かなくなっていた不具合を修正 (Thx @juggler999)</li>
+</ul>
+<h1 id="nyagos-449-6">NYAGOS 4.4.9_6</h1>
+<p>(2021.05.07)</p>
+<ul>
+<li>(#406) nyagos.argsfilter で生引数がコンバートされず、suffixコマンドが期待どおり機能しなくなっていた不具合を修正 (Thx @tGqmJHoJKqgK)</li>
+</ul>
+<h1 id="nyagos-449-5">NYAGOS 4.4.9_5</h1>
+<p>(2021.05.03)</p>
+<ul>
+<li>go-readline-ny v0.4.10: Yes/Noの回答のYが次のコマンドラインに入力される不具合を修正</li>
+<li>go-readline-ny v0.4.11: Emoji Moifier Sequence (skin tone) をサポート</li>
+<li>Windows 8.1でCPU負荷が高い時のカラーlsの速度を改善した</li>
+<li>( &quot;io/ioutil&quot; を使わないようにした )</li>
+<li>open で開いたプロセスが閉じる時のメッセージがコマンドラインに重ならないようにした</li>
+<li>go-readline-ny v0.4.12: VisualStudioCodeのターミナルでは絵文字編集はオフにするようにした</li>
+<li>(#403) CMD.EXE のような -S,-C,-K オプションをサポート</li>
+<li>(#403) コマンドラインの不規則な二重引用符が外部コマンドに渡される時に削除される問題を修正</li>
+<li>(#405) fuzzyfinder catalog module を追加 (Thx @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-449-4">NYAGOS 4.4.9_4</h1>
+<p>(2021.03.06)</p>
+<ul>
+<li>(#400) サブコマンド補完向けのコマンドの存在チェック追加(Thx @tsuyoshicho )</li>
+<li>(#401) choco/chocolaty 向けサブコマンド名補完追加(Thx @tsuyoshicho )</li>
+<li>WindowsTerminal で ls や Ctrl-Oの選択時のレイアウトが崩れる問題を修正</li>
+<li>go-readline-ny v0.4.4: 任意の一字 + Ctrl-B + 合字が入力された時、表示が乱れる問題を修正</li>
+<li>go-readline-ny v0.4.5: 合字の異体字サポート</li>
+<li>go-readline-ny v0.4.6: 異体字の後の囲み記号の編集をサポート(#️⃣)</li>
+<li>(#402) &quot;echo !xxx&quot; でシェルがいきなり終了してしまう問題を修正 (Thx @masamitsu-murase)</li>
+<li>go-readline-ny v0.4.7: REGIONAL INDICATOR (U+1F1E6..U+1F1FF) でカーソル位置が狂わないようにした</li>
+<li>go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)</li>
+<li>go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)</li>
+</ul>
+<h1 id="nyagos-449-3">NYAGOS 4.4.9_3</h1>
+<p>(2021.02.20)</p>
+<ul>
+<li>WindowsTerminal利用下の一行入力で Unicode の異体字をサポート</li>
+<li>(#397) scoopコマンドのサブコマンド補完を追加 (<code>use &quot;subcomplete.lua&quot;</code>) (Thx @tomato3713)</li>
+<li>補完時に最も短い候補に英大文字/小文字をあわせるようにした</li>
+<li>(#398) io.popen の第二引数のデフォルトが機能していなかった (Thx @ironsand)</li>
+<li>(#399) utf8 offset の改良 (Thx @masamitsu-murase)</li>
+<li>ALT-/ キーバインドのサポート (Thx @masamitsu-murase) <a href="https://github.com/zetamatta/go-readline-ny/pull/1">https://github.com/zetamatta/go-readline-ny/pull/1</a></li>
+<li>WindowsTerminal 1.5 で絵文字や丸数字が入力できなくなっていた問題を修正</li>
+</ul>
+<h1 id="nyagos-449-2">NYAGOS 4.4.9_2</h1>
+<p>(2021.01.08)</p>
+<ul>
+<li>(#342) Ctrl-C 押下時に子プロセスを kill しないようにした</li>
+</ul>
+<h1 id="nyagos-449-1">NYAGOS 4.4.9_1</h1>
+<p>(2020.12.21)</p>
+<ul>
+<li>パス引数なしの<code>make install</code> が失敗する不具合を修正</li>
+<li>(#396) Ctrl-W で左へのスクロールが必要な時に panic する不具合を修正</li>
+<li>コンソール入力の more/clip/type がエコーバックしない時がある不具合を修正</li>
+<li>(#342) クラッシュさせないよう Ctrl-C 割り込みハンドリングを改善</li>
+</ul>
+<h1 id="nyagos-449-0">NYAGOS 4.4.9_0</h1>
+<p>(2020.12.05)</p>
+<ul>
+<li>(#390,#394) Unicode の合字をサポート</li>
+<li>異字体コード1-16があるとカーソル位置がおかしくなる不具合を修正<br>
+(異字体コード自体は未対応なので &lt;FE0F&gt; などと表示する)</li>
+<li>su と clone で WindowsTerminal をサポート</li>
+<li>編集中はバックグランドプロセスの開始・終了メッセージを出させないようにした</li>
+<li>C-r: インクリメンタルサーチでは英大文字・小文字を区別しないようにした</li>
+<li>|| や &amp;&amp; の後でコマンド名補完が効かなかった不具合を修正</li>
+<li>C-y: ペースト時に最後の CRLF を除くようにした</li>
+<li>Fix: (#393) ウィンドウアクティブ後の最初のキーが２つ入力されます (Thanks to @tostos5963)</li>
+<li>アンチウィルスが誤判断をするので upx.exe を使用しないようにした</li>
+</ul>
+<h1 id="nyagos-448-0">NYAGOS 4.4.8_0</h1>
+<p>(2020.10.03)</p>
+<ul>
+<li>git.lua: <code>git add</code> 向け補完
+<ul>
+<li>&quot;\343\201\202\343\201\257\343\201\257&quot;といったファイル名のクォーテーションを解除するようにした</li>
+<li>untrackなディレクトリの下のファイルも補完対象とした</li>
+</ul>
+</li>
+<li>diskused: サイズ表記を <code>ls -h</code> のように</li>
+<li>diskused が Ctrl-C で止まらなかった不具合を修正</li>
+<li>%ENV:~10,5% のような環境変数抽出を実装</li>
+<li>(#308) UNCパスで表現されていないネットワーク上の GUI 実行ファイルを起動しようとすると <code>The operation was canceled by the user</code> というエラーになる問題を修正</li>
+<li>nyagos がネットワーク上にある時、clone コマンドでエラーダイアログが出る問題を修正</li>
+<li>(#389) su: SUBST コマンドのドライブマウントを維持するようにした</li>
+<li>(#390) U+2000～U+2FFF の Unicode が入力できない不具合を修正</li>
+<li>(#390) サロゲートペアな文字が入力できない不具合を修正</li>
+<li>box.lua: Ctrl+O→ESCAPE でユーザが入力した単語が消える不具合を修正</li>
+<li>(#391) subcommand.lua: ghコマンド向けサブコマンド補完を追加 (Thanks to @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-447-0">NYAGOS 4.4.7_0</h1>
+<p>(2020.07.18)</p>
+<ul>
+<li>cd,pushd とその補完で bash のような %CDPATH% をサポートした</li>
+<li><code>%APPDATA%\NYAOS_ORG\nyagos.d</code> のスクリプトも読むようにした</li>
+<li>WindowsTerminal上では、サロゲートペアなUnicodeを&lt;nnnnn&gt;のようにエスケープしないようにした</li>
+<li>バイナリファイルを置くディレクトリを Cmd から bin へ変更した</li>
+<li>catalog/subcomplete.lua
+<ul>
+<li>新補完API <code>nyagos.complete_for</code> を使うようにした</li>
+<li>起動を早くするため、補完するサブコマンド名をファイルにキャッシング</li>
+<li>キャッシュクリアコマンド <code>clear_subcomands_cache</code> を実装</li>
+<li><code>fsutil</code> と <code>go</code> のサブコマンド補完</li>
+</ul>
+</li>
+<li>catalog/git.lua
+<ul>
+<li><code>subcomplete.lua</code> を自動でロードするようにした</li>
+<li>commit-hash も branch-name 同様に補完する</li>
+<li><code>git checkout</code>で commit-hash,ブランチ名、修正されたファイル名を補完</li>
+</ul>
+</li>
+<li>(#386) <code>ls -h</code> のサイズ出力を単位付きで表示するよう修正 (Thx! <a href="https://github.com/Matsuyanagi">@Matsuyanagi</a>)</li>
+<li>Fix: <code>nyagos.exec{ ALIAS-COMMAND-USING $@ }</code> がパニックを引き起す不具合を修正</li>
+<li>補完可能なファイルのテーブルを返す関数 <code>nyagos.complete_for_files</code> を追加</li>
+</ul>
+<h1 id="nyagos-446-2">NYAGOS 4.4.6_2</h1>
+<p>(2020.06.09)</p>
+<ul>
+<li>Fix: Ctrl-C で Ctrl-D のように終了していた (<code>4.4.6_0</code> で #383 修正時に発生)</li>
+</ul>
+<h1 id="nyagos-446-1">NYAGOS 4.4.6_1</h1>
+<p>(2020.05.31)</p>
+<ul>
+<li>(#385) 最後にいたフォルダーが削除されたドライブの任意のフォルダーへ移動できなかった不具合を修正</li>
+<li>cd のディレクトリヒストリがパスの大文字小文字を区別していなかった問題を修正</li>
+<li>ドライブ移動(<code>x:</code>) でディレクトリヒストリにディレクトリをスタックしていなかった問題を修正</li>
+<li><code>nyagos.rawexec{...}</code>の最後の要素が無視されていた不具合を修正</li>
+</ul>
+<h1 id="nyagos-446-0">NYAGOS 4.4.6_0</h1>
+<p>(2020.05.08)</p>
+<ul>
+<li>%DATE% と %TIME% を実装した。</li>
+<li>nyagos.envdel は削除したディレクトリを戻り値として返すようになった。</li>
+<li><code>dos/net*.go</code> などを github.com/zetamatta/go-windows-netresource へ移行</li>
+<li>(#379) nyagos.preexechook &amp; postexechook を追加</li>
+<li>(#383) 端末がクラッシュした時、無限ループに突入してしまう不具合を修正</li>
+<li><code>start</code> の後のタブキーは <code>which</code> のようにコマンド名補完をするようにした</li>
+<li><code>cd x:\y\z</code> が失敗した時、<code>x:\</code> (ルートディレクトリ)に移動する不具合を修正した</li>
+</ul>
+<h1 id="nyagos-445-4">NYAGOS 4.4.5_4</h1>
+<p>(2020.03.13)</p>
+<ul>
+<li>github.com/BixData/gluabit32 が消えて C-xC-r C-xC-h , C-xC-g が動かなくなった問題を修正</li>
+<li>(#319) 自前版 bit32.band , bor , bxor を再び追加</li>
+<li>(#378) nyagos.d/catalog/subcomplete.lua: こちらのサブコマンド補完でも拡張子なし・英大文字・小文字は区別しないでコマンドを照合する動作を標準にした</li>
+<li>(#377) scoop でインストールされた git で <code>git gui</code> を実行すると、エスケープシーケンスが効かなくなる問題に対応</li>
+<li>パッケージを作成する時だけ、upx で実行ファイルを圧縮し、毎回のビルドでは使わないようにした</li>
+</ul>
+<h1 id="nyagos-445-3">NYAGOS 4.4.5_3</h1>
+<p>(2020.03.08)</p>
+<ul>
+<li>UNCパスのキャッシュを <code>~/appdata/local/nyaos.org/computers.txt</code> ではなく <code>~/appdata/local/nyaos_org/computers.txt</code> にセーブするようにした ( 他の機能は <code>nyaos_org</code> フォルダーを使っているため )</li>
+<li>サブコマンド補完(<code>complete_for</code>)では拡張子は無視してコマンドのマッチングを行うようにした</li>
+<li>UPX.EXE で、実行ファイルを圧縮するようにした</li>
+<li>github.com/BixData/gluabit32 が 404 になって、Lua関数 <code>bit32.*</code> が利用できなくなった。</li>
+<li>Windows10 のネイティブANSIエスケープシーケンスも mattn/go-colorable 経由で利用するようにした。</li>
+<li><code>echo $(gawk &quot;BEGIN{ print \&quot;\x22\x22\&quot; }&quot;)</code> で二重引用符が出ない不具合を修正</li>
+</ul>
+<h1 id="nyagos-445-2">NYAGOS 4.4.5_2</h1>
+<p>(2019.10.26)</p>
+<ul>
+<li>(#375) <code>~randomstring</code> でクラッシュする不具合を修正</li>
+<li>(#374) 未来のタイムスタンプのファイルの<code>ls -l</code>で西暦がでなかった不具合を修正</li>
+</ul>
+<h1 id="nyagos-445-1">NYAGOS 4.4.5_1</h1>
+<p>(2019.10.20)</p>
+<ul>
+<li>内蔵boxコマンドが複数アイテム選択に対応していなかった不具合を修正した</li>
+<li>プロセスを開始終了させる時、[PID]表示する際にカーソルを移動させないようにした</li>
+<li>Ctrl-O: 最後の \ の後に引用符を不可しないようにした。(NG: <code>&quot;Program Files\&quot;</code> -&gt; OK:<code>&quot;Program Files\</code>)</li>
+<li>nyagos.stat/access で ~ や %ENV% を解釈できるようにした</li>
+</ul>
+<h1 id="nyagos-445-0">NYAGOS 4.4.5_0</h1>
+<p>(2019.09.01)</p>
+<ul>
+<li>Lua関数: <code>nyagos.dirname()</code> を実装</li>
+<li>C-o で複数ファイル選択をサポート(Space,BackSpace,Shift-H/J/K/L,Ctrl-Left/Right/Down/Up)</li>
+<li>Alt-Y(引用符つきペースト)で、改行前後に引用符を置くようにした</li>
+<li>C-o で表示される選択肢がディレクトリの時、末尾に \ (Linux では /) をつけるようにした。</li>
+<li><code>nyagos.envadd(&quot;ENVNAME&quot;,&quot;DIR&quot;)</code> と <code>nyagos.envdel(&quot;ENVNAME&quot;,&quot;PATTERN&quot;)</code> を実装</li>
+<li><code>nyagos.pathjoin()</code> で <code>%ENVNAME%</code> と <code>~\</code>,<code>~/</code> を展開するようにした</li>
+</ul>
+<h1 id="nyagos-444-3">NYAGOS 4.4.4_3</h1>
+<p>(2019.06.14)</p>
+<ul>
+<li>(#371) ファイル名に.を含む実行ファイルを参照できなかった</li>
+<li>diskfree でネットワークドライブに割り当てられた UNC パスを表示</li>
+</ul>
+<h1 id="nyagos-444-2">NYAGOS 4.4.4_2</h1>
+<p>(2019.06.14)</p>
+<ul>
+<li>バックグラウンドでキャッシュを更新することで <code>\\host-name</code> の補完を高速化</li>
+</ul>
+<h1 id="nyagos-444-1">NYAGOS 4.4.4_1</h1>
+<p>(2019.05.30)</p>
+<ul>
+<li>Linux 版バイナリがビルドできなかった問題を修正</li>
+</ul>
+<h1 id="nyagos-444-0-">NYAGOS 4.4.4_0 令和版</h1>
+<p>(2019.05.27)</p>
+<ul>
+<li>(#233) <code>\\host-name\share-name</code> を補完できるようになった</li>
+<li>(#238) copyコマンドで進捗表示をするようにした</li>
+<li><code>環境変数名=値　コマンド名　パラメータ…</code> をサポート</li>
+<li>バッチファイル用の一時ファイル名が重複する問題を修正</li>
+<li>(#277) set /a 式を実装</li>
+<li>(#291) バックグラウンド実行のプロセスのIDを表示するようにした</li>
+<li>(#361) GUIアプリの標準出力がリダイレクトできなかった問題を修正</li>
+<li>Linux用の <code>.</code> と <code>source</code> を実装(/bin/sh を想定)</li>
+<li>一行入力で、ユーザが待っている時にカーソルの点滅がオフになっていなかった不具合を修正</li>
+<li><code>mklink /J マウントポイント 相対パス</code> で作るジャンクションが壊れていた(絶対パス化が抜けていた)</li>
+<li>起動オプション <code>--chdir &quot;DIR&quot;</code> and <code>--netuse &quot;X:=\\host-name\share-name&quot;</code> を追加</li>
+<li><code>su</code>を実行する際にCMD.EXEを使わないようにした(アイコンをNYAGOSのにするため)</li>
+<li>100個を越える補完候補がある時、確認するようにした</li>
+<li>ps: nyagos.exe 自身の行に <code>[self]</code> と表示するようにした</li>
+<li>(#272) <code>!(ヒストリ番号)@</code> をそのコマンドが実行された時のディレクトリに置換するようにした</li>
+<li>(#130) ヒアドキュメントをサポート</li>
+<li>Alt-O でショートカットのパス(例:SHORTCUT.lnk) をリンク先のファイル名に置換するようにした</li>
+<li>(#368) Lua関数 io.close() が未定義だった。</li>
+<li>(#332)(#369) io.open() のモード r+/w+/a+ を実装した。</li>
+</ul>
+<h1 id="nyagos-443-0">NYAGOS 4.4.3_0</h1>
+<p>(2019.04.27)</p>
+<ul>
+<li>(#116) readline: Ctrl-Z,Ctrl-<code>_</code> による操作取り消しを実装</li>
+<li>(#194) コンソールウインドウの左上のアイコンを更新するようにした</li>
+<li>CMD.EXE 内蔵 date,time を使うためのエイリアスを追加</li>
+<li><code>cd 相対パス</code> の後のドライブ毎のカレントディレクトリが狂う不具合を修正<br>
+( <code>cd C:\x\y\z ; cd .. ; cd \\localhost\c$ ; c: ; pwd</code> -&gt; <code>C:\x</code> (not <code>C:\x\y</code>) )</li>
+</ul>
+<h1 id="nyagos-442-3">NYAGOS 4.4.2_3</h1>
+<p>(2019.04.13)</p>
+<ul>
+<li>Ctrl-RIGHT,ALT-F(次の単語へ), Ctrl-LEFT,ALT-B(前の単語へ)を実装</li>
+<li>インクリメンタルサーチ開始時にトップへ移動する時のバックスペースの数が間違っていた不具合を修正</li>
+<li>(#364) <code>ESC[0A</code> というエスケープシーケンスが使われていた不具合を修正</li>
+</ul>
+<h1 id="nyagos-442-1">NYAGOS 4.4.2_1</h1>
+<p>(2019.04.05)</p>
+<ul>
+<li>diskfree: 行末の空白を削除</li>
+<li><code>~&quot;\Program Files&quot;</code> の最初の引用符が消えて、Files が引数に含まれない不具合を修正</li>
+</ul>
+<h1 id="nyagos-442-0">NYAGOS 4.4.2_0</h1>
+<p>(2019.04.02)</p>
+<ul>
+<li>OLEオブジェクトからLuaオブジェクトへの変換が日付型などでパニックを起こす不具合を修正</li>
+<li>Luaの数値が実数として OLE に渡されるべきだったのに、整数として渡されていた。</li>
+<li>Lua: 関数: <code>nyagos.to_ole_integer(n)</code> (数値を OLE 向けの整数に変換)を追加(trash.lua用)</li>
+<li>Lua: OLEObject に列挙用オブジェクトを得るメソッド <code>_iter()</code> を追加</li>
+<li>Lua: OLEObject を開放するメソッド <code>OLEObject:_release()</code> を追加</li>
+<li>trash.lua が COM の解放漏れを起こしていた問題を修正</li>
+<li>Lua: <code>create_object</code>生成された IUnkown インスタンスが解放されていなかった不具合を修正</li>
+<li>「~ユーザ名」の展開を実装</li>
+<li>バッチファイル以外の実行ファイルの exit status が表示されなくなっていた不具合を修正</li>
+<li>%COMSPEC% が未定義の時に CMD.EXE を用いるエイリアス(ren,mklink,dir,...)が動かなくなっていた不具合を修正</li>
+<li>全角空白(%U+3000%)がパラメータの区切り文字と認識されていた点を修正</li>
+<li>(#359) -c,-k オプションで CMD.EXE のように複数の引数をとれるようにした</li>
+<li>「存在しないディレクトリ\何か」を補完しようとすると「The system cannot find the path specified.」と表示される不具合を修正 (Thx! <a href="https://github.com/tsuyoshicho">tsuyoshicho</a>)</li>
+<li>(#360) 幅ゼロやサロゲートペアな Unicode は<code>&lt;NNNNN&gt;</code> と表示するようにした (Thx! <a href="https://github.com/tsuyoshicho">tsuyoshicho</a>)</li>
+<li>サロゲートペアな Unicode をそのまま出力するオプション --output-surrogate-pair を追加</li>
+<li>suコマンドで、ネットワークドライブが失なわれないようにした</li>
+<li>(#197) ソースがディレクトリで -s がない時、<code>ln</code> はジャンクションを作成するようにした</li>
+<li>内蔵の mklink コマンドを実装し、<code>CMD.exe /c mklink</code> のエイリアス <code>mklink</code> を削除</li>
+<li>ゼロバイトの Lua ファイルを削除(cdlnk.lua, open.lua, su.lua, swapstdfunc.lua )</li>
+<li>(#262) <code>diskfree</code> でボリュームラベルとファイルシステムを表示するようにした</li>
+<li>UNCパスがカレントディレクトリでもバッチファイルを実行できるようにした。</li>
+<li>UNCパスがカレントディレクトリの時、ren,assoc,dir,for が動作しない不具合を修正</li>
+<li>(#363) nyagos.alias.COMMAND=&quot;string&quot; 中では逆クォート置換が機能しない問題を修正 (Thx! <a href="https://github.com/tostos5963">tostos5963</a> &amp; <a href="https://github.com/sambatriste">sambatriste</a> )</li>
+<li>(#259) アプリケーションをダイアログで選んでファイルを開くコマンド <code>select</code> を実装</li>
+<li><code>diskfree</code> の出力フォーマットを修正</li>
+</ul>
+<h1 id="nyagos-441-1">NYAGOS 4.4.1_1</h1>
+<p>(2019.02.15)</p>
+<ul>
+<li><code>print(nyagos.complete_for[&quot;COMMAND&quot;])</code>が機能するようにした</li>
+<li>(#356) <code>type</code> が LF を含まない最終行を表示しない不具合を修正 (Thx! @spiegel-im-spiegel)
+<ul>
+<li>要 <a href="https://github.com/zetamatta/go-texts">zetamatta/go-texts</a> v1.0.1～</li>
+</ul>
+</li>
+<li>ビルドに <code>Go Modules</code> を使うようにした</li>
+<li><code>killall</code>,<code>taskkill</code> コマンド向け補完</li>
+<li><code>kill</code> &amp; <code>killall</code>: 自分自身のプロセスを停止できなくした。</li>
+<li>(#261) 補完や1フォルダのlsは10秒でタイムアウトするようにした</li>
+<li>Lua で OLE オブジェクトのセッター(<code>__newindex</code>)が効かなかった不具合を修正</li>
+<li>(#357) 仏語キーボードで AltGrシフトが効かない問題を修正 (Thx! @crile)</li>
+<li>(#358) <code>foo.exe</code>と<code>foo.cmd</code>があった時、<code>foo</code>で<code>foo.exe</code>ではなく<code>foo.cmd</code> が呼び出される不具合を修正</li>
+</ul>
+<h1 id="nyagos-441-0">NYAGOS 4.4.1_0</h1>
+<p>(2019.02.02)</p>
+<ul>
+<li><code>which</code>,<code>set</code>,<code>cd</code>,<code>pushd</code>,<code>rmdir</code>,<code>env</code> コマンド向け補完 (Thx! <a href="https://twitter.com/ChiyosukeF">ChiyosukeF</a>)</li>
+<li>(#353) OpenSSHでパスワード入力中に Ctrl-C で中断すると、画面表示がおかしくなる問題を修正 (コマンド実行後にコンソールモードを復旧するようにした) (Thx! <a href="https://twitter.com/beepcap">beepcap</a>)</li>
+<li>(#350) <code>-l</code> なしの <code>ls -F</code> で os.Readlink を呼ぶのをやめた</li>
+<li><code>nyagos.complete_for[&quot;COMMANDNAME&quot;] = function(args) ... end</code> 形式の補完</li>
+<li>(#345) subcomplete.lua で git/svn/hg が効かない問題を修正(Thx! @tsuyoshicho)</li>
+<li>リダイレクトが含まれている時、Lua関数 io.popen が機能しない不具合を修正(Thx! @tsuyoshicho)</li>
+<li>(#354) box.lua のヒストリ補完が C-X h で起動していなかった不具合を修正 (Thx! @fushihara)</li>
+<li>nyagos.d/catalog/subcomplete.lua で <code>hub</code> コマンドの補完をサポート (Thx! @tsuyoshicho)</li>
+</ul>
+<h1 id="nyagos-440-1">NYAGOS 4.4.0_1</h1>
+<p>(2019.01.19)</p>
+<ul>
+<li>&quot;--go-colorable&quot; と &quot;--enable-virtual-terminal-processing&quot; を廃止</li>
+<li><code>killall</code> コマンドを実装</li>
+<li>Linux用の copy と move を実装</li>
+<li>(#351) <code>END</code> と <code>F11</code> キーが動作もキー割り当てもできなかった不具合を修正</li>
+</ul>
+<h1 id="nyagos-440-0">NYAGOS 4.4.0_0</h1>
+<p>(2019.01.12)</p>
+<ul>
+<li>バッチファイルを呼ぶ時に、<code>/V:ON</code> を CMD.EXE に使わないようにした</li>
+</ul>
+<h1 id="nyagos-440-beta">NYAGOS 4.4.0_beta</h1>
+<p>(2019.01.02)</p>
+<ul>
+<li>Linux サポート(実験レベル)</li>
+<li>ドライブ毎のカレントディレクトリが子プロセスに継承されなかった問題を修正</li>
+<li>ライブラリ &quot;zetamatta/go-getch&quot; のかわりに &quot;mattn/go-tty&quot; を使うようにした</li>
+<li>msvcrt.dll を直接syscall経由で使わないようにした。</li>
+<li>Linux でも NUL を /dev/null 相当へ</li>
+<li>Lua変数 nyagos.goos を追加</li>
+<li>(#341) Windows10で全角文字の前に文字を挿入すると、不要な空白が入る不具合を修正
+<ul>
+<li>それに伴い、Windows10 では virtual terminal processing を常に有効に</li>
+<li><code>git.exe push</code>が無効にしても再び有効にする</li>
+</ul>
+</li>
+<li>(#339) ワイルドカード <code>.??*</code> が <code>..</code> にマッチする問題を修正
+<ul>
+<li>要 github.com/zetamatta/go-findfile tagged 20181230-2</li>
+</ul>
+</li>
+</ul>
+</div><!-- "body" -->
+</div><!-- "main" -->
+<div class="sidebar markdown-body">
+<h3 id="heading">目次</h3>
+<ol>
+<li><a href="./index.html">Top</a></li>
+<li><a href="01-Install_ja.html">インストール</a></li>
+<li><a href="02-Options_ja.html">起動オプション</a></li>
+<li><a href="03-Readline_ja.html">編集機能</a></li>
+<li><a href="04-Commands_ja.html">内蔵コマンド</a></li>
+<li><a href="05-Startup_ja.html">起動処理</a></li>
+<li><a href="06-Substitution_ja.html">コマンドライン置換</a></li>
+<li><a href="07-LuaFunctions_ja.html">Lua拡張</a></li>
+<li><a href="08-Uninstall_ja.html">アンインストール</a></li>
+<li><a href="09-Build_ja.html">ビルド方法</a></li>
+<li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
+</ol>
+<p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
+<h3 id="heading-1">リリースノート</h3>
+<ul>
+<li><a href="release_note_ja.html">4.4.x</a></li>
+<li><a href="history-4.3_ja.html">4.3.x</a></li>
+<li><a href="history-4.2_ja.html">4.2.x</a></li>
+<li><a href="history-4.1_ja.html">4.1.x</a></li>
+<li><a href="history-4.0_ja.html">4.0.x</a></li>
+</ul>
+</div><!-- "sidebar markdown-body" -->
+</body></html>

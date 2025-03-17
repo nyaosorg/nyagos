@@ -1,0 +1,1346 @@
+<html><head>
+<style type="text/css"><!--
+/* light */
+.markdown-body {
+  color-scheme: light;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #1f2328;
+  background-color: #ffffff;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+.markdown-body h1:hover .anchor .octicon-link:before,
+.markdown-body h2:hover .anchor .octicon-link:before,
+.markdown-body h3:hover .anchor .octicon-link:before,
+.markdown-body h4:hover .anchor .octicon-link:before,
+.markdown-body h5:hover .anchor .octicon-link:before,
+.markdown-body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+}
+
+.markdown-body details,
+.markdown-body figcaption,
+.markdown-body figure {
+  display: block;
+}
+
+.markdown-body summary {
+  display: list-item;
+}
+
+.markdown-body [hidden] {
+  display: none !important;
+}
+
+.markdown-body a {
+  background-color: transparent;
+  color: #0969da;
+  text-decoration: none;
+}
+
+.markdown-body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: 600;
+}
+
+.markdown-body dfn {
+  font-style: italic;
+}
+
+.markdown-body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 2em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body mark {
+  background-color: #fff8c5;
+  color: #1f2328;
+}
+
+.markdown-body small {
+  font-size: 90%;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body sup {
+  top: -0.5em;
+}
+
+.markdown-body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.markdown-body figure {
+  margin: 1em 2.5rem;
+}
+
+.markdown-body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: transparent;
+  border-bottom: 1px solid #d1d9e0b3;
+  height: .25em;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #d1d9e0;
+  border: 0;
+}
+
+.markdown-body input {
+  font: inherit;
+  margin: 0;
+  overflow: visible;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.markdown-body [type=button],
+.markdown-body [type=reset],
+.markdown-body [type=submit] {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+.markdown-body [type=checkbox],
+.markdown-body [type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body [type=number]::-webkit-inner-spin-button,
+.markdown-body [type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+.markdown-body [type=search]::-webkit-search-cancel-button,
+.markdown-body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.markdown-body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54;
+}
+
+.markdown-body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  appearance: button;
+  font: inherit;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body ::placeholder {
+  color: #59636e;
+  opacity: 1;
+}
+
+.markdown-body hr::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  font-variant: tabular-nums;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body details summary {
+  cursor: pointer;
+}
+
+.markdown-body a:focus,
+.markdown-body [role=button]:focus,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=checkbox]:focus {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:focus:not(:focus-visible),
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body input[type=radio]:focus:not(:focus-visible),
+.markdown-body input[type=checkbox]:focus:not(:focus-visible) {
+  outline: solid 1px transparent;
+}
+
+.markdown-body a:focus-visible,
+.markdown-body [role=button]:focus-visible,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:not([class]):focus,
+.markdown-body a:not([class]):focus-visible,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline-offset: 0;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 0.25rem;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #1f2328;
+  vertical-align: middle;
+  background-color: #f6f8fa;
+  border: solid 1px #d1d9e0b3;
+  border-bottom-color: #d1d9e0b3;
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 #d1d9e0b3;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-body h2 {
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body h3 {
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+.markdown-body h4 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-weight: 600;
+  font-size: .875em;
+}
+
+.markdown-body h6 {
+  font-weight: 600;
+  font-size: .85em;
+  color: #59636e;
+}
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #59636e;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body tt,
+.markdown-body code,
+.markdown-body samp {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+  word-wrap: normal;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-body input::-webkit-outer-spin-button,
+.markdown-body input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.markdown-body .mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+.markdown-body::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markdown-body .absent {
+  color: #d1242f;
+}
+
+.markdown-body .anchor {
+  float: left;
+  padding-right: 0.25rem;
+  margin-left: -20px;
+  line-height: 1;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body details {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  color: #1f2328;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markdown-body h1 tt,
+.markdown-body h1 code,
+.markdown-body h2 tt,
+.markdown-body h2 code,
+.markdown-body h3 tt,
+.markdown-body h3 code,
+.markdown-body h4 tt,
+.markdown-body h4 code,
+.markdown-body h5 tt,
+.markdown-body h5 code,
+.markdown-body h6 tt,
+.markdown-body h6 code {
+  padding: 0 .2em;
+  font-size: inherit;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2,
+.markdown-body summary h3,
+.markdown-body summary h4,
+.markdown-body summary h5,
+.markdown-body summary h6 {
+  display: inline-block;
+}
+
+.markdown-body summary h1 .anchor,
+.markdown-body summary h2 .anchor,
+.markdown-body summary h3 .anchor,
+.markdown-body summary h4 .anchor,
+.markdown-body summary h5 .anchor,
+.markdown-body summary h6 .anchor {
+  margin-left: -40px;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.markdown-body ul.no-list,
+.markdown-body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.markdown-body ol[type="a s"] {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body ol[type="A s"] {
+  list-style-type: upper-alpha;
+}
+
+.markdown-body ol[type="i s"] {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ol[type="I s"] {
+  list-style-type: upper-roman;
+}
+
+.markdown-body ol[type="1"] {
+  list-style-type: decimal;
+}
+
+.markdown-body div>ol:not([type]) {
+  list-style-type: decimal;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 1rem;
+}
+
+.markdown-body li+li {
+  margin-top: .25em;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.markdown-body dl dd {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body table th {
+  font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body table td>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table tr {
+  background-color: #ffffff;
+  border-top: 1px solid #d1d9e0b3;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+.markdown-body table img {
+  background-color: transparent;
+}
+
+.markdown-body img[align=right] {
+  padding-left: 20px;
+}
+
+.markdown-body img[align=left] {
+  padding-right: 20px;
+}
+
+.markdown-body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent;
+}
+
+.markdown-body span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+.markdown-body span.frame>span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body span.frame span img {
+  display: block;
+  float: left;
+}
+
+.markdown-body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #1f2328;
+}
+
+.markdown-body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-center>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.markdown-body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.markdown-body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-right>span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+
+.markdown-body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-left span {
+  margin: 13px 0 0;
+}
+
+.markdown-body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-right>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body code,
+.markdown-body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #818b981f;
+  border-radius: 6px;
+}
+
+.markdown-body code br,
+.markdown-body tt br {
+  display: none;
+}
+
+.markdown-body del code {
+  text-decoration: inherit;
+}
+
+.markdown-body samp {
+  font-size: 85%;
+}
+
+.markdown-body pre code {
+  font-size: 100%;
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 1rem;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  color: #1f2328;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+}
+
+.markdown-body pre code,
+.markdown-body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body .csv-data td,
+.markdown-body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown-body .csv-data .blob-num {
+  padding: 10px 0.5rem 9px;
+  text-align: right;
+  background: #ffffff;
+  border: 0;
+}
+
+.markdown-body .csv-data tr {
+  border-top: 0;
+}
+
+.markdown-body .csv-data th {
+  font-weight: 600;
+  background: #f6f8fa;
+  border-top: 0;
+}
+
+.markdown-body [data-footnote-ref]::before {
+  content: "[";
+}
+
+.markdown-body [data-footnote-ref]::after {
+  content: "]";
+}
+
+.markdown-body .footnotes {
+  font-size: 12px;
+  color: #59636e;
+  border-top: 1px solid #d1d9e0;
+}
+
+.markdown-body .footnotes ol {
+  padding-left: 1rem;
+}
+
+.markdown-body .footnotes ol ul {
+  display: inline-block;
+  padding-left: 1rem;
+  margin-top: 1rem;
+}
+
+.markdown-body .footnotes li {
+  position: relative;
+}
+
+.markdown-body .footnotes li:target::before {
+  position: absolute;
+  top: calc(0.5rem*-1);
+  right: calc(0.5rem*-1);
+  bottom: calc(0.5rem*-1);
+  left: calc(1.5rem*-1);
+  pointer-events: none;
+  content: "";
+  border: 2px solid #0969da;
+  border-radius: 6px;
+}
+
+.markdown-body .footnotes li:target {
+  color: #1f2328;
+}
+
+.markdown-body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace;
+}
+
+.markdown-body body:has(:modal) {
+  padding-right: var(--dialog-scrollgutter) !important;
+}
+
+.markdown-body .pl-c {
+  color: #59636e;
+}
+
+.markdown-body .pl-c1,
+.markdown-body .pl-s .pl-v {
+  color: #0550ae;
+}
+
+.markdown-body .pl-e,
+.markdown-body .pl-en {
+  color: #6639ba;
+}
+
+.markdown-body .pl-smi,
+.markdown-body .pl-s .pl-s1 {
+  color: #1f2328;
+}
+
+.markdown-body .pl-ent {
+  color: #0550ae;
+}
+
+.markdown-body .pl-k {
+  color: #cf222e;
+}
+
+.markdown-body .pl-s,
+.markdown-body .pl-pds,
+.markdown-body .pl-s .pl-pse .pl-s1,
+.markdown-body .pl-sr,
+.markdown-body .pl-sr .pl-cce,
+.markdown-body .pl-sr .pl-sre,
+.markdown-body .pl-sr .pl-sra {
+  color: #0a3069;
+}
+
+.markdown-body .pl-v,
+.markdown-body .pl-smw {
+  color: #953800;
+}
+
+.markdown-body .pl-bu {
+  color: #82071e;
+}
+
+.markdown-body .pl-ii {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+
+.markdown-body .pl-c2 {
+  color: #f6f8fa;
+  background-color: #cf222e;
+}
+
+.markdown-body .pl-sr .pl-cce {
+  font-weight: bold;
+  color: #116329;
+}
+
+.markdown-body .pl-ml {
+  color: #3b2300;
+}
+
+.markdown-body .pl-mh,
+.markdown-body .pl-mh .pl-en,
+.markdown-body .pl-ms {
+  font-weight: bold;
+  color: #0550ae;
+}
+
+.markdown-body .pl-mi {
+  font-style: italic;
+  color: #1f2328;
+}
+
+.markdown-body .pl-mb {
+  font-weight: bold;
+  color: #1f2328;
+}
+
+.markdown-body .pl-md {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+
+.markdown-body .pl-mi1 {
+  color: #116329;
+  background-color: #dafbe1;
+}
+
+.markdown-body .pl-mc {
+  color: #953800;
+  background-color: #ffd8b5;
+}
+
+.markdown-body .pl-mi2 {
+  color: #d1d9e0;
+  background-color: #0550ae;
+}
+
+.markdown-body .pl-mdr {
+  font-weight: bold;
+  color: #8250df;
+}
+
+.markdown-body .pl-ba {
+  color: #59636e;
+}
+
+.markdown-body .pl-sg {
+  color: #818b98;
+}
+
+.markdown-body .pl-corl {
+  text-decoration: underline;
+  color: #0a3069;
+}
+
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body [role=tabpanel][tabindex="0"]:focus:not(:focus-visible),
+.markdown-body button:focus:not(:focus-visible),
+.markdown-body summary:focus:not(:focus-visible),
+.markdown-body a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.markdown-body [tabindex="0"]:focus:not(:focus-visible),
+.markdown-body details-dialog:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.markdown-body g-emoji {
+  display: inline-block;
+  min-width: 1ch;
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal !important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -0.075em;
+}
+
+.markdown-body g-emoji img {
+  width: 1em;
+  height: 1em;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item label {
+  font-weight: 400;
+}
+
+.markdown-body .task-list-item.enabled label {
+  cursor: pointer;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 0.25rem;
+}
+
+.markdown-body .task-list-item .handle {
+  display: none;
+}
+
+.markdown-body .task-list-item-checkbox {
+  margin: 0 .2em .25em -1.4em;
+  vertical-align: middle;
+}
+
+.markdown-body ul:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body ol:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body .contains-task-list:hover .task-list-item-convert-container,
+.markdown-body .contains-task-list:focus-within .task-list-item-convert-container {
+  display: block;
+  width: auto;
+  height: 24px;
+  overflow: visible;
+  clip: auto;
+}
+
+.markdown-body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%);
+}
+
+.markdown-body .markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  color: inherit;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body .markdown-alert>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body .markdown-alert>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note {
+  border-left-color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important {
+  border-left-color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning {
+  border-left-color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip {
+  border-left-color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution {
+  border-left-color: #cf222e;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: #d1242f;
+}
+
+.markdown-body>*:first-child>.heading-element:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .highlight pre:has(+.zeroclipboard-container) {
+  min-height: 52px;
+}
+
+
+	.markdown-body {
+		box-sizing: border-box;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+	body{
+		display:flex;
+		overflow-y: scroll;
+	}
+	@media screen{
+		div.sidebar{ width:30% }
+		div.main{ width:70% }
+	}
+
+	@media print{
+		div.sidebar,div.footer{ display:none }
+		div.main{ width:100%!}(MISSING)
+	}
+
+// -->
+</style></head><body>
+<div class="main markdown-body">
+<div class="header">
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+</div><!-- "header" -->
+<div class="body">
+<p><a href="./history-4.3_en.html">English</a> / Japanese</p>
+<h1 id="nyagos-433-5">NYAGOS 4.3.3_5</h1>
+<p>(2018.12.24)</p>
+<ul>
+<li>(#345) subcomplete.lua が git 補完で動作しない問題を修正 (Thx! @tsuyoshicho)</li>
+<li>(#347) <code>dir 2&gt;&amp;1</code>実行後、dup元の標準出力までクローズされていた不具合を修正(Thx! @Matsuyanagi)</li>
+<li>(#348) ls 後マウスのスクロールが効きにくくなる問題に対応 (Thx! @tyochiai)
+<ul>
+<li>要 github.com/zetamatta/go-getch tagged:20181223</li>
+</ul>
+</li>
+</ul>
+<h1 id="nyagos-433-4">NYAGOS 4.3.3_4</h1>
+<p>(2018.12.13)</p>
+<ul>
+<li>出力先が端末でない場合、more を type と等価に</li>
+<li>バッチ実行時に作成する踏み台の一時バッチを廃止。<code>CMD /V:ON /S /C &quot;...&quot;</code> を使うようにした</li>
+<li>(#340) 最大ヒストリ保存数を指定する <code>nyagos.histsize</code> を追加(Thx! @crile)</li>
+<li>(#343) %COMSPEC% が未定義の時、CMD.EXE を用いるようにした(Thx! @orz--)</li>
+</ul>
+<h1 id="nyagos-433-3">NYAGOS 4.3.3_3</h1>
+<p>(2018.10.23)</p>
+<ul>
+<li>(#310) copy と move の宛先でショートカットをサポート</li>
+<li>(#313 reopened) <code>git blame FILES | type | gvim - &amp;</code> で gvim が空バッファで始まってしまう問題を修正</li>
+<li>壊れたジャンクションに対する rmdir ができなかった問題を修正</li>
+<li>Luaスクリプトや外部プロセスの一部で Ctrl-C が機能しなかった問題を修正</li>
+<li>(#267) <code>type</code> や <code>more</code> で UTF16 ファイルを表示できるようにした</li>
+<li>(#336) <code>io.write</code> が -e や --lua-file オプション中で機能しない不具合を修正</li>
+<li>(#337) バッチが exit -1 で終了するとクラッシュする不具合を修正(Thx! @hogewest)</li>
+</ul>
+<h1 id="nyagos-433-2">NYAGOS 4.3.3_2</h1>
+<p>(2018.09.22)</p>
+<ul>
+<li>リダイレクトで存在するファイルを上書きする時のエラーメッセージにファイル名を付与した</li>
+<li>noclobber が設定されている時に nul へのリダイレクトを上書きエラーにしてしまう問題を修正</li>
+<li>diskused: エラーが見付かっても容量計算を続けるようにした</li>
+<li>ls: <code>-1</code> があると、<code>-l</code> オプションが動かない点を修正</li>
+<li>ls: 出力先が端末でない時、1ファイル1行で出力していなかった点を修正</li>
+<li>別名定義されていない内蔵コマンドを bash のように <code>\ls</code> と呼べるようになった</li>
+<li>for のエイリアス定義が壊れていたのを修正</li>
+<li>ファイル名以外の補完の時もパスの区切り文字が補正されてしまう問題を修正</li>
+</ul>
+<h1 id="nyagos-433-1">NYAGOS 4.3.3_1</h1>
+<p>(2018.08.29)</p>
+<ul>
+<li>#330,#331 オリジナル版のfile:readの非互換な動作を修正 (Thx! @erw7)</li>
+<li>#332 io.open(&quot;w&quot;) でバッファリングしないようにした (Thx! @spiegel-im-spiegel)</li>
+<li>#333 Fix file:seek() が読み取り時に期待どおり同しなかった点を修正 (Thx! @erw7)</li>
+<li>#333 Fix file:close() の戻り値がおかしかった点を修正 (Thx! @erw7)</li>
+<li>#319 utf8.len() を実装</li>
+<li>Fix: <code>which</code> が拡張子なしのファイルも出力していた点を修正</li>
+<li><code>pwd</code> はデフォルトでは論理パスを出力するようにした</li>
+<li>インクリメンタルサーチを開始した時、表示にゴミが残る不具合を修正</li>
+<li>-lfdflags=&quot;-s -w&quot; で実行ファイルのサイズを削減した</li>
+</ul>
+<h1 id="nyagos-433-0">NYAGOS 4.3.3_0</h1>
+<p>(2018.08.14)</p>
+<ul>
+<li>#283 Ctrl-O での補完で、パスでディレクトリを省略するようにした。</li>
+<li>#326 オプション <code>nyagos.option.tilde_expansion</code> を追加</li>
+<li>Fix: <code>nyagos.option.xxxxxx = true</code> が機能していなかった</li>
+<li>Fix #328 <code>start https://...</code> で URL をブラウザで開けなかった</li>
+<li>#327 のために --read-stdin-as-file を実装(標準入力からファイル扱いでコマンドを読み込む)</li>
+<li>シンボリックリンク先にある GUI アプリケーションの実行が失敗する問題を修正</li>
+<li>(パイプラインではない)リダイレクトがバッググラウンドで起動できなかった不具合を修正</li>
+<li>文字列を空白で分割する Lua 関数 nyagos.fields を追加</li>
+<li>#185 <code>ps</code> , <code>kill</code> コマンドを追加</li>
+<li>#329 Lua用数値型として int ではなく float64 を使うようにした</li>
+</ul>
+<h1 id="nyagos-432-0">NYAGOS 4.3.2_0</h1>
+<p>(2018.07.23)</p>
+<ul>
+<li>#319 github.com/BixData/gluabit32 で、Lua関数 <code>bit32.*</code> を全てサポート</li>
+<li>#323 io.lines() , nyagos.lines() がリダイレクトされた標準入力から読み込めない問題を修正</li>
+<li>io.write() がリダイレクトされた標準出力に出力できなかった</li>
+<li><code>io.*</code> を NYAGOS の自前バージョンに置き変えた</li>
+<li>#324 Lua の print で --no-go-colorable が効いていなかった不具合を修正 (Thx @tignear)</li>
+<li>#325 Source 文で空白を含むパスをロードできなかった不具合を修正 (Thx @tignear)</li>
+<li>オプション <code>--lua-first</code> and <code>--cmd-first</code> を追加</li>
+</ul>
+<h1 id="nyagos-431-3">NYAGOS 4.3.1_3</h1>
+<p>(2018.06.19)</p>
+<ul>
+<li>#316 %PATH% の中の長さゼロのエントリがカレントディレクトリとみなされていた不具合を修正</li>
+<li>#321 キー機能名の <code>previous_history</code> と <code>next_history</code> が未登録だった不具合を修正</li>
+<li>-h,--help オプションを追加</li>
+<li>バッチファイル組み込みのため、Luaスクリプトの @ で始まる行を無視するようにした</li>
+<li>#322 バッチファイルの引数のエンコーディングをスレッドのコードページから、コンソールのコードページへ変更した。</li>
+<li>Lua変数 <code>nyagos.option.*</code> の全てを nyagos.exe のコマンドラインオプションで設定できるようにした。</li>
+</ul>
+<h1 id="nyagos-431-2">NYAGOS 4.3.1_2</h1>
+<p>(2018.06.12)</p>
+<ul>
+<li>#320: nyagos.rawexec &amp; raweval が引数内のテーブルを展開していなかった非互換性を修正</li>
+<li>--show-version-only を指定すると --norc を自動的に有効化するようにした</li>
+</ul>
+<h1 id="nyagos-431-1">NYAGOS 4.3.1_1</h1>
+<p>(2018.06.11)</p>
+<ul>
+<li>lua53.dll 向けのソースコードを削除</li>
+<li>#317: <code>use subcomplete</code> が有効で、rclone.exe が見付かった時デッドロックしていた
+<ul>
+<li><a href="https://github.com/yuin/gopher-lua/issues/181">https://github.com/yuin/gopher-lua/issues/181</a> も参照のこと</li>
+</ul>
+</li>
+<li>#318,#319 下記の Lua 5.3 互換関数を追加
+<ul>
+<li>bit32.band/bitor/bxor</li>
+<li>utf8.char/charpattern/codes</li>
+</ul>
+</li>
+</ul>
+<h1 id="nyagos-431-0">NYAGOS 4.3.1_0</h1>
+<p>(2018.06.03)</p>
+<ul>
+<li><code>--no-go-colorable</code> と <code>--enable-virtual-terminal-processing</code> で、Windows10 ネイティブのエスケープシーケンスをサポート</li>
+<li>#304,#312, カレントディレクトリから実行ファイルを探す時のオプションを追加
+<ul>
+<li>--look-curdir-first: %PATH% より前に探す(デフォルト:CMD.EXE互換動作)</li>
+<li>--look-curdir-last : %PATH% より後に探す(PowerShell互換動作)</li>
+<li>--look-curdir-never: %PATH% だけから実行ファイルを探す(UNIX Shells互換動作)</li>
+</ul>
+</li>
+<li>nyagos.prompt にプロンプトテンプレートの文字列を直接代入できるようになった。</li>
+<li>#314 rmdir がジャンクションを削除できなかった問題を修正</li>
+</ul>
+<h1 id="nyagos-430-4">NYAGOS 4.3.0_4</h1>
+<p>(2018.05.12)</p>
+<ul>
+<li>Fix: #309 nyagos.getkey() が使えない不具合を修正 (Thx @nocd5)</li>
+<li>lnk コマンドの宛先が <code>*.lnk</code> でなかったり存在しなかった時のエラーメッセージを修正</li>
+<li>子プロセスのカーソルがオフになってしまう不具合を修正</li>
+</ul>
+<h1 id="nyagos-430-3">NYAGOS 4.3.0_3</h1>
+<p>(2018.05.09)</p>
+<ul>
+<li>nyagos.setalias, nyagos.getalias の実装が漏れており、<code>alias { CMD=XXX}</code> が動かなくなっていた</li>
+<li>エイリアスの戻り値でテーブルが与えられた時、コマンド名として解釈すべき、要素[0]が使われていなかった不具合を修正</li>
+<li><code>doc/09-Build_*.md</code>: github からのソースダウンロード方法についてドキュメント更新</li>
+</ul>
+<h1 id="nyagos-430-2">NYAGOS 4.3.0_2</h1>
+<p>(2018.05.07)</p>
+<ul>
+<li>#305: ユーザの .nyagos が二回目以降ロードされない不具合を修正(Thx! @erw7)</li>
+</ul>
+<h1 id="nyagos-430-1">NYAGOS 4.3.0_1</h1>
+<p>(2018.05.05)</p>
+<ul>
+<li>nyagos.d/start.lua が動作していなかった不具合を修正 (エイリアス関数の rawargs パラメータが実装されていなかった)</li>
+<li>alias 関数の戻り値が評価されていなかった不具合を修正</li>
+<li>-e オプションのスクリプト向けに、arg[] に引数が代入されていなかった</li>
+<li>-e,-f オプションで、<code>getRegInt: could not find shell in Lua instance</code> が表示される不具合を修正</li>
+<li>バッチファイルが <code>exit /b</code> の値を ERRORLEVEL として返せなかった不具合を修正</li>
+</ul>
+<h1 id="nyagos-430-0">NYAGOS 4.3.0_0</h1>
+<p>(2018.05.03)</p>
+<ul>
+<li>シンボリックリンクの先を参照するオプション <code>ls -L</code> を追加</li>
+</ul>
+<h1 id="nyagos-43-beta2">NYAGOS 4.3_beta2</h1>
+<p>(2018.05.01)</p>
+<ul>
+<li>C-o を押すと Enter か Escape が押されるまでハングしたように見える不具合を修正
+<ul>
+<li>(ライブラリを修正: <a href="https://github.com/zetamatta/go-box/commit/322b2318471f1ad3ce99a3531118b7095cdf3842">go-box</a>)</li>
+</ul>
+</li>
+<li>chcp が動作しない不具合を修正 (同コマンドは画面幅取得のため別名定義していた)</li>
+</ul>
+<h1 id="nyagos-43-beta">NYAGOS 4.3_beta</h1>
+<p>(2018.04.30)</p>
+<ul>
+<li><strong>lua53.dll のかわりに Gopher-Lua を採用</strong> #300
+<ul>
+<li>旧来の lua53.dll 版 nyagos.exe は <code>cd mains ; go build</code> でビルド可能</li>
+<li>Lua無し版 nyagos.exe を <code>cd ngs ; go build</code> でビルド可能</li>
+</ul>
+</li>
+<li><code>nyagos.option.cleanup_buffer</code> を追加(デフォルトは false)。true の場合、一行入力の前にコンソールバッファをクリアする</li>
+<li><code>set -o OPTION_NAME</code> と <code>set +o OPTION_NAME</code> を新設(<code>nyagos.option.OPTION_NAME=</code> on Lua と等価)</li>
+<li>コンソール出力をバッファリングするようにした ( go-colorable and bufio.Writer )</li>
+</ul>
+</div><!-- "body" -->
+</div><!-- "main" -->
+<div class="sidebar markdown-body">
+<h3 id="heading">目次</h3>
+<ol>
+<li><a href="./index.html">Top</a></li>
+<li><a href="01-Install_ja.html">インストール</a></li>
+<li><a href="02-Options_ja.html">起動オプション</a></li>
+<li><a href="03-Readline_ja.html">編集機能</a></li>
+<li><a href="04-Commands_ja.html">内蔵コマンド</a></li>
+<li><a href="05-Startup_ja.html">起動処理</a></li>
+<li><a href="06-Substitution_ja.html">コマンドライン置換</a></li>
+<li><a href="07-LuaFunctions_ja.html">Lua拡張</a></li>
+<li><a href="08-Uninstall_ja.html">アンインストール</a></li>
+<li><a href="09-Build_ja.html">ビルド方法</a></li>
+<li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
+</ol>
+<p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
+<h3 id="heading-1">リリースノート</h3>
+<ul>
+<li><a href="release_note_ja.html">4.4.x</a></li>
+<li><a href="history-4.3_ja.html">4.3.x</a></li>
+<li><a href="history-4.2_ja.html">4.2.x</a></li>
+<li><a href="history-4.1_ja.html">4.1.x</a></li>
+<li><a href="history-4.0_ja.html">4.0.x</a></li>
+</ul>
+</div><!-- "sidebar markdown-body" -->
+</body></html>

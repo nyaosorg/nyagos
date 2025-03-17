@@ -1,0 +1,1465 @@
+<html><head>
+<style type="text/css"><!--
+/* light */
+.markdown-body {
+  color-scheme: light;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  margin: 0;
+  color: #1f2328;
+  background-color: #ffffff;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+  font-size: 16px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+.markdown-body h1:hover .anchor .octicon-link:before,
+.markdown-body h2:hover .anchor .octicon-link:before,
+.markdown-body h3:hover .anchor .octicon-link:before,
+.markdown-body h4:hover .anchor .octicon-link:before,
+.markdown-body h5:hover .anchor .octicon-link:before,
+.markdown-body h6:hover .anchor .octicon-link:before {
+  width: 16px;
+  height: 16px;
+  content: ' ';
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+  mask-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' version='1.1' aria-hidden='true'><path fill-rule='evenodd' d='M7.775 3.275a.75.75 0 001.06 1.06l1.25-1.25a2 2 0 112.83 2.83l-2.5 2.5a2 2 0 01-2.83 0 .75.75 0 00-1.06 1.06 3.5 3.5 0 004.95 0l2.5-2.5a3.5 3.5 0 00-4.95-4.95l-1.25 1.25zm-4.69 9.64a2 2 0 010-2.83l2.5-2.5a2 2 0 012.83 0 .75.75 0 001.06-1.06 3.5 3.5 0 00-4.95 0l-2.5 2.5a3.5 3.5 0 004.95 4.95l1.25-1.25a.75.75 0 00-1.06-1.06l-1.25 1.25a2 2 0 01-2.83 0z'></path></svg>");
+}
+
+.markdown-body details,
+.markdown-body figcaption,
+.markdown-body figure {
+  display: block;
+}
+
+.markdown-body summary {
+  display: list-item;
+}
+
+.markdown-body [hidden] {
+  display: none !important;
+}
+
+.markdown-body a {
+  background-color: transparent;
+  color: #0969da;
+  text-decoration: none;
+}
+
+.markdown-body abbr[title] {
+  border-bottom: none;
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+
+.markdown-body b,
+.markdown-body strong {
+  font-weight: 600;
+}
+
+.markdown-body dfn {
+  font-style: italic;
+}
+
+.markdown-body h1 {
+  margin: .67em 0;
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 2em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body mark {
+  background-color: #fff8c5;
+  color: #1f2328;
+}
+
+.markdown-body small {
+  font-size: 90%;
+}
+
+.markdown-body sub,
+.markdown-body sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+.markdown-body sub {
+  bottom: -0.25em;
+}
+
+.markdown-body sup {
+  top: -0.5em;
+}
+
+.markdown-body img {
+  border-style: none;
+  max-width: 100%;
+  box-sizing: content-box;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre,
+.markdown-body samp {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+.markdown-body figure {
+  margin: 1em 2.5rem;
+}
+
+.markdown-body hr {
+  box-sizing: content-box;
+  overflow: hidden;
+  background: transparent;
+  border-bottom: 1px solid #d1d9e0b3;
+  height: .25em;
+  padding: 0;
+  margin: 1.5rem 0;
+  background-color: #d1d9e0;
+  border: 0;
+}
+
+.markdown-body input {
+  font: inherit;
+  margin: 0;
+  overflow: visible;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.markdown-body [type=button],
+.markdown-body [type=reset],
+.markdown-body [type=submit] {
+  -webkit-appearance: button;
+  appearance: button;
+}
+
+.markdown-body [type=checkbox],
+.markdown-body [type=radio] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body [type=number]::-webkit-inner-spin-button,
+.markdown-body [type=number]::-webkit-outer-spin-button {
+  height: auto;
+}
+
+.markdown-body [type=search]::-webkit-search-cancel-button,
+.markdown-body [type=search]::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.markdown-body ::-webkit-input-placeholder {
+  color: inherit;
+  opacity: .54;
+}
+
+.markdown-body ::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  appearance: button;
+  font: inherit;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+}
+
+.markdown-body ::placeholder {
+  color: #59636e;
+  opacity: 1;
+}
+
+.markdown-body hr::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body table {
+  border-spacing: 0;
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow: auto;
+  font-variant: tabular-nums;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body details summary {
+  cursor: pointer;
+}
+
+.markdown-body a:focus,
+.markdown-body [role=button]:focus,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=checkbox]:focus {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:focus:not(:focus-visible),
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body input[type=radio]:focus:not(:focus-visible),
+.markdown-body input[type=checkbox]:focus:not(:focus-visible) {
+  outline: solid 1px transparent;
+}
+
+.markdown-body a:focus-visible,
+.markdown-body [role=button]:focus-visible,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline: 2px solid #0969da;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.markdown-body a:not([class]):focus,
+.markdown-body a:not([class]):focus-visible,
+.markdown-body input[type=radio]:focus,
+.markdown-body input[type=radio]:focus-visible,
+.markdown-body input[type=checkbox]:focus,
+.markdown-body input[type=checkbox]:focus-visible {
+  outline-offset: 0;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 0.25rem;
+  font: 11px ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  line-height: 10px;
+  color: #1f2328;
+  vertical-align: middle;
+  background-color: #f6f8fa;
+  border: solid 1px #d1d9e0b3;
+  border-bottom-color: #d1d9e0b3;
+  border-radius: 6px;
+  box-shadow: inset 0 -1px 0 #d1d9e0b3;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.markdown-body h2 {
+  font-weight: 600;
+  padding-bottom: .3em;
+  font-size: 1.5em;
+  border-bottom: 1px solid #d1d9e0b3;
+}
+
+.markdown-body h3 {
+  font-weight: 600;
+  font-size: 1.25em;
+}
+
+.markdown-body h4 {
+  font-weight: 600;
+  font-size: 1em;
+}
+
+.markdown-body h5 {
+  font-weight: 600;
+  font-size: .875em;
+}
+
+.markdown-body h6 {
+  font-weight: 600;
+  font-size: .85em;
+  color: #59636e;
+}
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+  padding: 0 1em;
+  color: #59636e;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 2em;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body tt,
+.markdown-body code,
+.markdown-body samp {
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  font-size: 12px;
+  word-wrap: normal;
+}
+
+.markdown-body .octicon {
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-body input::-webkit-outer-spin-button,
+.markdown-body input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+.markdown-body .mr-2 {
+  margin-right: 0.5rem !important;
+}
+
+.markdown-body::before {
+  display: table;
+  content: "";
+}
+
+.markdown-body::after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markdown-body .absent {
+  color: #d1242f;
+}
+
+.markdown-body .anchor {
+  float: left;
+  padding-right: 0.25rem;
+  margin-left: -20px;
+  line-height: 1;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre,
+.markdown-body details {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  color: #1f2328;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markdown-body h1 tt,
+.markdown-body h1 code,
+.markdown-body h2 tt,
+.markdown-body h2 code,
+.markdown-body h3 tt,
+.markdown-body h3 code,
+.markdown-body h4 tt,
+.markdown-body h4 code,
+.markdown-body h5 tt,
+.markdown-body h5 code,
+.markdown-body h6 tt,
+.markdown-body h6 code {
+  padding: 0 .2em;
+  font-size: inherit;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2,
+.markdown-body summary h3,
+.markdown-body summary h4,
+.markdown-body summary h5,
+.markdown-body summary h6 {
+  display: inline-block;
+}
+
+.markdown-body summary h1 .anchor,
+.markdown-body summary h2 .anchor,
+.markdown-body summary h3 .anchor,
+.markdown-body summary h4 .anchor,
+.markdown-body summary h5 .anchor,
+.markdown-body summary h6 .anchor {
+  margin-left: -40px;
+}
+
+.markdown-body summary h1,
+.markdown-body summary h2 {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.markdown-body ul.no-list,
+.markdown-body ol.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+
+.markdown-body ol[type="a s"] {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body ol[type="A s"] {
+  list-style-type: upper-alpha;
+}
+
+.markdown-body ol[type="i s"] {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ol[type="I s"] {
+  list-style-type: upper-roman;
+}
+
+.markdown-body ol[type="1"] {
+  list-style-type: decimal;
+}
+
+.markdown-body div>ol:not([type]) {
+  list-style-type: decimal;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 1rem;
+}
+
+.markdown-body li+li {
+  margin-top: .25em;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 1rem;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.markdown-body dl dd {
+  padding: 0 1rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body table th {
+  font-weight: 600;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body table td>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table tr {
+  background-color: #ffffff;
+  border-top: 1px solid #d1d9e0b3;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+
+.markdown-body table img {
+  background-color: transparent;
+}
+
+.markdown-body img[align=right] {
+  padding-left: 20px;
+}
+
+.markdown-body img[align=left] {
+  padding-right: 20px;
+}
+
+.markdown-body .emoji {
+  max-width: none;
+  vertical-align: text-top;
+  background-color: transparent;
+}
+
+.markdown-body span.frame {
+  display: block;
+  overflow: hidden;
+}
+
+.markdown-body span.frame>span {
+  display: block;
+  float: left;
+  width: auto;
+  padding: 7px;
+  margin: 13px 0 0;
+  overflow: hidden;
+  border: 1px solid #d1d9e0;
+}
+
+.markdown-body span.frame span img {
+  display: block;
+  float: left;
+}
+
+.markdown-body span.frame span span {
+  display: block;
+  padding: 5px 0 0;
+  clear: both;
+  color: #1f2328;
+}
+
+.markdown-body span.align-center {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-center>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: center;
+}
+
+.markdown-body span.align-center span img {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.markdown-body span.align-right {
+  display: block;
+  overflow: hidden;
+  clear: both;
+}
+
+.markdown-body span.align-right>span {
+  display: block;
+  margin: 13px 0 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body span.align-right span img {
+  margin: 0;
+  text-align: right;
+}
+
+.markdown-body span.float-left {
+  display: block;
+  float: left;
+  margin-right: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-left span {
+  margin: 13px 0 0;
+}
+
+.markdown-body span.float-right {
+  display: block;
+  float: right;
+  margin-left: 13px;
+  overflow: hidden;
+}
+
+.markdown-body span.float-right>span {
+  display: block;
+  margin: 13px auto 0;
+  overflow: hidden;
+  text-align: right;
+}
+
+.markdown-body code,
+.markdown-body tt {
+  padding: .2em .4em;
+  margin: 0;
+  font-size: 85%;
+  white-space: break-spaces;
+  background-color: #818b981f;
+  border-radius: 6px;
+}
+
+.markdown-body code br,
+.markdown-body tt br {
+  display: none;
+}
+
+.markdown-body del code {
+  text-decoration: inherit;
+}
+
+.markdown-body samp {
+  font-size: 85%;
+}
+
+.markdown-body pre code {
+  font-size: 100%;
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 1rem;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 1rem;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  color: #1f2328;
+  background-color: #f6f8fa;
+  border-radius: 6px;
+}
+
+.markdown-body pre code,
+.markdown-body pre tt {
+  display: inline;
+  max-width: auto;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body .csv-data td,
+.markdown-body .csv-data th {
+  padding: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown-body .csv-data .blob-num {
+  padding: 10px 0.5rem 9px;
+  text-align: right;
+  background: #ffffff;
+  border: 0;
+}
+
+.markdown-body .csv-data tr {
+  border-top: 0;
+}
+
+.markdown-body .csv-data th {
+  font-weight: 600;
+  background: #f6f8fa;
+  border-top: 0;
+}
+
+.markdown-body [data-footnote-ref]::before {
+  content: "[";
+}
+
+.markdown-body [data-footnote-ref]::after {
+  content: "]";
+}
+
+.markdown-body .footnotes {
+  font-size: 12px;
+  color: #59636e;
+  border-top: 1px solid #d1d9e0;
+}
+
+.markdown-body .footnotes ol {
+  padding-left: 1rem;
+}
+
+.markdown-body .footnotes ol ul {
+  display: inline-block;
+  padding-left: 1rem;
+  margin-top: 1rem;
+}
+
+.markdown-body .footnotes li {
+  position: relative;
+}
+
+.markdown-body .footnotes li:target::before {
+  position: absolute;
+  top: calc(0.5rem*-1);
+  right: calc(0.5rem*-1);
+  bottom: calc(0.5rem*-1);
+  left: calc(1.5rem*-1);
+  pointer-events: none;
+  content: "";
+  border: 2px solid #0969da;
+  border-radius: 6px;
+}
+
+.markdown-body .footnotes li:target {
+  color: #1f2328;
+}
+
+.markdown-body .footnotes .data-footnote-backref g-emoji {
+  font-family: monospace;
+}
+
+.markdown-body body:has(:modal) {
+  padding-right: var(--dialog-scrollgutter) !important;
+}
+
+.markdown-body .pl-c {
+  color: #59636e;
+}
+
+.markdown-body .pl-c1,
+.markdown-body .pl-s .pl-v {
+  color: #0550ae;
+}
+
+.markdown-body .pl-e,
+.markdown-body .pl-en {
+  color: #6639ba;
+}
+
+.markdown-body .pl-smi,
+.markdown-body .pl-s .pl-s1 {
+  color: #1f2328;
+}
+
+.markdown-body .pl-ent {
+  color: #0550ae;
+}
+
+.markdown-body .pl-k {
+  color: #cf222e;
+}
+
+.markdown-body .pl-s,
+.markdown-body .pl-pds,
+.markdown-body .pl-s .pl-pse .pl-s1,
+.markdown-body .pl-sr,
+.markdown-body .pl-sr .pl-cce,
+.markdown-body .pl-sr .pl-sre,
+.markdown-body .pl-sr .pl-sra {
+  color: #0a3069;
+}
+
+.markdown-body .pl-v,
+.markdown-body .pl-smw {
+  color: #953800;
+}
+
+.markdown-body .pl-bu {
+  color: #82071e;
+}
+
+.markdown-body .pl-ii {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+
+.markdown-body .pl-c2 {
+  color: #f6f8fa;
+  background-color: #cf222e;
+}
+
+.markdown-body .pl-sr .pl-cce {
+  font-weight: bold;
+  color: #116329;
+}
+
+.markdown-body .pl-ml {
+  color: #3b2300;
+}
+
+.markdown-body .pl-mh,
+.markdown-body .pl-mh .pl-en,
+.markdown-body .pl-ms {
+  font-weight: bold;
+  color: #0550ae;
+}
+
+.markdown-body .pl-mi {
+  font-style: italic;
+  color: #1f2328;
+}
+
+.markdown-body .pl-mb {
+  font-weight: bold;
+  color: #1f2328;
+}
+
+.markdown-body .pl-md {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+
+.markdown-body .pl-mi1 {
+  color: #116329;
+  background-color: #dafbe1;
+}
+
+.markdown-body .pl-mc {
+  color: #953800;
+  background-color: #ffd8b5;
+}
+
+.markdown-body .pl-mi2 {
+  color: #d1d9e0;
+  background-color: #0550ae;
+}
+
+.markdown-body .pl-mdr {
+  font-weight: bold;
+  color: #8250df;
+}
+
+.markdown-body .pl-ba {
+  color: #59636e;
+}
+
+.markdown-body .pl-sg {
+  color: #818b98;
+}
+
+.markdown-body .pl-corl {
+  text-decoration: underline;
+  color: #0a3069;
+}
+
+.markdown-body [role=button]:focus:not(:focus-visible),
+.markdown-body [role=tabpanel][tabindex="0"]:focus:not(:focus-visible),
+.markdown-body button:focus:not(:focus-visible),
+.markdown-body summary:focus:not(:focus-visible),
+.markdown-body a:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
+.markdown-body [tabindex="0"]:focus:not(:focus-visible),
+.markdown-body details-dialog:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.markdown-body g-emoji {
+  display: inline-block;
+  min-width: 1ch;
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1em;
+  font-style: normal !important;
+  font-weight: 400;
+  line-height: 1;
+  vertical-align: -0.075em;
+}
+
+.markdown-body g-emoji img {
+  width: 1em;
+  height: 1em;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item label {
+  font-weight: 400;
+}
+
+.markdown-body .task-list-item.enabled label {
+  cursor: pointer;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 0.25rem;
+}
+
+.markdown-body .task-list-item .handle {
+  display: none;
+}
+
+.markdown-body .task-list-item-checkbox {
+  margin: 0 .2em .25em -1.4em;
+  vertical-align: middle;
+}
+
+.markdown-body ul:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body ol:dir(rtl) .task-list-item-checkbox {
+  margin: 0 -1.6em .25em .2em;
+}
+
+.markdown-body .contains-task-list:hover .task-list-item-convert-container,
+.markdown-body .contains-task-list:focus-within .task-list-item-convert-container {
+  display: block;
+  width: auto;
+  height: 24px;
+  overflow: visible;
+  clip: auto;
+}
+
+.markdown-body ::-webkit-calendar-picker-indicator {
+  filter: invert(50%);
+}
+
+.markdown-body .markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  color: inherit;
+  border-left: .25em solid #d1d9e0;
+}
+
+.markdown-body .markdown-alert>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body .markdown-alert>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body .markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note {
+  border-left-color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: #0969da;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important {
+  border-left-color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: #8250df;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning {
+  border-left-color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: #9a6700;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip {
+  border-left-color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: #1a7f37;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution {
+  border-left-color: #cf222e;
+}
+
+.markdown-body .markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: #d1242f;
+}
+
+.markdown-body>*:first-child>.heading-element:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body .highlight pre:has(+.zeroclipboard-container) {
+  min-height: 52px;
+}
+
+
+	.markdown-body {
+		box-sizing: border-box;
+		max-width: 980px;
+		margin: 0 auto;
+		padding: 45px;
+	}
+	body{
+		display:flex;
+		overflow-y: scroll;
+	}
+	@media screen{
+		div.sidebar{ width:30% }
+		div.main{ width:70% }
+	}
+
+	@media print{
+		div.sidebar,div.footer{ display:none }
+		div.main{ width:100%!}(MISSING)
+	}
+
+// -->
+</style></head><body>
+<div class="main markdown-body">
+<div class="header">
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+</div><!-- "header" -->
+<div class="body">
+<p>English / <a href="history-4.1_ja.html">Japanese</a></p>
+<h1 id="since-41">Since 4.1</h1>
+<p>NYAGOS 4.0 has the problem that a panic sometimes occurs because
+multi-goroutines call only one Lua-instance.</p>
+<p>On NYAGOS 4.1, I tryied to prevent from panic and to make stable
+by creating Lua-instances for each lua-call and not allowing
+multi-goroutines use same one.</p>
+<p>But, it has the new problem that the functions assigned to nyagos[] ,
+can not see variables set on .nyagos including themselves.
+Because Lua-instances have their own variable-areas not seen by
+other instances.</p>
+<p>To share data between the different Lua-instance, On 4.1, the values
+assigned on the global table nyagos[] and share[] are linked to
+Go's memory. They are able to be accessed by all Lua-instance.</p>
+<p>It breaks the compatibility on Lua scripts. To let Lua scripts for 4.0
+run on 4.1, these modifing are required.</p>
+<ul>
+<li>Value assigned to global variable should be assigned to <code>share[]</code>.
+<ul>
+<li>Values and functions in <code>share[]</code> are able to be access from
+all lua-instances.</li>
+<li>nyagos.exe can find modifying the member of share[] and nyagos[] only.
+<ul>
+<li>OK: <code>share.foo = { '1','2','3' }</code></li>
+<li>NG: <code>share.foo[1] = 'x'</code></li>
+<li>OK: <code>local t=share.foo ; t[1] = 'x' ; share.foo = t</code></li>
+</ul>
+</li>
+<li>Do not assign closure to <code>nyagos.alias[]</code> !
+The code in the function can not access the bind variables.</li>
+</ul>
+</li>
+</ul>
+<h1 id="nyagos-419-3">NYAGOS 4.1.9_3</h1>
+<p>on May 13,2017</p>
+<ul>
+<li>Fix #214: warned as <code>main/lua_cmd.go: cmdExec: not found interpreter object</code></li>
+</ul>
+<h1 id="nyagos-419-2">NYAGOS 4.1.9_2</h1>
+<p>on Apr 3,2017</p>
+<ul>
+<li>Fix #191 the option<code>-c</code> printed <code>option parse error</code>.</li>
+<li>A new Lua function: <code>nyagos.elevated()</code> which returns true on elevated mode.</li>
+<li>The default title bar prints <code>(admin)</code> on elevated mode.</li>
+</ul>
+<h1 id="nyagos-419-1">NYAGOS 4.1.9_1</h1>
+<p>on Mar 28,2017</p>
+<ul>
+<li>Fix: sometimes cursor disappears on readline on some environment on 4.1.9_0.</li>
+<li>Be able to use the escape sequence <code>\033]0;(title)\007</code> to change the title of the command-prompt by the new go-colorable's feature.</li>
+</ul>
+<h1 id="nyagos-419-0">NYAGOS 4.1.9_0</h1>
+<p>on Mar 27,2017</p>
+<ul>
+<li>Fix: <code>open http(s)://...</code> did not work.</li>
+<li>Support <code>cd file:///...</code></li>
+<li>ALT-y: if string on clipboard has space, paste it with double-quatations.</li>
+<li>Listing filenames to completion, cut dirname of the fullpath</li>
+<li>Fix: <code>history</code>-command did not display ID to use !-mark</li>
+<li>Command-name on %NYAGOSPATH% are completed with TAB.</li>
+<li>Not expand environment variables on filename-completion.</li>
+<li>Not enclose ~/ &amp; ~\ with double-quotations.</li>
+<li>At completion, ignore the string before <code>;</code>,<code>=</code> (for set command)</li>
+<li>Speedup print working directory on Prompt by not to fix filename case.</li>
+<li><code>cd C:\Program Files</code> works without double-quotations.(#182)</li>
+<li><code>cd /D</code> works. ignore /D option for compatibility with CMD.EXE.(#182)</li>
+<li>Sort <code>history</code>'s output by time.</li>
+<li>Remove file existance check on <code>open</code> to <code>open regedit</code></li>
+<li><code>clone</code>,<code>su</code>,<code>sudo</code>: ShellExecute with the destinate paths of the symbolic links not to fail on network folders.(#122)</li>
+<li>set: be compatible with CMD.EXE's (set FOO=A B is same FOO=&quot;A B&quot;)</li>
+<li>Fix #184 Backquotation does not work in <code>_nyagos</code></li>
+<li><code>_nyagos</code>: support <code>bindkey KEYNAME FUNCNAME</code></li>
+<li>Support %ENVNAME:FROM=TO% like CMD.EXE</li>
+<li>On incremental search, bind ESCAPE-KEY to quit search-mode.</li>
+<li>New completions by new built-in command <code>box</code>
+<ul>
+<li>Ctrl-O          : Insert filename to select by Cursor (box.lua)</li>
+<li>Ctrl-XR , Alt-R : Insert history to select by Cursor (box.lua)</li>
+<li>Ctrl-XG , Alt-G : Insert Git-revision to select by Cursor (box.lua)</li>
+<li>Ctrl-XH , Alt-H : Insert <code>CD</code>ed directory to select by Cursor (box.lua)</li>
+</ul>
+</li>
+<li>Support <code>lua_e &quot;nyagos.key = function(this) end&quot;</code></li>
+</ul>
+<h1 id="nyagos-418-0">NYAGOS 4.1.8_0</h1>
+<p>on Feb 15,2017</p>
+<ul>
+<li>Add new customizing file <code>_nyagos</code>(command.com-batchlike)</li>
+<li>Fix #173 could not stop <code>ls</code> and built-in commands with Ctrl-C</li>
+<li>ls -h: display size with COMMA not Kilo,Mega or Giga</li>
+<li>Support nyagos.lines(FILENAME,&quot;n&quot;) but value is not float but int #147</li>
+<li>Add %NYAGOSPATH% which works like %PATH% only in nyagos.exe not childprocess</li>
+<li>Support SET VAR+=VALUE , VAR^=VALUE like vim</li>
+<li>Fix #176 Bug on <code>gawk &quot;BEGIN{ print substr(&quot;&quot;%01&quot;&quot;,2) }&quot;</code></li>
+<li>Use github.com/josephspurrier/goversioninfo instead of windres.exe to attach icon</li>
+<li>Support <code>if</code> compatible with command.com's one (<code>==</code>,<code>not</code>,<code>errorlevel</code>,<code>/I</code>)</li>
+<li>New alias macro <code>$~1</code> <code>$~2</code> ... <code>$~*</code> which remove double quotations.</li>
+<li>Record current directories, times and process-id as history (#112)</li>
+<li>ls -l: change timestamp format to 'Jan 2 15:04:05' or 'Jan 2 2006'</li>
+<li>When lua53.dll is not found, display not a stacktrace but a readable error.</li>
+<li>'#' became a comment mark.</li>
+<li>open,clone,su,sudo : rewrite with Go (from Lua)</li>
+</ul>
+<h1 id="nyagos-417-0">NYAGOS 4.1.7_0</h1>
+<p>on Nov 29,2016</p>
+<ul>
+<li>Abolished nyagos.lua, which role nyagos.exe do itself.</li>
+<li>Caching ~/.nyagos with <code>%APPDATA%\NYAOS_ORG/dotnyagos.luac</code></li>
+<li><code>nyagos.d/*</code> are bundled with nyagos.exe self.</li>
+<li>Fix #167 Could not call executable symbolic-linked to relative path</li>
+<li>Fix <code>ls -l</code> could not display <code>@</code> and linked path for symbolic-linked-executables</li>
+<li>Fix su.lua: clone/su displayed broken path.</li>
+<li>Fix #168 <code>ls RELATIVE-SYMLINKED-FILEPATH</code> occured error.</li>
+<li>Fix Widths for filesize in <code>ls -lh</code> were broken</li>
+<li>Set default alias ls=&quot;ls -oFh&quot; (add -h)</li>
+<li><code>history</code> outputs history lines all when stdout is not a terminal.</li>
+<li><code>open</code> prints a prompt for each files if more than one parameters are given.</li>
+<li><code>use &quot;cho&quot;</code> -&gt; powered by <a href="https://github.com/mattn/cho">cho</a>
+* C-r: History
+* C-o: Filename completion
+* M-h: Directory history
+* M-g: Git-revision</li>
+<li>Fix: brace expansion &quot;{a,b,c}&quot; worked even in quotated strings</li>
+</ul>
+<h1 id="nyagos-416-1">NYAGOS 4.1.6_1</h1>
+<p>on Sep 7,2016</p>
+<ul>
+<li>Fix: the package zip did not have lua53.dll</li>
+</ul>
+<h1 id="nyagos-416-0">NYAGOS 4.1.6_0</h1>
+<p>on Sep 7,2016</p>
+<ul>
+<li>Use &quot;\x1B[0K&quot; as ERASELINE instead of &quot; &quot; &amp; Backspace</li>
+<li>Use &quot;\x1B[mC as m-times of Backspace</li>
+<li>Fix #159: Stop to print prompt again when terminal window resized</li>
+<li>Fix #164: <code>cd --history</code> changed the current directory to home.</li>
+<li>copy and move always regard the desitinate path matching with <code>[\\/:]\.{0,2}$</code> as a directory wheter it fails or not to stat the path.</li>
+</ul>
+<h1 id="nyagos-415-1">NYAGOS 4.1.5_1</h1>
+<p>on Jul 31,2016</p>
+<ul>
+<li>Fix #157++: Overflow line on the text appended after screen resized.</li>
+<li>Error when it the upvalue named as 'prompter' is used on closures(nyagos.prompt) for invalid ~/.nyagos of 4.0.x on default for #155,#158</li>
+</ul>
+<h1 id="nyagos-415-0">NYAGOS 4.1.5_0</h1>
+<p>on Jul 31,2016</p>
+<ul>
+<li><code>cd --history</code> outputs the current directory at first to prevent peco(M-h) fro
+m hangup with no cd histories.</li>
+<li>On lua, <code>nyagos.option.glob = true</code> enables the wildcard expansion on external commands also.(#150)</li>
+<li>Tried to improve the compatibility of <code>source</code></li>
+<li>Support nyagos.lines(FILENAME,X) X='a','l','L',Number for #147</li>
+<li>Fix #156: %U+0000% causes panic</li>
+<li>Fix #152 ls -ld Downloads\ -&gt; Downloads/ printed.</li>
+<li>Fix #157 Reset the readline-width on the console window resized.</li>
+<li>Moved some packages to the other repositories.</li>
+</ul>
+<h1 id="nyagos-414-1">NYAGOS 4.1.4_1</h1>
+<p>on Jun 12,2016</p>
+<ul>
+<li>Fix #151 <code>&amp;&amp;</code> and <code>||</code> work same as <code> ;</code></li>
+<li>Add nyagos.d/catalog/autocd.lua &amp; autols.lua (#149 Thx @DeaR)</li>
+</ul>
+<h1 id="nyagos-414-0">NYAGOS 4.1.4_0</h1>
+<p>on May 29,2016</p>
+<ul>
+<li>Implemented built-in tiny OLE interface and nyole.dll is not necessary now.</li>
+<li>Define default-prompt function as <code>nyagos.default_prompt</code> and it can change
+console-title(second parameter)</li>
+<li>Fix: nyagos.lines() did not remove CRLF #144</li>
+<li>Fix: Lua's default file handles(STDIN/STDOUT) were opened by binary-mode. #146</li>
+<li>nyagos.d/catalog/peco.lua: C-r: revert order of display and improved speed.</li>
+</ul>
+<h1 id="nyagos-413-1">NYAGOS 4.1.3_1</h1>
+<p>on May 8,2016</p>
+<ul>
+<li>Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)</li>
+<li>Fix: when nyagos.history was deleted, warnings are displayed until <code>exit</code> was typed.</li>
+<li>Fix: nyagos.d/catalog/peco.lua: when nyagos.history does not exist, peco hangs</li>
+</ul>
+<h1 id="nyagos-413-0">NYAGOS 4.1.3_0</h1>
+<p>on May 5,2016</p>
+<ul>
+<li>Add: <code>nyagos.open(PATH,MODE)</code> which <code>PATH</code> is in UTF8 and compatible with <code>io.open</code>.</li>
+<li>Add: <code>nyagos.loadfile(PATH)</code> which <code>PATH</code> is in UTF8 and compatible with <code>loadfile</code>.</li>
+<li>Add: <code>nyagos.lines(PATH)</code> which <code>PATH</code> is in UTF8 and compatible with <code>io.lines</code>. (Be careful that it returns bytearray-string not always UTF8!)</li>
+<li>Built-in <code>echo</code> uses CRLF not LF as the end of line.(#124)</li>
+<li>Lua's default file handles follow nyagos's redirect and pipeline</li>
+<li>Implemented touch's -r and -t option</li>
+<li><code>touch</code> do tiny validation for timestamp format.</li>
+<li><code>make install</code> makes log and closes installing window after 3sec(#107)</li>
+<li><code>nyagos &lt; TEXTFILE</code> is available.(#125)</li>
+<li>lua.exe &amp; findstr.exe is no longer needed to make {conio,dos}/const.go.</li>
+<li>Fix: alias <code>suffix</code> dit not work.</li>
+<li>When the current working drive is a network drive, <code>su</code> starts new nyagos.exe as administrator on the same directory with UNC-Path.</li>
+<li>On <code>nyagos -c &quot;CMD&quot;</code>, CMD is executed after executing <code>nyagos.lua</code>.</li>
+<li><code>nyagos -[cfe] &quot;...&quot;</code> &amp; <code>nyagos &lt; TEXTFILE</code> do not display copyrights.</li>
+<li>Fix: <code>make install DIR</code> did not save DIR to Misc/version.cmd</li>
+<li>Fix: nyagos.exe could not load nyagos.lua when nyagos.exe exists on non-ascii-path (#133)</li>
+<li>Fix: nyagos.d/catalog/subcomplete.lua does not work after 4.1 (#135)</li>
+<li>Switch escape sequence emulater to github.com/mattn/go-colorable (#137)</li>
+<li>Fix: <code>ls -ltr *</code> was not sorted by modified time. (#136)</li>
+<li>Support: nyagos -f NOT-Lua-Script(COMMANDS-Script)</li>
+</ul>
+<h2 id="add-forgotten-change-on-may-172016">(Add forgotten change on May 17,2016)</h2>
+<ul>
+<li>Not to confuse whether the encoding is ANSI or UTF8 string , stop to print('UTF8-String with ESCAPE-SEQUENCE'). Now print remains to be the bundled one of lua53.dll. ( #129 )</li>
+</ul>
+<h1 id="nyagos-412-0">NYAGOS 4.1.2_0</h1>
+<p>on Mar 29,2016</p>
+<ul>
+<li>Made scripts-catalog system
+<ul>
+<li>Moved <code>catalog.d\*.lua</code> to <code>nyagos.d\catalog\.</code></li>
+<li>We can import cataloged functions with <code>use &quot;NAME&quot;</code> in <code>.nyagos</code>
+<ul>
+<li><code>use &quot;dollar&quot;</code> -&gt; Expand the environment variable like <code>$PATH</code></li>
+<li><code>use &quot;peco&quot;</code> -&gt; powered by <a href="https://github.com/peco/peco">peco</a>
+<ul>
+<li>C-r: History</li>
+<li>C-o: Filename completion</li>
+<li>M-h: Directory history</li>
+<li>M-g: Git-revision</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ls
+<ul>
+<li>not stop listing even if broken symbolic file exists.</li>
+<li>Support: <code>ls -d</code></li>
+</ul>
+</li>
+<li>.nyagos can be put on the same directory with nyagos.exe</li>
+<li>Add: <code>cd --history</code>: print all the directory stayed with no decorations.</li>
+<li>Implemented built-in command tiny <code>touch</code></li>
+<li>Fix: <code>&gt;&gt; bar</code> fails when <code>bar</code> does not exist(#121)</li>
+<li>Add the field <code>rawargs</code> to lua-command's parameter table,
+which contains parameters not removed quotations from user-typed ones.</li>
+<li>Add the method <code>replacefrom</code> to bindkey-function's parameter table.</li>
+</ul>
+<h1 id="nyagos-411-2">NYAGOS 4.1.1_2</h1>
+<p>on Feb 17,2016</p>
+<ul>
+<li>Fix the miss to convert filename UTF8 to ANSI for loadfile() of Lua (#110,Thx Mr.HABATA)</li>
+</ul>
+<h1 id="nyagos-411-1">NYAGOS 4.1.1_1</h1>
+<p>on Feb 16,2016</p>
+<ul>
+<li>Force to insert a line feed when prompt is too wide (#104)</li>
+<li>Fix the error message when no files matches with a given wildcard (#108)</li>
+<li>Fix the environment variable like %ProgramFiles(x86)% were not expanded. (#109 Thx @hattya)</li>
+</ul>
+<h1 id="nyagos-411-0">NYAGOS 4.1.1_0</h1>
+<p>on Jan 15,2016</p>
+<ul>
+<li>Support UTF-16 surrogate pair on getkey</li>
+<li><code>mkdir</code> suppports /p: make parent directories as needed.</li>
+</ul>
+<h1 id="nyagos-410-0">NYAGOS 4.1.0_0</h1>
+<p>on Jan 3,2016</p>
+<ul>
+<li>Add build-in <code>ln</code>.</li>
+<li>Add lua-command <code>lns</code> which shows UAC and do <code>ln -s</code></li>
+<li><code>ls -l</code> shows the destination of the symbolic-link.</li>
+<li>Query continue or not when copy/move failed on one of parameters.</li>
+<li>New variable: <code>nyagos.histchar</code>: a character for history-substitution (default: <code>!</code>)
+<ul>
+<li>To disable history-substitution, do <code>nyagos.histchar = nil</code></li>
+</ul>
+</li>
+<li>New variable: <code>nyagos.antihistquot</code>: characters to disable for history-substitution (default: <code>'&quot;</code>)
+<ul>
+<li>Be careful that <code>&quot;!!&quot;</code> is not substituted by DEFAULT.</li>
+<li>To be compatible with 4.0, do <code>nyagos.antihistquot = [[']]</code></li>
+</ul>
+</li>
+<li>New variable: <code>nyagos.quotation</code>: characters for the completion (default: <code>&quot;'</code>).
+<ul>
+<li>The first character of <code>nyagos.quotation</code> is the default quotation-mark.</li>
+<li>The others characters are used when an user typed before completion.</li>
+<li>When <code>nyagos.quotation=[[&quot;']]</code>
+<ul>
+<li><code>C:\Prog[TAB]</code> is completed to <code>&quot;C:\Program Files\ </code>  (<code>&quot;</code> inserted)</li>
+<li><code>'C:\Prog[TAB]</code> is completed to <code>'C:\Program Files\ </code> (<code>'</code> remains)</li>
+<li><code>&quot;C:\Prog[TAB]</code> is completed to <code>&quot;C:\Program Files\ </code> (<code>&quot;</code> remains)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="nyagos-41-beta">NYAGOS 4.1-beta</h1>
+<p>on Dec 13,2015</p>
+<ul>
+<li>All Lua-callback function have thier own Lua-instances to avoid crash.</li>
+<li>Create the Lua-table <code>share[]</code> to share values between callback
+functions and <code>.nyagos</code>.</li>
+<li><code>*.wsf</code> is associated with cscript</li>
+<li>Warn on illeagal assign to nyagos[]</li>
+</ul>
+</div><!-- "body" -->
+</div><!-- "main" -->
+<div class="sidebar markdown-body">
+<h3 id="contents">Contents</h3>
+<ol>
+<li><a href="./index.html">Top</a></li>
+<li><a href="01-Install_en.html">Install</a></li>
+<li><a href="02-Options_en.html">Option for NYAGOS</a></li>
+<li><a href="03-Readline_en.html">Editor</a></li>
+<li><a href="04-Commands_en.html">Built-in commands</a></li>
+<li><a href="05-Startup_en.html">What is done on the Startup</a></li>
+<li><a href="06-Substitution_en.html">Substitution</a></li>
+<li><a href="07-LuaFunctions_en.html">Lua functions extenteded by NYAGOS</a></li>
+<li><a href="08-Uninstall_en.html">Uninstall</a></li>
+<li><a href="09-Build_en.html">How To build</a></li>
+<li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+</ol>
+<p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
+<h3 id="release-note">Release note</h3>
+<ul>
+<li><a href="release_note_en.html">4.4.x</a></li>
+<li><a href="history-4.3_en.html">4.3.x</a></li>
+<li><a href="history-4.2_en.html">4.2.x</a></li>
+<li><a href="history-4.1_en.html">4.1.x</a></li>
+<li><a href="history-4.0_en.html">4.0.x</a></li>
+</ul>
+</div><!-- "sidebar markdown-body" -->
+</body></html>

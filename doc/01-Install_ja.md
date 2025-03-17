@@ -1,19 +1,25 @@
 [English](01-Install_en.md) / Japanese
 
-インストール
-------------
+## インストール
 
-バイナリファイルは https://github.com/nyaosorg/nyagos/releases よりダウンロード可能です。
+### バイナリをダウンロード
 
-    mkdir PATH\TO\INSTALLDIR
-    cd PATH\TO\INSTALLDIR
-    unzip PATH\TO\DOWNLOADDIR\nyagos-****.zip
-    makeicon.cmd
+* https://github.com/nyaosorg/nyagos/releases
 
-バッチファイル `makeicon.cmd` はデスクトップにアイコンを作成します。
+### Scoop installer を使う場合
+
+```
+C:> scoop install nyagos
+```
+
+### Chocolatey installer を使う場合
+
+```
+C:> choco install nyagos
+```
 
 
-## カスタマイズ
+### カスタマイズ
 
     copy .nyagos "%USERPROFILE%\."
     notepad "%USERPROFILE%\.nyagos"

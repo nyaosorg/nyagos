@@ -1,16 +1,14 @@
 English / [Japanese](./10-SetupSKK_ja.md)
 
+## How to setup SKK
 
-How to setup SKK
-================
-
-## 1. Download dictionaries
+### 1. Download dictionaries
 
     cd (YOUR-JISYO-DIR)
     curl -O https://raw.githubusercontent.com/skk-dev/dict/master/SKK-JISYO.L
     curl -O https://raw.githubusercontent.com/skk-dev/dict/master/SKK-JISYO.emoji
 
-## 2. Describe the paths for the dictionaries on ~/.nyagos
+### 2. Describe the paths for the dictionaries on ~/.nyagos
 
     nyagos.skk{
         user="~/.go-skk-jisyo" , -- user dictionary

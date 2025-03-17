@@ -5,7 +5,7 @@
 これらのコマンドはコマンド名とは別にエイリアスを持っています。
 たとえば `ls` は `__ls__` というエイリアスを持っています。
 
-### `bindkey キー名 機能名`
+#### `bindkey キー名 機能名`
 
 一行入力のキー操作をカスタマイズします。
 
@@ -25,7 +25,7 @@
         "END_OF_LINE" "COMPLETE" "PREVIOUS_HISTORY" "NEXT_HISTORY" "INTR"
         "ISEARCH_BACKWARD" "REPAINT_ON_NEWLINE"
 
-### `cd ドライブ:ディレクトリ`
+#### `cd ドライブ:ディレクトリ`
 
 現在のカレントドライブ、ディレクトリを変更します。
 引数を省略すると、CMD.EXE と違い、環境変数 HOME 、あるいは 
@@ -42,37 +42,37 @@ CMD.EXE と違い、ドライブも同時に変更します。
 存在しない場合、環境変数 CDPATH にリストされたディレクトリの
 サブディレクトリを検索します。
 
-### `chmod ooo FILE(s)`
+#### `chmod ooo FILE(s)`
 
-### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
+#### `env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)`
 
 COMMAND が実行されている間だけ、環境変数の値を変更します。
 
-### `more`
+#### `more`
 
 UTF8 と ANSI テキストの双方をサポートします。(自動判別)
 
-### `exit`
+#### `exit`
 
 NYAGOS を終了します。
 
-### foreach
+#### foreach
 
 `foreach` *VAR* *VAL1* *VAL2* ...
     STATEMENTS
 `end`
 
-### `history [件数]`
+#### `history [件数]`
 
 ヒストリ内容を表示します。件数を省略すると、最近の10件が表示されます。
 
-### if
+#### if
 
-#### inline-if
+##### inline-if
 
 `if` *COND* *THEN-STATEMENT*
 
-#### block-if
+##### block-if
 
 `if` *COND* [`then`]
    *THEN-BLOCK*
@@ -94,25 +94,25 @@ NYAGOS を終了します。
 * if *COND* is true, execute *THEN-BLOCK* or *THEN-STATEMENT*
 * if *COND* is false, execute *ELSE-BLOCK* or nothing.
 
-### `kill PID`
+#### `kill PID`
 
 PID で示されるプロセスを強制終了します
 
-### `killall NAME...`
+#### `killall NAME...`
 
 キーワードを含むプロセスを強制終了します
 
-### `ln [-s] SRC DST`
+#### `ln [-s] SRC DST`
 
 ハードリンク、もしくは、シンボリックリンクを作成します。
 `nyagos.d\lns.lua` で定義されるエイリアス lns は UAC 昇格と
 `ln -s` を実行します。
 
-### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
+#### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
 
 ショートカットを作成します
 
-### `ls [-オプション] …`
+#### `ls [-オプション] …`
 
 ディレクトリの一覧を表示します。
 サポートしているオプションは以下の通りです。
@@ -147,11 +147,11 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 - `s` - システムファイル
 - `h` - 隠しファイル
 
-### `ps`
+#### `ps`
 
 プロセスのリストを表示します。
 
-### `pwd`
+#### `pwd`
 
 現在のカレントドライブ + ディレクトリを表示します。
 
@@ -159,7 +159,7 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 * `pwd -L` : 環境から PWD を得る (default)
 * `pwd -P` : 全てのシンボリックリンクをたどる
 
-### `set 変数名=値`
+#### `set 変数名=値`
 
 環境変数に値を設定します。値に空白等を含む場合、CMD.EXE と同様に
 「`set "変数名=値"`」とします。= 以降を省略すると、現在の変数の内容を
@@ -171,7 +171,7 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 * `set ENV^=値` ... `set ENV=値;%ENV%` と等価ですが、重複した値は削除します
 * `set ENV+=値` ... `set ENV=%ENV%;値` と等価ですが、重複した値は削除します
 
-### `set -o OPTION-NAME`, `set +o OPTION-NAME`
+#### `set -o OPTION-NAME`, `set +o OPTION-NAME`
 
 `-o` は OPTION を設定し、`+o` は解除します。
 
@@ -181,43 +181,43 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 - `+o usesource` バッチファイルから環境変数の変更を読みとるには source コマンドを使う必要があります。
 - `-o cleaup_buffer` 一行入力の前に入力バッファをクリアします。
 
-### `set -a "EQUATION"`, `set /a "EQUATION"`
+#### `set -a "EQUATION"`, `set /a "EQUATION"`
 
 CMD.EXE と同じ。式を評価する
 
-### `select FILENAME(s)...`
+#### `select FILENAME(s)...`
 
 アプリケーションを選択するダイアログ付きでファイルを開きます
 
-### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r 参照ファイル] ファイル名…`
+#### `touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r 参照ファイル] ファイル名…`
 
 ファイルが存在すれば更新日時を更新し、存在しなければ新規作成します。
 
-### `which [-a] COMMAND-NAME`
+#### `which [-a] COMMAND-NAME`
 
 コマンド名に対して、どのファイルが実行されるか表示します
 
 * `-a` - %PATH% 上の全ての実行ファイルを表示します。
 
-### `copy SOURCE-FILENAME DESTINATE-FILENAME`
-### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
-### `copy SOURCE-FILENAME(S)... SHORTCUT(*.lnk)`
-### `move OLD-FILENAME NEW-FILENAME`
-### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
-### `move SOURCE-FILENAME(S)... SHORTCUT(*.lnk)`
-### `del FILE(S)...`
-### `erase FILE(S)...`
-### `mkdir [/p] NEWDIR(S)...`
-### `rmdir [/s] DIR(S)...`
-### `pushd`
-### `popd`
-### `dirs`
-### `diskfree`
-### `diskused`
+#### `copy SOURCE-FILENAME DESTINATE-FILENAME`
+#### `copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY`
+#### `copy SOURCE-FILENAME(S)... SHORTCUT(*.lnk)`
+#### `move OLD-FILENAME NEW-FILENAME`
+#### `move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY`
+#### `move SOURCE-FILENAME(S)... SHORTCUT(*.lnk)`
+#### `del FILE(S)...`
+#### `erase FILE(S)...`
+#### `mkdir [/p] NEWDIR(S)...`
+#### `rmdir [/s] DIR(S)...`
+#### `pushd`
+#### `popd`
+#### `dirs`
+#### `diskfree`
+#### `diskused`
 
 これらの内蔵版は、上書きや削除の際に常にプロンプトで実行可否を問い合わせます。
 
-### `source バッチファイル名`
+#### `source バッチファイル名`
 
 バッチファイルを CMD.EXE で実行して、CMD.EXE が変更した環境変数と
 カレントディレクトリを NYAGOS.EXE に取り込みます。
@@ -228,37 +228,37 @@ CMD.EXE と同じ。式を評価する
 - `-d` オプションで、`source` が作成する一時ファイルが削除されなくなります
 - `-v` オプションで、各一時ファイルが標準エラー出力に出力されます
 
-### `open FILE(s)`
+#### `open FILE(s)`
 
 Windows で関連付けられたアプリケーションでファイルを開きます。
 
-### `clone`
+#### `clone`
 
 NYAGOS を別ウインドウで開きます。
 
-### `su`
+#### `su`
 
 UAC 昇格された NYAGOS を別ウインドウで開きます。
 
-### `su COMMAND ARGS(s)...`
+#### `su COMMAND ARGS(s)...`
 
 UAC 昇格させて、コマンドを実行します。
 
-## Lua で実装されたコマンド
+### Lua で実装されたコマンド
 
-### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua) 
+#### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua) 
 
 内蔵Lua で引数の Lua コードを実行します。
 
-### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
+#### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
 
 内蔵Lua で Lua スクリプトを実行します。
 
-### `trash FILE(S)` (nyagos.d\trash.lua)
+#### `trash FILE(S)` (nyagos.d\trash.lua)
 
 ファイルを Windows のゴミ箱に移動させます。
 
-### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
+#### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
 
 ARG(s) に含まれるワイルドカードを展開して、COMMAND を実行します。
 
