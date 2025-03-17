@@ -1,4 +1,4 @@
-[top](../README_ja.md) &gt; [English](01-Install_en.md) / Japanese
+[English](01-Install_en.md) / Japanese
 
 インストール
 ------------

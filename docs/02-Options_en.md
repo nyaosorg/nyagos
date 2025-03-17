@@ -1,4 +1,4 @@
-[top](../README.md) &gt; English / [Japanese](./02-Options_ja.md)
+English / [Japanese](./02-Options_ja.md)
 
 
 ## Option for NYAGOS.EXE

@@ -1,4 +1,4 @@
-[top](../README_ja.md) &gt; [English](./07-LuaFunctions_en.md) / Japanese
+[English](./07-LuaFunctions_en.md) / Japanese
 
 ## Lua拡張
 

@@ -1,4 +1,4 @@
-[top](../README.md) &gt; English / [Japanese](./09-Build_ja.md)
+English / [Japanese](./09-Build_ja.md)
 
 Build
 -----

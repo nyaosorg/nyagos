@@ -1,4 +1,4 @@
-[top](../README.md) &gt; [English](./10-SetupSKK_en.md) / Japanese
+[English](./10-SetupSKK_en.md) / Japanese
 
 SKK のセットアップの仕方
 ========================

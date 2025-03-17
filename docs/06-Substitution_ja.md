@@ -1,4 +1,4 @@
-[top](../README_ja.md) &gt; [English](./06-Substitution_en.md) / Japanese
+[English](./06-Substitution_en.md) / Japanese
 
 ## コマンドライン置換
 

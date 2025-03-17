@@ -1,4 +1,4 @@
-[top](../README.md) &gt; English / [Japanese](release_note_ja.md)
+English / [Japanese](release_note_ja.md)
 
 - Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.
 - Syntax highlighting:
