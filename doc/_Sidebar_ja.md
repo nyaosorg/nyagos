@@ -3,7 +3,7 @@
 1. [Top](./index_ja.md)
 2. [インストール](01-Install_ja.md)
 3. [起動オプション](02-Options_ja.md)
-4. [編集機能](03-Readline_ja.md)
+4. [コマンドライン編集](03-Readline_ja.md)
 5. [内蔵コマンド](04-Commands_ja.md)
 6. [起動処理](05-Startup_ja.md)
 7. [コマンドライン置換](06-Substitution_ja.md)

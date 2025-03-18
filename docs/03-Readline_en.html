@@ -1135,36 +1135,37 @@
 </div><!-- "header" -->
 <div class="body">
 <p>English / <a href="./03-Readline_ja.html">Japanese</a></p>
-<h2 id="editor">Editor</h2>
+<h2 id="command-line-editing">Command Line Editing</h2>
+<p>You can edit the command line with key bindings similar to UNIX shells.</p>
 <ul>
-<li>BackSpace , Ctrl-H : Delete a charactor left of cursor</li>
-<li>Enter , Ctrl-M     : Execute commandline</li>
-<li>Del                : Delete a charactor on cursor</li>
-<li>Home , Ctrl-A      : Move cursor to top</li>
-<li>Left , Ctrl-B      : Move cursor to left</li>
-<li>Ctrl-D             : Delete a charactor on cursor or quit</li>
-<li>End , Ctrl-E       : Move cursor to the tail of commandline</li>
-<li>Right , Ctrl-F     : Move cursor right</li>
-<li>Ctrl-K             : Remove text from cursor to tail</li>
-<li>Ctrl-L             : Repaint screen</li>
-<li>Ctrl-U             : Remove text from top to cursor</li>
-<li>Ctrl-Y             : Paste text from clipboard</li>
-<li>Esc , Ctrl-[       : Remove all-commandline</li>
-<li>UP , Ctrl-P        : Replace commandline to previous input one</li>
-<li>DOWN , Ctrl-N      : Replace commnadline to next input one</li>
-<li>TAB , Ctrl-I       : Complete file or command-name</li>
-<li>Ctrl-C             : Drop text all</li>
-<li>Ctrl-R             : Incremental search</li>
-<li>Ctrl-W             : Remove current word.</li>
-<li>Ctrl-O             : Insert filename to select by Cursor (box.lua)</li>
-<li>Ctrl-XR , Alt-R    : Insert history to select by Cursor (box.lua)</li>
-<li>Ctrl-XG , Alt-G    : Insert Git-revision to select by Cursor (box.lua)</li>
-<li>Ctrl-XH , Alt-H    : Insert <code>CD</code>ed directory to select by Cursor (box.lua)</li>
-<li>Ctrl-Q , Ctrl-V    : Add the next character typed to the line verbatim</li>
-<li>Ctrl-Right , Alt-F : Move forward over a word</li>
-<li>Ctrl-Left , Alt-B  : Move backward over a word</li>
-<li>Ctrl-<code>_</code>, Ctrl-Z   : Undo</li>
-<li>Alt-O              : Expand the path of shortcut.lnk to target-path</li>
+<li><code>Backspace</code>, <code>Ctrl-H</code> : Delete the character to the left of the cursor</li>
+<li><code>Enter</code>, <code>Ctrl-M</code>     : Execute the command line</li>
+<li><code>Del</code>                 : Delete the character under the cursor</li>
+<li><code>Home</code>, <code>Ctrl-A</code>      : Move the cursor to the beginning of the line</li>
+<li><code>Left</code>, <code>Ctrl-B</code>      : Move the cursor one character to the left</li>
+<li><code>Ctrl-D</code>              : Delete the character under the cursor or exit</li>
+<li><code>End</code>, <code>Ctrl-E</code>       : Move the cursor to the end of the line</li>
+<li><code>Right</code>, <code>Ctrl-F</code>     : Move the cursor one character to the right</li>
+<li><code>Ctrl-K</code>              : Delete text from the cursor to the end of the line</li>
+<li><code>Ctrl-L</code>              : Refresh the screen</li>
+<li><code>Ctrl-U</code>              : Delete text from the beginning of the line to the cursor</li>
+<li><code>Ctrl-Y</code>              : Paste text from the clipboard</li>
+<li><code>Esc</code>, <code>Ctrl-[</code>       : Clear the entire command line</li>
+<li><code>Up</code>, <code>Ctrl-P</code>        : Recall the previous command</li>
+<li><code>Down</code>, <code>Ctrl-N</code>      : Recall the next command</li>
+<li><code>Tab</code>, <code>Ctrl-I</code>       : Complete file or command name</li>
+<li><code>Ctrl-C</code>              : Cancel the current command</li>
+<li><code>Ctrl-R</code>              : Search command history incrementally</li>
+<li><code>Ctrl-W</code>              : Delete the word before the cursor</li>
+<li><code>Ctrl-O</code>              : Insert a filename selected via cursor (requires <code>box.lua</code>)</li>
+<li><code>Ctrl-XR</code>, <code>Alt-R</code>    : Insert a history entry selected via cursor (requires <code>box.lua</code>)</li>
+<li><code>Ctrl-XG</code>, <code>Alt-G</code>    : Insert a Git revision selected via cursor (requires <code>box.lua</code>)</li>
+<li><code>Ctrl-XH</code>, <code>Alt-H</code>    : Insert a <code>CD</code>ed directory selected via cursor (requires <code>box.lua</code>)</li>
+<li><code>Ctrl-Q</code>, <code>Ctrl-V</code>    : Insert the next typed character verbatim</li>
+<li><code>Ctrl-Right</code>, <code>Alt-F</code> : Move the cursor forward by one word</li>
+<li><code>Ctrl-Left</code>, <code>Alt-B</code>  : Move the cursor backward by one word</li>
+<li><code>Ctrl-_, </code>Ctrl-Z`     : Undo</li>
+<li><code>Alt-O</code>               : Expand a <code>.lnk</code> shortcut path to its target path</li>
 </ul>
 </div><!-- "body" -->
 </div><!-- "main" -->
@@ -1174,7 +1175,7 @@
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
 <li><a href="02-Options_en.html">Option for NYAGOS</a></li>
-<li><a href="03-Readline_en.html">Editor</a></li>
+<li><a href="03-Readline_en.html">Command Line Editing</a></li>
 <li><a href="04-Commands_en.html">Built-in commands</a></li>
 <li><a href="05-Startup_en.html">What is done on the Startup</a></li>
 <li><a href="06-Substitution_en.html">Substitution</a></li>

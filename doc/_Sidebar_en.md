@@ -3,7 +3,7 @@
 1. [Top](./index.md)
 2. [Install](01-Install_en.md)
 3. [Option for NYAGOS](02-Options_en.md)
-4. [Editor](03-Readline_en.md)
+4. [Command Line Editing](03-Readline_en.md)
 5. [Built-in commands](04-Commands_en.md)
 6. [What is done on the Startup](05-Startup_en.md)
 7. [Substitution](06-Substitution_en.md)
