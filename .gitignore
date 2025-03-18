@@ -1,7 +1,6 @@
 *.a
 *.dll
 *.exe
-*.gif
 *.gz
 *.swp
 *.syso
