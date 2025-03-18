@@ -1,6 +1,6 @@
 ### 目次
 
-1. [Top](./index.md)
+1. [Top](./index_ja.md)
 2. [インストール](01-Install_ja.md)
 3. [起動オプション](02-Options_ja.md)
 4. [編集機能](03-Readline_ja.md)
