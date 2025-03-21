@@ -1131,11 +1131,11 @@
 </style></head><body>
 <div class="main markdown-body">
 <div class="header">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 </div><!-- "header" -->
 <div class="body">
 <p>English / <a href="history-4.2_ja.html">Japanese</a></p>
-<h1 id="nyagos-425-1">NYAGOS 4.2.5_1</h1>
+<h1 id="nyagos-425-1">NYAGOS 4.2.5_1 <a href="#nyagos-425-1">.</a></h1>
 <p>on Apr.14,2018</p>
 <ul>
 <li>Fix: <code>if [not] errorlevel N</code> did not work on block-if.</li>
@@ -1144,12 +1144,12 @@
 <li>Fix: <code>ls -F</code> marked '@' to files and directories which ar reparse-pointed but not symbolic-link nor junction</li>
 <li>Changed the error message when the command <code>history</code> is called in <code>_nyagos</code></li>
 </ul>
-<h1 id="nyagos-425-0">NYAGOS 4.2.5_0</h1>
+<h1 id="nyagos-425-0">NYAGOS 4.2.5_0 <a href="#nyagos-425-0">.</a></h1>
 <p>on Mar.31,2018</p>
 <ul>
 <li>Add Lua-flag: nyagos.option.usesource. When it is false, batchfiles can not change nyagos's environment variables and directory.(default:true)</li>
 </ul>
-<h1 id="nyagos-425-beta2">NYAGOS 4.2.5_beta2</h1>
+<h1 id="nyagos-425-beta2">NYAGOS 4.2.5_beta2 <a href="#nyagos-425-beta2">.</a></h1>
 <p>on Mar.27,2018</p>
 <ul>
 <li>Fix: #296 the batchfile could not be executed when the username contains multibyte-character.
@@ -1160,13 +1160,13 @@
 </li>
 <li>Fix: #297 running the batchfile includes <code>exit</code> without <code>/b</code> option, an error occurs</li>
 </ul>
-<h1 id="nyagos-425-beta">NYAGOS 4.2.5_beta</h1>
+<h1 id="nyagos-425-beta">NYAGOS 4.2.5_beta <a href="#nyagos-425-beta">.</a></h1>
 <p>on Mar.26,2018</p>
 <ul>
 <li>Read the value of environment variables that a batchfile changed like CMD.EXE.</li>
 <li>And refactored source files</li>
 </ul>
-<h1 id="nyagos-424-0">NYAGOS 4.2.4_0</h1>
+<h1 id="nyagos-424-0">NYAGOS 4.2.4_0 <a href="#nyagos-424-0">.</a></h1>
 <p>on Mar.9,2018</p>
 <ul>
 <li>lua: ole: <code>variable = OLE.property</code> is avaliable instead of <code>OLE:_get('property')</code></li>
@@ -1183,7 +1183,7 @@
 <li>When more than one are to be executed with <code>open</code> at once, display error: <code>open: ambiguous shellexecute</code></li>
 <li>Fix that <code>nyagos.alias.NAME = nil</code> could not remove the alias.</li>
 </ul>
-<h1 id="nyagos-423-4">NYAGOS 4.2.3_4</h1>
+<h1 id="nyagos-423-4">NYAGOS 4.2.3_4 <a href="#nyagos-423-4">.</a></h1>
 <p>on Mar.4,2018</p>
 <ul>
 <li><code>ls -?</code> for help instead of <code>ls -h</code></li>
@@ -1195,7 +1195,7 @@
 <li>Fix: #286 A tilde(~) after whitespace enclosed with double quotations was interpreted same as %USERPROFILE%</li>
 <li>#287 On the last entry of the history, do nothing for typing ARROW-DOWN</li>
 </ul>
-<h1 id="nyagos-423-3">NYAGOS 4.2.3_3</h1>
+<h1 id="nyagos-423-3">NYAGOS 4.2.3_3 <a href="#nyagos-423-3">.</a></h1>
 <p>on Jan.28,2018</p>
 <ul>
 <li>Fix: <code>print(nil,true,false)</code> outputs nothing..</li>
@@ -1204,19 +1204,19 @@
 <li>On completion, don't append SPACE after PERCENT mark.</li>
 <li>#276 Fix that <code>source</code> did not execute a batch with stdout. (Thx @tyochiai )</li>
 </ul>
-<h1 id="nyagos-423-2">NYAGOS 4.2.3_2</h1>
+<h1 id="nyagos-423-2">NYAGOS 4.2.3_2 <a href="#nyagos-423-2">.</a></h1>
 <p>on Jan.6,2018</p>
 <ul>
 <li>Fix: #265 Type <code>ls</code> , SPACE and TAB -&gt; command name completion starts.</li>
 </ul>
-<h1 id="nyagos-423-1">NYAGOS 4.2.3_1</h1>
+<h1 id="nyagos-423-1">NYAGOS 4.2.3_1 <a href="#nyagos-423-1">.</a></h1>
 <p>on Dec.30,2017</p>
 <ul>
 <li>Fix: CR and LF did not work as the word seperator in the commandline.</li>
 <li>Fix: #264 Garbage appears on the screen when screen buffer width is too large.
 (You have to do <code>go get -u github.com/mattn/go-colorable</code>)</li>
 </ul>
-<h1 id="nyagos-423-0">NYAGOS 4.2.3_0</h1>
+<h1 id="nyagos-423-0">NYAGOS 4.2.3_0 <a href="#nyagos-423-0">.</a></h1>
 <p>on Dec.25,2017</p>
 <ul>
 <li>option --norc : not to load startup-scripts.</li>
@@ -1234,21 +1234,21 @@
 <li>Fix #258 Environment variable expanding does not work after backslash</li>
 <li>Add lua-function nyagos.msgbox(MESSAGE,TITLE)</li>
 </ul>
-<h1 id="nyagos-422-2">NYAGOS 4.2.2_2</h1>
+<h1 id="nyagos-422-2">NYAGOS 4.2.2_2 <a href="#nyagos-422-2">.</a></h1>
 <p>on Nov.26,2017</p>
 <ul>
 <li>#255 <code>start</code> command search the executable via %PATH%</li>
 <li>#254 Fix: -xxxx of <code>nyagos -f SCRIPT -xxxx</code> was treated as not SCRIPT's option but nyagos' option.</li>
 <li>Fix: Lua-stack overflow when arguments filter is not set</li>
 </ul>
-<h1 id="nyagos-422-1">NYAGOS 4.2.2_1</h1>
+<h1 id="nyagos-422-1">NYAGOS 4.2.2_1 <a href="#nyagos-422-1">.</a></h1>
 <p>on Oct.11,2017</p>
 <ul>
 <li>#250 Fix the crash in the built-in command <code>bindkey</code> without parameters. (Thx @masamitsu-murase)</li>
 <li>#252 Fix the problem that Shift/Ctrl keys typing cancels the screen-scroll. (Skip the output CURSOR-OFF/ON sequences at Shift/Ctrl keys typed) (Thx @masamitsu-murase)</li>
 <li>#253 Fix <code>nyagos-4.2.2_0-386</code> was built as a 64bit executable by make.cmd's bug (Thx @hazychill)</li>
 </ul>
-<h1 id="nyagos-422-0">NYAGOS 4.2.2_0</h1>
+<h1 id="nyagos-422-0">NYAGOS 4.2.2_0 <a href="#nyagos-422-0">.</a></h1>
 <p>on Oct.8,2017</p>
 <ul>
 <li>Append the new command commands by Lua: <code>abspath</code>,<code>chompf</code> and <code>wildcard</code></li>
@@ -1264,7 +1264,7 @@
 <li>#249 Add <code>nyagos.completion_slash</code> option. When it is true, filename-completion uses a slash as the path-seperator as default. (Thx @masamitsu-murase)</li>
 <li>New building script(make.cmd) written in PowerShell</li>
 </ul>
-<h1 id="nyagos-421-0">NYAGOS 4.2.1_0</h1>
+<h1 id="nyagos-421-0">NYAGOS 4.2.1_0 <a href="#nyagos-421-0">.</a></h1>
 <p>on Aug.31,2017</p>
 <ul>
 <li>#241 Respect the item order in the list returned from <code>completion_hook</code> (Thx @masamitsu-murase)</li>
@@ -1278,13 +1278,13 @@
 <li><code>rmdir</code> prints the progress as before.</li>
 <li><code>diskfree</code>: new command like df</li>
 </ul>
-<h1 id="nyagos-420-5">NYAGOS 4.2.0_5</h1>
+<h1 id="nyagos-420-5">NYAGOS 4.2.0_5 <a href="#nyagos-420-5">.</a></h1>
 <p>on Aug.16,2017</p>
 <ul>
 <li>Fix: Building on Windows7, the version information was not written into the property of the executable because the script to make JSON for goversioninfo required the method ConvertTo-JSON of PowerShell 3.0 but Windows 7 does not support it.</li>
 <li>Fix: nyagos.box(LIST) ignored the order of LIST</li>
 </ul>
-<h1 id="nyagos-420-4">NYAGOS 4.2.0_4</h1>
+<h1 id="nyagos-420-4">NYAGOS 4.2.0_4 <a href="#nyagos-420-4">.</a></h1>
 <p>on Jul.29,2017</p>
 <ul>
 <li>Fix: error's line number was not displayed when <code>.nyagos</code> has an error.</li>
@@ -1296,7 +1296,7 @@
 <li>Do not insert interpreter-name when user-typed-command-name does not have a suffix to fix #237 that <code>cd nyagos.d</code> and <code>suffix</code> -&gt; new nyagos.exe processes start infinitely.</li>
 <li>Fix #240: on empty dir, C-o -&gt; <code>bad argument # 1 to 'find' (string expected, got nil)</code></li>
 </ul>
-<h1 id="nyagos-420-3">NYAGOS 4.2.0_3</h1>
+<h1 id="nyagos-420-3">NYAGOS 4.2.0_3 <a href="#nyagos-420-3">.</a></h1>
 <p>on Jul 13,2017</p>
 <ul>
 <li>Fix: panic occurs when <code>box</code> Enter &amp; Ctrl-C pressed.</li>
@@ -1307,7 +1307,7 @@
 <li>completion: enclose with &quot;&quot; when ! mark is found.</li>
 <li>Fix: <code>suffix ps1</code> =&gt; <code>?:-1: attempt to concatenate a table value</code></li>
 </ul>
-<h1 id="nyagos-420-2">NYAGOS 4.2.0_2</h1>
+<h1 id="nyagos-420-2">NYAGOS 4.2.0_2 <a href="#nyagos-420-2">.</a></h1>
 <p>on Jun 16,2017</p>
 <ul>
 <li>Fix the problem that <code>lnk . ~</code> failed.</li>
@@ -1315,7 +1315,7 @@
 <li>Fix: readline: isearch: BACKSPACE-KEY did not redraw a found commandline</li>
 <li>Fix: crash that <code>index out of range</code> occurs when an empty string in the global variable in Lua exists and pipeline was used. (#232)</li>
 </ul>
-<h1 id="nyagos-420-1">NYAGOS 4.2.0_1</h1>
+<h1 id="nyagos-420-1">NYAGOS 4.2.0_1 <a href="#nyagos-420-1">.</a></h1>
 <p>on Jun 06,2017</p>
 <ul>
 <li>Fix: sample of <code>_nyagos</code> was forgotten to bundle into the package. (#230)</li>
@@ -1323,7 +1323,7 @@
 <li>nyagos.d/catalog/dollar.lua: support completion $TEMP\xxxx format. (#228)</li>
 <li>nyagos.d/catalog/ezoe.lua: revival</li>
 </ul>
-<h1 id="nyagos-420-0">NYAGOS 4.2.0_0</h1>
+<h1 id="nyagos-420-0">NYAGOS 4.2.0_0 <a href="#nyagos-420-0">.</a></h1>
 <p>on May 29,2017</p>
 <ul>
 <li><strong>Improved the restriction that the Lua-variables not in <code>share[]</code> are not shared in all Lua-instances.(#210,#208)</strong>
@@ -1334,7 +1334,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="new-feature">New feature</h2>
+<h2 id="new-feature">New feature <a href="#new-feature">.</a></h2>
 <ul>
 <li><code>nyagos.completion_hidden</code>: If it is set true, hidden filenames are also completed.</li>
 <li>Add built-in command <code>env</code></li>
@@ -1348,13 +1348,13 @@
 <li><code>ls -l</code>: Show shortcut's target and working directory.</li>
 <li>New lua-function: <code>nyagos.box()</code></li>
 </ul>
-<h2 id="trivial-fix">Trivial fix</h2>
+<h2 id="trivial-fix">Trivial fix <a href="#trivial-fix">.</a></h2>
 <ul>
 <li>Support <code>-b BASE64edCOMMANDSTRING</code> as startup option (#200)</li>
 <li>Rewrote <code>cd/push SHORTCUT.lnk</code> from Lua(nyagos.d/cdlnk.lua) to Golang-native</li>
 <li><code>nyagos.alias.grep = &quot;findstr.exe&quot;</code></li>
 </ul>
-<h2 id="bugfix">Bugfix</h2>
+<h2 id="bugfix">Bugfix <a href="#bugfix">.</a></h2>
 <ul>
 <li>Fix <code>\</code> in <code>%USERPROFILE:\=/%</code> were replaced once only</li>
 <li>Fix: <code>ll</code> was aliased to non-colored version on default <code>_nyagos</code></li>
@@ -1367,7 +1367,7 @@
 </div><!-- "body" -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents</h3>
+<h3 id="contents">Contents <a href="#contents">.</a></h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1382,7 +1382,7 @@
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note</h3>
+<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>

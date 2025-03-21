@@ -1131,11 +1131,11 @@
 </style></head><body>
 <div class="main markdown-body">
 <div class="header">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 </div><!-- "header" -->
 <div class="body">
 <p><a href="release_note_en.html">English</a> / Japanese</p>
-<h2 id="heading">スナップショット</h2>
+<h2 id="heading">スナップショット <a href="#heading">.</a></h2>
 <ul>
 <li>シェルや REPLs は OS のクリップボードから切り離されているのが一般的であるため、OSのクリップボードを使用しないようにした</li>
 <li>シンタックスハイライト
@@ -1153,16 +1153,16 @@
 <li>v4.4.15 より非推奨としていた設定ファイル <code>_nyagos</code> を廃止</li>
 <li><code>set -o</code> で現在の設定内容を Lua 構文として表示するようになった。</li>
 </ul>
-<h2 id="v4416-0">v4.4.16_0</h2>
+<h2 id="v4416-0">v4.4.16_0 <a href="#v4416-0">.</a></h2>
 <p>(2024.10.14)</p>
-<h3 id="heading-1">廃止・非推奨</h3>
+<h3 id="heading-1">廃止・非推奨 <a href="#heading-1">.</a></h3>
 <ul>
 <li><code>nyagos.d/catalog/neco.lua</code> を削除</li>
 <li>Lua関数: <code>nyagos.msgbox</code> を削除</li>
 <li>grep.exe が存在しない時、勝手に findstr.exe を grep の別名にする動作を削除</li>
 </ul>
-<h3 id="heading-2">新機能</h3>
-<h4 id="heading-3">一行入力</h4>
+<h3 id="heading-2">新機能 <a href="#heading-2">.</a></h3>
+<h4 id="heading-3">一行入力 <a href="#heading-3">.</a></h4>
 <ul>
 <li>PowerShell 7 風の入力予測機能の実装
 <ul>
@@ -1173,7 +1173,7 @@
 </li>
 <li>Ctrl-P/N: 履歴を切り替えるときに変更したエントリを保存し、(Enterが入力されるまでは)再度切り替えたときに復元するようにした</li>
 </ul>
-<h4 id="lua-">Lua 拡張</h4>
+<h4 id="lua-">Lua 拡張 <a href="#lua-">.</a></h4>
 <ul>
 <li>キー入力の最初のコードの Unicode しか返さなくなっていた nyagos.getkey のかわりに、入力キーを<code>&quot;\027[A&quot;</code> といった<a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">キーシーケンス</a>で返す nyagos.getkeys() を実装した</li>
 <li><code>nyagos.key[KEY]=function(this)...end</code> の中で使える機能を拡充
@@ -1199,11 +1199,11 @@
 </ul>
 </li>
 </ul>
-<h3 id="heading-4">ドキュメント</h3>
+<h3 id="heading-4">ドキュメント <a href="#heading-4">.</a></h3>
 <ul>
 <li>readme.md → README.md でのファイル名変更でドキュメント間のリンクが切れてしまっていた点の修正 ( Thx @HAYASHI-Masayuki )</li>
 </ul>
-<h2 id="v4415-1">v4.4.15_1</h2>
+<h2 id="v4415-1">v4.4.15_1 <a href="#v4415-1">.</a></h2>
 <p>(2024.05.02)</p>
 <p>当バージョンのバイナリは Go 1.20.14 でビルドしました。<br>
 サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。</p>
@@ -1217,11 +1217,11 @@ nyagos.key[&quot;C-I&quot;] = function(this)
     assert(this:replacefrom(0,&quot;XXXXX&quot;))
 end
 </code></pre>
-<h2 id="v4415-0">v4.4.15_0</h2>
+<h2 id="v4415-0">v4.4.15_0 <a href="#v4415-0">.</a></h2>
 <p>(2024.04.07)</p>
 <p>当バージョンのバイナリは Go 1.20.14 でビルドしました。<br>
 サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。</p>
-<h3 id="heading-5">廃止・非推奨</h3>
+<h3 id="heading-5">廃止・非推奨 <a href="#heading-5">.</a></h3>
 <ul>
 <li>Lua 文法ではない設定ファイル <code>_nyagos</code> は非推奨とし添付をやめた。使用されている場合は実行するが、警告を表示するようにした</li>
 <li><code>use</code> は非推奨とした
@@ -1235,7 +1235,7 @@ end
 <li>ツール Lua 関数: <code>set(&quot;ENV=VALUE&quot;)</code>, <code>alias(&quot;NAME=DEFINE&quot;)</code> を定義する nyagos.d/aliasandset.lua を nyagos.d/catalog/ 以下へ移動</li>
 <li>Lua関数: <code>addpath</code> を削除</li>
 </ul>
-<h3 id="heading-6">新機能</h3>
+<h3 id="heading-6">新機能 <a href="#heading-6">.</a></h3>
 <ul>
 <li><code>%NO_COLOR%</code> が定義されていたら、プロンプト・コマンドライン・ls の着色を無効化</li>
 <li>サブコマンド補完(<code>require &quot;subcomplete&quot;</code>)関連
@@ -1244,7 +1244,7 @@ end
 </ul>
 </li>
 </ul>
-<h3 id="heading-7">不具合修正</h3>
+<h3 id="heading-7">不具合修正 <a href="#heading-7">.</a></h3>
 <ul>
 <li>SKK関連
 <ul>
@@ -1278,25 +1278,25 @@ end
 <li><code>foreach</code> で繰り返すコマンド入力のループ を Ctrl-C で中断できない不具合を修正<br>
 (本問題は <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2">4.4.6_2</a> のコミット<a href="https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae">8bf0a2acb25b152d3d40c188de09858c2ef572ae</a> で混入した模様。<a href="https://github.com/nyaosorg/nyagos/issues/383">#383</a>と<a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0">4.4.6_0</a> も参照のこと)</li>
 </ul>
-<h3 id="heading-8">ドキュメント</h3>
+<h3 id="heading-8">ドキュメント <a href="#heading-8">.</a></h3>
 <ul>
 <li>docs/07-LuaFunctions_*.md: <code>nyagos.shellexecute</code> について記述 (忘れてた!)</li>
 </ul>
-<h2 id="v4414-0">v4.4.14_0</h2>
+<h2 id="v4414-0">v4.4.14_0 <a href="#v4414-0">.</a></h2>
 <p>(2023.10.06)</p>
 <ul>
 <li>2023年下期版</li>
 <li>当バージョンのバイナリは Go 1.20.9 でビルド</li>
 <li>サポート対象は Windows 7, 8.1, 10, 11, WindowsServer 2008以降, Linux となります。</li>
 </ul>
-<h3 id="heading-9">新機能</h3>
+<h3 id="heading-9">新機能 <a href="#heading-9">.</a></h3>
 <ul>
 <li>nyagos.d/suffix.lua: 環境変数 NYAGOSEXPANDWILDCARD にリストされているコマンドのパラメータはワイルドカードを自動展開するようにした （例：<code>nyagos.env.NYAGOSEXPANDWILDCARD=&quot;gorename;gofmt&quot;</code> ）</li>
 <li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> 新オプション <code>glob_slash</code> を追加（起動オプション：<code>--glob-slash</code>, lua関数： <code>nyagos.option.glob_slash=true</code>、コマンドライン：<code>set -o glob_slash</code>）。設定されている時、ワイルドカード展開で <code>/</code> を使う</li>
 <li><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) サポート - <a href="https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.html">設定方法</a></li>
 <li>適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 <code>nyagos.atou_if_needed</code> を追加</li>
 </ul>
-<h3 id="heading-10">不具合修正</h3>
+<h3 id="heading-10">不具合修正 <a href="#heading-10">.</a></h3>
 <ul>
 <li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> <code>set -o glob</code> 時、二重引用符内の<code>*</code>,<code>?</code> がワイルドカードとして展開されていた(本来されるべきではない)</li>
 <li>Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に &quot;not supopported&quot; を返していたので、引数と同じ値を戻すようにした)</li>
@@ -1305,17 +1305,17 @@ end
 <li><a href="https://github.com/nyaosorg/nyagos/pull/434">#434</a> Lua で <code>nyagos.which('cp')</code> が機能しない問題を修正 (Thanks to <a href="https://github.com/ousttrue">@ousttrue</a>)</li>
 <li>全角空白(U+3000)の背景色が赤くなっていなかった不具合を修正</li>
 </ul>
-<h3 id="heading-11">破壊的変更</h3>
+<h3 id="heading-11">破壊的変更 <a href="#heading-11">.</a></h3>
 <ul>
 <li><code>nyagos.default_prompt</code> や <code>nyagos.prompt</code> は直接ターミナルへプロンプトを出力するのではなく、プロンプト文字列を戻り値として返すようにした。(<a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny#Editor">go-readline-ny.Editor</a> の deprecated フィールドの Prompt ではなく、PromptWriter を使用するための修正)</li>
 </ul>
-<h2 id="v4413-3">v4.4.13_3</h2>
+<h2 id="v4413-3">v4.4.13_3 <a href="#v4413-3">.</a></h2>
 <p>(2023.04.30)</p>
 <ul>
 <li>(#431) バッチファイル実行で変更した環境変数や、more/typeの出力など非UTF8からUTF8へ変更する時、4096バイトを越えるような行の変換で失敗する不具合を修正 (Thx. @8exBCYJi5ATL)</li>
 <li>(#431 とは別件で) 行のサイズが大きすぎると、more が行を出力しないことがある不具合を修正</li>
 </ul>
-<h2 id="v4413-2">v4.4.13_2</h2>
+<h2 id="v4413-2">v4.4.13_2 <a href="#v4413-2">.</a></h2>
 <p>(2023.04.25)</p>
 <p>2023年上期版</p>
 <ul>
@@ -1324,7 +1324,7 @@ end
 <li>(#429) カレントディレクトリが <code>C:</code> の時、<code>cd c:</code> が失敗する不具合を修正</li>
 <li>ANSIとUTF8間の変換に go-windows-mbcs v0.4 とgolang.org/x/text/transform を使うようにした</li>
 </ul>
-<h2 id="v4413-1">v4.4.13_1</h2>
+<h2 id="v4413-1">v4.4.13_1 <a href="#v4413-1">.</a></h2>
 <p>(2022.10.15)</p>
 <ul>
 <li>(#425) nyagos.d/suffix.lua で設定した拡張子を環境変数 PATHEXT ではなく、NYAGOSPATHEXT に登録するようにした。コマンド名補完は PATHEXT に加え、NYAGOSPATHEXT も参照するようにした  (Thx. @tsuyoshicho)</li>
@@ -1332,7 +1332,7 @@ end
 <li>(#426) 外部コマンドに対するワイルドカード展開が有効になっている時、空パラメータ(&quot;&quot;)が消えてしまう問題を修正 (Thx. @juggler999)</li>
 <li>(#427) '&quot;&quot;' が BEEP音プラス '(数字)' に置換されてしまう不具合を修正 (Thx.@hogewest)</li>
 </ul>
-<h2 id="v4413-0">v4.4.13_0</h2>
+<h2 id="v4413-0">v4.4.13_0 <a href="#v4413-0">.</a></h2>
 <p>(2022.09.24)</p>
 <ul>
 <li>セキュリティー警告対応のため、gopkg.in/yaml.v3 に依存するモジュールを直接利用しないようにした( <a href="https://github.com/nyaosorg/nyagos/security/dependabot/1">https://github.com/nyaosorg/nyagos/security/dependabot/1</a> )</li>
@@ -1346,7 +1346,7 @@ end
 <li>Windows以外で Makefile がエラーになる問題を修正</li>
 <li>(#424) fuzzy finder 拡張機能の統合 (Thx @tsuyoshicho)</li>
 </ul>
-<h2 id="v4412-0">v4.4.12_0</h2>
+<h2 id="v4412-0">v4.4.12_0 <a href="#v4412-0">.</a></h2>
 <p>(2022.04.29)</p>
 <ul>
 <li>カラー化コマンドラインの修正
@@ -1369,18 +1369,18 @@ end
 <li><code>rmdir FOLDER /s</code> とオプションをフォルダーの後に書けるようにした</li>
 <li>(#418) コマンドラインが ^ で終わっていた場合、Enter入力後も行入力を継続するようにした</li>
 </ul>
-<h2 id="v4411-0">v4.4.11_0</h2>
+<h2 id="v4411-0">v4.4.11_0 <a href="#v4411-0">.</a></h2>
 <p>(2021.12.10)</p>
 <ul>
 <li>コマンドラインをカラー化した</li>
 </ul>
-<h2 id="v4410-3">v4.4.10_3</h2>
+<h2 id="v4410-3">v4.4.10_3 <a href="#v4410-3">.</a></h2>
 <p>(2021.08.30)</p>
 <ul>
 <li>(#412) Windows10の、WindowsTerminalでない端末で、罫線キャラクターの幅が不正確になっていた問題に対応</li>
 <li>パッケージに新しいアイコンファイルを添付</li>
 </ul>
-<h2 id="v4410-2">v4.4.10_2</h2>
+<h2 id="v4410-2">v4.4.10_2 <a href="#v4410-2">.</a></h2>
 <p>(2021.07.23)</p>
 <ul>
 <li>コードページ437 で、%DATE% の置換結果が CMD.EXE 非互換になっている不具合を修正</li>
@@ -1389,13 +1389,13 @@ end
 <li>(#411) 英語部と日本語部が入れ変わっていたドキュメントを修正 (Thx! @tomato3713)</li>
 <li>テストコードの整理、自動化</li>
 </ul>
-<h2 id="v4410-1">v4.4.10_1</h2>
+<h2 id="v4410-1">v4.4.10_1 <a href="#v4410-1">.</a></h2>
 <p>(2021.07.02)</p>
 <ul>
 <li><code>./dll</code> というフォルダが存在して、CDPATH上に DLL がある時、入力されたパス <code>dll</code> が補完で DLL に置き変わっていた動作を修正(英大文字・小文字が変わってしまうのが問題)</li>
 <li>空白を含むディレクトリでの clone コマンドで、カレントディレクトリが維持されない不具合を修正</li>
 </ul>
-<h2 id="v4410-0">v4.4.10_0</h2>
+<h2 id="v4410-0">v4.4.10_0 <a href="#v4410-0">.</a></h2>
 <p>(2021.06.25)</p>
 <ul>
 <li>nyagos.d/aliases.lua: abspath をワイルドカード対応にした</li>
@@ -1409,17 +1409,17 @@ end
 <li>ビルドするのに PowerShell(make.cmd) ではなく Makefile(GNU Make)を使うようにした</li>
 <li>Linux でもビルドできるようにした</li>
 </ul>
-<h2 id="v449-7">v4.4.9_7</h2>
+<h2 id="v449-7">v4.4.9_7 <a href="#v449-7">.</a></h2>
 <p>(2021.05.22)</p>
 <ul>
 <li>(#409) <code>set -o glob</code> や <code>nyagos.option.glob=true</code> による外部コマンド向けワイルドカード展開が効かなくなっていた不具合を修正 (Thx @juggler999)</li>
 </ul>
-<h2 id="v449-6">v4.4.9_6</h2>
+<h2 id="v449-6">v4.4.9_6 <a href="#v449-6">.</a></h2>
 <p>(2021.05.07)</p>
 <ul>
 <li>(#406) nyagos.argsfilter で生引数がコンバートされず、suffixコマンドが期待どおり機能しなくなっていた不具合を修正 (Thx @tGqmJHoJKqgK)</li>
 </ul>
-<h2 id="v449-5">v4.4.9_5</h2>
+<h2 id="v449-5">v4.4.9_5 <a href="#v449-5">.</a></h2>
 <p>(2021.05.03)</p>
 <ul>
 <li>go-readline-ny v0.4.10: Yes/Noの回答のYが次のコマンドラインに入力される不具合を修正</li>
@@ -1432,7 +1432,7 @@ end
 <li>(#403) コマンドラインの不規則な二重引用符が外部コマンドに渡される時に削除される問題を修正</li>
 <li>(#405) fuzzyfinder catalog module を追加 (Thx @tsuyoshicho)</li>
 </ul>
-<h2 id="v449-4">v4.4.9_4</h2>
+<h2 id="v449-4">v4.4.9_4 <a href="#v449-4">.</a></h2>
 <p>(2021.03.06)</p>
 <ul>
 <li>(#400) サブコマンド補完向けのコマンドの存在チェック追加(Thx @tsuyoshicho )</li>
@@ -1446,7 +1446,7 @@ end
 <li>go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)</li>
 <li>go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)</li>
 </ul>
-<h2 id="v449-3">v4.4.9_3</h2>
+<h2 id="v449-3">v4.4.9_3 <a href="#v449-3">.</a></h2>
 <p>(2021.02.20)</p>
 <ul>
 <li>WindowsTerminal利用下の一行入力で Unicode の異体字をサポート</li>
@@ -1457,12 +1457,12 @@ end
 <li>ALT-/ キーバインドのサポート (Thx @masamitsu-murase) <a href="https://github.com/zetamatta/go-readline-ny/pull/1">https://github.com/zetamatta/go-readline-ny/pull/1</a></li>
 <li>WindowsTerminal 1.5 で絵文字や丸数字が入力できなくなっていた問題を修正</li>
 </ul>
-<h2 id="v449-2">v4.4.9_2</h2>
+<h2 id="v449-2">v4.4.9_2 <a href="#v449-2">.</a></h2>
 <p>(2021.01.08)</p>
 <ul>
 <li>(#342) Ctrl-C 押下時に子プロセスを kill しないようにした</li>
 </ul>
-<h2 id="v449-1">v4.4.9_1</h2>
+<h2 id="v449-1">v4.4.9_1 <a href="#v449-1">.</a></h2>
 <p>(2020.12.21)</p>
 <ul>
 <li>パス引数なしの<code>make install</code> が失敗する不具合を修正</li>
@@ -1470,7 +1470,7 @@ end
 <li>コンソール入力の more/clip/type がエコーバックしない時がある不具合を修正</li>
 <li>(#342) クラッシュさせないよう Ctrl-C 割り込みハンドリングを改善</li>
 </ul>
-<h2 id="v449-0">v4.4.9_0</h2>
+<h2 id="v449-0">v4.4.9_0 <a href="#v449-0">.</a></h2>
 <p>(2020.12.05)</p>
 <ul>
 <li>(#390,#394) Unicode の合字をサポート</li>
@@ -1484,7 +1484,7 @@ end
 <li>Fix: (#393) ウィンドウアクティブ後の最初のキーが２つ入力されます (Thanks to @tostos5963)</li>
 <li>アンチウィルスが誤判断をするので upx.exe を使用しないようにした</li>
 </ul>
-<h2 id="v448-0">v4.4.8_0</h2>
+<h2 id="v448-0">v4.4.8_0 <a href="#v448-0">.</a></h2>
 <p>(2020.10.03)</p>
 <ul>
 <li>git.lua: <code>git add</code> 向け補完
@@ -1504,7 +1504,7 @@ end
 <li>box.lua: Ctrl+O→ESCAPE でユーザが入力した単語が消える不具合を修正</li>
 <li>(#391) subcommand.lua: ghコマンド向けサブコマンド補完を追加 (Thanks to @tsuyoshicho)</li>
 </ul>
-<h2 id="v447-0">v4.4.7_0</h2>
+<h2 id="v447-0">v4.4.7_0 <a href="#v447-0">.</a></h2>
 <p>(2020.07.18)</p>
 <ul>
 <li>cd,pushd とその補完で bash のような %CDPATH% をサポートした</li>
@@ -1530,12 +1530,12 @@ end
 <li>Fix: <code>nyagos.exec{ ALIAS-COMMAND-USING $@ }</code> がパニックを引き起す不具合を修正</li>
 <li>補完可能なファイルのテーブルを返す関数 <code>nyagos.complete_for_files</code> を追加</li>
 </ul>
-<h2 id="v446-2">v4.4.6_2</h2>
+<h2 id="v446-2">v4.4.6_2 <a href="#v446-2">.</a></h2>
 <p>(2020.06.09)</p>
 <ul>
 <li>Fix: Ctrl-C で Ctrl-D のように終了していた (<code>4.4.6_0</code> で #383 修正時に発生)</li>
 </ul>
-<h2 id="v446-1">v4.4.6_1</h2>
+<h2 id="v446-1">v4.4.6_1 <a href="#v446-1">.</a></h2>
 <p>(2020.05.31)</p>
 <ul>
 <li>(#385) 最後にいたフォルダーが削除されたドライブの任意のフォルダーへ移動できなかった不具合を修正</li>
@@ -1543,7 +1543,7 @@ end
 <li>ドライブ移動(<code>x:</code>) でディレクトリヒストリにディレクトリをスタックしていなかった問題を修正</li>
 <li><code>nyagos.rawexec{...}</code>の最後の要素が無視されていた不具合を修正</li>
 </ul>
-<h2 id="v446-0">v4.4.6_0</h2>
+<h2 id="v446-0">v4.4.6_0 <a href="#v446-0">.</a></h2>
 <p>(2020.05.08)</p>
 <ul>
 <li>%DATE% と %TIME% を実装した。</li>
@@ -1554,7 +1554,7 @@ end
 <li><code>start</code> の後のタブキーは <code>which</code> のようにコマンド名補完をするようにした</li>
 <li><code>cd x:\y\z</code> が失敗した時、<code>x:\</code> (ルートディレクトリ)に移動する不具合を修正した</li>
 </ul>
-<h2 id="v445-4">v4.4.5_4</h2>
+<h2 id="v445-4">v4.4.5_4 <a href="#v445-4">.</a></h2>
 <p>(2020.03.13)</p>
 <ul>
 <li>github.com/BixData/gluabit32 が消えて C-xC-r C-xC-h , C-xC-g が動かなくなった問題を修正</li>
@@ -1563,7 +1563,7 @@ end
 <li>(#377) scoop でインストールされた git で <code>git gui</code> を実行すると、エスケープシーケンスが効かなくなる問題に対応</li>
 <li>パッケージを作成する時だけ、upx で実行ファイルを圧縮し、毎回のビルドでは使わないようにした</li>
 </ul>
-<h2 id="v445-3">v4.4.5_3</h2>
+<h2 id="v445-3">v4.4.5_3 <a href="#v445-3">.</a></h2>
 <p>(2020.03.08)</p>
 <ul>
 <li>UNCパスのキャッシュを <code>~/appdata/local/nyaos.org/computers.txt</code> ではなく <code>~/appdata/local/nyaos_org/computers.txt</code> にセーブするようにした ( 他の機能は <code>nyaos_org</code> フォルダーを使っているため )</li>
@@ -1573,13 +1573,13 @@ end
 <li>Windows10 のネイティブANSIエスケープシーケンスも mattn/go-colorable 経由で利用するようにした。</li>
 <li><code>echo $(gawk &quot;BEGIN{ print \&quot;\x22\x22\&quot; }&quot;)</code> で二重引用符が出ない不具合を修正</li>
 </ul>
-<h2 id="v445-2">v4.4.5_2</h2>
+<h2 id="v445-2">v4.4.5_2 <a href="#v445-2">.</a></h2>
 <p>(2019.10.26)</p>
 <ul>
 <li>(#375) <code>~randomstring</code> でクラッシュする不具合を修正</li>
 <li>(#374) 未来のタイムスタンプのファイルの<code>ls -l</code>で西暦がでなかった不具合を修正</li>
 </ul>
-<h2 id="v445-1">v4.4.5_1</h2>
+<h2 id="v445-1">v4.4.5_1 <a href="#v445-1">.</a></h2>
 <p>(2019.10.20)</p>
 <ul>
 <li>内蔵boxコマンドが複数アイテム選択に対応していなかった不具合を修正した</li>
@@ -1587,7 +1587,7 @@ end
 <li>Ctrl-O: 最後の \ の後に引用符を不可しないようにした。(NG: <code>&quot;Program Files\&quot;</code> -&gt; OK:<code>&quot;Program Files\</code>)</li>
 <li>nyagos.stat/access で ~ や %ENV% を解釈できるようにした</li>
 </ul>
-<h2 id="v445-0">v4.4.5_0</h2>
+<h2 id="v445-0">v4.4.5_0 <a href="#v445-0">.</a></h2>
 <p>(2019.09.01)</p>
 <ul>
 <li>Lua関数: <code>nyagos.dirname()</code> を実装</li>
@@ -1597,23 +1597,23 @@ end
 <li><code>nyagos.envadd(&quot;ENVNAME&quot;,&quot;DIR&quot;)</code> と <code>nyagos.envdel(&quot;ENVNAME&quot;,&quot;PATTERN&quot;)</code> を実装</li>
 <li><code>nyagos.pathjoin()</code> で <code>%ENVNAME%</code> と <code>~\</code>,<code>~/</code> を展開するようにした</li>
 </ul>
-<h2 id="v444-3">v4.4.4_3</h2>
+<h2 id="v444-3">v4.4.4_3 <a href="#v444-3">.</a></h2>
 <p>(2019.06.14)</p>
 <ul>
 <li>(#371) ファイル名に.を含む実行ファイルを参照できなかった</li>
 <li>diskfree でネットワークドライブに割り当てられた UNC パスを表示</li>
 </ul>
-<h2 id="v444-2">v4.4.4_2</h2>
+<h2 id="v444-2">v4.4.4_2 <a href="#v444-2">.</a></h2>
 <p>(2019.06.14)</p>
 <ul>
 <li>バックグラウンドでキャッシュを更新することで <code>\\host-name</code> の補完を高速化</li>
 </ul>
-<h2 id="v444-1">v4.4.4_1</h2>
+<h2 id="v444-1">v4.4.4_1 <a href="#v444-1">.</a></h2>
 <p>(2019.05.30)</p>
 <ul>
 <li>Linux 版バイナリがビルドできなかった問題を修正</li>
 </ul>
-<h2 id="v444-0-">v4.4.4_0 令和版</h2>
+<h2 id="v444-0-">v4.4.4_0 令和版 <a href="#v444-0-">.</a></h2>
 <p>(2019.05.27)</p>
 <ul>
 <li>(#233) <code>\\host-name\share-name</code> を補完できるようになった</li>
@@ -1636,7 +1636,7 @@ end
 <li>(#368) Lua関数 io.close() が未定義だった。</li>
 <li>(#332)(#369) io.open() のモード r+/w+/a+ を実装した。</li>
 </ul>
-<h2 id="v443-0">v4.4.3_0</h2>
+<h2 id="v443-0">v4.4.3_0 <a href="#v443-0">.</a></h2>
 <p>(2019.04.27)</p>
 <ul>
 <li>(#116) readline: Ctrl-Z,Ctrl-<code>_</code> による操作取り消しを実装</li>
@@ -1645,20 +1645,20 @@ end
 <li><code>cd 相対パス</code> の後のドライブ毎のカレントディレクトリが狂う不具合を修正<br>
 ( <code>cd C:\x\y\z ; cd .. ; cd \\localhost\c$ ; c: ; pwd</code> -&gt; <code>C:\x</code> (not <code>C:\x\y</code>) )</li>
 </ul>
-<h2 id="v442-3">v4.4.2_3</h2>
+<h2 id="v442-3">v4.4.2_3 <a href="#v442-3">.</a></h2>
 <p>(2019.04.13)</p>
 <ul>
 <li>Ctrl-RIGHT,ALT-F(次の単語へ), Ctrl-LEFT,ALT-B(前の単語へ)を実装</li>
 <li>インクリメンタルサーチ開始時にトップへ移動する時のバックスペースの数が間違っていた不具合を修正</li>
 <li>(#364) <code>ESC[0A</code> というエスケープシーケンスが使われていた不具合を修正</li>
 </ul>
-<h2 id="v442-1">v4.4.2_1</h2>
+<h2 id="v442-1">v4.4.2_1 <a href="#v442-1">.</a></h2>
 <p>(2019.04.05)</p>
 <ul>
 <li>diskfree: 行末の空白を削除</li>
 <li><code>~&quot;\Program Files&quot;</code> の最初の引用符が消えて、Files が引数に含まれない不具合を修正</li>
 </ul>
-<h2 id="v442-0">v4.4.2_0</h2>
+<h2 id="v442-0">v4.4.2_0 <a href="#v442-0">.</a></h2>
 <p>(2019.04.02)</p>
 <ul>
 <li>OLEオブジェクトからLuaオブジェクトへの変換が日付型などでパニックを起こす不具合を修正</li>
@@ -1687,7 +1687,7 @@ end
 <li>(#259) アプリケーションをダイアログで選んでファイルを開くコマンド <code>select</code> を実装</li>
 <li><code>diskfree</code> の出力フォーマットを修正</li>
 </ul>
-<h2 id="v441-1">v4.4.1_1</h2>
+<h2 id="v441-1">v4.4.1_1 <a href="#v441-1">.</a></h2>
 <p>(2019.02.15)</p>
 <ul>
 <li><code>print(nyagos.complete_for[&quot;COMMAND&quot;])</code>が機能するようにした</li>
@@ -1704,7 +1704,7 @@ end
 <li>(#357) 仏語キーボードで AltGrシフトが効かない問題を修正 (Thx! @crile)</li>
 <li>(#358) <code>foo.exe</code>と<code>foo.cmd</code>があった時、<code>foo</code>で<code>foo.exe</code>ではなく<code>foo.cmd</code> が呼び出される不具合を修正</li>
 </ul>
-<h2 id="v441-0">v4.4.1_0</h2>
+<h2 id="v441-0">v4.4.1_0 <a href="#v441-0">.</a></h2>
 <p>(2019.02.02)</p>
 <ul>
 <li><code>which</code>,<code>set</code>,<code>cd</code>,<code>pushd</code>,<code>rmdir</code>,<code>env</code> コマンド向け補完 (Thx! <a href="https://twitter.com/ChiyosukeF">ChiyosukeF</a>)</li>
@@ -1716,7 +1716,7 @@ end
 <li>(#354) box.lua のヒストリ補完が C-X h で起動していなかった不具合を修正 (Thx! @fushihara)</li>
 <li>nyagos.d/catalog/subcomplete.lua で <code>hub</code> コマンドの補完をサポート (Thx! @tsuyoshicho)</li>
 </ul>
-<h2 id="v440-1">v4.4.0_1</h2>
+<h2 id="v440-1">v4.4.0_1 <a href="#v440-1">.</a></h2>
 <p>(2019.01.19)</p>
 <ul>
 <li>&quot;--go-colorable&quot; と &quot;--enable-virtual-terminal-processing&quot; を廃止</li>
@@ -1724,12 +1724,12 @@ end
 <li>Linux用の copy と move を実装</li>
 <li>(#351) <code>END</code> と <code>F11</code> キーが動作もキー割り当てもできなかった不具合を修正</li>
 </ul>
-<h2 id="v440-0">v4.4.0_0</h2>
+<h2 id="v440-0">v4.4.0_0 <a href="#v440-0">.</a></h2>
 <p>(2019.01.12)</p>
 <ul>
 <li>バッチファイルを呼ぶ時に、<code>/V:ON</code> を CMD.EXE に使わないようにした</li>
 </ul>
-<h2 id="v440-beta">v4.4.0_beta</h2>
+<h2 id="v440-beta">v4.4.0_beta <a href="#v440-beta">.</a></h2>
 <p>(2019.01.02)</p>
 <ul>
 <li>Linux サポート(実験レベル)</li>
@@ -1753,7 +1753,7 @@ end
 </div><!-- "body" -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次</h3>
+<h3 id="heading">目次 <a href="#heading">.</a></h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1768,7 +1768,7 @@ end
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート</h3>
+<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>

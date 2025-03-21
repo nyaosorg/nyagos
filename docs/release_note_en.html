@@ -1131,11 +1131,11 @@
 </style></head><body>
 <div class="main markdown-body">
 <div class="header">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 </div><!-- "header" -->
 <div class="body">
 <p>English / <a href="release_note_ja.html">Japanese</a></p>
-<h2 id="snapshot">Snapshot</h2>
+<h2 id="snapshot">Snapshot <a href="#snapshot">.</a></h2>
 <ul>
 <li>Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.</li>
 <li>Syntax highlighting:
@@ -1153,16 +1153,16 @@
 <li>Removed support for the configuration file <code>_nyagos</code>, which had been deprecated since v4.4.15.</li>
 <li><code>set -o</code> now shows the current configuration in Lua syntax.</li>
 </ul>
-<h2 id="v4416-0">v4.4.16_0</h2>
+<h2 id="v4416-0">v4.4.16_0 <a href="#v4416-0">.</a></h2>
 <p>Oct.13, 2024</p>
-<h3 id="removed-features-and-deprecations">Removed features and Deprecations</h3>
+<h3 id="removed-features-and-deprecations">Removed features and Deprecations <a href="#removed-features-and-deprecations">.</a></h3>
 <ul>
 <li>Remove <code>nyagos.d/catalog/neco.lua</code></li>
 <li>Remove Lua function: <code>nyagos.msgbox</code></li>
 <li>Remove the feature to define <code>grep</code> as an alias of <code>findstr.exe</code> when <code>grep.exe</code> does not exist. It was the undocumented feature.</li>
 </ul>
-<h3 id="new-features">New features</h3>
-<h4 id="readline">Readline</h4>
+<h3 id="new-features">New features <a href="#new-features">.</a></h3>
+<h4 id="readline">Readline <a href="#readline">.</a></h4>
 <ul>
 <li>PowerShell 7-style input prediction
 <ul>
@@ -1173,7 +1173,7 @@
 </li>
 <li>Ctrl-P/N: save the modified entry when switching history, and restore when switching again, until Enter is pressed</li>
 </ul>
-<h4 id="lua-extensions">Lua extensions</h4>
+<h4 id="lua-extensions">Lua extensions <a href="#lua-extensions">.</a></h4>
 <ul>
 <li>Implement <code>nyagos.getkeys()</code> which returns the input key as a <a href="https://learn.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences#input-sequences">sequence</a> like <code>&quot;\027[A&quot;</code> instead of <code>nyagos.getkey()</code> which returns unicode.</li>
 <li>Enhance functions available in <code>nyagos.key[KEY] = function(this)...end</code>
@@ -1199,7 +1199,7 @@
 </ul>
 </li>
 </ul>
-<h3 id="documents">Documents</h3>
+<h3 id="documents">Documents <a href="#documents">.</a></h3>
 <ul>
 <li>Fix the broken links caused by renaming readme.md to README.md ( Thx @HAYASHI-Masayuki )
 v4.4.15_1</li>
@@ -1219,11 +1219,11 @@ nyagos.key[&quot;C-I&quot;] = function(this)
     assert(this:replacefrom(0,&quot;XXXXX&quot;))
 end
 </code></pre>
-<h2 id="v4415-0">v4.4.15_0</h2>
+<h2 id="v4415-0">v4.4.15_0 <a href="#v4415-0">.</a></h2>
 <p>Apr 7, 2024</p>
 <p>The binaries of this version are built with Go 1.20.14<br>
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
-<h3 id="deprecations">Deprecations</h3>
+<h3 id="deprecations">Deprecations <a href="#deprecations">.</a></h3>
 <ul>
 <li>The configuration file <code>_nyagos</code>, which is not a Lua syntax, is deprecated and no longer attached. When <code>_nyagos</code> is used, execute it, but print warning.</li>
 <li>The Lua function: <code>use</code> is now deprecated.
@@ -1237,7 +1237,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Remove lua functions: <code>addpath</code></li>
 <li>Move <code>nyagos.d/aliasandset.lua</code> to <code>nyagos/catalog/.</code> that defines tool lua functions: <code>set(&quot;ENV=VALUE&quot;)</code>, <code>alias(&quot;NAME=DEFINE&quot;)</code></li>
 </ul>
-<h3 id="new-features-1">New features</h3>
+<h3 id="new-features-1">New features <a href="#new-features-1">.</a></h3>
 <ul>
 <li>
 <p>When <code>%NO_COLOR%</code> is defined, disable the color of the prompt, the command-line, and ls command</p>
@@ -1249,7 +1249,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 </ul>
 </li>
 </ul>
-<h3 id="fixed-bugs">Fixed bugs</h3>
+<h3 id="fixed-bugs">Fixed bugs <a href="#fixed-bugs">.</a></h3>
 <ul>
 <li><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a>
 <ul>
@@ -1283,23 +1283,23 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: the loop to input commands for <code>foreach</code> could not be stopped with Ctrl-C<br>
 ( This problem was included in the commit <a href="https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae">8bf0a2acb25b152d3d40c188de09858c2ef572ae</a> of version <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2">4.4.6_2</a>. See also issue <a href="https://github.com/nyaosorg/nyagos/issues/383">#383</a> and <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0">4.4.6_0</a> )</li>
 </ul>
-<h3 id="documents-1">Documents</h3>
+<h3 id="documents-1">Documents <a href="#documents-1">.</a></h3>
 <ul>
 <li>docs/07-LuaFunctions_*.md: wrote about <code>nyagos.shellexecute</code> (forgotten!)</li>
 </ul>
-<h2 id="v4414-0">v4.4.14_0</h2>
+<h2 id="v4414-0">v4.4.14_0 <a href="#v4414-0">.</a></h2>
 <p>Oct 06, 2023</p>
 <p>The second half of 2023 edition.
 The binaries of this version are built with Go 1.20.9.<br>
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
-<h3 id="new-features-2">New features</h3>
+<h3 id="new-features-2">New features <a href="#new-features-2">.</a></h3>
 <ul>
 <li>nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in <code>%NYAGOSEXPANDWILDCARD%</code> (for example: <code>nyagos.env.NYAGOSEXPANDWILDCARD=&quot;gorename;gofmt&quot;</code> )</li>
 <li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> Add new option: <code>glob_slash</code> to enable with the option of executable <code>--glob-slash</code>, calling lua function like <code>nyagos.option.glob_slash=true</code>, or executing command <code>set -o glob_slash</code>. When it is set, <code>/</code> is used on wildcard expansion.</li>
 <li>Support Japanese input method editor: <a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) - <a href="https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.html">How To Setup</a></li>
 <li>Add the lua-function: <code>nyagos.atou_if_needed</code> that converts the string that is not valid utf8 one to utf8-string as the current codepage string.</li>
 </ul>
-<h3 id="fixed-bugs-1">Fixed bugs</h3>
+<h3 id="fixed-bugs-1">Fixed bugs <a href="#fixed-bugs-1">.</a></h3>
 <ul>
 <li><a href="https://github.com/nyaosorg/nyagos/discussions/433">#433</a> To avoid garbled characters, backquote uses <code>nyagos.atou_if_needed</code> to prevent UTF8 from being further converted to UTF8.</li>
 <li>Fix: On linux version, backquotation failed with error and did not work. ( because the lua function <code>atou</code> always returned &quot;not supported&quot;, it is changed to returning the same value with given )</li>
@@ -1308,18 +1308,18 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li><a href="https://github.com/nyaosorg/nyagos/pull/434">#434</a> Fix: <code>nyagos.which('cp')</code> does not work as expect on Linux (Thanks to <a href="https://github.com/ousttrue">@ousttrue</a>)</li>
 <li>Fix: the background color of U+3000 was not changed to red</li>
 </ul>
-<h3 id="breaking-changes">Breaking changes</h3>
+<h3 id="breaking-changes">Breaking changes <a href="#breaking-changes">.</a></h3>
 <ul>
 <li><code>nyagos.default_prompt</code> and <code>nyagos.prompt</code> return the prompt-string instead of output it to the terminal directly. This modifying is to use the new field <code>PromptWriter</code> of the <a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny#Editor">go-readline-ny.Editor</a> instead of <code>Prompt</code> that is deprecated.</li>
 </ul>
-<h2 id="v4413-3">v4.4.13_3</h2>
+<h2 id="v4413-3">v4.4.13_3 <a href="#v4413-3">.</a></h2>
 <p>Apr 30, 2023</p>
 <ul>
 <li>(#431) Fixed a bug that failed to convert lines exceeding 4096 bytes when changing from non-UTF8 to UTF8 such as environment variables changed by batch file execution or output of more/type. (Thx. @8exBCYJi5ATL)</li>
 <li>Fix: <code>more</code> sometimes printed no lines when the size of the line was too large.
 ( Due to a different issue than #431 )</li>
 </ul>
-<h2 id="v4413-2">v4.4.13_2</h2>
+<h2 id="v4413-2">v4.4.13_2 <a href="#v4413-2">.</a></h2>
 <p>Apr 25, 2023</p>
 <p>The first half of 2023 edition.</p>
 <ul>
@@ -1328,7 +1328,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#429) Fix <code>cd c:</code> fails when the current directory is <code>C:</code></li>
 <li>To convert between ANSI and UTF8 strings, use go-windows-mbcs v0.4 and golang.org/x/text/transform now</li>
 </ul>
-<h2 id="v4413-1">v4.4.13_1</h2>
+<h2 id="v4413-1">v4.4.13_1 <a href="#v4413-1">.</a></h2>
 <p>Oct 15, 2022</p>
 <ul>
 <li>(#425) nyagos.d/suffix.lua appends the extensions into %NYAGOSPATHEXT% instead of %PATHEXT% and the command-name completion now looks both %PATHEXT% and %NYAGOSPATHEXT% (Thx. @tsuyoshicho)</li>
@@ -1336,7 +1336,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed. (Thx. @juggler999)</li>
 <li>(#427) Fix: '&quot;&quot;' was replaced to '(DIGIT)' with BEEP (Thx. @hogewest)</li>
 </ul>
-<h2 id="v4413-0">v4.4.13_0</h2>
+<h2 id="v4413-0">v4.4.13_0 <a href="#v4413-0">.</a></h2>
 <p>Sep 24, 2022</p>
 <ul>
 <li>Fix: Unhandled exception in gopkg.in/yaml.v3 ( <a href="https://github.com/nyaosorg/nyagos/security/dependabot/1">https://github.com/nyaosorg/nyagos/security/dependabot/1</a> )</li>
@@ -1350,7 +1350,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fixed Makefile error on non-Windows</li>
 <li>(#424) fuzzy finder extension integration(catalog) (Thx @tsuyoshicho)</li>
 </ul>
-<h2 id="v4412-0">v4.4.12_0</h2>
+<h2 id="v4412-0">v4.4.12_0 <a href="#v4412-0">.</a></h2>
 <p>Apr 29, 2022</p>
 <ul>
 <li>Modified colored commandline
@@ -1373,18 +1373,18 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Support <code>rmdir FOLDER /s</code> (<code>/s</code> option can be put after folder list)</li>
 <li>(#418) When the command-line ends with ^ , continue line-input after enter-key is input.</li>
 </ul>
-<h2 id="v4411-0">v4.4.11_0</h2>
+<h2 id="v4411-0">v4.4.11_0 <a href="#v4411-0">.</a></h2>
 <p>Dec 10, 2021</p>
 <ul>
 <li>Color command-line</li>
 </ul>
-<h2 id="v4410-3">v4.4.10_3</h2>
+<h2 id="v4410-3">v4.4.10_3 <a href="#v4410-3">.</a></h2>
 <p>Aug 30, 2021</p>
 <ul>
 <li>(#412) Fix: The widths of Box Drawing (U+2500-257F) were incorrect on the legacy terminals (on not Windows Terminal in Windows10)</li>
 <li>Attach the package some new icon files</li>
 </ul>
-<h2 id="v4410-2">v4.4.10_2</h2>
+<h2 id="v4410-2">v4.4.10_2 <a href="#v4410-2">.</a></h2>
 <p>Jul 23, 2021</p>
 <ul>
 <li>Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437</li>
@@ -1393,13 +1393,13 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: (#411) the document that English part and Japanese were written in inverse places (Thx! @tomato3713)</li>
 <li>Organize and automate the test-codes</li>
 </ul>
-<h2 id="v4410-1">v4.4.10_1</h2>
+<h2 id="v4410-1">v4.4.10_1 <a href="#v4410-1">.</a></h2>
 <p>Jul 02, 2021</p>
 <ul>
 <li>Fix: When the folder <code>./dll</code> existed and the folder <code>DLL</code> existed on CDPATH, typed path dll was replaced to <code>DLL</code> with completion (The problem is that the path's cases were changed)</li>
 <li>Fix: clone: the current directory was not kept when the current directory name has a space</li>
 </ul>
-<h2 id="v4410-0">v4.4.10_0</h2>
+<h2 id="v4410-0">v4.4.10_0 <a href="#v4410-0">.</a></h2>
 <p>Jun 25, 2021</p>
 <ul>
 <li>nyagos.d/aliases.lua: abspath can be given wildcard names</li>
@@ -1413,17 +1413,17 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Use Makefile(GNU Make) to build instead of PowerShell(make.cmd)</li>
 <li>Can build on Linux</li>
 </ul>
-<h2 id="v449-7">v4.4.9_7</h2>
+<h2 id="v449-7">v4.4.9_7 <a href="#v449-7">.</a></h2>
 <p>May 22, 2021</p>
 <ul>
 <li>(#409) Fix: the wildcards expansion with <code>set -o glob</code> or <code>nyagos.option.glob=true</code> did not work for command alias (Thx @juggler999)</li>
 </ul>
-<h2 id="v449-6">v4.4.9_6</h2>
+<h2 id="v449-6">v4.4.9_6 <a href="#v449-6">.</a></h2>
 <p>May 07, 2021</p>
 <ul>
 <li>(#406) Fix: nyagos.argsfilter did not work, raw arguments were not converted and suffix command did not work as expected. (Thx @tGqmJHoJKqgK)</li>
 </ul>
-<h2 id="v449-5">v4.4.9_5</h2>
+<h2 id="v449-5">v4.4.9_5 <a href="#v449-5">.</a></h2>
 <p>May 03, 2021</p>
 <ul>
 <li>go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.</li>
@@ -1436,7 +1436,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#403) Fix: some irregular double-quotations in the commandline were removed when the parameter is sent to the external commands.</li>
 <li>(#405) Add fuzzyfinder catalog module (Thx @tsuyoshicho)</li>
 </ul>
-<h2 id="v449-4">v4.4.9_4</h2>
+<h2 id="v449-4">v4.4.9_4 <a href="#v449-4">.</a></h2>
 <p>Mar 06, 2021</p>
 <ul>
 <li>(#400) add check the existance of commands for subcomplete.lua (Thx @tsuyoshicho )</li>
@@ -1450,7 +1450,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)</li>
 <li>go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)</li>
 </ul>
-<h2 id="v449-3">v4.4.9_3</h2>
+<h2 id="v449-3">v4.4.9_3 <a href="#v449-3">.</a></h2>
 <p>Feb 20, 2021</p>
 <ul>
 <li>readline: on WindowsTerminal: Support Variation Selectors of Unicode</li>
@@ -1461,12 +1461,12 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Support ALT-/ key bind (Thx @masamitsu-murase) <a href="https://github.com/zetamatta/go-readline-ny/pull/1">https://github.com/zetamatta/go-readline-ny/pull/1</a></li>
 <li>readline: Fix the problem that emoji and circled digits could not be input in WindowsTerminal 1.5</li>
 </ul>
-<h2 id="v449-2">v4.4.9_2</h2>
+<h2 id="v449-2">v4.4.9_2 <a href="#v449-2">.</a></h2>
 <p>Jan 8, 2021</p>
 <ul>
 <li>(#342) Stop killing child process on Ctrl-C pressed.</li>
 </ul>
-<h2 id="v449-1">v4.4.9_1</h2>
+<h2 id="v449-1">v4.4.9_1 <a href="#v449-1">.</a></h2>
 <p>Dec 21, 2020</p>
 <ul>
 <li>Fix: the first <code>make install</code> without path parameter fails.</li>
@@ -1474,7 +1474,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: sometimes more, clip &amp; type from console did not echo input</li>
 <li>(#342) Improve Ctrl-C Interrupt handling to prevent from crash</li>
 </ul>
-<h2 id="v449-0">v4.4.9_0</h2>
+<h2 id="v449-0">v4.4.9_0 <a href="#v449-0">.</a></h2>
 <p>Dec 5, 2020</p>
 <ul>
 <li>(#390) Support zero-width-join sequence for WindowsTerminal</li>
@@ -1488,7 +1488,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: (#393) the first key after terminal-window activated was input twice. (Thanks to @tostos5963)</li>
 <li>Stop using upx.exe because antivirus software sometimes disjudges as a virus.</li>
 </ul>
-<h2 id="v448-0">v4.4.8_0</h2>
+<h2 id="v448-0">v4.4.8_0 <a href="#v448-0">.</a></h2>
 <p>Oct 3, 2020</p>
 <ul>
 <li>git.lua: completion for <code>git add</code>:
@@ -1508,7 +1508,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>box.lua: Fix: C-o and ESCAPE erased the user-input-word.</li>
 <li>(#391) subcommand.lua: add gh first level subcommand rule (Thanks to @tsuyoshicho)</li>
 </ul>
-<h2 id="v447-0">v4.4.7_0</h2>
+<h2 id="v447-0">v4.4.7_0 <a href="#v447-0">.</a></h2>
 <p>Jul 18, 2020</p>
 <ul>
 <li>cd,push and their completion supports %CDPATH% like bash</li>
@@ -1534,12 +1534,12 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: <code>nyagos.exec{ ALIAS-COMMAND-USING $@ }</code> causes panic</li>
 <li>Add: <code>nyagos.complete_for_files </code>(which returns table of completable files)`</li>
 </ul>
-<h2 id="v446-2">v4.4.6_2</h2>
+<h2 id="v446-2">v4.4.6_2 <a href="#v446-2">.</a></h2>
 <p>Jun 09, 2020</p>
 <ul>
 <li>Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at <code>4.4.6_0</code>)</li>
 </ul>
-<h2 id="v446-1">v4.4.6_1</h2>
+<h2 id="v446-1">v4.4.6_1 <a href="#v446-1">.</a></h2>
 <p>May 31, 2020</p>
 <ul>
 <li>(#385) Fix: Can not move to any folder in the other drive whose last folder is removed.</li>
@@ -1547,7 +1547,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: change drive(<code>x:</code>) did not push the last directory to directory history</li>
 <li>Fix: The last element of <code>nyagos.rawexec{...}</code> was ignored.</li>
 </ul>
-<h2 id="v446-0">v4.4.6_0</h2>
+<h2 id="v446-0">v4.4.6_0 <a href="#v446-0">.</a></h2>
 <p>May 08, 2020</p>
 <ul>
 <li>Implement: %DATE% and %TIME%</li>
@@ -1558,7 +1558,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Tab-key after <code>start</code> completes as a command name as <code>which</code></li>
 <li>Fix: when <code>cd x:\y\z</code> failed, the current directory is moved to x:\ (root)</li>
 </ul>
-<h2 id="v445-4">v4.4.5_4</h2>
+<h2 id="v445-4">v4.4.5_4 <a href="#v445-4">.</a></h2>
 <p>Mar 13, 2020</p>
 <ul>
 <li>box.lua: fixed C-xC-r, C-xC-h &amp; C-xC-g did not work because github.com/BixData/gluabit32 disappeared.</li>
@@ -1567,7 +1567,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#377) Fix: Escape sequence does not work after <code>git gui</code> installed by scoop</li>
 <li>make.cmd: do not compress executable on every building by upx.exe. Use it only on making packages.</li>
 </ul>
-<h2 id="v445-3">v4.4.5_3</h2>
+<h2 id="v445-3">v4.4.5_3 <a href="#v445-3">.</a></h2>
 <p>Mar 08, 2020</p>
 <ul>
 <li>UNC Path Cache is saved to <code>~/appdata/local/nyaos_org/computers.txt</code> rather than <code>~/appdata/local/nyaos.org/computers.txt</code> because other features use <code>nyaos_org</code> folder.</li>
@@ -1577,13 +1577,13 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Use Windows10's native ansi-escape-sequence through mattn/go-colorable</li>
 <li>Fix that <code>echo $(gawk &quot;BEGIN{ print \&quot;\x22\x22\&quot; }&quot;)</code> could not print double-quatations</li>
 </ul>
-<h2 id="v445-2">v4.4.5_2</h2>
+<h2 id="v445-2">v4.4.5_2 <a href="#v445-2">.</a></h2>
 <p>Oct 26, 2019</p>
 <ul>
 <li>(#375) Fix: <code>~randomstring</code> causes panic</li>
 <li>(#374) Fix: <code>ls -l</code> for future timestamp's files do not print year.</li>
 </ul>
-<h2 id="v445-1">v4.4.5_1</h2>
+<h2 id="v445-1">v4.4.5_1 <a href="#v445-1">.</a></h2>
 <p>Oct 20, 2019</p>
 <ul>
 <li>Fix that built-in <code>box</code> command did not support selecting multi-items.</li>
@@ -1591,7 +1591,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Ctrl-O: do not append a quotation after last backslach (NG: <code>&quot;Program Files\&quot;</code> -&gt; OK:<code>&quot;Program Files\</code>)</li>
 <li>nyagos.stat/access can understand ~ and %ENV% now.</li>
 </ul>
-<h2 id="v445-0">v4.4.5_0</h2>
+<h2 id="v445-0">v4.4.5_0 <a href="#v445-0">.</a></h2>
 <p>Sep 01, 2019</p>
 <ul>
 <li>Implement <code>nyagos.dirname()</code> as a Lua function.</li>
@@ -1601,23 +1601,23 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Implement <code>nyagos.envadd(&quot;ENVNAME&quot;,&quot;DIR&quot;)</code>,<code>nyagos.envdel(&quot;ENVNAME&quot;,&quot;PATTERN&quot;)</code></li>
 <li><code>nyagos.pathjoin()</code> now expands <code>%ENVNAME%</code> and <code>~\</code>,<code>~/</code></li>
 </ul>
-<h2 id="v444-3">v4.4.4_3</h2>
+<h2 id="v444-3">v4.4.4_3 <a href="#v444-3">.</a></h2>
 <p>Jul 07, 2019</p>
 <ul>
 <li>(#371) Could not execute <code>foo.bar.exe</code> as <code>foo.bar</code></li>
 <li>diskfree shows UNCPath assigned network drive</li>
 </ul>
-<h2 id="v444-2">v4.4.4_2</h2>
+<h2 id="v444-2">v4.4.4_2 <a href="#v444-2">.</a></h2>
 <p>Jun 14, 2019</p>
 <ul>
 <li>Speed up the completion for <code>\\host-name</code> by updating the cache on background.</li>
 </ul>
-<h2 id="v444-1">v4.4.4_1</h2>
+<h2 id="v444-1">v4.4.4_1 <a href="#v444-1">.</a></h2>
 <p>May 30, 2019</p>
 <ul>
 <li>Fix: executable for Linux could not be built.</li>
 </ul>
-<h2 id="v444-0-the-reiwa-edition">v4.4.4_0 the Reiwa edition</h2>
+<h2 id="v444-0-the-reiwa-edition">v4.4.4_0 the Reiwa edition <a href="#v444-0-the-reiwa-edition">.</a></h2>
 <p>May 27, 2019</p>
 <ul>
 <li>(#233) Completion for <code>\\host-name\share-name</code></li>
@@ -1640,7 +1640,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#368) Fix: Lua function: io.close() did not exist.</li>
 <li>(#332)(#369) Implement r+/w+/a+ mode for io.open</li>
 </ul>
-<h2 id="v443-0">v4.4.3_0</h2>
+<h2 id="v443-0">v4.4.3_0 <a href="#v443-0">.</a></h2>
 <p>Apr 27, 2019</p>
 <ul>
 <li>(#116) readline: implement UNDO on Ctrl-Z,Ctrl-<code>_</code></li>
@@ -1649,20 +1649,20 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: the current-dir per each drive was mistaken after <code>cd RELATIVE-PATH</code><br>
 ( <code>cd C:\x\y\z ; cd .. ; cd \\localhost\c$ ; c: ; pwd</code> -&gt; <code>C:\x</code> (not <code>C:\x\y</code>) )</li>
 </ul>
-<h2 id="v442-2">v4.4.2_2</h2>
+<h2 id="v442-2">v4.4.2_2 <a href="#v442-2">.</a></h2>
 <p>Apr 13, 2019</p>
 <ul>
 <li>Implement Ctrl-RIGHT,ALT-F(forward-word) and Ctrl-LEFT,ALT-B(backward-word)</li>
 <li>Fix: wrong the count of backspaces to move top on starting incremental-search</li>
 <li>(#364) Fix: <code>ESC[0A</code> was used.</li>
 </ul>
-<h2 id="v442-1">v4.4.2_1</h2>
+<h2 id="v442-1">v4.4.2_1 <a href="#v442-1">.</a></h2>
 <p>Apr 05, 2019</p>
 <ul>
 <li>diskfree: trim spaces from the end of line</li>
 <li>Fix: on<code>~&quot;\Program Files&quot;</code>, the first quotation disappeared and <code>Files</code> was not contained in the argument.</li>
 </ul>
-<h2 id="v442-0">v4.4.2_0</h2>
+<h2 id="v442-0">v4.4.2_0 <a href="#v442-0">.</a></h2>
 <p>Apr 02, 2019</p>
 <ul>
 <li>Fix converting OLE-Object to Lua-Object causes panic on <code>VT_DATE</code> and some types.</li>
@@ -1691,7 +1691,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#259) Implemented <code>select</code> command to open a file with dialog to select application.</li>
 <li>Fix the format of <code>diskfree</code>'s output</li>
 </ul>
-<h2 id="v441-1">v4.4.1_1</h2>
+<h2 id="v441-1">v4.4.1_1 <a href="#v441-1">.</a></h2>
 <p>Feb 15, 2019</p>
 <ul>
 <li>Made <code>print(nyagos.complete_for[&quot;COMMAND&quot;])</code> work</li>
@@ -1708,7 +1708,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>(#357) Fix: on a french keyboard, AltGr + anykey did not work (Thx! @crile)</li>
 <li>(#358) Fix: When <code>foo.exe</code> and <code>foo.cmd</code> exist, typing <code>foo</code> calls <code>foo.cmd</code> rather than <code>foo.exe</code></li>
 </ul>
-<h2 id="v441-0">v4.4.1_0</h2>
+<h2 id="v441-0">v4.4.1_0 <a href="#v441-0">.</a></h2>
 <p>Feb 02, 2019</p>
 <ul>
 <li>Support completion for <code>which</code>,<code>set</code>,<code>cd</code>,<code>pushd</code>,<code>rmdir</code> and <code>env</code> command. (Thx! <a href="https://twitter.com/ChiyosukeF">ChiyosukeF</a>)</li>
@@ -1720,7 +1720,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix (#354) box.lua: history completion did not start with C-X h (Thx! @fushihara)</li>
 <li>nyagos.d/catalog/subcomplete.lua supports completion for <code>hub</code> command. (Thx! @tsuyoshicho)</li>
 </ul>
-<h2 id="v440-1">v4.4.0_1</h2>
+<h2 id="v440-1">v4.4.0_1 <a href="#v440-1">.</a></h2>
 <p>Jan 19, 2019</p>
 <ul>
 <li>Abolished &quot;--go-colorable&quot; and &quot;--enable-virtual-terminal-processing&quot;</li>
@@ -1728,12 +1728,12 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Implemented <code>copy</code> and <code>move</code> for Linux</li>
 <li>(#351) Fix that <code>END</code> (and <code>F11</code>) key did not work</li>
 </ul>
-<h2 id="v440-0">v4.4.0_0</h2>
+<h2 id="v440-0">v4.4.0_0 <a href="#v440-0">.</a></h2>
 <p>Jan 12, 2019</p>
 <ul>
 <li>To call a batchfile, stop to use <code>/V:ON</code> for CMD.EXE</li>
 </ul>
-<h2 id="v440-beta">v4.4.0_beta</h2>
+<h2 id="v440-beta">v4.4.0_beta <a href="#v440-beta">.</a></h2>
 <p>Jan 02, 2019</p>
 <ul>
 <li>Support Linux (experimental)</li>
@@ -1757,7 +1757,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 </div><!-- "body" -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents</h3>
+<h3 id="contents">Contents <a href="#contents">.</a></h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1772,7 +1772,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note</h3>
+<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>

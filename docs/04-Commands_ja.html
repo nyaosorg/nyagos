@@ -1131,14 +1131,14 @@
 </style></head><body>
 <div class="main markdown-body">
 <div class="header">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 </div><!-- "header" -->
 <div class="body">
 <p><a href="./04-Commands_en.html">English</a> / Japanese</p>
-<h2 id="heading">内蔵コマンド</h2>
+<h2 id="heading">内蔵コマンド <a href="#heading">.</a></h2>
 <p>これらのコマンドはコマンド名とは別にエイリアスを持っています。
 たとえば <code>ls</code> は <code>__ls__</code> というエイリアスを持っています。</p>
-<h4 id="bindkey--"><code>bindkey キー名 機能名</code></h4>
+<h4 id="bindkey--"><code>bindkey キー名 機能名</code> <a href="#bindkey--">.</a></h4>
 <p>一行入力のキー操作をカスタマイズします。</p>
 <p>キー名</p>
 <pre><code>    &quot;C_A&quot; &quot;C_B&quot; ... &quot;C_Z&quot; &quot;M_A&quot; &quot;M_B&quot; ... &quot;M_Z&quot;
@@ -1154,7 +1154,7 @@
     &quot;END_OF_LINE&quot; &quot;COMPLETE&quot; &quot;PREVIOUS_HISTORY&quot; &quot;NEXT_HISTORY&quot; &quot;INTR&quot;
     &quot;ISEARCH_BACKWARD&quot; &quot;REPAINT_ON_NEWLINE&quot;
 </code></pre>
-<h4 id="cd-"><code>cd ドライブ:ディレクトリ</code></h4>
+<h4 id="cd-"><code>cd ドライブ:ディレクトリ</code> <a href="#cd-">.</a></h4>
 <p>現在のカレントドライブ、ディレクトリを変更します。
 引数を省略すると、CMD.EXE と違い、環境変数 HOME 、あるいは
 USERPROFILE の差す先のディレクトリへ移動します。
@@ -1169,23 +1169,23 @@ CMD.EXE と違い、ドライブも同時に変更します。</p>
 <p>ディレクトリ名が : / \ といった文字を含まず、カレントディレクトリに
 存在しない場合、環境変数 CDPATH にリストされたディレクトリの
 サブディレクトリを検索します。</p>
-<h4 id="chmod-ooo-files"><code>chmod ooo FILE(s)</code></h4>
-<h4 id="env-envvar1val1-envvar2val2--command-args"><code>env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)</code></h4>
+<h4 id="chmod-ooo-files"><code>chmod ooo FILE(s)</code> <a href="#chmod-ooo-files">.</a></h4>
+<h4 id="env-envvar1val1-envvar2val2--command-args"><code>env ENVVAR1=VAL1 ENVVAR2=VAL2 ... COMMAND ARG(s)</code> <a href="#env-envvar1val1-envvar2val2--command-args">.</a></h4>
 <p>COMMAND が実行されている間だけ、環境変数の値を変更します。</p>
-<h4 id="more"><code>more</code></h4>
+<h4 id="more"><code>more</code> <a href="#more">.</a></h4>
 <p>UTF8 と ANSI テキストの双方をサポートします。(自動判別)</p>
-<h4 id="exit"><code>exit</code></h4>
+<h4 id="exit"><code>exit</code> <a href="#exit">.</a></h4>
 <p>NYAGOS を終了します。</p>
-<h4 id="foreach">foreach</h4>
+<h4 id="foreach">foreach <a href="#foreach">.</a></h4>
 <p><code>foreach</code> <em>VAR</em> <em>VAL1</em> <em>VAL2</em> ...
 STATEMENTS
 <code>end</code></p>
-<h4 id="history-"><code>history [件数]</code></h4>
+<h4 id="history-"><code>history [件数]</code> <a href="#history-">.</a></h4>
 <p>ヒストリ内容を表示します。件数を省略すると、最近の10件が表示されます。</p>
-<h4 id="if">if</h4>
-<h5 id="inline-if">inline-if</h5>
+<h4 id="if">if <a href="#if">.</a></h4>
+<h5 id="inline-if">inline-if <a href="#inline-if">.</a></h5>
 <p><code>if</code> <em>COND</em> <em>THEN-STATEMENT</em></p>
-<h5 id="block-if">block-if</h5>
+<h5 id="block-if">block-if <a href="#block-if">.</a></h5>
 <p><code>if</code> <em>COND</em> [<code>then</code>]
 <em>THEN-BLOCK</em>
 <code>else</code>
@@ -1219,17 +1219,17 @@ STATEMENTS
 <p>if <em>COND</em> is false, execute <em>ELSE-BLOCK</em> or nothing.</p>
 </li>
 </ul>
-<h4 id="kill-pid"><code>kill PID</code></h4>
+<h4 id="kill-pid"><code>kill PID</code> <a href="#kill-pid">.</a></h4>
 <p>PID で示されるプロセスを強制終了します</p>
-<h4 id="killall-name"><code>killall NAME...</code></h4>
+<h4 id="killall-name"><code>killall NAME...</code> <a href="#killall-name">.</a></h4>
 <p>キーワードを含むプロセスを強制終了します</p>
-<h4 id="ln--s-src-dst"><code>ln [-s] SRC DST</code></h4>
+<h4 id="ln--s-src-dst"><code>ln [-s] SRC DST</code> <a href="#ln--s-src-dst">.</a></h4>
 <p>ハードリンク、もしくは、シンボリックリンクを作成します。
 <code>nyagos.d\lns.lua</code> で定義されるエイリアス lns は UAC 昇格と
 <code>ln -s</code> を実行します。</p>
-<h4 id="lnk-filename-shortcut-working-directory"><code>lnk FILENAME SHORTCUT [WORKING-DIRECTORY]</code></h4>
+<h4 id="lnk-filename-shortcut-working-directory"><code>lnk FILENAME SHORTCUT [WORKING-DIRECTORY]</code> <a href="#lnk-filename-shortcut-working-directory">.</a></h4>
 <p>ショートカットを作成します</p>
-<h4 id="ls---"><code>ls [-オプション] …</code></h4>
+<h4 id="ls---"><code>ls [-オプション] …</code> <a href="#ls---">.</a></h4>
 <p>ディレクトリの一覧を表示します。
 サポートしているオプションは以下の通りです。</p>
 <ul>
@@ -1260,16 +1260,16 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <li><code>s</code> - システムファイル</li>
 <li><code>h</code> - 隠しファイル</li>
 </ul>
-<h4 id="ps"><code>ps</code></h4>
+<h4 id="ps"><code>ps</code> <a href="#ps">.</a></h4>
 <p>プロセスのリストを表示します。</p>
-<h4 id="pwd"><code>pwd</code></h4>
+<h4 id="pwd"><code>pwd</code> <a href="#pwd">.</a></h4>
 <p>現在のカレントドライブ + ディレクトリを表示します。</p>
 <ul>
 <li><code>pwd -N</code> : N 回 cd で移動する前のディレクトリを表示します。</li>
 <li><code>pwd -L</code> : 環境から PWD を得る (default)</li>
 <li><code>pwd -P</code> : 全てのシンボリックリンクをたどる</li>
 </ul>
-<h4 id="set-"><code>set 変数名=値</code></h4>
+<h4 id="set-"><code>set 変数名=値</code> <a href="#set-">.</a></h4>
 <p>環境変数に値を設定します。値に空白等を含む場合、CMD.EXE と同様に
 「<code>set &quot;変数名=値&quot;</code>」とします。= 以降を省略すると、現在の変数の内容を
 表示します。</p>
@@ -1279,7 +1279,7 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <li><code>set ENV^=値</code> ... <code>set ENV=値;%ENV%</code> と等価ですが、重複した値は削除します</li>
 <li><code>set ENV+=値</code> ... <code>set ENV=%ENV%;値</code> と等価ですが、重複した値は削除します</li>
 </ul>
-<h4 id="set--o-option-name-set-o-option-name"><code>set -o OPTION-NAME</code>, <code>set +o OPTION-NAME</code></h4>
+<h4 id="set--o-option-name-set-o-option-name"><code>set -o OPTION-NAME</code>, <code>set +o OPTION-NAME</code> <a href="#set--o-option-name-set-o-option-name">.</a></h4>
 <p><code>-o</code> は OPTION を設定し、<code>+o</code> は解除します。</p>
 <ul>
 <li><code>-o glob</code> 外部コマンドに対するワイルドカード展開を有効にします。</li>
@@ -1288,34 +1288,34 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <li><code>+o usesource</code> バッチファイルから環境変数の変更を読みとるには source コマンドを使う必要があります。</li>
 <li><code>-o cleaup_buffer</code> 一行入力の前に入力バッファをクリアします。</li>
 </ul>
-<h4 id="set--a-equation-set-a-equation"><code>set -a &quot;EQUATION&quot;</code>, <code>set /a &quot;EQUATION&quot;</code></h4>
+<h4 id="set--a-equation-set-a-equation"><code>set -a &quot;EQUATION&quot;</code>, <code>set /a &quot;EQUATION&quot;</code> <a href="#set--a-equation-set-a-equation">.</a></h4>
 <p>CMD.EXE と同じ。式を評価する</p>
-<h4 id="select-filenames"><code>select FILENAME(s)...</code></h4>
+<h4 id="select-filenames"><code>select FILENAME(s)...</code> <a href="#select-filenames">.</a></h4>
 <p>アプリケーションを選択するダイアログ付きでファイルを開きます</p>
-<h4 id="touch--t-ccyymmddhhmmss--r--"><code>touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r 参照ファイル] ファイル名…</code></h4>
+<h4 id="touch--t-ccyymmddhhmmss--r--"><code>touch [-t [CC[YY]MMDDhhmm[.ss]]] [-r 参照ファイル] ファイル名…</code> <a href="#touch--t-ccyymmddhhmmss--r--">.</a></h4>
 <p>ファイルが存在すれば更新日時を更新し、存在しなければ新規作成します。</p>
-<h4 id="which--a-command-name"><code>which [-a] COMMAND-NAME</code></h4>
+<h4 id="which--a-command-name"><code>which [-a] COMMAND-NAME</code> <a href="#which--a-command-name">.</a></h4>
 <p>コマンド名に対して、どのファイルが実行されるか表示します</p>
 <ul>
 <li><code>-a</code> - %PATH% 上の全ての実行ファイルを表示します。</li>
 </ul>
-<h4 id="copy-source-filename-destinate-filename"><code>copy SOURCE-FILENAME DESTINATE-FILENAME</code></h4>
-<h4 id="copy-source-filenames-desinate-directory"><code>copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY</code></h4>
-<h4 id="copy-source-filenames-shortcutlnk"><code>copy SOURCE-FILENAME(S)... SHORTCUT(*.lnk)</code></h4>
-<h4 id="move-old-filename-new-filename"><code>move OLD-FILENAME NEW-FILENAME</code></h4>
-<h4 id="move-source-filenames-desitinate-directory"><code>move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY</code></h4>
-<h4 id="move-source-filenames-shortcutlnk"><code>move SOURCE-FILENAME(S)... SHORTCUT(*.lnk)</code></h4>
-<h4 id="del-files"><code>del FILE(S)...</code></h4>
-<h4 id="erase-files"><code>erase FILE(S)...</code></h4>
-<h4 id="mkdir-p-newdirs"><code>mkdir [/p] NEWDIR(S)...</code></h4>
-<h4 id="rmdir-s-dirs"><code>rmdir [/s] DIR(S)...</code></h4>
-<h4 id="pushd"><code>pushd</code></h4>
-<h4 id="popd"><code>popd</code></h4>
-<h4 id="dirs"><code>dirs</code></h4>
-<h4 id="diskfree"><code>diskfree</code></h4>
-<h4 id="diskused"><code>diskused</code></h4>
+<h4 id="copy-source-filename-destinate-filename"><code>copy SOURCE-FILENAME DESTINATE-FILENAME</code> <a href="#copy-source-filename-destinate-filename">.</a></h4>
+<h4 id="copy-source-filenames-desinate-directory"><code>copy SOURCE-FILENAME(S)... DESINATE-DIRECTORY</code> <a href="#copy-source-filenames-desinate-directory">.</a></h4>
+<h4 id="copy-source-filenames-shortcutlnk"><code>copy SOURCE-FILENAME(S)... SHORTCUT(*.lnk)</code> <a href="#copy-source-filenames-shortcutlnk">.</a></h4>
+<h4 id="move-old-filename-new-filename"><code>move OLD-FILENAME NEW-FILENAME</code> <a href="#move-old-filename-new-filename">.</a></h4>
+<h4 id="move-source-filenames-desitinate-directory"><code>move SOURCE-FILENAME(S)... DESITINATE-DIRECTORY</code> <a href="#move-source-filenames-desitinate-directory">.</a></h4>
+<h4 id="move-source-filenames-shortcutlnk"><code>move SOURCE-FILENAME(S)... SHORTCUT(*.lnk)</code> <a href="#move-source-filenames-shortcutlnk">.</a></h4>
+<h4 id="del-files"><code>del FILE(S)...</code> <a href="#del-files">.</a></h4>
+<h4 id="erase-files"><code>erase FILE(S)...</code> <a href="#erase-files">.</a></h4>
+<h4 id="mkdir-p-newdirs"><code>mkdir [/p] NEWDIR(S)...</code> <a href="#mkdir-p-newdirs">.</a></h4>
+<h4 id="rmdir-s-dirs"><code>rmdir [/s] DIR(S)...</code> <a href="#rmdir-s-dirs">.</a></h4>
+<h4 id="pushd"><code>pushd</code> <a href="#pushd">.</a></h4>
+<h4 id="popd"><code>popd</code> <a href="#popd">.</a></h4>
+<h4 id="dirs"><code>dirs</code> <a href="#dirs">.</a></h4>
+<h4 id="diskfree"><code>diskfree</code> <a href="#diskfree">.</a></h4>
+<h4 id="diskused"><code>diskused</code> <a href="#diskused">.</a></h4>
 <p>これらの内蔵版は、上書きや削除の際に常にプロンプトで実行可否を問い合わせます。</p>
-<h4 id="source-"><code>source バッチファイル名</code></h4>
+<h4 id="source-"><code>source バッチファイル名</code> <a href="#source-">.</a></h4>
 <p>バッチファイルを CMD.EXE で実行して、CMD.EXE が変更した環境変数と
 カレントディレクトリを NYAGOS.EXE に取り込みます。</p>
 <ul>
@@ -1328,28 +1328,28 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <li><code>-d</code> オプションで、<code>source</code> が作成する一時ファイルが削除されなくなります</li>
 <li><code>-v</code> オプションで、各一時ファイルが標準エラー出力に出力されます</li>
 </ul>
-<h4 id="open-files"><code>open FILE(s)</code></h4>
+<h4 id="open-files"><code>open FILE(s)</code> <a href="#open-files">.</a></h4>
 <p>Windows で関連付けられたアプリケーションでファイルを開きます。</p>
-<h4 id="clone"><code>clone</code></h4>
+<h4 id="clone"><code>clone</code> <a href="#clone">.</a></h4>
 <p>NYAGOS を別ウインドウで開きます。</p>
-<h4 id="su"><code>su</code></h4>
+<h4 id="su"><code>su</code> <a href="#su">.</a></h4>
 <p>UAC 昇格された NYAGOS を別ウインドウで開きます。</p>
-<h4 id="su-command-argss"><code>su COMMAND ARGS(s)...</code></h4>
+<h4 id="su-command-argss"><code>su COMMAND ARGS(s)...</code> <a href="#su-command-argss">.</a></h4>
 <p>UAC 昇格させて、コマンドを実行します。</p>
-<h3 id="lua-">Lua で実装されたコマンド</h3>
-<h4 id="lua-e-inline-lua-commands-nyagosdaliaseslua"><code>lua_e &quot;INLINE-LUA-COMMANDS&quot;</code> (nyagos.d\aliases.lua)</h4>
+<h3 id="lua-">Lua で実装されたコマンド <a href="#lua-">.</a></h3>
+<h4 id="lua-e-inline-lua-commands-nyagosdaliaseslua"><code>lua_e &quot;INLINE-LUA-COMMANDS&quot;</code> (nyagos.d\aliases.lua) <a href="#lua-e-inline-lua-commands-nyagosdaliaseslua">.</a></h4>
 <p>内蔵Lua で引数の Lua コードを実行します。</p>
-<h4 id="lua-f-lua-script-filename-args-nyagosdaliaseslua"><code>lua_f &quot;LUA-SCRIPT-FILENAME&quot; ARG(s)...</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="lua-f-lua-script-filename-args-nyagosdaliaseslua"><code>lua_f &quot;LUA-SCRIPT-FILENAME&quot; ARG(s)...</code> (nyagos.d\aliases.lua) <a href="#lua-f-lua-script-filename-args-nyagosdaliaseslua">.</a></h4>
 <p>内蔵Lua で Lua スクリプトを実行します。</p>
-<h4 id="trash-files-nyagosdtrashlua"><code>trash FILE(S)</code> (nyagos.d\trash.lua)</h4>
+<h4 id="trash-files-nyagosdtrashlua"><code>trash FILE(S)</code> (nyagos.d\trash.lua) <a href="#trash-files-nyagosdtrashlua">.</a></h4>
 <p>ファイルを Windows のゴミ箱に移動させます。</p>
-<h4 id="wildcard-command-args-nyagosdaliaseslua"><code>wildcard COMMAND ARG(s)...</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="wildcard-command-args-nyagosdaliaseslua"><code>wildcard COMMAND ARG(s)...</code> (nyagos.d\aliases.lua) <a href="#wildcard-command-args-nyagosdaliaseslua">.</a></h4>
 <p>ARG(s) に含まれるワイルドカードを展開して、COMMAND を実行します。</p>
 <!-- raw HTML omitted -->
 </div><!-- "body" -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次</h3>
+<h3 id="heading">目次 <a href="#heading">.</a></h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1364,7 +1364,7 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート</h3>
+<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>

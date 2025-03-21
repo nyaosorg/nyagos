@@ -1131,11 +1131,11 @@
 </style></head><body>
 <div class="main markdown-body">
 <div class="header">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 </div><!-- "header" -->
 <div class="body">
 <p><a href="./history-4.1_en.html">English</a> / Japanese</p>
-<h1 id="since-41">Since 4.1</h1>
+<h1 id="since-41">Since 4.1 <a href="#since-41">.</a></h1>
 <p>NYAGOS 4.0 では、パイプライン等で実行される複数の goroutine から
 同一の Lua インスタンスを呼び出すことがあり、Lua API 呼び出し時に
 panic を起こす問題がありました。</p>
@@ -1177,25 +1177,25 @@ share.foo = t
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-419-3">NYAGOS 4.1.9_3</h1>
+<h1 id="nyagos-419-3">NYAGOS 4.1.9_3 <a href="#nyagos-419-3">.</a></h1>
 <p>(4017.05.13)</p>
 <ul>
 <li>Fix #214: .nyagos でのバッチ実行時に <code>main/lua_cmd.go: cmdExec: not found interpreter object</code> と表示される</li>
 </ul>
-<h1 id="nyagos-419-2">NYAGOS 4.1.9_2</h1>
+<h1 id="nyagos-419-2">NYAGOS 4.1.9_2 <a href="#nyagos-419-2">.</a></h1>
 <p>(2017.04.03)</p>
 <ul>
 <li>Fix #191: <code>-c</code> オプションが <code>option parse error</code> を表示していた。</li>
 <li>昇格していたら true を返す Lua 関数 <code>nyagos.elevated()</code></li>
 <li>デフォルトのタイトルバーは昇格時に <code>(admin)</code> と表示</li>
 </ul>
-<h1 id="nyagos-419-1">NYAGOS 4.1.9_1</h1>
+<h1 id="nyagos-419-1">NYAGOS 4.1.9_1 <a href="#nyagos-419-1">.</a></h1>
 <p>(2017.03.28)</p>
 <ul>
 <li>Fix: 4.1.9_0 の一行入力でカーソルが時々見えなくなる問題を修正</li>
 <li>新go-colorableの機能で、 でコマンドプロンプトのタイトルを変更するエスケープシーケンス <code>\033]0;タイトル\007</code> が使えるようになった。</li>
 </ul>
-<h1 id="nyagos-419-0">NYAGOS 4.1.9_0</h1>
+<h1 id="nyagos-419-0">NYAGOS 4.1.9_0 <a href="#nyagos-419-0">.</a></h1>
 <p>(2017.03.27)</p>
 <ul>
 <li>Fix: <code>open http(s)://...</code> が機能しなかった不具合を修正</li>
@@ -1228,7 +1228,7 @@ share.foo = t
 </li>
 <li><code>lua_e &quot;nyagos.key = function(this) end&quot;</code> というキーアサインをサポート</li>
 </ul>
-<h1 id="nyagos-418-0">NYAGOS 4.1.8_0</h1>
+<h1 id="nyagos-418-0">NYAGOS 4.1.8_0 <a href="#nyagos-418-0">.</a></h1>
 <p>(2017.02.15)</p>
 <ul>
 <li>COMMAND.COMバッチ風の新カスタマイズファイルとして <code>_nyagos</code> を用意</li>
@@ -1247,7 +1247,7 @@ share.foo = t
 <li>'#' 以降をコメントとみなすようにした</li>
 <li>open,clone,su,sudo を Lua から Go に書き直した</li>
 </ul>
-<h1 id="nyagos-417-0">NYAGOS 4.1.7_0</h1>
+<h1 id="nyagos-417-0">NYAGOS 4.1.7_0 <a href="#nyagos-417-0">.</a></h1>
 <p>(2016.11.29)</p>
 <ul>
 <li>nyagos.lua を廃止した。その役割は nyagos.exe 自身が担うようにした。</li>
@@ -1268,12 +1268,12 @@ share.foo = t
 * M-g: Git のリビジョン名</li>
 <li>Fix: {a,b,c} といったブレース展開が、引用符の中でも機能していた不具合を修正</li>
 </ul>
-<h1 id="nyagos-416-1">NYAGOS 4.1.6_1</h1>
+<h1 id="nyagos-416-1">NYAGOS 4.1.6_1 <a href="#nyagos-416-1">.</a></h1>
 <p>(2016.09.07)</p>
 <ul>
 <li>Fix: パッケージの ZIP ファイルに lua53.dll が含まれていなかった。</li>
 </ul>
-<h1 id="nyagos-416-0">NYAGOS 4.1.6_0</h1>
+<h1 id="nyagos-416-0">NYAGOS 4.1.6_0 <a href="#nyagos-416-0">.</a></h1>
 <p>(2016.09.07)</p>
 <ul>
 <li>スペースとバックスペースで行っていた行末削除に &quot;\x1B[0K&quot; を使うようにした</li>
@@ -1282,13 +1282,13 @@ share.foo = t
 <li>Fix #164: <code>cd --history</code> でカレントディレクトリがホームに移動していた</li>
 <li>stat 取得の成否にかかわらず、<code>[\\/:]\.{0,2}$</code> にマッチする宛先パスをディレクトリとみなすようにした。</li>
 </ul>
-<h1 id="nyagos-415-1">NYAGOS 4.1.5_1</h1>
+<h1 id="nyagos-415-1">NYAGOS 4.1.5_1 <a href="#nyagos-415-1">.</a></h1>
 <p>(2016.07.31)</p>
 <ul>
 <li>Fix #157++: 端末サイズ変更後、追記でズレる不具合を修正</li>
 <li>4.0.x の不適切なデフォルト ~/.nyagos 向けに、prompter という名前の上位値がクロージャ(nyagos.prompt)で使われていたらエラーにするようにした (#155,#158)</li>
 </ul>
-<h1 id="nyagos-415-0">NYAGOS 4.1.5_0</h1>
+<h1 id="nyagos-415-0">NYAGOS 4.1.5_0 <a href="#nyagos-415-0">.</a></h1>
 <p>(2016.07.31)</p>
 <ul>
 <li>カレントディレクトリのヒストリがゼロの時に peco がハングしないように、<code>cd --history</code> の先頭にカレントディレクトリを出力するようにした。</li>
@@ -1300,13 +1300,13 @@ share.foo = t
 <li>Fix #157: 端末サイズ変更時の、一行入力の表示幅を再設定するようにした</li>
 <li>内蔵パッケージを別レポジトリヘ外出し</li>
 </ul>
-<h1 id="nyagos-414-1">NYAGOS 4.1.4_1</h1>
+<h1 id="nyagos-414-1">NYAGOS 4.1.4_1 <a href="#nyagos-414-1">.</a></h1>
 <p>(2016.06.12)</p>
 <ul>
 <li><code>&amp;&amp;</code> や <code>||</code> が <code> ;</code>と等価になっていた不具合を修正(#151)</li>
 <li>@DeaR さん提供の autocd.lua &amp; autols.lua を nyagos.d/catalog に追加(#149)</li>
 </ul>
-<h1 id="nyagos-414-0">NYAGOS 4.1.4_0</h1>
+<h1 id="nyagos-414-0">NYAGOS 4.1.4_0 <a href="#nyagos-414-0">.</a></h1>
 <p>(2016.05.29)</p>
 <ul>
 <li>簡易OLEインターフェイスを実装した。NYOLE.DLL は不要になった。</li>
@@ -1315,14 +1315,14 @@ share.foo = t
 <li>Fix: Lua のデフォルトファイルハンドル(標準入出力)がバイナリモードでオープンされていた(#146)</li>
 <li>nyagos.d/catalog/peco.lua: C-r: 表示順を反転させて、速度を改善した。</li>
 </ul>
-<h1 id="nyagos-413-1">NYAGOS 4.1.3_1</h1>
+<h1 id="nyagos-413-1">NYAGOS 4.1.3_1 <a href="#nyagos-413-1">.</a></h1>
 <p>(2016.05.08)</p>
 <ul>
 <li>Fix: ヒストリがファイルに保存されない #138</li>
 <li>Fix: nyagos.history を削除すると、exit で終了するまで警告が出続ける</li>
 <li>Fix: nyagos.d/catalog/peco.lua: nyagos.history が存在しないと、peco がハングする</li>
 </ul>
-<h1 id="nyagos-413-0">NYAGOS 4.1.3_0</h1>
+<h1 id="nyagos-413-0">NYAGOS 4.1.3_0 <a href="#nyagos-413-0">.</a></h1>
 <p>(2016.05.05)</p>
 <ul>
 <li>Add: <code>nyagos.open(PATH,MODE)</code> UTF8版<code>io.open</code></li>
@@ -1346,11 +1346,11 @@ share.foo = t
 <li>Fix: <code>ls -ltr * </code>で時系列でソートされていなかった (#136)</li>
 <li>nyagos -f で拡張子が .lua で無い時、シェルコマンドが格納されたファイルと解釈するようにした</li>
 </ul>
-<h2 id="20160517-">(2016.05.17 追記)</h2>
+<h2 id="20160517-">(2016.05.17 追記) <a href="#20160517-">.</a></h2>
 <ul>
 <li>ANSI文字列とUTF8文字列の混乱を避けるため、print でエスケープシーケンス入りの UTF8 文字列出力を廃止した。print は lua53.dll 内蔵のもののままとなった( #129 )</li>
 </ul>
-<h1 id="nyagos-412-0">NYAGOS 4.1.2_0</h1>
+<h1 id="nyagos-412-0">NYAGOS 4.1.2_0 <a href="#nyagos-412-0">.</a></h1>
 <p>(2016.03.29)</p>
 <ul>
 <li>スクリプトのカタログシステムを作った
@@ -1385,25 +1385,25 @@ share.foo = t
 (ユーザ入力文字列から引用符が削除されていない文字列を格納したテーブル)</li>
 <li>bindkeyのコールバック関数の引数テーブルに <code>replacefrom</code> メソッドを追加</li>
 </ul>
-<h1 id="nyagos-411-2">NYAGOS 4.1.1_2</h1>
+<h1 id="nyagos-411-2">NYAGOS 4.1.1_2 <a href="#nyagos-411-2">.</a></h1>
 <p>(2016.02.17)</p>
 <ul>
 <li>Lua の loadfile 等を呼ぶ際に UTF8 を ANSI へコンバートしていなかった不具合を修正 (#110,Thx Mr.HABATA)</li>
 </ul>
-<h1 id="nyagos-411-1">NYAGOS 4.1.1_1</h1>
+<h1 id="nyagos-411-1">NYAGOS 4.1.1_1 <a href="#nyagos-411-1">.</a></h1>
 <p>(2016.02.16)</p>
 <ul>
 <li>プロンプトが長すぎる時、強制的に改行するようにした (#104)</li>
 <li>ls でワイルドカードがマッチしない時のメッセージを修正 (#108)</li>
 <li>%ProgramFiles(x86)%のような環境変数が展開できてなかった点を修正(#109,Thx @hattya)</li>
 </ul>
-<h1 id="nyagos-411-0">NYAGOS 4.1.1_0</h1>
+<h1 id="nyagos-411-0">NYAGOS 4.1.1_0 <a href="#nyagos-411-0">.</a></h1>
 <p>(2016.01.15)</p>
 <ul>
 <li>キー入力で UTF16 のサロゲートペアをサポート</li>
 <li>mkdirに必要に応じて親ディレクトリを作成する /p オプションを追加</li>
 </ul>
-<h1 id="nyagos-410-0">NYAGOS 4.1.0_0</h1>
+<h1 id="nyagos-410-0">NYAGOS 4.1.0_0 <a href="#nyagos-410-0">.</a></h1>
 <p>(2016.01.03)</p>
 <ul>
 <li>内蔵コマンド ln を追加</li>
@@ -1435,7 +1435,7 @@ share.foo = t
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-41-beta">NYAGOS 4.1-beta</h1>
+<h1 id="nyagos-41-beta">NYAGOS 4.1-beta <a href="#nyagos-41-beta">.</a></h1>
 <p>(2015.12.13)</p>
 <ul>
 <li>クラッシュ回避のため、全てのLua のコールバック関数はそれぞれの Lua
@@ -1448,7 +1448,7 @@ share.foo = t
 </div><!-- "body" -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次</h3>
+<h3 id="heading">目次 <a href="#heading">.</a></h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1463,7 +1463,7 @@ share.foo = t
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート</h3>
+<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>

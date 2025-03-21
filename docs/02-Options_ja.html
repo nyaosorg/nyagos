@@ -1131,99 +1131,99 @@
 </style></head><body>
 <div class="main markdown-body">
 <div class="header">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 </div><!-- "header" -->
 <div class="body">
 <p><a href="./02-Options_en.html">English</a> / Japanese</p>
-<h2 id="heading">起動オプション</h2>
-<h3 id="--cleanup-buffer-lua-nyagosoptioncleanup-buffertrue">--cleanup-buffer (lua: <code>nyagos.option.cleanup_buffer=true</code>)</h3>
+<h2 id="heading">起動オプション <a href="#heading">.</a></h2>
+<h3 id="--cleanup-buffer-lua-nyagosoptioncleanup-buffertrue">--cleanup-buffer (lua: <code>nyagos.option.cleanup_buffer=true</code>) <a href="#--cleanup-buffer-lua-nyagosoptioncleanup-buffertrue">.</a></h3>
 <p>プロンプト表示のタイミングで、キーバッファをクリアします</p>
-<h3 id="--cmd-first-command">--cmd-first &quot;COMMAND&quot;</h3>
+<h3 id="--cmd-first-command">--cmd-first &quot;COMMAND&quot; <a href="#--cmd-first-command">.</a></h3>
 <p>.nyagos を処理する前に &quot;COMMAND&quot; を実行し、終了後、シェルを継続します。</p>
-<h3 id="--completion-hidden-lua-nyagosoptioncompletion-hiddentrue">--completion-hidden (lua: <code>nyagos.option.completion_hidden=true</code>)</h3>
+<h3 id="--completion-hidden-lua-nyagosoptioncompletion-hiddentrue">--completion-hidden (lua: <code>nyagos.option.completion_hidden=true</code>) <a href="#--completion-hidden-lua-nyagosoptioncompletion-hiddentrue">.</a></h3>
 <p>ファイル名補完に、隠しファイルも含めます</p>
-<h3 id="--completion-slash-lua-nyagosoptioncompletion-slashtrue">--completion-slash (lua: <code>nyagos.option.completion_slash=true</code>)</h3>
+<h3 id="--completion-slash-lua-nyagosoptioncompletion-slashtrue">--completion-slash (lua: <code>nyagos.option.completion_slash=true</code>) <a href="#--completion-slash-lua-nyagosoptioncompletion-slashtrue">.</a></h3>
 <p>ファイル名補完で、スラッシュを使います。</p>
-<h3 id="--glob-lua-nyagosoptionglobtrue">--glob (lua: <code>nyagos.option.glob=true</code>)</h3>
+<h3 id="--glob-lua-nyagosoptionglobtrue">--glob (lua: <code>nyagos.option.glob=true</code>) <a href="#--glob-lua-nyagosoptionglobtrue">.</a></h3>
 <p>外部コマンドにおいても、ワイルドカード展開を有効にします。</p>
-<h3 id="--glob-slash-lua-nyagosoptionglob-slashtrueset--o-glob-slash">--glob-slash (lua: <code>nyagos.option.glob_slash=true</code>,<code>set -o glob_slash</code>)</h3>
+<h3 id="--glob-slash-lua-nyagosoptionglob-slashtrueset--o-glob-slash">--glob-slash (lua: <code>nyagos.option.glob_slash=true</code>,<code>set -o glob_slash</code>) <a href="#--glob-slash-lua-nyagosoptionglob-slashtrueset--o-glob-slash">.</a></h3>
 <p>外部コマンド向けのワイルドカード展開で、ディレクトリ名区切りに <code>\</code> を使わず、<code>/</code> を使います。</p>
-<h3 id="--help">--help</h3>
+<h3 id="--help">--help <a href="#--help">.</a></h3>
 <p>ヘルプを表示します。</p>
-<h3 id="--look-curdir-first">--look-curdir-first</h3>
+<h3 id="--look-curdir-first">--look-curdir-first <a href="#--look-curdir-first">.</a></h3>
 <p>カレントディレクトリから実行ファイルを %PATH% より前に探します
 (デフォルト:CMD.EXE互換動作)</p>
-<h3 id="--look-curdir-last">--look-curdir-last</h3>
+<h3 id="--look-curdir-last">--look-curdir-last <a href="#--look-curdir-last">.</a></h3>
 <p>カレントディレクトリから実行ファイルを %PATH% より後に探します
 (PowerShell互換動作)</p>
-<h3 id="--look-curdir-never">--look-curdir-never</h3>
+<h3 id="--look-curdir-never">--look-curdir-never <a href="#--look-curdir-never">.</a></h3>
 <p>%PATH% にカレントディレクトリが含まれない限り、カレントディレクトリから
 実行ファイルは探しません(UNIX Shells互換動作)</p>
-<h3 id="--lua-file-file-arg1-arg2">--lua-file FILE ARG1 ARG2...</h3>
+<h3 id="--lua-file-file-arg1-arg2">--lua-file FILE ARG1 ARG2... <a href="#--lua-file-file-arg1-arg2">.</a></h3>
 <p>ファイルを Lua スクリプトとして実行します。
 引数を arg[] として参照できます。
 バッチファイルへの埋め込みができるように、<code>@</code> で始まる行は無視されます</p>
-<h3 id="--lua-first-luacode">--lua-first &quot;LUACODE&quot;</h3>
+<h3 id="--lua-first-luacode">--lua-first &quot;LUACODE&quot; <a href="#--lua-first-luacode">.</a></h3>
 <p>.nyagos を読み込む前に、引数の LUAコードを実行します</p>
-<h3 id="--predict-lua-nyagosoptionpredicttrue-default">--predict (lua: <code>nyagos.option.predict=true</code>) [default]</h3>
+<h3 id="--predict-lua-nyagosoptionpredicttrue-default">--predict (lua: <code>nyagos.option.predict=true</code>) [default] <a href="#--predict-lua-nyagosoptionpredicttrue-default">.</a></h3>
 <p>一行入力の予測表示を有効化します(デフォルトは有効)</p>
-<h3 id="--no-cleanup-buffer-lua-nyagosoptioncleanup-bufferfalse-default">--no-cleanup-buffer (lua: <code>nyagos.option.cleanup_buffer=false</code>) [default]</h3>
+<h3 id="--no-cleanup-buffer-lua-nyagosoptioncleanup-bufferfalse-default">--no-cleanup-buffer (lua: <code>nyagos.option.cleanup_buffer=false</code>) [default] <a href="#--no-cleanup-buffer-lua-nyagosoptioncleanup-bufferfalse-default">.</a></h3>
 <p>プロンプト表示時にキーバッファをクリアさせません。</p>
-<h3 id="--no-completion-hidden-lua-nyagosoptioncompletion-hiddenfalse-default">--no-completion-hidden (lua: <code>nyagos.option.completion_hidden=false</code>) [default]</h3>
+<h3 id="--no-completion-hidden-lua-nyagosoptioncompletion-hiddenfalse-default">--no-completion-hidden (lua: <code>nyagos.option.completion_hidden=false</code>) [default] <a href="#--no-completion-hidden-lua-nyagosoptioncompletion-hiddenfalse-default">.</a></h3>
 <p>ファイル名補完に隠しファイルを含ませません。</p>
-<h3 id="--no-completion-slash-lua-nyagosoptioncompletion-slashfalse-default">--no-completion-slash (lua: <code>nyagos.option.completion_slash=false</code>) [default]</h3>
+<h3 id="--no-completion-slash-lua-nyagosoptioncompletion-slashfalse-default">--no-completion-slash (lua: <code>nyagos.option.completion_slash=false</code>) [default] <a href="#--no-completion-slash-lua-nyagosoptioncompletion-slashfalse-default">.</a></h3>
 <p>ファイル名補完でスラッシュを使いません(バックスラッシュを使います)</p>
-<h3 id="--no-glob-lua-nyagosoptionglobfalse-default">--no-glob (lua: <code>nyagos.option.glob=false</code>) [default]</h3>
+<h3 id="--no-glob-lua-nyagosoptionglobfalse-default">--no-glob (lua: <code>nyagos.option.glob=false</code>) [default] <a href="#--no-glob-lua-nyagosoptionglobfalse-default">.</a></h3>
 <p>外部コマンドで、ワイルドカード展開をしません。</p>
-<h3 id="--no-glob-slash-lua-nyagosoptionglob-slashfalseset-o-glob-slash">--no-glob-slash (lua: <code>nyagos.option.glob_slash=false</code>,<code>set +o glob_slash</code>)</h3>
+<h3 id="--no-glob-slash-lua-nyagosoptionglob-slashfalseset-o-glob-slash">--no-glob-slash (lua: <code>nyagos.option.glob_slash=false</code>,<code>set +o glob_slash</code>) <a href="#--no-glob-slash-lua-nyagosoptionglob-slashfalseset-o-glob-slash">.</a></h3>
 <p>外部コマンド向けのワイルドカード展開で、ディレクトリ名区切りに <code>\</code> を使います。</p>
-<h3 id="--no-output-surrogate-pair-lua-nyagosoptionoutput-surrogate-pairfalse-default">--no-output-surrogate-pair (lua: <code>nyagos.option.output_surrogate_pair=false</code>) [default]</h3>
+<h3 id="--no-output-surrogate-pair-lua-nyagosoptionoutput-surrogate-pairfalse-default">--no-output-surrogate-pair (lua: <code>nyagos.option.output_surrogate_pair=false</code>) [default] <a href="#--no-output-surrogate-pair-lua-nyagosoptionoutput-surrogate-pairfalse-default">.</a></h3>
 <p>サロゲートペアな文字を <code>&lt;NNNN&gt;</code> と表記します。</p>
-<h3 id="--no-noclobber-lua-nyagosoptionnoclobberfalse-default">--no-noclobber (lua: <code>nyagos.option.noclobber=false</code>) [default]</h3>
+<h3 id="--no-noclobber-lua-nyagosoptionnoclobberfalse-default">--no-noclobber (lua: <code>nyagos.option.noclobber=false</code>) [default] <a href="#--no-noclobber-lua-nyagosoptionnoclobberfalse-default">.</a></h3>
 <p>リダイレクトでの上書きを許可します。</p>
-<h3 id="--no-read-stdin-as-file-lua-nyagosoptionread-stdin-as-filefalse-default">--no-read-stdin-as-file (lua: <code>nyagos.option.read_stdin_as_file=false</code>) [default]</h3>
+<h3 id="--no-read-stdin-as-file-lua-nyagosoptionread-stdin-as-filefalse-default">--no-read-stdin-as-file (lua: <code>nyagos.option.read_stdin_as_file=false</code>) [default] <a href="#--no-read-stdin-as-file-lua-nyagosoptionread-stdin-as-filefalse-default">.</a></h3>
 <p>標準入力からコンソール扱いでコマンドを読み込みます。
 (編集機能が有効になります)</p>
-<h3 id="--no-tilde-expansion-lua-nyagosoptiontilde-expansionfalse">--no-tilde-expansion (lua: <code>nyagos.option.tilde_expansion=false</code>)</h3>
+<h3 id="--no-tilde-expansion-lua-nyagosoptiontilde-expansionfalse">--no-tilde-expansion (lua: <code>nyagos.option.tilde_expansion=false</code>) <a href="#--no-tilde-expansion-lua-nyagosoptiontilde-expansionfalse">.</a></h3>
 <p>~ の置換を無効にする</p>
-<h3 id="--no-usesource-lua-nyagosoptionusesourcefalse">--no-usesource (lua: <code>nyagos.option.usesource=false</code>)</h3>
+<h3 id="--no-usesource-lua-nyagosoptionusesourcefalse">--no-usesource (lua: <code>nyagos.option.usesource=false</code>) <a href="#--no-usesource-lua-nyagosoptionusesourcefalse">.</a></h3>
 <p>バッチファイルに、NYAGOS側の環境変数の変更させるのを禁止します。</p>
-<h3 id="--noclobber-lua-nyagosoptionnoclobbertrue">--noclobber (lua: <code>nyagos.option.noclobber=true</code>)</h3>
+<h3 id="--noclobber-lua-nyagosoptionnoclobbertrue">--noclobber (lua: <code>nyagos.option.noclobber=true</code>) <a href="#--noclobber-lua-nyagosoptionnoclobbertrue">.</a></h3>
 <p>リダイレクトでの上書きを禁止します。</p>
-<h3 id="--no-predict-lua-nyagosoptionpredictfalse">--no-predict (lua: <code>nyagos.option.predict=false</code>)</h3>
+<h3 id="--no-predict-lua-nyagosoptionpredictfalse">--no-predict (lua: <code>nyagos.option.predict=false</code>) <a href="#--no-predict-lua-nyagosoptionpredictfalse">.</a></h3>
 <p>一行入力の予測表示を無効化します(デフォルトは有効)</p>
-<h3 id="--norc">--norc</h3>
+<h3 id="--norc">--norc <a href="#--norc">.</a></h3>
 <p><code>~\.nyagos</code>, <code>(BINDIR)\.nyagos</code>, <code>(BINDIR)\nyagos.d\*.lua</code>, <code>%APPDATA%\NYAOS_ORG\nyagos.d\*.lua</code> といった起動スクリプトをロードしないようにします。</p>
-<h3 id="--output-surrogate-pair-lua-nyagosoptionoutput-surrogate-pairtrue">--output-surrogate-pair (lua: <code>nyagos.option.output_surrogate_pair=true</code>)</h3>
+<h3 id="--output-surrogate-pair-lua-nyagosoptionoutput-surrogate-pairtrue">--output-surrogate-pair (lua: <code>nyagos.option.output_surrogate_pair=true</code>) <a href="#--output-surrogate-pair-lua-nyagosoptionoutput-surrogate-pairtrue">.</a></h3>
 <p>サロゲートペアな文字をそのまま表示します</p>
-<h3 id="--read-stdin-as-file-lua-nyagosoptionread-stdin-as-filetrue">--read-stdin-as-file (lua: <code>nyagos.option.read_stdin_as_file=true</code>)</h3>
+<h3 id="--read-stdin-as-file-lua-nyagosoptionread-stdin-as-filetrue">--read-stdin-as-file (lua: <code>nyagos.option.read_stdin_as_file=true</code>) <a href="#--read-stdin-as-file-lua-nyagosoptionread-stdin-as-filetrue">.</a></h3>
 <p>標準入力からファイル扱いでコマンドを読み込みます。
 (編集機能が無効になります)</p>
-<h3 id="--show-version-only">--show-version-only</h3>
+<h3 id="--show-version-only">--show-version-only <a href="#--show-version-only">.</a></h3>
 <p>バージョンを表示します(ビルド用です)</p>
-<h3 id="--tilde-expansion-lua-nyagosoptiontilde-expansiontrue-default">--tilde-expansion (lua: <code>nyagos.option.tilde_expansion=true</code>) [default]</h3>
+<h3 id="--tilde-expansion-lua-nyagosoptiontilde-expansiontrue-default">--tilde-expansion (lua: <code>nyagos.option.tilde_expansion=true</code>) [default] <a href="#--tilde-expansion-lua-nyagosoptiontilde-expansiontrue-default">.</a></h3>
 <p>~ 置換を有効にします</p>
-<h3 id="--usesource-lua-nyagosoptionusesourcetrue-default">--usesource (lua: <code>nyagos.option.usesource=true</code>) [default]</h3>
+<h3 id="--usesource-lua-nyagosoptionusesourcetrue-default">--usesource (lua: <code>nyagos.option.usesource=true</code>) [default] <a href="#--usesource-lua-nyagosoptionusesourcetrue-default">.</a></h3>
 <p>バッチファイルに、NYAGOS側の環境変数の変更させるのを許可します。</p>
-<h3 id="-b-base64edcommand">-b &quot;BASE64edCOMMAND&quot;</h3>
+<h3 id="-b-base64edcommand">-b &quot;BASE64edCOMMAND&quot; <a href="#-b-base64edcommand">.</a></h3>
 <p>BASE64形式でエンコードされたコマンドをデコードして実行します。</p>
-<h3 id="-c-command">-c &quot;COMMAND&quot;</h3>
+<h3 id="-c-command">-c &quot;COMMAND&quot; <a href="#-c-command">.</a></h3>
 <p>コマンドを実行して、ただちに終了します。</p>
-<h3 id="-e-scriptcode">-e &quot;SCRIPTCODE&quot;</h3>
+<h3 id="-e-scriptcode">-e &quot;SCRIPTCODE&quot; <a href="#-e-scriptcode">.</a></h3>
 <p>Luaインタプリタでスクリプトコードを実行後、終了します。</p>
-<h3 id="-f-file-arg1-arg2-">-f FILE ARG1 ARG2 ...</h3>
+<h3 id="-f-file-arg1-arg2-">-f FILE ARG1 ARG2 ... <a href="#-f-file-arg1-arg2-">.</a></h3>
 <p>ファイル名の拡張子が .Lua の場合、ファイル中の Lua コードを実行します。
 (引数は配列 arg[] という形で参照できます)</p>
 <p>さもなければ、通常コマンドとして読み取って実行します。</p>
-<h3 id="-h">-h</h3>
+<h3 id="-h">-h <a href="#-h">.</a></h3>
 <p>オプションのヘルプを表示します。</p>
-<h3 id="-k-command">-k &quot;COMMAND&quot;</h3>
+<h3 id="-k-command">-k &quot;COMMAND&quot; <a href="#-k-command">.</a></h3>
 <p>コマンドを実行してから、通常起動します。</p>
 <!-- raw HTML omitted -->
 </div><!-- "body" -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次</h3>
+<h3 id="heading">目次 <a href="#heading">.</a></h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1238,7 +1238,7 @@
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート</h3>
+<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>
