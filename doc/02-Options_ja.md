@@ -5,6 +5,9 @@
 ### --cleanup-buffer (lua: `nyagos.option.cleanup_buffer=true`)
 プロンプト表示のタイミングで、キーバッファをクリアします
 
+## --clipboard (lua: `nyagos.option.clipboard=true`)
+コピーバッファのクリップボード連動を有効にする
+
 ### --cmd-first "COMMAND"
 .nyagos を処理する前に "COMMAND" を実行し、終了後、シェルを継続します。
 
@@ -48,6 +51,9 @@
 
 ### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
 プロンプト表示時にキーバッファをクリアさせません。
+
+### --no-clipboard (lua: `nyagos.option.clipboard=false`)
+コピーバッファのクリップボード連動を無効にする
 
 ### --no-completion-hidden (lua: `nyagos.option.completion_hidden=false`) [default]
 ファイル名補完に隠しファイルを含ませません。

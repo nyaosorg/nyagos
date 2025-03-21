@@ -7,6 +7,9 @@ English / [Japanese](./02-Options_ja.md)
 ### --cleanup-buffer (lua: `nyagos.option.cleanup_buffer=true`)
 Clean up key buffer at prompt
 
+## --clipboard (lua: `nyagos.option.clipboard=true`)
+Enable clipboard integration for the kill buffer
+
 ### --cmd-first "COMMAND"
 Execute "COMMAND" before processing any rcfiles and continue shell
 
@@ -51,6 +54,9 @@ Enable the prediction on readlines (default: enabled)
 
 ### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
 Do not clean up key buffer at prompt
+
+### --no-clipboard (lua: `nyagos.option.clipboard=false`)
+Disable clipboard integration for the kill buffer
 
 ### --no-completion-hidden (lua: `nyagos.option.completion_hidden=false`) [default]
 Do not include hidden files on completion
