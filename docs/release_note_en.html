@@ -1134,7 +1134,7 @@
 <p>English / <a href="release_note_ja.html">Japanese</a></p>
 <h2 id="snapshot">Snapshot <a href="#snapshot">.</a></h2>
 <ul>
-<li>Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.</li>
+<li>The kill buffer in NYAGOS previously interacted with the OS clipboard by default. This behavior has been changed so that it no longer does so by default. To enable clipboard integration, set nyagos.option.clipboard = true.</li>
 <li>Syntax highlighting:
 <ul>
 <li>The highlighted environment variable is now limited to text that starts with a letter and contains only alphanumeric characters.</li>

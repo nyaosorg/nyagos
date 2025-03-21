@@ -3,7 +3,7 @@ English / [Japanese](release_note_ja.md)
 Snapshot
 --------
 
-- Stopped using the operating system's clipboard, as it’s more common for shells and REPLs to keep it separate from the OS clipboard.
+- The kill buffer in NYAGOS previously interacted with the OS clipboard by default. This behavior has been changed so that it no longer does so by default. To enable clipboard integration, set nyagos.option.clipboard = true.
 - Syntax highlighting:
     - The highlighted environment variable is now limited to text that starts with a letter and contains only alphanumeric characters.
     - The highlighted option can now contain `-` anywhere, not just at the beginning.
