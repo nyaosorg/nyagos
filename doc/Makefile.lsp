@@ -21,9 +21,11 @@
         (let ((html (md-to-html md))
               (sidebar (if (match "_ja.md$" md) "_Sidebar_ja.md" "_Sidebar_en.md")))
           (if (updatep html md sidebar "_Header.md")
-            (sh (string-append 
-                  "minipage -header _Header.md -sidebar " sidebar
-                  " -title \"" (make-title md) "\" " md " > " html )))))
+            (sh (format
+                  nil
+                  "minipage -sidebar \"~A\" -title \"~A\" _Header.md \"~A\" > \"~A\""
+                  sidebar (make-title md) md html))
+                  )))
       ) ; dolist
     ) ; t
   ) ; case
