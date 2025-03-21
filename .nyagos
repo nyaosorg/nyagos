@@ -39,4 +39,6 @@ nyagos.prompt = function(this)
     end
 end
 
+-- nyagos.option.clipboard = true
+
 -- vim:set ft=lua: --

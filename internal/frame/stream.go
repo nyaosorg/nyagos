@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/atotto/clipboard"
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
@@ -28,6 +29,16 @@ type CmdStreamConsole struct {
 	HistPath string
 }
 
+type OSClipboard struct{}
+
+func (OSClipboard) Read() (string, error) {
+	return clipboard.ReadAll()
+}
+
+func (OSClipboard) Write(s string) error {
+	return clipboard.WriteAll(s)
+}
+
 func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsole {
 	history1 := &history.Container{}
 	stream := &CmdStreamConsole{
@@ -43,6 +54,9 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			PlainHistory: []string{},
 			Pointer:      -1,
 		},
+	}
+	if config.AccessClipboard {
+		stream.Editor.Clipboard = OSClipboard{}
 	}
 	if _, ok := os.LookupEnv("NO_COLOR"); !ok {
 		stream.Editor.Highlight = []readline.Highlight{

@@ -15,6 +15,8 @@ import (
 // ReadStdinAsFile is the flat to read commands from stdin as a file stream
 var ReadStdinAsFile = false
 
+var AccessClipboard = false
+
 type Bool interface {
 	Usage() string
 	NoUsage() string
@@ -79,6 +81,11 @@ var Bools = ignoreCaseSorted.MapToDictionary(map[string]Bool{
 		ptr:     &OptionPredictColor,
 		usage:   "Enable prediction on readline",
 		noUsage: "Disable prediction on readline",
+	},
+	"clipboard": &BoolPtr{
+		ptr:     &AccessClipboard,
+		usage:   "Use clipboard",
+		noUsage: "Do not use clipboard",
 	},
 })
 
