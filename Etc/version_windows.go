@@ -1,10 +1,5 @@
 //go:build windows
-// +build windows
 
 package etc
 
-// for default icon
-//go:generate cmd /c go run mkversioninfo.go > v.json && go run github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest -icon=nyagos.ico -o ..\nyagos.syso v.json && del v.json
-
-// for second icon (disabled)
-////go:generate cmd /c go run mkversioninfo.go > v.json && go run github.com/josephspurrier/goversioninfo/cmd/goversioninfo@latest -icon=nyagos32x32.ico -icon=nyagos16x16.ico -o ..\nyagos.syso v.json && del v.json
+//go:generate cmd /c go1.20.14.exe run mkversioninfo.go > v.json && go1.20.14.exe run github.com/hymkor/goversioninfo/cmd/goversioninfo@master -icon=nyagos.ico,nyagos32x32.ico,nyagos16x16.ico -o ..\nyagos.syso v.json && del v.json
