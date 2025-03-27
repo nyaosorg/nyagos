@@ -52,7 +52,7 @@ NYAGOS - Nihongo Yet Another GOing Shell is a command-line shell that combines b
   * Linux (experimental)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
-[SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
+[SKKSetUpEn]: 10-SetupSKK_en.md
 
 [Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
 

@@ -53,7 +53,7 @@ NYAGOS - Nihongo Yet Another GOing Shell は、bash のようなコマンドラ�
   * Linux (試験的サポート)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
-[SKKSetUpJa]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md
+[SKKSetUpJa]: 10-SetupSKK_ja.md
 
 [Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
 
