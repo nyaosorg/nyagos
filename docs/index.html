@@ -1132,93 +1132,105 @@
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 <p>English / <a href="./index_ja.html">Japanese</a></p>
-<h2 id="welcome-to-the-hybrid-commandline-shell">Welcome to the hybrid commandline shell <a href="#welcome-to-the-hybrid-commandline-shell">.</a></h2>
-<p>NYAGOS - Nihongo Yet Another GOing Shell is a command-line shell that combines bash-like command-line editing with seamless support for Windows file system paths and batch files. It also allows extensive customization of shell behavior using the Lua language.</p>
+<h2 id="welcome-to-the-hybrid-command-line-shell">Welcome to the hybrid command-line shell <a href="#welcome-to-the-hybrid-command-line-shell">.</a></h2>
+<p>NYAGOS - Nihongo Yet Another GOing Shell is a versatile command-line shell that blends bash-like command-line editing with seamless integration of Windows file system paths and batch files. It offers extensive customization through the Lua scripting language and supports modern predictive input features.</p>
 <p><img src="./demo.gif" alt="demo-animation"></p>
+<h3 id="key-features">Key Features <a href="#key-features">.</a></h3>
+<h4 id="unix-like-shell-behavior">UNIX-Like Shell Behavior <a href="#unix-like-shell-behavior">.</a></h4>
 <ul>
-<li>UNIX-Like Shell
+<li><strong>Keybindings</strong>
 <ul>
-<li>Keybinding
-<ul>
-<li>Features are bound to keys like Bash on default</li>
-<li>Customized like
-<ul>
-<li><code>nyagos.key.c_u = &quot;KILL_WHOLE_LINE&quot;</code> on %USERPROFILE%\.nyagos (<a href="https://github.com/yuin/gopher-lua">Lua</a>)</li>
-</ul>
-</li>
-<li>A lua-functions can be bound to a key like
-<ul>
-<li><code>nyagos.key.escape = function(this) nyagos.exec(&quot;start vim.exe&quot;) end</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>History (Ctrl-P and !-mark)</li>
-<li>Alias
-<ul>
-<li>like DOSKEY
-<ul>
-<li><code>nyagos.alias[&quot;g++&quot;]=&quot;g++.exe -std=gnu++17 $*&quot;</code></li>
-</ul>
-</li>
-<li>ones implemented by Lua functions
-<ul>
-<li><code>nyagos.alias[&quot;lala&quot;]=function(args) nyagos.exec(&quot;ls&quot;,&quot;-al&quot;,unpack(args)) end</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Custom completions</li>
-</ul>
-</li>
-</ul>
-<pre><code class="language-lua">            nyagos.complete_for[&quot;go&quot;] = function(args)
-                if #args == 2 then
-                    return {
-                        &quot;bug&quot;,&quot;doc&quot;,&quot;fmt&quot;,&quot;install&quot;,&quot;run&quot;,&quot;version&quot;,
-                        &quot;build&quot;,&quot;env&quot;,&quot;generate&quot;,&quot;list&quot;,&quot;test&quot;,&quot;vet&quot;,
-                        &quot;clean&quot;,&quot;fix&quot;,&quot;get&quot;,&quot;mod&quot;,&quot;tool&quot; }
-                else
-                    return nil -- files completion
-                end
-            end
+<li>By default, keybindings are similar to Bash.</li>
+<li>Customizable via Lua scripts in <code>%USERPROFILE%\.nyagos</code>.
+<pre><code class="language-lua">nyagos.key.c_u = &quot;KILL_WHOLE_LINE&quot;
 </code></pre>
-<ul>
-<li>Shell that follows the Windows' style like CMD.EXE
-<ul>
-<li>Windows' path format <code>C:\path\to\file</code> are able to be used.</li>
-<li>Each drive has its own current directory.</li>
-<li><code>copy</code>,<code>move</code> and some dos-like built-in commands work.</li>
-<li>No additional DLL are required.</li>
-<li>Registry are not used.</li>
+</li>
+<li>Lua functions can be bound to keys:
+<pre><code class="language-lua">nyagos.key.escape = function(this) nyagos.exec(&quot;start vim.exe&quot;) end
+</code></pre>
+</li>
 </ul>
 </li>
-<li>Color command-line</li>
-<li>Support Unicode. Windows unicode APIs are used.
+<li><strong>History and Aliases</strong>
 <ul>
-<li>Can paste unicode character on clipboard and edit them.</li>
-<li>Unicode-literal %U+XXXX%</li>
-<li>Prompt Macro $Uxxxx</li>
+<li>Supports <code>Ctrl-P</code> history search and <code>!-style</code> command recall.</li>
+<li>Alias system similar to DOSKEY:
+<pre><code class="language-lua">nyagos.alias[&quot;g++&quot;] = &quot;g++.exe -std=gnu++17 $*&quot;
+</code></pre>
+</li>
+<li>Lua-powered aliases:
+<pre><code class="language-lua">nyagos.alias[&quot;lala&quot;] = function(args) nyagos.exec(&quot;ls&quot;, &quot;-al&quot;, unpack(args)) end
+</code></pre>
+</li>
 </ul>
 </li>
-<li>Built-in ls
+<li><strong>Custom Command Completion (Bash-Style Tab Completion)</strong>
 <ul>
-<li>color support (-o option)</li>
-<li>print hard-link,symbolic-link and junction's target-path</li>
+<li>Allows defining completions for specific commands.
+<pre><code class="language-lua">nyagos.complete_for[&quot;go&quot;] = function(args)
+    if #args == 2 then
+        return { &quot;bug&quot;, &quot;doc&quot;, &quot;fmt&quot;, &quot;install&quot;, &quot;run&quot;, &quot;version&quot;,
+                 &quot;build&quot;, &quot;env&quot;, &quot;generate&quot;, &quot;list&quot;, &quot;test&quot;, &quot;vet&quot;,
+                 &quot;clean&quot;, &quot;fix&quot;, &quot;get&quot;, &quot;mod&quot;, &quot;tool&quot; }
+    else
+        return nil -- file completion
+    end
+end
+</code></pre>
+</li>
 </ul>
 </li>
-<li>Support Japanese input method editor: <a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) - <a href="10-SetupSKK_en.html">How To Setup</a></li>
-<li>Support OS:
+<li><strong>Predictive Completion (PowerShell 7-Like)</strong>
 <ul>
-<li>Windows 7, 8.1, 10, 11, WindowsServer 2008 or later</li>
+<li>Suggests completions based on command history.</li>
+<li>Predictions can be accepted using <code>Ctrl-F</code> or the right arrow key.</li>
+</ul>
+</li>
+</ul>
+<h4 id="windows-compatibility">Windows Compatibility <a href="#windows-compatibility">.</a></h4>
+<ul>
+<li><strong>Seamless Batch File Execution</strong>
+<ul>
+<li>Runs Windows batch files (<code>.bat</code> and <code>.cmd</code>) as if executed directly in CMD.exe.</li>
+<li>Captures environment variable changes and directory switches made within batch files.</li>
+</ul>
+</li>
+<li><strong>CMD.EXE-Like Features</strong>
+<ul>
+<li>Supports Windows path formats (<code>C:\path\to\file</code>).</li>
+<li>Maintains a separate current directory for each drive.</li>
+<li>Includes built-in equivalents for common DOS commands (<code>copy</code>, <code>move</code>, etc.).</li>
+<li>No additional DLLs required, and no registry modifications.</li>
+</ul>
+</li>
+</ul>
+<h4 id="enhanced-user-experience">Enhanced User Experience <a href="#enhanced-user-experience">.</a></h4>
+<ul>
+<li><strong>Colorized Command-Line Interface</strong></li>
+<li><strong>Unicode Support</strong>
+<ul>
+<li>Full compatibility with Windows Unicode APIs.</li>
+<li>Supports pasting and editing of Unicode characters.</li>
+<li>Special Unicode literals: <code>%U+XXXX%</code> and <code>$Uxxxx</code> for prompts.</li>
+</ul>
+</li>
+<li><strong>Built-in <code>ls</code> Command</strong>
+<ul>
+<li>Supports colorized output (<code>-o</code> option).</li>
+<li>Displays hard links, symbolic links, and junction targets.</li>
+</ul>
+</li>
+<li><strong>Support <a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) - <a href="10-SetupSKK_en.html">Setup Guide</a></strong></li>
+</ul>
+<h3 id="supported-platforms">Supported Platforms <a href="#supported-platforms">.</a></h3>
+<ul>
+<li>Windows 7, 8.1, 10, 11, Windows Server 2008 or later</li>
 <li>Linux (experimental)</li>
 </ul>
-</li>
-</ul>
 <p><a href="https://www.youtube.com/watch?v=WsfIrBWwAh0">Video by @emisjerry</a></p>
-<h2 id="license">License <a href="#license">.</a></h2>
-<p>You can use, copy and modify under the New BSD License.</p>
-<h2 id="acknowledgement">Acknowledgement <a href="#acknowledgement">.</a></h2>
+<h3 id="license">License <a href="#license">.</a></h3>
+<p>You may use, copy, and modify NYAGOS under the New BSD License.</p>
+<h3 id="acknowledgement">Acknowledgement <a href="#acknowledgement">.</a></h3>
 <p><a href="https://github.com/nocd5">nocd5</a>
 / <a href="https://github.com/mattn">mattn</a>
 / <a href="https://github.com/hattya">hattya</a>
@@ -1274,7 +1286,7 @@
 / <a href="https://github.com/HAYASHI-Masayuki">HAYASHI-Masayuki</a>
 / <a href="https://github.com/naoyaikeda">naoyaikeda</a>
 / <a href="https://github.com/emisjerry">emisjerry</a></p>
-<h2 id="author">Author <a href="#author">.</a></h2>
+<h3 id="author">Author <a href="#author">.</a></h3>
 <ul>
 <li><a href="https://github.com/hymkor">hymkor - HAYAMA Kaoru</a> (a.k.a zetamatta)</li>
 </ul>

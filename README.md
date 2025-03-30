@@ -8,63 +8,77 @@ The Nihongo Yet Another GOing Shell
 
 **&lt;English&gt;** / [&lt;Japanese&gt;](./README_ja.md)
 
-NYAGOS is the commandline-shell written with the Programming Language GO and Lua.
+NYAGOS - Nihongo Yet Another GOing Shell is a versatile command-line shell that blends bash-like command-line editing with seamless integration of Windows file system paths and batch files. It offers extensive customization through the Lua scripting language and supports modern predictive input features.
 
 ![demo-animation](./demo.gif)
 
-There are some shells in Windows compatible with ones in UNIX.
-Most of them do not support Windows's traditional PATH-style
-like `X:\DIR\FILE.EXT` that many applications require as arguments.
+### Key Features
 
-So, I created a new shell like below:
+#### UNIX-Like Shell Behavior
+- **Keybindings**
+  - By default, keybindings are similar to Bash.
+  - Customizable via Lua scripts in `%USERPROFILE%\.nyagos`.
+    ```lua
+    nyagos.key.c_u = "KILL_WHOLE_LINE"
+    ```
+  - Lua functions can be bound to keys:
+    ```lua
+    nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end
+    ```
+- **History and Aliases**
+  - Supports `Ctrl-P` history search and `!-style` command recall.
+  - Alias system similar to DOSKEY:
+    ```lua
+    nyagos.alias["g++"] = "g++.exe -std=gnu++17 $*"
+    ```
+  - Lua-powered aliases:
+    ```lua
+    nyagos.alias["lala"] = function(args) nyagos.exec("ls", "-al", unpack(args)) end
+    ```
+- **Custom Command Completion (Bash-Style Tab Completion)**
+  - Allows defining completions for specific commands.
+    ```lua
+    nyagos.complete_for["go"] = function(args)
+        if #args == 2 then
+            return { "bug", "doc", "fmt", "install", "run", "version",
+                     "build", "env", "generate", "list", "test", "vet",
+                     "clean", "fix", "get", "mod", "tool" }
+        else
+            return nil -- file completion
+        end
+    end
+    ```
+- **Predictive Completion (PowerShell 7-Like)**
+  - Suggests completions based on command history.
+  - Predictions can be accepted using `Ctrl-F` or the right arrow key.
 
-* UNIX-Like Shell
-  * Keybinding
-    * Features are bound to keys like Bash on default
-    * Customized like
-        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` on %USERPROFILE%\\.nyagos ([Lua](https://github.com/yuin/gopher-lua))
-    * A lua-functions can be bound to a key like
-        * `nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end`
-  * History (Ctrl-P and !-mark)
-  * Alias
-    * like DOSKEY
-        * `nyagos.alias["g++"]="g++.exe -std=gnu++17 $*"`
-    * ones implemented by Lua functions
-        * `nyagos.alias["lala"]=function(args) nyagos.exec("ls","-al",unpack(args)) end`
-  * Custom completions
-```lua
-            nyagos.complete_for["go"] = function(args)
-                if #args == 2 then
-                    return {
-                        "bug","doc","fmt","install","run","version",
-                        "build","env","generate","list","test","vet",
-                        "clean","fix","get","mod","tool" }
-                else
-                    return nil -- files completion
-                end
-            end
-```
-* Shell that follows the Windows' style like CMD.EXE
-  * Windows' path format `C:\path\to\file` are able to be used.
-  * Each drive has its own current directory.
-  * `copy`,`move` and some dos-like built-in commands work.
-  * No additional DLL are required.
-  * Registry are not used.
-* Color command-line
-* Support Unicode. Windows unicode APIs are used.
-  * Can paste unicode character on clipboard and edit them.
-  * Unicode-literal %U+XXXX%
-  * Prompt Macro $Uxxxx
-* Built-in ls
-  * color support (-o option)
-  * print hard-link,symbolic-link and junction's target-path
-* Support Japanese input method editor: [SKK] \(Simple Kana Kanji conversion program\) - [How To Setup][SKKSetUpEn]
-* Support OS:
-  * Windows 7, 8.1, 10, 11, WindowsServer 2008 or later
-  * Linux (experimental)
+#### Windows Compatibility
+- **Seamless Batch File Execution**
+  - Runs Windows batch files (`.bat` and `.cmd`) as if executed directly in CMD.exe.
+  - Captures environment variable changes and directory switches made within batch files.
+- **CMD.EXE-Like Features**
+  - Supports Windows path formats (`C:\path\to\file`).
+  - Maintains a separate current directory for each drive.
+  - Includes built-in equivalents for common DOS commands (`copy`, `move`, etc.).
+  - No additional DLLs required, and no registry modifications.
+
+#### Enhanced User Experience
+- **Colorized Command-Line Interface**
+- **Unicode Support**
+  - Full compatibility with Windows Unicode APIs.
+  - Supports pasting and editing of Unicode characters.
+  - Special Unicode literals: `%U+XXXX%` and `$Uxxxx` for prompts.
+- **Built-in `ls` Command**
+  - Supports colorized output (`-o` option).
+  - Displays hard links, symbolic links, and junction targets.
+- **Support [SKK] (Simple Kana Kanji conversion program) - [Setup Guide][SKKSetUpEn]**
+
+### Supported Platforms
+- Windows 7, 8.1, 10, 11, Windows Server 2008 or later
+- Linux (experimental)
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
-[SKKSetUpEn]: https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_en.md
+[SKKSetUpEn]: doc/10-SetupSKK_en.md
 
 [Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
 

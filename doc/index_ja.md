@@ -1,69 +1,85 @@
 [English](./index.md) / Japanese
 
-## ハイブリッドコマンドラインシェルの世界へようこそ
+## ハイブリッドなコマンドラインシェルへようこそ
 
-NYAGOS - Nihongo Yet Another GOing Shell は、bash のようなコマンドライン編集処理と、Windows のファイルシステムパスやバッチファイルのシームレスな利用を両立するコマンドラインシェルです。Lua 言語によって、シェル処理のさまざまなカスタマイズが可能になっています
+NYAGOS - Nihongo Yet Another GOing Shell は、Bash 風のコマンドライン編集機能と、Windows のファイルパスやバッチファイルとのシームレスな統合を兼ね備えた多機能なコマンドラインシェルです。Lua スクリプトによる柔軟なカスタマイズが可能で、最新の予測入力機能にも対応しています。
 
 ![demo-animation](./demo.gif)
 
-* UNIX風シェル
-  * キーバインド
-    * デフォルト：Bash風
-    * カスタマイズ
-        * `nyagos.key.c_u = "KILL_WHOLE_LINE"` on %USERPROFILE%\\.nyagos ([Lua](https://github.com/yuin/gopher-lua))
-    * Lua関数のキーへのバインド
-        * `nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end`
-  * ヒストリ (Ctrl-P や ! マークによる)
-  * エイリアス
-    * DOSKEY風
-        * `nyagos.alias["g++"]="g++.exe -std=gnu++17 $*"`
-    * Lua関数による実装
-        * `nyagos.alias["lala"]=function(args) nyagos.exec("ls","-al",unpack(args)) end`
+### 主な機能
 
-  * カスタム補完
-```lua
-            nyagos.complete_for["go"] = function(args)
-                if #args == 2 then
-                    return {
-                        "bug","doc","fmt","install","run","version",
-                        "build","env","generate","list","test","vet",
-                        "clean","fix","get","mod","tool" }
-                else
-                    return nil -- files completion
-                end
-            end
-```
-* CMD.EXE同様のウインドウズの作法に従うシェル
-  * `C:\path\to\file` のような Windowsパス使用可能
-  * ドライブごとにカレントディレクトリを保持
-  * `copy`,`move` など DOS 風の内蔵コマンドが動作
-  * ランタイムDLL不要
-  * レジストリ無使用
-* カラーコマンドライン
-* Unicodeサポート
-  * Unicode文字をコピペ・編集可能
-  * Unicodeリテラル %U+XXXX%
-  * プロンプト向けマクロ $Uxxxx
-* 内蔵ls
-  * カラーサポート(-oオプション)
-  * ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示
-* [SKK] \(Simple Kana Kanji conversion program\) サポート - [設定方法][SKKSetUpJa]
-* サポート OS
-  * Windows 7, 8.1, 10, 11, Windows Server2008以降
-  * Linux (試験的サポート)
+#### UNIX ライクなシェル動作
+- **キーバインド**
+  - デフォルトでは Bash に近いキーバインドを採用。
+  - `%USERPROFILE%\.nyagos` に Lua スクリプトでカスタマイズ可能。
+    ```lua
+    nyagos.key.c_u = "KILL_WHOLE_LINE"
+    ```
+  - Lua 関数をキーに割り当て可能：
+    ```lua
+    nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end
+    ```
+- **履歴とエイリアス**
+  - `Ctrl-P` による履歴検索や `!` を用いたコマンド再実行が可能。
+  - DOSKEY 風のエイリアス機能：
+    ```lua
+    nyagos.alias["g++"] = "g++.exe -std=gnu++17 $*"
+    ```
+  - Lua でエイリアスを実装可能：
+    ```lua
+    nyagos.alias["lala"] = function(args) nyagos.exec("ls", "-al", unpack(args)) end
+    ```
+- **カスタム補完（Bash 風の Tab 補完）**
+  - コマンドごとに補完の定義が可能。
+    ```lua
+    nyagos.complete_for["go"] = function(args)
+        if #args == 2 then
+            return { "bug", "doc", "fmt", "install", "run", "version",
+                     "build", "env", "generate", "list", "test", "vet",
+                     "clean", "fix", "get", "mod", "tool" }
+        else
+            return nil -- ファイル補完
+        end
+    end
+    ```
+- **予測補完（PowerShell 7 風）**
+  - 過去の履歴をもとに補完候補を提示。
+  - `Ctrl-F` または右矢印キーで補完候補を採用可能。
+
+#### Windows 互換機能
+- **バッチファイルのシームレスな実行**
+  - Windows のバッチファイル（`.bat` や `.cmd`）を CMD.exe 上で実行するのと同じように実行可能。
+  - バッチファイル内で変更された環境変数やカレントディレクトリを適切に反映。
+- **CMD.EXE ライクな機能**
+  - Windows のパス表記（`C:\path\to\file`）に対応。
+  - ドライブごとにカレントディレクトリを維持。
+  - `copy` や `move` などの DOS 風の組み込みコマンドを搭載。
+  - 追加の DLL 不要、レジストリ変更なし。
+
+#### ユーザーエクスペリエンスの向上
+- **カラー対応のコマンドライン**
+- **Unicode サポート**
+  - Windows の Unicode API を完全サポート。
+  - クリップボードの Unicode 文字の貼り付け・編集が可能。
+  - 特殊な Unicode リテラル `%U+XXXX%` やプロンプトマクロ `$Uxxxx` に対応。
+- **組み込み `ls` コマンド**
+  - カラー出力に対応（`-o` オプション）。
+  - ハードリンク、シンボリックリンク、ジャンクションのターゲットパスを表示。
+- **[SKK]（簡易かな漢字変換プログラム）をサポート - [セットアップガイド][SKKSetUpJa]**
+
+### 対応プラットフォーム
+- Windows 7, 8.1, 10, 11, Windows Server 2008 以降
+- Linux（実験的対応）
+
+[Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
+
+### ライセンス
+NYAGOS は New BSD License のもとで使用・複製・改変が可能です。
 
 [SKK]: https://ja.wikipedia.org/wiki/SKK
 [SKKSetUpJa]: 10-SetupSKK_ja.md
 
-[Video by @emisjerry](https://www.youtube.com/watch?v=WsfIrBWwAh0)
-
-ライセンス
-----------
-
-修正BSDライセンスに基いて、使用・コピー・改変が可能です。
-
-謝辞
-----
+### 謝辞
 
 [nocd5](https://github.com/nocd5)
 / [mattn](https://github.com/mattn)
@@ -121,8 +137,7 @@ NYAGOS - Nihongo Yet Another GOing Shell は、bash のようなコマンドラ�
 / [naoyaikeda](https://github.com/naoyaikeda)
 / [emisjerry](https://github.com/emisjerry)
 
-開発者
-------
+### 開発者
 
 * [hymkor - HAYAMA Kaoru](https://github.com/hymkor) (a.k.a zetamatta)
 <!-- vim:set fenc=utf8 -->

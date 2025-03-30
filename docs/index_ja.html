@@ -1132,99 +1132,105 @@
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
 <p><a href="./index.html">English</a> / Japanese</p>
-<h2 id="heading">ハイブリッドコマンドラインシェルの世界へようこそ <a href="#heading">.</a></h2>
-<p>NYAGOS - Nihongo Yet Another GOing Shell は、bash のようなコマンドライン編集処理と、Windows のファイルシステムパスやバッチファイルのシームレスな利用を両立するコマンドラインシェルです。Lua 言語によって、シェル処理のさまざまなカスタマイズが可能になっています</p>
+<h2 id="heading">ハイブリッドなコマンドラインシェルへようこそ <a href="#heading">.</a></h2>
+<p>NYAGOS - Nihongo Yet Another GOing Shell は、Bash 風のコマンドライン編集機能と、Windows のファイルパスやバッチファイルとのシームレスな統合を兼ね備えた多機能なコマンドラインシェルです。Lua スクリプトによる柔軟なカスタマイズが可能で、最新の予測入力機能にも対応しています。</p>
 <p><img src="./demo.gif" alt="demo-animation"></p>
+<h3 id="heading-1">主な機能 <a href="#heading-1">.</a></h3>
+<h4 id="unix-">UNIX ライクなシェル動作 <a href="#unix-">.</a></h4>
 <ul>
-<li>UNIX風シェル
+<li><strong>キーバインド</strong>
 <ul>
-<li>
-<p>キーバインド</p>
-<ul>
-<li>デフォルト：Bash風</li>
-<li>カスタマイズ
-<ul>
-<li><code>nyagos.key.c_u = &quot;KILL_WHOLE_LINE&quot;</code> on %USERPROFILE%\.nyagos (<a href="https://github.com/yuin/gopher-lua">Lua</a>)</li>
-</ul>
-</li>
-<li>Lua関数のキーへのバインド
-<ul>
-<li><code>nyagos.key.escape = function(this) nyagos.exec(&quot;start vim.exe&quot;) end</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>ヒストリ (Ctrl-P や ! マークによる)</p>
-</li>
-<li>
-<p>エイリアス</p>
-<ul>
-<li>DOSKEY風
-<ul>
-<li><code>nyagos.alias[&quot;g++&quot;]=&quot;g++.exe -std=gnu++17 $*&quot;</code></li>
-</ul>
-</li>
-<li>Lua関数による実装
-<ul>
-<li><code>nyagos.alias[&quot;lala&quot;]=function(args) nyagos.exec(&quot;ls&quot;,&quot;-al&quot;,unpack(args)) end</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p>カスタム補完</p>
-</li>
-</ul>
-</li>
-</ul>
-<pre><code class="language-lua">            nyagos.complete_for[&quot;go&quot;] = function(args)
-                if #args == 2 then
-                    return {
-                        &quot;bug&quot;,&quot;doc&quot;,&quot;fmt&quot;,&quot;install&quot;,&quot;run&quot;,&quot;version&quot;,
-                        &quot;build&quot;,&quot;env&quot;,&quot;generate&quot;,&quot;list&quot;,&quot;test&quot;,&quot;vet&quot;,
-                        &quot;clean&quot;,&quot;fix&quot;,&quot;get&quot;,&quot;mod&quot;,&quot;tool&quot; }
-                else
-                    return nil -- files completion
-                end
-            end
+<li>デフォルトでは Bash に近いキーバインドを採用。</li>
+<li><code>%USERPROFILE%\.nyagos</code> に Lua スクリプトでカスタマイズ可能。
+<pre><code class="language-lua">nyagos.key.c_u = &quot;KILL_WHOLE_LINE&quot;
 </code></pre>
-<ul>
-<li>CMD.EXE同様のウインドウズの作法に従うシェル
-<ul>
-<li><code>C:\path\to\file</code> のような Windowsパス使用可能</li>
-<li>ドライブごとにカレントディレクトリを保持</li>
-<li><code>copy</code>,<code>move</code> など DOS 風の内蔵コマンドが動作</li>
-<li>ランタイムDLL不要</li>
-<li>レジストリ無使用</li>
+</li>
+<li>Lua 関数をキーに割り当て可能：
+<pre><code class="language-lua">nyagos.key.escape = function(this) nyagos.exec(&quot;start vim.exe&quot;) end
+</code></pre>
+</li>
 </ul>
 </li>
-<li>カラーコマンドライン</li>
-<li>Unicodeサポート
+<li><strong>履歴とエイリアス</strong>
 <ul>
-<li>Unicode文字をコピペ・編集可能</li>
-<li>Unicodeリテラル %U+XXXX%</li>
-<li>プロンプト向けマクロ $Uxxxx</li>
+<li><code>Ctrl-P</code> による履歴検索や <code>!</code> を用いたコマンド再実行が可能。</li>
+<li>DOSKEY 風のエイリアス機能：
+<pre><code class="language-lua">nyagos.alias[&quot;g++&quot;] = &quot;g++.exe -std=gnu++17 $*&quot;
+</code></pre>
+</li>
+<li>Lua でエイリアスを実装可能：
+<pre><code class="language-lua">nyagos.alias[&quot;lala&quot;] = function(args) nyagos.exec(&quot;ls&quot;, &quot;-al&quot;, unpack(args)) end
+</code></pre>
+</li>
 </ul>
 </li>
-<li>内蔵ls
+<li><strong>カスタム補完（Bash 風の Tab 補完）</strong>
 <ul>
-<li>カラーサポート(-oオプション)</li>
-<li>ハードリンク・シンボリックリンク・ジャンクションのリンク先を表示</li>
+<li>コマンドごとに補完の定義が可能。
+<pre><code class="language-lua">nyagos.complete_for[&quot;go&quot;] = function(args)
+    if #args == 2 then
+        return { &quot;bug&quot;, &quot;doc&quot;, &quot;fmt&quot;, &quot;install&quot;, &quot;run&quot;, &quot;version&quot;,
+                 &quot;build&quot;, &quot;env&quot;, &quot;generate&quot;, &quot;list&quot;, &quot;test&quot;, &quot;vet&quot;,
+                 &quot;clean&quot;, &quot;fix&quot;, &quot;get&quot;, &quot;mod&quot;, &quot;tool&quot; }
+    else
+        return nil -- ファイル補完
+    end
+end
+</code></pre>
+</li>
 </ul>
 </li>
-<li><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) サポート - <a href="10-SetupSKK_ja.html">設定方法</a></li>
-<li>サポート OS
+<li><strong>予測補完（PowerShell 7 風）</strong>
 <ul>
-<li>Windows 7, 8.1, 10, 11, Windows Server2008以降</li>
-<li>Linux (試験的サポート)</li>
+<li>過去の履歴をもとに補完候補を提示。</li>
+<li><code>Ctrl-F</code> または右矢印キーで補完候補を採用可能。</li>
 </ul>
 </li>
+</ul>
+<h4 id="windows-">Windows 互換機能 <a href="#windows-">.</a></h4>
+<ul>
+<li><strong>バッチファイルのシームレスな実行</strong>
+<ul>
+<li>Windows のバッチファイル（<code>.bat</code> や <code>.cmd</code>）を CMD.exe 上で実行するのと同じように実行可能。</li>
+<li>バッチファイル内で変更された環境変数やカレントディレクトリを適切に反映。</li>
+</ul>
+</li>
+<li><strong>CMD.EXE ライクな機能</strong>
+<ul>
+<li>Windows のパス表記（<code>C:\path\to\file</code>）に対応。</li>
+<li>ドライブごとにカレントディレクトリを維持。</li>
+<li><code>copy</code> や <code>move</code> などの DOS 風の組み込みコマンドを搭載。</li>
+<li>追加の DLL 不要、レジストリ変更なし。</li>
+</ul>
+</li>
+</ul>
+<h4 id="heading-2">ユーザーエクスペリエンスの向上 <a href="#heading-2">.</a></h4>
+<ul>
+<li><strong>カラー対応のコマンドライン</strong></li>
+<li><strong>Unicode サポート</strong>
+<ul>
+<li>Windows の Unicode API を完全サポート。</li>
+<li>クリップボードの Unicode 文字の貼り付け・編集が可能。</li>
+<li>特殊な Unicode リテラル <code>%U+XXXX%</code> やプロンプトマクロ <code>$Uxxxx</code> に対応。</li>
+</ul>
+</li>
+<li><strong>組み込み <code>ls</code> コマンド</strong>
+<ul>
+<li>カラー出力に対応（<code>-o</code> オプション）。</li>
+<li>ハードリンク、シンボリックリンク、ジャンクションのターゲットパスを表示。</li>
+</ul>
+</li>
+<li><strong><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a>（簡易かな漢字変換プログラム）をサポート - <a href="10-SetupSKK_ja.html">セットアップガイド</a></strong></li>
+</ul>
+<h3 id="heading-3">対応プラットフォーム <a href="#heading-3">.</a></h3>
+<ul>
+<li>Windows 7, 8.1, 10, 11, Windows Server 2008 以降</li>
+<li>Linux（実験的対応）</li>
 </ul>
 <p><a href="https://www.youtube.com/watch?v=WsfIrBWwAh0">Video by @emisjerry</a></p>
-<h2 id="heading-1">ライセンス <a href="#heading-1">.</a></h2>
-<p>修正BSDライセンスに基いて、使用・コピー・改変が可能です。</p>
-<h2 id="heading-2">謝辞 <a href="#heading-2">.</a></h2>
+<h3 id="heading-4">ライセンス <a href="#heading-4">.</a></h3>
+<p>NYAGOS は New BSD License のもとで使用・複製・改変が可能です。</p>
+<h3 id="heading-5">謝辞 <a href="#heading-5">.</a></h3>
 <p><a href="https://github.com/nocd5">nocd5</a>
 / <a href="https://github.com/mattn">mattn</a>
 / <a href="https://github.com/hattya">hattya</a>
@@ -1280,7 +1286,7 @@
 / <a href="https://github.com/HAYASHI-Masayuki">HAYASHI-Masayuki</a>
 / <a href="https://github.com/naoyaikeda">naoyaikeda</a>
 / <a href="https://github.com/emisjerry">emisjerry</a></p>
-<h2 id="heading-3">開発者 <a href="#heading-3">.</a></h2>
+<h3 id="heading-6">開発者 <a href="#heading-6">.</a></h3>
 <ul>
 <li><a href="https://github.com/hymkor">hymkor - HAYAMA Kaoru</a> (a.k.a zetamatta)</li>
 </ul>
