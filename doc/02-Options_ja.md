@@ -2,9 +2,6 @@
 
 ## 起動オプション
 
-### --cleanup-buffer (lua: `nyagos.option.cleanup_buffer=true`)
-プロンプト表示のタイミングで、キーバッファをクリアします
-
 ## --clipboard (lua: `nyagos.option.clipboard=true`)
 コピーバッファのクリップボード連動を有効にする
 
@@ -48,9 +45,6 @@
 
 ### --predict (lua: `nyagos.option.predict=true`) [default]
 一行入力の予測表示を有効化します(デフォルトは有効)
-
-### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
-プロンプト表示時にキーバッファをクリアさせません。
 
 ### --no-clipboard (lua: `nyagos.option.clipboard=false`)
 コピーバッファのクリップボード連動を無効にする

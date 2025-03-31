@@ -1,11 +1,6 @@
 English / [Japanese](./02-Options_ja.md)
 
-
 ## Option for NYAGOS.EXE
-
-
-### --cleanup-buffer (lua: `nyagos.option.cleanup_buffer=true`)
-Clean up key buffer at prompt
 
 ## --clipboard (lua: `nyagos.option.clipboard=true`)
 Enable clipboard integration for the kill buffer
@@ -51,9 +46,6 @@ Execute "LUACODE" before processing any rcfiles and continue shell
 
 ### --predict (lua: `nyagos.option.predict=true`) [default]
 Enable the prediction on readlines (default: enabled)
-
-### --no-cleanup-buffer (lua: `nyagos.option.cleanup_buffer=false`) [default]
-Do not clean up key buffer at prompt
 
 ### --no-clipboard (lua: `nyagos.option.clipboard=false`)
 Disable clipboard integration for the kill buffer

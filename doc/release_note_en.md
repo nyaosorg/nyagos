@@ -13,6 +13,8 @@ Snapshot
 - Removed support for the configuration file `_nyagos`, which had been deprecated since v4.4.15.
 - `set -o` now shows the current configuration in Lua syntax.
 - Included multiple icons in the executable, allowing users to choose one when creating a shortcut
+- Fix a documentation mistake.
+    - `nyagos.option.cleanup_buffer` was still mentioned even though it had been removed.
 
 v4.4.16\_0
 --------
