@@ -2,26 +2,55 @@
 
 ## 起動オプション
 
-## --clipboard (lua: `nyagos.option.clipboard=true`)
-コピーバッファのクリップボード連動を有効にする
+### -b "BASE64edCOMMAND"
+BASE64形式でエンコードされたコマンドをデコードして実行します。
+
+### -c "COMMAND"
+指定したコマンドを実行し、ただちに終了します。
+
+### --clipboard / --no-clipboard
+(Lua: `nyagos.option.clipboard = true` / `false`)
+
+コピーバッファのクリップボード連動を有効 / 無効にする。
 
 ### --cmd-first "COMMAND"
-.nyagos を処理する前に "COMMAND" を実行し、終了後、シェルを継続します。
+.nyagos を処理する前に "COMMAND" を実行し、その後シェルを継続する。
 
-### --completion-hidden (lua: `nyagos.option.completion_hidden=true`)
-ファイル名補完に、隠しファイルも含めます
+### --completion-hidden / --no-completion-hidden
+(Lua: `nyagos.option.completion_hidden = true` / `false`)
 
-### --completion-slash (lua: `nyagos.option.completion_slash=true`)
-ファイル名補完で、スラッシュを使います。
+ファイル名補完に、隠しファイルも含める。
+無効にする場合、`--no-completion-hidden` を使う。
 
-### --glob (lua: `nyagos.option.glob=true`)
-外部コマンドにおいても、ワイルドカード展開を有効にします。
+### --completion-slash / --no-completion-slash
+(Lua: `nyagos.option.completion_slash = true` / `false`)
 
-### --glob-slash (lua: `nyagos.option.glob_slash=true`,`set -o glob_slash`)
-外部コマンド向けのワイルドカード展開で、ディレクトリ名区切りに `\` を使わず、`/` を使います。
+ファイル名補完で、フォワードスラッシュ（`/`）を使用する / しない。
 
-### --help
+### -e "SCRIPTCODE"
+Luaインタプリタで指定したスクリプトコードを実行し、終了します。
+
+### -f FILE ARG1 ARG2 ...
+ファイル名の拡張子が .Lua の場合、ファイル中の Lua コードを実行します。
+(引数は配列 arg[] という形で参照できます)
+
+さもなければ、通常コマンドとして読み取って実行します。
+
+### --glob / --no-glob
+(Lua: `nyagos.option.glob = true` / `false`)
+
+外部コマンドにおいても、ワイルドカード展開を有効 / 無効にする。
+
+### --glob-slash / --no-glob-slash
+(Lua: `nyagos.option.glob_slash = true` / `false` , `set -o glob_slash` / `set +o glob_slash`)
+
+外部コマンド向けのワイルドカード展開で、ディレクトリの区切り文字として `/` を使う/ `\` を使う
+
+### -h , --help
 ヘルプを表示します。
+
+### -k "COMMAND"
+コマンドを実行してから、通常起動します。
 
 ### --look-curdir-first
 カレントディレクトリから実行ファイルを %PATH% より前に探します
@@ -43,84 +72,41 @@
 ### --lua-first "LUACODE"
 .nyagos を読み込む前に、引数の LUAコードを実行します
 
-### --predict (lua: `nyagos.option.predict=true`) [default]
-一行入力の予測表示を有効化します(デフォルトは有効)
+### --noclobber / --no-noclobber
+(Lua: `nyagos.option.noclobber=true` / `false`)
 
-### --no-clipboard (lua: `nyagos.option.clipboard=false`)
-コピーバッファのクリップボード連動を無効にする
-
-### --no-completion-hidden (lua: `nyagos.option.completion_hidden=false`) [default]
-ファイル名補完に隠しファイルを含ませません。
-
-### --no-completion-slash (lua: `nyagos.option.completion_slash=false`) [default]
-ファイル名補完でスラッシュを使いません(バックスラッシュを使います)
-
-### --no-glob (lua: `nyagos.option.glob=false`) [default]
-外部コマンドで、ワイルドカード展開をしません。
-
-### --no-glob-slash (lua: `nyagos.option.glob_slash=false`,`set +o glob_slash`)
-外部コマンド向けのワイルドカード展開で、ディレクトリ名区切りに `\` を使います。
-
-### --no-output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=false`) [default]
-サロゲートペアな文字を `<NNNN>` と表記します。
-
-### --no-noclobber (lua: `nyagos.option.noclobber=false`) [default]
-リダイレクトでの上書きを許可します。
-
-### --no-read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=false`) [default]
-標準入力からコンソール扱いでコマンドを読み込みます。
-(編集機能が有効になります)
-
-### --no-tilde-expansion (lua: `nyagos.option.tilde_expansion=false`)
-~ の置換を無効にする
-
-### --no-usesource (lua: `nyagos.option.usesource=false`)
-バッチファイルに、NYAGOS側の環境変数の変更させるのを禁止します。
-
-### --noclobber (lua: `nyagos.option.noclobber=true`)
-リダイレクトでの上書きを禁止します。
-
-### --no-predict (lua: `nyagos.option.predict=false`)
-一行入力の予測表示を無効化します(デフォルトは有効)
+リダイレクト時のファイル上書きを禁止 / 許可します。
 
 ### --norc
 `~\.nyagos`, `(BINDIR)\.nyagos`, `(BINDIR)\nyagos.d\*.lua`, `%APPDATA%\NYAOS_ORG\nyagos.d\*.lua` といった起動スクリプトをロードしないようにします。
 
-### --output-surrogate-pair (lua: `nyagos.option.output_surrogate_pair=true`)
-サロゲートペアな文字をそのまま表示します
+### --output-surrogate-pair / --no-output-surrogate-pair
+(Lua: `nyagos.option.output_surrogate_pair=true`)
 
-### --read-stdin-as-file (lua: `nyagos.option.read_stdin_as_file=true`)
-標準入力からファイル扱いでコマンドを読み込みます。
-(編集機能が無効になります)
+サロゲートペアの文字をそのまま表示する / `<NNNN>` の形式で出力する。
+
+### --predict / --no-predict
+(Lua: `nyagos.option.predict = true` / `false`) [default]
+
+一行入力の予測表示を有効化/無効化します
+
+### --read-stdin-as-file / --no-read-stdin-as-file
+(Lua: `nyagos.option.read_stdin_as_file=true` / `false`)
+
+編集機能を無効にし、標準入力をファイルとして読み込みます。
+コンソール扱いで読み込む場合は `--no-read-stdin-as-file` を指定します。
 
 ### --show-version-only
 バージョンを表示します(ビルド用です)
 
-### --tilde-expansion (lua: `nyagos.option.tilde_expansion=true`) [default]
-~ 置換を有効にします
+### --tilde-expansion / --no-tilde-expansion
+(Lua: `nyagos.option.tilde_expansion=true`) [default]
 
-### --usesource (lua: `nyagos.option.usesource=true`) [default]
-バッチファイルに、NYAGOS側の環境変数の変更させるのを許可します。
+`~` をホームディレクトリに展開する機能を有効にします。無効にする場合は`--no-tilde-expansion` を指定します。
 
-### -b "BASE64edCOMMAND"
-BASE64形式でエンコードされたコマンドをデコードして実行します。
+### --usesource / --no-usesource
+(Lua: `nyagos.option.usesource=true` / `false`) [default]
 
-### -c "COMMAND"
-コマンドを実行して、ただちに終了します。
-
-### -e "SCRIPTCODE"
-Luaインタプリタでスクリプトコードを実行後、終了します。
-
-### -f FILE ARG1 ARG2 ...
-ファイル名の拡張子が .Lua の場合、ファイル中の Lua コードを実行します。
-(引数は配列 arg[] という形で参照できます)
-
-さもなければ、通常コマンドとして読み取って実行します。
-
-### -h
-オプションのヘルプを表示します。
-
-### -k "COMMAND"
-コマンドを実行してから、通常起動します。
+バッチファイルから NYAGOS の環境変数を変更できるようにする / 禁止する。
 
 <!-- set:fenc=utf8: -->
