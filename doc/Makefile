@@ -8,16 +8,16 @@ ALL := $(HTML_EN) $(HTML_JA) ../docs/index.html ../docs/index_ja.html
 all: $(ALL)
 
 ../docs/%_en.html: %_en.md
-	minipage -title "NYAOS.ORG/NYAGOS $(subst _en,,$(basename $<))" -sidebar _Sidebar_en.md _Header.md $< > $@
+	gawk 'match($$0,/^##* */) { print substr($$0,RLENGTH+1); nextfile }' $< | minipage -title-from-file - -sidebar _Sidebar_en.md _Header.md $< > $@
 
 ../docs/%_ja.html: %_ja.md
-	minipage -title "NYAOS.ORG/NYAGOS $(subst _ja,,$(basename $<))" -sidebar _Sidebar_ja.md _Header.md $< > $@
+	gawk 'match($$0,/^##* */) { print substr($$0,RLENGTH+1); nextfile }' $< | minipage -title-from-file - -sidebar _Sidebar_ja.md _Header.md $< > $@
 
 ../docs/index.html:    index.md
-	minipage -title "NYAOS.ORG/NYAGOS " -sidebar _Sidebar_en.md _Header.md $< > $@
+	minipage -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_en.md _Header.md $< > $@
 
 ../docs/index_ja.html: index_ja.md
-	minipage -title "NYAOS.ORG/NYAGOS " -sidebar _Sidebar_ja.md _Header.md $< > $@
+	minipage -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
 clean:
 	rm $(ALL)
