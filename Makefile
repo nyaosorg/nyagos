@@ -66,6 +66,7 @@ clean:
 
 get:
 	$(GO) get -u
+	$(GO) get golang.org/x/sys@v0.30.0
 	$(GO) mod tidy
 
 _dist:
