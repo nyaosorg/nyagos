@@ -1,7 +1,8 @@
 English / [Japanese](release_note_ja.md)
 
-Snapshot
---------
+v4.4.17\_0
+----------
+May 7, 2025
 
 - The kill buffer in NYAGOS previously interacted with the OS clipboard by default. This behavior has been changed so that it no longer does so by default. To enable clipboard integration, set nyagos.option.clipboard = true.
 - Syntax highlighting:
