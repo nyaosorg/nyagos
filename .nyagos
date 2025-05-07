@@ -39,6 +39,6 @@ nyagos.prompt = function(this)
     end
 end
 
--- nyagos.option.clipboard = true
+-- nyagos.option.clipboard = true  -- Enable OS clipboard integration for kill/yank
 
 -- vim:set ft=lua: --
