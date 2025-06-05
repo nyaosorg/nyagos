@@ -88,6 +88,6 @@ release:
 
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
-	$(SUPPORTGO) download
+	"$(shell go env GOPATH)/bin/$(SUPPORTGO)" download
 
 .PHONY: snapshot debug test tstlua clean get _dist dist release install
