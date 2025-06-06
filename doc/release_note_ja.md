@@ -1,6 +1,7 @@
 [English](release_note_en.md) / Japanese
 
 - `%USERPROFILE%` が `C:\Users\foo` の時、`C:\Users\fool` へ chdir すると、プロンプトの `$P` が `~l` となってしまう不具合を修正
+- `nyagos.d/` 直下の Lua スクリプトを実行ファイルに組み込んだ
 
 v4.4.17\_0
 ----------
