@@ -2,6 +2,7 @@ package frame
 
 import (
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -51,6 +52,42 @@ func loadScriptDir(dir string, L scriptEngine) error {
 		}
 	}
 	return nil
+}
+
+func loadEmbedScripts(L scriptEngine, fsys fs.FS, dir string, warn func(error) error) error {
+	entries, err := fs.ReadDir(fsys, dir)
+	if err != nil {
+		return err
+	}
+	for _, entry1 := range entries {
+		scriptName := entry1.Name()
+		if len(scriptName) > 0 && scriptName[0] == '.' {
+			continue
+		}
+		scriptPath := path.Join(dir, scriptName)
+		if entry1.IsDir() {
+			if err := loadEmbedScripts(L, fsys, scriptPath, warn); err != nil {
+				return err
+			}
+			continue
+		}
+		if !strings.HasSuffix(scriptName, ".lua") {
+			continue
+		}
+		scriptCode, err := fs.ReadFile(fsys, scriptPath)
+		if err != nil {
+			return err
+		}
+		if err := L.DoString(string(scriptCode)); err != nil {
+			if err = warn(fmt.Errorf("(embed) %s: %w", scriptName, err)); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+func LoadEmbedScripts(L scriptEngine, fsys fs.FS, warn func(error) error) error {
+	return loadEmbedScripts(L, fsys, ".", warn)
 }
 
 // LoadScripts loads ".nyagos"
