@@ -131,12 +131,9 @@ func Main() error {
 	sh.Console = colorable.NewColorableStdout()
 	ctx = context.WithValue(ctx, shellKey, sh)
 
-	langEngine := func(fname string) ([]byte, error) {
-		ctxTmp := context.WithValue(ctx, shellKey, sh)
-		defer setContext(getContext(L), L)
-		setContext(ctxTmp, L)
-		return nil, L.DoFile(fname)
-	}
+	ctxTmp := context.WithValue(ctx, shellKey, sh)
+	defer setContext(getContext(L), L)
+	setContext(ctxTmp, L)
 
 	alias.LineFilter = func(ctx context.Context, line string) string {
 		if L, ok := ctx.Value(luaKey).(Lua); ok {
@@ -158,7 +155,7 @@ func Main() error {
 		if !frame.SilentMode {
 			frame.Title()
 		}
-		if err := frame.LoadScripts(langEngine); err != nil {
+		if err := frame.LoadScripts(L); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}

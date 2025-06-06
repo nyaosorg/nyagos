@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 
 	"github.com/nyaosorg/nyagos/internal/nodos"
@@ -25,7 +24,12 @@ func (e _DirNotFound) Unwrap() error {
 	return e.err
 }
 
-func loadScriptDir(dir string, langEngine func(string) ([]byte, error)) error {
+type scriptEngine interface {
+	DoFile(string) error
+	DoString(string) error
+}
+
+func loadScriptDir(dir string, L scriptEngine) error {
 	files, err := os.ReadDir(dir)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -40,7 +44,7 @@ func loadScriptDir(dir string, langEngine func(string) ([]byte, error)) error {
 		lowerName := strings.ToLower(name)
 
 		if strings.HasSuffix(lowerName, ".lua") {
-			_, err := langEngine(path)
+			err := L.DoFile(path)
 			if err != nil {
 				fmt.Fprintf(os.Stderr, "%s: %s\n", path, err.Error())
 			}
@@ -50,19 +54,17 @@ func loadScriptDir(dir string, langEngine func(string) ([]byte, error)) error {
 }
 
 // LoadScripts loads ".nyagos"
-func LoadScripts(
-	langEngine func(string) ([]byte, error)) error {
-
+func LoadScripts(L scriptEngine) error {
 	exeName, err := os.Executable()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
 	exeFolder := filepath.Dir(exeName)
-	loadScriptDir(filepath.Join(exeFolder, "nyagos.d"), langEngine)
+	loadScriptDir(filepath.Join(exeFolder, "nyagos.d"), L)
 
 	if appDir, err := os.UserConfigDir(); err == nil {
 		dir := filepath.Join(appDir, "NYAOS_ORG/nyagos.d")
-		err := loadScriptDir(dir, langEngine)
+		err := loadScriptDir(dir, L)
 		if err != nil {
 			if _, ok := err.(_DirNotFound); ok {
 				os.MkdirAll(dir, 0755)
@@ -74,36 +76,20 @@ func LoadScripts(
 
 	fname := filepath.Join(exeFolder, ".nyagos")
 	if _, err := os.Stat(fname); err == nil {
-		if _, err := langEngine(fname); err != nil {
+		if err := L.DoFile(fname); err != nil {
 			fmt.Fprintln(os.Stderr, err.Error())
 		}
 	}
-	if err := dotNyagos(langEngine); err != nil {
+	if err := dotNyagos(L); err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 	return nil
 }
 
-func dotNyagos(langEngine func(string) ([]byte, error)) error {
+func dotNyagos(L scriptEngine) error {
 	dotNyagos := filepath.Join(nodos.GetHome(), ".nyagos")
-	dotStat, err := os.Stat(dotNyagos)
-	if err != nil {
+	if _, err := os.Stat(dotNyagos); err != nil {
 		return nil
 	}
-	cachePath := filepath.Join(appDataDir(), runtime.GOARCH+".nyagos.luac")
-	cacheStat, err := os.Stat(cachePath)
-	if err == nil {
-		if cacheStat.Size() != 0 && !dotStat.ModTime().After(cacheStat.ModTime()) {
-			_, err = langEngine(cachePath)
-			if err == nil {
-				return nil
-			}
-		}
-		os.Remove(cachePath)
-	}
-	chank, err := langEngine(dotNyagos)
-	if err != nil || chank == nil {
-		return err
-	}
-	return os.WriteFile(cachePath, chank, os.FileMode(0644))
+	return L.DoFile(dotNyagos)
 }
