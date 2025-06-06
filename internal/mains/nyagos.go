@@ -162,7 +162,9 @@ func Run(fsys fs.FS) error {
 		if !frame.SilentMode {
 			frame.Title()
 		}
-		if err := frame.LoadEmbedScripts(L, fsys, warningOnly); err != nil {
+		if embed, err := fs.Sub(fsys, "embed"); err != nil {
+			warningOnly(err)
+		} else if err := frame.LoadScriptsFs(L, embed, warningOnly); err != nil {
 			return err
 		}
 		if err := frame.LoadScripts(L, warningOnly); err != nil {
