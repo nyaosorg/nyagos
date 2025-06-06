@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/signal"
 	"runtime/debug"
+	"strings"
 	"syscall"
 
 	"github.com/go-ole/go-ole"
@@ -19,13 +20,14 @@ import (
 	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/history"
+	"github.com/nyaosorg/nyagos/internal/onexit"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 var DefaultHistory *history.Container
 
-func Start(mainHandler func() error) error {
-	defer panicHandler()
+func Setup(version string) {
+	Version = strings.TrimSpace(version)
 
 	shell.SetHook(func(ctx context.Context, it *shell.Cmd) (int, bool, error) {
 		rc, done, err := commands.Exec(ctx, it)
@@ -35,24 +37,22 @@ func Start(mainHandler func() error) error {
 	completion.AppendCommandLister(alias.AllNames)
 
 	if ole.CoInitializeEx(0, ole.COINIT_MULTITHREADED) == nil {
-		defer ole.CoUninitialize()
+		onexit.Register(ole.CoUninitialize)
 	}
 
 	alias.Init()
 
 	disableColors := colorable.EnableColorsStdout(nil)
-	defer disableColors()
+	onexit.Register(disableColors)
 
 	if clean, err := consoleicon.SetFromExe(); err == nil {
-		defer clean(true)
+		onexit.Register(func() { clean(true) })
 	}
 
 	signal.Ignore(os.Interrupt, syscall.SIGINT)
-
-	return mainHandler()
 }
 
-func panicHandler() {
+func PanicHandler() {
 	err := recover()
 	if err == nil {
 		return

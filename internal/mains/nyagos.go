@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
 	"strings"
 
@@ -115,8 +116,8 @@ func warningOnly(err error) error {
 	return nil
 }
 
-// Main is the entry of this package.
-func Main() error {
+// Run is the entry of this package.
+func Run(fsys fs.FS) error {
 	ctx := context.Background()
 
 	L, err := NewLua()
@@ -160,6 +161,9 @@ func Main() error {
 	if !frame.OptionNorc {
 		if !frame.SilentMode {
 			frame.Title()
+		}
+		if err := frame.LoadEmbedScripts(L, fsys, warningOnly); err != nil {
+			return err
 		}
 		if err := frame.LoadScripts(L, warningOnly); err != nil {
 			return err

@@ -1,11 +1,10 @@
 package main
 
 import (
-	_ "embed"
+	"embed"
 	"fmt"
 	"io"
 	"os"
-	"strings"
 
 	"github.com/nyaosorg/nyagos/internal/defined"
 	"github.com/nyaosorg/nyagos/internal/frame"
@@ -15,16 +14,22 @@ import (
 
 var version string
 
-func main() {
-	rc := 0
-	frame.Version = strings.TrimSpace(version)
-	if err := frame.Start(mains.Main); err != nil && err != io.EOF {
-		fmt.Fprintln(os.Stderr, err.Error())
-		rc = 1
-	}
+//go:embed embed/*.lua
+var embedLua embed.FS
+
+func run() error {
+	defer frame.PanicHandler()
+	defer onexit.Done()
 	if defined.DBG {
-		os.Stdin.Read(make([]byte, 1))
+		defer os.Stdin.Read(make([]byte, 1))
 	}
-	onexit.Done()
-	os.Exit(rc)
+	frame.Setup(version)
+	return mains.Run(&embedLua)
+}
+
+func main() {
+	if err := run(); err != nil && err != io.EOF {
+		fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
+	}
 }
