@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -91,7 +92,7 @@ func LoadEmbedScripts(L scriptEngine, fsys fs.FS, warn func(error) error) error 
 }
 
 // LoadScripts loads ".nyagos"
-func LoadScripts(L scriptEngine) error {
+func LoadScripts(L scriptEngine, warn func(error) error) error {
 	exeName, err := os.Executable()
 	if err != nil {
 		exeName = os.Args[0]
@@ -106,7 +107,9 @@ func LoadScripts(L scriptEngine) error {
 			if _, ok := err.(_DirNotFound); ok {
 				os.MkdirAll(dir, 0755)
 			} else {
-				fmt.Fprintln(os.Stderr, err.Error())
+				if err := warn(err); err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -114,11 +117,15 @@ func LoadScripts(L scriptEngine) error {
 	fname := filepath.Join(exeFolder, ".nyagos")
 	if _, err := os.Stat(fname); err == nil {
 		if err := L.DoFile(fname); err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+			if err = warn(err); err != nil {
+				return err
+			}
 		}
 	}
 	if err := dotNyagos(L); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+		if err = warn(err); err != nil {
+			return err
+		}
 	}
 	return nil
 }

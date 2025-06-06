@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"golang.org/x/text/transform"
 
@@ -109,6 +110,11 @@ func (lw *luaWrapper) Close() error {
 	return nil
 }
 
+func warningOnly(err error) error {
+	fmt.Fprintln(os.Stderr, strings.TrimSpace(err.Error()))
+	return nil
+}
+
 // Main is the entry of this package.
 func Main() error {
 	ctx := context.Background()
@@ -155,8 +161,8 @@ func Main() error {
 		if !frame.SilentMode {
 			frame.Title()
 		}
-		if err := frame.LoadScripts(L); err != nil {
-			fmt.Fprintln(os.Stderr, err.Error())
+		if err := frame.LoadScripts(L, warningOnly); err != nil {
+			return err
 		}
 	}
 
