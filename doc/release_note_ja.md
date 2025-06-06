@@ -1,5 +1,7 @@
 [English](release_note_en.md) / Japanese
 
+- `%USERPROFILE%` が `C:\Users\foo` の時、`C:\Users\fool` へ chdir すると、プロンプトの `$P` が `~l` となってしまう不具合を修正
+
 v4.4.17\_0
 ----------
 May 7, 2025

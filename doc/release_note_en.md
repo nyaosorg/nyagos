@@ -1,5 +1,7 @@
 English / [Japanese](release_note_ja.md)
 
+- Fix the issue where, when `%USERPROFILE%` was `C:\Users\foo` and the current directory was `C:\Users\fool`, `$P` in `%PROMPT%` was incorrectly replaced with `~l`.
+
 v4.4.17\_0
 ----------
 May 7, 2025
