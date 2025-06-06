@@ -57,7 +57,7 @@ func loadScriptDir(dir string, L scriptEngine) error {
 func LoadScripts(L scriptEngine) error {
 	exeName, err := os.Executable()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		exeName = os.Args[0]
 	}
 	exeFolder := filepath.Dir(exeName)
 	loadScriptDir(filepath.Join(exeFolder, "nyagos.d"), L)
