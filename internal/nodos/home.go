@@ -20,7 +20,9 @@ func ReplaceHomeToTilde(wd string) string {
 	home := GetHome()
 	homeLen := len(home)
 	if len(wd) >= homeLen && strings.EqualFold(home, wd[0:homeLen]) {
-		wd = "~" + wd[homeLen:]
+		if len(wd) == homeLen || wd[homeLen] == '/' || wd[homeLen] == '\\' {
+			wd = "~" + wd[homeLen:]
+		}
 	}
 	return wd
 }
