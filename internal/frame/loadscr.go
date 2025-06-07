@@ -51,8 +51,10 @@ func LoadScripts(L scriptEngine, warn func(error) error) error {
 	}
 	exeFolder := filepath.Dir(exeName)
 	nyagosD := filepath.Join(exeFolder, "nyagos.d")
-	if err := LoadScriptsFs(L, os.DirFS(nyagosD), warn); err != nil {
-		return err
+	if _, err := os.Stat(nyagosD); err == nil {
+		if err := LoadScriptsFs(L, os.DirFS(nyagosD), warn); err != nil {
+			return err
+		}
 	}
 	if appDir, err := os.UserConfigDir(); err == nil {
 		dir := filepath.Join(appDir, "NYAOS_ORG/nyagos.d")
