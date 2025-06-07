@@ -87,19 +87,31 @@ Install
 
 ### Download Binary
 
+Download the latest stable release from:
+
 * https://github.com/nyaosorg/nyagos/releases
 
 ### Use "Scoop installer"
 
-```
+```cmd
 C:> scoop install nyagos
 ```
 
 ### Use "Chocolatey installer"
 
-```
+```cmd
 C:> choco install nyagos
 ```
+
+### Build from source (snapshot)
+
+If you want to try the latest snapshot version, you can install it via `go install`:
+
+```cmd
+C:> go install github.com/nyaosorg/nyagos@latest
+```
+
+> ⚠️ Note: This builds a development snapshot, not the latest stable release.
 
 Contents
 --------

@@ -88,21 +88,33 @@ NYAGOS は New BSD License のもとで使用・複製・改変が可能です�
 インストール
 ------------
 
-### バイナリをダウンロード
+### バイナリをダウンロードする
+
+安定版のバイナリは以下のページからダウンロードできます：
 
 * https://github.com/nyaosorg/nyagos/releases
 
-### Scoop installer を使う場合
+### Scoop でインストールする
 
-```
+```cmd
 C:> scoop install nyagos
 ```
 
-### Chocolatey installer を使う場合
+### Chocolatey でインストールする
 
-```
+```cmd
 C:> choco install nyagos
 ```
+
+### ソースコードからビルドする（スナップショット版）
+
+最新版のスナップショットを試したい場合は、`go install` でインストールできます：
+
+```cmd
+C:> go install github.com/nyaosorg/nyagos@latest
+```
+
+> ⚠️ この方法でインストールされるのは開発中のスナップショット版であり、安定版ではありません。
 
 目次
 ----
