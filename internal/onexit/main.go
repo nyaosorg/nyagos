@@ -10,4 +10,5 @@ func Done() {
 	for i := len(functions) - 1; i >= 0; i-- {
 		functions[i]()
 	}
+	functions = functions[:0]
 }
