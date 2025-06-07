@@ -12,7 +12,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/onexit"
 )
 
-var version string
+var version = "snapshot"
 
 //go:embed embed/*.lua
 var embedLua embed.FS
