@@ -121,24 +121,24 @@ C:> go install github.com/nyaosorg/nyagos@latest
 
 ### リリースノート
 
-[4.4.x](docs/release_note_ja.md)
-/ [4.3.x](docs/history-4.3_ja.md)
-/ [4.2.x](docs/history-4.2_ja.md)
-/ [4.1.x](docs/history-4.1_ja.md)
-/ [4.0.x](docs/history-4.0_ja.md)
+[4.4.x](doc/release_note_ja.md)
+/ [4.3.x](doc/history-4.3_ja.md)
+/ [4.2.x](doc/history-4.2_ja.md)
+/ [4.1.x](doc/history-4.1_ja.md)
+/ [4.0.x](doc/history-4.0_ja.md)
 
 ### ドキュメント
 
-1. [インストール](docs/01-Install_ja.md)
-2. [起動オプション](docs/02-Options_ja.md)
-3. [編集機能](docs/03-Readline_ja.md)
-4. [内蔵コマンド](docs/04-Commands_ja.md)
-5. [起動処理](docs/05-Startup_ja.md)
-6. [コマンドライン置換](docs/06-Substitution_ja.md)
-7. [Lua拡張](docs/07-LuaFunctions_ja.md)
-8. [アンインストール](docs/08-Uninstall_ja.md)
-9. [ビルド方法](docs/09-Build_ja.md)
-10. [SKKの設定](docs/10-SetupSKK_ja.md) (v4.4.14以降)
+1. [インストール](doc/01-Install_ja.md)
+2. [起動オプション](doc/02-Options_ja.md)
+3. [編集機能](doc/03-Readline_ja.md)
+4. [内蔵コマンド](doc/04-Commands_ja.md)
+5. [起動処理](doc/05-Startup_ja.md)
+6. [コマンドライン置換](doc/06-Substitution_ja.md)
+7. [Lua拡張](doc/07-LuaFunctions_ja.md)
+8. [アンインストール](doc/08-Uninstall_ja.md)
+9. [ビルド方法](doc/09-Build_ja.md)
+10. [SKKの設定](doc/10-SetupSKK_ja.md) (v4.4.14以降)
 
 ライセンス
 ----------

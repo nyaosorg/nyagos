@@ -116,26 +116,26 @@ C:> go install github.com/nyaosorg/nyagos@latest
 Contents
 --------
 
-### Release note
+### Release notes
 
-[4.4.x](docs/release_note_en.md)
-/ [4.3.x](docs/history-4.3_en.md)
-/ [4.2.x](docs/history-4.2_en.md)
-/ [4.1.x](docs/history-4.1_en.md)
-/ [4.0.x](docs/history-4.0_en.md)
+[4.4.x](doc/release_note_en.md)
+/ [4.3.x](doc/history-4.3_en.md)
+/ [4.2.x](doc/history-4.2_en.md)
+/ [4.1.x](doc/history-4.1_en.md)
+/ [4.0.x](doc/history-4.0_en.md)
 
 ### Documents
 
-1. [Install](docs/01-Install_en.md)
-2. [Option for NYAGOS](docs/02-Options_en.md)
-3. [Editor](docs/03-Readline_en.md)
-4. [Built-in commands](docs/04-Commands_en.md)
-5. [What is done on the Startup](docs/05-Startup_en.md)
-6. [Substitution](docs/06-Substitution_en.md)
-7. [Lua functions extenteded by NYAGOS](docs/07-LuaFunctions_en.md)
-8. [Uninstall](docs/08-Uninstall_en.md)
-9. [How To build](docs/09-Build_en.md)
-10. [How to setup SKK](docs/10-SetupSKK_en.md) (since v4.4.14)
+1. [Install](doc/01-Install_en.md)
+2. [Option for NYAGOS](doc/02-Options_en.md)
+3. [Editor](doc/03-Readline_en.md)
+4. [Built-in commands](doc/04-Commands_en.md)
+5. [What is done on the Startup](doc/05-Startup_en.md)
+6. [Substitution](doc/06-Substitution_en.md)
+7. [Lua functions extenteded by NYAGOS](doc/07-LuaFunctions_en.md)
+8. [Uninstall](doc/08-Uninstall_en.md)
+9. [How To build](doc/09-Build_en.md)
+10. [How to setup SKK](doc/10-SetupSKK_en.md) (since v4.4.14)
 
 License
 -------
