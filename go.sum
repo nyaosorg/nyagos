@@ -30,8 +30,8 @@ github.com/nyaosorg/go-readline-ny v1.9.0 h1:5jXBhg5qeOyJK/2R3lo6+VLx30HdjPh2dw7
 github.com/nyaosorg/go-readline-ny v1.9.0/go.mod h1:54AzdC//M5EzTWRdvUHv2ChuYgp58mRrStTlpxiCmT0=
 github.com/nyaosorg/go-readline-skk v0.5.0 h1:+YWtmWveOV2ovchQAP3AHdTa9yfd9rbFn+/ZyqEfw18=
 github.com/nyaosorg/go-readline-skk v0.5.0/go.mod h1:Fe48AMXOmzDXIz9wDu+BnfnALnrZrU1deema5D70sTA=
-github.com/nyaosorg/go-windows-commandline v0.0.0-20250408012452-618eb04c5bbe h1:4an8OmeBEYi0MY/T/3X4AUG0dLxVkOr1/uVdaJLlu6I=
-github.com/nyaosorg/go-windows-commandline v0.0.0-20250408012452-618eb04c5bbe/go.mod h1:u82aK0/yJBpmTGp8QYdNIbq+C8LdLp/tsgR4sOX3ohs=
+github.com/nyaosorg/go-windows-commandline v0.1.0 h1:sQP8/iW4r8zdZSWW6lTNajEbxBi7twq47EJ6rjsY4oI=
+github.com/nyaosorg/go-windows-commandline v0.1.0/go.mod h1:u82aK0/yJBpmTGp8QYdNIbq+C8LdLp/tsgR4sOX3ohs=
 github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a h1:71x0OsguXShN1AJCxhvF8mY3GXAY2NiGGOBb9UnuXOo=
 github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a/go.mod h1:YLvYLIcnvKlEEJhGKbyJUUzwDhz0nWZ2lMSAY94bp5w=
 github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d h1:K5bgdUWwFH7EiZBCR96b4i96CqSY72e53u+fwDgcjbQ=

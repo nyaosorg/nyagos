@@ -16,7 +16,7 @@ require (
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
 	github.com/nyaosorg/go-readline-ny v1.9.0
 	github.com/nyaosorg/go-readline-skk v0.5.0
-	github.com/nyaosorg/go-windows-commandline v0.0.0-20250408012452-618eb04c5bbe
+	github.com/nyaosorg/go-windows-commandline v0.1.0
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d
 	github.com/nyaosorg/go-windows-junction v0.2.0
