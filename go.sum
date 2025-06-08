@@ -38,8 +38,8 @@ github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d h1:K5
 github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d/go.mod h1:0nNN743DHZNTy+FTf4fP888lxvci+stkBVrJHKiBJIE=
 github.com/nyaosorg/go-windows-junction v0.2.0 h1:RJ30+bYzCHYFWZGFelsI1lvV02gCmDdsO4DD3UkeTh8=
 github.com/nyaosorg/go-windows-junction v0.2.0/go.mod h1:H5YCOgEb2UvUNH8GNQ8h+I1/7AqpR6brAG0zCl61F+Y=
-github.com/nyaosorg/go-windows-mbcs v0.4.3 h1:4/qX+VhzvpINp4ptREYgTunMzIRBEasXsZL8uV4JhY4=
-github.com/nyaosorg/go-windows-mbcs v0.4.3/go.mod h1:80D9r2RNEPG2STQVD5tsgGB/SNkT6HS0ZlKufUn/F70=
+github.com/nyaosorg/go-windows-mbcs v0.4.4 h1:x5MqDvOsfRO8F2a9Uedlm3I6SB/H0whN4KZknTOLe3w=
+github.com/nyaosorg/go-windows-mbcs v0.4.4/go.mod h1:P610Wyc6LcgDbx2VZhwUQn02XRuwjqGK2l/3wox3auA=
 github.com/nyaosorg/go-windows-netresource v0.1.0 h1:PnqD0fE65HGTr/sVe5EQG8Wlgb7IRUxhy1eQ5YfyLzw=
 github.com/nyaosorg/go-windows-netresource v0.1.0/go.mod h1:bgafgIk9EoJBey6Coc1k6jIiMQgVTyWSsD91qYjB06I=
 github.com/nyaosorg/go-windows-shortcut v0.0.0-20220529122037-8b0c89bca4c4 h1:+3bXHpIl3RiBuPKlqeCZZeShGHC9RFhR/P2OJfOLRyA=

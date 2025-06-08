@@ -20,7 +20,7 @@ require (
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d
 	github.com/nyaosorg/go-windows-junction v0.2.0
-	github.com/nyaosorg/go-windows-mbcs v0.4.3
+	github.com/nyaosorg/go-windows-mbcs v0.4.4
 	github.com/nyaosorg/go-windows-netresource v0.1.0
 	github.com/nyaosorg/go-windows-shortcut v0.0.0-20220529122037-8b0c89bca4c4
 	github.com/nyaosorg/go-windows-su v0.2.1
