@@ -2,6 +2,7 @@
 
 - `%USERPROFILE%` が `C:\Users\foo` の時、`C:\Users\fool` へ chdir すると、プロンプトの `$P` が `~l` となってしまう不具合を修正
 - `nyagos.d/` 直下の Lua スクリプトを実行ファイルに組み込んだ
+    - `nyagos.d/` 直下のスクリプトは自動で読まなくなりました。かわりに `%APPDATA%/NYAOS_ORG/nyagos.d` を使ってください
 - Windows/arm64 向けバイナリをビルドができるようにした(ビルドのみで動作は未検証)
 
 v4.4.17\_0
