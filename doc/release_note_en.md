@@ -3,6 +3,7 @@ English / [Japanese](release_note_ja.md)
 - Embedded Lua scripts in the top level of `nyagos.d/` into the executable
     - The scripts on `nyagos.d/` are no longer loaded automatically. Use `%APPDATA%/NYAOS_ORG/nyagos.d` instead
 - Enable building Windows/arm64 binary (build only; runtime untested)
+- Fixed an issue where candidates were not shown during environment variable name completion
 
 v4.4.17\_1
 ==========
