@@ -12,6 +12,7 @@ import (
 
 	"github.com/nyaosorg/go-box/v2"
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/moji"
 
 	"github.com/nyaosorg/nyagos/internal/texts"
 )
@@ -111,9 +112,13 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 	for _, p := range indexes {
 		rv.Field = append(rv.Field, rv.Left[p[0]:p[1]])
 	}
-	rv.List, rv.Pos, err = listUpEnv(rv.AllLine)
+	var posAsStr int
+	rv.List, posAsStr, err = listUpEnv(rv.AllLine)
 	defaultDelimiter := rune(readline.Delimiters[0])
-	if len(rv.List) > 0 && rv.Pos >= 0 && err == nil {
+
+	if len(rv.List) > 0 && posAsStr >= 0 && err == nil {
+		_, mojiCount := moji.MojiWidthAndCountInString(rv.AllLine[posAsStr:])
+		rv.Pos = len(this.Buffer) - mojiCount
 		rv.RawWord = rv.AllLine[rv.Pos:]
 		rv.Word = rv.RawWord
 		return rv, defaultDelimiter, cmdlineRecover, nil

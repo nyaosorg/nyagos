@@ -1,9 +1,15 @@
 English / [Japanese](release_note_ja.md)
 
-- Fix the issue where, when `%USERPROFILE%` was `C:\Users\foo` and the current directory was `C:\Users\fool`, `$P` in `%PROMPT%` was incorrectly replaced with `~l`.
 - Embedded Lua scripts in the top level of `nyagos.d/` into the executable
     - The scripts on `nyagos.d/` are no longer loaded automatically. Use `%APPDATA%/NYAOS_ORG/nyagos.d` instead
 - Enable building Windows/arm64 binary (build only; runtime untested)
+
+v4.4.17\_1
+==========
+Jul 3, 2025
+
+- Fix the issue where, when `%USERPROFILE%` was `C:\Users\foo` and the current directory was `C:\Users\fool`, `$P` in `%PROMPT%` was incorrectly replaced with `~l`.
+- Fixed a crash in environment variable name completion when multibyte characters (e.g., Japanese) appear before the variable name. The bug was caused by misinterpreting the byte offset of the `%` sign (which marks the start of the variable) as a character index.
 
 v4.4.17\_0
 ----------
