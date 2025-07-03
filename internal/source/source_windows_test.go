@@ -18,8 +18,8 @@ func TestBatchCall(t *testing.T) {
 	if err != nil {
 		t.Fatalf("os.Create(\"%s\")=%s", scriptPath, err.Error())
 	}
-	moveDir := os.Getenv("TEMP")
-	fmt.Fprintf(fd, "cd \"%s\"\r\n", moveDir)
+	moveDir := filepath.Clean(os.Getenv("TEMP"))
+	fmt.Fprintf(fd, "cd /D \"%s\"\r\n", moveDir)
 	io.WriteString(fd, "set BATCHTEST=SUCCESS\r\n")
 	io.WriteString(fd, "exit /b 1\r\n")
 	fd.Close()
