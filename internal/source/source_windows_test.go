@@ -50,6 +50,6 @@ func TestBatchCall(t *testing.T) {
 		t.Fatalf("os.Getwd():%s", err.Error())
 	}
 	if wd != moveDir {
-		t.Fatalf("os.Getwd() != \"%s\"", moveDir)
+		t.Fatalf("os.Getwd():\"%s\" != \"%s\"", wd, moveDir)
 	}
 }
