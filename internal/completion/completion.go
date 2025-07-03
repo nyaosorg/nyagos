@@ -119,7 +119,7 @@ func listUpComplete(ctx context.Context, this *readline.Buffer) (*List, rune, fu
 	if len(rv.List) > 0 && posAsStr >= 0 && err == nil {
 		_, mojiCount := moji.MojiWidthAndCountInString(rv.AllLine[posAsStr:])
 		rv.Pos = len(this.Buffer) - mojiCount
-		rv.RawWord = rv.AllLine[rv.Pos:]
+		rv.RawWord = rv.AllLine[posAsStr:]
 		rv.Word = rv.RawWord
 		return rv, defaultDelimiter, cmdlineRecover, nil
 	}
