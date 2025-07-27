@@ -1,5 +1,9 @@
 [English](release_note_en.md) / Japanese
 
+v4.4.17\_2
+==========
+Jul 27, 2025
+
 - コマンド処理中に複数回 Ctrl-C が押下された際、二回目以降が次のコマンド実行時に処理されてしまう問題を修正  
   ( [#449]: Thanks to [@fushihara] )
 

@@ -1,5 +1,9 @@
 English / [Japanese](release_note_ja.md)
 
+v4.4.17\_2
+==========
+Jul 27, 2025
+
 - Fixed an issue where multiple Ctrl-C inputs during command execution could affect subsequent commands.  
   ([#449]: Thanks to [@fushihara])
 
