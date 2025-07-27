@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/signal"
+	"runtime"
 	"syscall"
 
 	"github.com/nyaosorg/go-readline-ny"
@@ -73,6 +74,18 @@ func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, erro
 	return ctx, line, nil
 }
 
+func dropSigint(sigint chan os.Signal) {
+	for {
+		select {
+		case <-sigint:
+			// println("drop sigint")
+			runtime.Gosched()
+		default:
+			return
+		}
+	}
+}
+
 // Loop executes commands from `stream` until any errors are found.
 func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 	backup := sh.Stream
@@ -90,6 +103,8 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 	}()
 
 	for {
+		dropSigint(sigint)
+
 		ctx, cancel := context.WithCancel(ctx0)
 
 		ctx, line, err := sh.ReadCommand(ctx)

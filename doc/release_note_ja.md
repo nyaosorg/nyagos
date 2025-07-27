@@ -5,6 +5,16 @@
 - Windows/arm64 向けバイナリをビルドができるようにした(ビルドのみで動作は未検証)
 - 環境変数名の補完において候補リストが表示されなかった不具合を修正
 
+v4.4.17\_2
+==========
+Jul 27, 2025
+
+- コマンド処理中に複数回 Ctrl-C が押下された際、二回目以降が次のコマンド実行時に処理されてしまう問題を修正  
+  ( [#449]: Thanks to [@fushihara] )
+
+[#449]: https://github.com/nyaosorg/nyagos/issues/449
+[@fushihara](https://github.com/fushihara)
+
 v4.4.17\_1
 ==========
 Jul 3, 2025
