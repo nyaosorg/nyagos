@@ -1,5 +1,11 @@
 [English](release_note_en.md) / Japanese
 
+- コマンド処理中に複数回 Ctrl-C が押下された際、二回目以降が次のコマンド実行時に処理されてしまう問題を修正  
+  ( [#449]: Thanks to [@fushihara] )
+
+[#449]: https://github.com/nyaosorg/nyagos/issues/449
+[@fushihara](https://github.com/fushihara)
+
 v4.4.17\_1
 ==========
 Jul 3, 2025

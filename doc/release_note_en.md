@@ -1,5 +1,11 @@
 English / [Japanese](release_note_ja.md)
 
+- Fixed an issue where multiple Ctrl-C inputs during command execution could affect subsequent commands.  
+  ([#449]: Thanks to [@fushihara])
+
+[#449]: https://github.com/nyaosorg/nyagos/issues/449
+[@fushihara](https://github.com/fushihara)
+
 v4.4.17\_1
 ==========
 Jul 3, 2025
