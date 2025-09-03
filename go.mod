@@ -15,7 +15,7 @@ require (
 	github.com/nyaosorg/go-box/v2 v2.2.1
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
 	github.com/nyaosorg/go-readline-ny v1.9.1
-	github.com/nyaosorg/go-readline-skk v0.5.0
+	github.com/nyaosorg/go-readline-skk v0.6.0
 	github.com/nyaosorg/go-windows-commandline v0.1.0
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d
@@ -32,5 +32,6 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
+	github.com/hymkor/sxencode-go v0.3.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 )
