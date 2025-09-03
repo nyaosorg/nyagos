@@ -4,6 +4,9 @@ English / [Japanese](release_note_ja.md)
     - The scripts on `nyagos.d/` are no longer loaded automatically. Use `%APPDATA%/NYAOS_ORG/nyagos.d` instead
 - Enable building Windows/arm64 binary (build only; runtime untested)
 - Fixed an issue where candidates were not shown during environment variable name completion
+- Update SKK library: go-readline-skk to v0.6.0:
+    - Enabled conversion and word registration for words containing slashes in the conversion result
+    - Added support for evaluating certain Emacs Lisp forms in conversion results, such as `(concat)`, `(pwd)`, `(substring)`, and `(skk-current-date)` (but not `(lambda)` yet)
 
 v4.4.17\_2
 ==========
