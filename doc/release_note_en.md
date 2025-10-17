@@ -1,4 +1,4 @@
-English / [Japanese](release_note_ja.md)
+( **English** / [Japanese](release_note_ja.md) )
 
 - Embedded Lua scripts in the top level of `nyagos.d/` into the executable
     - The scripts on `nyagos.d/` are no longer loaded automatically. Use `%APPDATA%/NYAOS_ORG/nyagos.d` instead
@@ -7,6 +7,25 @@ English / [Japanese](release_note_ja.md)
 - Update SKK library: go-readline-skk to v0.6.0:
     - Enabled conversion and word registration for words containing slashes in the conversion result
     - Added support for evaluating certain Emacs Lisp forms in conversion results, such as `(concat)`, `(pwd)`, `(substring)`, and `(skk-current-date)` (but not `(lambda)` yet)
+- Updated [go-readline-ny] to v1.10.0
+    - Implemented the following changes in response to Issue [#452]: (Thanks @emisjerry )
+      - Added symbolic identifiers and string names for keys  
+        | Symbol         | Key Combination   |
+        | -------------- | ----------------- |
+        | `"C_PAGEDOWN"` | `Ctrl`+`PageDown` |
+        | `"C_PAGEUP"`   | `Ctrl`+`PageUp`   |
+        | `"C_HOME"`     | `Ctrl`+`Home`     |
+        | `"C_END"`      | `Ctrl`+`End`      |
+      - Added default key bindings  
+        |Key Combination| Function |
+        |---------------|----------|
+        |`Ctrl`+`Home` | Delete from the beginning of the line to the cursor (same as `Ctrl`+`U`) |
+        |`Ctrl`+`End` | Delete from the cursor to the end of the line (same as `Ctrl`+`K`) |
+- Updated [mattn/go-runewidth] from v0.0.16 to v0.0.19
+
+[go-readline-ny]: https://github.com/nyaosorg/go-readline-ny
+[#452]: https://github.com/nyaosorg/nyagos/issues/452
+[mattn/go-runewidth]: https://github.com/mattn/go-runewidth
 
 v4.4.17\_2
 ==========

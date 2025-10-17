@@ -1,4 +1,4 @@
-[English](release_note_en.md) / Japanese
+( [English](release_note_en.md) / **Japanese** )
 
 - `nyagos.d/` 直下の Lua スクリプトを実行ファイルに組み込んだ
     - `nyagos.d/` 直下のスクリプトは自動で読まなくなりました。かわりに `%APPDATA%/NYAOS_ORG/nyagos.d` を使ってください
@@ -7,6 +7,25 @@
 - SKK かな漢字変換ライブラリ: go-readline-skk を v0.6.0 へ更新:
     - 変換結果にスラッシュを含む単語も変換・単語登録できるようにした
     - emacslisp で書かれた変換結果について `(concat)`, `(pwd)`, `(substring)`, `(skk-current-date)` 程度は評価できるようにした (`(lambda)` はまだ)
+- [go-readline-ny] を v1.10.0 へ更新
+    - [#452] への対応のため以下を実施 (Thanks @emisjerry ) 
+        - キーを表す識別子・シンボル文字列を追加 
+            | シンボル       | キー組み合わせ  |
+            |----------------|-----------------|
+            |`"C_PAGEDOWN"`  |`Ctrl`+`PageDown`|
+            |`"C_PAGEUP"`    |`Ctrl`+`PageUp`  |
+            |`"C_HOME"`      |`Ctrl`+`Home`    |
+            |`"C_END"`       |`Ctrl`+`End`     |
+        - 初期キー設定を追加  
+            |キー組み合わせ| 機能 |
+            |--------------|------|
+            |`Ctrl`+`Home` | 先頭からカーソル位置までを削除(`Ctrl`+`U`と等価) |
+            |`Ctrl`+`End`  | カーソル位置から末尾までの削除(`Ctrl`+`K`と等価) |
+- [mattn/go-runewidth] を v0.0.16 から v0.0.19 へ更新
+
+[go-readline-ny]: https://github.com/nyaosorg/go-readline-ny
+[#452]: https://github.com/nyaosorg/nyagos/issues/452
+[mattn/go-runewidth]: https://github.com/mattn/go-runewidth
 
 v4.4.17\_2
 ==========
