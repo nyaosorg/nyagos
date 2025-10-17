@@ -8,7 +8,7 @@ require (
 	github.com/go-ole/go-ole v1.3.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.20
-	github.com/mattn/go-runewidth v0.0.16
+	github.com/mattn/go-runewidth v0.0.19
 	github.com/mattn/go-tty v0.0.7
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/glua-ole v0.0.0-20250402051125-b885836720e9
@@ -32,6 +32,6 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
+	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/hymkor/sxencode-go v0.3.0 // indirect
-	github.com/rivo/uniseg v0.4.7 // indirect
 )
