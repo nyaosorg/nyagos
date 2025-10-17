@@ -15,7 +15,8 @@
         "F1" "F2" ..."F24"
         "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
         "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
-        "C_BREAK" "CAPSLOCK" "PAGEUP", "PAGEDOWN" "PAUSE"
+        "C_BREAK" "CAPSLOCK" "PAGEUP" "PAGEDOWN" "PAUSE"
+        "C_HOME" "C_END" "C_PAGEUP" "C_PAGEDOWN"
 
 機能名
 
