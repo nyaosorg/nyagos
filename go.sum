@@ -32,6 +32,8 @@ github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
 github.com/nyaosorg/go-readline-ny v1.10.0 h1:xxEbx4LpUHDNEITFi1DpunISI552o1/yfynNn4A65KI=
 github.com/nyaosorg/go-readline-ny v1.10.0/go.mod h1:ifQ0YwPemXHat17gvybf+i7/gyQnpufancIbnqTjsEM=
+github.com/nyaosorg/go-readline-ny v1.11.0 h1:D2y24u68a4lr2tAN+SS1DgGtbInoBHtP+rxm5Gx/Evo=
+github.com/nyaosorg/go-readline-ny v1.11.0/go.mod h1:ifQ0YwPemXHat17gvybf+i7/gyQnpufancIbnqTjsEM=
 github.com/nyaosorg/go-readline-skk v0.6.0 h1:n7iy806v34+HwiCgBog7OfUaHe9m43z2o6mg3dylgXo=
 github.com/nyaosorg/go-readline-skk v0.6.0/go.mod h1:ulYKxU1enVwOlLA8LFNaRUxSlI1PyayTM1PBOPVs1w8=
 github.com/nyaosorg/go-windows-commandline v0.1.0 h1:sQP8/iW4r8zdZSWW6lTNajEbxBi7twq47EJ6rjsY4oI=
