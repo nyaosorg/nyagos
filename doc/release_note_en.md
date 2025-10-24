@@ -7,7 +7,7 @@
 - Update SKK library: go-readline-skk to v0.6.0:
     - Enabled conversion and word registration for words containing slashes in the conversion result
     - Added support for evaluating certain Emacs Lisp forms in conversion results, such as `(concat)`, `(pwd)`, `(substring)`, and `(skk-current-date)` (but not `(lambda)` yet)
-- Updated [go-readline-ny] to v1.10.0
+- Updated [go-readline-ny] to v1.11.0
     - Implemented the following changes in response to Issue [#452]: (Thanks @emisjerry )
       - Added symbolic identifiers and string names for keys  
         | Symbol         | Key Combination   |

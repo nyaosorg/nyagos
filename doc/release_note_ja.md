@@ -7,7 +7,7 @@
 - SKK かな漢字変換ライブラリ: go-readline-skk を v0.6.0 へ更新:
     - 変換結果にスラッシュを含む単語も変換・単語登録できるようにした
     - emacslisp で書かれた変換結果について `(concat)`, `(pwd)`, `(substring)`, `(skk-current-date)` 程度は評価できるようにした (`(lambda)` はまだ)
-- [go-readline-ny] を v1.10.0 へ更新
+- [go-readline-ny] を v1.11.0 へ更新
     - [#452] への対応のため以下を実施 (Thanks @emisjerry ) 
         - キーを表す識別子・シンボル文字列を追加 
             | シンボル       | キー組み合わせ  |
