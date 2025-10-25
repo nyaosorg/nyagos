@@ -84,7 +84,7 @@ dist:
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
 release:
-	gh release create -d --notes "" -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
+	pwsh latest-notes.ps1 | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
 
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
