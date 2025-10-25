@@ -1,7 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
 - Embedded Lua scripts in the top level of `nyagos.d/` into the executable
+    - Makes it easy to set up on other environments — just copy nyagos.exe and your .nyagos.
     - The scripts on `nyagos.d/` are no longer loaded automatically. Use `%APPDATA%/NYAOS_ORG/nyagos.d` instead
+    - Scripts under `nyagos.d/catalog` are handled as before. If you use them, make sure to copy them as well.
 - Enable building Windows/arm64 binary (build only; runtime untested)
 - Fixed an issue where candidates were not shown during environment variable name completion
 - Update SKK library: go-readline-skk to v0.6.0:

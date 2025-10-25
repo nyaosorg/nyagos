@@ -1,7 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
 - `nyagos.d/` 直下の Lua スクリプトを実行ファイルに組み込んだ
+    - 他環境への展開が容易になり、各位の .nyagos と nyagos.exe のコピーだけで利用可能になりました。
     - `nyagos.d/` 直下のスクリプトは自動で読まなくなりました。かわりに `%APPDATA%/NYAOS_ORG/nyagos.d` を使ってください
+    - `nyagos.d/catalog` 以下のスクリプトは従来どおりの扱いです。これらを利用する場合は、あわせてコピーが必要です。
 - Windows/arm64 向けバイナリをビルドができるようにした(ビルドのみで動作は未検証)
 - 環境変数名の補完において候補リストが表示されなかった不具合を修正
 - SKK かな漢字変換ライブラリ: go-readline-skk を v0.6.0 へ更新:
