@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+v4.4.18\_0
+==========
+Oct 25, 2025
+
 - `nyagos.d/` 直下の Lua スクリプトを実行ファイルに組み込んだ
     - 他環境への展開が容易になり、各位の .nyagos と nyagos.exe のコピーだけで利用可能になりました。
     - `nyagos.d/` 直下のスクリプトは自動で読まなくなりました。かわりに `%APPDATA%/NYAOS_ORG/nyagos.d` を使ってください

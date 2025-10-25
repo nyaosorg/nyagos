@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+v4.4.18\_0
+==========
+Oct 25, 2025
+
 - Embedded Lua scripts in the top level of `nyagos.d/` into the executable
     - Makes it easy to set up on other environments — just copy nyagos.exe and your .nyagos.
     - The scripts on `nyagos.d/` are no longer loaded automatically. Use `%APPDATA%/NYAOS_ORG/nyagos.d` instead
