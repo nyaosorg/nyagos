@@ -30,7 +30,7 @@ func cmdSource(ctx context.Context, cmd Param) (int, error) {
 		args = args[1:]
 		rawargs = rawargs[1:]
 	}
-	if args == nil || len(args) < 1 {
+	if len(args) < 1 {
 		return 1, errors.New("source: too few arguments")
 	}
 	if !filepath.IsAbs(args[0]) {
