@@ -11,7 +11,7 @@ import (
 
 	"github.com/yuin/gopher-lua"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-readline-ny/keys"
 	"github.com/nyaosorg/go-readline-ny/nameutils"
@@ -119,7 +119,7 @@ func (rl *_ReadLineCallBack) BoxListing(L Lua) int {
 	for i := 0; i < size; i++ {
 		list[i] = L.GetTable(table, lua.LNumber(i+1)).String()
 	}
-	box.Print(L.Context(), list, os.Stdout)
+	box.Println(list, os.Stdout)
 	rl.buffer.RepaintAll()
 	return 0
 }

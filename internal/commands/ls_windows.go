@@ -17,7 +17,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 	"github.com/nyaosorg/go-windows-findfile"
 	"github.com/nyaosorg/go-windows-shortcut"
 	"github.com/nyaosorg/nyagos/internal/nodos"
@@ -235,14 +235,11 @@ func lsBox(ctx context.Context, folder string, nodes []os.FileInfo, flag int, ou
 			_nodes[key] = prefix + val.Name()
 		}
 	}
-	isSucceeded := box.Print(ctx, _nodes, out)
+	err := box.Println(_nodes, out)
 	if (flag & optionColor) != 0 {
 		io.WriteString(out, ansiEnd)
 	}
-	if !isSucceeded {
-		return ctx.Err()
-	}
-	return nil
+	return err
 }
 
 func keta(n int64) int {

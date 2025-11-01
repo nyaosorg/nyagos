@@ -16,7 +16,7 @@ import (
 	"github.com/mattn/go-isatty"
 	"github.com/mattn/go-tty"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-windows-findfile"
 
