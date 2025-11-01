@@ -62,7 +62,7 @@ func listUpEnv(cmdline string) ([]Element, int, error) {
 			}
 		} else {
 			m = rxDollar2.FindStringIndex(cmdline)
-			if m == nil || len(m) <= 0 {
+			if len(m) <= 0 {
 				return nil, -1, nil
 			}
 			replaceStartPos = m[0]

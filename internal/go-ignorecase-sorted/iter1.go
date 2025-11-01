@@ -8,7 +8,7 @@ type Iterator[T any] struct {
 }
 
 func (d *Dictionary[T]) Front() *Iterator[T] {
-	if d.maps == nil || len(d.maps) <= 0 {
+	if len(d.maps) <= 0 {
 		return nil
 	}
 	p := d.maps[d.order[0]]
@@ -33,7 +33,7 @@ func (iter *Iterator[T]) Next() *Iterator[T] {
 }
 
 func (d *Dictionary[T]) Back() *Iterator[T] {
-	if d.maps == nil || len(d.maps) <= 0 {
+	if len(d.maps) <= 0 {
 		return nil
 	}
 	index := len(d.order) - 1
