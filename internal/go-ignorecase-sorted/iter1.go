@@ -33,7 +33,7 @@ func (iter *Iterator[T]) Next() *Iterator[T] {
 }
 
 func (d *Dictionary[T]) Back() *Iterator[T] {
-	if d.maps == nil || len(d.maps) <= 0 {
+	if len(d.maps) <= 0 {
 		return nil
 	}
 	index := len(d.order) - 1
