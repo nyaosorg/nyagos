@@ -30,12 +30,12 @@ github.com/nyaosorg/go-box/v3 v3.0.0 h1:W5qfScEkKBoD68gbP/lwfWlvcTRB0rwXkhL+9iC6
 github.com/nyaosorg/go-box/v3 v3.0.0/go.mod h1:70GsE9mIh7JKVCxt71q3jEijO6C9YJmOZqWpPa9w+GY=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16XkjcdkjWTJX3jfFiP987ougN3RrK7oNr+rvau5INs=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
-github.com/nyaosorg/go-readline-ny v1.11.0 h1:D2y24u68a4lr2tAN+SS1DgGtbInoBHtP+rxm5Gx/Evo=
-github.com/nyaosorg/go-readline-ny v1.11.0/go.mod h1:ifQ0YwPemXHat17gvybf+i7/gyQnpufancIbnqTjsEM=
+github.com/nyaosorg/go-readline-ny v1.12.2 h1:PH273rRJ7USE2nCjJK7QzuiFpxJsnzWY2XKsJIdwLSs=
+github.com/nyaosorg/go-readline-ny v1.12.2/go.mod h1:KIoNjr6f6aur67nnYkVvLapZQiFPNRSqUcTe32IgeLE=
 github.com/nyaosorg/go-readline-skk v0.6.0 h1:n7iy806v34+HwiCgBog7OfUaHe9m43z2o6mg3dylgXo=
 github.com/nyaosorg/go-readline-skk v0.6.0/go.mod h1:ulYKxU1enVwOlLA8LFNaRUxSlI1PyayTM1PBOPVs1w8=
-github.com/nyaosorg/go-ttyadapter v0.0.1 h1:4VslnofOrGLqXvVeKwz51BDR+Q82D2Iitk51urYRLGo=
-github.com/nyaosorg/go-ttyadapter v0.0.1/go.mod h1:w6ySb/Y8rpr0uIju4vN/TMRHC/6ayabORHmEVs6d/qE=
+github.com/nyaosorg/go-ttyadapter v0.1.0 h1:3U3ytc35SOdkrn15rHLG36ozkmqBeGqhQgNufoep1AI=
+github.com/nyaosorg/go-ttyadapter v0.1.0/go.mod h1:w6ySb/Y8rpr0uIju4vN/TMRHC/6ayabORHmEVs6d/qE=
 github.com/nyaosorg/go-windows-commandline v0.1.0 h1:sQP8/iW4r8zdZSWW6lTNajEbxBi7twq47EJ6rjsY4oI=
 github.com/nyaosorg/go-windows-commandline v0.1.0/go.mod h1:u82aK0/yJBpmTGp8QYdNIbq+C8LdLp/tsgR4sOX3ohs=
 github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a h1:71x0OsguXShN1AJCxhvF8mY3GXAY2NiGGOBb9UnuXOo=
