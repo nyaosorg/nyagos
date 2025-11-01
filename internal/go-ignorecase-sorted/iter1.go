@@ -8,7 +8,7 @@ type Iterator[T any] struct {
 }
 
 func (d *Dictionary[T]) Front() *Iterator[T] {
-	if d.maps == nil || len(d.maps) <= 0 {
+	if len(d.maps) <= 0 {
 		return nil
 	}
 	p := d.maps[d.order[0]]
