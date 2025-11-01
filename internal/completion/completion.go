@@ -294,7 +294,7 @@ func KeyFuncCompletion(ctx context.Context, this *readline.Buffer) readline.Resu
 		this.RepaintAll()
 		return readline.CONTINUE
 	}
-	if comp.List == nil || len(comp.List) <= 0 {
+	if len(comp.List) <= 0 {
 		cmdlineRecover()
 		return readline.CONTINUE
 	}
