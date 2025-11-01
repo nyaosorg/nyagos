@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 )
 
 func cmdBox(ctx context.Context, cmd Param) (int, error) {
@@ -25,7 +25,7 @@ func cmdBox(ctx context.Context, cmd Param) (int, error) {
 	}
 
 	console := bufio.NewWriter(cmd.Term())
-	result, err := box.SelectStringContext(ctx, list, true, console)
+	result, err := box.SelectString(list, true, console)
 	if err != nil {
 		return 0, err
 	}
