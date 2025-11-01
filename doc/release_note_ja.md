@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+- [github.com/nyaosorg/go-box] を v2.2.1 から v3.0.0 にバージョンアップした
+
+[github.com/nyaosorg/go-box]: https://github.com/nyaosorg/go-box
+
 v4.4.18\_0
 ==========
 Oct 25, 2025
