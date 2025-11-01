@@ -10,7 +10,7 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/nyaosorg/go-box/v2"
+	"github.com/nyaosorg/go-box/v3"
 	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-readline-ny/moji"
 
@@ -283,7 +283,7 @@ func showCompList(ctx context.Context, this *readline.Buffer, comp *List) {
 			return
 		}
 	}
-	box.Print(ctx, toDisplay(comp.List), this.Out)
+	box.Println(toDisplay(comp.List), this.Out)
 	this.RepaintAll()
 }
 
