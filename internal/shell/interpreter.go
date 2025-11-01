@@ -177,7 +177,7 @@ func (cmd *Cmd) DumpEnv() []string {
 var LookCurdirOrder = nodos.LookCurdirFirst
 
 func (cmd *Cmd) FullPath() string {
-	if cmd.args == nil || len(cmd.args) <= 0 {
+	if len(cmd.args) <= 0 {
 		return ""
 	}
 	if cmd.fullPath == "" {
