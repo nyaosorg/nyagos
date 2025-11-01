@@ -38,7 +38,7 @@ func (ses *session) push(lines []string) {
 }
 
 func (ses *session) pop() (string, bool) {
-	if ses.unreadline == nil || len(ses.unreadline) <= 0 {
+	if len(ses.unreadline) <= 0 {
 		return "", false
 	}
 	line := ses.unreadline[0]
