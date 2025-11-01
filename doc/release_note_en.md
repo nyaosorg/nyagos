@@ -1,7 +1,10 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
 - Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0.
+- Replaced deprecated [readline.GetKey] with [go-ttyadapter]/tty8 in `nyagos.getkeys`.
 
+[readline.GetKey]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey
+[go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
 [github.com/nyaosorg/go-box]: https://github.com/nyaosorg/go-box
 
 v4.4.18\_0

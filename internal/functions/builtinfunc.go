@@ -18,6 +18,7 @@ import (
 
 	"github.com/nyaosorg/go-box/v3"
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-ttyadapter/tty8"
 	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/internal/completion"
@@ -118,12 +119,12 @@ func CmdGetKey(args []any) []any {
 }
 
 func CmdGetKeys(args []any) []any {
-	tty1, err := tty.Open()
-	if err != nil {
+	tty := &tty8.Tty{}
+	if err := tty.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}
-	defer tty1.Close()
-	key, err := readline.GetKey(tty1)
+	defer tty.Close()
+	key, err := tty.GetKey()
 	if err != nil {
 		return []any{nil, err.Error()}
 	}
