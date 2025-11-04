@@ -1,7 +1,10 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
-- Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0.
-- Replaced deprecated [readline.GetKey] with [go-ttyadapter]/tty8 in `nyagos.getkeys`.
+### Internal changes
+
+- Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0. (#453)
+- Replaced deprecated [readline.GetKey] with [go-ttyadapter]/tty8 in `nyagos.getkeys`. (#454)
+- Fix: staticcheck: should omit nil check; len() for nil slices is defined as zero (S1009) (#455)
 
 [readline.GetKey]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey
 [go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter

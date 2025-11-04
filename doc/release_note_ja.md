@@ -1,7 +1,10 @@
 ( [English](release_note_en.md) / **Japanese** )
 
-- [github.com/nyaosorg/go-box] を v2.2.1 から v3.0.0 にバージョンアップした
-- `nyagos.getkeys` 内で使用していたが、Deprecated となっていた [readline.GetKey] を [go-ttyadapter]/tty8 に置き換えた
+### 内部的な変更
+
+- [github.com/nyaosorg/go-box] を v2.2.1 から v3.0.0 にバージョンアップした (#453)
+- `nyagos.getkeys` 内で使用していたが、Deprecated となっていた [readline.GetKey] を [go-ttyadapter]/tty8 に置き換えた (#454)
+- nilに対するlen()は0だから、nil チェックを省略すべきという staticcheck の warning を解消した (#455)
 
 [readline.GetKey]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey
 [go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
