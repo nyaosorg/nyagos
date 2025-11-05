@@ -23,7 +23,6 @@ var Table = map[string]func([]interface{}) []interface{}{
 	"glob":               CmdGlob,
 	"pathjoin":           CmdPathJoin,
 	"setenv":             CmdSetEnv,
-	"setrunewidth":       CmdSetRuneWidth,
 	"shellexecute":       CmdShellExecute,
 	"skk":                CmdSkk,
 	"stat":               CmdStat,
