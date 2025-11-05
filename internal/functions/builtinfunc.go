@@ -88,11 +88,6 @@ func CmdBox(this *Param) []any {
 	return values
 }
 
-func CmdResetCharWidth(args []any) []any {
-	readline.ResetCharWidth()
-	return []any{}
-}
-
 func CmdGetwd(args []any) []any {
 	wd, err := os.Getwd()
 	if err != nil {
