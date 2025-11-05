@@ -5,6 +5,8 @@
 - Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0. (#453)
 - Replaced deprecated [readline.GetKey] with [go-ttyadapter]/tty8 in `nyagos.getkeys`. (#454)
 - Fix: staticcheck: should omit nil check; len() for nil slices is defined as zero (S1009) (#455)
+- Removed internal Lua functions `nyagos.resetcharwidth` and `nyagos.setrunewidth`, which used deprecated APIs from go-readline-ny.
+  These functions were originally added for maintenance and debugging purposes, but became obsolete after the removal of redundant character width caching in go-readline-ny.
 
 [readline.GetKey]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey
 [go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter

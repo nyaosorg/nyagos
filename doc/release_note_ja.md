@@ -5,6 +5,7 @@
 - [github.com/nyaosorg/go-box] を v2.2.1 から v3.0.0 にバージョンアップした (#453)
 - `nyagos.getkeys` 内で使用していたが、Deprecated となっていた [readline.GetKey] を [go-ttyadapter]/tty8 に置き換えた (#454)
 - nilに対するlen()は0だから、nil チェックを省略すべきという staticcheck の warning を解消した (#455)
+- go-readline-ny での冗長な文字幅データのキャッシュ機能廃止にともなって Deprecated となった関数を使っていた、メンテ・調査用の非公開Lua関数 `nyagos.resetcharwidth`, `nyagos.setrunewidth` を廃止した
 
 [readline.GetKey]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey
 [go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
