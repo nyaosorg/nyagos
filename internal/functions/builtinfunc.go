@@ -17,7 +17,6 @@ import (
 	"github.com/mattn/go-tty"
 
 	"github.com/nyaosorg/go-box/v3"
-	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/go-ttyadapter/tty8"
 	"github.com/nyaosorg/go-windows-findfile"
 
@@ -86,11 +85,6 @@ func CmdBox(this *Param) []any {
 		values = append(values, s)
 	}
 	return values
-}
-
-func CmdResetCharWidth(args []any) []any {
-	readline.ResetCharWidth()
-	return []any{}
 }
 
 func CmdGetwd(args []any) []any {
@@ -341,22 +335,6 @@ func CmdRawEval(this *Param) []any {
 		return []any{nil, err.Error()}
 	}
 	return []any{out}
-}
-
-func CmdSetRuneWidth(args []any) []any {
-	if len(args) < 2 {
-		return []any{nil, "too few aruments"}
-	}
-	char, ok := toNumber(args[0])
-	if !ok {
-		return []any{nil, "not a number"}
-	}
-	width, ok := toNumber(args[1])
-	if !ok {
-		return []any{nil, "not a number"}
-	}
-	readline.SetCharWidth(rune(char), width)
-	return []any{true}
 }
 
 func CmdCommonPrefix(args []any) []any {
