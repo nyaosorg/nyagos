@@ -95,15 +95,16 @@ func (impl *_ScriptEngineForOptionImpl) RunString(ctx context.Context, code stri
 
 type luaWrapper struct {
 	Lua
+	Env *env
 }
 
 func (lw *luaWrapper) Clone(ctx context.Context) (context.Context, shell.CloneCloser, error) {
-	newL, err := Clone(lw.Lua)
+	newL, err := Clone(lw.Lua, lw.Env)
 	if err != nil {
 		return nil, nil, err
 	}
 	ctx = context.WithValue(ctx, luaKey, newL)
-	return ctx, &luaWrapper{newL}, nil
+	return ctx, &luaWrapper{Lua: newL, Env: lw.Env}, nil
 }
 
 func (lw *luaWrapper) Close() error {
@@ -120,7 +121,12 @@ func warningOnly(err error) error {
 func Run(fsys fs.FS) error {
 	ctx := context.Background()
 
-	L, err := NewLua()
+	sh := shell.New()
+	defer sh.Close()
+
+	env := &env{Shell: sh, Env: &functions.Env{Value: sh}}
+
+	L, err := NewLua(env)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 	} else {
@@ -130,11 +136,9 @@ func Run(fsys fs.FS) error {
 
 	completion.HookToList = append(completion.HookToList, (&_LuaCallBack{Lua: L}).luaHookForComplete)
 
-	sh := shell.New()
 	if L != nil {
-		sh.SetTag(&luaWrapper{L})
+		sh.SetTag(&luaWrapper{Lua: L, Env: env})
 	}
-	defer sh.Close()
 	sh.Console = colorable.NewColorableStdout()
 	ctx = context.WithValue(ctx, shellKey, sh)
 
@@ -188,7 +192,7 @@ func Run(fsys fs.FS) error {
 				if L != nil {
 					return printPrompt(ctx, sh, L, w)
 				}
-				functions.Prompt(
+				(&functions.Env{Value: sh}).Prompt(
 					&functions.Param{
 						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
 						In:   os.Stdin,

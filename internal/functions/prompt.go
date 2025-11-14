@@ -12,8 +12,8 @@ func setTitle(w io.Writer, s string) {
 }
 
 // Prompt is the body of the lua-function `nyagos.default_prompt`
-func Prompt(param *Param) []interface{} {
-	return []interface{}{PromptCore(param.Term, param.Args...)}
+func (*Env) Prompt(param *Param) []any {
+	return []any{PromptCore(param.Term, param.Args...)}
 }
 
 // PromptCore prints prompt-str(args[0]) to console.

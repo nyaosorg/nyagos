@@ -9,12 +9,12 @@ import (
 	"github.com/nyaosorg/go-windows-su"
 )
 
-func CmdElevated([]any) []any {
+func (*Env) CmdElevated([]any) []any {
 	flag, _ := su.IsElevated()
 	return []any{flag}
 }
 
-func CmdShellExecute(args []any) []any {
+func (*Env) CmdShellExecute(args []any) []any {
 	pid, err := su.ShellExecute(
 		toStr(args, 0),
 		toStr(args, 1),
@@ -26,7 +26,7 @@ func CmdShellExecute(args []any) []any {
 	return []any{pid}
 }
 
-func CmdRawExec(this *Param) []any {
+func (*Env) CmdRawExec(this *Param) []any {
 	argv := stackToSlice(this)
 	xcmd := exec.Command(argv[0], argv[1:]...)
 	xcmd.Stdin = this.In
@@ -41,7 +41,7 @@ func CmdRawExec(this *Param) []any {
 	return []any{errorlevel}
 }
 
-func CmdAtoU(args []any) []any {
+func (*Env) CmdAtoU(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -55,7 +55,7 @@ func CmdAtoU(args []any) []any {
 	return []any{fmt.Sprint(args[0])}
 }
 
-func CmdUtoA(args []any) []any {
+func (*Env) CmdUtoA(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -67,7 +67,7 @@ func CmdUtoA(args []any) []any {
 	return []any{bin, nil}
 }
 
-func CmdAnsiToUtf8IfNeeded(args []any) []any {
+func (*Env) CmdAnsiToUtf8IfNeeded(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}

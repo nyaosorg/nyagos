@@ -1,40 +1,56 @@
 package functions
 
-var Table = map[string]func([]interface{}) []interface{}{
-	"access":             CmdAccess,
-	"atou":               CmdAtoU,
-	"atou_if_needed":     CmdAnsiToUtf8IfNeeded,
-	"bitand":             CmdBitAnd,
-	"bitor":              CmdBitOr,
-	"chdir":              CmdChdir,
-	"commonprefix":       CmdCommonPrefix,
-	"complete_for_files": CmdCompleteForFiles,
-	"dirname":            CmdDirName,
-	"elevated":           CmdElevated,
-	"envadd":             CmdEnvAdd,
-	"envdel":             CmdEnvDel,
-	"fields":             CmdFields,
-	"getenv":             CmdGetEnv,
-	"gethistory":         CmdGetHistory,
-	"getkey":             CmdGetKey,
-	"getkeys":            CmdGetKeys,
-	"getviewwidth":       CmdGetViewWidth,
-	"getwd":              CmdGetwd,
-	"glob":               CmdGlob,
-	"pathjoin":           CmdPathJoin,
-	"setenv":             CmdSetEnv,
-	"shellexecute":       CmdShellExecute,
-	"skk":                CmdSkk,
-	"stat":               CmdStat,
-	"utoa":               CmdUtoA,
-	"which":              CmdWhich,
+import (
+	"io"
+)
+
+type Env struct {
+	Value interface {
+		In() io.Reader
+		Out() io.Writer
+		Err() io.Writer
+	}
 }
 
-var Table2 = map[string]func(*Param) []interface{}{
-	"box":            CmdBox,
-	"raweval":        CmdRawEval,
-	"rawexec":        CmdRawExec,
-	"write":          CmdWrite,
-	"writerr":        CmdWriteErr,
-	"default_prompt": Prompt,
+func (e *Env) Table() map[string]func([]any) []any {
+	return map[string]func([]any) []any{
+		"access":             e.CmdAccess,
+		"atou":               e.CmdAtoU,
+		"atou_if_needed":     e.CmdAnsiToUtf8IfNeeded,
+		"bitand":             e.CmdBitAnd,
+		"bitor":              e.CmdBitOr,
+		"chdir":              e.CmdChdir,
+		"commonprefix":       e.CmdCommonPrefix,
+		"complete_for_files": e.CmdCompleteForFiles,
+		"dirname":            e.CmdDirName,
+		"elevated":           e.CmdElevated,
+		"envadd":             e.CmdEnvAdd,
+		"envdel":             e.CmdEnvDel,
+		"fields":             e.CmdFields,
+		"getenv":             e.CmdGetEnv,
+		"gethistory":         e.CmdGetHistory,
+		"getkey":             e.CmdGetKey,
+		"getkeys":            e.CmdGetKeys,
+		"getviewwidth":       e.CmdGetViewWidth,
+		"getwd":              e.CmdGetwd,
+		"glob":               e.CmdGlob,
+		"pathjoin":           e.CmdPathJoin,
+		"setenv":             e.CmdSetEnv,
+		"shellexecute":       e.CmdShellExecute,
+		"skk":                e.CmdSkk,
+		"stat":               e.CmdStat,
+		"utoa":               e.CmdUtoA,
+		"which":              e.CmdWhich,
+	}
+}
+
+func (e *Env) Table2() map[string]func(*Param) []any {
+	return map[string]func(*Param) []any{
+		"box":            e.CmdBox,
+		"raweval":        e.CmdRawEval,
+		"rawexec":        e.CmdRawExec,
+		"write":          e.CmdWrite,
+		"writerr":        e.CmdWriteErr,
+		"default_prompt": e.Prompt,
+	}
 }
