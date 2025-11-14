@@ -85,7 +85,6 @@ func (impl *_ScriptEngineForOptionImpl) RunString(ctx context.Context, code stri
 	if !ok {
 		return errors.New("script is not supported")
 	}
-	ctx = context.WithValue(ctx, shellKey, impl.Sh)
 	defer setContext(getContext(L), L)
 	setContext(ctx, L)
 	return luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
@@ -140,11 +139,8 @@ func Run(fsys fs.FS) error {
 		sh.SetTag(&luaWrapper{Lua: L, Env: env})
 	}
 	sh.Console = colorable.NewColorableStdout()
-	ctx = context.WithValue(ctx, shellKey, sh)
 
-	ctxTmp := context.WithValue(ctx, shellKey, sh)
 	defer setContext(getContext(L), L)
-	setContext(ctxTmp, L)
 
 	alias.LineFilter = func(ctx context.Context, line string) string {
 		if L, ok := ctx.Value(luaKey).(Lua); ok {
@@ -205,7 +201,6 @@ func Run(fsys fs.FS) error {
 		stream1 = constream
 		frame.DefaultHistory = constream.History
 		sh.History = constream.History
-		ctx = context.WithValue(ctx, shellKey, sh)
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
