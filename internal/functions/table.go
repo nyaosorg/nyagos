@@ -2,6 +2,8 @@ package functions
 
 import (
 	"io"
+
+	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
 type Env struct {
@@ -9,6 +11,7 @@ type Env struct {
 		In() io.Reader
 		Out() io.Writer
 		Err() io.Writer
+		GetHistory() shell.History
 	}
 }
 

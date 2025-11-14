@@ -19,12 +19,9 @@ import (
 	"github.com/nyaosorg/nyagos/internal/alias"
 	"github.com/nyaosorg/nyagos/internal/commands"
 	"github.com/nyaosorg/nyagos/internal/completion"
-	"github.com/nyaosorg/nyagos/internal/history"
 	"github.com/nyaosorg/nyagos/internal/onexit"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
-
-var DefaultHistory *history.Container
 
 func Setup(version string) {
 	Version = strings.TrimSpace(version)

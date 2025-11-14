@@ -199,7 +199,6 @@ func Run(fsys fs.FS) error {
 				return 0, nil
 			})
 		stream1 = constream
-		frame.DefaultHistory = constream.History
 		sh.History = constream.History
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)

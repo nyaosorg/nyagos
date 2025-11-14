@@ -23,7 +23,6 @@ import (
 	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/config"
 	"github.com/nyaosorg/nyagos/internal/defined"
-	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
@@ -308,23 +307,25 @@ func (*Env) CmdGlob(args []any) []any {
 	return []any{result}
 }
 
-func (*Env) CmdGetHistory(args []any) []any {
-	if frame.DefaultHistory == nil {
+func (env *Env) CmdGetHistory(args []any) []any {
+	history := env.Value.GetHistory()
+	if history == nil {
 		return []any{}
 	}
 	if len(args) >= 1 {
 		if n, ok := toNumber(args[len(args)-1]); ok {
-			return []any{frame.DefaultHistory.At(n)}
+			return []any{history.At(n)}
 		}
 	}
-	return []any{frame.DefaultHistory.Len()}
+	return []any{history.Len()}
 }
 
-func (*Env) CmdLenHistory(args []any) []any {
-	if frame.DefaultHistory == nil {
+func (env *Env) CmdLenHistory(args []any) []any {
+	history := env.Value.GetHistory()
+	if history == nil {
 		return []any{}
 	}
-	return []any{frame.DefaultHistory.Len()}
+	return []any{history.Len()}
 }
 
 func (*Env) CmdRawEval(this *Param) []any {
