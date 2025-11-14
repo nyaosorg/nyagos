@@ -22,6 +22,10 @@ func (*CmdStreamFile) DisableHistory(value bool) bool {
 	return false
 }
 
+func (*CmdStreamFile) GetHistory() History {
+	return &_NulHistory{}
+}
+
 func NewCmdStreamFile(r io.Reader) *CmdStreamFile {
 	return &CmdStreamFile{
 		Scanner: bufio.NewScanner(r),

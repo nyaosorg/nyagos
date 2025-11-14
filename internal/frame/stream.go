@@ -29,6 +29,10 @@ type CmdStreamConsole struct {
 	HistPath string
 }
 
+func (c *CmdStreamConsole) GetHistory() shell.History {
+	return c.History
+}
+
 type OSClipboard struct{}
 
 func (OSClipboard) Read() (string, error) {

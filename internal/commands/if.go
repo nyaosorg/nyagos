@@ -66,7 +66,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 		status = !status
 	}
 
-	thenBuffer := shell.BufStream{}
+	thenBuffer := shell.BufStream{History: cmd.GetHistory()}
 
 	if len(args) > 0 {
 		if args[0] == "then" {
@@ -86,7 +86,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 
 	// block `then` / `else`
 
-	elseBuffer := shell.BufStream{}
+	elseBuffer := shell.BufStream{History: cmd.GetHistory()}
 	elsePart := false
 
 	savePrompt := os.Getenv("PROMPT")

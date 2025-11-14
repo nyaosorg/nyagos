@@ -6,8 +6,9 @@ import (
 )
 
 type BufStream struct {
-	line []string
-	n    int
+	line    []string
+	n       int
+	History History
 }
 
 func (*BufStream) DisableHistory(value bool) bool { return false }
@@ -27,4 +28,8 @@ func (bufStream *BufStream) SetPos(n int) error {
 
 func (bufStream *BufStream) Add(line string) {
 	bufStream.line = append(bufStream.line, line)
+}
+
+func (bufStream *BufStream) GetHistory() History {
+	return bufStream.History
 }
