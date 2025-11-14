@@ -46,6 +46,7 @@ type CloneCloser interface {
 }
 
 type History interface {
+	At(n int) string
 	Len() int
 	DumpAt(n int) string
 	IgnorePush(newvalue bool) bool
@@ -56,6 +57,7 @@ type _NulHistory struct{}
 func (nul *_NulHistory) DumpAt(n int) string           { return "" }
 func (nul *_NulHistory) Len() int                      { return 0 }
 func (nul *_NulHistory) IgnorePush(newvalue bool) bool { return false }
+func (nul *_NulHistory) At(n int) string               { return "" }
 
 type Shell struct {
 	Stream
