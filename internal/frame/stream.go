@@ -115,6 +115,7 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 	buffer := make([]byte, 0, 256)
 	for {
 		line, err := stream.Editor.ReadLine(ctx)
+		stream.Editor.Default = ""
 		buffer = append(buffer, line...)
 		if err != nil || !endsWithSep(buffer, '^') {
 			if continued {

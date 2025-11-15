@@ -577,3 +577,23 @@ func CmdCompleteForFiles(param *Param) []any {
 	}
 	return []any{nil, errors.New("invalid arguments")}
 }
+func CmdSetNextLine(param *Param) []any {
+	editor := param.Editor
+	if editor == nil {
+		return []any{nil, "can not find the current editor"}
+	}
+	args := param.Args
+	var buffer strings.Builder
+	if len(args) > 0 {
+		for {
+			fmt.Fprint(&buffer, args[0])
+			args = args[1:]
+			if len(args) <= 0 {
+				editor.Default = buffer.String()
+				break
+			}
+			buffer.WriteByte(' ')
+		}
+	}
+	return []any{true}
+}
