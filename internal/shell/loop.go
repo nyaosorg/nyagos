@@ -13,6 +13,7 @@ import (
 )
 
 type Editor interface {
+	StoreDefault(string)
 }
 
 // Stream is the inteface which can read command-line
