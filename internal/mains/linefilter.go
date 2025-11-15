@@ -47,10 +47,10 @@ func luaLineFilter(ctx context.Context, L Lua, line string) string {
 	return string(newLine)
 }
 
-func (lfs *luaFilterStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	ctx, line, err := lfs.Stream.ReadLine(ctx)
+func (lfs *luaFilterStream) ReadLine(ctx context.Context) (string, error) {
+	line, err := lfs.Stream.ReadLine(ctx)
 	if err != nil {
-		return ctx, "", err
+		return "", err
 	}
-	return ctx, luaLineFilter(ctx, lfs.L, line), err
+	return luaLineFilter(ctx, lfs.L, line), err
 }

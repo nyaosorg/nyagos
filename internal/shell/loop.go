@@ -18,7 +18,7 @@ type Editor interface {
 
 // Stream is the inteface which can read command-line
 type Stream interface {
-	ReadLine(context.Context) (context.Context, string, error)
+	ReadLine(context.Context) (string, error)
 	GetHistory() History
 	GetEditor() Editor
 }
@@ -29,8 +29,8 @@ type NulStream struct {
 }
 
 // ReadLine always returns "" and io.EOF.
-func (stream *NulStream) ReadLine(ctx context.Context) (context.Context, string, error) {
-	return ctx, "", io.EOF
+func (stream *NulStream) ReadLine(ctx context.Context) (string, error) {
+	return "", io.EOF
 }
 
 func (stream *NulStream) GetHistory() History {
@@ -67,7 +67,7 @@ func (ses *session) pop() (string, bool) {
 }
 
 // ReadCommand reads completed one command from `stream`.
-func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, error) {
+func (sh *Shell) ReadCommand(ctx context.Context) (string, error) {
 	stream := sh.Stream
 	var line string
 	var err error
@@ -77,17 +77,17 @@ func (sh *Shell) ReadCommand(ctx context.Context) (context.Context, string, erro
 		outputMutex.Lock()
 		os.Stderr.Sync()
 		os.Stdout.Sync()
-		ctx, line, err = stream.ReadLine(ctx)
+		line, err = stream.ReadLine(ctx)
 		outputMutex.Unlock()
 		if err != nil {
-			return ctx, line, err
+			return line, err
 		}
 
 		texts := splitToStatement(line)
 		line = texts[0]
 		sh.push(texts[1:])
 	}
-	return ctx, line, nil
+	return line, nil
 }
 
 func dropSigint(sigint chan os.Signal) {
@@ -118,14 +118,26 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		close(sigint)
 	}()
 
+	var cancel context.CancelFunc
+
+	go func() {
+		for range sigint {
+			if cancel != nil {
+				cancel()
+			}
+		}
+	}()
+
 	for {
 		dropSigint(sigint)
 
-		ctx, cancel := context.WithCancel(ctx0)
+		var ctx context.Context
+		ctx, cancel = context.WithCancel(ctx0)
 
-		ctx, line, err := sh.ReadCommand(ctx)
+		line, err := sh.ReadCommand(ctx)
 		if err != nil {
 			cancel()
+			cancel = nil
 			if err == io.EOF {
 				return 0, err
 			}
@@ -135,14 +147,6 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			}
 			return 1, err
 		}
-
-		go func() {
-			select {
-			case <-sigint:
-				cancel()
-			case <-ctx.Done():
-			}
-		}()
 
 		rc, err := sh.Interpret(ctx, line)
 
@@ -164,6 +168,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			fmt.Fprintf(os.Stderr, "exit status %d\n", rc)
 		}
 		cancel()
+		cancel = nil
 	}
 }
 
