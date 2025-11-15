@@ -201,7 +201,7 @@ func Run(fsys fs.FS) error {
 		stream1 = constream
 		sh.History = constream.History
 	} else {
-		stream1 = shell.NewCmdStreamFile(os.Stdin)
+		stream1 = shell.NewCmdStreamFile(os.Stdin, nil)
 	}
 	if L != nil {
 		return sh.ForEver(ctx, &luaFilterStream{Stream: stream1, L: L})

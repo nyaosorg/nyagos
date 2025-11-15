@@ -9,6 +9,7 @@ type BufStream struct {
 	line    []string
 	n       int
 	History History
+	Super   Stream
 }
 
 func (bufStream *BufStream) ReadLine(c context.Context) (context.Context, string, error) {
@@ -30,4 +31,11 @@ func (bufStream *BufStream) Add(line string) {
 
 func (bufStream *BufStream) GetHistory() History {
 	return bufStream.History
+}
+
+func (bufStream *BufStream) GetEditor() Editor {
+	if bufStream != nil {
+		return bufStream.Super.GetEditor()
+	}
+	return nil
 }
