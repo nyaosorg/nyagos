@@ -12,6 +12,7 @@ type Env struct {
 		Out() io.Writer
 		Err() io.Writer
 		GetHistory() shell.History
+		GetStream() shell.Stream
 	}
 }
 
@@ -39,6 +40,7 @@ func (e *Env) Table() map[string]func([]any) []any {
 		"glob":               e.CmdGlob,
 		"pathjoin":           e.CmdPathJoin,
 		"setenv":             e.CmdSetEnv,
+		"setnextline":        e.CmdSetNextLine,
 		"shellexecute":       e.CmdShellExecute,
 		"skk":                e.CmdSkk,
 		"stat":               e.CmdStat,
