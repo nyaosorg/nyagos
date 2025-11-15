@@ -50,7 +50,8 @@ func toStr(arr []any, n int) string {
 	return ""
 }
 
-func CmdChdir(args []any) []any {
+func CmdChdir(param *Param) []any {
+	args := param.Args
 	if len(args) >= 1 {
 		nodos.Chdir(fmt.Sprint(args[0]))
 		return []any{true}
@@ -58,8 +59,8 @@ func CmdChdir(args []any) []any {
 	return []any{nil, "directory is required"}
 }
 
-func CmdBox(this *Param) []any {
-	args := this.Args
+func CmdBox(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -77,7 +78,7 @@ func CmdBox(this *Param) []any {
 		}
 	}
 	values := make([]any, 0)
-	choice, err := box.SelectString(sources, true, this.Term)
+	choice, err := box.SelectString(sources, true, param.Term)
 	if err != nil {
 		return []any{nil, err.Error()}
 	}
@@ -87,7 +88,7 @@ func CmdBox(this *Param) []any {
 	return values
 }
 
-func CmdGetwd(args []any) []any {
+func CmdGetwd(param *Param) []any {
 	wd, err := os.Getwd()
 	if err != nil {
 		return []any{nil, err}
@@ -95,7 +96,7 @@ func CmdGetwd(args []any) []any {
 	return []any{wd}
 }
 
-func CmdGetKey(args []any) []any {
+func CmdGetKey(*Param) []any {
 	tty1, err := tty.Open()
 	if err != nil {
 		return []any{nil, err.Error()}
@@ -112,7 +113,7 @@ func CmdGetKey(args []any) []any {
 	}
 }
 
-func CmdGetKeys(args []any) []any {
+func CmdGetKeys(*Param) []any {
 	tty := &tty8.Tty{}
 	if err := tty.Open(nil); err != nil {
 		return []any{nil, err.Error()}
@@ -125,7 +126,7 @@ func CmdGetKeys(args []any) []any {
 	return []any{key}
 }
 
-func CmdGetViewWidth(args []any) []any {
+func CmdGetViewWidth(*Param) []any {
 	tty1, err := tty.Open()
 	if err != nil {
 		return []any{nil, err.Error()}
@@ -154,7 +155,8 @@ func expandEnv(str string) string {
 	})
 }
 
-func CmdPathJoin(args []any) []any {
+func CmdPathJoin(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{""}
 	}
@@ -166,7 +168,8 @@ func CmdPathJoin(args []any) []any {
 	return []any{path}
 }
 
-func CmdDirName(args []any) []any {
+func CmdDirName(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{""}
 	}
@@ -181,7 +184,8 @@ func CmdDirName(args []any) []any {
 	return result
 }
 
-func CmdAccess(args []any) []any {
+func CmdAccess(param *Param) []any {
+	args := param.Args
 	if len(args) < 2 {
 		return []any{nil, "nyagos.access requilres two arguments"}
 	}
@@ -215,7 +219,8 @@ func CmdAccess(args []any) []any {
 	return []any{result}
 }
 
-func CmdStat(args []any) []any {
+func CmdStat(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -255,7 +260,8 @@ func CmdStat(args []any) []any {
 	}
 }
 
-func CmdSetEnv(args []any) []any {
+func CmdSetEnv(param *Param) []any {
+	args := param.Args
 	if len(args) < 2 {
 		return []any{nil, TooFewArguments}
 	}
@@ -269,7 +275,8 @@ func CmdSetEnv(args []any) []any {
 	return []any{true}
 }
 
-func CmdGetEnv(args []any) []any {
+func CmdGetEnv(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -281,7 +288,8 @@ func CmdGetEnv(args []any) []any {
 	return []any{nil}
 }
 
-func CmdWhich(args []any) []any {
+func CmdWhich(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -293,7 +301,8 @@ func CmdWhich(args []any) []any {
 	return []any{nil, name + ": Path not found"}
 }
 
-func CmdGlob(args []any) []any {
+func CmdGlob(param *Param) []any {
+	args := param.Args
 	result := make([]string, 0)
 	for _, arg1 := range args {
 		wildcard := fmt.Sprint(arg1)
@@ -308,10 +317,11 @@ func CmdGlob(args []any) []any {
 	return []any{result}
 }
 
-func CmdGetHistory(args []any) []any {
+func CmdGetHistory(param *Param) []any {
 	if frame.DefaultHistory == nil {
 		return []any{}
 	}
+	args := param.Args
 	if len(args) >= 1 {
 		if n, ok := toNumber(args[len(args)-1]); ok {
 			return []any{frame.DefaultHistory.At(n)}
@@ -320,15 +330,15 @@ func CmdGetHistory(args []any) []any {
 	return []any{frame.DefaultHistory.Len()}
 }
 
-func CmdLenHistory(args []any) []any {
+func CmdLenHistory(param *Param) []any {
 	if frame.DefaultHistory == nil {
 		return []any{}
 	}
 	return []any{frame.DefaultHistory.Len()}
 }
 
-func CmdRawEval(this *Param) []any {
-	argv := stackToSlice(this)
+func CmdRawEval(param *Param) []any {
+	argv := stackToSlice(param)
 	cmd1 := exec.Command(argv[0], argv[1:]...)
 	out, err := cmd1.Output()
 	if err != nil {
@@ -337,7 +347,8 @@ func CmdRawEval(this *Param) []any {
 	return []any{out}
 }
 
-func CmdCommonPrefix(args []any) []any {
+func CmdCommonPrefix(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, "too few arguments"}
 	}
@@ -353,10 +364,10 @@ func CmdCommonPrefix(args []any) []any {
 	return []any{completion.CommonPrefix(list)}
 }
 
-func CmdWriteSub(this *Param, out io.Writer) []any {
-	args := this.Args
+func CmdWriteSub(param *Param, out io.Writer) []any {
+	args := param.Args
 	if f, ok := out.(*os.File); ok && isatty.IsTerminal(f.Fd()) {
-		cout := bufio.NewWriter(this.Term)
+		cout := bufio.NewWriter(param.Term)
 		defer cout.Flush()
 		out = cout
 	}
@@ -384,23 +395,23 @@ func CmdWriteSub(this *Param, out io.Writer) []any {
 	return []any{true}
 }
 
-func CmdWrite(this *Param) []any {
-	return CmdWriteSub(this, this.Out)
+func CmdWrite(param *Param) []any {
+	return CmdWriteSub(param, param.Out)
 }
 
-func CmdWriteErr(this *Param) []any {
-	return CmdWriteSub(this, this.Err)
+func CmdWriteErr(param *Param) []any {
+	return CmdWriteSub(param, param.Err)
 }
 
-func CmdPrint(this *Param) []any {
-	rc := CmdWrite(this)
-	fmt.Fprintln(this.Out)
+func CmdPrint(param *Param) []any {
+	rc := CmdWrite(param)
+	fmt.Fprintln(param.Out)
 	return rc
 }
 
-func stackToSlice(this *Param) []string {
-	argv := make([]string, 0, len(this.Args))
-	for _, arg1 := range this.Args {
+func stackToSlice(param *Param) []string {
+	argv := make([]string, 0, len(param.Args))
+	for _, arg1 := range param.Args {
 		if table, ok := arg1.(map[interface{}]interface{}); ok {
 			// Support both {0..(n-1)} and {1..n}
 			for i := 0; i <= len(table); i++ {
@@ -415,7 +426,8 @@ func stackToSlice(this *Param) []string {
 	return argv
 }
 
-func GetOption(args []any) []any {
+func GetOption(param *Param) []any {
+	args := param.Args
 	if len(args) < 2 {
 		return []any{nil, "too few arguments"}
 	}
@@ -429,7 +441,8 @@ func GetOption(args []any) []any {
 	return []any{nil, fmt.Sprintf("key: %s: not found", key)}
 }
 
-func SetOption(args []any) []any {
+func SetOption(param *Param) []any {
+	args := param.Args
 	if len(args) < 3 {
 		return []any{nil, "too few arguments"}
 	}
@@ -469,19 +482,23 @@ func bitOperators(args []any, result int, f func(int, int) int) []any {
 	return []any{result}
 }
 
-func CmdBitAnd(args []any) []any {
+func CmdBitAnd(param *Param) []any {
+	args := param.Args
 	return bitOperators(args, ^0, func(r, v int) int { return r & v })
 }
 
-func CmdBitOr(args []any) []any {
+func CmdBitOr(param *Param) []any {
+	args := param.Args
 	return bitOperators(args, 0, func(r, v int) int { return r | v })
 }
 
-func CmdBitXor(args []any) []any {
+func CmdBitXor(param *Param) []any {
+	args := param.Args
 	return bitOperators(args, 0, func(r, v int) int { return r ^ v })
 }
 
-func CmdFields(args []any) []any {
+func CmdFields(param *Param) []any {
+	args := param.Args
 	if len(args) <= 0 {
 		return []any{nil}
 	}
@@ -489,7 +506,8 @@ func CmdFields(args []any) []any {
 	return []any{fields}
 }
 
-func CmdEnvAdd(args []any) []any {
+func CmdEnvAdd(param *Param) []any {
+	args := param.Args
 	if len(args) >= 1 {
 		list := make([]string, 1, len(args))
 		name := strings.ToUpper(fmt.Sprint(args[0]))
@@ -502,7 +520,8 @@ func CmdEnvAdd(args []any) []any {
 	return []any{}
 }
 
-func CmdEnvDel(args []any) (result []any) {
+func CmdEnvDel(param *Param) (result []any) {
+	args := param.Args
 	if len(args) >= 1 {
 		name := strings.ToUpper(fmt.Sprint(args[0]))
 		list := filepath.SplitList(os.Getenv(name))
@@ -528,7 +547,8 @@ func CmdEnvDel(args []any) (result []any) {
 	return
 }
 
-func CmdCompleteForFiles(args []any) []any {
+func CmdCompleteForFiles(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, errors.New("too few arguments")}
 	}

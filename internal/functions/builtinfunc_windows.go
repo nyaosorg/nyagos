@@ -9,12 +9,13 @@ import (
 	"github.com/nyaosorg/go-windows-su"
 )
 
-func CmdElevated([]any) []any {
+func CmdElevated(param *Param) []any {
 	flag, _ := su.IsElevated()
 	return []any{flag}
 }
 
-func CmdShellExecute(args []any) []any {
+func CmdShellExecute(param *Param) []any {
+	args := param.Args
 	pid, err := su.ShellExecute(
 		toStr(args, 0),
 		toStr(args, 1),
@@ -41,7 +42,8 @@ func CmdRawExec(this *Param) []any {
 	return []any{errorlevel}
 }
 
-func CmdAtoU(args []any) []any {
+func CmdAtoU(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -55,7 +57,8 @@ func CmdAtoU(args []any) []any {
 	return []any{fmt.Sprint(args[0])}
 }
 
-func CmdUtoA(args []any) []any {
+func CmdUtoA(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -67,7 +70,8 @@ func CmdUtoA(args []any) []any {
 	return []any{bin, nil}
 }
 
-func CmdAnsiToUtf8IfNeeded(args []any) []any {
+func CmdAnsiToUtf8IfNeeded(param *Param) []any {
+	args := param.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
