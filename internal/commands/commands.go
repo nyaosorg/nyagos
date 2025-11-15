@@ -32,6 +32,7 @@ type Param interface {
 	DumpEnv() []string
 	Setenv(key, val string)
 	GetHistory() shell.History
+	GetStream() shell.Stream
 }
 
 var buildInCommand ignoreCaseSorted.Dictionary[func(context.Context, Param) (int, error)]

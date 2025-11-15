@@ -16,7 +16,10 @@ var startList = map[string]bool{
 }
 
 func cmdForeach(ctx context.Context, cmd Param) (int, error) {
-	bufstream := shell.BufStream{History: cmd.GetHistory()}
+	bufstream := &shell.BufStream{
+		History: cmd.GetHistory(),
+		Super:   cmd.GetStream(),
+	}
 	savePrompt := os.Getenv("PROMPT")
 	os.Setenv("PROMPT", "foreach>")
 	defer os.Setenv("PROMPT", savePrompt)
@@ -48,7 +51,7 @@ func cmdForeach(ctx context.Context, cmd Param) (int, error) {
 	save := os.Getenv(name)
 	for _, value := range cmd.Args()[2:] {
 		os.Setenv(name, value)
-		cmd.Loop(ctx, &bufstream)
+		cmd.Loop(ctx, bufstream)
 		bufstream.SetPos(0)
 	}
 	os.Setenv(name, save)
