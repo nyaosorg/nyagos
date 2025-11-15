@@ -157,12 +157,9 @@ func NewLua() (Lua, error) {
 
 	nyagosTable := L.NewTable()
 
-	for name, function := range functions.Table {
-		L.SetField(nyagosTable, name, L.NewFunction(lua2cmd(function)))
-	}
 	envTable := makeVirtualTable(L,
-		lua2cmd(functions.CmdGetEnv),
-		lua2cmd(functions.CmdSetEnv))
+		lua2param(functions.CmdGetEnv),
+		lua2param(functions.CmdSetEnv))
 	L.SetField(nyagosTable, "env", envTable)
 
 	compTable := makeVirtualTable(L,
@@ -175,11 +172,11 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "setalias", L.NewFunction(cmdSetAlias))
 	L.SetField(nyagosTable, "getalias", L.NewFunction(cmdGetAlias))
 
-	for name, function := range functions.Table2 {
+	for name, function := range functions.Table {
 		L.SetField(nyagosTable, name, L.NewFunction(lua2param(function)))
 	}
 
-	optionTable := makeVirtualTable(L, lua2cmd(functions.GetOption), lua2cmd(functions.SetOption))
+	optionTable := makeVirtualTable(L, lua2param(functions.GetOption), lua2param(functions.SetOption))
 	L.SetField(nyagosTable, "option", optionTable)
 
 	L.SetField(nyagosTable, "lines", L.GetField(ioTable, "lines"))
@@ -208,8 +205,8 @@ func NewLua() (Lua, error) {
 	}
 
 	historyMeta := L.NewTable()
-	L.SetField(historyMeta, "__index", L.NewFunction(lua2cmd(functions.CmdGetHistory)))
-	L.SetField(historyMeta, "__len", L.NewFunction(lua2cmd(functions.CmdLenHistory)))
+	L.SetField(historyMeta, "__index", L.NewFunction(lua2param(functions.CmdGetHistory)))
+	L.SetField(historyMeta, "__len", L.NewFunction(lua2param(functions.CmdLenHistory)))
 	historyTable := L.NewTable()
 	L.SetMetatable(historyTable, historyMeta)
 	L.SetField(nyagosTable, "history", historyTable)
@@ -227,9 +224,9 @@ func NewLua() (Lua, error) {
 	setupUtf8Table(L)
 
 	bit32Table := L.NewTable()
-	L.SetField(bit32Table, "band", L.NewFunction(lua2cmd(functions.CmdBitAnd)))
-	L.SetField(bit32Table, "bor", L.NewFunction(lua2cmd(functions.CmdBitOr)))
-	L.SetField(bit32Table, "bxor", L.NewFunction(lua2cmd(functions.CmdBitXor)))
+	L.SetField(bit32Table, "band", L.NewFunction(lua2param(functions.CmdBitAnd)))
+	L.SetField(bit32Table, "bor", L.NewFunction(lua2param(functions.CmdBitOr)))
+	L.SetField(bit32Table, "bxor", L.NewFunction(lua2param(functions.CmdBitXor)))
 	L.SetGlobal("bit32", bit32Table)
 
 	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
