@@ -16,19 +16,31 @@ type CmdSeeker struct {
 type CmdStreamFile struct {
 	CmdSeeker
 	Scanner *bufio.Scanner
+	super   Stream
 }
 
-func (*CmdStreamFile) GetHistory() History {
+func (c *CmdStreamFile) GetHistory() History {
+	if c.super != nil {
+		return c.super.GetHistory()
+	}
 	return &_NulHistory{}
 }
 
-func NewCmdStreamFile(r io.Reader) *CmdStreamFile {
+func (c *CmdStreamFile) GetEditor() Editor {
+	if c.super != nil {
+		return c.super.GetEditor()
+	}
+	return nil
+}
+
+func NewCmdStreamFile(r io.Reader, super Stream) *CmdStreamFile {
 	return &CmdStreamFile{
 		Scanner: bufio.NewScanner(r),
 		CmdSeeker: CmdSeeker{
 			PlainHistory: []string{},
 			Pointer:      -1,
 		},
+		super: super,
 	}
 }
 
@@ -56,7 +68,7 @@ func (sh *Shell) Source(ctx context.Context, fname string) error {
 	if err != nil {
 		return err
 	}
-	stream1 := NewCmdStreamFile(fd)
+	stream1 := NewCmdStreamFile(fd, sh.Stream)
 	_, err = sh.Loop(ctx, stream1)
 	fd.Close()
 	if err == io.EOF {
