@@ -118,14 +118,26 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		close(sigint)
 	}()
 
+	var cancel context.CancelFunc
+
+	go func() {
+		for range sigint {
+			if cancel != nil {
+				cancel()
+			}
+		}
+	}()
+
 	for {
 		dropSigint(sigint)
 
-		ctx, cancel := context.WithCancel(ctx0)
+		var ctx context.Context
+		ctx, cancel = context.WithCancel(ctx0)
 
 		line, err := sh.ReadCommand(ctx)
 		if err != nil {
 			cancel()
+			cancel = nil
 			if err == io.EOF {
 				return 0, err
 			}
@@ -135,14 +147,6 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			}
 			return 1, err
 		}
-
-		go func() {
-			select {
-			case <-sigint:
-				cancel()
-			case <-ctx.Done():
-			}
-		}()
 
 		rc, err := sh.Interpret(ctx, line)
 
@@ -164,6 +168,7 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 			fmt.Fprintf(os.Stderr, "exit status %d\n", rc)
 		}
 		cancel()
+		cancel = nil
 	}
 }
 
