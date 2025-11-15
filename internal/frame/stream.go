@@ -29,6 +29,10 @@ type CmdStreamConsole struct {
 	HistPath string
 }
 
+func (c *CmdStreamConsole) GetHistory() shell.History {
+	return c.History
+}
+
 type OSClipboard struct{}
 
 func (OSClipboard) Read() (string, error) {
@@ -88,10 +92,6 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 	history1.Load(stream.HistPath)
 	history1.Save(stream.HistPath)
 	return stream
-}
-
-func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
-	return stream.History.IgnorePush(value)
 }
 
 // endsWithSep returns

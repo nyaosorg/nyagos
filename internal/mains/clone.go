@@ -39,8 +39,8 @@ func cloneTo(L1, L2 Lua) bool {
 }
 
 // Clone makes a copy of Lua instance.
-func Clone(L Lua) (Lua, error) {
-	L2, err := NewLua()
+func Clone(L Lua, env1 *env) (Lua, error) {
+	L2, err := NewLua(env1)
 	if err != nil {
 		return L2, err
 	}

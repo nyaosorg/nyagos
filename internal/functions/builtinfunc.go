@@ -23,7 +23,6 @@ import (
 	"github.com/nyaosorg/nyagos/internal/completion"
 	"github.com/nyaosorg/nyagos/internal/config"
 	"github.com/nyaosorg/nyagos/internal/defined"
-	"github.com/nyaosorg/nyagos/internal/frame"
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
@@ -50,7 +49,7 @@ func toStr(arr []any, n int) string {
 	return ""
 }
 
-func CmdChdir(args []any) []any {
+func (*Env) CmdChdir(args []any) []any {
 	if len(args) >= 1 {
 		nodos.Chdir(fmt.Sprint(args[0]))
 		return []any{true}
@@ -58,7 +57,7 @@ func CmdChdir(args []any) []any {
 	return []any{nil, "directory is required"}
 }
 
-func CmdBox(this *Param) []any {
+func (*Env) CmdBox(this *Param) []any {
 	args := this.Args
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
@@ -87,7 +86,7 @@ func CmdBox(this *Param) []any {
 	return values
 }
 
-func CmdGetwd(args []any) []any {
+func (*Env) CmdGetwd(args []any) []any {
 	wd, err := os.Getwd()
 	if err != nil {
 		return []any{nil, err}
@@ -95,7 +94,7 @@ func CmdGetwd(args []any) []any {
 	return []any{wd}
 }
 
-func CmdGetKey(args []any) []any {
+func (*Env) CmdGetKey(args []any) []any {
 	tty1, err := tty.Open()
 	if err != nil {
 		return []any{nil, err.Error()}
@@ -112,7 +111,7 @@ func CmdGetKey(args []any) []any {
 	}
 }
 
-func CmdGetKeys(args []any) []any {
+func (*Env) CmdGetKeys(args []any) []any {
 	tty := &tty8.Tty{}
 	if err := tty.Open(nil); err != nil {
 		return []any{nil, err.Error()}
@@ -125,7 +124,7 @@ func CmdGetKeys(args []any) []any {
 	return []any{key}
 }
 
-func CmdGetViewWidth(args []any) []any {
+func (*Env) CmdGetViewWidth(args []any) []any {
 	tty1, err := tty.Open()
 	if err != nil {
 		return []any{nil, err.Error()}
@@ -154,7 +153,7 @@ func expandEnv(str string) string {
 	})
 }
 
-func CmdPathJoin(args []any) []any {
+func (*Env) CmdPathJoin(args []any) []any {
 	if len(args) < 1 {
 		return []any{""}
 	}
@@ -166,7 +165,7 @@ func CmdPathJoin(args []any) []any {
 	return []any{path}
 }
 
-func CmdDirName(args []any) []any {
+func (*Env) CmdDirName(args []any) []any {
 	if len(args) < 1 {
 		return []any{""}
 	}
@@ -181,7 +180,7 @@ func CmdDirName(args []any) []any {
 	return result
 }
 
-func CmdAccess(args []any) []any {
+func (*Env) CmdAccess(args []any) []any {
 	if len(args) < 2 {
 		return []any{nil, "nyagos.access requilres two arguments"}
 	}
@@ -215,7 +214,7 @@ func CmdAccess(args []any) []any {
 	return []any{result}
 }
 
-func CmdStat(args []any) []any {
+func (*Env) CmdStat(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -255,7 +254,7 @@ func CmdStat(args []any) []any {
 	}
 }
 
-func CmdSetEnv(args []any) []any {
+func (*Env) CmdSetEnv(args []any) []any {
 	if len(args) < 2 {
 		return []any{nil, TooFewArguments}
 	}
@@ -269,7 +268,7 @@ func CmdSetEnv(args []any) []any {
 	return []any{true}
 }
 
-func CmdGetEnv(args []any) []any {
+func (*Env) CmdGetEnv(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -281,7 +280,7 @@ func CmdGetEnv(args []any) []any {
 	return []any{nil}
 }
 
-func CmdWhich(args []any) []any {
+func (*Env) CmdWhich(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, TooFewArguments}
 	}
@@ -293,7 +292,7 @@ func CmdWhich(args []any) []any {
 	return []any{nil, name + ": Path not found"}
 }
 
-func CmdGlob(args []any) []any {
+func (*Env) CmdGlob(args []any) []any {
 	result := make([]string, 0)
 	for _, arg1 := range args {
 		wildcard := fmt.Sprint(arg1)
@@ -308,26 +307,28 @@ func CmdGlob(args []any) []any {
 	return []any{result}
 }
 
-func CmdGetHistory(args []any) []any {
-	if frame.DefaultHistory == nil {
+func (env *Env) CmdGetHistory(args []any) []any {
+	history := env.Value.GetHistory()
+	if history == nil {
 		return []any{}
 	}
 	if len(args) >= 1 {
 		if n, ok := toNumber(args[len(args)-1]); ok {
-			return []any{frame.DefaultHistory.At(n)}
+			return []any{history.At(n)}
 		}
 	}
-	return []any{frame.DefaultHistory.Len()}
+	return []any{history.Len()}
 }
 
-func CmdLenHistory(args []any) []any {
-	if frame.DefaultHistory == nil {
+func (env *Env) CmdLenHistory(args []any) []any {
+	history := env.Value.GetHistory()
+	if history == nil {
 		return []any{}
 	}
-	return []any{frame.DefaultHistory.Len()}
+	return []any{history.Len()}
 }
 
-func CmdRawEval(this *Param) []any {
+func (*Env) CmdRawEval(this *Param) []any {
 	argv := stackToSlice(this)
 	cmd1 := exec.Command(argv[0], argv[1:]...)
 	out, err := cmd1.Output()
@@ -337,7 +338,7 @@ func CmdRawEval(this *Param) []any {
 	return []any{out}
 }
 
-func CmdCommonPrefix(args []any) []any {
+func (*Env) CmdCommonPrefix(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, "too few arguments"}
 	}
@@ -353,7 +354,7 @@ func CmdCommonPrefix(args []any) []any {
 	return []any{completion.CommonPrefix(list)}
 }
 
-func CmdWriteSub(this *Param, out io.Writer) []any {
+func (*Env) CmdWriteSub(this *Param, out io.Writer) []any {
 	args := this.Args
 	if f, ok := out.(*os.File); ok && isatty.IsTerminal(f.Fd()) {
 		cout := bufio.NewWriter(this.Term)
@@ -384,16 +385,16 @@ func CmdWriteSub(this *Param, out io.Writer) []any {
 	return []any{true}
 }
 
-func CmdWrite(this *Param) []any {
-	return CmdWriteSub(this, this.Out)
+func (env *Env) CmdWrite(this *Param) []any {
+	return env.CmdWriteSub(this, this.Out)
 }
 
-func CmdWriteErr(this *Param) []any {
-	return CmdWriteSub(this, this.Err)
+func (env *Env) CmdWriteErr(this *Param) []any {
+	return env.CmdWriteSub(this, this.Err)
 }
 
-func CmdPrint(this *Param) []any {
-	rc := CmdWrite(this)
+func (env *Env) CmdPrint(this *Param) []any {
+	rc := env.CmdWrite(this)
 	fmt.Fprintln(this.Out)
 	return rc
 }
@@ -415,7 +416,7 @@ func stackToSlice(this *Param) []string {
 	return argv
 }
 
-func GetOption(args []any) []any {
+func (*Env) GetOption(args []any) []any {
 	if len(args) < 2 {
 		return []any{nil, "too few arguments"}
 	}
@@ -429,7 +430,7 @@ func GetOption(args []any) []any {
 	return []any{nil, fmt.Sprintf("key: %s: not found", key)}
 }
 
-func SetOption(args []any) []any {
+func (*Env) SetOption(args []any) []any {
 	if len(args) < 3 {
 		return []any{nil, "too few arguments"}
 	}
@@ -469,19 +470,19 @@ func bitOperators(args []any, result int, f func(int, int) int) []any {
 	return []any{result}
 }
 
-func CmdBitAnd(args []any) []any {
+func (*Env) CmdBitAnd(args []any) []any {
 	return bitOperators(args, ^0, func(r, v int) int { return r & v })
 }
 
-func CmdBitOr(args []any) []any {
+func (*Env) CmdBitOr(args []any) []any {
 	return bitOperators(args, 0, func(r, v int) int { return r | v })
 }
 
-func CmdBitXor(args []any) []any {
+func (*Env) CmdBitXor(args []any) []any {
 	return bitOperators(args, 0, func(r, v int) int { return r ^ v })
 }
 
-func CmdFields(args []any) []any {
+func (*Env) CmdFields(args []any) []any {
 	if len(args) <= 0 {
 		return []any{nil}
 	}
@@ -489,7 +490,7 @@ func CmdFields(args []any) []any {
 	return []any{fields}
 }
 
-func CmdEnvAdd(args []any) []any {
+func (*Env) CmdEnvAdd(args []any) []any {
 	if len(args) >= 1 {
 		list := make([]string, 1, len(args))
 		name := strings.ToUpper(fmt.Sprint(args[0]))
@@ -502,7 +503,7 @@ func CmdEnvAdd(args []any) []any {
 	return []any{}
 }
 
-func CmdEnvDel(args []any) (result []any) {
+func (*Env) CmdEnvDel(args []any) (result []any) {
 	if len(args) >= 1 {
 		name := strings.ToUpper(fmt.Sprint(args[0]))
 		list := filepath.SplitList(os.Getenv(name))
@@ -528,7 +529,7 @@ func CmdEnvDel(args []any) (result []any) {
 	return
 }
 
-func CmdCompleteForFiles(args []any) []any {
+func (*Env) CmdCompleteForFiles(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, errors.New("too few arguments")}
 	}

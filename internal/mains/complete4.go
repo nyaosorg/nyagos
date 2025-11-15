@@ -15,7 +15,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/completion"
 )
 
-func complete4getter(L Lua) int {
+func (*env) complete4getter(L Lua) int {
 	key, ok := L.Get(-1).(lua.LString)
 	if !ok {
 		return lerror(L, "nyagos.complete_for[] too few arguments")
@@ -89,7 +89,7 @@ func (c *customCompleter) Complete(ctx context.Context, ua completion.UncComplet
 	}
 }
 
-func complete4setter(L Lua) int {
+func (*env) complete4setter(L Lua) int {
 	key, ok := L.Get(-2).(lua.LString)
 	if !ok {
 		return lerror(L, "nyagos.complete_for[] too few arguments")

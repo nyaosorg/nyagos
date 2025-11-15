@@ -15,7 +15,7 @@ import (
 // Stream is the inteface which can read command-line
 type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
-	DisableHistory(value bool) bool
+	GetHistory() History
 }
 
 // NulStream is the null implementation for the interface Stream.
@@ -26,9 +26,8 @@ func (stream *NulStream) ReadLine(ctx context.Context) (context.Context, string,
 	return ctx, "", io.EOF
 }
 
-// DisableHistory do nothing.
-func (stream *NulStream) DisableHistory(value bool) bool {
-	return false
+func (stream *NulStream) GetHistory() History {
+	return &_NulHistory{}
 }
 
 func (ses *session) push(lines []string) {

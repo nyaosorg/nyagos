@@ -7,7 +7,7 @@ import (
 )
 
 // CmdGetBindKey is the getter for nyagos.key table.
-func CmdGetBindKey(args []any) []any {
+func (*Env) CmdGetBindKey(args []any) []any {
 	if len(args) < 1 {
 		return []any{nil, "too few arguments"}
 	}

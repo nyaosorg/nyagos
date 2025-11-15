@@ -12,7 +12,7 @@ import (
 	"github.com/nyaosorg/nyagos/internal/onexit"
 )
 
-func CmdSkk(args []any) []any {
+func (*Env) CmdSkk(args []any) []any {
 	cfg := &skk.Config{
 		BindTo: readline.GlobalKeyMap,
 	}

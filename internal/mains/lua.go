@@ -135,7 +135,7 @@ func lerror(L Lua, s string) int {
 }
 
 // NewLua sets up the lua instance with NYAOGS' environment.
-func NewLua() (Lua, error) {
+func NewLua(env *env) (Lua, error) {
 	L := lua.NewState(
 		lua.Options{
 			IncludeGoStackTrace: true,
@@ -157,41 +157,41 @@ func NewLua() (Lua, error) {
 
 	nyagosTable := L.NewTable()
 
-	for name, function := range functions.Table {
-		L.SetField(nyagosTable, name, L.NewFunction(lua2cmd(function)))
+	for name, function := range env.Table() {
+		L.SetField(nyagosTable, name, L.NewFunction(env.lua2cmd(function)))
 	}
 	envTable := makeVirtualTable(L,
-		lua2cmd(functions.CmdGetEnv),
-		lua2cmd(functions.CmdSetEnv))
+		env.lua2cmd(env.CmdGetEnv),
+		env.lua2cmd(env.CmdSetEnv))
 	L.SetField(nyagosTable, "env", envTable)
 
 	compTable := makeVirtualTable(L,
-		complete4getter,
-		complete4setter)
+		env.complete4getter,
+		env.complete4setter)
 	L.SetField(nyagosTable, "complete_for", compTable)
 
-	aliasTable := makeVirtualTable(L, cmdGetAlias, cmdSetAlias)
+	aliasTable := makeVirtualTable(L, env.cmdGetAlias, env.cmdSetAlias)
 	L.SetField(nyagosTable, "alias", aliasTable)
-	L.SetField(nyagosTable, "setalias", L.NewFunction(cmdSetAlias))
-	L.SetField(nyagosTable, "getalias", L.NewFunction(cmdGetAlias))
+	L.SetField(nyagosTable, "setalias", L.NewFunction(env.cmdSetAlias))
+	L.SetField(nyagosTable, "getalias", L.NewFunction(env.cmdGetAlias))
 
-	for name, function := range functions.Table2 {
-		L.SetField(nyagosTable, name, L.NewFunction(lua2param(function)))
+	for name, function := range env.Table2() {
+		L.SetField(nyagosTable, name, L.NewFunction(env.lua2param(function)))
 	}
 
-	optionTable := makeVirtualTable(L, lua2cmd(functions.GetOption), lua2cmd(functions.SetOption))
+	optionTable := makeVirtualTable(L, env.lua2cmd(env.GetOption), env.lua2cmd(env.SetOption))
 	L.SetField(nyagosTable, "option", optionTable)
 
 	L.SetField(nyagosTable, "lines", L.GetField(ioTable, "lines"))
 	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))
 
-	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
+	keyTable := makeVirtualTable(L, env.lua2cmd(env.CmdGetBindKey), env.cmdBindKey)
 	L.SetField(nyagosTable, "key", keyTable)
-	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
-	L.SetField(nyagosTable, "exec", L.NewFunction(cmdExec))
-	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
-	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2param(functions.Prompt)))
+	L.SetField(nyagosTable, "bindkey", L.NewFunction(env.cmdBindKey))
+	L.SetField(nyagosTable, "exec", L.NewFunction(env.cmdExec))
+	L.SetField(nyagosTable, "eval", L.NewFunction(env.cmdEval))
+	L.SetField(nyagosTable, "prompt", L.NewFunction(env.lua2param(env.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(ole.CreateObject))
 	L.SetField(nyagosTable, "to_ole_integer", L.NewFunction(ole.ToOleInteger))
 	L.SetField(nyagosTable, "goarch", lua.LString(runtime.GOARCH))
@@ -208,8 +208,8 @@ func NewLua() (Lua, error) {
 	}
 
 	historyMeta := L.NewTable()
-	L.SetField(historyMeta, "__index", L.NewFunction(lua2cmd(functions.CmdGetHistory)))
-	L.SetField(historyMeta, "__len", L.NewFunction(lua2cmd(functions.CmdLenHistory)))
+	L.SetField(historyMeta, "__index", L.NewFunction(env.lua2cmd(env.CmdGetHistory)))
+	L.SetField(historyMeta, "__len", L.NewFunction(env.lua2cmd(env.CmdLenHistory)))
 	historyTable := L.NewTable()
 	L.SetMetatable(historyTable, historyMeta)
 	L.SetField(nyagosTable, "history", historyTable)
@@ -227,12 +227,12 @@ func NewLua() (Lua, error) {
 	setupUtf8Table(L)
 
 	bit32Table := L.NewTable()
-	L.SetField(bit32Table, "band", L.NewFunction(lua2cmd(functions.CmdBitAnd)))
-	L.SetField(bit32Table, "bor", L.NewFunction(lua2cmd(functions.CmdBitOr)))
-	L.SetField(bit32Table, "bxor", L.NewFunction(lua2cmd(functions.CmdBitXor)))
+	L.SetField(bit32Table, "band", L.NewFunction(env.lua2cmd(env.CmdBitAnd)))
+	L.SetField(bit32Table, "bor", L.NewFunction(env.lua2cmd(env.CmdBitOr)))
+	L.SetField(bit32Table, "bxor", L.NewFunction(env.lua2cmd(env.CmdBitXor)))
 	L.SetGlobal("bit32", bit32Table)
 
-	L.SetGlobal("print", L.NewFunction(lua2param(functions.CmdPrint)))
+	L.SetGlobal("print", L.NewFunction(env.lua2param(env.CmdPrint)))
 
 	if !isHookSetup {
 		orgArgHook = shell.SetArgsHook(newArgHook)
@@ -300,7 +300,7 @@ type ToLValueT interface {
 	ToLValue(Lua) lua.LValue
 }
 
-func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
+func (env *env) interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 	if valueTmp == nil {
 		return lua.LNil
 	}
@@ -341,9 +341,9 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		}
 		return lua.LFalse
 	case func([]interface{}) []interface{}:
-		return L.NewFunction(lua2cmd(value))
+		return L.NewFunction(env.lua2cmd(value))
 	case func(*functions.Param) []interface{}:
-		return L.NewFunction(lua2param(value))
+		return L.NewFunction(env.lua2param(value))
 	case reflect.Value:
 		switch value.Kind() {
 		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
@@ -360,7 +360,7 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 		case reflect.String:
 			return lua.LString(value.String())
 		case reflect.Interface:
-			return interfaceToLValue(L, value.Interface())
+			return env.interfaceToLValue(L, value.Interface())
 		default:
 			panic("not supporting type even in reflect value: " + value.Kind().String())
 		}
@@ -380,16 +380,16 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 			for i, end := 0, reflectValue.Len(); i < end; i++ {
 				val := reflectValue.Index(i)
 				L.SetTable(array1,
-					interfaceToLValue(L, i+1),
-					interfaceToLValue(L, val))
+					env.interfaceToLValue(L, i+1),
+					env.interfaceToLValue(L, val))
 			}
 			return array1
 		case reflect.Map:
 			map1 := L.NewTable()
 			for _, key := range reflectValue.MapKeys() {
 				L.SetTable(map1,
-					interfaceToLValue(L, key),
-					interfaceToLValue(L, reflectValue.MapIndex(key)))
+					env.interfaceToLValue(L, key),
+					env.interfaceToLValue(L, reflectValue.MapIndex(key)))
 			}
 			return map1
 		default:
@@ -401,57 +401,32 @@ func interfaceToLValue(L Lua, valueTmp interface{}) lua.LValue {
 	}
 }
 
-func pushInterfaces(L Lua, values []interface{}) {
+func (env *env) pushInterfaces(L Lua, values []interface{}) {
 	for _, value := range values {
-		L.Push(interfaceToLValue(L, value))
+		L.Push(env.interfaceToLValue(L, value))
 	}
 }
 
-func lua2cmd(f func([]interface{}) []interface{}) func(Lua) int {
+func (env *env) lua2cmd(f func([]interface{}) []interface{}) func(Lua) int {
 	return func(L Lua) int {
 		param := luaArgsToInterfaces(L)
 		result := f(param)
-		pushInterfaces(L, result)
+		env.pushInterfaces(L, result)
 		return len(result)
 	}
 }
 
-type shellKeyT struct{}
-
-var shellKey shellKeyT
-
-func getRegInt(L Lua) (context.Context, *shell.Shell) {
-	ctx := getContext(L)
-	if ctx == nil {
-		println("getRegInt: could not find context in Lua instance")
-		return context.Background(), nil
-	}
-	sh, ok := ctx.Value(shellKey).(*shell.Shell)
-	if !ok {
-		println("getRegInt: could not find shell in Lua instance")
-		return ctx, nil
-	}
-	return ctx, sh
-}
-
-func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
+func (env *env) lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 	return func(L Lua) int {
-		_, sh := getRegInt(L)
 		param := &functions.Param{
 			Args: luaArgsToInterfaces(L),
 		}
-		if sh != nil {
-			param.In = sh.In()
-			param.Out = sh.Out()
-			param.Err = sh.Err()
-		} else {
-			param.In = os.Stdin
-			param.Out = os.Stdout
-			param.Err = os.Stderr
-		}
+		param.In = env.Value.In()
+		param.Out = env.Value.Out()
+		param.Err = env.Value.Err()
 		param.Term = colorable.NewColorableStdout()
 		result := f(param)
-		pushInterfaces(L, result)
+		env.pushInterfaces(L, result)
 		return len(result)
 	}
 }
@@ -580,7 +555,6 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 
 func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	defer setContext(getContext(L), L)
-	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(ctx, L)
 
 	return luaRedirect(ctx, sh.Stdio[0], sh.Stdio[1], sh.Stdio[2], L, func() error {

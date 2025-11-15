@@ -201,7 +201,7 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 	return readline.CONTINUE
 }
 
-func cmdBindKey(L Lua) int {
+func (*env) cmdBindKey(L Lua) int {
 	key, ok := L.Get(-2).(lua.LString)
 	if !ok {
 		return lerror(L, "bindkey: key error: "+string(key))

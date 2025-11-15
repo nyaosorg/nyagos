@@ -12,6 +12,7 @@ import (
 	"os"
 
 	"github.com/nyaosorg/nyagos/internal/alias"
+	"github.com/nyaosorg/nyagos/internal/functions"
 	"github.com/nyaosorg/nyagos/internal/shell"
 	"github.com/yuin/gopher-lua"
 )
@@ -74,7 +75,12 @@ func (lbc *_LuaBinaryChank) Call(ctx context.Context, cmd *shell.Cmd) (int, erro
 	return errorlevel, err
 }
 
-func cmdSetAlias(L Lua) int {
+type env struct {
+	*functions.Env
+	*shell.Shell
+}
+
+func (*env) cmdSetAlias(L Lua) int {
 	key := L.ToString(-2)
 	switch L.Get(-1).Type() {
 	case lua.LTString:
@@ -88,7 +94,7 @@ func cmdSetAlias(L Lua) int {
 	return 1
 }
 
-func cmdGetAlias(L Lua) int {
+func (*env) cmdGetAlias(L Lua) int {
 	value, ok := alias.Table.Load(L.ToString(-1))
 	if !ok {
 		L.Push(lua.LNil)
@@ -103,8 +109,11 @@ func cmdGetAlias(L Lua) int {
 	return 1
 }
 
-func cmdExec(L Lua) int {
+func (e *env) cmdExec(L Lua) int {
 	errorlevel := 0
+	ctx := L.Context()
+	sh := e.Shell
+
 	var err error
 	table, ok := L.Get(1).(*lua.LTable)
 	if ok {
@@ -112,16 +121,6 @@ func cmdExec(L Lua) int {
 		args := make([]string, n)
 		for i := 0; i < n; i++ {
 			args[i] = L.GetTable(table, lua.LNumber(i+1)).String()
-		}
-		ctx, sh := getRegInt(L)
-		if sh == nil {
-			println("main/lua_cmd.go: cmdExec: not found interpreter object")
-			sh = shell.New()
-			newL, err := Clone(L)
-			if err == nil && newL != nil {
-				sh.SetTag(&luaWrapper{Lua: newL})
-			}
-			defer sh.Close()
 		}
 		cmd := sh.Command()
 		defer cmd.Close()
@@ -131,16 +130,6 @@ func cmdExec(L Lua) int {
 		statement, ok := L.Get(1).(lua.LString)
 		if !ok {
 			return lerror(L, "nyagos.exec: the 1st argument is not a string")
-		}
-		ctx, sh := getRegInt(L)
-		if ctx == nil {
-			return lerror(L, "nyagos.exec: context not found")
-		}
-		if sh == nil {
-			println("nyagos.exec: warning shell is not found.")
-			sh = shell.New()
-			sh.SetTag(&luaWrapper{L})
-			defer sh.Close()
 		}
 		errorlevel, err = sh.Interpret(ctx, string(statement))
 	}
@@ -153,7 +142,7 @@ func cmdExec(L Lua) int {
 	return 2
 }
 
-func cmdEval(L Lua) int {
+func (e *env) cmdEval(L Lua) int {
 	statement, ok := L.Get(1).(lua.LString)
 	if !ok {
 		return lerror(L, "nyagos.eval: an argument is not string")
@@ -163,17 +152,9 @@ func cmdEval(L Lua) int {
 		return lerror(L, err.Error())
 	}
 	go func(statement string, w *os.File) {
-		ctx, sh := getRegInt(L)
-		if ctx == nil {
-			ctx = context.Background()
-			println("cmdEval: context not found.")
-		}
-		if sh == nil {
-			sh = shell.New()
-			println("cmdEval: shell not found.")
-			defer sh.Close()
-		}
-		sh.SetTag(&luaWrapper{L})
+		ctx := L.Context()
+		sh := e.Shell
+		sh.SetTag(&luaWrapper{Lua: L, Env: e})
 		saveOut := sh.Stdio[1]
 		sh.Stdio[1] = w
 		sh.Interpret(ctx, statement)
