@@ -15,7 +15,6 @@ import (
 // Stream is the inteface which can read command-line
 type Stream interface {
 	ReadLine(context.Context) (context.Context, string, error)
-	DisableHistory(value bool) bool
 	GetHistory() History
 }
 
@@ -25,11 +24,6 @@ type NulStream struct{}
 // ReadLine always returns "" and io.EOF.
 func (stream *NulStream) ReadLine(ctx context.Context) (context.Context, string, error) {
 	return ctx, "", io.EOF
-}
-
-// DisableHistory do nothing.
-func (stream *NulStream) DisableHistory(value bool) bool {
-	return false
 }
 
 func (stream *NulStream) GetHistory() History {

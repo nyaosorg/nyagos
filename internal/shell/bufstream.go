@@ -11,8 +11,6 @@ type BufStream struct {
 	History History
 }
 
-func (*BufStream) DisableHistory(value bool) bool { return false }
-
 func (bufStream *BufStream) ReadLine(c context.Context) (context.Context, string, error) {
 	if bufStream.n >= len(bufStream.line) {
 		return c, "", io.EOF

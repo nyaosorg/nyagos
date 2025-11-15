@@ -457,8 +457,10 @@ func parse1(stream Stream, text string) ([]*_Statement, error) {
 					}
 					defer os.Setenv("PROMPT", prompt)
 					ctx := context.Background()
-					backup := stream.DisableHistory(true)
-					defer stream.DisableHistory(backup)
+					if history := stream.GetHistory(); history != nil {
+						backup := history.IgnorePush(true)
+						defer history.IgnorePush(backup)
+					}
 					for {
 						_, line, err := stream.ReadLine(ctx)
 						if err != nil {

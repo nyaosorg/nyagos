@@ -94,10 +94,6 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 	return stream
 }
 
-func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
-	return stream.History.IgnorePush(value)
-}
-
 // endsWithSep returns
 //
 //	false when line does not end with `^`
