@@ -549,3 +549,31 @@ func (*Env) CmdCompleteForFiles(args []any) []any {
 	}
 	return []any{nil, errors.New("invalid arguments")}
 }
+
+func (e *Env) CmdSetNextLine(args []any) []any {
+	if e.Value == nil {
+		return []any{nil, "can not find the current editor"}
+	}
+	stream := e.Value.GetStream()
+	if stream == nil {
+		return []any{nil, "can not find the current editor"}
+	}
+	editor := stream.GetEditor()
+	if editor == nil {
+		return []any{nil, "can not find the current editor"}
+	}
+
+	var buffer strings.Builder
+	if len(args) > 0 {
+		for {
+			fmt.Fprint(&buffer, args[0])
+			args = args[1:]
+			if len(args) <= 0 {
+				editor.StoreDefault(buffer.String())
+				break
+			}
+			buffer.WriteByte(' ')
+		}
+	}
+	return []any{true}
+}
