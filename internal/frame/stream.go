@@ -146,11 +146,11 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 	}
 }
 
-func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
+func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (string, error) {
 	if stream.Pointer >= 0 {
 		if stream.Pointer < len(stream.PlainHistory) {
 			stream.Pointer++
-			return ctx, stream.PlainHistory[stream.Pointer-1], nil
+			return stream.PlainHistory[stream.Pointer-1], nil
 		}
 		stream.Pointer = -1
 	}
@@ -165,7 +165,7 @@ func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, 
 		}
 		disabler()
 		if err != nil {
-			return ctx, line, err
+			return line, err
 		}
 		var isReplaced bool
 		line, isReplaced, err = stream.History.Replace(line)
@@ -190,5 +190,5 @@ func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, 
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 	stream.PlainHistory = append(stream.PlainHistory, line)
-	return ctx, line, err
+	return line, err
 }

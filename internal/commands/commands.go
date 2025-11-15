@@ -28,7 +28,7 @@ type Param interface {
 	Spawnlp(context.Context, []string, []string) (int, error)
 	Spawnlpe(context.Context, []string, []string, map[string]string) (int, error)
 	Loop(context.Context, shell.Stream) (int, error)
-	ReadCommand(context.Context) (context.Context, string, error)
+	ReadCommand(context.Context) (string, error)
 	DumpEnv() []string
 	Setenv(key, val string)
 	GetHistory() shell.History
