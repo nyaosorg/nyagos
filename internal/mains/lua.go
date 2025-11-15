@@ -442,6 +442,7 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = sh.Out()
 			param.Err = sh.Err()
 			param.History = sh.GetHistory()
+			param.Stream = sh.GetStream()
 		} else {
 			param.In = os.Stdin
 			param.Out = os.Stdout

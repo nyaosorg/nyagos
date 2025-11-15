@@ -14,4 +14,5 @@ type Param struct {
 	Err  io.Writer
 	Term io.Writer
 	shell.History
+	shell.Stream
 }
