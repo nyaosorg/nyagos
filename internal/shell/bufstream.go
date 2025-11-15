@@ -12,12 +12,12 @@ type BufStream struct {
 	Super   Stream
 }
 
-func (bufStream *BufStream) ReadLine(c context.Context) (context.Context, string, error) {
+func (bufStream *BufStream) ReadLine(c context.Context) (string, error) {
 	if bufStream.n >= len(bufStream.line) {
-		return c, "", io.EOF
+		return "", io.EOF
 	}
 	bufStream.n++
-	return c, bufStream.line[bufStream.n-1], nil
+	return bufStream.line[bufStream.n-1], nil
 }
 
 func (bufStream *BufStream) SetPos(n int) error {

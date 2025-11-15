@@ -44,23 +44,23 @@ func NewCmdStreamFile(r io.Reader, super Stream) *CmdStreamFile {
 	}
 }
 
-func (stream *CmdStreamFile) ReadLine(ctx context.Context) (context.Context, string, error) {
+func (stream *CmdStreamFile) ReadLine(ctx context.Context) (string, error) {
 	if stream.Pointer >= 0 {
 		if stream.Pointer < len(stream.PlainHistory) {
 			stream.Pointer++
-			return ctx, stream.PlainHistory[stream.Pointer-1], nil
+			return stream.PlainHistory[stream.Pointer-1], nil
 		}
 		stream.Pointer = -1
 	}
 	if !stream.Scanner.Scan() {
 		if err := stream.Scanner.Err(); err != nil {
-			return ctx, "", err
+			return "", err
 		}
-		return ctx, "", io.EOF
+		return "", io.EOF
 	}
 	text := strings.TrimRight(stream.Scanner.Text(), "\r\n")
 	stream.PlainHistory = append(stream.PlainHistory, text)
-	return ctx, text, nil
+	return text, nil
 }
 
 func (sh *Shell) Source(ctx context.Context, fname string) error {
