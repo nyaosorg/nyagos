@@ -32,7 +32,7 @@ func TestClone(t *testing.T) {
 	L1 := lua.NewState()
 
 	makeSource(L1)
-	L2, err := Clone(L1,&env{})
+	L2, err := Clone(L1, &env{})
 	if err != nil {
 		t.Fatalf("Failed to create instance: %s", err.Error())
 		return
