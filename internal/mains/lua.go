@@ -183,7 +183,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "open", L.GetField(ioTable, "open"))
 	L.SetField(nyagosTable, "loadfile", L.GetGlobal("loadfile"))
 
-	keyTable := makeVirtualTable(L, lua2cmd(functions.CmdGetBindKey), cmdBindKey)
+	keyTable := makeVirtualTable(L, lua2param(functions.CmdGetBindKey), cmdBindKey)
 	L.SetField(nyagosTable, "key", keyTable)
 	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
 	L.SetField(nyagosTable, "exec", L.NewFunction(cmdExec))
@@ -448,6 +448,11 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 			param.Out = os.Stdout
 			param.Err = os.Stderr
 		}
+
+		if editor, ok := getLuaRegistry(L, readlineLuaRegistryKey).(*readline.Editor); ok {
+			param.Editor = editor
+		}
+
 		param.Term = colorable.NewColorableStdout()
 		result := f(param)
 		pushInterfaces(L, result)

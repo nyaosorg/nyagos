@@ -3,6 +3,7 @@ package functions
 import (
 	"io"
 
+	"github.com/nyaosorg/go-readline-ny"
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
@@ -15,4 +16,5 @@ type Param struct {
 	Term io.Writer
 	shell.History
 	shell.Stream
+	*readline.Editor
 }
