@@ -454,37 +454,6 @@ func lua2param(f func(*functions.Param) []interface{}) func(Lua) int {
 	}
 }
 
-const ctxkey = "github.com/nyaosorg/nyagos"
-
-// setContext
-func setContext(ctx context.Context, L Lua) {
-	reg := L.Get(lua.RegistryIndex)
-	if ctx != nil {
-		u := L.NewUserData()
-		u.Value = ctx
-		L.SetField(reg, ctxkey, u)
-
-		L.SetContext(ctx)
-	} else {
-		L.SetField(reg, ctxkey, lua.LNil)
-
-		L.SetContext(context.Background())
-	}
-}
-
-func getContext(L Lua) context.Context {
-	reg := L.Get(lua.RegistryIndex)
-	valueUD, ok := L.GetField(reg, ctxkey).(*lua.LUserData)
-	if !ok {
-		return nil
-	}
-	ctx, ok := valueUD.Value.(context.Context)
-	if !ok {
-		return nil
-	}
-	return ctx
-}
-
 func dispose(L *lua.LState, val lua.LValue) {
 	gc := L.GetMetaField(val, "__gc")
 	if f, ok := gc.(*lua.LFunction); ok {
