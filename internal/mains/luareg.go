@@ -4,7 +4,10 @@ import (
 	"github.com/yuin/gopher-lua"
 )
 
-const readlineLuaRegistryKey = "nyagos.readline"
+const (
+	readlineLuaRegistryKey = "nyagos.readline"
+	shellLuaRegistryKey    = "nyagos.shell"
+)
 
 func getLuaRegistry(L Lua, key string) any {
 	tbl, ok := L.Get(lua.RegistryIndex).(*lua.LTable)

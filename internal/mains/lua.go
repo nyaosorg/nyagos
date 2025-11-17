@@ -413,17 +413,13 @@ func lua2cmd(f func([]interface{}) []interface{}) func(Lua) int {
 	}
 }
 
-type shellKeyT struct{}
-
-var shellKey shellKeyT
-
 func getRegInt(L Lua) (context.Context, *shell.Shell) {
 	ctx := getContext(L)
 	if ctx == nil {
 		println("getRegInt: could not find context in Lua instance")
 		return context.Background(), nil
 	}
-	sh, ok := ctx.Value(shellKey).(*shell.Shell)
+	sh, ok := getLuaRegistry(L, shellLuaRegistryKey).(*shell.Shell)
 	if !ok {
 		println("getRegInt: could not find shell in Lua instance")
 		return ctx, nil
@@ -582,8 +578,9 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 
 func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
 	defer setContext(getContext(L), L)
-	ctx = context.WithValue(ctx, shellKey, sh)
 	setContext(ctx, L)
+	restore := pushLuaRegistry(L, shellLuaRegistryKey, sh)
+	defer restore()
 
 	return luaRedirect(ctx, sh.Stdio[0], sh.Stdio[1], sh.Stdio[2], L, func() error {
 		return L.PCall(nargs, nresult, nil)
