@@ -5,6 +5,7 @@ package mains
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/yuin/gopher-lua"
 )
@@ -45,8 +46,14 @@ func cloneTo(L1, L2 Lua) bool {
 		L2.Close()
 		return false
 	}
-	deepCopyTable(L2, reg1, reg2)
-
+	reg1.ForEach(func(key, val lua.LValue) {
+		if s, ok := key.(lua.LString); ok && strings.HasPrefix(string(s), "nyagos.") {
+			target := L2.GetTable(reg2, key)
+			if target.Type() == lua.LTNil { // do not override
+				L2.SetTable(reg2, key, val)
+			}
+		}
+	})
 	if ctx := L1.Context(); ctx != nil {
 		L2.SetContext(ctx)
 	}
