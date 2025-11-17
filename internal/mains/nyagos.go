@@ -170,6 +170,8 @@ func Run(fsys fs.FS) error {
 		frame.DefaultHistory = constream.History
 		sh.History = constream.History
 		ctx = context.WithValue(ctx, shellKey, sh)
+
+		setLuaRegistry(L, readlineLuaRegistryKey, constream.Editor)
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
