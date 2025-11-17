@@ -167,7 +167,6 @@ func Run(fsys fs.FS) error {
 				return 0, nil
 			})
 		stream1 = constream
-		frame.DefaultHistory = constream.History
 		sh.History = constream.History
 		ctx = context.WithValue(ctx, shellKey, sh)
 
