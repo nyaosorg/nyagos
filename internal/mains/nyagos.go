@@ -149,6 +149,30 @@ func Run(fsys fs.FS) error {
 		return line
 	}
 
+	var stream1 shell.Stream
+	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
+		constream := frame.NewCmdStreamConsole(
+			func(w io.Writer) (int, error) {
+				if L != nil {
+					return printPrompt(ctx, sh, L, w)
+				}
+				functions.Prompt(
+					&functions.Param{
+						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
+						In:   os.Stdin,
+						Out:  os.Stdout,
+						Err:  os.Stderr,
+						Term: colorable.NewColorableStdout(),
+					})
+				return 0, nil
+			})
+		stream1 = constream
+		sh.History = constream.History
+		ctx = context.WithValue(ctx, shellKey, sh)
+	} else {
+		stream1 = shell.NewCmdStreamFile(os.Stdin, nil)
+	}
+
 	script, err := frame.OptionParse(ctx, sh, &_ScriptEngineForOptionImpl{L: L, Sh: sh})
 	if err != nil {
 		return err
@@ -181,29 +205,6 @@ func Run(fsys fs.FS) error {
 		}
 	}
 
-	var stream1 shell.Stream
-	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
-		constream := frame.NewCmdStreamConsole(
-			func(w io.Writer) (int, error) {
-				if L != nil {
-					return printPrompt(ctx, sh, L, w)
-				}
-				functions.Prompt(
-					&functions.Param{
-						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
-						In:   os.Stdin,
-						Out:  os.Stdout,
-						Err:  os.Stderr,
-						Term: colorable.NewColorableStdout(),
-					})
-				return 0, nil
-			})
-		stream1 = constream
-		sh.History = constream.History
-		ctx = context.WithValue(ctx, shellKey, sh)
-	} else {
-		stream1 = shell.NewCmdStreamFile(os.Stdin, nil)
-	}
 	if L != nil {
 		return sh.ForEver(ctx, &luaFilterStream{Stream: stream1, L: L})
 	}
