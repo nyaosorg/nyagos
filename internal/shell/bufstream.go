@@ -9,7 +9,6 @@ type BufStream struct {
 	line    []string
 	n       int
 	History History
-	Super   Stream
 }
 
 func (bufStream *BufStream) ReadLine(c context.Context) (string, error) {

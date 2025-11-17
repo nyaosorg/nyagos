@@ -78,7 +78,6 @@ func (sh *Shell) Term() io.Writer        { return sh.Console }
 func (sh *Shell) Tag() CloneCloser       { return sh.tag }
 func (sh *Shell) SetTag(tag CloneCloser) { sh.tag = tag }
 func (sh *Shell) GetHistory() History    { return sh.History }
-func (sh *Shell) GetStream() Stream      { return sh.Stream }
 
 type Cmd struct {
 	Shell
