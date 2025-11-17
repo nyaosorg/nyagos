@@ -169,6 +169,8 @@ func Run(fsys fs.FS) error {
 		stream1 = constream
 		sh.History = constream.History
 		ctx = context.WithValue(ctx, shellKey, sh)
+
+		setLuaRegistry(L, readlineLuaRegistryKey, constream.Editor)
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin, nil)
 	}
