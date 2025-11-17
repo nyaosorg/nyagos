@@ -579,11 +579,7 @@ func CmdCompleteForFiles(param *Param) []any {
 }
 
 func CmdSetNextLine(param *Param) []any {
-	stream := param.Stream
-	if stream == nil {
-		return []any{nil, "can not find the current editor"}
-	}
-	editor := stream.GetEditor()
+	editor := param.Editor
 	if editor == nil {
 		return []any{nil, "can not find the current editor"}
 	}
@@ -595,7 +591,7 @@ func CmdSetNextLine(param *Param) []any {
 			fmt.Fprint(&buffer, args[0])
 			args = args[1:]
 			if len(args) <= 0 {
-				editor.StoreDefault(buffer.String())
+				editor.Default = buffer.String()
 				break
 			}
 			buffer.WriteByte(' ')
