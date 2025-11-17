@@ -317,7 +317,11 @@ func CmdGlob(param *Param) []any {
 }
 
 func CmdGetHistory(param *Param) []any {
-	history := param.History
+	editor := param.Editor
+	if editor == nil {
+		return []any{}
+	}
+	history := editor.History
 	if history == nil {
 		return []any{}
 	}
@@ -331,7 +335,11 @@ func CmdGetHistory(param *Param) []any {
 }
 
 func CmdLenHistory(param *Param) []any {
-	history := param.History
+	editor := param.Editor
+	if editor == nil {
+		return []any{}
+	}
+	history := editor.History
 	if history == nil {
 		return []any{}
 	}

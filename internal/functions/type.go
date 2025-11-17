@@ -14,7 +14,6 @@ type Param struct {
 	Out  io.Writer
 	Err  io.Writer
 	Term io.Writer
-	shell.History
 	shell.Stream
 	*readline.Editor
 }
