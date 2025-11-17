@@ -1,6 +1,8 @@
 package mains
 
 import (
+	"context"
+
 	"github.com/yuin/gopher-lua"
 )
 
@@ -41,4 +43,15 @@ func pushLuaRegistry(L Lua, key string, value any) func() {
 	return func() {
 		setLuaRegistry(L, key, orig)
 	}
+}
+
+func setContext(ctx context.Context, L Lua) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+	L.SetContext(ctx)
+}
+
+func getContext(L Lua) context.Context {
+	return L.Context()
 }
