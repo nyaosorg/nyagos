@@ -12,15 +12,10 @@ import (
 	"github.com/nyaosorg/go-readline-ny"
 )
 
-type Editor interface {
-	StoreDefault(string)
-}
-
 // Stream is the inteface which can read command-line
 type Stream interface {
 	ReadLine(context.Context) (string, error)
 	GetHistory() History
-	GetEditor() Editor
 }
 
 // NulStream is the null implementation for the interface Stream.
@@ -38,13 +33,6 @@ func (stream *NulStream) GetHistory() History {
 		return stream.super.GetHistory()
 	}
 	return &_NulHistory{}
-}
-
-func (stream *NulStream) GetEditor() Editor {
-	if stream.super != nil {
-		return stream.super.GetEditor()
-	}
-	return nil
 }
 
 func (ses *session) push(lines []string) {

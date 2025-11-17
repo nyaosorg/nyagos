@@ -33,18 +33,6 @@ func (c *CmdStreamConsole) GetHistory() shell.History {
 	return c.History
 }
 
-type editor struct {
-	*readline.Editor
-}
-
-func (e *editor) StoreDefault(text string) {
-	e.Editor.Default = text
-}
-
-func (c *CmdStreamConsole) GetEditor() shell.Editor {
-	return &editor{Editor: c.Editor}
-}
-
 type OSClipboard struct{}
 
 func (OSClipboard) Read() (string, error) {

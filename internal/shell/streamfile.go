@@ -26,13 +26,6 @@ func (c *CmdStreamFile) GetHistory() History {
 	return &_NulHistory{}
 }
 
-func (c *CmdStreamFile) GetEditor() Editor {
-	if c.super != nil {
-		return c.super.GetEditor()
-	}
-	return nil
-}
-
 func NewCmdStreamFile(r io.Reader, super Stream) *CmdStreamFile {
 	return &CmdStreamFile{
 		Scanner: bufio.NewScanner(r),
