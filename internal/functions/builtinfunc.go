@@ -590,6 +590,7 @@ func CmdSetNextLine(param *Param) []any {
 			args = args[1:]
 			if len(args) <= 0 {
 				editor.Default = buffer.String()
+				editor.Cursor = 9999
 				break
 			}
 			buffer.WriteByte(' ')
