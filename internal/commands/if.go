@@ -94,7 +94,7 @@ func cmdIf(ctx context.Context, cmd Param) (int, error) {
 	defer os.Setenv("PROMPT", savePrompt)
 	nest := 1
 	for {
-		_, line, err := cmd.ReadCommand(ctx)
+		line, err := cmd.ReadCommand(ctx)
 		if err != nil {
 			if err != io.EOF {
 				return -1, err

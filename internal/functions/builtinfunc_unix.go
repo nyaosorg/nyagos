@@ -3,25 +3,25 @@
 
 package functions
 
-func CmdMsgBox(args []any) []any {
+func CmdMsgBox(param *Param) []any {
 	return []any{nil, "not support"}
 }
 
-func CmdElevated([]any) []any {
+func CmdElevated(param *Param) []any {
 	return []any{nil, "not support"}
 }
-func CmdShellExecute(args []any) []any {
+func CmdShellExecute(param *Param) []any {
 	return []any{nil, "not support"}
 }
-func CmdRawExec(this *Param) []any {
+func CmdRawExec(param *Param) []any {
 	return []any{nil, "not support"}
 }
-func CmdAtoU(args []any) []any {
-	return args
+func CmdAtoU(param *Param) []any {
+	return param.Args
 }
-func CmdUtoA(args []any) []any {
-	return args
+func CmdUtoA(param *Param) []any {
+	return param.Args
 }
-func CmdAnsiToUtf8IfNeeded(args []any) []any {
-	return args
+func CmdAnsiToUtf8IfNeeded(param *Param) []any {
+	return param.Args
 }

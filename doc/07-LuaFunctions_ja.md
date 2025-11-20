@@ -338,6 +338,10 @@ false の時 \ が使われます。
 
 ターミナルの横幅と高さを返します。
 
+### `nyagos.setnextline(CMDLINE)`
+
+readline の次回プロンプトに初期テキスト CMDLINE を挿入します。
+
 ### `STAT = nyagos.stat(FILENAME)`
 
 ファイルの情報を返します。

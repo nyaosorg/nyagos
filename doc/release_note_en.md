@@ -1,5 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+* Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
+
 ### Internal changes
 
 - Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0. (#453)

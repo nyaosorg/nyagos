@@ -1,5 +1,7 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+* readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
+
 ### 内部的な変更
 
 - [github.com/nyaosorg/go-box] を v2.2.1 から v3.0.0 にバージョンアップした (#453)
