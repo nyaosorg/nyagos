@@ -55,6 +55,12 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			Pointer:      -1,
 		},
 	}
+	history1.Load(stream.HistPath)
+	history1.Save(stream.HistPath)
+	return stream
+}
+
+func (stream *CmdStreamConsole) LazySetup() {
 	if config.AccessClipboard {
 		stream.Editor.Clipboard = OSClipboard{}
 	}
@@ -85,9 +91,6 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			stream.Editor.PredictColor = config.PredictColor
 		}
 	}
-	history1.Load(stream.HistPath)
-	history1.Save(stream.HistPath)
-	return stream
 }
 
 func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
