@@ -150,6 +150,8 @@ func Run(fsys fs.FS) error {
 		return line
 	}
 
+	lazySetup := func() {}
+
 	var stream1 shell.Stream
 	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
@@ -170,6 +172,7 @@ func Run(fsys fs.FS) error {
 		stream1 = constream
 		sh.History = constream.History
 		setLuaRegistry(L, readlineLuaRegistryKey, constream.Editor)
+		lazySetup = constream.LazySetup
 	} else {
 		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
@@ -205,6 +208,8 @@ func Run(fsys fs.FS) error {
 			return nil
 		}
 	}
+
+	lazySetup()
 
 	if L != nil {
 		return sh.ForEver(ctx, &luaFilterStream{Stream: stream1, L: L})
