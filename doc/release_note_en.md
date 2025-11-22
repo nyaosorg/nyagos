@@ -2,6 +2,10 @@
 
 * Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
 
+## Bug fixes
+
+- Fixed a bug where existing content was not cleared when opening a file with Lua `io.open(..., "w")` (#471, #472 Thanks to @emisjerry)
+
 ### Internal changes
 
 - Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0. (#453)
