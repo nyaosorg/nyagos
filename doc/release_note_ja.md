@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+### 不具合修正
+
+- Lua関数 `io.open(..., "w")` でファイルをオープンした時、ファイルが truncate されていなかった不具合を修正 (#471, #472 Thanks to @emisjerry)
+
 ### 内部的な変更
 
 - [github.com/nyaosorg/go-box] を v2.2.1 から v3.0.0 にバージョンアップした (#453)

@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+## Bug fixes
+
+- Fixed a bug where existing content was not cleared when opening a file with Lua `io.open(..., "w")` (#471, #472 Thanks to @emisjerry)
+
 ### Internal changes
 
 - Upgraded [github.com/nyaosorg/go-box] from v2.2.1 to v3.0.0. (#453)
