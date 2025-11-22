@@ -1,7 +1,6 @@
 <!DOCTYPE html><html><head>
-<title>Lua拡張
-</title>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - 07-LuaFunctions</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1107,37 +1106,47 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p><a href="./07-LuaFunctions_en.html">English</a> / Japanese</p>
-<h2 id="lua">Lua拡張 <a href="#lua">.</a></h2>
+<h2 id="lua%E6%8B%A1%E5%BC%B5">Lua拡張</h2>
 <p>nyagos では、EXE の本体の機能はコンパクトとし、便利機能は
 なるべく Lua で機能を拡張できるよう設計を進めています。
 現在は以下のような関数が使用できます。</p>
-<h3 id="nyagosalias--"><code>nyagos.alias.エイリアス名 = &quot;置換コード&quot;</code> <a href="#nyagosalias--">.</a></h3>
+<h3 id="nyagosalias%E3%82%A8%E3%82%A4%E3%83%AA%E3%82%A2%E3%82%B9%E5%90%8D--%E7%BD%AE%E6%8F%9B%E3%82%B3%E3%83%BC%E3%83%89"><code>nyagos.alias.エイリアス名 = &quot;置換コード&quot;</code></h3>
 <p>エイリアスを設定します。以下のマクロが使用可能です。</p>
 <ul>
 <li><code>$1</code>、<code>$2</code>、<code>$3</code>…<code>$n</code> - n番目の引数(引用符は削除されない)</li>
@@ -1145,7 +1154,7 @@
 <li><code>$~1</code>、<code>$~2</code>、<code>$~3</code>…<code>$~n</code> - n番目の引数(引用符は削除される)</li>
 <li><code>$~*</code> - 全ての引数(引用符は削除される)</li>
 </ul>
-<h3 id="nyagosalias--functionargsend"><code>nyagos.alias.エイリアス名 = function(args)～end</code> <a href="#nyagosalias--functionargsend">.</a></h3>
+<h3 id="nyagosalias%E3%82%A8%E3%82%A4%E3%83%AA%E3%82%A2%E3%82%B9%E5%90%8D--functionargs%EF%BD%9Eend"><code>nyagos.alias.エイリアス名 = function(args)～end</code></h3>
 <p>Lua 関数をエイリアスコマンドとして呼び出せるようにします。
 args には全引数を格納したテーブルが入ります。</p>
 <pre><code>{
@@ -1170,55 +1179,55 @@ args には全引数を格納したテーブルが入ります。</p>
 定義された変数は、共有テーブルshare[] を除いて、参照できません。
 share[] はユーザが自由に使用可能ですが、全てのインスタンスで、
 ただちに同期されるのは share[] 直下のメンバーのみです。</p>
-<h3 id="nyagosenv"><code>nyagos.env.環境変数名</code> <a href="#nyagosenv">.</a></h3>
+<h3 id="nyagosenv%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0%E5%90%8D"><code>nyagos.env.環境変数名</code></h3>
 <p>環境変数にリンクしています。参照・変更が可能です。</p>
-<h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code> <a href="#nyagosfieldstext">.</a></h3>
+<h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code></h3>
 <p>TEXT を空白で分割して、文字列のテーブルとして返します</p>
-<h3 id="errorlevelerrormessage--nyagosexec"><code>errorlevel,errormessage = nyagos.exec(&quot;シェルコマンド&quot;)</code> <a href="#errorlevelerrormessage--nyagosexec">.</a></h3>
-<h3 id="errorlevelerrormessage--nyagosexecexenameparam1param2"><code>errorlevel,errormessage = nyagos.exec{&quot;EXENAME&quot;,&quot;PARAM1&quot;,&quot;PARAM2&quot;...}</code> <a href="#errorlevelerrormessage--nyagosexecexenameparam1param2">.</a></h3>
+<h3 id="errorlevelerrormessage--nyagosexec%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89"><code>errorlevel,errormessage = nyagos.exec(&quot;シェルコマンド&quot;)</code></h3>
+<h3 id="errorlevelerrormessage--nyagosexecexenameparam1param2"><code>errorlevel,errormessage = nyagos.exec{&quot;EXENAME&quot;,&quot;PARAM1&quot;,&quot;PARAM2&quot;...}</code></h3>
 <p>シェルコマンドを実行します。外部コマンドだけでなく、nyagos内蔵コマンドも
 呼び出せます。バッチファイルを呼び出した時、環境変数の変更も取り込めます。</p>
 <p>エラーが発生した時、戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージ
 が入ります。エラーが無い時は (0,nil) が戻ります。</p>
-<h3 id="errorlevelerrormessage--nyagosrawexec12"><code>errorlevel,errormessage = nyagos.rawexec(&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…)</code> <a href="#errorlevelerrormessage--nyagosrawexec12">.</a></h3>
-<h3 id="errorlevelerrormessage--nyagosrawexec12-1"><code>errorlevel,errormessage = nyagos.rawexec{&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…}</code> <a href="#errorlevelerrormessage--nyagosrawexec12-1">.</a></h3>
+<h3 id="errorlevelerrormessage--nyagosrawexec%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6"><code>errorlevel,errormessage = nyagos.rawexec(&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…)</code></h3>
+<h3 id="errorlevelerrormessage--nyagosrawexec%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6-1"><code>errorlevel,errormessage = nyagos.rawexec{&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…}</code></h3>
 <p>外部コマンドを実行します。OSの API を呼んでいるだけなので、nyagos 内蔵コマンド
 は使えませんが、動作は軽いです。</p>
 <p>戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。
 エラーが無い時は (0,nil) が戻ります。
 (os.execute との違いは引数が UTF8 と解釈される点です)</p>
-<h3 id="nyagoseval"><code>nyagos.eval(&quot;シェルコマンド&quot;)</code> <a href="#nyagoseval">.</a></h3>
+<h3 id="nyagoseval%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89"><code>nyagos.eval(&quot;シェルコマンド&quot;)</code></h3>
 <p>nyagos.exec と同じですが、標準出力を取り込んで、戻り値として返します。
 実行に失敗した場合などは nil が戻ります。</p>
-<h3 id="outputerr--nyagosraweval12"><code>OUTPUT,ERR = nyagos.raweval(&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…)</code> <a href="#outputerr--nyagosraweval12">.</a></h3>
-<h3 id="outputerr--nyagosraweval12-1"><code>OUTPUT,ERR = nyagos.raweval{&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…}</code> <a href="#outputerr--nyagosraweval12-1">.</a></h3>
+<h3 id="outputerr--nyagosraweval%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6"><code>OUTPUT,ERR = nyagos.raweval(&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…)</code></h3>
+<h3 id="outputerr--nyagosraweval%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6-1"><code>OUTPUT,ERR = nyagos.raweval{&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…}</code></h3>
 <p>外部コマンドを実行して、標準出力の内容を戻り値として返します。
 実行に失敗した場合は nil とエラーが戻ります。</p>
-<h3 id="nyagoswrite"><code>nyagos.write(テキスト)</code> <a href="#nyagoswrite">.</a></h3>
+<h3 id="nyagoswrite%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88"><code>nyagos.write(テキスト)</code></h3>
 <p>テキストを標準出力に出力しますが、リダイレクトされている場合は
 文字コードはUTF8 になります。内蔵 Lua の print は
 nyagos.write(テキスト..'\n') に差し替えられています。</p>
-<h3 id="nyagoswriterr"><code>nyagos.writerr(テキスト)</code> <a href="#nyagoswriterr">.</a></h3>
+<h3 id="nyagoswriterr%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88"><code>nyagos.writerr(テキスト)</code></h3>
 <p>テキストを標準エラー出力に出力しますが、リダイレクトされている場合は
 文字コードはUTF8 になります。</p>
-<h3 id="nyagosgetwd"><code>nyagos.getwd()</code> <a href="#nyagosgetwd">.</a></h3>
+<h3 id="nyagosgetwd"><code>nyagos.getwd()</code></h3>
 <p>現在のカレントディレクトリを返します。</p>
-<h3 id="nyagoschdirdirectory"><code>nyagos.chdir('DIRECTORY')</code> <a href="#nyagoschdirdirectory">.</a></h3>
+<h3 id="nyagoschdirdirectory"><code>nyagos.chdir('DIRECTORY')</code></h3>
 <p>カレントディレクトリを変更します。</p>
-<h3 id="nyagosutoautf8"><code>nyagos.utoa(UTF8文字列)</code> <a href="#nyagosutoautf8">.</a></h3>
+<h3 id="nyagosutoautf8%E6%96%87%E5%AD%97%E5%88%97"><code>nyagos.utoa(UTF8文字列)</code></h3>
 <p>UTF8文字列を、現在のコードページの文字列に変換します。</p>
-<h3 id="nyagosatouansi"><code>nyagos.atou(ANSI文字列)</code> <a href="#nyagosatouansi">.</a></h3>
+<h3 id="nyagosatouansi%E6%96%87%E5%AD%97%E5%88%97"><code>nyagos.atou(ANSI文字列)</code></h3>
 <p>現在のコードページの文字列を、UTF8 へ変換します。</p>
-<h3 id="utf8string--nyagosatou-if-neededstring"><code>UTF8STRING = nyagos.atou_if_needed(STRING)</code> <a href="#utf8string--nyagosatou-if-neededstring">.</a></h3>
+<h3 id="utf8string--nyagosatou-if-neededstring"><code>UTF8STRING = nyagos.atou_if_needed(STRING)</code></h3>
 <p>STRING が適切な UTF8 文字列でない場合、それを現在のコードページの
 文字列とみなして UTF8 への変換を試みます。</p>
-<h3 id="nyagosglob12"><code>nyagos.glob(ワイルドカード文字列1,ワイルドカード文字列2,...)</code> <a href="#nyagosglob12">.</a></h3>
+<h3 id="nyagosglob%E3%83%AF%E3%82%A4%E3%83%AB%E3%83%89%E3%82%AB%E3%83%BC%E3%83%89%E6%96%87%E5%AD%97%E5%88%971%E3%83%AF%E3%82%A4%E3%83%AB%E3%83%89%E3%82%AB%E3%83%BC%E3%83%89%E6%96%87%E5%AD%97%E5%88%972"><code>nyagos.glob(ワイルドカード文字列1,ワイルドカード文字列2,...)</code></h3>
 <p>ワイルドカードを展開し、それらを格納したテーブルを返します。</p>
-<h3 id="path--nyagospathjoin12"><code>path = nyagos.pathjoin('パス1','パス2'...)</code> <a href="#path--nyagospathjoin12">.</a></h3>
+<h3 id="path--nyagospathjoin%E3%83%91%E3%82%B91%E3%83%91%E3%82%B92"><code>path = nyagos.pathjoin('パス1','パス2'...)</code></h3>
 <p>パスの要素を連結して、一つのパスにします。</p>
-<h3 id="path--nyagosdirnamecpathtowhere"><code>path = nyagos.dirname('C:\\path\\to\\where')</code> <a href="#path--nyagosdirnamecpathtowhere">.</a></h3>
+<h3 id="path--nyagosdirnamecpathtowhere"><code>path = nyagos.dirname('C:\\path\\to\\where')</code></h3>
 <p>パスのディレクトリ部分を返します。例では <code>C:\\path\\to</code> が得られます。</p>
-<h3 id="nyagosenvaddenvnamepath"><code>nyagos.envadd('ENVNAME','PATH'...)</code> <a href="#nyagosenvaddenvnamepath">.</a></h3>
+<h3 id="nyagosenvaddenvnamepath"><code>nyagos.envadd('ENVNAME','PATH'...)</code></h3>
 <p><code>nyagos.envadd(&quot;PATH&quot;,&quot;C:\\path\\to&quot;)</code> は
 <code>set PATH=%PATH%;C:\path\to</code> と等価です。
 ただし、%PATH% が既に <code>C:\path\to</code> を含んでいる時、
@@ -1237,7 +1246,7 @@ nyagos.write(テキスト..'\n') に差し替えられています。</p>
     &quot;~\\Share\\bin&quot;,
     &quot;~\\Share\\cmds&quot;)
 </code></pre>
-<h3 id="nyagosenvdelenvnamepattern"><code>nyagos.envdel('ENVNAME','PATTERN')</code> <a href="#nyagosenvdelenvnamepattern">.</a></h3>
+<h3 id="nyagosenvdelenvnamepattern"><code>nyagos.envdel('ENVNAME','PATTERN')</code></h3>
 <p>ENVNAME が示す環境変数の中から PATTERN を含む要素を
 削除します。</p>
 <p>例：</p>
@@ -1246,16 +1255,17 @@ nyagos.write(テキスト..'\n') に差し替えられています。</p>
     &quot;TypeScript&quot;,&quot;WindowsApps&quot;,
     &quot;Wbem&quot;,&quot;dotnet&quot;)
 </code></pre>
-<h3 id="nyagosbindkey"><code>nyagos.bindkey(&quot;キー名&quot;,&quot;機能名&quot;)</code> <a href="#nyagosbindkey">.</a></h3>
-<h3 id="nyagoskey--"><code>nyagos.key[&quot;キー名&quot;] = &quot;機能名&quot;</code> <a href="#nyagoskey--">.</a></h3>
-<h3 id="nyagoskey---1"><code>nyagos.key.キー名 = &quot;機能名&quot;</code> <a href="#nyagoskey---1">.</a></h3>
+<h3 id="nyagosbindkey%E3%82%AD%E3%83%BC%E5%90%8D%E6%A9%9F%E8%83%BD%E5%90%8D"><code>nyagos.bindkey(&quot;キー名&quot;,&quot;機能名&quot;)</code></h3>
+<h3 id="nyagoskey%E3%82%AD%E3%83%BC%E5%90%8D--%E6%A9%9F%E8%83%BD%E5%90%8D"><code>nyagos.key[&quot;キー名&quot;] = &quot;機能名&quot;</code></h3>
+<h3 id="nyagoskey%E3%82%AD%E3%83%BC%E5%90%8D--%E6%A9%9F%E8%83%BD%E5%90%8D-1"><code>nyagos.key.キー名 = &quot;機能名&quot;</code></h3>
 <p>一行入力のキーに機能を割り当てます。</p>
 <p>キー名として以下が使えます。</p>
 <pre><code>    &quot;C_A&quot; &quot;C_B&quot; ... &quot;C_Z&quot; &quot;M_A&quot; &quot;M_B&quot; ... &quot;M_Z&quot;
     &quot;F1&quot; &quot;F2&quot; ... &quot;F24&quot;
     &quot;BACKSPACE&quot; &quot;CTRL&quot; &quot;DEL&quot; &quot;DOWN&quot; &quot;END&quot;
     &quot;ENTER&quot; &quot;ESCAPE&quot; &quot;HOME&quot; &quot;LEFT&quot; &quot;RIGHT&quot; &quot;SHIFT&quot; &quot;UP&quot;,
-    &quot;C_BREAK&quot; &quot;CAPSLOCK&quot; &quot;PAGEUP&quot;, &quot;PAGEDOWN&quot; &quot;PAUSE&quot;
+    &quot;C_BREAK&quot; &quot;CAPSLOCK&quot; &quot;PAGEUP&quot; &quot;PAGEDOWN&quot; &quot;PAUSE&quot;
+    &quot;C_HOME&quot; &quot;C_END&quot; &quot;C_PAGEUP&quot; &quot;C_PAGEDOWN&quot;
 </code></pre>
 <p>機能名として以下が使えます。</p>
 <pre><code>    &quot;BACKWARD_DELETE_CHAR&quot; &quot;BACKWARD_CHAR&quot; &quot;CLEAR_SCREEN&quot; &quot;DELETE_CHAR&quot;
@@ -1266,9 +1276,9 @@ nyagos.write(テキスト..'\n') に差し替えられています。</p>
 </code></pre>
 <p>成功すると true を、失敗すると nil とエラーメッセージを返します。
 大文字・小文字は区別せず、_ のかわりに - を使うことができます。</p>
-<h3 id="nyagosbindkeyfunctionthis--end"><code>nyagos.bindkey(&quot;キー名&quot;,function(this) ... end)</code> <a href="#nyagosbindkeyfunctionthis--end">.</a></h3>
-<h3 id="nyagoskey--functionthis--end"><code>nyagos.key[&quot;キー名&quot;] = function(this) ... end</code> <a href="#nyagoskey--functionthis--end">.</a></h3>
-<h3 id="nyagoskey--functionthis--end-1"><code>nyagos.key.キー名 = function(this) ... end</code> <a href="#nyagoskey--functionthis--end-1">.</a></h3>
+<h3 id="nyagosbindkey%E3%82%AD%E3%83%BC%E5%90%8Dfunctionthis--end"><code>nyagos.bindkey(&quot;キー名&quot;,function(this) ... end)</code></h3>
+<h3 id="nyagoskey%E3%82%AD%E3%83%BC%E5%90%8D--functionthis--end"><code>nyagos.key[&quot;キー名&quot;] = function(this) ... end</code></h3>
+<h3 id="nyagoskey%E3%82%AD%E3%83%BC%E5%90%8D--functionthis--end-1"><code>nyagos.key.キー名 = function(this) ... end</code></h3>
 <p>キーが押下された時、関数を呼び出します。引数 this は次のような
 メンバーを持ったテーブルです。</p>
 <ul>
@@ -1288,7 +1298,7 @@ nyagos.write(テキスト..'\n') に差し替えられています。</p>
 <li>false の時: Ctrl-C が押下されたのと同様に内容を破棄して入力を終結します。</li>
 <li>nil の時: 無視されます。</li>
 </ul>
-<h3 id="nyagosfilter"><code>nyagos.filter</code> <a href="#nyagosfilter">.</a></h3>
+<h3 id="nyagosfilter"><code>nyagos.filter</code></h3>
 <p>通常ユーザが呼び出すことはありません。
 当関数を定義すると、ユーザが入力したコマンドラインの内容を引数として
 NYAGOS.EXE から呼び出されます。これを加工して戻り値とすると、
@@ -1296,7 +1306,7 @@ NYAGOS.EXE はコマンドラインを、その文字列と置き換えます。
 <p>標準の nyagos.lua では nyagos.filter には、逆クォート機能を実現する関数が
 定義されています。処理内容としては nyagos.eval でコマンドの出力を取り込み、
 nyagos.atou で UTF8 に変換して、NYAGOS.EXE に返しています。</p>
-<h3 id="nyagosargsfilter"><code>nyagos.argsfilter</code> <a href="#nyagosargsfilter">.</a></h3>
+<h3 id="nyagosargsfilter"><code>nyagos.argsfilter</code></h3>
 <p>nyagos.argsfilter は nyagos.filter と似ていますが、コマンドライン
 を字句解析した後の、引数配列(args)を加工できる点が違います。</p>
 <p>標準の nyagos.lua では nyagos.argsfilter を使って、
@@ -1308,7 +1318,7 @@ Lua:関数
 </code></pre>
 <p>これはコマンドに特定の拡張子がついた時に、インタプリタ名を
 先頭に挿入するものです。</p>
-<h3 id="s--nyagosprompttemplate"><code>s = nyagos.prompt(template)</code> <a href="#s--nyagosprompttemplate">.</a></h3>
+<h3 id="s--nyagosprompttemplate"><code>s = nyagos.prompt(template)</code></h3>
 <p>通常ユーザが直接呼び出すことはありません。
 引数のプロンプトのテンプレート(=%PROMPT%)を展開して、プロンプト文字列を
 生成して、戻り値として返す関数が格納されています。
@@ -1321,19 +1331,19 @@ end
 </code></pre>
 <p><code>nyagos.default_prompt</code> はデフォルトのプロンプト生成関数です。
 第二引数でターミナルのタイトルを変更することができます。</p>
-<h3 id="nyagosgethistoryn--nyagoshistoryn"><code>nyagos.gethistory(N)</code> もしくは <code>nyagos.history[N]</code> <a href="#nyagosgethistoryn--nyagoshistoryn">.</a></h3>
+<h3 id="nyagosgethistoryn-%E3%82%82%E3%81%97%E3%81%8F%E3%81%AF-nyagoshistoryn"><code>nyagos.gethistory(N)</code> もしくは <code>nyagos.history[N]</code></h3>
 <p>N 番目のヒストリ内容を返します。N が負の時は現在から(-N)個過去の
 ヒストリを返します。</p>
-<h3 id="nyagosgethistory--nyagoshistory"><code>nyagos.gethistory()</code> もしくは <code>#nyagos.history</code> <a href="#nyagosgethistory--nyagoshistory">.</a></h3>
+<h3 id="nyagosgethistory-%E3%82%82%E3%81%97%E3%81%8F%E3%81%AF-nyagoshistory"><code>nyagos.gethistory()</code> もしくは <code>#nyagos.history</code></h3>
 <p>ヒストリの総数を返します。</p>
-<h3 id="nyagoshistsize"><code>nyagos.histsize</code> <a href="#nyagoshistsize">.</a></h3>
+<h3 id="nyagoshistsize"><code>nyagos.histsize</code></h3>
 <p>ヒストリの、終了時に保存されるエントリ数の上限値を取得/変更します。</p>
-<h3 id="nyagosaccesspathmode"><code>nyagos.access(PATH,MODE)</code> <a href="#nyagosaccesspathmode">.</a></h3>
+<h3 id="nyagosaccesspathmode"><code>nyagos.access(PATH,MODE)</code></h3>
 <p>PATH で示されるファイルがアクセス可能かどうかを boolean 値で返します。
 C言語の access 関数と同じです。</p>
-<h3 id="result--nyagosbox-choices-"><code>RESULT = nyagos.box({ CHOICES... })</code> <a href="#result--nyagosbox-choices-">.</a></h3>
+<h3 id="result--nyagosbox-choices-"><code>RESULT = nyagos.box({ CHOICES... })</code></h3>
 <p>ユーザがカーソルキーなどで選択した結果を得ます</p>
-<h3 id="nyagoscomplete-forcommand--functionargs--end"><code>nyagos.complete_for[&quot;COMMAND&quot;] = function(args) ... end</code> <a href="#nyagoscomplete-forcommand--functionargs--end">.</a></h3>
+<h3 id="nyagoscomplete-forcommand--functionargs--end"><code>nyagos.complete_for[&quot;COMMAND&quot;] = function(args) ... end</code></h3>
 <p>コマンド毎の簡易補完フックです。</p>
 <p>最初の単語が <code>COMMAND</code> の時に関数が呼び出されます。
 <code>args</code> はカーソル前に存在する単語を格納する配列がセットされます。</p>
@@ -1351,7 +1361,7 @@ end
 </code></pre>
 <p>関数はマッチしない単語を返すことができます。<code>nyagos.exe</code> が削除して
 くれます。nil を返した時、<code>nyagos.exe</code> は普通のファイル名補完を行います。</p>
-<h3 id="nyagoscompletion-hook--functionc--end"><code>nyagos.completion_hook = function(c) ... end</code> <a href="#nyagoscompletion-hook--functionc--end">.</a></h3>
+<h3 id="nyagoscompletion-hook--functionc--end"><code>nyagos.completion_hook = function(c) ... end</code></h3>
 <p>補完のフックです。関数を代入してください。
 引数 c は下記のような要素を持つテーブルです。</p>
 <pre><code>c.list[1] .. c.list[#c.list] - コマンド名・ファイル名の補完候補
@@ -1365,19 +1375,19 @@ c.left - カーソルよりも左の文字列
 </code></pre>
 <p><code>nyagos.completion_hook</code> は更新した候補リストのテーブルか nil を
 戻り値としてください。nil は、更新しない c.list と等価です。</p>
-<h3 id="nyagoscompletion-slash--true-or-false"><code>nyagos.completion_slash = true OR false</code> <a href="#nyagoscompletion-slash--true-or-false">.</a></h3>
+<h3 id="nyagoscompletion-slash--true-or-false"><code>nyagos.completion_slash = true OR false</code></h3>
 <p>true の時、ファイル名補完はデフォルトのパス区切り文字に / を使い、
 false の時 \ が使われます。</p>
-<h3 id="nyagoson-command-not-found--functionargs--end"><code>nyagos.on_command_not_found = function(args) ... end</code> <a href="#nyagoson-command-not-found--functionargs--end">.</a></h3>
+<h3 id="nyagoson-command-not-found--functionargs--end"><code>nyagos.on_command_not_found = function(args) ... end</code></h3>
 <p>定義されていると、コマンドが見付からなかった時に呼び出されます。
 コマンド名とパラメータが args[0] ～ args[#args] にセットされます。
 関数が nil か false を返した場合は nyagos.exe は通常のエラーを
 表示します。</p>
 <p>関数は別の Lua インスタンスで実行されるため、.nyagos で定義された変数への
 アクセスはエイリアス同様の制限があります。</p>
-<h3 id="widthheight--nyagosgetviewwidth"><code>WIDTH,HEIGHT = nyagos.getviewwidth()</code> <a href="#widthheight--nyagosgetviewwidth">.</a></h3>
+<h3 id="widthheight--nyagosgetviewwidth"><code>WIDTH,HEIGHT = nyagos.getviewwidth()</code></h3>
 <p>ターミナルの横幅と高さを返します。</p>
-<h3 id="stat--nyagosstatfilename"><code>STAT = nyagos.stat(FILENAME)</code> <a href="#stat--nyagosstatfilename">.</a></h3>
+<h3 id="stat--nyagosstatfilename"><code>STAT = nyagos.stat(FILENAME)</code></h3>
 <p>ファイルの情報を返します。
 ファイルが存在する時、テーブル STAT は下記のようなメンバーを持ちます。</p>
 <pre><code>STAT.name
@@ -1391,18 +1401,18 @@ STAT.mtime.minute
 STAT.mtime.second
 </code></pre>
 <p>ファイルがない時、STAT は nil です。</p>
-<h3 id="nyagosgetkey"><code>nyagos.getkey()</code> <a href="#nyagosgetkey">.</a></h3>
+<h3 id="nyagosgetkey"><code>nyagos.getkey()</code></h3>
 <p>入力されたキーの、Unicode、スキャンコード、シフト状態を返します。</p>
-<h3 id="nyagosopenpathmode"><code>nyagos.open(PATH,MODE)</code> <a href="#nyagosopenpathmode">.</a></h3>
+<h3 id="nyagosopenpathmode"><code>nyagos.open(PATH,MODE)</code></h3>
 <p>PATH が utf8 と解釈される以外は io.open と等価です。</p>
-<h3 id="nyagosloadfilepath"><code>nyagos.loadfile(PATH)</code> <a href="#nyagosloadfilepath">.</a></h3>
+<h3 id="nyagosloadfilepath"><code>nyagos.loadfile(PATH)</code></h3>
 <p>PATH が UTF8 と解釈される以外は、通常の loadfile と等価です。</p>
-<h3 id="nyagoslinespath"><code>nyagos.lines(PATH)</code> <a href="#nyagoslinespath">.</a></h3>
+<h3 id="nyagoslinespath"><code>nyagos.lines(PATH)</code></h3>
 <p>PATH が UTF8 と解釈される以外は、通常の io.lines と等価です。</p>
 <pre><code>for text in nyagos.lines(PATH) do ... end
 </code></pre>
 <p><code>text</code> は UTF8 変換などはなく、io.lines 同様、ただのバイト列です</p>
-<h3 id="oleobject--nyagoscreate-objectservernametypename"><code>OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')</code> <a href="#oleobject--nyagoscreate-objectservernametypename">.</a></h3>
+<h3 id="oleobject--nyagoscreate-objectservernametypename"><code>OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')</code></h3>
 <p>OLEオブジェクトを作成します。OLEオブジェクトはメソッド・プロパティー
 を持ちます。</p>
 <ul>
@@ -1424,35 +1434,35 @@ STAT.mtime.second
 </ul>
 </li>
 </ul>
-<h3 id="integer-for-ole--nyagosto-ole-integer10"><code>INTEGER_FOR_OLE = nyagos.to_ole_integer(10)</code> <a href="#integer-for-ole--nyagosto-ole-integer10">.</a></h3>
+<h3 id="integer-for-ole--nyagosto-ole-integer10"><code>INTEGER_FOR_OLE = nyagos.to_ole_integer(10)</code></h3>
 <p>実数を OLE オブジェクトへのパラメータに使える整数にコンバートします。
 この関数は <code>nyagos.d/trash.lua</code> のために作られました。</p>
-<h3 id="nyagosoptionglob"><code>nyagos.option.glob</code> <a href="#nyagosoptionglob">.</a></h3>
+<h3 id="nyagosoptionglob"><code>nyagos.option.glob</code></h3>
 <p>true の時、外部コマンドに対するワイルドカード展開を有効にします。</p>
-<h3 id="nyagosoptionnoclobber"><code>nyagos.option.noclobber</code> <a href="#nyagosoptionnoclobber">.</a></h3>
+<h3 id="nyagosoptionnoclobber"><code>nyagos.option.noclobber</code></h3>
 <p>true の時、リダイレクトによる既存ファイルの上書きを禁止します。
 リダイレクト記号の <code>&gt;|</code> と <code>&gt;!</code> は nyagos.option.noclobber が
 true の時でもファイルの上書きができます。</p>
-<h3 id="nyagosoptionusesource"><code>nyagos.option.usesource</code> <a href="#nyagosoptionusesource">.</a></h3>
+<h3 id="nyagosoptionusesource"><code>nyagos.option.usesource</code></h3>
 <p>true の時(デフォルト)、バッチファイルで NYAGOS の環境変数が変更できる
 ようになります。false の場合、バッチファイルから環境変数の変更を読みと
 るには source コマンドを使う必要があります。</p>
-<h3 id="nyagosoptioncleaup-buffer"><code>nyagos.option.cleaup_buffer</code> <a href="#nyagosoptioncleaup-buffer">.</a></h3>
+<h3 id="nyagosoptioncleaup-buffer"><code>nyagos.option.cleaup_buffer</code></h3>
 <p>true の場合、一行入力の前に入力バッファをクリアします。</p>
-<h3 id="nyagosoptionpredict-color"><code>nyagos.option.predict_color</code> <a href="#nyagosoptionpredict-color">.</a></h3>
+<h3 id="nyagosoptionpredict-color"><code>nyagos.option.predict_color</code></h3>
 <p>入力予測機能の色を設定します。</p>
 <p>例: <code>nyagos.option.predict_color = &quot;\027[0;31;1m&quot;</code> (赤)</p>
-<h3 id="nyagosgoversion"><code>nyagos.goversion</code> <a href="#nyagosgoversion">.</a></h3>
+<h3 id="nyagosgoversion"><code>nyagos.goversion</code></h3>
 <p>ビルドに使用した Go のバージョン文字列が格納されます。
 (例：「go1.6」)</p>
-<h3 id="nyagosgoarch"><code>nyagos.goarch</code> <a href="#nyagosgoarch">.</a></h3>
+<h3 id="nyagosgoarch"><code>nyagos.goarch</code></h3>
 <p>実行ファイルが想定している CPU アーキテクチャを示す文字列が格納されます。
 (例：「386」「amd64」)</p>
-<h3 id="nyagosgoos"><code>nyagos.goos</code> <a href="#nyagosgoos">.</a></h3>
+<h3 id="nyagosgoos"><code>nyagos.goos</code></h3>
 <p>OS名 (<code>windows</code> or <code>linux</code>)</p>
-<h3 id="nyagospreexechook"><code>nyagos.preexechook</code> <a href="#nyagospreexechook">.</a></h3>
+<h3 id="nyagospreexechook"><code>nyagos.preexechook</code></h3>
 <p>コマンド実行前のフックです。</p>
-<h4 id="heading">登録 <a href="#heading">.</a></h4>
+<h4 id="%E7%99%BB%E9%8C%B2">登録</h4>
 <pre><code>nyagos.preexechook = function(args)
     io.write(&quot;Call &quot;)
     for i=1,#args do
@@ -1461,12 +1471,12 @@ true の時でもファイルの上書きができます。</p>
     io.write(&quot;\n&quot;)
 end
 </code></pre>
-<h4 id="heading-1">解除 <a href="#heading-1">.</a></h4>
+<h4 id="%E8%A7%A3%E9%99%A4">解除</h4>
 <pre><code>nyagos.preexechook = nil
 </code></pre>
-<h3 id="nyagospostexechook"><code>nyagos.postexechook</code> <a href="#nyagospostexechook">.</a></h3>
+<h3 id="nyagospostexechook"><code>nyagos.postexechook</code></h3>
 <p>コマンド実行後のフックです。</p>
-<h4 id="heading-2">登録 <a href="#heading-2">.</a></h4>
+<h4 id="%E7%99%BB%E9%8C%B2-1">登録</h4>
 <pre><code>nyagos.postexechook = function(args)
     io.write(&quot;Done &quot;)
     for i=1,#args do
@@ -1475,12 +1485,12 @@ end
     io.write(&quot;\n&quot;)
 end
 </code></pre>
-<h4 id="heading-3">解除 <a href="#heading-3">.</a></h4>
+<h4 id="%E8%A7%A3%E9%99%A4-1">解除</h4>
 <pre><code>nyagos.postexechook = nil
 </code></pre>
-<h3 id="nyagosexe"><code>nyagos.exe</code> <a href="#nyagosexe">.</a></h3>
+<h3 id="nyagosexe"><code>nyagos.exe</code></h3>
 <p>nyagos.exe のフルパスが格納されています。</p>
-<h3 id="nyagosskk"><code>nyagos.skk</code> <a href="#nyagosskk">.</a></h3>
+<h3 id="nyagosskk"><code>nyagos.skk</code></h3>
 <p>SKK のセットアップを行います。</p>
 <pre><code>nyagos.skk{
     user=&quot;~/.go-skk-jisyo&quot; , -- ユーザ辞書
@@ -1489,7 +1499,7 @@ end
     ctrlj=&quot;C-J&quot;, -- 日本語切り替えキー(省略時は Ctrl-J)
 }
 </code></pre>
-<h3 id="nyagosshellexecuteactionpathparamdirectory"><code>nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)</code> <a href="#nyagosshellexecuteactionpathparamdirectory">.</a></h3>
+<h3 id="nyagosshellexecuteactionpathparamdirectory"><code>nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)</code></h3>
 <p>管理者モードで実行ファイルを起動します。</p>
 <ul>
 <li><code>ACTION</code> … <code>runas</code> を指定します(他に <code>open</code>, <code>properties</code> などが選択できます)</li>
@@ -1500,7 +1510,7 @@ end
 <!-- raw HTML omitted -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次 <a href="#heading">.</a></h3>
+<h3 id="%E7%9B%AE%E6%AC%A1">目次</h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1515,7 +1525,7 @@ end
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
+<h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>
@@ -1523,5 +1533,5 @@ end
 <li><a href="history-4.1_ja.html">4.1.x</a></li>
 <li><a href="history-4.0_ja.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

@@ -1,7 +1,6 @@
 <!DOCTYPE html><html><head>
-<title>Options
-</title>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - 02-Options</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1107,116 +1106,126 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>English / <a href="./02-Options_ja.html">Japanese</a></p>
-<h2 id="options">Options <a href="#options">.</a></h2>
-<h3 id="-b-base64edcommand">-b &quot;BASE64edCOMMAND&quot; <a href="#-b-base64edcommand">.</a></h3>
+<h2 id="options">Options</h2>
+<h3 id="-b-base64edcommand">-b &quot;BASE64edCOMMAND&quot;</h3>
 <p>Decode and execute the command encoded with Base64.</p>
-<h3 id="-c-command">-c &quot;COMMAND&quot; <a href="#-c-command">.</a></h3>
+<h3 id="-c-command">-c &quot;COMMAND&quot;</h3>
 <p>Execute <code>COMMAND</code> and quit.</p>
-<h3 id="--clipboard----no-clipboard">--clipboard / --no-clipboard <a href="#--clipboard----no-clipboard">.</a></h3>
+<h3 id="--clipboard----no-clipboard">--clipboard / --no-clipboard</h3>
 <p>(Lua: <code>nyagos.option.clipboard=true</code> / <code>false</code>)</p>
 <p>Enable / Disable clipboard integration for the kill buffer.</p>
-<h3 id="--cmd-first-command">--cmd-first &quot;COMMAND&quot; <a href="#--cmd-first-command">.</a></h3>
+<h3 id="--cmd-first-command">--cmd-first &quot;COMMAND&quot;</h3>
 <p>Execute &quot;COMMAND&quot; before processing any rcfiles and continue the shell.</p>
-<h3 id="--completion-hidden----no-completion-hidden">--completion-hidden / --no-completion-hidden <a href="#--completion-hidden----no-completion-hidden">.</a></h3>
+<h3 id="--completion-hidden----no-completion-hidden">--completion-hidden / --no-completion-hidden</h3>
 <p>(Lua: <code>nyagos.option.completion_hidden = true</code> / <code>false</code>)</p>
-<p>Include hidden files in completion.<br>
+<p>Include hidden files in completion.<br />
 Use <code>--no-completion-hidden</code> to disable it.</p>
-<h3 id="--completion-slash----no-completion-slash">--completion-slash / --no-completion-slash <a href="#--completion-slash----no-completion-slash">.</a></h3>
+<h3 id="--completion-slash----no-completion-slash">--completion-slash / --no-completion-slash</h3>
 <p>(Lua: <code>nyagos.option.completion_slash = true</code> / <code>false</code>)</p>
-<p>Use forward slash in completion.<br>
+<p>Use forward slash in completion.<br />
 Use <code>--no-completion-slash</code> to disable it.</p>
-<h3 id="-e-scriptcode">-e &quot;SCRIPTCODE&quot; <a href="#-e-scriptcode">.</a></h3>
+<h3 id="-e-scriptcode">-e &quot;SCRIPTCODE&quot;</h3>
 <p>Execute SCRIPTCODE with the Lua interpreter and quit.</p>
-<h3 id="-f-file-arg1-arg2-">-f FILE ARG1 ARG2 ... <a href="#-f-file-arg1-arg2-">.</a></h3>
-<p>If FILE's suffix is <code>.lua</code>, execute it as a Lua script.<br>
-The script can access arguments as <code>arg[]</code>.<br>
+<h3 id="-f-file-arg1-arg2-">-f FILE ARG1 ARG2 ...</h3>
+<p>If FILE's suffix is <code>.lua</code>, execute it as a Lua script.<br />
+The script can access arguments as <code>arg[]</code>.<br />
 Otherwise, read and execute commands from the file.</p>
-<h3 id="--glob----no-glob">--glob / --no-glob <a href="#--glob----no-glob">.</a></h3>
+<h3 id="--glob----no-glob">--glob / --no-glob</h3>
 <p>(Lua: <code>nyagos.option.glob=true</code> / <code>false</code>)</p>
-<p>Enable wildcard expansion.<br>
+<p>Enable wildcard expansion.<br />
 Use <code>--no-glob</code> to disable it.</p>
-<h3 id="--glob-slash----no-glob-slash">--glob-slash / --no-glob-slash <a href="#--glob-slash----no-glob-slash">.</a></h3>
+<h3 id="--glob-slash----no-glob-slash">--glob-slash / --no-glob-slash</h3>
 <p>(Lua: <code>nyagos.option.glob_slash=true</code>, <code>set -o glob_slash</code>)</p>
-<p>Use forward slash <code>/</code> for wildcard expansion instead of <code>\</code>.<br>
+<p>Use forward slash <code>/</code> for wildcard expansion instead of <code>\</code>.<br />
 Use <code>--no-glob-slash</code> to disable it.</p>
-<h3 id="-h----help">-h , --help <a href="#-h----help">.</a></h3>
+<h3 id="-h----help">-h , --help</h3>
 <p>Print this usage information.</p>
-<h3 id="-k-command">-k &quot;COMMAND&quot; <a href="#-k-command">.</a></h3>
+<h3 id="-k-command">-k &quot;COMMAND&quot;</h3>
 <p>Execute &quot;COMMAND&quot; and continue the command-line.</p>
-<h3 id="--look-curdir-first">--look-curdir-first <a href="#--look-curdir-first">.</a></h3>
-<p>Search for executables in the current directory before checking <code>%PATH%</code>.<br>
+<h3 id="--look-curdir-first">--look-curdir-first</h3>
+<p>Search for executables in the current directory before checking <code>%PATH%</code>.<br />
 (Compatible with CMD.EXE)</p>
-<h3 id="--look-curdir-last">--look-curdir-last <a href="#--look-curdir-last">.</a></h3>
-<p>Search for executables in the current directory after checking <code>%PATH%</code>.<br>
+<h3 id="--look-curdir-last">--look-curdir-last</h3>
+<p>Search for executables in the current directory after checking <code>%PATH%</code>.<br />
 (Compatible with PowerShell)</p>
-<h3 id="--look-curdir-never">--look-curdir-never <a href="#--look-curdir-never">.</a></h3>
-<p>Never search for executables in the current directory<br>
-unless <code>%PATH%</code> contains it.<br>
+<h3 id="--look-curdir-never">--look-curdir-never</h3>
+<p>Never search for executables in the current directory<br />
+unless <code>%PATH%</code> contains it.<br />
 (Compatible with UNIX shells)</p>
-<h3 id="--lua-file-file-arg1-arg2">--lua-file FILE ARG1 ARG2... <a href="#--lua-file-file-arg1-arg2">.</a></h3>
-<p>Execute FILE as a Lua script, even if its suffix is not <code>.lua</code>.<br>
-The script can access arguments as <code>arg[]</code>.<br>
+<h3 id="--lua-file-file-arg1-arg2">--lua-file FILE ARG1 ARG2...</h3>
+<p>Execute FILE as a Lua script, even if its suffix is not <code>.lua</code>.<br />
+The script can access arguments as <code>arg[]</code>.<br />
 Lines starting with <code>@</code> are ignored for batch file embedding.</p>
-<h3 id="--lua-first-luacode">--lua-first &quot;LUACODE&quot; <a href="#--lua-first-luacode">.</a></h3>
+<h3 id="--lua-first-luacode">--lua-first &quot;LUACODE&quot;</h3>
 <p>Execute &quot;LUACODE&quot; before processing any rcfiles and continue the shell.</p>
-<h3 id="--noclobber----no-noclobber">--noclobber / --no-noclobber <a href="#--noclobber----no-noclobber">.</a></h3>
+<h3 id="--noclobber----no-noclobber">--noclobber / --no-noclobber</h3>
 <p>(Lua: <code>nyagos.option.noclobber=true</code>)</p>
-<p>Prevent overwriting files during redirection.<br>
+<p>Prevent overwriting files during redirection.<br />
 Use <code>--no-noclobber</code> to disable it.</p>
-<h3 id="--norc">--norc <a href="#--norc">.</a></h3>
-<p>Do not load startup scripts:<br>
+<h3 id="--norc">--norc</h3>
+<p>Do not load startup scripts:<br />
 <code>~\.nyagos</code>, <code>(BINDIR)\.nyagos</code>, <code>(BINDIR)\nyagos.d\*.lua</code>, and <code>%APPDATA%\NYAOS_ORG\nyagos.d\*.lua</code>.</p>
-<h3 id="--output-surrogate-pair----no-output-surrogate-pair">--output-surrogate-pair / --no-output-surrogate-pair <a href="#--output-surrogate-pair----no-output-surrogate-pair">.</a></h3>
+<h3 id="--output-surrogate-pair----no-output-surrogate-pair">--output-surrogate-pair / --no-output-surrogate-pair</h3>
 <p>(Lua: <code>nyagos.option.output_surrogate_pair = true</code> / <code>false</code>)</p>
-<p>Output surrogate pair characters as they are.<br>
+<p>Output surrogate pair characters as they are.<br />
 Use <code>--no-output-surrogate-pair</code> to output surrogate pair characters as <code>&lt;NNNNN&gt;</code>.</p>
-<h3 id="--predict----no-predict">--predict / --no-predict <a href="#--predict----no-predict">.</a></h3>
+<h3 id="--predict----no-predict">--predict / --no-predict</h3>
 <p>(Lua: <code>nyagos.option.predict=true</code> / <code>false</code>)</p>
-<p>Enable prediction in readline.<br>
+<p>Enable prediction in readline.<br />
 Use <code>--no-predict</code> to disable it.</p>
-<h3 id="--read-stdin-as-file----no-read-stdin-as-file">--read-stdin-as-file / --no-read-stdin-as-file <a href="#--read-stdin-as-file----no-read-stdin-as-file">.</a></h3>
+<h3 id="--read-stdin-as-file----no-read-stdin-as-file">--read-stdin-as-file / --no-read-stdin-as-file</h3>
 <p>(Lua: <code>nyagos.option.read_stdin_as_file = true</code> / <code>false</code>)</p>
-<p>Read commands from stdin as a file stream. (Disables line editing.)<br>
+<p>Read commands from stdin as a file stream. (Disables line editing.)<br />
 Use <code>--no-read-stdin-as-file</code> to disable it.</p>
-<h3 id="--show-version-only">--show-version-only <a href="#--show-version-only">.</a></h3>
+<h3 id="--show-version-only">--show-version-only</h3>
 <p>Show version only.</p>
-<h3 id="--tilde-expansion----no-tilde-expansion">--tilde-expansion / --no-tilde-expansion <a href="#--tilde-expansion----no-tilde-expansion">.</a></h3>
+<h3 id="--tilde-expansion----no-tilde-expansion">--tilde-expansion / --no-tilde-expansion</h3>
 <p>(Lua: <code>nyagos.option.tilde_expansion=true</code>)</p>
-<p>Enable tilde expansion.<br>
+<p>Enable tilde expansion.<br />
 Use <code>--no-tilde-expansion</code> to disable it.</p>
-<h3 id="--usesource----no-usesource">--usesource / --no-usesource <a href="#--usesource----no-usesource">.</a></h3>
+<h3 id="--usesource----no-usesource">--usesource / --no-usesource</h3>
 <p>(Lua: <code>nyagos.option.usesource=true</code>)</p>
-<p>Allow batch files to change the environment variables of nyagos.<br>
+<p>Allow batch files to change the environment variables of nyagos.<br />
 Use <code>--no-usesource</code> to disable it.</p>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents <a href="#contents">.</a></h3>
+<h3 id="contents">Contents</h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1231,7 +1240,7 @@ Use <code>--no-usesource</code> to disable it.</p>
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
+<h3 id="release-note">Release note</h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>
@@ -1239,5 +1248,5 @@ Use <code>--no-usesource</code> to disable it.</p>
 <li><a href="history-4.1_en.html">4.1.x</a></li>
 <li><a href="history-4.0_en.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

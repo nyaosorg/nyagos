@@ -1,5 +1,6 @@
 <!DOCTYPE html><html><head>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - history-4.2</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1105,33 +1106,43 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p><a href="./history-4.2_en.html">English</a> / Japanese</p>
-<h1 id="nyagos-425-1">NYAGOS 4.2.5_1 <a href="#nyagos-425-1">.</a></h1>
+<h1 id="nyagos-425-1">NYAGOS 4.2.5_1</h1>
 <p>(2018.04.14)</p>
 <ul>
 <li>ブロックif で <code>if [not] errorlevel N</code> が動かなかった不具合を修正</li>
@@ -1140,12 +1151,12 @@
 <li><code>ls -F</code> が「リパースポイントではあるが、ジャンクション、シンボリックリンクでないファイル・ディレクトリ」に @ マークをつけていた不具合を修正</li>
 <li><code>_nyagos</code> で <code>history</code> コマンドを使った時のエラーメッセージを変更</li>
 </ul>
-<h1 id="nyagos-425-0">NYAGOS 4.2.5_0 <a href="#nyagos-425-0">.</a></h1>
+<h1 id="nyagos-425-0">NYAGOS 4.2.5_0</h1>
 <p>(2018.03.31)</p>
 <ul>
 <li>luaフラグ nyagos.option.usesource を追加。false の時、バッチファイルは NYAGOS の環境変数を変更できなくなる(default:true)</li>
 </ul>
-<h1 id="nyagos-425-beta2">NYAGOS 4.2.5_beta2 <a href="#nyagos-425-beta2">.</a></h1>
+<h1 id="nyagos-425-beta2">NYAGOS 4.2.5_beta2</h1>
 <p>(2018.03.27)</p>
 <ul>
 <li>#296 ユーザ名にマルチバイト文字が入っていると、バッチが正常動作しない不具合を修正
@@ -1156,13 +1167,13 @@
 </li>
 <li>#297 /b なしの exit をバッチファイルが実行した時の、一時ファイルが無い旨のエラーがでていた</li>
 </ul>
-<h1 id="nyagos-425-beta">NYAGOS 4.2.5_beta <a href="#nyagos-425-beta">.</a></h1>
+<h1 id="nyagos-425-beta">NYAGOS 4.2.5_beta</h1>
 <p>(2018.03.26)</p>
 <ul>
 <li>CMD.EXE と同様に、バッチファイルが変更した環境変数の値を読み取るようにした。</li>
 <li>ソースの幾つかをリファクタリングした。</li>
 </ul>
-<h1 id="nyagos-424-0">NYAGOS 4.2.4_0 <a href="#nyagos-424-0">.</a></h1>
+<h1 id="nyagos-424-0">NYAGOS 4.2.4_0</h1>
 <p>(2018.03.09)</p>
 <ul>
 <li>lua: ole: <code>variable = OLE.property</code> が <code>OLE:_get('property')</code> のかわりに使えるようになった</li>
@@ -1179,7 +1190,7 @@
 <li>複数のファイルが「open」で一度に開こうとした時、<code>open: ambiguous shellexecute</code> とエラーを表示するようにした。</li>
 <li><code>nyagos.alias.NAME = nil</code> で alias を削除できなかった動作を修正</li>
 </ul>
-<h1 id="nyagos-423-4">NYAGOS 4.2.3_4 <a href="#nyagos-423-4">.</a></h1>
+<h1 id="nyagos-423-4">NYAGOS 4.2.3_4</h1>
 <p>(2018.03.04)</p>
 <ul>
 <li><code>ls -h</code> のかわりに <code>ls -?</code> をヘルプに用意した</li>
@@ -1191,7 +1202,7 @@
 <li>#286 Fix: 二重引用符内の空白に続く ~ が %USERPROFILE% と解釈されていた不具合を修正</li>
 <li>#287 ヒストリの最後のエントリの時、↓をタイプしても何もしないようにした</li>
 </ul>
-<h1 id="nyagos-423-3">NYAGOS 4.2.3_3 <a href="#nyagos-423-3">.</a></h1>
+<h1 id="nyagos-423-3">NYAGOS 4.2.3_3</h1>
 <p>(2018.01.28)</p>
 <ul>
 <li><code>print(nil,true,false)</code> が何も出力しない不具合を修正</li>
@@ -1200,19 +1211,19 @@
 <li>補完の際、パーネントの後にスペースを追加しないようにした</li>
 <li>#276 source コマンドで実行されるバッチの標準出力が閉じていた不具合を修正 (Thx @tyochiai )</li>
 </ul>
-<h1 id="nyagos-423-2">NYAGOS 4.2.3_2 <a href="#nyagos-423-2">.</a></h1>
+<h1 id="nyagos-423-2">NYAGOS 4.2.3_2</h1>
 <p>(2018.01.06)</p>
 <ul>
 <li>#265 <code>ls</code> + 空白 + TAB でコマンド名補完が動いていた不具合を修正</li>
 </ul>
-<h1 id="nyagos-423-1">NYAGOS 4.2.3_1 <a href="#nyagos-423-1">.</a></h1>
+<h1 id="nyagos-423-1">NYAGOS 4.2.3_1</h1>
 <p>(2017.12.30)</p>
 <ul>
 <li>改行コード等が単語の区切りとして認識していなかった不具合を修正</li>
 <li>#264 画面バッファの幅が広すぎる時に、画面にゴミが現われる不具合を修正
 (You have to do <code>go get -u github.com/mattn/go-colorable</code>)</li>
 </ul>
-<h1 id="nyagos-423-0">NYAGOS 4.2.3_0 <a href="#nyagos-423-0">.</a></h1>
+<h1 id="nyagos-423-0">NYAGOS 4.2.3_0</h1>
 <p>(2017.12.25)</p>
 <ul>
 <li>起動スクリプトのロードを抑制する --norc オプションを追加</li>
@@ -1230,21 +1241,21 @@
 <li>#248 バックスラッシュ直後の環境変数展開が機能しない不具合を修正</li>
 <li>lua関数 <code>nyagos.msgbox(MESSAGE,TITLE)</code> を追加</li>
 </ul>
-<h1 id="nyagos-422-2">NYAGOS 4.2.2_2 <a href="#nyagos-422-2">.</a></h1>
+<h1 id="nyagos-422-2">NYAGOS 4.2.2_2</h1>
 <p>(2017.11.26)</p>
 <ul>
 <li>#255 <code>start</code> コマンドでコマンドを %PATH% から探すようにした</li>
 <li>#254 <code>nyagos -f SCRIPT -xxxx</code> の -xxxx が SCRIPT のオプションではなく、nyagos のオプションとして扱われていた問題を修正</li>
 <li>コマンドラインフィルターが設定されていない時に Lua のスタックがオーバーフローしてクラッシュする不具合を修正</li>
 </ul>
-<h1 id="nyagos-422-1">NYAGOS 4.2.2_1 <a href="#nyagos-422-1">.</a></h1>
+<h1 id="nyagos-422-1">NYAGOS 4.2.2_1</h1>
 <p>(2017.10.11)</p>
 <ul>
 <li>#250 引数なしの <code>bindkey</code> でクラッシュする不具合を修正 (Thx @masamitsu-murase)</li>
 <li>#252 Shift/Ctrl キーのタイプで、画面のスクロールがキャンセルされてしまう問題を修正 ( Shift/Ctrl キーのタイプでカーソルOFF/ONの出力を省くようにした ) (Thx @masamitsu-murase)</li>
 <li>#253 <code>nyagos-4.2.2_0-386</code> が make.cmd の不具合で 64bitでビルドされていた (Thx @hazychill)</li>
 </ul>
-<h1 id="nyagos-422-0">NYAGOS 4.2.2_0 <a href="#nyagos-422-0">.</a></h1>
+<h1 id="nyagos-422-0">NYAGOS 4.2.2_0</h1>
 <p>(2017.10.08)</p>
 <ul>
 <li>新Lua製コマンド(<code>abspath</code>,<code>chompf</code>,<code>wildcard</code>)を追加</li>
@@ -1255,7 +1266,7 @@
 <li>#249 <code>nyagos.completion_slash</code> を追加。これが true の時、ファイル名補完はデフォルトでパス区切り文字に / を使う(Thx @masamitsu-murase)</li>
 <li>PowerShell で記述したあたらしいビルドスクリプト(make.cmd) を用意</li>
 </ul>
-<h1 id="nyagos-421-0">NYAGOS 4.2.1_0 <a href="#nyagos-421-0">.</a></h1>
+<h1 id="nyagos-421-0">NYAGOS 4.2.1_0</h1>
 <p>(2017.08.31)</p>
 <ul>
 <li>#241 <code>completion_hook</code> で戻るリストの順番が反映されていなかった問題を修正 (Thx @masamitsu-murase)</li>
@@ -1269,13 +1280,13 @@
 <li><code>rmdir</code> : 進捗を表示する仕様を復活させた</li>
 <li><code>diskfree</code>: df ライクな新コマンド</li>
 </ul>
-<h1 id="nyagos-420-5">NYAGOS 4.2.0_5 <a href="#nyagos-420-5">.</a></h1>
+<h1 id="nyagos-420-5">NYAGOS 4.2.0_5</h1>
 <p>(2017.08.16)</p>
 <ul>
 <li>Windows7 でのビルドで、バージョン情報が実行ファイルのプロパティーに記入されない問題があり、修正した。原因は goversioninfo 向けの JSON を作るスクリプトが PowerShell 3.0 の ConvertTo-JSON メソッドを必要としていたが、Windows 7 はサポートしていなかった。</li>
 <li>nyagos.box(LIST)関数が LIST の順番を無視していた</li>
 </ul>
-<h1 id="nyagos-420-4">NYAGOS 4.2.0_4 <a href="#nyagos-420-4">.</a></h1>
+<h1 id="nyagos-420-4">NYAGOS 4.2.0_4</h1>
 <p>(2017.07.29)</p>
 <ul>
 <li><code>.nyagos</code> にエラーがあった時のエラー行番号が表示されない問題を修正</li>
@@ -1287,7 +1298,7 @@
 <li><code>nyagos.d</code> ディレクトリで <code>suffix</code> とタイプすると、無限に nyagos.exe プロセスが起動する問題 #237 を修正するために、ユーザがタイプしたコマンド名に拡張子が含まれていない場合は、インタプリタ名の挿入をしないようにした。</li>
 <li>Fix #240: 空のディレクトリで C-o を押下すると「<code>bad argument # 1 to 'find' (string expected, got nil)</code>」と表示されていた</li>
 </ul>
-<h1 id="nyagos-420-3">NYAGOS 4.2.0_3 <a href="#nyagos-420-3">.</a></h1>
+<h1 id="nyagos-420-3">NYAGOS 4.2.0_3</h1>
 <p>(2017.07.13)</p>
 <ul>
 <li>Fix: <code>box</code> Enter &amp; Ctrl-C でパニックが発生する不具合を修正</li>
@@ -1298,7 +1309,7 @@
 <li>補完で、! マークがある時、&quot;&quot; で囲むようにした。</li>
 <li>Fix: <code>suffix ps1</code> が <code>?:-1: attempt to concatenate a table value</code> となる不具合を修正</li>
 </ul>
-<h1 id="nyagos-420-2">NYAGOS 4.2.0_2 <a href="#nyagos-420-2">.</a></h1>
+<h1 id="nyagos-420-2">NYAGOS 4.2.0_2</h1>
 <p>(2017.06.13)</p>
 <ul>
 <li><code>lnk . ~</code>が失敗する不具合を修正</li>
@@ -1306,7 +1317,7 @@
 <li>一行入力のインクリメンタルサーチ中、BACKSPACE で行が更新されなかった不具合を修正</li>
 <li>Lua で空文字のグローバル変数があると、pipeを使った時に落ちる不具合を修正(#232)</li>
 </ul>
-<h1 id="nyagos-420-1">NYAGOS 4.2.0_1 <a href="#nyagos-420-1">.</a></h1>
+<h1 id="nyagos-420-1">NYAGOS 4.2.0_1</h1>
 <p>(2017.06.06)</p>
 <ul>
 <li>Fix: <code>_nyagos</code> のサンプルをパッケージに同梱するのを忘れていた (#230)</li>
@@ -1314,7 +1325,7 @@
 <li>nyagos.d/catalog/dollar.lua: $TEMP\xxxx 形式のファイル名補完をサポート(#228)</li>
 <li>nyagos.d/catalog/ezoe.lua: 復活</li>
 </ul>
-<h1 id="nyagos-420-0">NYAGOS 4.2.0_0 <a href="#nyagos-420-0">.</a></h1>
+<h1 id="nyagos-420-0">NYAGOS 4.2.0_0</h1>
 <p>(2017.05.29)</p>
 <ul>
 <li><code>share[]</code>直下の以外のLua変数が共有されない制限を改善した(#210,#208)
@@ -1325,7 +1336,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="heading">新機能 <a href="#heading">.</a></h2>
+<h2 id="%E6%96%B0%E6%A9%9F%E8%83%BD">新機能</h2>
 <ul>
 <li><code>nyagos.completion_hidden</code>: true の時、隠しファイルも補完候補に入れる</li>
 <li>内蔵コマンド <code>env</code> の追加</li>
@@ -1339,13 +1350,13 @@
 <li><code>ls -l</code>: ショートカットのリンク先・作業ディレクトリを表示するようにした</li>
 <li>Lua関数 <code>nyagos.box()</code> を追加</li>
 </ul>
-<h2 id="trivial-change">Trivial change <a href="#trivial-change">.</a></h2>
+<h2 id="trivial-change">Trivial change</h2>
 <ul>
 <li>起動オプションに「-b (base64化されたコマンド文字列)」を追加した</li>
 <li>Lua(nyagos.d/cdlnk.lua)製の <code>cd/push ショートカット.lnk</code> を Go で書き直した</li>
 <li><code>nyagos.alias.grep = &quot;findstr.exe&quot;</code></li>
 </ul>
-<h2 id="bugfix">Bugfix <a href="#bugfix">.</a></h2>
+<h2 id="bugfix">Bugfix</h2>
 <ul>
 <li><code>%USERPROFILE:\=/%</code> で <code>\</code> が一度しか置換されていない不具合を修正</li>
 <li>デフォルトの<code>_nyagos</code>で<code>ll</code>がカラーでない<code>ls</code>に別名定義されていた点を修正</li>
@@ -1357,7 +1368,7 @@
 </ul>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次 <a href="#heading">.</a></h3>
+<h3 id="%E7%9B%AE%E6%AC%A1">目次</h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1372,7 +1383,7 @@
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
+<h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>
@@ -1380,5 +1391,5 @@
 <li><a href="history-4.1_ja.html">4.1.x</a></li>
 <li><a href="history-4.0_ja.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>
