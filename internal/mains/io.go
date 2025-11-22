@@ -134,7 +134,7 @@ func ioOpen(L *lua.LState) int {
 			read = true
 			write = false
 		case "w", "wb":
-			mode = os.O_WRONLY | os.O_CREATE
+			mode = os.O_WRONLY | os.O_TRUNC | os.O_CREATE
 			read = false
 			write = true
 		case "a", "ab":
