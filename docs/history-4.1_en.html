@@ -1,5 +1,6 @@
 <!DOCTYPE html><html><head>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - history-4.1</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1105,33 +1106,43 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>English / <a href="history-4.1_ja.html">Japanese</a></p>
-<h1 id="since-41">Since 4.1 <a href="#since-41">.</a></h1>
+<h1 id="since-41">Since 4.1</h1>
 <p>NYAGOS 4.0 has the problem that a panic sometimes occurs because
 multi-goroutines call only one Lua-instance.</p>
 <p>On NYAGOS 4.1, I tryied to prevent from panic and to make stable
@@ -1163,25 +1174,25 @@ The code in the function can not access the bind variables.</li>
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-419-3">NYAGOS 4.1.9_3 <a href="#nyagos-419-3">.</a></h1>
+<h1 id="nyagos-419-3">NYAGOS 4.1.9_3</h1>
 <p>on May 13,2017</p>
 <ul>
 <li>Fix #214: warned as <code>main/lua_cmd.go: cmdExec: not found interpreter object</code></li>
 </ul>
-<h1 id="nyagos-419-2">NYAGOS 4.1.9_2 <a href="#nyagos-419-2">.</a></h1>
+<h1 id="nyagos-419-2">NYAGOS 4.1.9_2</h1>
 <p>on Apr 3,2017</p>
 <ul>
 <li>Fix #191 the option<code>-c</code> printed <code>option parse error</code>.</li>
 <li>A new Lua function: <code>nyagos.elevated()</code> which returns true on elevated mode.</li>
 <li>The default title bar prints <code>(admin)</code> on elevated mode.</li>
 </ul>
-<h1 id="nyagos-419-1">NYAGOS 4.1.9_1 <a href="#nyagos-419-1">.</a></h1>
+<h1 id="nyagos-419-1">NYAGOS 4.1.9_1</h1>
 <p>on Mar 28,2017</p>
 <ul>
 <li>Fix: sometimes cursor disappears on readline on some environment on 4.1.9_0.</li>
 <li>Be able to use the escape sequence <code>\033]0;(title)\007</code> to change the title of the command-prompt by the new go-colorable's feature.</li>
 </ul>
-<h1 id="nyagos-419-0">NYAGOS 4.1.9_0 <a href="#nyagos-419-0">.</a></h1>
+<h1 id="nyagos-419-0">NYAGOS 4.1.9_0</h1>
 <p>on Mar 27,2017</p>
 <ul>
 <li>Fix: <code>open http(s)://...</code> did not work.</li>
@@ -1214,7 +1225,7 @@ The code in the function can not access the bind variables.</li>
 </li>
 <li>Support <code>lua_e &quot;nyagos.key = function(this) end&quot;</code></li>
 </ul>
-<h1 id="nyagos-418-0">NYAGOS 4.1.8_0 <a href="#nyagos-418-0">.</a></h1>
+<h1 id="nyagos-418-0">NYAGOS 4.1.8_0</h1>
 <p>on Feb 15,2017</p>
 <ul>
 <li>Add new customizing file <code>_nyagos</code>(command.com-batchlike)</li>
@@ -1233,7 +1244,7 @@ The code in the function can not access the bind variables.</li>
 <li>'#' became a comment mark.</li>
 <li>open,clone,su,sudo : rewrite with Go (from Lua)</li>
 </ul>
-<h1 id="nyagos-417-0">NYAGOS 4.1.7_0 <a href="#nyagos-417-0">.</a></h1>
+<h1 id="nyagos-417-0">NYAGOS 4.1.7_0</h1>
 <p>on Nov 29,2016</p>
 <ul>
 <li>Abolished nyagos.lua, which role nyagos.exe do itself.</li>
@@ -1254,12 +1265,12 @@ The code in the function can not access the bind variables.</li>
 * M-g: Git-revision</li>
 <li>Fix: brace expansion &quot;{a,b,c}&quot; worked even in quotated strings</li>
 </ul>
-<h1 id="nyagos-416-1">NYAGOS 4.1.6_1 <a href="#nyagos-416-1">.</a></h1>
+<h1 id="nyagos-416-1">NYAGOS 4.1.6_1</h1>
 <p>on Sep 7,2016</p>
 <ul>
 <li>Fix: the package zip did not have lua53.dll</li>
 </ul>
-<h1 id="nyagos-416-0">NYAGOS 4.1.6_0 <a href="#nyagos-416-0">.</a></h1>
+<h1 id="nyagos-416-0">NYAGOS 4.1.6_0</h1>
 <p>on Sep 7,2016</p>
 <ul>
 <li>Use &quot;\x1B[0K&quot; as ERASELINE instead of &quot; &quot; &amp; Backspace</li>
@@ -1268,13 +1279,13 @@ The code in the function can not access the bind variables.</li>
 <li>Fix #164: <code>cd --history</code> changed the current directory to home.</li>
 <li>copy and move always regard the desitinate path matching with <code>[\\/:]\.{0,2}$</code> as a directory wheter it fails or not to stat the path.</li>
 </ul>
-<h1 id="nyagos-415-1">NYAGOS 4.1.5_1 <a href="#nyagos-415-1">.</a></h1>
+<h1 id="nyagos-415-1">NYAGOS 4.1.5_1</h1>
 <p>on Jul 31,2016</p>
 <ul>
 <li>Fix #157++: Overflow line on the text appended after screen resized.</li>
 <li>Error when it the upvalue named as 'prompter' is used on closures(nyagos.prompt) for invalid ~/.nyagos of 4.0.x on default for #155,#158</li>
 </ul>
-<h1 id="nyagos-415-0">NYAGOS 4.1.5_0 <a href="#nyagos-415-0">.</a></h1>
+<h1 id="nyagos-415-0">NYAGOS 4.1.5_0</h1>
 <p>on Jul 31,2016</p>
 <ul>
 <li><code>cd --history</code> outputs the current directory at first to prevent peco(M-h) fro
@@ -1287,13 +1298,13 @@ m hangup with no cd histories.</li>
 <li>Fix #157 Reset the readline-width on the console window resized.</li>
 <li>Moved some packages to the other repositories.</li>
 </ul>
-<h1 id="nyagos-414-1">NYAGOS 4.1.4_1 <a href="#nyagos-414-1">.</a></h1>
+<h1 id="nyagos-414-1">NYAGOS 4.1.4_1</h1>
 <p>on Jun 12,2016</p>
 <ul>
 <li>Fix #151 <code>&amp;&amp;</code> and <code>||</code> work same as <code> ;</code></li>
 <li>Add nyagos.d/catalog/autocd.lua &amp; autols.lua (#149 Thx @DeaR)</li>
 </ul>
-<h1 id="nyagos-414-0">NYAGOS 4.1.4_0 <a href="#nyagos-414-0">.</a></h1>
+<h1 id="nyagos-414-0">NYAGOS 4.1.4_0</h1>
 <p>on May 29,2016</p>
 <ul>
 <li>Implemented built-in tiny OLE interface and nyole.dll is not necessary now.</li>
@@ -1303,14 +1314,14 @@ console-title(second parameter)</li>
 <li>Fix: Lua's default file handles(STDIN/STDOUT) were opened by binary-mode. #146</li>
 <li>nyagos.d/catalog/peco.lua: C-r: revert order of display and improved speed.</li>
 </ul>
-<h1 id="nyagos-413-1">NYAGOS 4.1.3_1 <a href="#nyagos-413-1">.</a></h1>
+<h1 id="nyagos-413-1">NYAGOS 4.1.3_1</h1>
 <p>on May 8,2016</p>
 <ul>
 <li>Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)</li>
 <li>Fix: when nyagos.history was deleted, warnings are displayed until <code>exit</code> was typed.</li>
 <li>Fix: nyagos.d/catalog/peco.lua: when nyagos.history does not exist, peco hangs</li>
 </ul>
-<h1 id="nyagos-413-0">NYAGOS 4.1.3_0 <a href="#nyagos-413-0">.</a></h1>
+<h1 id="nyagos-413-0">NYAGOS 4.1.3_0</h1>
 <p>on May 5,2016</p>
 <ul>
 <li>Add: <code>nyagos.open(PATH,MODE)</code> which <code>PATH</code> is in UTF8 and compatible with <code>io.open</code>.</li>
@@ -1334,11 +1345,11 @@ console-title(second parameter)</li>
 <li>Fix: <code>ls -ltr *</code> was not sorted by modified time. (#136)</li>
 <li>Support: nyagos -f NOT-Lua-Script(COMMANDS-Script)</li>
 </ul>
-<h2 id="add-forgotten-change-on-may-172016">(Add forgotten change on May 17,2016) <a href="#add-forgotten-change-on-may-172016">.</a></h2>
+<h2 id="add-forgotten-change-on-may-172016">(Add forgotten change on May 17,2016)</h2>
 <ul>
 <li>Not to confuse whether the encoding is ANSI or UTF8 string , stop to print('UTF8-String with ESCAPE-SEQUENCE'). Now print remains to be the bundled one of lua53.dll. ( #129 )</li>
 </ul>
-<h1 id="nyagos-412-0">NYAGOS 4.1.2_0 <a href="#nyagos-412-0">.</a></h1>
+<h1 id="nyagos-412-0">NYAGOS 4.1.2_0</h1>
 <p>on Mar 29,2016</p>
 <ul>
 <li>Made scripts-catalog system
@@ -1373,25 +1384,25 @@ console-title(second parameter)</li>
 which contains parameters not removed quotations from user-typed ones.</li>
 <li>Add the method <code>replacefrom</code> to bindkey-function's parameter table.</li>
 </ul>
-<h1 id="nyagos-411-2">NYAGOS 4.1.1_2 <a href="#nyagos-411-2">.</a></h1>
+<h1 id="nyagos-411-2">NYAGOS 4.1.1_2</h1>
 <p>on Feb 17,2016</p>
 <ul>
 <li>Fix the miss to convert filename UTF8 to ANSI for loadfile() of Lua (#110,Thx Mr.HABATA)</li>
 </ul>
-<h1 id="nyagos-411-1">NYAGOS 4.1.1_1 <a href="#nyagos-411-1">.</a></h1>
+<h1 id="nyagos-411-1">NYAGOS 4.1.1_1</h1>
 <p>on Feb 16,2016</p>
 <ul>
 <li>Force to insert a line feed when prompt is too wide (#104)</li>
 <li>Fix the error message when no files matches with a given wildcard (#108)</li>
 <li>Fix the environment variable like %ProgramFiles(x86)% were not expanded. (#109 Thx @hattya)</li>
 </ul>
-<h1 id="nyagos-411-0">NYAGOS 4.1.1_0 <a href="#nyagos-411-0">.</a></h1>
+<h1 id="nyagos-411-0">NYAGOS 4.1.1_0</h1>
 <p>on Jan 15,2016</p>
 <ul>
 <li>Support UTF-16 surrogate pair on getkey</li>
 <li><code>mkdir</code> suppports /p: make parent directories as needed.</li>
 </ul>
-<h1 id="nyagos-410-0">NYAGOS 4.1.0_0 <a href="#nyagos-410-0">.</a></h1>
+<h1 id="nyagos-410-0">NYAGOS 4.1.0_0</h1>
 <p>on Jan 3,2016</p>
 <ul>
 <li>Add build-in <code>ln</code>.</li>
@@ -1423,7 +1434,7 @@ which contains parameters not removed quotations from user-typed ones.</li>
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-41-beta">NYAGOS 4.1-beta <a href="#nyagos-41-beta">.</a></h1>
+<h1 id="nyagos-41-beta">NYAGOS 4.1-beta</h1>
 <p>on Dec 13,2015</p>
 <ul>
 <li>All Lua-callback function have thier own Lua-instances to avoid crash.</li>
@@ -1434,7 +1445,7 @@ functions and <code>.nyagos</code>.</li>
 </ul>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents <a href="#contents">.</a></h3>
+<h3 id="contents">Contents</h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1449,7 +1460,7 @@ functions and <code>.nyagos</code>.</li>
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
+<h3 id="release-note">Release note</h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>
@@ -1457,5 +1468,5 @@ functions and <code>.nyagos</code>.</li>
 <li><a href="history-4.1_en.html">4.1.x</a></li>
 <li><a href="history-4.0_en.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

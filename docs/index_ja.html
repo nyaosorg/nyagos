@@ -1,6 +1,6 @@
 <!DOCTYPE html><html><head>
 <title>NYAOS.ORG/NYAGOS</title>
-<style type="text/css"><!--
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1106,37 +1106,47 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p><a href="./index.html">English</a> / Japanese</p>
-<h2 id="heading">ハイブリッドなコマンドラインシェルへようこそ <a href="#heading">.</a></h2>
+<h2 id="%E3%83%8F%E3%82%A4%E3%83%96%E3%83%AA%E3%83%83%E3%83%89%E3%81%AA%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%A9%E3%82%A4%E3%83%B3%E3%82%B7%E3%82%A7%E3%83%AB%E3%81%B8%E3%82%88%E3%81%86%E3%81%93%E3%81%9D">ハイブリッドなコマンドラインシェルへようこそ</h2>
 <p>NYAGOS - Nihongo Yet Another GOing Shell は、Bash 風のコマンドライン編集機能と、Windows のファイルパスやバッチファイルとのシームレスな統合を兼ね備えた多機能なコマンドラインシェルです。Lua スクリプトによる柔軟なカスタマイズが可能で、最新の予測入力機能にも対応しています。</p>
-<p><img src="./demo.gif" alt="demo-animation"></p>
-<h3 id="heading-1">主な機能 <a href="#heading-1">.</a></h3>
-<h4 id="unix-">UNIX ライクなシェル動作 <a href="#unix-">.</a></h4>
+<p><img src="./demo.gif" alt="demo-animation" /></p>
+<h3 id="%E4%B8%BB%E3%81%AA%E6%A9%9F%E8%83%BD">主な機能</h3>
+<h4 id="unix-%E3%83%A9%E3%82%A4%E3%82%AF%E3%81%AA%E3%82%B7%E3%82%A7%E3%83%AB%E5%8B%95%E4%BD%9C">UNIX ライクなシェル動作</h4>
 <ul>
 <li><strong>キーバインド</strong>
 <ul>
@@ -1187,7 +1197,7 @@ end
 </ul>
 </li>
 </ul>
-<h4 id="windows-">Windows 互換機能 <a href="#windows-">.</a></h4>
+<h4 id="windows-%E4%BA%92%E6%8F%9B%E6%A9%9F%E8%83%BD">Windows 互換機能</h4>
 <ul>
 <li><strong>バッチファイルのシームレスな実行</strong>
 <ul>
@@ -1204,7 +1214,7 @@ end
 </ul>
 </li>
 </ul>
-<h4 id="heading-2">ユーザーエクスペリエンスの向上 <a href="#heading-2">.</a></h4>
+<h4 id="%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%9A%E3%83%AA%E3%82%A8%E3%83%B3%E3%82%B9%E3%81%AE%E5%90%91%E4%B8%8A">ユーザーエクスペリエンスの向上</h4>
 <ul>
 <li><strong>カラー対応のコマンドライン</strong></li>
 <li><strong>Unicode サポート</strong>
@@ -1222,15 +1232,15 @@ end
 </li>
 <li><strong><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a>（簡易かな漢字変換プログラム）をサポート - <a href="10-SetupSKK_ja.html">セットアップガイド</a></strong></li>
 </ul>
-<h3 id="heading-3">対応プラットフォーム <a href="#heading-3">.</a></h3>
+<h3 id="%E5%AF%BE%E5%BF%9C%E3%83%97%E3%83%A9%E3%83%83%E3%83%88%E3%83%95%E3%82%A9%E3%83%BC%E3%83%A0">対応プラットフォーム</h3>
 <ul>
 <li>Windows 7, 8.1, 10, 11, Windows Server 2008 以降</li>
 <li>Linux（実験的対応）</li>
 </ul>
 <p><a href="https://www.youtube.com/watch?v=WsfIrBWwAh0">Video by @emisjerry</a></p>
-<h3 id="heading-4">ライセンス <a href="#heading-4">.</a></h3>
+<h3 id="%E3%83%A9%E3%82%A4%E3%82%BB%E3%83%B3%E3%82%B9">ライセンス</h3>
 <p>NYAGOS は New BSD License のもとで使用・複製・改変が可能です。</p>
-<h3 id="heading-5">謝辞 <a href="#heading-5">.</a></h3>
+<h3 id="%E8%AC%9D%E8%BE%9E">謝辞</h3>
 <p><a href="https://github.com/nocd5">nocd5</a>
 / <a href="https://github.com/mattn">mattn</a>
 / <a href="https://github.com/hattya">hattya</a>
@@ -1286,14 +1296,14 @@ end
 / <a href="https://github.com/HAYASHI-Masayuki">HAYASHI-Masayuki</a>
 / <a href="https://github.com/naoyaikeda">naoyaikeda</a>
 / <a href="https://github.com/emisjerry">emisjerry</a></p>
-<h3 id="heading-6">開発者 <a href="#heading-6">.</a></h3>
+<h3 id="%E9%96%8B%E7%99%BA%E8%80%85">開発者</h3>
 <ul>
 <li><a href="https://github.com/hymkor">hymkor - HAYAMA Kaoru</a> (a.k.a zetamatta)</li>
 </ul>
 <!-- raw HTML omitted -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次 <a href="#heading">.</a></h3>
+<h3 id="%E7%9B%AE%E6%AC%A1">目次</h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1308,7 +1318,7 @@ end
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
+<h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>
@@ -1316,5 +1326,5 @@ end
 <li><a href="history-4.1_ja.html">4.1.x</a></li>
 <li><a href="history-4.0_ja.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

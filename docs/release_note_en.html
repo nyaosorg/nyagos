@@ -1,6 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>Removed features and Deprecations
-</title>
+<title>NYAOS.ORG/NYAGOS - release_note</title>
 <style type="text/css">
 /* light */
 .markdown-body {
@@ -1143,6 +1142,14 @@ a.permalink:hover{
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>( <strong>English</strong> / <a href="release_note_ja.html">Japanese</a> )</p>
+<h3 id="internal-changes">Internal changes</h3>
+<ul>
+<li>Upgraded <a href="https://github.com/nyaosorg/go-box">github.com/nyaosorg/go-box</a> from v2.2.1 to v3.0.0. (#453)</li>
+<li>Replaced deprecated <a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey">readline.GetKey</a> with <a href="https://github.com/nyaosorg/go-ttyadapter">go-ttyadapter</a>/tty8 in <code>nyagos.getkeys</code>. (#454)</li>
+<li>Fix: staticcheck: should omit nil check; len() for nil slices is defined as zero (S1009) (#455)</li>
+<li>Removed internal Lua functions <code>nyagos.resetcharwidth</code> and <code>nyagos.setrunewidth</code>, which used deprecated APIs from go-readline-ny. (#457)
+These functions were originally added for maintenance and debugging purposes, but became obsolete after the removal of redundant character width caching in go-readline-ny.</li>
+</ul>
 <h1 id="v4418-0">v4.4.18_0</h1>
 <p>Oct 25, 2025</p>
 <ul>
