@@ -1,5 +1,6 @@
 <!DOCTYPE html><html><head>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - history-4.0</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1105,33 +1106,43 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>English / <a href="history-4.0_ja.html">Japanese</a></p>
-<h1 id="nyagos-409-11">NYAGOS 4.0.9_11 <a href="#nyagos-409-11">.</a></h1>
+<h1 id="nyagos-409-11">NYAGOS 4.0.9_11</h1>
 <p>on Dec 12,2015</p>
 <ul>
 <li>Build with go 1.5.2</li>
@@ -1162,7 +1173,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-409-10">NYAGOS 4.0.9_10 <a href="#nyagos-409-10">.</a></h1>
+<h1 id="nyagos-409-10">NYAGOS 4.0.9_10</h1>
 <p>on Sep 17,2015</p>
 <ul>
 <li>Build with go 1.5.1</li>
@@ -1176,7 +1187,7 @@
 <li>Support C-w (unix-word-rubout) like nyaos (#85)</li>
 <li>Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)</li>
 </ul>
-<h1 id="nyagos-409-9">NYAGOS 4.0.9_9 <a href="#nyagos-409-9">.</a></h1>
+<h1 id="nyagos-409-9">NYAGOS 4.0.9_9</h1>
 <p>on Sep 07,2015</p>
 <ul>
 <li>Fixed #80 built-in commands and aliases could not return errorlevel</li>
@@ -1185,25 +1196,25 @@
 <li>Fixed #82 panic: using pipeline between replacing-type-aliases.</li>
 <li>Fixed #81 No errors reported on rmdir NOT directory before prompt.</li>
 </ul>
-<h1 id="nyagos-409-8">NYAGOS 4.0.9_8 <a href="#nyagos-409-8">.</a></h1>
+<h1 id="nyagos-409-8">NYAGOS 4.0.9_8</h1>
 <p>on Aug 20,2015</p>
 <ul>
 <li>Build with go 1.5</li>
 <li>Set go-version to Lua-variable: <code>nyagos.goversion</code> and print at startup.</li>
 <li>Support to build both 32bit and 64bit executable.</li>
 </ul>
-<h1 id="nyagos-409-7">NYAGOS 4.0.9_7 <a href="#nyagos-409-7">.</a></h1>
+<h1 id="nyagos-409-7">NYAGOS 4.0.9_7</h1>
 <p>on Jul 29,2015</p>
 <ul>
 <li>Fixed a panic occurs when only '||' command-line typed.</li>
 </ul>
-<h1 id="nyagos-409-6">NYAGOS 4.0.9_6 <a href="#nyagos-409-6">.</a></h1>
+<h1 id="nyagos-409-6">NYAGOS 4.0.9_6</h1>
 <p>on Jul 21,2015</p>
 <ul>
 <li>Fixed nyagos.stat(nil) caused a panic.</li>
 <li>Fixed not all stack trace was printed when a panic was recovered.</li>
 </ul>
-<h1 id="nyagos-409-5">NYAGOS 4.0.9_5 <a href="#nyagos-409-5">.</a></h1>
+<h1 id="nyagos-409-5">NYAGOS 4.0.9_5</h1>
 <p>on Jul 15,2015</p>
 <ul>
 <li>Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)</li>
@@ -1212,31 +1223,31 @@
 <li>Forbade to run Lua background to avoid crash.</li>
 <li>Fixed #77: echo &quot;{a,b}&quot; -&gt; &quot;a b&quot; is printed.({a,b} should be printed)</li>
 </ul>
-<h1 id="nyagos-409-4">NYAGOS 4.0.9_4 <a href="#nyagos-409-4">.</a></h1>
+<h1 id="nyagos-409-4">NYAGOS 4.0.9_4</h1>
 <p>on Jun 24,2015</p>
 <ul>
 <li>Fixed <code>ls (NO_MATCHING_WILDCARD)</code> worked as if <code>ls</code> with (NO-ARGUMENTS)</li>
 <li>Fixed <code>A ; B</code> worked as if <code>A &amp; B</code>.</li>
 </ul>
-<h1 id="nyagos-409-3">NYAGOS 4.0.9_3 <a href="#nyagos-409-3">.</a></h1>
+<h1 id="nyagos-409-3">NYAGOS 4.0.9_3</h1>
 <p>on Jun 15,2015</p>
 <ul>
 <li>Fixed nyagos.stat did not work on reparsepoints.</li>
 <li>Fixed #74 &quot;ls -a&quot; never prints &quot;.&quot; and &quot;..&quot; (current and parent directory)</li>
 <li>Disabled ls-color when stdout is not console even if -o option exists.</li>
 </ul>
-<h1 id="nyagos-409-2">NYAGOS 4.0.9_2 <a href="#nyagos-409-2">.</a></h1>
+<h1 id="nyagos-409-2">NYAGOS 4.0.9_2</h1>
 <p>on Jun 12,2015</p>
 <ul>
 <li>Fixed the limiter of alias subsutitution was only one. Changed upto 5</li>
 <li>Fixed more than one nyagos.argsfiler could run at once on pipelines. It caused to crash the process.</li>
 </ul>
-<h1 id="nyagos-409-1">NYAGOS 4.0.9_1 <a href="#nyagos-409-1">.</a></h1>
+<h1 id="nyagos-409-1">NYAGOS 4.0.9_1</h1>
 <p>on Jun 03,2015</p>
 <ul>
 <li>Fixed nyagos.exec() crashed when it was redirected.</li>
 </ul>
-<h1 id="nyagos-409-0">NYAGOS 4.0.9_0 <a href="#nyagos-409-0">.</a></h1>
+<h1 id="nyagos-409-0">NYAGOS 4.0.9_0</h1>
 <p>on Jun 02,2015</p>
 <ul>
 <li>Add the lua-table <code>nyagos.env</code></li>
@@ -1248,7 +1259,7 @@
 <li>Made lua-script catalog folder 'catalog.d'(not loaded automatically)</li>
 <li>Associated the suffix .py to either of IronPython or CPython automatically(Thx @hattya)</li>
 </ul>
-<h1 id="nyagos-408-0">NYAGOS 4.0.8_0 <a href="#nyagos-408-0">.</a></h1>
+<h1 id="nyagos-408-0">NYAGOS 4.0.8_0</h1>
 <p>on May 28,2015</p>
 <ul>
 <li>Supported single-quatations like UNIX-Shell</li>
@@ -1265,56 +1276,56 @@
 <li>Replaced lua53.dll to LuaBinaries' version.</li>
 <li>Unbundled lua.exe from zip-file.</li>
 </ul>
-<h2 id="bugfix">Bugfix <a href="#bugfix">.</a></h2>
+<h2 id="bugfix">Bugfix</h2>
 <ul>
 <li>Fixed #66 <code>echo a&gt;a</code> makes a empty file named <code>aa</code></li>
 <li>Fixed suffix.lua problem (#69 Thx hattya)</li>
 <li>Fixed panic when nyagos.argsfilter returns empty array(#68 Thx hattya)</li>
 <li>Reset to default color after ls (#67 Thx @hattya)</li>
 </ul>
-<h1 id="nyagos-407-5">NYAGOS 4.0.7_5 <a href="#nyagos-407-5">.</a></h1>
+<h1 id="nyagos-407-5">NYAGOS 4.0.7_5</h1>
 <p>on May 09,2015</p>
 <ul>
 <li>Fix #64 invalid cursor position after Ctrl-T typed.(Not compatible with other shells)</li>
 </ul>
-<h1 id="nyagos-407-4">NYAGOS 4.0.7_4 <a href="#nyagos-407-4">.</a></h1>
+<h1 id="nyagos-407-4">NYAGOS 4.0.7_4</h1>
 <p>on May 05,2015</p>
 <ul>
 <li>Fix bug that filename-completion replacing slash all to backslash.</li>
 <li>Fix #63 ESCAPE-Key let clipboard empty-string. (Thx hokorobi)</li>
 <li>Let Ctrl-U copy erased string to clipboard.</li>
 </ul>
-<h1 id="nyagos-407-3">NYAGOS 4.0.7_3 <a href="#nyagos-407-3">.</a></h1>
+<h1 id="nyagos-407-3">NYAGOS 4.0.7_3</h1>
 <p>on May 05,2015</p>
 <ul>
 <li><code>SET VAR=</code> removes environment variable <code>VAR</code> (Thx @pine613)</li>
 <li>lnk.js with one parameter shows its linked file. (#59 Thx @NSP-0123456)</li>
 <li>Support Ctrl-T (swapchar) (#62)</li>
 </ul>
-<h2 id="bugfix-1">BugFix <a href="#bugfix-1">.</a></h2>
+<h2 id="bugfix-1">BugFix</h2>
 <ul>
 <li>missed a double-quatation after a percent (#57)</li>
 <li>wildcard's case was not ignored (#58)</li>
 <li>completion removed .\ (dot and shash) (#61)</li>
 <li><code>open ARGUMENT(s)</code> did not work</li>
 </ul>
-<h1 id="nyagos-407-2">NYAGOS 4.0.7_2 <a href="#nyagos-407-2">.</a></h1>
+<h1 id="nyagos-407-2">NYAGOS 4.0.7_2</h1>
 <p>on Apr 18,2015</p>
 <ul>
 <li>Fix:on completion, / was always replaced to \ .(Thx @nocd5)</li>
 <li>Fix:nyagos.shellexecute() did not report some errors.</li>
 <li>To use COM on Lua scripts, include and use <a href="https://github.com/zetamatta/nyole">NYOLE.DLL</a>.</li>
 </ul>
-<h1 id="nyagos-407-1">NYAGOS 4.0.7_1 <a href="#nyagos-407-1">.</a></h1>
+<h1 id="nyagos-407-1">NYAGOS 4.0.7_1</h1>
 <p>on Apr 13,2015</p>
 <ul>
 <li>Set arg[..] in nyagos -e &quot;LUA-CODE&quot;.</li>
 </ul>
-<h2 id="bugfix-2">Bugfix <a href="#bugfix-2">.</a></h2>
+<h2 id="bugfix-2">Bugfix</h2>
 <ul>
 <li>In nyagos -f &quot;LUA-FILE&quot;, arg[i]'s elements were shifted.</li>
 </ul>
-<h1 id="nyagos-407-0">NYAGOS 4.0.7_0 <a href="#nyagos-407-0">.</a></h1>
+<h1 id="nyagos-407-0">NYAGOS 4.0.7_0</h1>
 <p>on Apr 15,2015</p>
 <ul>
 <li>Support incremental-search(C-r)</li>
@@ -1322,7 +1333,7 @@
 <li>Set executable's property the version-number</li>
 <li>Change error-message when files do not exists like bash.</li>
 </ul>
-<h1 id="nyagos-406-0">NYAGOS 4.0.6_0 <a href="#nyagos-406-0">.</a></h1>
+<h1 id="nyagos-406-0">NYAGOS 4.0.6_0</h1>
 <p>on Mar 19,2015</p>
 <ul>
 <li>Add built-in command: pushd/popd/dirs</li>
@@ -1331,11 +1342,11 @@
 <li>Add <code>nyagos.completion_hook</code></li>
 <li>Sub-command completion for git, Subversion and Mercurial.</li>
 </ul>
-<h2 id="bugfix-3">Bugfix <a href="#bugfix-3">.</a></h2>
+<h2 id="bugfix-3">Bugfix</h2>
 <ul>
 <li>Completion failed when 0001 is typed where 0001.txt and &quot;0001 copy.txt&quot; were.</li>
 </ul>
-<h1 id="nyagos-405-0">NYAGOS 4.0.5_0 <a href="#nyagos-405-0">.</a></h1>
+<h1 id="nyagos-405-0">NYAGOS 4.0.5_0</h1>
 <p>on Feb 07,2015</p>
 <ul>
 <li>cd -N (N:digit): move the N-th previous directory.</li>
@@ -1343,7 +1354,7 @@
 <li>pwd -N (N:digit): print the N-th previous directory.</li>
 <li>%CD% , %ERRORLEVEL% are able to be completed.</li>
 </ul>
-<h2 id="bugfix-4">Bugfix <a href="#bugfix-4">.</a></h2>
+<h2 id="bugfix-4">Bugfix</h2>
 <ul>
 <li>Lua-function 'include' didn't report error</li>
 <li>Command-name completion printed same-name in diffent directories.</li>
@@ -1352,22 +1363,22 @@
 <li>Could not broken symbolic link with DEL #44</li>
 <li>Files contains '&amp;' was not enclosed with &quot;..&quot; at completion.</li>
 </ul>
-<h2 id="trivial-fix">Trivial fix <a href="#trivial-fix">.</a></h2>
+<h2 id="trivial-fix">Trivial fix</h2>
 <ul>
 <li>make.cmd: add echo off a lot</li>
 <li>Let make.cmd on the top directory without arguments copy EXE top</li>
 </ul>
-<h1 id="nyagos-404-0">NYAGOS 4.0.4_0 <a href="#nyagos-404-0">.</a></h1>
+<h1 id="nyagos-404-0">NYAGOS 4.0.4_0</h1>
 <p>on Jan 19,2015</p>
 <ul>
 <li>Support Lua 5.3</li>
 </ul>
-<h1 id="nyagos-403-2">NYAGOS 4.0.3_2 <a href="#nyagos-403-2">.</a></h1>
+<h1 id="nyagos-403-2">NYAGOS 4.0.3_2</h1>
 <p>on Jan 18,2015</p>
 <ul>
 <li>Command-name completion supports alias and built-in commands.</li>
 </ul>
-<h2 id="bugfix-5">BugFix <a href="#bugfix-5">.</a></h2>
+<h2 id="bugfix-5">BugFix</h2>
 <ul>
 <li><code>pwd</code> did not print correct UNC-Path (#37)</li>
 <li><code>nyagos.gethistory( large-value )</code> crashes nyagos (#38 @1)</li>
@@ -1378,7 +1389,7 @@
 <p>@1 Probably these bugs appeared only on snapshot-build.</p>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents <a href="#contents">.</a></h3>
+<h3 id="contents">Contents</h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1393,7 +1404,7 @@
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
+<h3 id="release-note">Release note</h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>
@@ -1401,5 +1412,5 @@
 <li><a href="history-4.1_en.html">4.1.x</a></li>
 <li><a href="history-4.0_en.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

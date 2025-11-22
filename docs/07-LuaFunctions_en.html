@@ -1,7 +1,6 @@
 <!DOCTYPE html><html><head>
-<title>Lua functions extenteded by NYAGOS
-</title>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - 07-LuaFunctions</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1107,34 +1106,44 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>English / <a href="./07-LuaFunctions_ja.html">Japanese</a></p>
-<h2 id="lua-functions-extenteded-by-nyagos">Lua functions extenteded by NYAGOS <a href="#lua-functions-extenteded-by-nyagos">.</a></h2>
-<h3 id="nyagosaliasname--replaced-string"><code>nyagos.alias.NAME = &quot;REPLACED-STRING&quot;</code> <a href="#nyagosaliasname--replaced-string">.</a></h3>
+<h2 id="lua-functions-extenteded-by-nyagos">Lua functions extenteded by NYAGOS</h2>
+<h3 id="nyagosaliasname--replaced-string"><code>nyagos.alias.NAME = &quot;REPLACED-STRING&quot;</code></h3>
 <p>It defines an alias. These macros are available on &quot;REPLACE-STRING&quot;.</p>
 <ul>
 <li><code>$1</code>,<code>$2</code>,<code>$3</code> ... the number's argument (not removed quotations)</li>
@@ -1142,7 +1151,7 @@
 <li><code>$~1</code>,<code>$~2</code>,<code>$~3</code> ... the number's argument (removed quotations)</li>
 <li><code>$~*</code> ... all arguments (removed quotations)</li>
 </ul>
-<h3 id="nyagosaliasname--functionargsend"><code>nyagos.alias.NAME = function(ARGS)...end</code> <a href="#nyagosaliasname--functionargsend">.</a></h3>
+<h3 id="nyagosaliasname--functionargsend"><code>nyagos.alias.NAME = function(ARGS)...end</code></h3>
 <p>It assigns the function to the command-name <code>&quot;NAME&quot;</code>.
 <code>ARGS</code> is the table:</p>
 <pre><code>{
@@ -1167,56 +1176,56 @@ executes the string(-table) as a new commandline.</p>
 assigned on .nyagos but <code>share[]</code>. You can use share[] as you like.
 Only the member of the table <code>share[]</code> are shared on all Lua-instances
 of nyagos.</p>
-<h3 id="nyagoscompletion-hidden--bool"><code>nyagos.completion_hidden = (bool)</code> <a href="#nyagoscompletion-hidden--bool">.</a></h3>
+<h3 id="nyagoscompletion-hidden--bool"><code>nyagos.completion_hidden = (bool)</code></h3>
 <p>If it is set true, on filename completion, hidden files are also included
 completion list.</p>
-<h3 id="nyagosenvname"><code>nyagos.env.NAME</code> <a href="#nyagosenvname">.</a></h3>
+<h3 id="nyagosenvname"><code>nyagos.env.NAME</code></h3>
 <p>It is linked to the the environment variable, which are able
 to be refered and assigned.</p>
-<h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code> <a href="#nyagosfieldstext">.</a></h3>
+<h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code></h3>
 <p>It splits TEXT with white-spaces and returns them as table of strings.</p>
-<h3 id="errorlevelerrormessage--nyagosexeccommand"><code>errorlevel,errormessage = nyagos.exec(&quot;COMMAND&quot;)</code> <a href="#errorlevelerrormessage--nyagosexeccommand">.</a></h3>
-<h3 id="errorlevelerrormessage--nyagosexecexenameparam1param2"><code>errorlevel,errormessage = nyagos.exec{&quot;EXENAME&quot;,&quot;PARAM1&quot;,&quot;PARAM2&quot;,...}</code> <a href="#errorlevelerrormessage--nyagosexecexenameparam1param2">.</a></h3>
+<h3 id="errorlevelerrormessage--nyagosexeccommand"><code>errorlevel,errormessage = nyagos.exec(&quot;COMMAND&quot;)</code></h3>
+<h3 id="errorlevelerrormessage--nyagosexecexenameparam1param2"><code>errorlevel,errormessage = nyagos.exec{&quot;EXENAME&quot;,&quot;PARAM1&quot;,&quot;PARAM2&quot;,...}</code></h3>
 <p>It executes &quot;COMMAND&quot; as shell command. It can call not only external commands,
 but also nyagos built-in commands. When it calls a batchfile, nyagos imports
 their changes of enviroment variables.</p>
 <p>It returns the integer-value for %ERRORLEVEL% and the error-message.
 With no error, they are 0 and nil.</p>
-<h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2"><code>errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)</code> <a href="#errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2">.</a></h3>
-<h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2-1"><code>errorlevel,errormessage = nyagos.rawexec{'COMMAND-NAME','ARG-1','ARG-2'...}</code> <a href="#errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2-1">.</a></h3>
+<h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2"><code>errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)</code></h3>
+<h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2-1"><code>errorlevel,errormessage = nyagos.rawexec{'COMMAND-NAME','ARG-1','ARG-2'...}</code></h3>
 <p>It executes &quot;COMMAND-NAME&quot; with ARGs. COMMAND-NAME is not interpreted as
 a built-in command nor an alias. The difference with os.execute is that
 the errormessage is written with utf8.</p>
-<h3 id="output--nyagosevalcommand"><code>OUTPUT = nyagos.eval(&quot;COMMAND&quot;)</code> <a href="#output--nyagosevalcommand">.</a></h3>
+<h3 id="output--nyagosevalcommand"><code>OUTPUT = nyagos.eval(&quot;COMMAND&quot;)</code></h3>
 <p>It executes &quot;COMMAND&quot; and set its standard output into the lua-variable OUTPUT.
 When error occures, OUTPUT is set <code>nil</code>.</p>
-<h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2"><code>OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)</code> <a href="#outputerr--nyagosrawevalcommand-namearg-1arg-2">.</a></h3>
-<h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2-1"><code>OUTPUT,ERR = nyagos.raweval{'COMMAND-NAME','ARG-1','ARG-2'...}</code> <a href="#outputerr--nyagosrawevalcommand-namearg-1arg-2-1">.</a></h3>
+<h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2"><code>OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)</code></h3>
+<h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2-1"><code>OUTPUT,ERR = nyagos.raweval{'COMMAND-NAME','ARG-1','ARG-2'...}</code></h3>
 <p>It executes &quot;COMMAND-NAME&quot; with ARGs and returns commands' standard-output.
 COMMAND-NAME is not intepreted as a built-in command nor an alias.</p>
-<h3 id="wd--nyagosgetwd"><code>WD = nyagos.getwd()</code> <a href="#wd--nyagosgetwd">.</a></h3>
+<h3 id="wd--nyagosgetwd"><code>WD = nyagos.getwd()</code></h3>
 <p>Get current working directory.</p>
-<h3 id="nyagoschdirdirectory"><code>nyagos.chdir('DIRECTORY')</code> <a href="#nyagoschdirdirectory">.</a></h3>
+<h3 id="nyagoschdirdirectory"><code>nyagos.chdir('DIRECTORY')</code></h3>
 <p>Set new current working directory.</p>
-<h3 id="nyagoswritetext"><code>nyagos.write(&quot;TEXT&quot;)</code> <a href="#nyagoswritetext">.</a></h3>
+<h3 id="nyagoswritetext"><code>nyagos.write(&quot;TEXT&quot;)</code></h3>
 <p>It output &quot;TEXT&quot; to the standard output with UTF8.</p>
-<h3 id="nyagoswriterrtext"><code>nyagos.writerr(&quot;TEXT&quot;)</code> <a href="#nyagoswriterrtext">.</a></h3>
+<h3 id="nyagoswriterrtext"><code>nyagos.writerr(&quot;TEXT&quot;)</code></h3>
 <p>It output &quot;TEXT&quot; to the standard error with UTF8.</p>
-<h3 id="ansistring--nyagosutoautf8string"><code>ANSISTRING = nyagos.utoa(UTF8STRING)</code> <a href="#ansistring--nyagosutoautf8string">.</a></h3>
+<h3 id="ansistring--nyagosutoautf8string"><code>ANSISTRING = nyagos.utoa(UTF8STRING)</code></h3>
 <p>It converts UTF8 string to the current code page multibyte string.</p>
-<h3 id="utf8string--nyagosatouansistring"><code>UTF8STRING = nyagos.atou(ANSISTRING)</code> <a href="#utf8string--nyagosatouansistring">.</a></h3>
+<h3 id="utf8string--nyagosatouansistring"><code>UTF8STRING = nyagos.atou(ANSISTRING)</code></h3>
 <p>It converts the current codepage multibyte string to UTF8 string.</p>
-<h3 id="utf8string--nyagosatou-if-neededstring"><code>UTF8STRING = nyagos.atou_if_needed(STRING)</code> <a href="#utf8string--nyagosatou-if-neededstring">.</a></h3>
+<h3 id="utf8string--nyagosatou-if-neededstring"><code>UTF8STRING = nyagos.atou_if_needed(STRING)</code></h3>
 <p>If STRING is not a valid UTF8 string, try convert it
 as the current codepage multibyte string to UTF8 string.</p>
-<h3 id="files--nyagosglobwildcard-pattern1wildcard-pattern2"><code>FILES = nyagos.glob(&quot;WILDCARD-PATTERN1&quot;,&quot;WILDCARD-PATTERN2&quot;...)</code> <a href="#files--nyagosglobwildcard-pattern1wildcard-pattern2">.</a></h3>
+<h3 id="files--nyagosglobwildcard-pattern1wildcard-pattern2"><code>FILES = nyagos.glob(&quot;WILDCARD-PATTERN1&quot;,&quot;WILDCARD-PATTERN2&quot;...)</code></h3>
 <p>It returns the table which includes files matching the wildcard pattern(s).</p>
-<h3 id="path--nyagospathjoinpathtowhere"><code>path = nyagos.pathjoin('path','to','where'...)</code> <a href="#path--nyagospathjoinpathtowhere">.</a></h3>
+<h3 id="path--nyagospathjoinpathtowhere"><code>path = nyagos.pathjoin('path','to','where'...)</code></h3>
 <p>It makes parts of path-string join. It expands %ENVNAME% and ~/</p>
-<h3 id="path--nyagosdirnamecpathtowhere"><code>path = nyagos.dirname('C:\\path\\to\\where')</code> <a href="#path--nyagosdirnamecpathtowhere">.</a></h3>
+<h3 id="path--nyagosdirnamecpathtowhere"><code>path = nyagos.dirname('C:\\path\\to\\where')</code></h3>
 <p>It returns the directory-part of each argument.
 The sample code returns <code>C:\\path\\to</code>.</p>
-<h3 id="nyagosenvaddenvnamepath"><code>nyagos.envadd('ENVNAME','PATH'...)</code> <a href="#nyagosenvaddenvnamepath">.</a></h3>
+<h3 id="nyagosenvaddenvnamepath"><code>nyagos.envadd('ENVNAME','PATH'...)</code></h3>
 <p><code>nyagos.envadd(&quot;PATH&quot;,&quot;C:\\path\\to&quot;)</code> equals to
 <code>set PATH=%PATH%;C:\path\to</code> except when %PATH%
 already contains <code>C:\path\to</code> or <code>C:\path\to</code>
@@ -1235,7 +1244,7 @@ does not exist.</p>
     &quot;~\\Share\\bin&quot;,
     &quot;~\\Share\\cmds&quot;)
 </code></pre>
-<h3 id="nyagosenvdelenvnamepattern"><code>nyagos.envdel('ENVNAME','PATTERN')</code> <a href="#nyagosenvdelenvnamepattern">.</a></h3>
+<h3 id="nyagosenvdelenvnamepattern"><code>nyagos.envdel('ENVNAME','PATTERN')</code></h3>
 <p>It removes the field which contains PATTERN
 from the environment variable pointed by ENVNAME.</p>
 <p>For example:</p>
@@ -1244,15 +1253,16 @@ from the environment variable pointed by ENVNAME.</p>
     &quot;TypeScript&quot;,&quot;WindowsApps&quot;,
     &quot;Wbem&quot;,&quot;dotnet&quot;)
 </code></pre>
-<h3 id="nyagosbindkeykeynamefuncname"><code>nyagos.bindkey(&quot;KEYNAME&quot;,&quot;FUNCNAME&quot;)</code> <a href="#nyagosbindkeykeynamefuncname">.</a></h3>
-<h3 id="nyagoskeykeyname--funcname"><code>nyagos.key[&quot;KEYNAME&quot;] = &quot;FUNCNAME&quot;</code> <a href="#nyagoskeykeyname--funcname">.</a></h3>
-<h3 id="nyagoskeykeyname--funcname-1"><code>nyagos.key.KEYNAME = &quot;FUNCNAME&quot;</code> <a href="#nyagoskeykeyname--funcname-1">.</a></h3>
+<h3 id="nyagosbindkeykeynamefuncname"><code>nyagos.bindkey(&quot;KEYNAME&quot;,&quot;FUNCNAME&quot;)</code></h3>
+<h3 id="nyagoskeykeyname--funcname"><code>nyagos.key[&quot;KEYNAME&quot;] = &quot;FUNCNAME&quot;</code></h3>
+<h3 id="nyagoskeykeyname--funcname-1"><code>nyagos.key.KEYNAME = &quot;FUNCNAME&quot;</code></h3>
 <p>KEYNAME are:</p>
 <pre><code>    &quot;C_A&quot; &quot;C_B&quot; ... &quot;C_Z&quot; &quot;M_A&quot; &quot;M_B&quot; ... &quot;M_Z&quot;
     &quot;F1&quot; &quot;F2&quot; ...&quot;F24&quot;
     &quot;BACKSPACE&quot; &quot;CTRL&quot; &quot;DEL&quot; &quot;DOWN&quot; &quot;END&quot;
     &quot;ENTER&quot; &quot;ESCAPE&quot; &quot;HOME&quot; &quot;LEFT&quot; &quot;RIGHT&quot; &quot;SHIFT&quot; &quot;UP&quot;
     &quot;C_BREAK&quot; &quot;CAPSLOCK&quot; &quot;PAGEUP&quot;, &quot;PAGEDOWN&quot; &quot;PAUSE&quot;
+    &quot;C_HOME&quot; &quot;C_END&quot; &quot;C_PAGEUP&quot; &quot;C_PAGEDOWN&quot;
 </code></pre>
 <p>FUNCNAME are:</p>
 <pre><code>    &quot;BACKWARD_DELETE_CHAR&quot; &quot;BACKWARD_CHAR&quot; &quot;CLEAR_SCREEN&quot; &quot;DELETE_CHAR&quot;
@@ -1263,9 +1273,9 @@ from the environment variable pointed by ENVNAME.</p>
 </code></pre>
 <p>If it succeeded, it returns true only. Failed, it returns nil and error-message.
 Cases are ignores and, the character '-' is same as '_'.</p>
-<h3 id="nyagosbindkeykeynamefunctionthisend"><code>nyagos.bindkey(&quot;KEYNAME&quot;,function(this)...end)</code> <a href="#nyagosbindkeykeynamefunctionthisend">.</a></h3>
-<h3 id="nyagoskeykeyname--functionthisend"><code>nyagos.key.KEYNAME = function(this)...end</code> <a href="#nyagoskeykeyname--functionthisend">.</a></h3>
-<h3 id="nyagoskeykeyname--functionthisend-1"><code>nyagos.key[&quot;KEYNAME&quot;] = function(this)...end</code> <a href="#nyagoskeykeyname--functionthisend-1">.</a></h3>
+<h3 id="nyagosbindkeykeynamefunctionthisend"><code>nyagos.bindkey(&quot;KEYNAME&quot;,function(this)...end)</code></h3>
+<h3 id="nyagoskeykeyname--functionthisend"><code>nyagos.key.KEYNAME = function(this)...end</code></h3>
+<h3 id="nyagoskeykeyname--functionthisend-1"><code>nyagos.key[&quot;KEYNAME&quot;] = function(this)...end</code></h3>
 <p>When the key is pressed, call the function.</p>
 <p><code>this</code> is the table which have these members.</p>
 <ul>
@@ -1285,14 +1295,14 @@ Cases are ignores and, the character '-' is same as '_'.</p>
 <li>When it is <code>false</code>, drop line as same as Ctrl-C is pressed.</li>
 <li>When it is <code>nil</code>, it is ignored.</li>
 </ul>
-<h3 id="nyagosfilter--functioncmdline--end"><code>nyagos.filter = function(cmdline) ... end</code> <a href="#nyagosfilter--functioncmdline--end">.</a></h3>
+<h3 id="nyagosfilter--functioncmdline--end"><code>nyagos.filter = function(cmdline) ... end</code></h3>
 <p><code>nyagos.filter</code> can modify user input command-line.
 If it returns string, NYAGOS.exe replace the command-line-string it.</p>
-<h3 id="nyagosargsfilter--functionargs--end"><code>nyagos.argsfilter = function(args) ... end</code> <a href="#nyagosargsfilter--functionargs--end">.</a></h3>
+<h3 id="nyagosargsfilter--functionargs--end"><code>nyagos.argsfilter = function(args) ... end</code></h3>
 <p><code>nyagos.argsfilter</code> is like <code>nyaos.filter</code>, but its argument are
 not a string but a table as string array which has each command
 arguments.</p>
-<h3 id="s--nyagosprompttemplate"><code>s = nyagos.prompt(template)</code> <a href="#s--nyagosprompttemplate">.</a></h3>
+<h3 id="s--nyagosprompttemplate"><code>s = nyagos.prompt(template)</code></h3>
 <p><code>nyagos.prompt</code> should be assigned the function which creates and
 returns the string for prompt.
 ( Until v4.4.13, <code>nyagos.prompt</code> is expected to output the prompt string
@@ -1305,18 +1315,18 @@ end
 </code></pre>
 <p><code>nyagos.default_prompt</code> is the default prompt function which can
 change the title of the terminal-window with the second parameter.</p>
-<h3 id="nyagosgethistoryn-and-nyagoshistoryn"><code>nyagos.gethistory(N)</code> and <code>nyagos.history[N]</code> <a href="#nyagosgethistoryn-and-nyagoshistoryn">.</a></h3>
+<h3 id="nyagosgethistoryn-and-nyagoshistoryn"><code>nyagos.gethistory(N)</code> and <code>nyagos.history[N]</code></h3>
 <p>Get the n-th command-line history. When N &lt; 0, last (-N)-th history.</p>
-<h3 id="nyagosgethistory-and-nyagoshistory"><code>nyagos.gethistory()</code> and <code>#nyagos.history</code> <a href="#nyagosgethistory-and-nyagoshistory">.</a></h3>
+<h3 id="nyagosgethistory-and-nyagoshistory"><code>nyagos.gethistory()</code> and <code>#nyagos.history</code></h3>
 <p>Get the count of the command-line history.</p>
-<h3 id="nyagoshistsize"><code>nyagos.histsize</code> <a href="#nyagoshistsize">.</a></h3>
+<h3 id="nyagoshistsize"><code>nyagos.histsize</code></h3>
 <p>The max number of entries of history to save to disk.</p>
-<h3 id="nyagosaccesspathmode"><code>nyagos.access(PATH,MODE)</code> <a href="#nyagosaccesspathmode">.</a></h3>
+<h3 id="nyagosaccesspathmode"><code>nyagos.access(PATH,MODE)</code></h3>
 <p>Returns the boolean value whether the PATH can be access with MODE.
 It equals the access function of the programming language C.</p>
-<h3 id="result--nyagosbox-choices-"><code>RESULT = nyagos.box({ CHOICES... })</code> <a href="#result--nyagosbox-choices-">.</a></h3>
+<h3 id="result--nyagosbox-choices-"><code>RESULT = nyagos.box({ CHOICES... })</code></h3>
 <p>Returns the choice which user select with cursor-keys</p>
-<h3 id="nyagoscomplete-forcommand--functionargs--end"><code>nyagos.complete_for[&quot;COMMAND&quot;] = function(args) ... end</code> <a href="#nyagoscomplete-forcommand--functionargs--end">.</a></h3>
+<h3 id="nyagoscomplete-forcommand--functionargs--end"><code>nyagos.complete_for[&quot;COMMAND&quot;] = function(args) ... end</code></h3>
 <p>This is the tiny hook for completion per command.</p>
 <p>The function is called when the first word is <code>COMMAND</code> and
 <code>args</code> is set the array contains the words which exist before the cursor.</p>
@@ -1334,7 +1344,7 @@ end
 </code></pre>
 <p>The function can return not matching words. <code>nyagos.exe</code> removes them.
 When nil is returned, <code>nyagos.exe</code> completes the word as a filename.</p>
-<h3 id="nyagoscompletion-hook--functionc--end"><code>nyagos.completion_hook = function(c) ... end</code> <a href="#nyagoscompletion-hook--functionc--end">.</a></h3>
+<h3 id="nyagoscompletion-hook--functionc--end"><code>nyagos.completion_hook = function(c) ... end</code></h3>
 <p>This is the Hook for completion. It should be assigned a function.
 The argument <code>c</code> is the table which has these members.</p>
 <pre><code>c.list[1] .. c.list[#c.list] - command/filename completion result
@@ -1348,21 +1358,21 @@ c.left - string before cursor
 </code></pre>
 <p><code>nyagos.completion_hook</code> should return updated list(table) or <code>nil</code>.
 Returning nil equals to returning c.list with no change.</p>
-<h3 id="nyagoscompletion-slash--true-or-false"><code>nyagos.completion_slash = true OR false</code> <a href="#nyagoscompletion-slash--true-or-false">.</a></h3>
+<h3 id="nyagoscompletion-slash--true-or-false"><code>nyagos.completion_slash = true OR false</code></h3>
 <p>When it is assigned true, filename-completion uses a slash as the
 path-seperator as default. Otherwise it uses backslash.</p>
-<h3 id="nyagoson-command-not-found--functionargs--end"><code>nyagos.on_command_not_found = function(args) ... end</code> <a href="#nyagoson-command-not-found--functionargs--end">.</a></h3>
+<h3 id="nyagoson-command-not-found--functionargs--end"><code>nyagos.on_command_not_found = function(args) ... end</code></h3>
 <p>It is called when the command which user typed is not found.
 The command-name and parameters are set to args[0]...args[#args].
 If the function returns nil or false, nyagos.exe prints errors of
 usual.</p>
 <p>Since the function runs the other Lua-instance, accesss to variables
 assigned on .nyagos have the same restriction with aliases.</p>
-<h3 id="nyagosgetkey"><code>nyagos.getkey()</code> <a href="#nyagosgetkey">.</a></h3>
+<h3 id="nyagosgetkey"><code>nyagos.getkey()</code></h3>
 <p>It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.</p>
-<h3 id="widthheightnyagosgetviewwidth"><code>WIDTH,HEIGHT=nyagos.getviewwidth()</code> <a href="#widthheightnyagosgetviewwidth">.</a></h3>
+<h3 id="widthheightnyagosgetviewwidth"><code>WIDTH,HEIGHT=nyagos.getviewwidth()</code></h3>
 <p>It returns the width and height of the terminal.</p>
-<h3 id="stat--nyagosstatfilename"><code>STAT = nyagos.stat(FILENAME)</code> <a href="#stat--nyagosstatfilename">.</a></h3>
+<h3 id="stat--nyagosstatfilename"><code>STAT = nyagos.stat(FILENAME)</code></h3>
 <p>It returns the file's information.
 If the file exists, the table STAT has these members.</p>
 <pre><code>STAT.name
@@ -1376,16 +1386,16 @@ STAT.mtime.minute
 STAT.mtime.second
 </code></pre>
 <p>If the file does not exist, STAT is nil.</p>
-<h3 id="nyagosopenpathmode"><code>nyagos.open(PATH,MODE)</code> <a href="#nyagosopenpathmode">.</a></h3>
+<h3 id="nyagosopenpathmode"><code>nyagos.open(PATH,MODE)</code></h3>
 <p>Same as io.open but PATH must be written in UTF8.</p>
-<h3 id="nyagosloadfilepath"><code>nyagos.loadfile(PATH)</code> <a href="#nyagosloadfilepath">.</a></h3>
+<h3 id="nyagosloadfilepath"><code>nyagos.loadfile(PATH)</code></h3>
 <p>Same as loadfile on root-namespace but PATH must be written in UTF8.</p>
-<h3 id="nyagoslinespath"><code>nyagos.lines(PATH)</code> <a href="#nyagoslinespath">.</a></h3>
+<h3 id="nyagoslinespath"><code>nyagos.lines(PATH)</code></h3>
 <p>Same as io.lines but PATH must be written in UTF8.</p>
 <pre><code>for text in nyagos.lines(PATH) do ... end
 </code></pre>
 <p><code>text</code> is bytearray as same as io.lines().</p>
-<h3 id="oleobject--nyagoscreate-objectservernametypename"><code>OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')</code> <a href="#oleobject--nyagoscreate-objectservernametypename">.</a></h3>
+<h3 id="oleobject--nyagoscreate-objectservernametypename"><code>OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')</code></h3>
 <p>Create OLEObject. OLEOBJECTs have methods and property.</p>
 <ul>
 <li>Method
@@ -1406,35 +1416,35 @@ STAT.mtime.second
 </ul>
 </li>
 </ul>
-<h3 id="integer-for-ole--nyagosto-ole-integer10"><code>INTEGER_FOR_OLE = nyagos.to_ole_integer(10)</code> <a href="#integer-for-ole--nyagosto-ole-integer10">.</a></h3>
+<h3 id="integer-for-ole--nyagosto-ole-integer10"><code>INTEGER_FOR_OLE = nyagos.to_ole_integer(10)</code></h3>
 <p>Convert a float number to integer which can be used as the parameter
 to OLE-Object only. This function is made for <code>nyagos.d/trash.lua</code>.</p>
-<h3 id="nyagosoptionglob"><code>nyagos.option.glob</code> <a href="#nyagosoptionglob">.</a></h3>
+<h3 id="nyagosoptionglob"><code>nyagos.option.glob</code></h3>
 <p>If it is true , enables the wildcard expansion on external commands also.</p>
-<h3 id="nyagosoptionnoclobber"><code>nyagos.option.noclobber</code> <a href="#nyagosoptionnoclobber">.</a></h3>
+<h3 id="nyagosoptionnoclobber"><code>nyagos.option.noclobber</code></h3>
 <p>If it is true , overwriting the existing file by redirect is forbidden.</p>
 <p>The redirect marks <code>&gt;|</code> and <code>&gt;!</code> can overwrite a file whenever
 nyagos.option.noclobber is true.</p>
-<h3 id="nyagosoptionusesource"><code>nyagos.option.usesource</code> <a href="#nyagosoptionusesource">.</a></h3>
+<h3 id="nyagosoptionusesource"><code>nyagos.option.usesource</code></h3>
 <p>If it is true(=default), batchfiles can change the environment variable of
 nyagos. False, you have to use <code>source BATCHFILE</code> to read the changes of
 the environment variables from batchfiles.</p>
-<h3 id="nyagosoptioncleaup-buffer"><code>nyagos.option.cleaup_buffer</code> <a href="#nyagosoptioncleaup-buffer">.</a></h3>
+<h3 id="nyagosoptioncleaup-buffer"><code>nyagos.option.cleaup_buffer</code></h3>
 <p>When it is true, clean up console input buffer before readline.</p>
-<h3 id="nyagosoptionpredict-color"><code>nyagos.option.predict_color</code> <a href="#nyagosoptionpredict-color">.</a></h3>
+<h3 id="nyagosoptionpredict-color"><code>nyagos.option.predict_color</code></h3>
 <p>It customizes the color of input prediction.</p>
 <p>e.g., <code>nyagos.option.predict_color = &quot;\027[0;31;1m&quot;</code> (red).</p>
-<h3 id="nyagosgoversion"><code>nyagos.goversion</code> <a href="#nyagosgoversion">.</a></h3>
+<h3 id="nyagosgoversion"><code>nyagos.goversion</code></h3>
 <p>Go-version string to build nyagos.exe
 (for example, &quot;go1.6&quot;)</p>
-<h3 id="nyagosgoarch"><code>nyagos.goarch</code> <a href="#nyagosgoarch">.</a></h3>
+<h3 id="nyagosgoarch"><code>nyagos.goarch</code></h3>
 <p>The string compilation architecture of nyagos.exe.
 (for example, &quot;386&quot; or &quot;amd64&quot; )</p>
-<h3 id="nyagosgoos"><code>nyagos.goos</code> <a href="#nyagosgoos">.</a></h3>
+<h3 id="nyagosgoos"><code>nyagos.goos</code></h3>
 <p>The string indicating OS name (<code>windows</code> or <code>linux</code>)</p>
-<h3 id="nyagospreexechook"><code>nyagos.preexechook</code> <a href="#nyagospreexechook">.</a></h3>
+<h3 id="nyagospreexechook"><code>nyagos.preexechook</code></h3>
 <p>The hook before calling commands.</p>
-<h4 id="to-register">To register: <a href="#to-register">.</a></h4>
+<h4 id="to-register">To register:</h4>
 <pre><code>nyagos.preexechook = function(args)
     io.write(&quot;Call &quot;)
     for i=1,#args do
@@ -1443,12 +1453,12 @@ the environment variables from batchfiles.</p>
     io.write(&quot;\n&quot;)
 end
 </code></pre>
-<h4 id="to-unregister">To unregister: <a href="#to-unregister">.</a></h4>
+<h4 id="to-unregister">To unregister:</h4>
 <pre><code>nyagos.preexechook = nil
 </code></pre>
-<h3 id="nyagospostexechook"><code>nyagos.postexechook</code> <a href="#nyagospostexechook">.</a></h3>
+<h3 id="nyagospostexechook"><code>nyagos.postexechook</code></h3>
 <p>The hook after calling commands.</p>
-<h4 id="to-register-1">To register: <a href="#to-register-1">.</a></h4>
+<h4 id="to-register-1">To register:</h4>
 <pre><code>nyagos.postexechook = function(args)
     io.write(&quot;Done &quot;)
     for i=1,#args do
@@ -1457,12 +1467,12 @@ end
     io.write(&quot;\n&quot;)
 end
 </code></pre>
-<h4 id="to-unregister-1">To unregister: <a href="#to-unregister-1">.</a></h4>
+<h4 id="to-unregister-1">To unregister:</h4>
 <pre><code>nyagos.postexechook = nil
 </code></pre>
-<h3 id="nyagosexe"><code>nyagos.exe</code> <a href="#nyagosexe">.</a></h3>
+<h3 id="nyagosexe"><code>nyagos.exe</code></h3>
 <p>This string variable has the value of the fullpath of nyagos.exe.</p>
-<h3 id="nyagosskk"><code>nyagos.skk</code> <a href="#nyagosskk">.</a></h3>
+<h3 id="nyagosskk"><code>nyagos.skk</code></h3>
 <p>Setup SKK</p>
 <pre><code>nyagos.skk{
     user=&quot;~/.go-skk-jisyo&quot; , -- user dictionary
@@ -1471,7 +1481,7 @@ end
     ctrlj=&quot;C-J&quot;, -- key to switch Japanese input mode (default:ctrl-j)
 }
 </code></pre>
-<h3 id="nyagosshellexecuteactionpathparamdirectory"><code>nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)</code> <a href="#nyagosshellexecuteactionpathparamdirectory">.</a></h3>
+<h3 id="nyagosshellexecuteactionpathparamdirectory"><code>nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)</code></h3>
 <p>Start an executable as administrator-mode</p>
 <ul>
 <li><code>ACTION</code> … <code>&quot;runas&quot;</code>, <code>&quot;open&quot;</code>, or <code>&quot;properties&quot;</code></li>
@@ -1482,7 +1492,7 @@ end
 <!-- raw HTML omitted -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents <a href="#contents">.</a></h3>
+<h3 id="contents">Contents</h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1497,7 +1507,7 @@ end
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
+<h3 id="release-note">Release note</h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>
@@ -1505,5 +1515,5 @@ end
 <li><a href="history-4.1_en.html">4.1.x</a></li>
 <li><a href="history-4.0_en.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

@@ -1,7 +1,6 @@
 <!DOCTYPE html><html><head>
-<title>起動処理
-</title>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - 05-Startup</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1107,33 +1106,43 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p><a href="./05-Startup_en.html">English</a> / Japanese</p>
-<h2 id="heading">起動処理 <a href="#heading">.</a></h2>
+<h2 id="%E8%B5%B7%E5%8B%95%E5%87%A6%E7%90%86">起動処理</h2>
 <p>起動時、nyagos.exe は以下のファイルをロード・実行します。</p>
 <ul>
 <li><code>(nyagos.exe と同じディレクトリ)\.nyagos</code> (Luaで記述)</li>
@@ -1147,7 +1156,7 @@ NYAGOS 終了時には、このファイルに再び最後のヒストリ内容�
 <!-- raw HTML omitted -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="heading">目次 <a href="#heading">.</a></h3>
+<h3 id="%E7%9B%AE%E6%AC%A1">目次</h3>
 <ol>
 <li><a href="./index_ja.html">Top</a></li>
 <li><a href="01-Install_ja.html">インストール</a></li>
@@ -1162,7 +1171,7 @@ NYAGOS 終了時には、このファイルに再び最後のヒストリ内容�
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
-<h3 id="heading-1">リリースノート <a href="#heading-1">.</a></h3>
+<h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="release_note_ja.html">4.4.x</a></li>
 <li><a href="history-4.3_ja.html">4.3.x</a></li>
@@ -1170,5 +1179,5 @@ NYAGOS 終了時には、このファイルに再び最後のヒストリ内容�
 <li><a href="history-4.1_ja.html">4.1.x</a></li>
 <li><a href="history-4.0_ja.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>

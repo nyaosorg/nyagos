@@ -1,6 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>廃止・非推奨
-</title>
+<title>NYAOS.ORG/NYAGOS - release_note</title>
 <style type="text/css">
 /* light */
 .markdown-body {
@@ -1143,6 +1142,13 @@ a.permalink:hover{
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>( <a href="release_note_en.html">English</a> / <strong>Japanese</strong> )</p>
+<h3 id="%E5%86%85%E9%83%A8%E7%9A%84%E3%81%AA%E5%A4%89%E6%9B%B4">内部的な変更</h3>
+<ul>
+<li><a href="https://github.com/nyaosorg/go-box">github.com/nyaosorg/go-box</a> を v2.2.1 から v3.0.0 にバージョンアップした (#453)</li>
+<li><code>nyagos.getkeys</code> 内で使用していたが、Deprecated となっていた <a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey">readline.GetKey</a> を <a href="https://github.com/nyaosorg/go-ttyadapter">go-ttyadapter</a>/tty8 に置き換えた (#454)</li>
+<li>nilに対するlen()は0だから、nil チェックを省略すべきという staticcheck の warning を解消した (#455)</li>
+<li>go-readline-ny での冗長な文字幅データのキャッシュ機能廃止にともなって Deprecated となった関数を使っていた、メンテ・調査用の非公開Lua関数 <code>nyagos.resetcharwidth</code>, <code>nyagos.setrunewidth</code> を廃止した (#457)</li>
+</ul>
 <h1 id="v4418-0">v4.4.18_0</h1>
 <p>Oct 25, 2025</p>
 <ul>

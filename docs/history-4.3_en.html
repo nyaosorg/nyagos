@@ -1,5 +1,6 @@
 <!DOCTYPE html><html><head>
-<style type="text/css"><!--
+<title>NYAOS.ORG/NYAGOS - history-4.3</title>
+<style type="text/css">
 /* light */
 .markdown-body {
   color-scheme: light;
@@ -1105,33 +1106,43 @@
   min-height: 52px;
 }
 
+.markdown-body {
+  box-sizing: border-box;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 45px;
+}
+body{
+  display:flex;
+  overflow-y: scroll;
+}
+@media screen{
+  div.sidebar{ width:30% }
+  div.main{ width:70% }
+}
 
-	.markdown-body {
-		box-sizing: border-box;
-		max-width: 980px;
-		margin: 0 auto;
-		padding: 45px;
-	}
-	body{
-		display:flex;
-		overflow-y: scroll;
-	}
-	@media screen{
-		div.sidebar{ width:30% }
-		div.main{ width:70% }
-	}
+@media print{
+  div.sidebar,div.footer{ display:none }
+  div.main{ width:100% }
+}
+a.permalink{
+  font-size: 0.75em;
+  vertical-align: super;
+  text-decoration: none;
+  margin-left: 0.3em;
+  color: #888;
+}
+a.permalink:hover{
+  color: #000;
+  text-decoration: underline;
+}
 
-	@media print{
-		div.sidebar,div.footer{ display:none }
-		div.main{ width:100%!}(MISSING)
-	}
-
-// -->
-</style></head><body>
+</style>
+</head><body>
 <div class="main markdown-body">
-<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell <a href="#nyagos---the-nihongo-yet-another-going-shell">.</a></h1>
+<h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
 <p>English / <a href="history-4.3_ja.html">Japanese</a></p>
-<h1 id="nyagos-433-5">NYAGOS 4.3.3_5 <a href="#nyagos-433-5">.</a></h1>
+<h1 id="nyagos-433-5">NYAGOS 4.3.3_5</h1>
 <p>on Dec.24,2018</p>
 <ul>
 <li>(#345) Fix subcomplete.lua don't work git (Thx! @tsuyoshicho)</li>
@@ -1142,7 +1153,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-433-4">NYAGOS 4.3.3_4 <a href="#nyagos-433-4">.</a></h1>
+<h1 id="nyagos-433-4">NYAGOS 4.3.3_4</h1>
 <p>on Dec.13,2018</p>
 <ul>
 <li>If stdin is not terminal, <code>more</code> command runs as <code>type</code>.</li>
@@ -1150,7 +1161,7 @@
 <li>(#340) Add lua variable <code>nyagos.histsize</code> to set the number of entries for history to save disk. (Thx! @crile)</li>
 <li>(#343) When %COMSPEC% is empty, use CMD.EXE (Thx! @orz--)</li>
 </ul>
-<h1 id="nyagos-433-3">NYAGOS 4.3.3_3 <a href="#nyagos-433-3">.</a></h1>
+<h1 id="nyagos-433-3">NYAGOS 4.3.3_3</h1>
 <p>on Oct.23,2018</p>
 <ul>
 <li>(#310) copy and move support shortcut files(<code>*.lnk</code>) as destination.</li>
@@ -1161,7 +1172,7 @@
 <li>(#336) Fix <code>io.write</code> did not work with -e and --lua-file</li>
 <li>(#337) Fix the crash the batchfile exit with -1 (Thx! @hogewest)</li>
 </ul>
-<h1 id="nyagos-433-2">NYAGOS 4.3.3_2 <a href="#nyagos-433-2">.</a></h1>
+<h1 id="nyagos-433-2">NYAGOS 4.3.3_2</h1>
 <p>on Sep.22,2018</p>
 <ul>
 <li>Append error message the filename on overwriting to existing file on redirect.</li>
@@ -1173,7 +1184,7 @@
 <li>Fix the broken alias &quot;for&quot;</li>
 <li>Fix on completion the path separating characters were replaced to default one even if the word was not filepath for #334</li>
 </ul>
-<h1 id="nyagos-433-1">NYAGOS 4.3.3_1 <a href="#nyagos-433-1">.</a></h1>
+<h1 id="nyagos-433-1">NYAGOS 4.3.3_1</h1>
 <p>on Aug.29,2018</p>
 <ul>
 <li>#330,#331 Fix the original version of file:read incompatible behavior (Thx! @erw7)</li>
@@ -1186,7 +1197,7 @@
 <li>Fix: trash was left when incremental-search starts and some string exists on command-line.</li>
 <li>Shrink the executable with -lfdflags=&quot;-s -w&quot;</li>
 </ul>
-<h1 id="nyagos-433-0">NYAGOS 4.3.3_0 <a href="#nyagos-433-0">.</a></h1>
+<h1 id="nyagos-433-0">NYAGOS 4.3.3_0</h1>
 <p>on Aug.14,2018</p>
 <ul>
 <li>#283 Omit the directory of path on completion by Ctrl-O</li>
@@ -1200,7 +1211,7 @@
 <li>#185 Add <code>ps</code> and <code>kill</code> command</li>
 <li>#329 Use <code>float64</code> instead of <code>int</code> for the number-type of Lua</li>
 </ul>
-<h1 id="nyagos-432-0">NYAGOS 4.3.2_0 <a href="#nyagos-432-0">.</a></h1>
+<h1 id="nyagos-432-0">NYAGOS 4.3.2_0</h1>
 <p>on Jul.23,2018</p>
 <ul>
 <li>#319 Support lua <code>bit32.*</code> all by github.com/BixData/gluabit32</li>
@@ -1211,7 +1222,7 @@
 <li>#325 Fix: <code>source</code> could not load the path which contains spaces.</li>
 <li>Add options: <code>--lua-first</code> and <code>--cmd-first</code></li>
 </ul>
-<h1 id="nyagos-431-3">NYAGOS 4.3.1_3 <a href="#nyagos-431-3">.</a></h1>
+<h1 id="nyagos-431-3">NYAGOS 4.3.1_3</h1>
 <p>on Jun.19,2018</p>
 <ul>
 <li>#316 Fix: zero-length directory-name in %PATH% is regarded as the current directory</li>
@@ -1221,13 +1232,13 @@
 <li>#322 Fix: change the encoding for batchfile's parameters from Thread Codepage to Console Codepage #322</li>
 <li>All of lua variables <code>nyagos.option.*</code> are now able to be set by nyagos.exe's command-line option.</li>
 </ul>
-<h1 id="nyagos-431-2">NYAGOS 4.3.1_2 <a href="#nyagos-431-2">.</a></h1>
+<h1 id="nyagos-431-2">NYAGOS 4.3.1_2</h1>
 <p>on Jun.12,2018</p>
 <ul>
 <li>#320: fix the imcompatibility: nyagos.rawexec &amp; raweval did not expand tables in arguments.</li>
 <li>--show-version-only enables --norc automatically</li>
 </ul>
-<h1 id="nyagos-431-1">NYAGOS 4.3.1_1 <a href="#nyagos-431-1">.</a></h1>
+<h1 id="nyagos-431-1">NYAGOS 4.3.1_1</h1>
 <p>on Jun.11,2018</p>
 <ul>
 <li>Remove source code for lua53.dll</li>
@@ -1243,7 +1254,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-431-0">NYAGOS 4.3.1_0 <a href="#nyagos-431-0">.</a></h1>
+<h1 id="nyagos-431-0">NYAGOS 4.3.1_0</h1>
 <p>on Jun.3,2018</p>
 <ul>
 <li>Support Windows10's native ESCAPE SEQUENCE processing with --no-go-colorable and --enable-virtual-terminal-processing</li>
@@ -1257,26 +1268,26 @@
 <li>nyagos.prompt can now be assigned string literal as prompt template directly.</li>
 <li>Fix #314 rmdir could not remove junctions.</li>
 </ul>
-<h1 id="nyagos-430-4">NYAGOS 4.3.0_4 <a href="#nyagos-430-4">.</a></h1>
+<h1 id="nyagos-430-4">NYAGOS 4.3.0_4</h1>
 <p>on May.12,2018</p>
 <ul>
 <li>Fix: #309 nyagos.getkey() raised panic (Thx @nocd5)</li>
 <li>Fix: error-message when command <code>lnk</code>'s target is not <code>*.lnk</code> nor exist.</li>
 <li>Fix: the cursor blink was switched to off on the child process.</li>
 </ul>
-<h1 id="nyagos-430-3">NYAGOS 4.3.0_3 <a href="#nyagos-430-3">.</a></h1>
+<h1 id="nyagos-430-3">NYAGOS 4.3.0_3</h1>
 <p>on May.9,2018</p>
 <ul>
 <li>Fix: forgot implement nyagos.setalias , nyagos.getalias (<code>alias { CMD=XXX}</code> did not work.)</li>
 <li>Fix: that the element [0] of the table value returned by alias-function was not used as the new command name to evaluate.</li>
 <li>Fix: <code>doc/09-Build_*.md</code> about how to download sourcefiles from github</li>
 </ul>
-<h1 id="nyagos-430-2">NYAGOS 4.3.0_2 <a href="#nyagos-430-2">.</a></h1>
+<h1 id="nyagos-430-2">NYAGOS 4.3.0_2</h1>
 <p>on May.7,2018</p>
 <ul>
 <li>#305: Fix issue that user's .nyagos was not loaded again (Thx! @erw7)</li>
 </ul>
-<h1 id="nyagos-430-1">NYAGOS 4.3.0_1 <a href="#nyagos-430-1">.</a></h1>
+<h1 id="nyagos-430-1">NYAGOS 4.3.0_1</h1>
 <p>on May.5,2018</p>
 <ul>
 <li>Fix: nyagos.d/start.lua did not worked because the member <code>rawargs</code> of alias-function's argument was not implemented.</li>
@@ -1285,12 +1296,12 @@
 <li>Fix: On -f &amp; -e option, warned as <code>getRegInt: could not find shell in Lua instanc e</code></li>
 <li>Fix: batchfile cound not return the value of <code>exit /b</code> as ERRORLEVEL</li>
 </ul>
-<h1 id="nyagos-430-0">NYAGOS 4.3.0_0 <a href="#nyagos-430-0">.</a></h1>
+<h1 id="nyagos-430-0">NYAGOS 4.3.0_0</h1>
 <p>on May.3,2018</p>
 <ul>
 <li>Add <code>ls -L</code> which shows information for the file refernces rather than for the link it self.</li>
 </ul>
-<h1 id="nyagos-43-beta2">NYAGOS 4.3_beta2 <a href="#nyagos-43-beta2">.</a></h1>
+<h1 id="nyagos-43-beta2">NYAGOS 4.3_beta2</h1>
 <p>on May.1,2018</p>
 <ul>
 <li>Fix: Typing C-o looks to raise hang up until Enter or ESCAPE is typed (on 4.3beta) #303
@@ -1300,7 +1311,7 @@
 </li>
 <li>Fix: chcp did not work. (<code>chcp</code> was aliaes to update memory of screen width)</li>
 </ul>
-<h1 id="nyagos-43-beta">NYAGOS 4.3_beta <a href="#nyagos-43-beta">.</a></h1>
+<h1 id="nyagos-43-beta">NYAGOS 4.3_beta</h1>
 <p>on Apr.30,2018</p>
 <ul>
 <li>Use Gopher-Lua instead of lua53.dll #300
@@ -1315,7 +1326,7 @@
 </ul>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents <a href="#contents">.</a></h3>
+<h3 id="contents">Contents</h3>
 <ol>
 <li><a href="./index.html">Top</a></li>
 <li><a href="01-Install_en.html">Install</a></li>
@@ -1330,7 +1341,7 @@
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="release-note">Release note <a href="#release-note">.</a></h3>
+<h3 id="release-note">Release note</h3>
 <ul>
 <li><a href="release_note_en.html">4.4.x</a></li>
 <li><a href="history-4.3_en.html">4.3.x</a></li>
@@ -1338,5 +1349,5 @@
 <li><a href="history-4.1_en.html">4.1.x</a></li>
 <li><a href="history-4.0_en.html">4.0.x</a></li>
 </ul>
-</div><!-- "sidebar markdown-body" -->
+</div><!-- "sidebar" -->
 </body></html>
