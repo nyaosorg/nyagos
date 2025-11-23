@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+v4.4.18\_1
+==========
+Nov 23, 2025
+
 ## Bug fixes
 
 - Fixed a bug where existing content was not cleared when opening a file with Lua `io.open(..., "w")` (#471, #472 Thanks to @emisjerry)

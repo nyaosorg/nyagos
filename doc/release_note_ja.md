@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+v4.4.18\_1
+==========
+Nov 23, 2025
+
 ### 不具合修正
 
 - Lua関数 `io.open(..., "w")` でファイルをオープンした時、ファイルが truncate されていなかった不具合を修正 (#471, #472 Thanks to @emisjerry)
