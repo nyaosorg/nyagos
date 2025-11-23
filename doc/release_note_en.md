@@ -1,5 +1,7 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+* Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
+
 v4.4.18\_1
 ==========
 Nov 23, 2025

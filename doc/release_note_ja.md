@@ -1,5 +1,7 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+* readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
+
 v4.4.18\_1
 ==========
 Nov 23, 2025

@@ -460,7 +460,7 @@ func parse1(stream Stream, text string) ([]*_Statement, error) {
 					backup := stream.DisableHistory(true)
 					defer stream.DisableHistory(backup)
 					for {
-						_, line, err := stream.ReadLine(ctx)
+						line, err := stream.ReadLine(ctx)
 						if err != nil {
 							if err != io.EOF {
 								return func() {}, err

@@ -85,9 +85,10 @@ func (impl *_ScriptEngineForOptionImpl) RunString(ctx context.Context, code stri
 	if !ok {
 		return errors.New("script is not supported")
 	}
-	ctx = context.WithValue(ctx, shellKey, impl.Sh)
 	defer setContext(getContext(L), L)
 	setContext(ctx, L)
+	restore := pushLuaRegistry(L, shellLuaRegistryKey, impl.Sh)
+	defer restore()
 	return luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
 		return L.DoString(code)
 	})
@@ -136,17 +137,44 @@ func Run(fsys fs.FS) error {
 	}
 	defer sh.Close()
 	sh.Console = colorable.NewColorableStdout()
-	ctx = context.WithValue(ctx, shellKey, sh)
 
-	ctxTmp := context.WithValue(ctx, shellKey, sh)
 	defer setContext(getContext(L), L)
-	setContext(ctxTmp, L)
+	setContext(ctx, L)
+	restore := pushLuaRegistry(L, shellLuaRegistryKey, sh)
+	defer restore()
 
 	alias.LineFilter = func(ctx context.Context, line string) string {
 		if L, ok := ctx.Value(luaKey).(Lua); ok {
 			return luaLineFilter(ctx, L, line)
 		}
 		return line
+	}
+
+	lazySetup := func() {}
+
+	var stream1 shell.Stream
+	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
+		constream := frame.NewCmdStreamConsole(
+			func(w io.Writer) (int, error) {
+				if L != nil {
+					return printPrompt(ctx, sh, L, w)
+				}
+				functions.Prompt(
+					&functions.Param{
+						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
+						In:   os.Stdin,
+						Out:  os.Stdout,
+						Err:  os.Stderr,
+						Term: colorable.NewColorableStdout(),
+					})
+				return 0, nil
+			})
+		stream1 = constream
+		sh.History = constream.History
+		setLuaRegistry(L, readlineLuaRegistryKey, constream.Editor)
+		lazySetup = constream.LazySetup
+	} else {
+		stream1 = shell.NewCmdStreamFile(os.Stdin)
 	}
 
 	script, err := frame.OptionParse(ctx, sh, &_ScriptEngineForOptionImpl{L: L, Sh: sh})
@@ -181,30 +209,8 @@ func Run(fsys fs.FS) error {
 		}
 	}
 
-	var stream1 shell.Stream
-	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
-		constream := frame.NewCmdStreamConsole(
-			func(w io.Writer) (int, error) {
-				if L != nil {
-					return printPrompt(ctx, sh, L, w)
-				}
-				functions.Prompt(
-					&functions.Param{
-						Args: []interface{}{frame.Format2Prompt(os.Getenv("PROMPT"))},
-						In:   os.Stdin,
-						Out:  os.Stdout,
-						Err:  os.Stderr,
-						Term: colorable.NewColorableStdout(),
-					})
-				return 0, nil
-			})
-		stream1 = constream
-		frame.DefaultHistory = constream.History
-		sh.History = constream.History
-		ctx = context.WithValue(ctx, shellKey, sh)
-	} else {
-		stream1 = shell.NewCmdStreamFile(os.Stdin)
-	}
+	lazySetup()
+
 	if L != nil {
 		return sh.ForEver(ctx, &luaFilterStream{Stream: stream1, L: L})
 	}
