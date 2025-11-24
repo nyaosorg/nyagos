@@ -1,14 +1,16 @@
+Release notes
+=============
 ( **English** / [Japanese](release_note_ja.md) )
 
 - `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
     - Regenerate with jj v0.35
     - Modify the generate script `make-complete-jj.lua` to output CRLF as line endings
 
-v4.4.18\_1
-==========
+4.4.18\_1
+---------
 Nov 23, 2025
 
-## Bug fixes
+### Bug fixes
 
 - Fixed a bug where existing content was not cleared when opening a file with Lua `io.open(..., "w")` (#471, #472 Thanks to @emisjerry)
 
@@ -24,8 +26,8 @@ Nov 23, 2025
 [go-ttyadapter]: https://github.com/nyaosorg/go-ttyadapter
 [github.com/nyaosorg/go-box]: https://github.com/nyaosorg/go-box
 
-v4.4.18\_0
-==========
+4.4.18\_0
+---------
 Oct 25, 2025
 
 - Embedded Lua scripts in the top level of `nyagos.d/` into the executable
@@ -57,28 +59,28 @@ Oct 25, 2025
 [#452]: https://github.com/nyaosorg/nyagos/issues/452
 [mattn/go-runewidth]: https://github.com/mattn/go-runewidth
 
-v4.4.17\_2
-==========
+4.4.17\_2
+---------
 Jul 27, 2025
 
 - Fixed an issue where multiple Ctrl-C inputs during command execution could affect subsequent commands.  
   ([#449]: Thanks to [@fushihara])
 
 [#449]: https://github.com/nyaosorg/nyagos/issues/449
-[@fushihara](https://github.com/fushihara)
+[@fushihara]: https://github.com/fushihara
 
-v4.4.17\_1
-==========
+4.4.17\_1
+---------
 Jul 3, 2025
 
 - Fix the issue where, when `%USERPROFILE%` was `C:\Users\foo` and the current directory was `C:\Users\fool`, `$P` in `%PROMPT%` was incorrectly replaced with `~l`.
 - Fixed a crash in environment variable name completion when multibyte characters (e.g., Japanese) appear before the variable name. The bug was caused by misinterpreting the byte offset of the `%` sign (which marks the start of the variable) as a character index.
 
-v4.4.17\_0
-----------
+4.4.17\_0
+---------
 May 7, 2025
 
-- The kill buffer in NYAGOS previously interacted with the OS clipboard by default. This behavior has been changed so that it no longer does so by default. To enable clipboard integration, set nyagos.option.clipboard = true.
+- The kill buffer in NYAGOS previously interacted with the OS clipboard by default. This behavior has been changed so that it no longer does so by default. To enable clipboard integration, set `nyagos.option.clipboard = true`.
 - Syntax highlighting:
     - The highlighted environment variable is now limited to text that starts with a letter and contains only alphanumeric characters.
     - The highlighted option can now contain `-` anywhere, not just at the beginning.
@@ -91,9 +93,9 @@ May 7, 2025
 - Fix a documentation mistake.
     - `nyagos.option.cleanup_buffer` was still mentioned even though it had been removed.
 
-v4.4.16\_0
---------
-Oct.13, 2024
+4.4.16\_0
+---------
+Oct 13, 2024
 
 ### Removed features and Deprecations
 
@@ -133,9 +135,10 @@ Oct.13, 2024
 ### Documents
 
 * Fix the broken links caused by renaming readme.md to README.md ( Thx @HAYASHI-Masayuki )
-v4.4.15\_1
---------
-May.02, 2024
+
+4.4.15\_1
+---------
+May 2, 2024
 
 The binaries of this version are built with Go 1.20.14  
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
@@ -153,8 +156,8 @@ end
 ```
 
 
-v4.4.15\_0 
---------
+4.4.15\_0
+---------
 Apr 7, 2024
 
 The binaries of this version are built with Go 1.20.14  
@@ -216,9 +219,9 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 [#436]: https://github.com/nyaosorg/nyagos/pull/436
 [@tsuyoshicho]: https://github.com/tsuyoshicho
 
-v4.4.14\_0 
---------
-Oct 06, 2023
+4.4.14\_0
+---------
+Oct 6, 2023
 
 The second half of 2023 edition.
 The binaries of this version are built with Go 1.20.9.  
@@ -253,16 +256,16 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.
 [v4.4.13\_3]: https://github.com/nyaosorg/nyagos/releases/tag/4.4.13_3
 [go-readline-ny.Editor]: https://pkg.go.dev/github.com/nyaosorg/go-readline-ny#Editor
 
-v4.4.13\_3
---------
+4.4.13\_3
+---------
 Apr 30, 2023
 
 * (#431) Fixed a bug that failed to convert lines exceeding 4096 bytes when changing from non-UTF8 to UTF8 such as environment variables changed by batch file execution or output of more/type. (Thx. @8exBCYJi5ATL)
 * Fix: `more` sometimes printed no lines when the size of the line was too large.
     ( Due to a different issue than #431 )
 
-v4.4.13\_2
---------
+4.4.13\_2
+---------
 Apr 25, 2023
 
 The first half of 2023 edition.
@@ -272,8 +275,8 @@ The first half of 2023 edition.
 * (#429) Fix `cd c:` fails when the current directory is `C:`
 * To convert between ANSI and UTF8 strings, use go-windows-mbcs v0.4 and golang.org/x/text/transform now
 
-v4.4.13\_1
---------
+4.4.13\_1
+---------
 Oct 15, 2022
 
 * (#425) nyagos.d/suffix.lua appends the extensions into %NYAGOSPATHEXT% instead of %PATHEXT% and the command-name completion now looks both %PATHEXT% and %NYAGOSPATHEXT% (Thx. @tsuyoshicho)
@@ -281,8 +284,8 @@ Oct 15, 2022
 * (#426) Fix: Wnen wildcard expansion for external commands is enabled, empty parameters were removed. (Thx. @juggler999)
 * (#427) Fix: '""' was replaced to '(DIGIT)' with BEEP (Thx. @hogewest)
 
-v4.4.13\_0
---------
+4.4.13\_0
+---------
 Sep 24, 2022
 
 * Fix: Unhandled exception in gopkg.in/yaml.v3 ( https://github.com/nyaosorg/nyagos/security/dependabot/1 )
@@ -296,8 +299,8 @@ Sep 24, 2022
 * Fixed Makefile error on non-Windows
 * (#424) fuzzy finder extension integration(catalog) (Thx @tsuyoshicho)
 
-v4.4.12\_0
---------
+4.4.12\_0
+---------
 Apr 29, 2022
 
 * Modified colored commandline
@@ -314,21 +317,21 @@ Apr 29, 2022
 * Support `rmdir FOLDER /s` (`/s` option can be put after folder list)
 * (#418) When the command-line ends with ^ , continue line-input after enter-key is input.
 
-v4.4.11\_0
---------
+4.4.11\_0
+---------
 Dec 10, 2021
 
 * Color command-line
 
-v4.4.10\_3
---------
+4.4.10\_3
+---------
 Aug 30, 2021
 
 * (#412) Fix: The widths of Box Drawing (U+2500-257F) were incorrect on the legacy terminals (on not Windows Terminal in Windows10)
 * Attach the package some new icon files
 
-v4.4.10\_2
---------
+4.4.10\_2
+---------
 Jul 23, 2021
 
 * Fix: the replacing result for %DATE% was not compatible with CMD.EXE's output on codepage 437
@@ -337,15 +340,15 @@ Jul 23, 2021
 * Fix: (#411) the document that English part and Japanese were written in inverse places (Thx! @tomato3713)
 * Organize and automate the test-codes
 
-v4.4.10\_1
---------
-Jul 02, 2021
+4.4.10\_1
+---------
+Jul 2, 2021
 
 * Fix: When the folder `./dll` existed and the folder `DLL` existed on CDPATH, typed path dll was replaced to `DLL` with completion (The problem is that the path's cases were changed)
 * Fix: clone: the current directory was not kept when the current directory name has a space
 
-v4.4.10\_0
---------
+4.4.10\_0
+---------
 Jun 25, 2021
 
 * nyagos.d/aliases.lua: abspath can be given wildcard names
@@ -359,21 +362,21 @@ Jun 25, 2021
 * Use Makefile(GNU Make) to build instead of PowerShell(make.cmd)
 * Can build on Linux
 
-v4.4.9\_7
+4.4.9\_7
 --------
 May 22, 2021
 
 * (#409) Fix: the wildcards expansion with `set -o glob` or `nyagos.option.glob=true` did not work for command alias (Thx @juggler999)
 
-v4.4.9\_6
+4.4.9\_6
 --------
-May 07, 2021
+May 7, 2021
 
 * (#406) Fix: nyagos.argsfilter did not work, raw arguments were not converted and suffix command did not work as expected. (Thx @tGqmJHoJKqgK)
 
-v4.4.9\_5
+4.4.9\_5
 --------
-May 03, 2021
+May 3, 2021
 
 * go-readline-ny v0.4.10: Fix that Yes/No's answer:Y is inserted in the next commandline.
 * go-readline-ny v0.4.11: Support Emoji Moifier Sequence (skin tone)
@@ -385,9 +388,9 @@ May 03, 2021
 * (#403) Fix: some irregular double-quotations in the commandline were removed when the parameter is sent to the external commands.
 * (#405) Add fuzzyfinder catalog module (Thx @tsuyoshicho)
 
-v4.4.9\_4
+4.4.9\_4
 --------
-Mar 06, 2021
+Mar 6, 2021
 
 * (#400) add check the existance of commands for subcomplete.lua (Thx @tsuyoshicho )
 * (#401) add subcompletion choco/chocolaty (Thx @tsuyoshicho )
@@ -400,7 +403,7 @@ Mar 06, 2021
 * go-readline-ny v0.4.8: WAVING WHITE FLAG and its variations (U+1F3F3 U+FE0F?)
 * go-readline-ny v0.4.9: RAINBOW FLAG (U+1F3F3 U+200D U+1F308)
 
-v4.4.9\_3
+4.4.9\_3
 --------
 Feb 20, 2021
 
@@ -412,13 +415,13 @@ Feb 20, 2021
 * Support ALT-/ key bind (Thx @masamitsu-murase) https://github.com/zetamatta/go-readline-ny/pull/1
 * readline: Fix the problem that emoji and circled digits could not be input in WindowsTerminal 1.5
 
-v4.4.9\_2
+4.4.9\_2
 --------
 Jan 8, 2021
 
 * (#342) Stop killing child process on Ctrl-C pressed.
 
-v4.4.9\_1
+4.4.9\_1
 --------
 Dec 21, 2020
 
@@ -427,7 +430,7 @@ Dec 21, 2020
 * Fix: sometimes more, clip & type from console did not echo input
 * (#342) Improve Ctrl-C Interrupt handling to prevent from crash
 
-v4.4.9\_0
+4.4.9\_0
 --------
 Dec 5, 2020
 
@@ -442,7 +445,7 @@ Dec 5, 2020
 * Fix: (#393) the first key after terminal-window activated was input twice. (Thanks to @tostos5963)
 * Stop using upx.exe because antivirus software sometimes disjudges as a virus.
 
-v4.4.8\_0
+4.4.8\_0
 --------
 Oct 3, 2020
 
@@ -460,7 +463,7 @@ Oct 3, 2020
 * box.lua: Fix: C-o and ESCAPE erased the user-input-word.
 * (#391) subcommand.lua: add gh first level subcommand rule (Thanks to @tsuyoshicho)
 
-v4.4.7\_0
+4.4.7\_0
 --------
 Jul 18, 2020
 
@@ -479,15 +482,15 @@ Jul 18, 2020
     - Complete commit-hash,branch-name and modified filenames after `git checkout`
 * (#386) Fix the file size output of `ls -h` to be displayed in units.(Thx! [@Matsuyanagi](https://github.com/Matsuyanagi))
 * Fix: `nyagos.exec{ ALIAS-COMMAND-USING $@ }` causes panic
-* Add: `nyagos.complete_for_files `(which returns table of completable files)`
+* Add: `nyagos.complete_for_files` (which returns table of completable files)
 
-v4.4.6\_2
+4.4.6\_2
 --------
 Jun 09, 2020
 
-* Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at `4.4.6_0`)
+* Fix: Ctrl-C terminated nyagos.exe like Ctrl-D (which is made on fixing #383 at `4.4.6\_0`)
 
-v4.4.6\_1
+4.4.6\_1
 --------
 May 31, 2020
 
@@ -496,9 +499,9 @@ May 31, 2020
 * Fix: change drive(`x:`) did not push the last directory to directory history
 * Fix: The last element of `nyagos.rawexec{...}` was ignored.
 
-v4.4.6\_0
+4.4.6\_0
 --------
-May 08, 2020
+May 8, 2020
 
 * Implement: %DATE% and %TIME%
 * nyagos.envdel now returns removed directories.
@@ -508,7 +511,7 @@ May 08, 2020
 * Tab-key after `start` completes as a command name as `which`
 * Fix: when `cd x:\y\z` failed, the current directory is moved to x:\ (root)
 
-v4.4.5\_4
+4.4.5\_4
 --------
 Mar 13, 2020
 
@@ -518,7 +521,7 @@ Mar 13, 2020
 * (#377) Fix: Escape sequence does not work after `git gui` installed by scoop
 * make.cmd: do not compress executable on every building by upx.exe. Use it only on making packages.
 
-v4.4.5\_3
+4.4.5\_3
 --------
 Mar 08, 2020
 
@@ -529,14 +532,14 @@ Mar 08, 2020
 * Use Windows10's native ansi-escape-sequence through mattn/go-colorable
 * Fix that `echo $(gawk "BEGIN{ print \"\x22\x22\" }")` could not print double-quatations
 
-v4.4.5\_2
+4.4.5\_2
 --------
 Oct 26, 2019
 
 * (#375) Fix: `~randomstring` causes panic
 * (#374) Fix: `ls -l` for future timestamp's files do not print year.
 
-v4.4.5\_1
+4.4.5\_1
 --------
 Oct 20, 2019
 
@@ -545,7 +548,7 @@ Oct 20, 2019
 * Ctrl-O: do not append a quotation after last backslach (NG: `"Program Files\"` -> OK:`"Program Files\`)
 * nyagos.stat/access can understand ~ and %ENV% now.
 
-v4.4.5\_0
+4.4.5\_0
 --------
 Sep 01, 2019
 
@@ -556,26 +559,26 @@ Sep 01, 2019
 * Implement `nyagos.envadd("ENVNAME","DIR")`,`nyagos.envdel("ENVNAME","PATTERN")`
 * `nyagos.pathjoin()` now expands `%ENVNAME%` and `~\`,`~/`
 
-v4.4.4\_3
+4.4.4\_3
 --------
 Jul 07, 2019
 
 * (#371) Could not execute `foo.bar.exe` as `foo.bar`
 * diskfree shows UNCPath assigned network drive
 
-v4.4.4\_2
+4.4.4\_2
 --------
 Jun 14, 2019
 
 * Speed up the completion for `\\host-name` by updating the cache on background.
 
-v4.4.4\_1
+4.4.4\_1
 --------
 May 30, 2019
 
 * Fix: executable for Linux could not be built.
 
-v4.4.4\_0 the Reiwa edition
+4.4.4\_0
 --------
 May 27, 2019
 
@@ -599,7 +602,7 @@ May 27, 2019
 * (#368) Fix: Lua function: io.close() did not exist.
 * (#332)(#369) Implement r+/w+/a+ mode for io.open
 
-v4.4.3\_0
+4.4.3\_0
 --------
 Apr 27, 2019
 
@@ -609,7 +612,7 @@ Apr 27, 2019
 * Fix: the current-dir per each drive was mistaken after `cd RELATIVE-PATH`  
   ( `cd C:\x\y\z ; cd .. ; cd \\localhost\c$ ; c: ; pwd` -> `C:\x` (not `C:\x\y`) )
 
-v4.4.2\_2
+4.4.2\_2
 --------
 Apr 13, 2019
 
@@ -617,16 +620,16 @@ Apr 13, 2019
 * Fix: wrong the count of backspaces to move top on starting incremental-search
 * (#364) Fix: `ESC[0A` was used.
 
-v4.4.2\_1
+4.4.2\_1
 --------
-Apr 05, 2019
+Apr 5, 2019
 
 * diskfree: trim spaces from the end of line
 * Fix: on`~"\Program Files"`, the first quotation disappeared and `Files` was not contained in the argument.
 
-v4.4.2\_0
+4.4.2\_0
 --------
-Apr 02, 2019
+Apr 2, 2019
 
 * Fix converting OLE-Object to Lua-Object causes panic on `VT_DATE` and some types.
 * Fix: lua.LNumber was treated as integer. It should be as float64
@@ -654,7 +657,7 @@ Apr 02, 2019
 * (#259) Implemented `select` command to open a file with dialog to select application.
 * Fix the format of `diskfree`'s output
 
-v4.4.1\_1
+4.4.1\_1
 --------
 Feb 15, 2019
 
@@ -669,9 +672,9 @@ Feb 15, 2019
 * (#357) Fix: on a french keyboard, AltGr + anykey did not work (Thx! @crile)
 * (#358) Fix: When `foo.exe` and `foo.cmd` exist, typing `foo` calls `foo.cmd` rather than `foo.exe`
 
-v4.4.1\_0
+4.4.1\_0
 --------
-Feb 02, 2019
+Feb 2, 2019
 
 * Support completion for `which`,`set`,`cd`,`pushd`,`rmdir` and `env` command. (Thx! [ChiyosukeF](https://twitter.com/ChiyosukeF))
 * Fix (#353) Stopping OpenSSH with Ctrl-C on password prompt, Escape sequences and etc. are disabled. (Restore console mode for stdout after executing command) (Thx! [beepcap](https://twitter.com/beepcap))
@@ -682,7 +685,7 @@ Feb 02, 2019
 * Fix (#354) box.lua: history completion did not start with C-X h (Thx! @fushihara)
 * nyagos.d/catalog/subcomplete.lua supports completion for `hub` command. (Thx! @tsuyoshicho)
 
-v4.4.0\_1
+4.4.0\_1
 --------
 Jan 19, 2019
 
@@ -691,15 +694,15 @@ Jan 19, 2019
 * Implemented `copy` and `move` for Linux
 * (#351) Fix that `END` (and `F11`) key did not work 
 
-v4.4.0\_0
+4.4.0\_0
 --------
 Jan 12, 2019
 
 * To call a batchfile, stop to use `/V:ON` for CMD.EXE
 
-v4.4.0\_beta
+4.4.0\_beta
 --------
-Jan 02, 2019
+Jan 2, 2019
 
 * Support Linux (experimental)
 * Fix the problem that current directories per drive were not inherited to child processes.
