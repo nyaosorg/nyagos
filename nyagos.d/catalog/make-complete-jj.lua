@@ -21,14 +21,14 @@ function dump(fd,obj,indent)
     elseif t == "table" then
         fd:write("{")
         for key,val in pairs(obj) do
-            fd:write("\n"..string.rep("    ",indent+1).."[")
+            fd:write("\r\n"..string.rep("    ",indent+1).."[")
             dump(fd,key,indent+1)
             fd:write("]=")
             dump(fd,val,indent+1)
             fd:write(",")
         end
         if next(obj) then
-            fd:write("\n"..string.rep("    ",indent).."}")
+            fd:write("\r\n"..string.rep("    ",indent).."}")
         else
             fd:write("}")
         end
@@ -56,7 +56,7 @@ local fd = assert(io.open("complete-jj.lua","w+"))
 fd:write("share.jj=")
 dump(fd,jj,0)
 
-fd:write([[
+local script = string.gsub([[
 
 nyagos.complete_for["jj"] = function(args)
     if not string.match(args[#args],"^[-a-z]+") then
@@ -89,6 +89,7 @@ nyagos.complete_for["jj"] = function(args)
         j = nextj
     end
 end
-]])
+]],"\r?\n","\r\n")
 
+fd:write(script)
 fd:close()
