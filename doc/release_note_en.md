@@ -1,5 +1,9 @@
 ( **English** / [Japanese](release_note_ja.md) )
 
+- `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
+    - Regenerate with jj v0.35
+    - Modify the generate script `make-complete-jj.lua` to output CRLF as line endings
+
 v4.4.18\_1
 ==========
 Nov 23, 2025

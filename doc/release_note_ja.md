@@ -1,5 +1,9 @@
 ( [English](release_note_en.md) / **Japanese** )
 
+- `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
+    - `jj` のサブコマンド補完をv0.35 ベースに更新
+    - 改行コードが LF になっていたので、CRLF となるよう、生成スクリプト make-complete-jj.lua を修正
+
 v4.4.18\_1
 ==========
 Nov 23, 2025
