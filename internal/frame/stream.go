@@ -55,6 +55,12 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			Pointer:      -1,
 		},
 	}
+	history1.Load(stream.HistPath)
+	history1.Save(stream.HistPath)
+	return stream
+}
+
+func (stream *CmdStreamConsole) LazySetup() {
 	if config.AccessClipboard {
 		stream.Editor.Clipboard = OSClipboard{}
 	}
@@ -85,9 +91,6 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 			stream.Editor.PredictColor = config.PredictColor
 		}
 	}
-	history1.Load(stream.HistPath)
-	history1.Save(stream.HistPath)
-	return stream
 }
 
 func (stream *CmdStreamConsole) DisableHistory(value bool) bool {
@@ -115,6 +118,7 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 	buffer := make([]byte, 0, 256)
 	for {
 		line, err := stream.Editor.ReadLine(ctx)
+		stream.Editor.Default = ""
 		buffer = append(buffer, line...)
 		if err != nil || !endsWithSep(buffer, '^') {
 			if continued {
@@ -133,11 +137,11 @@ func (stream *CmdStreamConsole) readLineContinued(ctx context.Context) (string, 
 	}
 }
 
-func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, string, error) {
+func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (string, error) {
 	if stream.Pointer >= 0 {
 		if stream.Pointer < len(stream.PlainHistory) {
 			stream.Pointer++
-			return ctx, stream.PlainHistory[stream.Pointer-1], nil
+			return stream.PlainHistory[stream.Pointer-1], nil
 		}
 		stream.Pointer = -1
 	}
@@ -152,7 +156,7 @@ func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, 
 		}
 		disabler()
 		if err != nil {
-			return ctx, line, err
+			return line, err
 		}
 		var isReplaced bool
 		line, isReplaced, err = stream.History.Replace(line)
@@ -177,5 +181,5 @@ func (stream *CmdStreamConsole) ReadLine(ctx context.Context) (context.Context, 
 		fmt.Fprintln(os.Stderr, err.Error())
 	}
 	stream.PlainHistory = append(stream.PlainHistory, line)
-	return ctx, line, err
+	return line, err
 }

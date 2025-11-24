@@ -202,6 +202,10 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 }
 
 func cmdBindKey(L Lua) int {
+	editor, ok := getLuaRegistry(L, readlineLuaRegistryKey).(*readline.Editor)
+	if !ok {
+		return lerror(L, "bindkey: readline.Editor not found")
+	}
 	key, ok := L.Get(-2).(lua.LString)
 	if !ok {
 		return lerror(L, "bindkey: key error: "+string(key))
@@ -211,14 +215,14 @@ func cmdBindKey(L Lua) int {
 		code = keys.Code(key)
 	}
 	if f, ok := L.Get(-1).(*lua.LFunction); ok {
-		readline.GlobalKeyMap.BindKey(code, &_KeyLuaFunc{Chank: f, L: L})
+		editor.BindKey(code, &_KeyLuaFunc{Chank: f, L: L})
 	} else {
 		funcname := L.ToString(-1)
 		f, ok := readline.NameToFunc[funcname]
 		if !ok {
 			return lerror(L, "bindkey: func error: "+funcname)
 		}
-		readline.GlobalKeyMap.BindKey(code, f)
+		editor.BindKey(code, f)
 	}
 	L.Push(lua.LTrue)
 	return 1

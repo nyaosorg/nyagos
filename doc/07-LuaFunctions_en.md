@@ -319,6 +319,10 @@ It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.
 
 It returns the width and height of the terminal.
 
+### `nyagos.setnextline(CMDLINE)`
+
+It sets the initial text `CMDLINE` for the next readline prompt.
+
 ### `STAT = nyagos.stat(FILENAME)`
 
 It returns the file's information.

@@ -2,6 +2,8 @@ Release notes
 =============
 ( **English** / [Japanese](release_note_ja.md) )
 
+- Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
+
 - `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
     - Regenerate with jj v0.35
     - Modify the generate script `make-complete-jj.lua` to output CRLF as line endings

@@ -2,6 +2,8 @@ Release notes
 =============
 ( [English](release_note_en.md) / **Japanese** )
 
+- readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
+
 - `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
     - `jj` のサブコマンド補完をv0.35 ベースに更新
     - 改行コードが LF になっていたので、CRLF となるよう、生成スクリプト make-complete-jj.lua を修正
