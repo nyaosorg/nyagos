@@ -8,6 +8,19 @@ Release notes
     - `jj` のサブコマンド補完をv0.35 ベースに更新
     - 改行コードが LF になっていたので、CRLF となるよう、生成スクリプト make-complete-jj.lua を修正
 
+- カーソル一文字分の右移動(`FORWARD_CHAR`)に組み込まれていた予測候補確定を分離し、次の3機能に分離した。([go-readline-ny#19], #476, #477, thanks to @emisjerry)
+
+  - 純粋にカーソル一文字分の右移動のみ (`FORWARD_CHAR`)
+  - 予測候補を確定 (`ACCEPT_PREDICT`)
+  - カーソルが行末の時は予測候補確定、さもなければカーソル一文字分移動(`FORWARD_CHAR_OR_ACCEPT_PREDICT`)
+
+  なお、右矢印キー、Ctrl-F はデフォルトで `FORWARD_CHAR_OR_ACCEPT_PREDICT` とした。
+
+- 入力予測機能で英大文字・小文字を区別しないようにした ([go-readline-ny#20], #476, #477, thanks to @emisjerry)
+
+[go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
+[go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
+
 4.4.18\_1
 ----------
 Nov 23, 2025

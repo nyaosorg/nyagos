@@ -8,6 +8,19 @@ Release notes
     - Regenerate with jj v0.35
     - Modify the generate script `make-complete-jj.lua` to output CRLF as line endings
 
+- Split the commit-prediction behavior that had been embedded in `FORWARD_CHAR` into three separate functions ([go-readline-ny#19], #476 and #477, thanks to @emisjerry):
+
+  - `FORWARD_CHAR`: move the cursor one character to the right
+  - `ACCEPT_PREDICT`: accept the current prediction
+  - `FORWARD_CHAR_OR_ACCEPT_PREDICT`: accept the prediction when the cursor is at the end of the line; otherwise move the cursor one character to the right
+
+  By default, the Right Arrow key and **Ctrl-F** are now bound to `FORWARD_CHAR_OR_ACCEPT_PREDICT`.
+
+- Made input prediction case-insensitive. ([go-readline-ny#20], #476 and #477, thanks to @emisjerry)
+
+[go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
+[go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
+
 4.4.18\_1
 ---------
 Nov 23, 2025
