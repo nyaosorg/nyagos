@@ -18,6 +18,10 @@ Release notes
 
 - Made input prediction case-insensitive. ([go-readline-ny#20], #476 and #477, thanks to @emisjerry)
 
+- Lua scripts under the `nyagos.d` directory are now loaded automatically again. (#469, #478)
+  However, the standard scripts that used to reside in that directory remain embedded in the executable, and the default `nyagos.d` directory is empty.
+  ( Originally, the directory was not intended for user-defined scripts. )
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
