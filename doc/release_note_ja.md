@@ -22,6 +22,8 @@ Release notes
   ただし、かつてあった nyagos.d 以下の標準スクリプトは引き続き EXE ファイル内に組み込みとし、デフォルトでは同フォルダー直下はファイルのない状態とする。
   ( 当初は nyagos.d 配下にユーザが独自スクリプトを置く想定ではありませんでした )
 
+- 起動時に読み込むスクリプトのどれかでエラーが発生しても、残りのスクリプトの実行を続けるようにした。(#479)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 

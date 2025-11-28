@@ -21,7 +21,7 @@ type scriptEngine interface {
 func LoadScriptsFs(L scriptEngine, fsys fs.FS, warn func(error) error) error {
 	entries, err := fs.ReadDir(fsys, ".")
 	if err != nil {
-		return err
+		return warn(err)
 	}
 	for _, entry1 := range entries {
 		if entry1.IsDir() {
@@ -33,7 +33,10 @@ func LoadScriptsFs(L scriptEngine, fsys fs.FS, warn func(error) error) error {
 		}
 		scriptCode, err := fs.ReadFile(fsys, scriptName)
 		if err != nil {
-			return err
+			if err = warn(err); err != nil {
+				return err
+			}
+			continue
 		}
 		if err := L.DoString(string(scriptCode)); err != nil {
 			if err = warn(fmt.Errorf("%s: %w", scriptName, err)); err != nil {

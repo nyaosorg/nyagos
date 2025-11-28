@@ -22,6 +22,8 @@ Release notes
   However, the standard scripts that used to reside in that directory remain embedded in the executable, and the default `nyagos.d` directory is empty.
   ( Originally, the directory was not intended for user-defined scripts. )
 
+- Do not stop processing other startup scripts when one of them fails. (#479)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
