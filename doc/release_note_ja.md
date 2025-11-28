@@ -18,6 +18,10 @@ Release notes
 
 - 入力予測機能で英大文字・小文字を区別しないようにした ([go-readline-ny#20], #476, #477, thanks to @emisjerry)
 
+- nyagos.d 以下の Lua スクリプトを再び自動ロード対象とした。(#469, #478)
+  ただし、かつてあった nyagos.d 以下の標準スクリプトは引き続き EXE ファイル内に組み込みとし、デフォルトでは同フォルダー直下はファイルのない状態とする。
+  ( 当初は nyagos.d 配下にユーザが独自スクリプトを置く想定ではありませんでした )
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
