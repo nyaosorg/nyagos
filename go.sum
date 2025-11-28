@@ -30,8 +30,8 @@ github.com/nyaosorg/go-box/v3 v3.0.0 h1:W5qfScEkKBoD68gbP/lwfWlvcTRB0rwXkhL+9iC6
 github.com/nyaosorg/go-box/v3 v3.0.0/go.mod h1:70GsE9mIh7JKVCxt71q3jEijO6C9YJmOZqWpPa9w+GY=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16XkjcdkjWTJX3jfFiP987ougN3RrK7oNr+rvau5INs=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
-github.com/nyaosorg/go-readline-ny v1.12.3 h1:nF+ywMS1XFpIeONssuUxmu20S2tQIqkq1ahdEXBhIYU=
-github.com/nyaosorg/go-readline-ny v1.12.3/go.mod h1:pFXLTklUi8JVi6gI3HdnA3Wak/7cl+kx2q8kIIiAf/c=
+github.com/nyaosorg/go-readline-ny v1.13.0 h1:3ifu0FQsswdB9N5vcph7lVzQvu20kVt6pMt1JuSz45o=
+github.com/nyaosorg/go-readline-ny v1.13.0/go.mod h1:pFXLTklUi8JVi6gI3HdnA3Wak/7cl+kx2q8kIIiAf/c=
 github.com/nyaosorg/go-readline-skk v0.6.1 h1:k8A50gJKb9WpDKEKHdXAZriOAWi8APJSZf07tPqb5ok=
 github.com/nyaosorg/go-readline-skk v0.6.1/go.mod h1:wjcWJkHorPQ2BepphQH33TbdAXcVmmYDeXZc4Y6dbzc=
 github.com/nyaosorg/go-ttyadapter v0.1.0 h1:3U3ytc35SOdkrn15rHLG36ozkmqBeGqhQgNufoep1AI=
