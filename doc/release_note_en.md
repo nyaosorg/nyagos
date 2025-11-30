@@ -24,6 +24,12 @@ Release notes
 
 - Do not stop processing other startup scripts when one of them fails. (#479)
 
+- Added `runall.lua` to `nyagos.d/catalog`. This utility loads and executes all Lua scripts under the specified directories (#480). Example:
+  ```
+  local runall = require("runall")
+  runall("~/scriptdir1;~/scriptdir2")
+  ```
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 

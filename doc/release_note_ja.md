@@ -24,6 +24,12 @@ Release notes
 
 - 起動時に読み込むスクリプトのどれかでエラーが発生しても、残りのスクリプトの実行を続けるようにした。(#479)
 
+- `runall.lua` スクリプトを `nyagos.d/catalog` に追加した。これは、指定ディレクトリ以下にあるすべての Lua スクリプトを順にロードして実行する (#480) 。使用例:
+  ```
+  local runall = require("runall")
+  runall("~/scriptdir1;~/scriptdir2")
+  ```
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
