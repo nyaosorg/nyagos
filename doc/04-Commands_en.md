@@ -99,7 +99,7 @@ Kill process by name
 #### `ln [-s] SRC DST`
 
 Make hardlink or symbolic-link.
-The alias 'lns' defined on `nyagos.d\lns.lua` shows UAC-dialog
+The alias 'lns' defined on `(embed)\lns.lua` shows UAC-dialog
 and calls `ln -s`.
 
 #### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
@@ -239,18 +239,18 @@ Run another nyagos.exe as Administrator.
 
 ### Commands implemented by Lua
 
-#### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua)
+#### `lua_e "INLINE-LUA-COMMANDS"` ((embed)\aliases.lua)
 
 Execute inline-lua-commands like 'lua.exe -e "..."'.
 
-#### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
+#### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` ((embed)\aliases.lua)
 
 Execute lua-script.
 
-#### `trash FILE(S)` (nyagos.d\trash.lua)
+#### `trash FILE(S)` ((embed)\trash.lua)
 
 It throws files into trashbox of Windows.
 
-#### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
+#### `wildcard COMMAND ARG(s)...` ((embed)\aliases.lua)
 
 Expand the wildcard included ARG(s) and call COMMAND.

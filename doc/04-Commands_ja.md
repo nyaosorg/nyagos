@@ -106,7 +106,7 @@ PID で示されるプロセスを強制終了します
 #### `ln [-s] SRC DST`
 
 ハードリンク、もしくは、シンボリックリンクを作成します。
-`nyagos.d\lns.lua` で定義されるエイリアス lns は UAC 昇格と
+`(embed)\lns.lua` で定義されるエイリアス lns は UAC 昇格と
 `ln -s` を実行します。
 
 #### `lnk FILENAME SHORTCUT [WORKING-DIRECTORY]`
@@ -247,19 +247,19 @@ UAC 昇格させて、コマンドを実行します。
 
 ### Lua で実装されたコマンド
 
-#### `lua_e "INLINE-LUA-COMMANDS"` (nyagos.d\aliases.lua) 
+#### `lua_e "INLINE-LUA-COMMANDS"` ((embed)\aliases.lua) 
 
 内蔵Lua で引数の Lua コードを実行します。
 
-#### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` (nyagos.d\aliases.lua)
+#### `lua_f "LUA-SCRIPT-FILENAME" ARG(s)...` ((embed)\aliases.lua)
 
 内蔵Lua で Lua スクリプトを実行します。
 
-#### `trash FILE(S)` (nyagos.d\trash.lua)
+#### `trash FILE(S)` ((embed)\trash.lua)
 
 ファイルを Windows のゴミ箱に移動させます。
 
-#### `wildcard COMMAND ARG(s)...` (nyagos.d\aliases.lua)
+#### `wildcard COMMAND ARG(s)...` ((embed)\aliases.lua)
 
 ARG(s) に含まれるワイルドカードを展開して、COMMAND を実行します。
 
