@@ -32,7 +32,7 @@
 
 * `%u+XXXX%` (XXXX:16進数) を Unicode 文字に置換します。
 
-### コマンド出力置換 (nyagos.d\backquote.lua)
+### コマンド出力置換 ((embed)\backquote.lua)
 
     `COMMAND`
   もしくは
@@ -40,7 +40,7 @@
 
 を、COMMAND の標準出力の内容に置換します。
 
-### ブレース展開 (nyagos.d\brace.lua)
+### ブレース展開 ((embed)\brace.lua)
 
     echo a{b,c,d}e
 
@@ -48,7 +48,7 @@
 
     echo abe ace ade
 
-### インタプリタ名の追加 (nyagos.d\suffix.lua)
+### インタプリタ名の追加 ((embed)\suffix.lua)
 
 - `FOO.pl  ...` は `perl   FOO.pl ...` に置換されます。
 - `FOO.py  ...` は `ipy FOO.pl`、`py FOO.py`、`python FOO.py ...` のいずれかに置換されます。(最初に見付かったインタプリタ名が挿入されます)

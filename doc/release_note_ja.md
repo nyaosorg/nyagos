@@ -66,7 +66,7 @@ Jul 27, 2025
   ( [#449]: Thanks to [@fushihara] )
 
 [#449]: https://github.com/nyaosorg/nyagos/issues/449
-[@fushihara](https://github.com/fushihara)
+[@fushihara]: https://github.com/fushihara
 
 4.4.17\_1
 ---------
