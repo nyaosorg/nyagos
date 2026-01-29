@@ -17,7 +17,7 @@ import (
 	"github.com/mattn/go-tty"
 
 	"github.com/nyaosorg/go-box/v3"
-	"github.com/nyaosorg/go-ttyadapter/tty8"
+	"github.com/nyaosorg/go-ttyadapter/tty8pe"
 	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/internal/completion"
@@ -113,7 +113,7 @@ func CmdGetKey(*Param) []any {
 }
 
 func CmdGetKeys(*Param) []any {
-	tty := &tty8.Tty{}
+	tty := &tty8pe.Tty{}
 	if err := tty.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}

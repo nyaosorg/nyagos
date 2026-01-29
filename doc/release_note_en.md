@@ -30,6 +30,16 @@ Release notes
   runall("~/scriptdir1;~/scriptdir2")
   ```
 
+- Update go-readline-ny from v1.13.0 to [v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1) and go-ttyadapter from v0.1.0 to [v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) (#483)
+  - Changed the behavior of the Escape key to act as a prefix key instead of clearing input. This ensures that:
+    - Escape sequences such as `\x1B[A` (arrow keys) work correctly even when the input is split by the terminal.
+    - Pressing `Escape` is now equivalent to pressing `Alt`.
+  - `Esc`+`Left`  now behaves the same as `Esc`+`b` or `Alt`+`b`.
+  - `Esc`+`Right` now behaves the same as `Esc`+`f` or `Alt`+`f`.
+  - Changed the behavior of `Alt`+`f`, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word.
+  - `Alt`/`Esc`+`Backspace` and `ESC`+`Ctrl`+`w` now delete the word to the left of the cursor.
+  - `Alt`/`Esc`+`d` now deletes the current or next word.
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 

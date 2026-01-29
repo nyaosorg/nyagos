@@ -30,6 +30,16 @@ Release notes
   runall("~/scriptdir1;~/scriptdir2")
   ```
 
+- go-readline-ny をv1.13.0 から[v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1) へ、go-ttyadapter を v0.1.0 から[v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) へ更新 (#483)
+  - `Esc`キーの扱いを見直し、「入力内容のクリア」ではなくプリフィックスキーとして処理するように変更した。これにより
+    - 上矢印キーを表す `\x1B[A` などのキーシーケンスが端末の仕様により分割されて入力された場合でも、正しく動作するようになった。
+    - `Esc` の入力が `Alt` シフトと等価となった。
+  - `Esc`+`Left`  を `Esc`+`b`, `Alt`+`b` と等価にした。
+  - `Esc`+`Right` を `Esc`+`f`, `Alt`+`f` と等価にした。
+  - これまで次の単語の先頭への移動だった Alt + f の挙動を本家の readline に合わせ、現在または次の単語の末尾へ移動するように修正した。
+  - `Alt`/`Esc`+`Backspace`, `ESC`+`Ctrl`+`w` で、カーソル左の単語を削除するようにした。
+  - `Alt`+`d` で、カーソルから右直近の単語末尾までを削除するようにした。
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
