@@ -16,7 +16,6 @@ You can edit the command line with key bindings similar to UNIX shells.
 * `Ctrl-L`              : Refresh the screen
 * `Ctrl-U`              : Delete text from the beginning of the line to the cursor
 * `Ctrl-Y`              : Paste text from the clipboard
-* `Esc`, `Ctrl-[`       : Clear the entire command line
 * `Up`, `Ctrl-P`        : Recall the previous command
 * `Down`, `Ctrl-N`      : Recall the next command
 * `Tab`, `Ctrl-I`       : Complete file or command name
@@ -24,11 +23,13 @@ You can edit the command line with key bindings similar to UNIX shells.
 * `Ctrl-R`              : Search command history incrementally
 * `Ctrl-W`              : Delete the word before the cursor
 * `Ctrl-O`              : Insert a filename selected via cursor (requires `box.lua`)
-* `Ctrl-XR`, `Alt-R`    : Insert a history entry selected via cursor (requires `box.lua`)
-* `Ctrl-XG`, `Alt-G`    : Insert a Git revision selected via cursor (requires `box.lua`)
-* `Ctrl-XH`, `Alt-H`    : Insert a `CD`ed directory selected via cursor (requires `box.lua`)
+* `Ctrl-XR`, `Meta-R`   : Insert a history entry selected via cursor (requires `box.lua`)
+* `Ctrl-XG`, `Meta-G`   : Insert a Git revision selected via cursor (requires `box.lua`)
+* `Ctrl-XH`, `Meta-H`   : Insert a `CD`ed directory selected via cursor (requires `box.lua`)
 * `Ctrl-Q`, `Ctrl-V`    : Insert the next typed character verbatim
-* `Ctrl-Right`, `Alt-F` : Move the cursor forward by one word
-* `Ctrl-Left`, `Alt-B`  : Move the cursor backward by one word
+* `Ctrl-Right`, `Meta-F`: Move the cursor forward by one word
+* `Ctrl-Left`, `Meta-B` : Move the cursor backward by one word
 * `Ctrl-_, `Ctrl-Z`     : Undo
-* `Alt-O`               : Expand a `.lnk` shortcut path to its target path
+* `Meta-O`              : Expand a `.lnk` shortcut path to its target path
+
+`Meta` means either `Alt`+`key` or `Esc` followed by key.

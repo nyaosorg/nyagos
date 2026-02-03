@@ -14,7 +14,7 @@
         "C_A" "C_B" ... "C_Z" "M_A" "M_B" ... "M_Z"
         "F1" "F2" ..."F24"
         "BACKSPACE" "CTRL" "DEL" "DOWN" "END"
-        "ENTER" "ESCAPE" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
+        "ENTER" "HOME" "LEFT" "RIGHT" "SHIFT" "UP"
         "C_BREAK" "CAPSLOCK" "PAGEUP" "PAGEDOWN" "PAUSE"
         "C_HOME" "C_END" "C_PAGEUP" "C_PAGEDOWN"
 
