@@ -30,7 +30,7 @@ Release notes
   runall("~/scriptdir1;~/scriptdir2")
   ```
 
-- go-readline-ny をv1.13.0 から[v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1) へ、go-ttyadapter を v0.1.0 から[v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) へ更新 (#483)
+- go-readline-ny をv1.13.0 から[v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1) へ、go-ttyadapter を v0.1.0 から[v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) へ(#483)、go-box を v3.0.0 から [v3.1.1](https://github.com/nyaosorg/go-box/releases/tag/v3.1.1) へ更新した (#485)
   - `Esc`キーの扱いを見直し、「入力内容のクリア」ではなくプリフィックスキーとして処理するように変更した。これにより
     - 上矢印キーを表す `\x1B[A` などのキーシーケンスが端末の仕様により分割されて入力された場合でも、正しく動作するようになった。
     - `Esc` の入力が `Alt` シフトと等価となった。
