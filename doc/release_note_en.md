@@ -30,7 +30,7 @@ Release notes
   runall("~/scriptdir1;~/scriptdir2")
   ```
 
-- Update go-readline-ny from v1.13.0 to [v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1) and go-ttyadapter from v0.1.0 to [v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) (#483)
+- Update go-readline-ny from v1.13.0 to [v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1), go-ttyadapter from v0.1.0 to [v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) (#483) and go-tty from v0.3.0 to [v3.1.1](https://github.com/nyaosorg/go-box/releases/tag/v3.1.1) (#485)
   - Changed the behavior of the Escape key to act as a prefix key instead of clearing input. This ensures that:
     - Escape sequences such as `\x1B[A` (arrow keys) work correctly even when the input is split by the terminal.
     - Pressing `Escape` is now equivalent to pressing `Alt`.
