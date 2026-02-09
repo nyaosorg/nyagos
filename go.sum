@@ -5,8 +5,8 @@ github.com/atotto/clipboard v0.1.4/go.mod h1:ZY9tmq7sm5xIbd9bOK4onWV4S6X0u6GY7Vn
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
-github.com/clipperhouse/uax29/v2 v2.2.0 h1:ChwIKnQN3kcZteTXMgb1wztSgaU+ZemkgWdohwgs8tY=
-github.com/clipperhouse/uax29/v2 v2.2.0/go.mod h1:EFJ2TJMRUaplDxHKj1qAEhCtQPW2tJSwu5BF98AuoVM=
+github.com/clipperhouse/uax29/v2 v2.6.0 h1:z0cDbUV+aPASdFb2/ndFnS9ts/WNXgTNNGFoKXuhpos=
+github.com/clipperhouse/uax29/v2 v2.6.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
 github.com/dustin/go-humanize v1.0.1 h1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkpeCY=
 github.com/dustin/go-humanize v1.0.1/go.mod h1:Mu1zIs6XwVuF/gI1OepvI0qD18qycQx+mFykh5fBlto=
 github.com/go-ole/go-ole v1.2.5/go.mod h1:pprOEPIfldk/42T2oK7lQ4v4JSDwmV0As9GaiUsvbm0=
@@ -26,8 +26,8 @@ github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc
 github.com/mitchellh/go-ps v1.0.0/go.mod h1:J4lOc8z8yJs6vUwklHw2XEIiT4z4C40KtWVN3nvg8Pg=
 github.com/nyaosorg/glua-ole v0.0.0-20250402051125-b885836720e9 h1:YsqfppqxO/01E6v9/lJfGXgWkpQZDNIGA+BEeorTWdg=
 github.com/nyaosorg/glua-ole v0.0.0-20250402051125-b885836720e9/go.mod h1:VSzOmhPQQUKqQgU3lmkyt3yIYKJSvYSKt35/1pMFtS8=
-github.com/nyaosorg/go-box/v3 v3.0.0 h1:W5qfScEkKBoD68gbP/lwfWlvcTRB0rwXkhL+9iC62xI=
-github.com/nyaosorg/go-box/v3 v3.0.0/go.mod h1:70GsE9mIh7JKVCxt71q3jEijO6C9YJmOZqWpPa9w+GY=
+github.com/nyaosorg/go-box/v3 v3.1.1 h1:iTWE0MOTlD52yEySfhdN6nonX7Uagkn985xQZM6sCyI=
+github.com/nyaosorg/go-box/v3 v3.1.1/go.mod h1:kuRLL+x9n7kqIAiSZRXgNxP+HJVelsCKplo2TQSnWIo=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20 h1:16XkjcdkjWTJX3jfFiP987ougN3RrK7oNr+rvau5INs=
 github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20/go.mod h1:r8i5fNh8CgCesa7wGRY1y9SNqSDpEyDIiRwNKtK0Sdc=
 github.com/nyaosorg/go-readline-ny v1.14.1 h1:bWyXpR6jRaCXysx4bnioxk36+YjQ6dypHKMjHnzIXdk=

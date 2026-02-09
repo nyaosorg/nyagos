@@ -12,7 +12,7 @@ require (
 	github.com/mattn/go-tty v0.0.7
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/glua-ole v0.0.0-20250402051125-b885836720e9
-	github.com/nyaosorg/go-box/v3 v3.0.0
+	github.com/nyaosorg/go-box/v3 v3.1.1
 	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
 	github.com/nyaosorg/go-readline-ny v1.14.1
 	github.com/nyaosorg/go-readline-skk v0.6.1
@@ -33,6 +33,6 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
 	github.com/hymkor/sxencode-go v0.3.0 // indirect
 )
