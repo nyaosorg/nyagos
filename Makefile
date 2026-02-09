@@ -27,23 +27,9 @@ VERSION:=$(shell git describe --tags 2>$(NUL) || echo v0.0.0)
 GOOPT:=-ldflags "-s -w -X main.version=$(VERSION)"
 EXE:=$(shell go env GOEXE)
 
-snapshot:
+build:
 	$(GO) fmt ./...
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
-
-future:
-	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT) -tags=orgxwidth
-
-debug:
-	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT) -tags=debug
-
-define test1
-	pushd "$(1)" && $(GO) test && popd
-
-endef
-
-test: tstlua
-	$(foreach I,$(wildcard internal/*),$(call test1,$(I)))
 
 define tstlua1
 	"./nyagos" --norc -f "$(1)"
@@ -55,7 +41,8 @@ define tstlua2
 
 endef
 
-tstlua:
+test:
+	$(GO) test -v ./...
 	$(foreach I,$(wildcard test/lua/*.lua),$(call tstlua1,$(I)))
 ifeq ($(OS),Windows_NT)
 	$(foreach I,$(wildcard test/cmd/*.cmd),$(call tstlua2,$(I)))
@@ -73,12 +60,12 @@ get:
 _dist:
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 	zip -9 "nyagos-$(VERSION)-$(GOOS)-$(GOARCH).zip" \
-	    "nyagos$(EXE)" .nyagos LICENSE \
-	    "nyagos.d/*.lua" "nyagos.d/catalog/*.lua" \
+	    "nyagos$(EXE)" .nyagos \
+	    "nyagos.d/catalog/*.lua" \
 	    $(FILES)
 
 dist:
-	cd Etc && $(SET) "GOPROXY=direct" && $(GO) generate
+	$(SET) "GOPROXY=direct" && $(GO) generate -C Etc
 	$(SET) "GOOS=windows" && $(SET) "GOARCH=386"   && $(MAKE) _dist "FILES=makeicon.cmd"
 	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _dist "FILES=makeicon.cmd"
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
@@ -90,4 +77,4 @@ $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	"$(shell go env GOPATH)/bin/$(SUPPORTGO)" download
 
-.PHONY: snapshot debug test tstlua clean get _dist dist release install
+.PHONY: build debug test tstlua clean get _dist dist release install
