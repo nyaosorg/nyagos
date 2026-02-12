@@ -51,12 +51,6 @@ endif
 clean:
 	-$(DEL) nyagos.exe nyagos nyagos.syso 2>$(NUL)
 
-get:
-	$(GO) get -u
-	$(GO) get golang.org/x/sys@v0.30.0
-	$(GO) get golang.org/x/text@v0.22.0
-	$(GO) mod tidy
-
 _dist:
 	$(SET) "CGO_ENABLED=0" && $(GO) build $(GOOPT)
 	zip -9 "nyagos-$(VERSION)-$(GOOS)-$(GOARCH).zip" \
@@ -71,7 +65,7 @@ dist:
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
 release:
-	pwsh tools\latest-notes.ps1 | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
+	$(GO) run github.com/hymkor/latest-notes@latest -pattern "^\d+\.\d+\.\d+\\?\_\d+$" doc/release_note_*.md | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
 
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
