@@ -65,7 +65,7 @@ dist:
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
 release:
-	pwsh tools\latest-notes.ps1 | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
+	$(GO) run github.com/hymkor/latest-notes@latest -pattern "^\d+\.\d+\.\d+\\?\_\d+$" doc/release_note_*.md | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
 
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
