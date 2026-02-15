@@ -417,8 +417,12 @@ type AlreadyReportedError struct {
 	Err error
 }
 
-func (AlreadyReportedError) Error() string {
-	return ""
+func (a AlreadyReportedError) Unwrap() error {
+	return a.Err
+}
+
+func (a AlreadyReportedError) Error() string {
+	return "AlreadyReportedError: " + a.Err.Error()
 }
 
 func isAlreadyReported(err error) bool {

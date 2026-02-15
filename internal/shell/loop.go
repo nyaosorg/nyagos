@@ -2,6 +2,7 @@ package shell
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -87,10 +88,10 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		line, err := sh.ReadCommand(ctx)
 		if err != nil {
 			cancel()
-			if err == io.EOF {
+			if errors.Is(err, io.EOF) {
 				return 0, err
 			}
-			if err == readline.CtrlC {
+			if errors.Is(err, readline.CtrlC) {
 				fmt.Fprintln(os.Stderr, err.Error())
 				continue
 			}
@@ -100,16 +101,12 @@ func (sh *Shell) Loop(ctx0 context.Context, stream Stream) (int, error) {
 		rc, err := sh.Interpret(ctx, line)
 
 		if err != nil {
-			if err == io.EOF {
+			if errors.Is(err, io.EOF) {
 				cancel()
 				return rc, err
 			}
-			if err1, ok := err.(AlreadyReportedError); ok {
-				if err1.Err == io.EOF {
-					cancel()
-					return rc, err
-				}
-			} else {
+			var e AlreadyReportedError
+			if !errors.As(err, &e) {
 				fmt.Fprintln(os.Stderr, err)
 			}
 		}
