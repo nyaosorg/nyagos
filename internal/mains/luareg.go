@@ -9,6 +9,7 @@ import (
 const (
 	readlineLuaRegistryKey = "nyagos.readline"
 	shellLuaRegistryKey    = "nyagos.shell"
+	ctxLuaRegistryKey      = "nyagos.context"
 )
 
 func getLuaRegistry(L Lua, key string) any {
@@ -37,6 +38,14 @@ func setLuaRegistry(L Lua, key string, value any) {
 	}
 }
 
+func clearLuaRegistry(L Lua, key string) {
+	reg, ok := L.Get(lua.RegistryIndex).(*lua.LTable)
+	if !ok {
+		return
+	}
+	L.SetField(reg, key, lua.LNil)
+}
+
 func pushLuaRegistry(L Lua, key string, value any) func() {
 	orig := getLuaRegistry(L, key)
 	setLuaRegistry(L, key, value)
@@ -49,9 +58,16 @@ func setContext(ctx context.Context, L Lua) {
 	if ctx == nil {
 		ctx = context.Background()
 	}
-	L.SetContext(ctx)
+	setLuaRegistry(L, ctxLuaRegistryKey, ctx)
+}
+
+func clearContext(L Lua) {
+	clearLuaRegistry(L, ctxLuaRegistryKey)
 }
 
 func getContext(L Lua) context.Context {
-	return L.Context()
+	if v, ok := getLuaRegistry(L, ctxLuaRegistryKey).(context.Context); ok {
+		return v
+	}
+	return context.Background()
 }

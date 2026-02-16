@@ -73,7 +73,7 @@ func (*_ScriptEngineForOptionImpl) RunFile(ctx context.Context, fname string) ([
 	if !ok {
 		return nil, errors.New("script is not supported")
 	}
-	defer setContext(getContext(L), L)
+	defer clearContext(L)
 	setContext(ctx, L)
 	return nil, luaRedirect(ctx, os.Stdin, os.Stdout, os.Stderr, L, func() error {
 		return doFileExceptAtMarkLines(L, fname)
@@ -85,7 +85,7 @@ func (impl *_ScriptEngineForOptionImpl) RunString(ctx context.Context, code stri
 	if !ok {
 		return errors.New("script is not supported")
 	}
-	defer setContext(getContext(L), L)
+	defer clearContext(L)
 	setContext(ctx, L)
 	restore := pushLuaRegistry(L, shellLuaRegistryKey, impl.Sh)
 	defer restore()
@@ -138,7 +138,7 @@ func Run(fsys fs.FS) error {
 	defer sh.Close()
 	sh.Console = colorable.NewColorableStdout()
 
-	defer setContext(getContext(L), L)
+	defer clearContext(L)
 	setContext(ctx, L)
 	restore := pushLuaRegistry(L, shellLuaRegistryKey, sh)
 	defer restore()

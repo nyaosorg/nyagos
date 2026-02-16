@@ -45,7 +45,7 @@ func (L *_LuaCallBack) luaHookForComplete(ctx context.Context, this *readline.Bu
 	L.SetField(tbl, "field", field)
 	L.SetField(tbl, "left", lua.LString(rv.Left))
 
-	defer setContext(getContext(L.Lua), L.Lua)
+	defer clearContext(L.Lua)
 	setContext(ctx, L.Lua)
 
 	L.Push(f)
