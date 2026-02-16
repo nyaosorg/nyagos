@@ -2,13 +2,13 @@ package commands
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strings"
 
 	"github.com/nyaosorg/go-windows-mbcs"
-	"github.com/nyaosorg/nyagos/internal/nodos"
 )
 
 func cat(ctx context.Context, r io.Reader, w io.Writer) error {
@@ -33,37 +33,28 @@ func cat(ctx context.Context, r io.Reader, w io.Writer) error {
 }
 
 func cmdType(ctx context.Context, cmd Param) (int, error) {
-	if len(cmd.Args()) <= 1 {
-		if isTerminalIn(cmd.In()) {
-			c, err := nodos.EnableProcessInput()
-			if err != nil {
-				return 1, err
-			}
-			defer c()
-		}
-		if err := cat(ctx, cmd.In(), cmd.Out()); err != nil {
+	args := cmd.Args()
+	if len(args) <= 1 {
+		return 1, errors.New("The syntax of the command is incorrect.")
+	}
+	for _, arg1 := range args[1:] {
+		r, err := os.Open(arg1)
+		if err != nil {
 			return 1, err
 		}
-	} else {
-		for _, arg1 := range cmd.Args()[1:] {
-			r, err := os.Open(arg1)
-			if err != nil {
-				return 1, err
-			}
-			stat1, err := r.Stat()
-			if err != nil {
-				r.Close()
-				return 2, err
-			}
-			if stat1.IsDir() {
-				r.Close()
-				return 3, fmt.Errorf("%s: Permission denied", arg1)
-			}
-			err = cat(ctx, r, cmd.Out())
+		stat1, err := r.Stat()
+		if err != nil {
 			r.Close()
-			if err != nil {
-				return 0, err
-			}
+			return 2, err
+		}
+		if stat1.IsDir() {
+			r.Close()
+			return 3, fmt.Errorf("%s: Permission denied", arg1)
+		}
+		err = cat(ctx, r, cmd.Out())
+		r.Close()
+		if err != nil {
+			return 0, err
 		}
 	}
 	return 0, nil

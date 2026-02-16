@@ -40,6 +40,9 @@ Release notes
   - `Alt`/`Esc`+`Backspace`, `ESC`+`Ctrl`+`w` で、カーソル左の単語を削除するようにした。
   - `Alt`+`d` で、カーソルから右直近の単語末尾までを削除するようにした。
 
+- `type` コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)  
+  (標準入力から読み取ると、Ctrl-C による SIGINT が遅延し、type ではなく、次のコマンドを中断させてしまうことが多いため)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
