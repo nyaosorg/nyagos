@@ -546,7 +546,7 @@ func luaRedirect(ctx context.Context, _stdin, _stdout, _stderr *os.File, L Lua, 
 }
 
 func execLuaKeepContextAndShell(ctx context.Context, sh *shell.Shell, L Lua, nargs, nresult int) error {
-	defer setContext(getContext(L), L)
+	defer clearContext(L)
 	setContext(ctx, L)
 	restore := pushLuaRegistry(L, shellLuaRegistryKey, sh)
 	defer restore()

@@ -32,7 +32,7 @@ func luaLineFilter(ctx context.Context, L Lua, line string) string {
 
 	L.Push(luaFilter)
 	L.Push(lua.LString(line))
-	defer setContext(getContext(L), L)
+	defer clearContext(L)
 	setContext(ctx, L)
 	err := L.PCall(1, 1, nil)
 	if err != nil {

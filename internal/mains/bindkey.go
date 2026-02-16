@@ -62,7 +62,7 @@ func (rl *_ReadLineCallBack) evalKey(L Lua) int {
 		code = keys.Code(key)
 	}
 	function := rl.buffer.LookupCommand(string(code))
-	rc := function.Call(L.Context(), rl.buffer)
+	rc := function.Call(getContext(L), rl.buffer)
 	rl.buffer.RepaintLastLine()
 	switch rc {
 	case readline.ENTER:
@@ -82,7 +82,7 @@ func (rl *_ReadLineCallBack) KeyFunc(L Lua) int {
 	if err != nil {
 		return lerror(L, err.Error())
 	}
-	switch function.Call(L.Context(), rl.buffer) {
+	switch function.Call(getContext(L), rl.buffer) {
 	case readline.ENTER:
 		L.Push(lua.LTrue)
 	case readline.INTR:
@@ -179,7 +179,7 @@ func (f *_KeyLuaFunc) Call(ctx context.Context, buffer *readline.Buffer) readlin
 		L.SetField(table, "text", lua.LString(_text))
 	}
 
-	defer setContext(getContext(L), L)
+	defer clearContext(L)
 	setContext(ctx, L)
 
 	L.Push(table)

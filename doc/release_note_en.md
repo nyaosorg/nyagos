@@ -43,6 +43,8 @@ Release notes
 - Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)  
   (This avoids a race condition where a SIGINT from Ctrl-C could be delayed and incorrectly cancel the subsequent command.)
 
+- Improved how Context is passed to Lua extensions. By using the Lua registry instead of `LState.SetContext`, we now suppress redundant Lua stack traces when a command is interrupted by Ctrl-C. (#492)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 

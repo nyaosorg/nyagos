@@ -43,6 +43,8 @@ Release notes
 - `type` コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)  
   (標準入力から読み取ると、Ctrl-C による SIGINT が遅延し、type ではなく、次のコマンドを中断させてしまうことが多いため)
 
+- Lua 拡張関数への Context 渡しを LState 経由からレジストリ経由に変更した。これにより、Ctrl-C 中断時に Lua インタプリタが冗長なスタックトレースを表示する問題を解消した。(#492)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 

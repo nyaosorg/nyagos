@@ -54,9 +54,6 @@ func cloneTo(L1, L2 Lua) bool {
 			}
 		}
 	})
-	if ctx := L1.Context(); ctx != nil {
-		L2.SetContext(ctx)
-	}
 	return true
 }
 

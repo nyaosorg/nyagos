@@ -53,7 +53,7 @@ func (c *customCompleter) Complete(ctx context.Context, ua completion.UncComplet
 		LL.SetTable(tbl, lua.LNumber(i+1), lua.LString(arg1))
 	}
 
-	defer setContext(getContext(LL), LL)
+	defer clearContext(LL)
 	setContext(ctx, LL)
 
 	LL.Push(c.Func)
