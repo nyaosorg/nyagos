@@ -2,12 +2,27 @@ package shell_test
 
 import (
 	"context"
+	"errors"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
+
+func TestAlreadyReportedError(t *testing.T) {
+	a := shell.AlreadyReportedError{Err: io.EOF}
+
+	if !errors.Is(a, io.EOF) {
+		t.Fatal("AleadyReportedError failed to implement Unwrap():case 1")
+	}
+
+	b := shell.AlreadyReportedError{}
+	if errors.Is(b, io.EOF) {
+		t.Fatal("AleadyReportedError failed to implement Unwrap():case 2")
+	}
+}
 
 func TestInterpret(t *testing.T) {
 	ctx := context.Background()
