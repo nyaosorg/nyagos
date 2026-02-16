@@ -40,6 +40,9 @@ Release notes
   - `Alt`/`Esc`+`Backspace` and `ESC`+`Ctrl`+`w` now delete the word to the left of the cursor.
   - `Alt`/`Esc`+`d` now deletes the current or next word.
 
+- Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)  
+  (This avoids a race condition where a SIGINT from Ctrl-C could be delayed and incorrectly cancel the subsequent command.)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
