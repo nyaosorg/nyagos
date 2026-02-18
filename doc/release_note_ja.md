@@ -45,6 +45,9 @@ Release notes
 
 - Lua 拡張関数への Context 渡しを LState 経由からレジストリ経由に変更した。これにより、Ctrl-C 中断時に Lua インタプリタが冗長なスタックトレースを表示する問題を解消した。(#492)
 
+- GNU Make なしでビルドした場合に、バージョン文字列が空になってしまう問題を修正
+今後、バージョンアップ時に `make bump` を実行する (#493)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
