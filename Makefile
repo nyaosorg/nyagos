@@ -64,8 +64,17 @@ dist:
 	$(SET) "GOOS=windows" && $(SET) "GOARCH=amd64" && $(MAKE) _dist "FILES=makeicon.cmd"
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
+LATEST=$(GO) run github.com/hymkor/latest-notes@latest -pattern "^\d+\.\d+\.\d+\\?\_\d+$$"
+NOTES=doc/release_note_*.md
+
 release:
-	$(GO) run github.com/hymkor/latest-notes@latest -pattern "^\d+\.\d+\.\d+\\?\_\d+$" doc/release_note_*.md | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
+	$(LATEST) $(NOTES) | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
+
+dry-release:
+	$(LATEST) $(NOTES)
+
+bump:
+	$(LATEST) -gosrc main -suffix "-goinstall" $(NOTES) > version.go
 
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
