@@ -1,6 +1,6 @@
-Release notes
-=============
-( [English](release_note_en.md) / **Japanese** )
+Changelog
+=========
+( [English](CHANGELOG.md) / **Japanese** )
 
 - readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
 
@@ -47,6 +47,8 @@ Release notes
 
 - GNU Make なしでビルドした場合に、バージョン文字列が空になってしまう問題を修正
 今後、バージョンアップ時に `make bump` を実行する (#493)
+
+- 変更履歴を記録するファイルを `release_note_en.md`, `release_note_ja.md` から `CHANGELOG.md`, `CHANGELOG_ja.md` へ改名 (#494)
 
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20

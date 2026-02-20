@@ -14,9 +14,9 @@
 
 [GitHub Repository](https://github.com/nyaosorg/nyagos)
 
-### Release note
+### Changelog
 
-- [4.4.x](release_note_en.md)
+- [4.4.x](CHANGELOG.md)
 - [4.3.x](history-4.3_en.md)
 - [4.2.x](history-4.2_en.md)
 - [4.1.x](history-4.1_en.md)

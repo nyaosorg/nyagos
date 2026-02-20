@@ -116,9 +116,9 @@ C:> go install github.com/nyaosorg/nyagos@latest
 Contents
 --------
 
-### Release notes
+### Changelog
 
-[4.4.x](doc/release_note_en.md)
+[4.4.x](doc/CHANGELOG.md)
 / [4.3.x](doc/history-4.3_en.md)
 / [4.2.x](doc/history-4.2_en.md)
 / [4.1.x](doc/history-4.1_en.md)

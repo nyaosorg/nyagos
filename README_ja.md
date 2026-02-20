@@ -119,9 +119,9 @@ C:> go install github.com/nyaosorg/nyagos@latest
 目次
 ----
 
-### リリースノート
+### Changelog
 
-[4.4.x](doc/release_note_ja.md)
+[4.4.x](doc/CHANGELOG_ja.md)
 / [4.3.x](doc/history-4.3_ja.md)
 / [4.2.x](doc/history-4.2_ja.md)
 / [4.1.x](doc/history-4.1_ja.md)

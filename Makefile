@@ -65,7 +65,7 @@ dist:
 	$(SET) "GOOS=linux"   && $(SET) "GOARCH=amd64" && $(MAKE) _dist
 
 LATEST=$(GO) run github.com/hymkor/latest-notes@latest -pattern "^\d+\.\d+\.\d+\\?\_\d+$$"
-NOTES=doc/release_note_*.md
+NOTES=doc/CHANGELOG*.md
 
 release:
 	$(LATEST) $(NOTES) | gh release create -d --notes-file - -t $(VERSION) $(VERSION) $(wildcard $(NAME)-$(VERSION)-*.zip)
@@ -76,8 +76,11 @@ dry-release:
 bump:
 	$(LATEST) -gosrc main -suffix "-goinstall" $(NOTES) > version.go
 
+docs:
+	$(MAKE) -C doc all
+
 $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	"$(shell go env GOPATH)/bin/$(SUPPORTGO)" download
 
-.PHONY: build debug test tstlua clean get _dist dist release install
+.PHONY: build debug test tstlua clean get _dist dist release install docs
