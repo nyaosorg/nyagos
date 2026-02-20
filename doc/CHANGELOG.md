@@ -1,6 +1,6 @@
-Release notes
-=============
-( **English** / [Japanese](release_note_ja.md) )
+Changelog
+=========
+( **English** / [Japanese](CHANGELOG_ja.md) )
 
 - Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
 
@@ -47,6 +47,8 @@ Release notes
 
 - Fixed an issue where the version string was empty when built without GNU Make.
   The version string is now updated via `make bump` during the release process. (#493)
+
+- Rename release note files to `CHANGELOG.md` and `CHANGELOG_ja`.md.
 
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
