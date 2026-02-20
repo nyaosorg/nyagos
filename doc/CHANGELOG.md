@@ -48,7 +48,7 @@ Changelog
 - Fixed an issue where the version string was empty when built without GNU Make.
   The version string is now updated via `make bump` during the release process. (#493)
 
-- Rename release note files to `CHANGELOG.md` and `CHANGELOG_ja`.md.
+- Rename release note files to `CHANGELOG.md` and `CHANGELOG_ja`.md. (#494)
 
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
