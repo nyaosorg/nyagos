@@ -17,7 +17,7 @@
 ### Changelog
 
 - [4.4.x](CHANGELOG.md)
-- [4.3.x](history-4.3_en.md)
-- [4.2.x](history-4.2_en.md)
-- [4.1.x](history-4.1_en.md)
-- [4.0.x](history-4.0_en.md)
+- [4.3.x](CHANGELOG-v4.3_en.md)
+- [4.2.x](CHANGELOG-v4.2_en.md)
+- [4.1.x](CHANGELOG-v4.1_en.md)
+- [4.0.x](CHANGELOG-v4.0_en.md)

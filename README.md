@@ -119,10 +119,10 @@ Contents
 ### Changelog
 
 [4.4.x](doc/CHANGELOG.md)
-/ [4.3.x](doc/history-4.3_en.md)
-/ [4.2.x](doc/history-4.2_en.md)
-/ [4.1.x](doc/history-4.1_en.md)
-/ [4.0.x](doc/history-4.0_en.md)
+/ [4.3.x](doc/CHANGELOG-v4.3_en.md)
+/ [4.2.x](doc/CHANGELOG-v4.2_en.md)
+/ [4.1.x](doc/CHANGELOG-v4.1_en.md)
+/ [4.0.x](doc/CHANGELOG-v4.0_en.md)
 
 ### Documents
 
@@ -135,7 +135,7 @@ Contents
 7. [Lua functions extenteded by NYAGOS](doc/07-LuaFunctions_en.md)
 8. [Uninstall](doc/08-Uninstall_en.md)
 9. [How To build](doc/09-Build_en.md)
-10. [How to setup SKK](doc/10-SetupSKK_en.md) (since v4.4.14)
+10. [How to setup SKK](doc/10-SetupSKK_en.md)
 
 License
 -------

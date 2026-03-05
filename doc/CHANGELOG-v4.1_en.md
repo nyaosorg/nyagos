@@ -1,7 +1,9 @@
-English / [Japanese](history-4.1_ja.md)
+Changelog v4.1
+==============
+( English / [Japanese](CHANGELOG-v4.1_ja.md) )
 
 Since 4.1
-=========
+---------
 
 NYAGOS 4.0 has the problem that a panic sometimes occurs because 
 multi-goroutines call only one Lua-instance.
@@ -32,30 +34,30 @@ run on 4.1, these modifing are required.
     - Do not assign closure to `nyagos.alias[]` ! 
       The code in the function can not access the bind variables.
 
-NYAGOS 4.1.9\_3
-===============
-on May 13,2017
+v4.1.9\_3
+---------
+May 13, 2017
 
 * Fix #214: warned as `main/lua_cmd.go: cmdExec: not found interpreter object`
 
-NYAGOS 4.1.9\_2
-===============
-on Apr 3,2017
+v4.1.9\_2
+---------
+Apr 3, 2017
 
 * Fix #191 the option`-c` printed `option parse error`.
 * A new Lua function: `nyagos.elevated()` which returns true on elevated mode.
 * The default title bar prints `(admin)` on elevated mode.
 
-NYAGOS 4.1.9\_1
-===============
-on Mar 28,2017
+v4.1.9\_1
+---------
+Mar 28, 2017
 
 * Fix: sometimes cursor disappears on readline on some environment on 4.1.9\_0.
 * Be able to use the escape sequence `\033]0;(title)\007` to change the title of the command-prompt by the new go-colorable's feature.
 
-NYAGOS 4.1.9\_0
-===============
-on Mar 27,2017
+v4.1.9\_0
+---------
+Mar 27, 2017
 
 * Fix: `open http(s)://...` did not work.
 * Support `cd file:///...`
@@ -84,9 +86,9 @@ on Mar 27,2017
     * Ctrl-XH , Alt-H : Insert `CD`ed directory to select by Cursor (box.lua)
 * Support `lua_e "nyagos.key = function(this) end"`
 
-NYAGOS 4.1.8\_0
-===============
-on Feb 15,2017
+v4.1.8\_0
+---------
+Feb 15, 2017
 
 * Add new customizing file `_nyagos`(command.com-batchlike)
 * Fix #173 could not stop `ls` and built-in commands with Ctrl-C
@@ -104,9 +106,9 @@ on Feb 15,2017
 * '#' became a comment mark.
 * open,clone,su,sudo : rewrite with Go (from Lua)
 
-NYAGOS 4.1.7\_0
-===============
-on Nov 29,2016
+v4.1.7\_0
+---------
+Nov 29, 2016
 
 * Abolished nyagos.lua, which role nyagos.exe do itself.
 * Caching ~/.nyagos with `%APPDATA%\NYAOS_ORG/dotnyagos.luac`
@@ -126,15 +128,15 @@ on Nov 29,2016
         * M-g: Git-revision
 * Fix: brace expansion "{a,b,c}" worked even in quotated strings
 
-NYAGOS 4.1.6\_1
-===============
-on Sep 7,2016
+v4.1.6\_1
+---------
+Sep 7, 2016
 
 * Fix: the package zip did not have lua53.dll
 
-NYAGOS 4.1.6\_0
-===============
-on Sep 7,2016
+v4.1.6\_0
+---------
+Sep 7, 2016
 
 * Use "\x1B[0K" as ERASELINE instead of " " & Backspace
 * Use "\x1B[mC as m-times of Backspace
@@ -142,16 +144,16 @@ on Sep 7,2016
 * Fix #164: `cd --history` changed the current directory to home.
 * copy and move always regard the desitinate path matching with `[\\/:]\.{0,2}$` as a directory wheter it fails or not to stat the path.
 
-NYAGOS 4.1.5\_1
-===============
-on Jul 31,2016
+v4.1.5\_1
+---------
+Jul 31, 2016
 
 * Fix #157++: Overflow line on the text appended after screen resized.
 * Error when it the upvalue named as 'prompter' is used on closures(nyagos.prompt) for invalid ~/.nyagos of 4.0.x on default for #155,#158
 
-NYAGOS 4.1.5\_0
-===============
-on Jul 31,2016
+v4.1.5\_0
+---------
+Jul 31,2016
 
 * `cd --history` outputs the current directory at first to prevent peco(M-h) fro
 m hangup with no cd histories.
@@ -163,16 +165,16 @@ m hangup with no cd histories.
 * Fix #157 Reset the readline-width on the console window resized.
 * Moved some packages to the other repositories.
 
-NYAGOS 4.1.4\_1
-===============
-on Jun 12,2016
+v4.1.4\_1
+---------
+Jun 12, 2016
 
 * Fix #151 `&&` and `||` work same as ` ;`
 * Add nyagos.d/catalog/autocd.lua & autols.lua (#149 Thx @DeaR)
 
-NYAGOS 4.1.4\_0
-===============
-on May 29,2016
+v4.1.4\_0
+---------
+May 29, 2016
 
 * Implemented built-in tiny OLE interface and nyole.dll is not necessary now.
 * Define default-prompt function as `nyagos.default_prompt` and it can change
@@ -181,17 +183,17 @@ console-title(second parameter)
 * Fix: Lua's default file handles(STDIN/STDOUT) were opened by binary-mode. #146
 * nyagos.d/catalog/peco.lua: C-r: revert order of display and improved speed.
 
-NYAGOS 4.1.3\_1
-===============
-on May 8,2016
+v4.1.3\_1
+---------
+May 8, 2016
 
 * Fix: %APPDATA%\nyaos.org\nyagos.history was not updated (#138)
 * Fix: when nyagos.history was deleted, warnings are displayed until `exit` was typed.
 * Fix: nyagos.d/catalog/peco.lua: when nyagos.history does not exist, peco hangs
 
-NYAGOS 4.1.3\_0
-===============
-on May 5,2016
+v4.1.3\_0
+---------
+May 5, 2016
 
 * Add: `nyagos.open(PATH,MODE)` which `PATH` is in UTF8 and compatible with `io.open`.
 * Add: `nyagos.loadfile(PATH)` which `PATH` is in UTF8 and compatible with `loadfile`.
@@ -214,14 +216,13 @@ on May 5,2016
 * Fix: `ls -ltr *` was not sorted by modified time. (#136)
 * Support: nyagos -f NOT-Lua-Script(COMMANDS-Script)
 
-(Add forgotten change on May 17,2016)
--------------------------------------
+### (Add forgotten change on May 17, 2016)
 
 * Not to confuse whether the encoding is ANSI or UTF8 string , stop to print('UTF8-String with ESCAPE-SEQUENCE'). Now print remains to be the bundled one of lua53.dll. ( #129 )
 
-NYAGOS 4.1.2\_0
-===============
-on Mar 29,2016
+v4.1.2\_0
+---------
+Mar 29, 2016
 
 * Made scripts-catalog system
     - Moved `catalog.d\*.lua` to `nyagos.d\catalog\.`
@@ -243,31 +244,30 @@ on Mar 29,2016
   which contains parameters not removed quotations from user-typed ones.
 * Add the method `replacefrom` to bindkey-function's parameter table.
 
-
-NYAGOS 4.1.1\_2
-===============
-on Feb 17,2016
+v4.1.1\_2
+---------
+Feb 17, 2016
 
 * Fix the miss to convert filename UTF8 to ANSI for loadfile() of Lua (#110,Thx Mr.HABATA)
 
-NYAGOS 4.1.1\_1
-===============
-on Feb 16,2016
+v4.1.1\_1
+---------
+Feb 16, 2016
 
 * Force to insert a line feed when prompt is too wide (#104)
 * Fix the error message when no files matches with a given wildcard (#108)
 * Fix the environment variable like %ProgramFiles(x86)% were not expanded. (#109 Thx @hattya)
 
-NYAGOS 4.1.1\_0
-===============
-on Jan 15,2016
+v4.1.1\_0
+---------
+Jan 15, 2016
 
 * Support UTF-16 surrogate pair on getkey
 * `mkdir` suppports /p: make parent directories as needed.
 
-NYAGOS 4.1.0\_0
-===============
-on Jan 3,2016
+v4.1.0\_0
+---------
+Jan 3, 2016
 
 * Add build-in `ln`.
 * Add lua-command `lns` which shows UAC and do `ln -s`
@@ -286,9 +286,9 @@ on Jan 3,2016
         - `'C:\Prog[TAB]` is completed to `'C:\Program Files\ ` (`'` remains)
         - `"C:\Prog[TAB]` is completed to `"C:\Program Files\ ` (`"` remains)
 
-NYAGOS 4.1-beta
-================
-on Dec 13,2015
+v4.1-beta
+---------
+Dec 13, 2015
 
 * All Lua-callback function have thier own Lua-instances to avoid crash.
 * Create the Lua-table `share[]` to share values between callback 

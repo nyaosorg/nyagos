@@ -2,6 +2,13 @@ Changelog
 =========
 ( [English](CHANGELOG.md) / **Japanese** )
 
+- [v4.0.\*](CHANGELOG-v4.0_ja.md)
+- [v4.1.\*](CHANGELOG-v4.1_ja.md)
+- [v4.2.\*](CHANGELOG-v4.2_ja.md)
+- [v4.3.\*](CHANGELOG-v4.3_ja.md)
+
+---
+
 - readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
 
 - `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
