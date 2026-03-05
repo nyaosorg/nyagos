@@ -73,9 +73,11 @@ a built-in command nor an alias. The difference with os.execute is that
 the errormessage is written with utf8.
 
 ### `OUTPUT = nyagos.eval("COMMAND")`
+### `OUTPUT = nyagos.evaln("COMMAND")`
 
-It executes "COMMAND" and set its standard output into the lua-variable OUTPUT.
-When error occures, OUTPUT is set `nil`.
+Executes "COMMAND" and sets its standard output to the Lua variable OUTPUT.
+`eval` strips trailing CRLF from the output, while `evaln` returns the output as-is.
+If an error occurs, OUTPUT is set to `nil`.
 
 ### `OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)`
 ### `OUTPUT,ERR = nyagos.raweval{'COMMAND-NAME','ARG-1','ARG-2'...}`

@@ -50,6 +50,8 @@ Changelog
 
 - Rename release note files to `CHANGELOG.md` and `CHANGELOG_ja`.md. (#494)
 
+- Lua: Add `nyagos.evaln`, a version of `nyagos.eval` that does not strip trailing CRLF from the output (#495)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
