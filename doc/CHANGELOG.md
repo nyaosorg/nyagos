@@ -7,6 +7,10 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_en.md)
 - [v4.3.\*](CHANGELOG-v4.3_en.md)
 
+4.4.19\_0
+---------
+Mar 13, 2026
+
 ### Bug fixes
 
 - Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)  
