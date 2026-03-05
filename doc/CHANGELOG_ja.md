@@ -7,7 +7,25 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_ja.md)
 - [v4.3.\*](CHANGELOG-v4.3_ja.md)
 
----
+### 不具合修正
+
+- `type` コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)  
+  (標準入力から読み取ると、Ctrl-C による SIGINT が遅延し、type ではなく、次のコマンドを中断させてしまうことが多いため)
+
+### 仕様変更
+
+- 入力予測機能で英大文字・小文字を区別しないようにした ([go-readline-ny#20], #476, #477, thanks to @emisjerry)
+
+- `Esc`キーの扱いを見直し、「入力内容のクリア」ではなくプリフィックスキーとして処理するように変更した。(#483, #485)
+  - 上矢印キーを表す `\x1B[A` などのキーシーケンスが端末の仕様により分割されて入力された場合でも、正しく動作するようになった。
+  - `Esc` の入力が `Alt` シフトと等価となった。
+- `Esc`+`Left`  を `Esc`+`b`, `Alt`+`b` と等価にした。
+- `Esc`+`Right` を `Esc`+`f`, `Alt`+`f` と等価にした。
+- これまで次の単語の先頭への移動だった Alt + f の挙動を本家の readline に合わせ、現在または次の単語の末尾へ移動するように修正した。
+- `Alt`/`Esc`+`Backspace`, `ESC`+`Ctrl`+`w` で、カーソル左の単語を削除するようにした。
+- `Alt`+`d` で、カーソルから右直近の単語末尾までを削除するようにした。
+
+### Lua
 
 - readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
 
@@ -22,42 +40,31 @@ Changelog
   - カーソルが行末の時は予測候補確定、さもなければカーソル一文字分移動(`FORWARD_CHAR_OR_ACCEPT_PREDICT`)
 
   なお、右矢印キー、Ctrl-F はデフォルトで `FORWARD_CHAR_OR_ACCEPT_PREDICT` とした。
-
-- 入力予測機能で英大文字・小文字を区別しないようにした ([go-readline-ny#20], #476, #477, thanks to @emisjerry)
-
 - nyagos.d 以下の Lua スクリプトを再び自動ロード対象とした。(#469, #478)
   ただし、かつてあった nyagos.d 以下の標準スクリプトは引き続き EXE ファイル内に組み込みとし、デフォルトでは同フォルダー直下はファイルのない状態とする。
   ( 当初は nyagos.d 配下にユーザが独自スクリプトを置く想定ではありませんでした )
 
 - 起動時に読み込むスクリプトのどれかでエラーが発生しても、残りのスクリプトの実行を続けるようにした。(#479)
-
 - `runall.lua` スクリプトを `nyagos.d/catalog` に追加した。これは、指定ディレクトリ以下にあるすべての Lua スクリプトを順にロードして実行する (#480) 。使用例:
   ```
   local runall = require("runall")
   runall("~/scriptdir1;~/scriptdir2")
   ```
 
-- go-readline-ny をv1.13.0 から[v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1) へ、go-ttyadapter を v0.1.0 から[v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) へ(#483)、go-box を v3.0.0 から [v3.1.1](https://github.com/nyaosorg/go-box/releases/tag/v3.1.1) へ更新した (#485)
-  - `Esc`キーの扱いを見直し、「入力内容のクリア」ではなくプリフィックスキーとして処理するように変更した。これにより
-    - 上矢印キーを表す `\x1B[A` などのキーシーケンスが端末の仕様により分割されて入力された場合でも、正しく動作するようになった。
-    - `Esc` の入力が `Alt` シフトと等価となった。
-  - `Esc`+`Left`  を `Esc`+`b`, `Alt`+`b` と等価にした。
-  - `Esc`+`Right` を `Esc`+`f`, `Alt`+`f` と等価にした。
-  - これまで次の単語の先頭への移動だった Alt + f の挙動を本家の readline に合わせ、現在または次の単語の末尾へ移動するように修正した。
-  - `Alt`/`Esc`+`Backspace`, `ESC`+`Ctrl`+`w` で、カーソル左の単語を削除するようにした。
-  - `Alt`+`d` で、カーソルから右直近の単語末尾までを削除するようにした。
+- `nyagos.eval` の出力末尾の CRLF を削除しないバージョン `nyagos.evaln` を追加 (#495)
 
-- `type` コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)  
-  (標準入力から読み取ると、Ctrl-C による SIGINT が遅延し、type ではなく、次のコマンドを中断させてしまうことが多いため)
+### Documents
 
-- Lua 拡張関数への Context 渡しを LState 経由からレジストリ経由に変更した。これにより、Ctrl-C 中断時に Lua インタプリタが冗長なスタックトレースを表示する問題を解消した。(#492)
+- 変更履歴を記録するファイルを変更
+  - `release_note_en.md` → `CHANGELOG.md`
+  - `release_note_ja.md` → `CHANGELOG_ja.md`  (#494)
+  - `history-*.md` → `CHANGELOG-v*.md` (#496)
+
+### Internal changes
 
 - GNU Make なしでビルドした場合に、バージョン文字列が空になってしまう問題を修正
 今後、バージョンアップ時に `make bump` を実行する (#493)
-
-- 変更履歴を記録するファイルを `release_note_en.md`, `release_note_ja.md` から `CHANGELOG.md`, `CHANGELOG_ja.md` へ改名 (#494)
-
-- Lua関数: `nyagos.eval` の出力末尾の CRLF を削除しないバージョン `nyagos.evaln` を追加 (#495)
+- Lua 拡張関数への Context 渡しを LState 経由からレジストリ経由に変更した。これにより、Ctrl-C 中断時に Lua インタプリタが冗長なスタックトレースを表示する問題を解消した。(#492)
 
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
