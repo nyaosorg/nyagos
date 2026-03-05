@@ -2,6 +2,13 @@ Changelog
 =========
 ( **English** / [Japanese](CHANGELOG_ja.md) )
 
+- [v4.0.\*](CHANGELOG-v4.0_en.md)
+- [v4.1.\*](CHANGELOG-v4.1_en.md)
+- [v4.2.\*](CHANGELOG-v4.2_en.md)
+- [v4.3.\*](CHANGELOG-v4.3_en.md)
+
+---
+
 - Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
 
 - `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
