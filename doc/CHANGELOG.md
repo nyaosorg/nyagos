@@ -7,7 +7,25 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_en.md)
 - [v4.3.\*](CHANGELOG-v4.3_en.md)
 
----
+### Bug fixes
+
+- Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)  
+  (This avoids a race condition where a SIGINT from Ctrl-C could be delayed and incorrectly cancel the subsequent command.)
+
+### New Features
+
+- Made input prediction case-insensitive. ([go-readline-ny#20], #476 and #477, thanks to @emisjerry)
+
+- Changed the behavior of the Escape key to act as a prefix key instead of clearing input.(#483, #485) This ensures that:
+  - Escape sequences such as `\x1B[A` (arrow keys) work correctly even when the input is split by the terminal.
+  - Pressing `Escape` is now equivalent to pressing `Alt`.
+- `Esc`+`Left`  now behaves the same as `Esc`+`b` or `Alt`+`b`.
+- `Esc`+`Right` now behaves the same as `Esc`+`f` or `Alt`+`f`.
+- Changed the behavior of `Alt`+`f`, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word.
+- `Alt`/`Esc`+`Backspace` and `ESC`+`Ctrl`+`w` now delete the word to the left of the cursor.
+- `Alt`/`Esc`+`d` now deletes the current or next word.
+
+### Lua
 
 - Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
 
@@ -23,8 +41,6 @@ Changelog
 
   By default, the Right Arrow key and **Ctrl-F** are now bound to `FORWARD_CHAR_OR_ACCEPT_PREDICT`.
 
-- Made input prediction case-insensitive. ([go-readline-ny#20], #476 and #477, thanks to @emisjerry)
-
 - Lua scripts under the `nyagos.d` directory are now loaded automatically again. (#469, #478)
   However, the standard scripts that used to reside in that directory remain embedded in the executable, and the default `nyagos.d` directory is empty.
   ( Originally, the directory was not intended for user-defined scripts. )
@@ -37,27 +53,20 @@ Changelog
   runall("~/scriptdir1;~/scriptdir2")
   ```
 
-- Update go-readline-ny from v1.13.0 to [v1.14.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1), go-ttyadapter from v0.1.0 to [v0.3.0](https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0) (#483) and go-tty from v0.3.0 to [v3.1.1](https://github.com/nyaosorg/go-box/releases/tag/v3.1.1) (#485)
-  - Changed the behavior of the Escape key to act as a prefix key instead of clearing input. This ensures that:
-    - Escape sequences such as `\x1B[A` (arrow keys) work correctly even when the input is split by the terminal.
-    - Pressing `Escape` is now equivalent to pressing `Alt`.
-  - `Esc`+`Left`  now behaves the same as `Esc`+`b` or `Alt`+`b`.
-  - `Esc`+`Right` now behaves the same as `Esc`+`f` or `Alt`+`f`.
-  - Changed the behavior of `Alt`+`f`, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word.
-  - `Alt`/`Esc`+`Backspace` and `ESC`+`Ctrl`+`w` now delete the word to the left of the cursor.
-  - `Alt`/`Esc`+`d` now deletes the current or next word.
+- Add `nyagos.evaln`, a version of `nyagos.eval` that does not strip trailing CRLF from the output (#495)
 
-- Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)  
-  (This avoids a race condition where a SIGINT from Ctrl-C could be delayed and incorrectly cancel the subsequent command.)
+### Documents
 
-- Improved how Context is passed to Lua extensions. By using the Lua registry instead of `LState.SetContext`, we now suppress redundant Lua stack traces when a command is interrupted by Ctrl-C. (#492)
+- Rename release note files:
+  - `release_note_en.md` → `CHANGELOG.md`
+  - `release_note_ja.md` → `CHANGELOG_ja.md`  (#494)
+  - `history-*.md` → `CHANGELOG-v*.md` (#496)
+
+### Internal changes
 
 - Fixed an issue where the version string was empty when built without GNU Make.
   The version string is now updated via `make bump` during the release process. (#493)
-
-- Rename release note files to `CHANGELOG.md` and `CHANGELOG_ja`.md. (#494)
-
-- Lua: Add `nyagos.evaln`, a version of `nyagos.eval` that does not strip trailing CRLF from the output (#495)
+- Improved how Context is passed to Lua extensions. By using the Lua registry instead of `LState.SetContext`, we now suppress redundant Lua stack traces when a command is interrupted by Ctrl-C. (#492)
 
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
