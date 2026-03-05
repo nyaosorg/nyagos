@@ -188,6 +188,7 @@ func NewLua() (Lua, error) {
 	L.SetField(nyagosTable, "bindkey", L.NewFunction(cmdBindKey))
 	L.SetField(nyagosTable, "exec", L.NewFunction(cmdExec))
 	L.SetField(nyagosTable, "eval", L.NewFunction(cmdEval))
+	L.SetField(nyagosTable, "evaln", L.NewFunction(cmdEvaln))
 	L.SetField(nyagosTable, "prompt", L.NewFunction(lua2param(functions.Prompt)))
 	L.SetField(nyagosTable, "create_object", L.NewFunction(ole.CreateObject))
 	L.SetField(nyagosTable, "to_ole_integer", L.NewFunction(ole.ToOleInteger))

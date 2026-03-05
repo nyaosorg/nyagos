@@ -10,6 +10,11 @@ if result ~= "ahaha" then
     print("NG:",result)
 end
 
+local result = nyagos.evaln("tst20180504")
+if result ~= "ahaha\r\n" then
+    print("NG:",result)
+end
+
 nyagos.alias.tst20180504b = function(args)
     return "echo ihihi"
 end

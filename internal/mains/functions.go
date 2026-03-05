@@ -154,25 +154,44 @@ func cmdExec(L Lua) int {
 }
 
 func cmdEval(L Lua) int {
+	result, err := coreEval(L)
+	if err != nil {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(err.Error()))
+		return 2
+	}
+	L.Push(lua.LString(bytes.Trim(result, "\r\n\t ")))
+	return 1
+}
+
+func cmdEvaln(L Lua) int {
+	result, err := coreEval(L)
+	if err != nil {
+		L.Push(lua.LNil)
+		L.Push(lua.LString(err.Error()))
+		return 2
+	}
+	L.Push(lua.LString(result))
+	return 1
+}
+
+func coreEval(L Lua) ([]byte, error) {
 	statement, ok := L.Get(1).(lua.LString)
 	if !ok {
-		return lerror(L, "nyagos.eval: an argument is not string")
+		return nil, errors.New("an argument is not string")
 	}
 	r, w, err := os.Pipe()
 	if err != nil {
-		return lerror(L, err.Error())
+		return nil, err
+	}
+	ctx, sh := getRegInt(L)
+	if ctx == nil {
+		return nil, errors.New("context not found.")
+	}
+	if sh == nil {
+		return nil, errors.New("shell not found.")
 	}
 	go func(statement string, w *os.File) {
-		ctx, sh := getRegInt(L)
-		if ctx == nil {
-			ctx = context.Background()
-			println("cmdEval: context not found.")
-		}
-		if sh == nil {
-			sh = shell.New()
-			println("cmdEval: shell not found.")
-			defer sh.Close()
-		}
 		sh.SetTag(&luaWrapper{L})
 		saveOut := sh.Stdio[1]
 		sh.Stdio[1] = w
@@ -180,15 +199,12 @@ func cmdEval(L Lua) int {
 		sh.Stdio[1] = saveOut
 		w.Close()
 	}(string(statement), w)
-
-	result, err := io.ReadAll(r)
-	r.Close()
-	if err == nil {
-		L.Push(lua.LString(string(bytes.Trim(result, "\r\n\t "))))
-	} else {
-		L.Push(lua.LNil)
+	result, err1 := io.ReadAll(r)
+	err2 := r.Close()
+	if err1 != nil {
+		return result, err1
 	}
-	return 1
+	return result, err2
 }
 
 func setExecHook(f *lua.LFunction, hook *func(context.Context, *shell.Cmd)) int {
