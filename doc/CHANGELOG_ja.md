@@ -50,6 +50,8 @@ Changelog
 
 - 変更履歴を記録するファイルを `release_note_en.md`, `release_note_ja.md` から `CHANGELOG.md`, `CHANGELOG_ja.md` へ改名 (#494)
 
+- Lua関数: `nyagos.eval` の出力末尾の CRLF を削除しないバージョン `nyagos.evaln` を追加 (#495)
+
 [go-readline-ny#19]: https://github.com/nyaosorg/go-readline-ny/pull/19
 [go-readline-ny#20]: https://github.com/nyaosorg/go-readline-ny/pull/20
 
