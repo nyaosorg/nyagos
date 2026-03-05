@@ -83,4 +83,7 @@ $(SUPPORTGO):
 	go install golang.org/dl/$(SUPPORTGO)@latest
 	"$(shell go env GOPATH)/bin/$(SUPPORTGO)" download
 
+update-complete-jj:
+	cd "nyagos.d/catalog" && "../../nyagos" -f make-complete-jj.lua
+
 .PHONY: build debug test tstlua clean get _dist dist release install docs
