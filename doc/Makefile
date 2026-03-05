@@ -1,3 +1,11 @@
+ifeq ($(OS),Windows_NT)
+    DEL=del
+else
+    DEL=rm
+endif
+
+MINIPAGE=go run github.com/hymkor/minipage@latest
+
 MD_EN := $(filter-out index%,$(filter-out _%.md,$(wildcard *_en.md)))
 MD_JA := $(filter-out index%,$(filter-out _%.md,$(wildcard *_ja.md)))
 
@@ -8,22 +16,22 @@ ALL := $(HTML_EN) $(HTML_JA) ../docs/index.html ../docs/index_ja.html ../docs/CH
 all: $(ALL)
 
 ../docs/%_en.html: %_en.md
-	minipage -title "NYAOS.ORG/NYAGOS - $*" -sidebar _Sidebar_en.md _Header.md $< > $@
+	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - $*" -sidebar _Sidebar_en.md _Header.md $< > $@
 
 ../docs/%_ja.html: %_ja.md
-	minipage -title "NYAOS.ORG/NYAGOS - $*" -sidebar _Sidebar_ja.md _Header.md $< > $@
+	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - $*" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
 ../docs/index.html:    index.md
-	minipage -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_en.md _Header.md $< > $@
+	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_en.md _Header.md $< > $@
 
 ../docs/index_ja.html: index_ja.md
-	minipage -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_ja.md _Header.md $< > $@
+	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
 ../docs/CHANGELOG.html: CHANGELOG.md
-	minipage -title "NYAOS.ORG/NYAGOS - Changelog" -sidebar _Sidebar_en.md _Header.md $< > $@
+	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - Changelog" -sidebar _Sidebar_en.md _Header.md $< > $@
 
 ../docs/CHANGELOG_ja.html: CHANGELOG_ja.md
-	minipage -title "NYAOS.ORG/NYAGOS - Changelog" -sidebar _Sidebar_ja.md _Header.md $< > $@
+	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - Changelog" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
 clean:
-	rm $(ALL)
+	$(DEL) $(ALL)
