@@ -1,10 +1,12 @@
 share.jj={
     ["abandon"]={},
     ["absorb"]={},
+    ["arrange"]={},
     ["bisect"]={
         ["run"]={},
     },
     ["bookmark"]={
+        ["advance"]={},
         ["create"]={},
         ["delete"]={},
         ["forget"]={},
@@ -34,6 +36,7 @@ share.jj={
         ["annotate"]={},
         ["chmod"]={},
         ["list"]={},
+        ["search"]={},
         ["show"]={},
         ["track"]={},
         ["untrack"]={},
@@ -62,6 +65,7 @@ share.jj={
     ["operation"]={
         ["abandon"]={},
         ["diff"]={},
+        ["integrate"]={},
         ["log"]={},
         ["restore"]={},
         ["revert"]={},
@@ -101,6 +105,7 @@ share.jj={
         ["gc"]={},
         ["install-man-pages"]={},
         ["markdown-help"]={},
+        ["snapshot"]={},
     },
     ["version"]={},
     ["workspace"]={
