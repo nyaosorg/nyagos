@@ -29,9 +29,10 @@ Changelog
 
 - readline の次回プロンプトに挿入する初期テキストを設定する `nyagos.setnextline(STR)` を実装 (#458, #466, thanks to @emisjerry)
 
-- `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
-    - `jj` のサブコマンド補完をv0.35 ベースに更新
+- `nyagos.d/catalog/complete-jj.lua` (#473, #474, #499, Thanks to @tsuyoshicho)
+    - `jj` のサブコマンド補完をv0.39 ベースに更新
     - 改行コードが LF になっていたので、CRLF となるよう、生成スクリプト make-complete-jj.lua を修正
+    - `make update-complete-jj` から complete-jj.lua を更新できるようにした
 
 - カーソル一文字分の右移動(`FORWARD_CHAR`)に組み込まれていた予測候補確定を分離し、次の3機能に分離した。([go-readline-ny#19], #476, #477, thanks to @emisjerry)
 

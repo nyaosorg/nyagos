@@ -29,9 +29,10 @@ Changelog
 
 - Implemented `nyagos.setnextline(STR)`, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)
 
-- `nyagos.d/catalog/complete-jj.lua` (#473, #474, Thanks to @tsuyoshicho)
-    - Regenerate with jj v0.35
+- `nyagos.d/catalog/complete-jj.lua` (#473, #474, #499, Thanks to @tsuyoshicho)
+    - Regenerate with jj v0.39
     - Modify the generate script `make-complete-jj.lua` to output CRLF as line endings
+    - Enable `make update-complete-jj` to update complete-jj.lua
 
 - Split the commit-prediction behavior that had been embedded in `FORWARD_CHAR` into three separate functions ([go-readline-ny#19], #476 and #477, thanks to @emisjerry):
 
