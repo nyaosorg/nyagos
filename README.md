@@ -142,6 +142,14 @@ License
 
 You can use, copy and modify under the New BSD License.
 
+Contributing
+------------
+
+- Bug reports and improvement suggestions are welcome. You may write them in either English or Japanese.
+- Please write comments in the code and commit messages in English.
+- If a `develop` branch exists at the time of your pull request, please target it. Otherwise, `master` is fine.
+- Test code and documentation updates that accompany code changes are appreciated, but not required. They can be added later if necessary.
+
 Acknowledgement
 ---------------
 
