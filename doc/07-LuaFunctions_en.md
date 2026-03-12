@@ -55,15 +55,31 @@ to be refered and assigned.
 
 It splits TEXT with white-spaces and returns them as table of strings.
 
-### `errorlevel,errormessage = nyagos.exec("COMMAND")`
-### `errorlevel,errormessage = nyagos.exec{"EXENAME","PARAM1","PARAM2",...}`
+### nyagos.exec
 
-It executes "COMMAND" as shell command. It can call not only external commands,
-but also nyagos built-in commands. When it calls a batchfile, nyagos imports
-their changes of enviroment variables.
+Executes a command. Both external commands and nyagos built-in commands can be called.
 
-It returns the integer-value for %ERRORLEVEL% and the error-message.
-With no error, they are 0 and nil.
+When a batch file is executed, any changes to environment variables made inside the batch file are reflected in the caller.
+
+If an error occurs, the return values are the integer value that should be stored in `%ERRORLEVEL%` and an error message.
+If no error occurs, `(0,nil)` is returned.
+
+#### Form 1: `nyagos.exec("command line string")`
+
+Executes the given string **as a command line exactly as written**.
+Spaces, quotation marks, and other syntax are interpreted using the same rules as a normal shell command line.
+
+If the command name or arguments contain spaces, the caller must write the appropriate quoting.
+
+Example: `nyagos.exec('"C:\\Program Files\\foo\\bar.exe" arg1 arg2')`
+
+#### Form 2: `nyagos.exec{"EXENAME","ARG1","ARG2"...}`
+
+Each element of the table is treated **as the command name and its arguments**.
+
+Arguments containing spaces are passed correctly without requiring manual quoting.
+
+Example: `nyagos.exec{"C:\\Program Files\\foo\\bar.exe","arg1","arg2"}`
 
 ### `errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)`
 ### `errorlevel,errormessage = nyagos.rawexec{'COMMAND-NAME','ARG-1','ARG-2'...}`
