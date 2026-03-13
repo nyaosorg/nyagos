@@ -3,7 +3,7 @@ English / [Japanese](./09-Build_ja.md)
 Build
 -----
 
-Git, [Go 1.20.14 or later](http://go.dev) and GNU Make are required
+Git, [Go 1.20.14 or later](https://go.dev) and GNU Make are required
 
     git clone https://github.com/nyaosorg/nyagos
     cd nyagos
