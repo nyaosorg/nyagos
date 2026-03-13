@@ -15,22 +15,22 @@ HTML_JA := $(patsubst %.md,../docs/%.html,$(MD_JA))
 ALL := $(HTML_EN) $(HTML_JA) ../docs/index.html ../docs/index_ja.html ../docs/CHANGELOG.html ../docs/CHANGELOG_ja.html
 all: $(ALL)
 
-../docs/%_en.html: %_en.md
+../docs/%_en.html: %_en.md _Sidebar_en.md
 	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - $*" -sidebar _Sidebar_en.md _Header.md $< > $@
 
-../docs/%_ja.html: %_ja.md
+../docs/%_ja.html: %_ja.md _Sidebar_ja.md
 	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - $*" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
-../docs/index.html:    index.md
+../docs/index.html:    index.md _Sidebar_en.md
 	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_en.md _Header.md $< > $@
 
-../docs/index_ja.html: index_ja.md
+../docs/index_ja.html: index_ja.md _Sidebar_ja.md
 	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
-../docs/CHANGELOG.html: CHANGELOG.md
+../docs/CHANGELOG.html: CHANGELOG.md _Sidebar_en.md
 	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - Changelog" -sidebar _Sidebar_en.md _Header.md $< > $@
 
-../docs/CHANGELOG_ja.html: CHANGELOG_ja.md
+../docs/CHANGELOG_ja.html: CHANGELOG_ja.md _Sidebar_ja.md
 	$(MINIPAGE) -title "NYAOS.ORG/NYAGOS - Changelog" -sidebar _Sidebar_ja.md _Header.md $< > $@
 
 clean:

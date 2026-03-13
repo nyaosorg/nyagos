@@ -1228,7 +1228,7 @@ STATEMENTS
 <p>Kill process by name</p>
 <h4 id="ln--s-src-dst"><code>ln [-s] SRC DST</code></h4>
 <p>Make hardlink or symbolic-link.
-The alias 'lns' defined on <code>nyagos.d\lns.lua</code> shows UAC-dialog
+The alias 'lns' defined on <code>(embed)\lns.lua</code> shows UAC-dialog
 and calls <code>ln -s</code>.</p>
 <h4 id="lnk-filename-shortcut-working-directory"><code>lnk FILENAME SHORTCUT [WORKING-DIRECTORY]</code></h4>
 <p>Make shortcut.</p>
@@ -1339,13 +1339,13 @@ the environemnt variables.</li>
 <h4 id="su"><code>su</code></h4>
 <p>Run another nyagos.exe as Administrator.</p>
 <h3 id="commands-implemented-by-lua">Commands implemented by Lua</h3>
-<h4 id="lua-e-inline-lua-commands-nyagosdaliaseslua"><code>lua_e &quot;INLINE-LUA-COMMANDS&quot;</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="lua-e-inline-lua-commands-embedaliaseslua"><code>lua_e &quot;INLINE-LUA-COMMANDS&quot;</code> ((embed)\aliases.lua)</h4>
 <p>Execute inline-lua-commands like 'lua.exe -e &quot;...&quot;'.</p>
-<h4 id="lua-f-lua-script-filename-args-nyagosdaliaseslua"><code>lua_f &quot;LUA-SCRIPT-FILENAME&quot; ARG(s)...</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="lua-f-lua-script-filename-args-embedaliaseslua"><code>lua_f &quot;LUA-SCRIPT-FILENAME&quot; ARG(s)...</code> ((embed)\aliases.lua)</h4>
 <p>Execute lua-script.</p>
-<h4 id="trash-files-nyagosdtrashlua"><code>trash FILE(S)</code> (nyagos.d\trash.lua)</h4>
+<h4 id="trash-files-embedtrashlua"><code>trash FILE(S)</code> ((embed)\trash.lua)</h4>
 <p>It throws files into trashbox of Windows.</p>
-<h4 id="wildcard-command-args-nyagosdaliaseslua"><code>wildcard COMMAND ARG(s)...</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="wildcard-command-args-embedaliaseslua"><code>wildcard COMMAND ARG(s)...</code> ((embed)\aliases.lua)</h4>
 <p>Expand the wildcard included ARG(s) and call COMMAND.</p>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
@@ -1367,10 +1367,10 @@ the environemnt variables.</li>
 <h3 id="changelog">Changelog</h3>
 <ul>
 <li><a href="CHANGELOG.html">4.4.x</a></li>
-<li><a href="history-4.3_en.html">4.3.x</a></li>
-<li><a href="history-4.2_en.html">4.2.x</a></li>
-<li><a href="history-4.1_en.html">4.1.x</a></li>
-<li><a href="history-4.0_en.html">4.0.x</a></li>
+<li><a href="CHANGELOG-v4.3_en.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_en.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_en.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_en.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>

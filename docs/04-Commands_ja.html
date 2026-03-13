@@ -1233,7 +1233,7 @@ STATEMENTS
 <p>キーワードを含むプロセスを強制終了します</p>
 <h4 id="ln--s-src-dst"><code>ln [-s] SRC DST</code></h4>
 <p>ハードリンク、もしくは、シンボリックリンクを作成します。
-<code>nyagos.d\lns.lua</code> で定義されるエイリアス lns は UAC 昇格と
+<code>(embed)\lns.lua</code> で定義されるエイリアス lns は UAC 昇格と
 <code>ln -s</code> を実行します。</p>
 <h4 id="lnk-filename-shortcut-working-directory"><code>lnk FILENAME SHORTCUT [WORKING-DIRECTORY]</code></h4>
 <p>ショートカットを作成します</p>
@@ -1345,13 +1345,13 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <h4 id="su-command-argss"><code>su COMMAND ARGS(s)...</code></h4>
 <p>UAC 昇格させて、コマンドを実行します。</p>
 <h3 id="lua-%E3%81%A7%E5%AE%9F%E8%A3%85%E3%81%95%E3%82%8C%E3%81%9F%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89">Lua で実装されたコマンド</h3>
-<h4 id="lua-e-inline-lua-commands-nyagosdaliaseslua"><code>lua_e &quot;INLINE-LUA-COMMANDS&quot;</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="lua-e-inline-lua-commands-embedaliaseslua"><code>lua_e &quot;INLINE-LUA-COMMANDS&quot;</code> ((embed)\aliases.lua)</h4>
 <p>内蔵Lua で引数の Lua コードを実行します。</p>
-<h4 id="lua-f-lua-script-filename-args-nyagosdaliaseslua"><code>lua_f &quot;LUA-SCRIPT-FILENAME&quot; ARG(s)...</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="lua-f-lua-script-filename-args-embedaliaseslua"><code>lua_f &quot;LUA-SCRIPT-FILENAME&quot; ARG(s)...</code> ((embed)\aliases.lua)</h4>
 <p>内蔵Lua で Lua スクリプトを実行します。</p>
-<h4 id="trash-files-nyagosdtrashlua"><code>trash FILE(S)</code> (nyagos.d\trash.lua)</h4>
+<h4 id="trash-files-embedtrashlua"><code>trash FILE(S)</code> ((embed)\trash.lua)</h4>
 <p>ファイルを Windows のゴミ箱に移動させます。</p>
-<h4 id="wildcard-command-args-nyagosdaliaseslua"><code>wildcard COMMAND ARG(s)...</code> (nyagos.d\aliases.lua)</h4>
+<h4 id="wildcard-command-args-embedaliaseslua"><code>wildcard COMMAND ARG(s)...</code> ((embed)\aliases.lua)</h4>
 <p>ARG(s) に含まれるワイルドカードを展開して、COMMAND を実行します。</p>
 <!-- set:fenc=utf8: -->
 </div><!-- "main" -->
@@ -1374,10 +1374,10 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="CHANGELOG_ja.html">4.4.x</a></li>
-<li><a href="history-4.3_ja.html">4.3.x</a></li>
-<li><a href="history-4.2_ja.html">4.2.x</a></li>
-<li><a href="history-4.1_ja.html">4.1.x</a></li>
-<li><a href="history-4.0_ja.html">4.0.x</a></li>
+<li><a href="CHANGELOG-v4.3_ja.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_ja.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_ja.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_ja.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>
