@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>NYAOS.ORG/NYAGOS - history-4.2</title>
+<title>NYAOS.ORG/NYAGOS - CHANGELOG-v4.1</title>
 <style type="text/css">
 /* light */
 .markdown-body {
@@ -1141,260 +1141,342 @@ a.permalink:hover{
 </head><body>
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
-<p>English / <a href="history-4.2_ja.html">Japanese</a></p>
-<h1 id="nyagos-425-1">NYAGOS 4.2.5_1</h1>
-<p>on Apr.14,2018</p>
+<h1 id="changelog-v41">Changelog v4.1</h1>
+<p>( <a href="./history-4.1_en.html">English</a> / Japanese )</p>
+<h2 id="since-41">Since 4.1</h2>
+<p>NYAGOS 4.0 では、パイプライン等で実行される複数の goroutine から
+同一の Lua インスタンスを呼び出すことがあり、Lua API 呼び出し時に
+panic を起こす問題がありました。</p>
+<p>NYAGOS 4.1 では、それを回避するために、コマンド発行の度に別の
+Lua インスタンスを新規に作成して、Lua インスタンスの競合を回避し、
+安定をはかりました。</p>
+<p>ただし、別のインスタンスでは、変数・テーブル領域が完全に別になり、
+このままでは nyagos.alias[] 等に代入された関数自身すら、新しい
+Lua インスタンス(goroutine)から見えないという問題があります。</p>
+<p>そのため、グローバルテーブル nyagos[] 以下と share[] 以下に代入された
+変数・関数については、Go言語側で保持し、新インスタンスの同テーブルより
+参照できるようにしました。</p>
+<p>とはいえ、これによって、従来稼動していた Lua スクリプトの互換性が
+損われる結果となりました。NYAGOS 4.0 で動作していたスクリプトが
+4.1 にて同様に動くには、下記の修正が必要です。</p>
 <ul>
-<li>Fix: <code>if [not] errorlevel N</code> did not work on block-if.</li>
-<li>Fix: that <code>ls -1F</code> did not show the indicator such as <code>/</code>,<code>*</code> or <code>@</code>.</li>
-<li>Fix: the problem that executables reparse-pointed but not symbolic-linked can not be found.</li>
-<li>Fix: <code>ls -F</code> marked '@' to files and directories which ar reparse-pointed but not symbolic-link nor junction</li>
-<li>Changed the error message when the command <code>history</code> is called in <code>_nyagos</code></li>
-</ul>
-<h1 id="nyagos-425-0">NYAGOS 4.2.5_0</h1>
-<p>on Mar.31,2018</p>
+<li>従来グローバル変数に代入していた変数を、share[] 下へ移動する
 <ul>
-<li>Add Lua-flag: nyagos.option.usesource. When it is false, batchfiles can not change nyagos's environment variables and directory.(default:true)</li>
-</ul>
-<h1 id="nyagos-425-beta2">NYAGOS 4.2.5_beta2</h1>
-<p>on Mar.27,2018</p>
-<ul>
-<li>Fix: #296 the batchfile could not be executed when the username contains multibyte-character.
-<ul>
-<li>Fix that the encoding of the temporary batchfile was UTF8.</li>
-<li>Fix that the end of the each line of the temporary batchfile was LF not CRLF.</li>
-</ul>
-</li>
-<li>Fix: #297 running the batchfile includes <code>exit</code> without <code>/b</code> option, an error occurs</li>
-</ul>
-<h1 id="nyagos-425-beta">NYAGOS 4.2.5_beta</h1>
-<p>on Mar.26,2018</p>
-<ul>
-<li>Read the value of environment variables that a batchfile changed like CMD.EXE.</li>
-<li>And refactored source files</li>
-</ul>
-<h1 id="nyagos-424-0">NYAGOS 4.2.4_0</h1>
-<p>on Mar.9,2018</p>
-<ul>
-<li>lua: ole: <code>variable = OLE.property</code> is avaliable instead of <code>OLE:_get('property')</code></li>
-<li>lua: ole: <code>OLE.property = value</code> is avaliable instead of <code>OLE:_set('property',value)</code></li>
-<li>Load <code>nyagos.d/*.ny</code> as batchlike file</li>
-<li>#266: <code>lua_e &quot;nyagos.option.noclobber = true&quot;</code> forbides overwriting existing file by redirect.</li>
-<li>#269: <code>&gt;| FILENAME</code> and <code>&gt;! FILENAME</code> enable to overwrite the file already existing by redirect even if <code>nyagos.option.noclobber = true</code></li>
-<li>#270: Console input buffer has been cleaned up when prompt is drawn.</li>
-<li>#228: Completion supports $ENV[TAB]... by native</li>
-<li>#275: Fix: history substitution like <code>!str:$</code> , <code>!?str?:$</code> did not work.</li>
-<li>The error <code>event not found</code> is caused when the event pointed !y does note exists.</li>
-<li>#285: Not wait GUI-process not using pipeline terminating like CMD.EXE (Call them with ShellExecute() instead of CreateProcess() )</li>
-<li>(Replaced <code>bytes.Buffer</code> to <code>strings.Builder</code> and Go 1.10 is required to build)</li>
-<li>When more than one are to be executed with <code>open</code> at once, display error: <code>open: ambiguous shellexecute</code></li>
-<li>Fix that <code>nyagos.alias.NAME = nil</code> could not remove the alias.</li>
-</ul>
-<h1 id="nyagos-423-4">NYAGOS 4.2.3_4</h1>
-<p>on Mar.4,2018</p>
-<ul>
-<li><code>ls -?</code> for help instead of <code>ls -h</code></li>
-<li>Building with <code>go build</code> instead of make.cmd, print version as <code>snapshot-GOARCH</code></li>
-<li>Show an error when <code>type DIRECTORY</code> is executed.</li>
-<li>Made error message simple on <code>del NOTEXISTFILE</code></li>
-<li>Fix: #279 Substitution on Environment variable (%VAR:OLD=NEW%) did not ignore case</li>
-<li>Fix: #281 <code>cd \\host-name\share-name ; open</code> -&gt; <code>C:\Windows\system32</code> was open.</li>
-<li>Fix: #286 A tilde(~) after whitespace enclosed with double quotations was interpreted same as %USERPROFILE%</li>
-<li>#287 On the last entry of the history, do nothing for typing ARROW-DOWN</li>
-</ul>
-<h1 id="nyagos-423-3">NYAGOS 4.2.3_3</h1>
-<p>on Jan.28,2018</p>
-<ul>
-<li>Fix: <code>print(nil,true,false)</code> outputs nothing..</li>
-<li>Fix the bug that <code>!notfoundstr</code> is replaced to <code>!n</code> only.</li>
-<li>#271: Fix Ctrl-O (box selector) does not work for the path contains %APPDATA% ( Fix zetamatta\go-findfile )</li>
-<li>On completion, don't append SPACE after PERCENT mark.</li>
-<li>#276 Fix that <code>source</code> did not execute a batch with stdout. (Thx @tyochiai )</li>
-</ul>
-<h1 id="nyagos-423-2">NYAGOS 4.2.3_2</h1>
-<p>on Jan.6,2018</p>
-<ul>
-<li>Fix: #265 Type <code>ls</code> , SPACE and TAB -&gt; command name completion starts.</li>
-</ul>
-<h1 id="nyagos-423-1">NYAGOS 4.2.3_1</h1>
-<p>on Dec.30,2017</p>
-<ul>
-<li>Fix: CR and LF did not work as the word seperator in the commandline.</li>
-<li>Fix: #264 Garbage appears on the screen when screen buffer width is too large.
-(You have to do <code>go get -u github.com/mattn/go-colorable</code>)</li>
-</ul>
-<h1 id="nyagos-423-0">NYAGOS 4.2.3_0</h1>
-<p>on Dec.25,2017</p>
-<ul>
-<li>option --norc : not to load startup-scripts.</li>
-<li>#132 Support foreach and block-if</li>
-<li>Add option --lua-file which loads and runs Lua-Script even if the suffix of the filename is not .lua .</li>
-<li>Add members  to the parameter <code>c</code> of <code>nyagos.complete_hook(c)</code>
-<ul>
-<li><code>c.field</code> : array split all commandline string with space.</li>
-<li><code>c.left</code> : string before cursor.</li>
-</ul>
-</li>
-<li>Enable command-name completion even if it is after <code>|</code> , <code>&amp;</code> , <code>;</code></li>
-<li>#245 <code>print</code> of lua supports redirect.</li>
-<li>On incremental search, support Ctrl-S for backward search.</li>
-<li>Fix #258 Environment variable expanding does not work after backslash</li>
-<li>Add lua-function nyagos.msgbox(MESSAGE,TITLE)</li>
-</ul>
-<h1 id="nyagos-422-2">NYAGOS 4.2.2_2</h1>
-<p>on Nov.26,2017</p>
-<ul>
-<li>#255 <code>start</code> command search the executable via %PATH%</li>
-<li>#254 Fix: -xxxx of <code>nyagos -f SCRIPT -xxxx</code> was treated as not SCRIPT's option but nyagos' option.</li>
-<li>Fix: Lua-stack overflow when arguments filter is not set</li>
-</ul>
-<h1 id="nyagos-422-1">NYAGOS 4.2.2_1</h1>
-<p>on Oct.11,2017</p>
-<ul>
-<li>#250 Fix the crash in the built-in command <code>bindkey</code> without parameters. (Thx @masamitsu-murase)</li>
-<li>#252 Fix the problem that Shift/Ctrl keys typing cancels the screen-scroll. (Skip the output CURSOR-OFF/ON sequences at Shift/Ctrl keys typed) (Thx @masamitsu-murase)</li>
-<li>#253 Fix <code>nyagos-4.2.2_0-386</code> was built as a 64bit executable by make.cmd's bug (Thx @hazychill)</li>
-</ul>
-<h1 id="nyagos-422-0">NYAGOS 4.2.2_0</h1>
-<p>on Oct.8,2017</p>
-<ul>
-<li>Append the new command commands by Lua: <code>abspath</code>,<code>chompf</code> and <code>wildcard</code></li>
-<li>Append the forgotten builtin lua-commands reference: <code>lua_f</code>,<code>kill</code> and <code>killall</code>.</li>
-<li>#246 Reject conversion from userdata to Object. (Thx @masamitsu-murase)
-<ul>
-<li>To assign userdata(Lua) to <code>share[]</code> is forbidden</li>
-<li>The global userdata(Lua) are not cloned on the forked Lua instance for the background goroutine to make pipelines.</li>
-</ul>
-</li>
-<li>#247 Fixed the problem that Go's Garbage collector releases data refered by Lua and crashes (Thx @masamitsu-murase)</li>
-<li>#248 Completion hook can specify displayed-titles which differ from completed-strings.(Thx @masamitsu-murase)</li>
-<li>#249 Add <code>nyagos.completion_slash</code> option. When it is true, filename-completion uses a slash as the path-seperator as default. (Thx @masamitsu-murase)</li>
-<li>New building script(make.cmd) written in PowerShell</li>
-</ul>
-<h1 id="nyagos-421-0">NYAGOS 4.2.1_0</h1>
-<p>on Aug.31,2017</p>
-<ul>
-<li>#241 Respect the item order in the list returned from <code>completion_hook</code> (Thx @masamitsu-murase)</li>
-<li>#242,#243 Support key combination for Alt+Backspace and Alt+&quot;/&quot;. (Thx @masamitsu-murase)</li>
-<li>Remove built-in command <code>sudo</code></li>
-<li>Add built-in command <code>more</code> (support color and unicode)</li>
-<li>readline: support C-q,C-v (<code>QUOTED_INSERT</code>)</li>
-<li>pwd: add options -L(use PWD from environment) and -P(avoid all symlinks)</li>
-<li>Output <code>nyagos.dump</code> if panic occurs.</li>
-<li><code>diskused</code>: new command like du</li>
-<li><code>rmdir</code> prints the progress as before.</li>
-<li><code>diskfree</code>: new command like df</li>
-</ul>
-<h1 id="nyagos-420-5">NYAGOS 4.2.0_5</h1>
-<p>on Aug.16,2017</p>
-<ul>
-<li>Fix: Building on Windows7, the version information was not written into the property of the executable because the script to make JSON for goversioninfo required the method ConvertTo-JSON of PowerShell 3.0 but Windows 7 does not support it.</li>
-<li>Fix: nyagos.box(LIST) ignored the order of LIST</li>
-</ul>
-<h1 id="nyagos-420-4">NYAGOS 4.2.0_4</h1>
-<p>on Jul.29,2017</p>
-<ul>
-<li>Fix: error's line number was not displayed when <code>.nyagos</code> has an error.</li>
-<li>Fix: <code>.nyagos</code> cache errors when executable architecture (amd64 or 386) changes previous'run</li>
-<li>Fix: <code>ls | more</code> outputs <code>ESC[0K</code>. (fixed by go-box)</li>
-<li>(internal) follow the change in go-colorable's <code>ESC[%dC</code> &amp; <code>ESC[%dD</code>'s behaviour ( <a href="https://github.com/mattn/go-colorable/commit/3fa8c76f">https://github.com/mattn/go-colorable/commit/3fa8c76f</a> , thanks to @tyochiai )</li>
-<li>Fix: on default <code>_nyagos</code>, <code>suffix &quot;lua=nyagos&quot;</code> was wrong. Added <code>.exe -f</code></li>
-<li>Error if scripts on <code>nyagos.d</code> are executed by not nyagos.exe</li>
-<li>Do not insert interpreter-name when user-typed-command-name does not have a suffix to fix #237 that <code>cd nyagos.d</code> and <code>suffix</code> -&gt; new nyagos.exe processes start infinitely.</li>
-<li>Fix #240: on empty dir, C-o -&gt; <code>bad argument # 1 to 'find' (string expected, got nil)</code></li>
-</ul>
-<h1 id="nyagos-420-3">NYAGOS 4.2.0_3</h1>
-<p>on Jul 13,2017</p>
-<ul>
-<li>Fix: panic occurs when <code>box</code> Enter &amp; Ctrl-C pressed.</li>
-<li>Fix: panic occurs when <code>lua_e &quot;nyagos.box({})&quot;</code></li>
-<li>Fix: box: cursor disappear at scrolling (go-box's fix)</li>
-<li><code>box</code>: decrease flickering (go-box's fix)</li>
-<li>Fix: #235 .nyagos on the same directory with nyaos.exe wasn't read on startup.</li>
-<li>completion: enclose with &quot;&quot; when ! mark is found.</li>
-<li>Fix: <code>suffix ps1</code> =&gt; <code>?:-1: attempt to concatenate a table value</code></li>
-</ul>
-<h1 id="nyagos-420-2">NYAGOS 4.2.0_2</h1>
-<p>on Jun 16,2017</p>
-<ul>
-<li>Fix the problem that <code>lnk . ~</code> failed.</li>
-<li>Fix the problem executables on the folder symbolic-linked to network one and to be elevated are unable to be called. (ShellExecute with physical path)</li>
-<li>Fix: readline: isearch: BACKSPACE-KEY did not redraw a found commandline</li>
-<li>Fix: crash that <code>index out of range</code> occurs when an empty string in the global variable in Lua exists and pipeline was used. (#232)</li>
-</ul>
-<h1 id="nyagos-420-1">NYAGOS 4.2.0_1</h1>
-<p>on Jun 06,2017</p>
-<ul>
-<li>Fix: sample of <code>_nyagos</code> was forgotten to bundle into the package. (#230)</li>
-<li>Implemented <code>chmod</code>. (#199)</li>
-<li>nyagos.d/catalog/dollar.lua: support completion $TEMP\xxxx format. (#228)</li>
-<li>nyagos.d/catalog/ezoe.lua: revival</li>
-</ul>
-<h1 id="nyagos-420-0">NYAGOS 4.2.0_0</h1>
-<p>on May 29,2017</p>
-<ul>
-<li><strong>Improved the restriction that the Lua-variables not in <code>share[]</code> are not shared in all Lua-instances.(#210,#208)</strong>
-<ul>
-<li>Do not create a new lua instance except when background thread begins to run.</li>
-<li>Copy global variables all including ones not in <code>share[]</code> from the Lua-instance in the forwaground thread to the new instance for the new background thread.</li>
-<li>To print prompt, use the same Lua instance loading ~/.nyagos</li>
+<li>share 直下の変数・関数は、全ての Lua インスタンス・
+コマンドより参照可能</li>
+<li>変更の検出は share[] の直下しかされない。つまり
+<code>share.foo = { '1','2','3' }</code> は OK だが、
+<code>share.foo[1] = 'x'</code> という変更は階層が一つ深いため、
+データ本体まで修正が届かない。正しく、反映するためには
+下記のように、テーブル全体を出し入れする必要がある。</li>
 </ul>
 </li>
 </ul>
-<h2 id="new-feature">New feature</h2>
+<pre><code>local t = share.foo
+t[1] = 'x'
+share.foo = t
+</code></pre>
 <ul>
-<li><code>nyagos.completion_hidden</code>: If it is set true, hidden filenames are also completed.</li>
-<li>Add built-in command <code>env</code></li>
-<li>#189 Support <code>nyagos.history[..]</code> and <code>#nyagos.history</code></li>
-<li>Make <code>type</code> as built-in command.</li>
-<li>Make <code>clip</code> as built-in command which read/write both UTF8/MBCS (#202)</li>
-<li>Support <code>del /f</code>: delete even if it is a readonly file. (#198)</li>
-<li>Add command to make shortcut(<code>lnk FILENAME SHORTCUT WORKING-DIRECTORY</code>)</li>
-<li>Add <code>attrib</code> as built-in command. (#199)</li>
-<li>Support <code>$(  )</code> format to quote command-output by backquote.lua</li>
-<li><code>ls -l</code>: Show shortcut's target and working directory.</li>
-<li>New lua-function: <code>nyagos.box()</code></li>
-</ul>
-<h2 id="trivial-fix">Trivial fix</h2>
+<li><code>nyagos.alias[]</code> , <code>nyagos.on_command_not_found</code> には代入できるのは
+関数だけで、クロージャーは代入できない
 <ul>
-<li>Support <code>-b BASE64edCOMMANDSTRING</code> as startup option (#200)</li>
-<li>Rewrote <code>cd/push SHORTCUT.lnk</code> from Lua(nyagos.d/cdlnk.lua) to Golang-native</li>
-<li><code>nyagos.alias.grep = &quot;findstr.exe&quot;</code></li>
+<li>つまり、local 宣言された変数も参照できない</li>
+<li><code>nyagos.prompt</code> も同様だが、改善を検討中</li>
 </ul>
-<h2 id="bugfix">Bugfix</h2>
+</li>
+</ul>
+<h2 id="v419-3">v4.1.9_3</h2>
+<p>(4017.05.13)</p>
 <ul>
-<li>Fix <code>\</code> in <code>%USERPROFILE:\=/%</code> were replaced once only</li>
-<li>Fix: <code>ll</code> was aliased to non-colored version on default <code>_nyagos</code></li>
-<li>Fix the problem that C-o could not complete filenames which has <code> </code> and <code>~</code>.</li>
-<li>Fix Ctrl-O (filename-completion) causes panic. (#204)</li>
-<li>Never cut double-quotations of parameters which users wrote for FIND.EXE and so on #218,#222</li>
-<li>Fix: Executing commands requiring elevation causes the error <code>The requested operation requires elevation</code>. Now UAC elevation dialog is shown. #227</li>
-<li>Fix: executed <code>FOO.123.EXE</code> even when <code>FOO</code> was typed #229</li>
+<li>Fix #214: .nyagos でのバッチ実行時に <code>main/lua_cmd.go: cmdExec: not found interpreter object</code> と表示される</li>
 </ul>
+<h2 id="v419-2">v4.1.9_2</h2>
+<p>(2017.04.03)</p>
+<ul>
+<li>Fix #191: <code>-c</code> オプションが <code>option parse error</code> を表示していた。</li>
+<li>昇格していたら true を返す Lua 関数 <code>nyagos.elevated()</code></li>
+<li>デフォルトのタイトルバーは昇格時に <code>(admin)</code> と表示</li>
+</ul>
+<h2 id="v419-1">v4.1.9_1</h2>
+<p>(2017.03.28)</p>
+<ul>
+<li>Fix: 4.1.9_0 の一行入力でカーソルが時々見えなくなる問題を修正</li>
+<li>新go-colorableの機能で、 でコマンドプロンプトのタイトルを変更するエスケープシーケンス <code>\033]0;タイトル\007</code> が使えるようになった。</li>
+</ul>
+<h2 id="v419-0">v4.1.9_0</h2>
+<p>(2017.03.27)</p>
+<ul>
+<li>Fix: <code>open http(s)://...</code> が機能しなかった不具合を修正</li>
+<li><code>cd file:///...</code> をサポート</li>
+<li>ALT-y: クリップボード文字列が空白を含んでいる時、二重引用符で囲んでペースト</li>
+<li>ファイル名補完の一覧表示で、フルパスのうちのディレクトリ部分を省くようにした</li>
+<li><code>history</code>コマンドで「!」マークで使用する ID を表示していなかった</li>
+<li>%NYAGOSPATH% にあるコマンドも補完されるようにした。</li>
+<li>補完で環境変数を展開しないようにした。</li>
+<li>補完で <code>~/</code> や <code>~\</code> を二重引用符で囲まないようにした。</li>
+<li><code>;</code> や <code>=</code> の前の文字列は補完では無視するようにした(setコマンド用)</li>
+<li>ファイル名の大文字・小文字の補正をしないことによる、プロンプトのカレントディレクトリの取得速度の改善</li>
+<li>二重引用符無しでも <code>cd C:\Program Files</code> が機能するようにした</li>
+<li>cd /D を機能するようにした(#182 CMD.EXE との互換性のため /D オプションは無視される)</li>
+<li><code>history</code> で時間順にソートするようにした</li>
+<li><code>open regedit</code> を機能させるため、<code>open</code> でのファイル存在チェックを省く</li>
+<li><code>clone</code>,<code>su</code>,<code>sudo</code>: ネットワークフォルダーで失敗させないよう、シンボリックリンクの宛先パスで ShellExecute を行うようにした (#122)</li>
+<li>set の動作を CMD.EXE 互換とした(<code>set FOO=A B</code> が <code>set FOO=&quot;A B&quot;</code> と同じ)</li>
+<li>#184 <code>_nyagos</code> 内で逆クォートが効かなかった不具合を修正</li>
+<li><code>_nyagos</code>: <code>bindkey KEYNAME FUNCNAME</code> を実装</li>
+<li>CMD.EXE と同様の <code>%環境変数名:被置換文字列=置換文字列%</code> をサポート</li>
+<li>インクリメンタルサーチで ESCAPE キーを検索モード終了に割り当てた。</li>
+<li>カーソル選択型補完(選択用の内蔵コマンド box を新設)
+<ul>
+<li>Ctrl-O          : カーソルで選択したファイル名を挿入する (by box.lua)</li>
+<li>Ctrl-XR , Alt-R : カーソルで選択したヒストリを挿入する (by box.lua)</li>
+<li>Ctrl-XG , Alt-G : カーソルで選択したGit Revisionを挿入する(by box.lua)</li>
+<li>Ctrl-XH , Alt-H : カーソルで選択した過去に移動したディレクトリを挿入する(by box.lua)</li>
+</ul>
+</li>
+<li><code>lua_e &quot;nyagos.key = function(this) end&quot;</code> というキーアサインをサポート</li>
+</ul>
+<h2 id="v418-0">v4.1.8_0</h2>
+<p>(2017.02.15)</p>
+<ul>
+<li>COMMAND.COMバッチ風の新カスタマイズファイルとして <code>_nyagos</code> を用意</li>
+<li>Fix #173 <code>ls</code> や内蔵コマンドを Ctrl-C で止められるようになった</li>
+<li>ls -h のファイルサイズを 1K,2M 等ではなく、カンマ区切りの数値とした</li>
+<li>nyagos.lines(FILENAME,&quot;n&quot;) を実装した(ただし、実数ではなく整数)</li>
+<li>nyagos.exe の中だけで機能する %PATH% 的な環境変数 %NYAGOSPATH% を追加</li>
+<li>vim のような SET VAR+=VALUE , VAR^=VALUE をサポート</li>
+<li>Fix #176 <code>gawk &quot;BEGIN{ print substr(&quot;&quot;%01&quot;&quot;,2) }&quot;</code> がエラーになっていた</li>
+<li>アイコンを付けるのに、windres.exe ではなく github.com/josephspurrier/goversioninfo を使うようにした</li>
+<li>command.com と同程度の <code>if</code> をサポート(<code>==</code>,<code>not</code>,<code>errorlevel</code>,<code>/I</code>)</li>
+<li>alias に新マクロを追加 <code>$~1</code> <code>$~2</code> ... <code>$~*</code> (前後の二重引用符を削除する)</li>
+<li>カレントディレクトリ,時刻,PID もヒストリに記録するようにした (#112)</li>
+<li>ls -l: タイムスタンプのフォーマットを 'Jan 2 15:04:05' or 'Jan 2 2006'へ変更</li>
+<li>lua53.dll が無い時、スタックトレースではなくエラーを表示するようにした</li>
+<li>'#' 以降をコメントとみなすようにした</li>
+<li>open,clone,su,sudo を Lua から Go に書き直した</li>
+</ul>
+<h2 id="v417-0">v4.1.7_0</h2>
+<p>(2016.11.29)</p>
+<ul>
+<li>nyagos.lua を廃止した。その役割は nyagos.exe 自身が担うようにした。</li>
+<li><code>~/.nyagos</code> を<code>%APPDATA%\NYAOS_ORG/dotnyagos.luac</code> にキャッシング</li>
+<li><code>nyagos.d/*</code> を nyagos.exe 自体にバンドルするようにした</li>
+<li>Fix #167 相対パスにシンボリックリンクされた実行ファイルが動かなかった</li>
+<li>Fix <code>ls -l</code> でリンクされた実行ファイルに @ とリンク先が表示されていなかった</li>
+<li>Fix su.lua: clone/su で文字化けしたパスが表示されていた</li>
+<li>Fix #168 <code>ls 相対パスのシンボリックリンク</code> がエラーになっていた</li>
+<li>Fix <code>ls -lh</code> の時のファイルサイズの表示幅がおかしくなっていた</li>
+<li><code>ls -oFh</code> をデフォルトの ls のエイリアスにした</li>
+<li><code>history</code> で標準出力が端末ではない時、全行を出力するようにした</li>
+<li><code>open</code> で複数のファイルが指定された時にプロンプトを表示するようにした</li>
+<li><code>use &quot;cho&quot;</code> → <a href="https://github.com/mattn/cho">cho</a> 向け拡張
+* C-r: ヒストリ
+* C-o: ファイル名
+* M-h: ディレクトリヒストリ
+* M-g: Git のリビジョン名</li>
+<li>Fix: {a,b,c} といったブレース展開が、引用符の中でも機能していた不具合を修正</li>
+</ul>
+<h2 id="v416-1">v4.1.6_1</h2>
+<p>(2016.09.07)</p>
+<ul>
+<li>Fix: パッケージの ZIP ファイルに lua53.dll が含まれていなかった。</li>
+</ul>
+<h2 id="v416-0">v4.1.6_0</h2>
+<p>(2016.09.07)</p>
+<ul>
+<li>スペースとバックスペースで行っていた行末削除に &quot;\x1B[0K&quot; を使うようにした</li>
+<li>m回のバックスペースに &quot;\x1B[mC&quot; を使うようにした。</li>
+<li>Fix #159: 端末幅を変更した時にプロンプトから再表示していたのを廃止</li>
+<li>Fix #164: <code>cd --history</code> でカレントディレクトリがホームに移動していた</li>
+<li>stat 取得の成否にかかわらず、<code>[\\/:]\.{0,2}$</code> にマッチする宛先パスをディレクトリとみなすようにした。</li>
+</ul>
+<h2 id="v415-1">v4.1.5_1</h2>
+<p>(2016.07.31)</p>
+<ul>
+<li>Fix #157++: 端末サイズ変更後、追記でズレる不具合を修正</li>
+<li>4.0.x の不適切なデフォルト ~/.nyagos 向けに、prompter という名前の上位値がクロージャ(nyagos.prompt)で使われていたらエラーにするようにした (#155,#158)</li>
+</ul>
+<h2 id="v415-0">v4.1.5_0</h2>
+<p>(2016.07.31)</p>
+<ul>
+<li>カレントディレクトリのヒストリがゼロの時に peco がハングしないように、<code>cd --history</code> の先頭にカレントディレクトリを出力するようにした。</li>
+<li>Luaで <code>nyagos.option.glob = true</code> とすると、外部コマンドでもワイルドカード展開するようにした。(#150)</li>
+<li>source の互換性改善を試みた</li>
+<li>nyagos.lines(FILENAME,X) の X='a','l','L',数値のサポート(#147)</li>
+<li>Fix #156: %U+0000% でパニックが発生する</li>
+<li>Fix #152: 「ls -ld Downloads\」の結果が「Downloads/」となる</li>
+<li>Fix #157: 端末サイズ変更時の、一行入力の表示幅を再設定するようにした</li>
+<li>内蔵パッケージを別レポジトリヘ外出し</li>
+</ul>
+<h2 id="v414-1">v4.1.4_1</h2>
+<p>(2016.06.12)</p>
+<ul>
+<li><code>&amp;&amp;</code> や <code>||</code> が <code> ;</code>と等価になっていた不具合を修正(#151)</li>
+<li>@DeaR さん提供の autocd.lua &amp; autols.lua を nyagos.d/catalog に追加(#149)</li>
+</ul>
+<h2 id="v414-0">v4.1.4_0</h2>
+<p>(2016.05.29)</p>
+<ul>
+<li>簡易OLEインターフェイスを実装した。NYOLE.DLL は不要になった。</li>
+<li>デフォルトのプロンプト表示関数を <code>nyagos.default_prompt</code> と定義し、第二引数で端末タイトルを変更できるようにした</li>
+<li>Fix: nyagos.lines() が改行を削除していなかった</li>
+<li>Fix: Lua のデフォルトファイルハンドル(標準入出力)がバイナリモードでオープンされていた(#146)</li>
+<li>nyagos.d/catalog/peco.lua: C-r: 表示順を反転させて、速度を改善した。</li>
+</ul>
+<h2 id="v413-1">v4.1.3_1</h2>
+<p>(2016.05.08)</p>
+<ul>
+<li>Fix: ヒストリがファイルに保存されない #138</li>
+<li>Fix: nyagos.history を削除すると、exit で終了するまで警告が出続ける</li>
+<li>Fix: nyagos.d/catalog/peco.lua: nyagos.history が存在しないと、peco がハングする</li>
+</ul>
+<h2 id="v413-0">v4.1.3_0</h2>
+<p>(2016.05.05)</p>
+<ul>
+<li>Add: <code>nyagos.open(PATH,MODE)</code> UTF8版<code>io.open</code></li>
+<li>Add: <code>nyagos.loadfile(PATH)</code> UTF8版<code>loadfile</code></li>
+<li>Add: <code>nyagos.lines(PATH)</code> UTF8版<code>io.lines</code>(注意:戻り値はバイト列、ファイル名だけがUTF8指定になった)</li>
+<li>内蔵<code>echo</code>の改行コードとして LF ではなく CRLF を使うようにした (#124)</li>
+<li>Lua のデフォルト入出力を NYAGOS のリダイレクトに追随させるようにした</li>
+<li>touch コマンドに -r と -t オプションを実装した</li>
+<li>touch コマンドで簡易日時フォーマットチェックを入れた</li>
+<li><code>make install</code> でログを残して、3秒後にインストール窓を閉じるようにした(#107)</li>
+<li><code>nyagos &lt; TEXTFILE</code> が利用可能になった (#125)</li>
+<li>{conio,dos}/const.go を再作成するのに lua.exe,findstr.exe は不要になった</li>
+<li>標準エイリアス suffix が機能していなかった</li>
+<li>カレントドライブがネットワークドライブでも、<code>su</code> は新しい管理者モード nyagos を同じ UNC-Path でディレクトリで起動させられるようにした。</li>
+<li><code>nyagos -c 'CMD'</code> で CMD は <code>nyagos.lua</code> の後に実行するようにした。</li>
+<li><code>nyagos -[cfe] &quot;...&quot;や </code>nyagos &lt; TEXTFILE` では著作権表示を出さないようにした</li>
+<li>Fix: <code>make install DIR</code> が次回の <code>make install</code> 向けに DIR をセーブしていなかった。</li>
+<li>Fix: nyagos.exe が日本語フォルダーに置いてある時、nyagos.lua をロードできていなかった。</li>
+<li>Fix: nyagos.d/catalog/subcomplete.lua が 4.1 以降で動かなくなっていた (#135)</li>
+<li>エスケープシーケンスエミュレータをgithub.com/mattn/go-colorable に変更 (#137)</li>
+<li>Fix: <code>ls -ltr * </code>で時系列でソートされていなかった (#136)</li>
+<li>nyagos -f で拡張子が .lua で無い時、シェルコマンドが格納されたファイルと解釈するようにした</li>
+</ul>
+<h2 id="20160517-%E8%BF%BD%E8%A8%98">(2016.05.17 追記)</h2>
+<ul>
+<li>ANSI文字列とUTF8文字列の混乱を避けるため、print でエスケープシーケンス入りの UTF8 文字列出力を廃止した。print は lua53.dll 内蔵のもののままとなった( #129 )</li>
+</ul>
+<h2 id="v412-0">v4.1.2_0</h2>
+<p>(2016.03.29)</p>
+<ul>
+<li>スクリプトのカタログシステムを作った
+<ul>
+<li>スクリプト <code>catalog.d\*.lua</code> を <code>nyagos.d\catalog\.</code> へ移動</li>
+<li>カタログのスクリプトを .nyagos より <code>use &quot;NAME&quot;</code> で利用できるようにした
+<ul>
+<li><code>use &quot;dollar&quot;</code> → <code>$PATH</code>形式で環境変数を展開</li>
+<li><code>use &quot;peco&quot;</code> → <a href="https://github.com/peco/peco">peco</a> 向け拡張
+<ul>
+<li>C-r: ヒストリ</li>
+<li>C-o: ファイル名</li>
+<li>M-h: ディレクトリヒストリ</li>
+<li>M-g: Git のリビジョン名</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ls
+<ul>
+<li>壊れたシンボリックリンクがあっても ls は中断しないようにした。</li>
+<li><code>ls -d</code> をサポート</li>
+</ul>
+</li>
+<li>.nyagos を nyagos.exe と同じディレクトリに置けるようにした。</li>
+<li>cd のヒストリ全てを <code>cd --history</code> で出せるようにした</li>
+<li>組込みの簡易<code>touch</code>コマンドを実装</li>
+<li>ファイルが存在しない時に、&gt;&gt; が失敗する不具合を修正</li>
+<li>Lua関数の第一パラメータテーブルのメンバに rawargs を追加
+(ユーザ入力文字列から引用符が削除されていない文字列を格納したテーブル)</li>
+<li>bindkeyのコールバック関数の引数テーブルに <code>replacefrom</code> メソッドを追加</li>
+</ul>
+<h2 id="v411-2">v4.1.1_2</h2>
+<p>(2016.02.17)</p>
+<ul>
+<li>Lua の loadfile 等を呼ぶ際に UTF8 を ANSI へコンバートしていなかった不具合を修正 (#110,Thx Mr.HABATA)</li>
+</ul>
+<h2 id="v411-1">v4.1.1_1</h2>
+<p>(2016.02.16)</p>
+<ul>
+<li>プロンプトが長すぎる時、強制的に改行するようにした (#104)</li>
+<li>ls でワイルドカードがマッチしない時のメッセージを修正 (#108)</li>
+<li>%ProgramFiles(x86)%のような環境変数が展開できてなかった点を修正(#109,Thx @hattya)</li>
+</ul>
+<h2 id="v411-0">v4.1.1_0</h2>
+<p>(2016.01.15)</p>
+<ul>
+<li>キー入力で UTF16 のサロゲートペアをサポート</li>
+<li>mkdirに必要に応じて親ディレクトリを作成する /p オプションを追加</li>
+</ul>
+<h2 id="v410-0">v4.1.0_0</h2>
+<p>(2016.01.03)</p>
+<ul>
+<li>内蔵コマンド ln を追加</li>
+<li>Lua コマンド lns を追加 (UACを表示後、<code>ln -s</code> を実行する)</li>
+<li><code>ls -l</code> でシンボリックリンクの宛先を表示</li>
+<li>あるファイルでcopy/move 時に失敗した時、以降のファイルを続けるか問合せるようにした。</li>
+<li>新変数: <code>nyagos.histchar</code>: ヒストリ置換文字(デフォルト「<code>!</code>」)
+<ul>
+<li>ヒストリ置換を完全に無効にする場合、<code>nyagos.histchar = nil</code></li>
+</ul>
+</li>
+<li>新変数: <code>nyagos.antihistquot</code>: ヒストリ置換を抑制する引用符(デフォルト「<code>'&quot;</code>」)
+<ul>
+<li>【注意】<code>&quot;!!&quot;</code> は「デフォルト」では置換されなくなりました</li>
+<li>4.0互換にするには <code>nyagos.antihistquot = [[']]</code> とする</li>
+</ul>
+</li>
+<li>新変数: <code>nyagos.quotation</code>: 補完でのデリミタ文字(デフォルト「<code>&quot;'</code>」)。
+<ul>
+<li><code>nyagos.quotation</code> の最初の文字がデフォルトの引用符となる。</li>
+<li>二番目以降の文字は、ユーザが補完前に使用していた場合に採用される</li>
+<li><code>nyagos.quotation=[[&quot;']]</code>の場合
+<ul>
+<li><code>C:\Prog[TAB]</code> → <code>&quot;C:\Program Files\ </code> (<code>&quot;</code> が挿入される)</li>
+<li><code>'C:\Prog[TAB]</code> → <code>'C:\Program Files\ </code> (<code>'</code> が維持される)</li>
+<li><code>&quot;C:\Prog[TAB]</code> → <code>&quot;C:\Program Files\ </code> (<code>&quot;</code> が維持される)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="v41-beta">v4.1-beta</h2>
+<p>(2015.12.13)</p>
+<ul>
+<li>クラッシュ回避のため、全てのLua のコールバック関数はそれぞれの Lua
+インスタンスを持つようにした。</li>
+<li>コールバック関数と .nyagos 間で値を共有するため、テーブル share[] を作った</li>
+<li><code>*.wsf</code> を cscript に関連付けた</li>
+<li><code>nyagos[]</code> への不適切な代入を警告するようにした。</li>
+</ul>
+<!-- vim:set fenc=utf8: -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents</h3>
+<h3 id="%E7%9B%AE%E6%AC%A1">目次</h3>
 <ol>
-<li><a href="./index.html">Top</a></li>
-<li><a href="01-Install_en.html">Install</a></li>
-<li><a href="02-Options_en.html">Options</a></li>
-<li><a href="03-Readline_en.html">Command Line Editing</a></li>
-<li><a href="04-Commands_en.html">Built-in commands</a></li>
-<li><a href="05-Startup_en.html">What is done on the Startup</a></li>
-<li><a href="06-Substitution_en.html">Substitution</a></li>
-<li><a href="07-LuaFunctions_en.html">Lua functions extenteded by NYAGOS</a></li>
-<li><a href="08-Uninstall_en.html">Uninstall</a></li>
-<li><a href="09-Build_en.html">How To build</a></li>
-<li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+<li><a href="./index_ja.html">Top</a></li>
+<li><a href="01-Install_ja.html">インストール</a></li>
+<li><a href="02-Options_ja.html">起動オプション</a></li>
+<li><a href="03-Readline_ja.html">コマンドライン編集</a></li>
+<li><a href="04-Commands_ja.html">内蔵コマンド</a></li>
+<li><a href="05-Startup_ja.html">起動処理</a></li>
+<li><a href="06-Substitution_ja.html">コマンドライン置換</a></li>
+<li><a href="07-LuaFunctions_ja.html">Lua拡張</a></li>
+<li><a href="08-Uninstall_ja.html">アンインストール</a></li>
+<li><a href="09-Build_ja.html">ビルド方法</a></li>
+<li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
-<p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="changelog">Changelog</h3>
+<p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
+<h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
-<li><a href="CHANGELOG.html">4.4.x</a></li>
-<li><a href="history-4.3_en.html">4.3.x</a></li>
-<li><a href="history-4.2_en.html">4.2.x</a></li>
-<li><a href="history-4.1_en.html">4.1.x</a></li>
-<li><a href="history-4.0_en.html">4.0.x</a></li>
+<li><a href="CHANGELOG_ja.html">4.4.x</a></li>
+<li><a href="CHANGELOG-v4.3_ja.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_ja.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_ja.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_ja.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>

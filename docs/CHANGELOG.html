@@ -1144,14 +1144,57 @@ a.permalink:hover{
 <h1 id="changelog">Changelog</h1>
 <p>( <strong>English</strong> / <a href="CHANGELOG_ja.html">Japanese</a> )</p>
 <ul>
+<li><a href="CHANGELOG-v4.0_en.html">v4.0.*</a></li>
+<li><a href="CHANGELOG-v4.1_en.html">v4.1.*</a></li>
+<li><a href="CHANGELOG-v4.2_en.html">v4.2.*</a></li>
+<li><a href="CHANGELOG-v4.3_en.html">v4.3.*</a></li>
+</ul>
+<h2 id="4419-0">4.4.19_0</h2>
+<p>Mar 13, 2026</p>
+<h3 id="bug-fixes">Bug fixes</h3>
+<ul>
+<li>Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)<br />
+(This avoids a race condition where a SIGINT from Ctrl-C could be delayed and incorrectly cancel the subsequent command.)</li>
+</ul>
+<h3 id="new-features">New Features</h3>
+<ul>
+<li>
+<p>Made input prediction case-insensitive. (<a href="https://github.com/nyaosorg/go-readline-ny/pull/20">go-readline-ny#20</a>, #476 and #477, thanks to @emisjerry)</p>
+</li>
+<li>
+<p>Changed the behavior of the Escape key to act as a prefix key instead of clearing input.(#483, #485) This ensures that:</p>
+<ul>
+<li>Escape sequences such as <code>\x1B[A</code> (arrow keys) work correctly even when the input is split by the terminal.</li>
+<li>Pressing <code>Escape</code> is now equivalent to pressing <code>Alt</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>Esc</code>+<code>Left</code>  now behaves the same as <code>Esc</code>+<code>b</code> or <code>Alt</code>+<code>b</code>.</p>
+</li>
+<li>
+<p><code>Esc</code>+<code>Right</code> now behaves the same as <code>Esc</code>+<code>f</code> or <code>Alt</code>+<code>f</code>.</p>
+</li>
+<li>
+<p>Changed the behavior of <code>Alt</code>+<code>f</code>, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word.</p>
+</li>
+<li>
+<p><code>Alt</code>/<code>Esc</code>+<code>Backspace</code> and <code>ESC</code>+<code>Ctrl</code>+<code>w</code> now delete the word to the left of the cursor.</p>
+</li>
+<li>
+<p><code>Alt</code>/<code>Esc</code>+<code>d</code> now deletes the current or next word.</p>
+</li>
+</ul>
+<h3 id="lua">Lua</h3>
+<ul>
 <li>
 <p>Implemented <code>nyagos.setnextline(STR)</code>, which sets the initial text for the next readline prompt. (#458, #466, thanks to @emisjerry)</p>
 </li>
 <li>
-<p><code>nyagos.d/catalog/complete-jj.lua</code> (#473, #474, Thanks to @tsuyoshicho)</p>
+<p><code>nyagos.d/catalog/complete-jj.lua</code> (#473, #474, #499, Thanks to @tsuyoshicho)</p>
 <ul>
-<li>Regenerate with jj v0.35</li>
+<li>Regenerate with jj v0.39</li>
 <li>Modify the generate script <code>make-complete-jj.lua</code> to output CRLF as line endings</li>
+<li>Enable <code>make update-complete-jj</code> to update complete-jj.lua</li>
 </ul>
 </li>
 <li>
@@ -1162,9 +1205,6 @@ a.permalink:hover{
 <li><code>FORWARD_CHAR_OR_ACCEPT_PREDICT</code>: accept the prediction when the cursor is at the end of the line; otherwise move the cursor one character to the right</li>
 </ul>
 <p>By default, the Right Arrow key and <strong>Ctrl-F</strong> are now bound to <code>FORWARD_CHAR_OR_ACCEPT_PREDICT</code>.</p>
-</li>
-<li>
-<p>Made input prediction case-insensitive. (<a href="https://github.com/nyaosorg/go-readline-ny/pull/20">go-readline-ny#20</a>, #476 and #477, thanks to @emisjerry)</p>
 </li>
 <li>
 <p>Lua scripts under the <code>nyagos.d</code> directory are now loaded automatically again. (#469, #478)
@@ -1181,43 +1221,32 @@ runall(&quot;~/scriptdir1;~/scriptdir2&quot;)
 </code></pre>
 </li>
 <li>
-<p>Update go-readline-ny from v1.13.0 to <a href="https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1">v1.14.1</a>, go-ttyadapter from v0.1.0 to <a href="https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0">v0.3.0</a> (#483) and go-tty from v0.3.0 to <a href="https://github.com/nyaosorg/go-box/releases/tag/v3.1.1">v3.1.1</a> (#485)</p>
+<p>Add <code>nyagos.evaln</code>, a version of <code>nyagos.eval</code> that does not strip trailing CRLF from the output (#495)</p>
+</li>
+</ul>
+<h3 id="documents">Documents</h3>
 <ul>
-<li>Changed the behavior of the Escape key to act as a prefix key instead of clearing input. This ensures that:
+<li>Rename release note files:
 <ul>
-<li>Escape sequences such as <code>\x1B[A</code> (arrow keys) work correctly even when the input is split by the terminal.</li>
-<li>Pressing <code>Escape</code> is now equivalent to pressing <code>Alt</code>.</li>
+<li><code>release_note_en.md</code> → <code>CHANGELOG.md</code></li>
+<li><code>release_note_ja.md</code> → <code>CHANGELOG_ja.md</code>  (#494)</li>
+<li><code>history-*.md</code> → <code>CHANGELOG-v*.md</code> (#496)</li>
 </ul>
 </li>
-<li><code>Esc</code>+<code>Left</code>  now behaves the same as <code>Esc</code>+<code>b</code> or <code>Alt</code>+<code>b</code>.</li>
-<li><code>Esc</code>+<code>Right</code> now behaves the same as <code>Esc</code>+<code>f</code> or <code>Alt</code>+<code>f</code>.</li>
-<li>Changed the behavior of <code>Alt</code>+<code>f</code>, which previously moved the cursor to the beginning of the next word, to match GNU readline: it now moves to the end of the current or next word.</li>
-<li><code>Alt</code>/<code>Esc</code>+<code>Backspace</code> and <code>ESC</code>+<code>Ctrl</code>+<code>w</code> now delete the word to the left of the cursor.</li>
-<li><code>Alt</code>/<code>Esc</code>+<code>d</code> now deletes the current or next word.</li>
 </ul>
-</li>
-<li>
-<p>Changed type command to require at least one argument, matching CMD.exe behavior. (#489,#490)<br />
-(This avoids a race condition where a SIGINT from Ctrl-C could be delayed and incorrectly cancel the subsequent command.)</p>
-</li>
-<li>
-<p>Improved how Context is passed to Lua extensions. By using the Lua registry instead of <code>LState.SetContext</code>, we now suppress redundant Lua stack traces when a command is interrupted by Ctrl-C. (#492)</p>
-</li>
-<li>
-<p>Fixed an issue where the version string was empty when built without GNU Make.
-The version string is now updated via <code>make bump</code> during the release process. (#493)</p>
-</li>
-<li>
-<p>Rename release note files to <code>CHANGELOG.md</code> and <code>CHANGELOG_ja</code>.md. (#494)</p>
-</li>
+<h3 id="internal-changes">Internal changes</h3>
+<ul>
+<li>Fixed an issue where the version string was empty when built without GNU Make.
+The version string is now updated via <code>make bump</code> during the release process. (#493)</li>
+<li>Improved how Context is passed to Lua extensions. By using the Lua registry instead of <code>LState.SetContext</code>, we now suppress redundant Lua stack traces when a command is interrupted by Ctrl-C. (#492)</li>
 </ul>
 <h2 id="4418-1">4.4.18_1</h2>
 <p>Nov 23, 2025</p>
-<h3 id="bug-fixes">Bug fixes</h3>
+<h3 id="bug-fixes-1">Bug fixes</h3>
 <ul>
 <li>Fixed a bug where existing content was not cleared when opening a file with Lua <code>io.open(..., &quot;w&quot;)</code> (#471, #472 Thanks to @emisjerry)</li>
 </ul>
-<h3 id="internal-changes">Internal changes</h3>
+<h3 id="internal-changes-1">Internal changes</h3>
 <ul>
 <li>Upgraded <a href="https://github.com/nyaosorg/go-box">github.com/nyaosorg/go-box</a> from v2.2.1 to v3.0.0. (#453)</li>
 <li>Replaced deprecated <a href="https://pkg.go.dev/github.com/nyaosorg/go-readline-ny@v1.11.0#GetKey">readline.GetKey</a> with <a href="https://github.com/nyaosorg/go-ttyadapter">go-ttyadapter</a>/tty8 in <code>nyagos.getkeys</code>. (#454)</li>
@@ -1346,7 +1375,7 @@ These functions were originally added for maintenance and debugging purposes, bu
 <li>Remove Lua function: <code>nyagos.msgbox</code></li>
 <li>Remove the feature to define <code>grep</code> as an alias of <code>findstr.exe</code> when <code>grep.exe</code> does not exist. It was the undocumented feature.</li>
 </ul>
-<h3 id="new-features">New features</h3>
+<h3 id="new-features-1">New features</h3>
 <h4 id="readline">Readline</h4>
 <ul>
 <li>PowerShell 7-style input prediction
@@ -1384,7 +1413,7 @@ These functions were originally added for maintenance and debugging purposes, bu
 </ul>
 </li>
 </ul>
-<h3 id="documents">Documents</h3>
+<h3 id="documents-1">Documents</h3>
 <ul>
 <li>Fix the broken links caused by renaming readme.md to README.md ( Thx @HAYASHI-Masayuki )</li>
 </ul>
@@ -1421,7 +1450,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Remove lua functions: <code>addpath</code></li>
 <li>Move <code>nyagos.d/aliasandset.lua</code> to <code>nyagos/catalog/.</code> that defines tool lua functions: <code>set(&quot;ENV=VALUE&quot;)</code>, <code>alias(&quot;NAME=DEFINE&quot;)</code></li>
 </ul>
-<h3 id="new-features-1">New features</h3>
+<h3 id="new-features-2">New features</h3>
 <ul>
 <li>
 <p>When <code>%NO_COLOR%</code> is defined, disable the color of the prompt, the command-line, and ls command</p>
@@ -1467,7 +1496,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li>Fix: the loop to input commands for <code>foreach</code> could not be stopped with Ctrl-C<br />
 ( This problem was included in the commit <a href="https://github.com/nyaosorg/nyagos/commit/8bf0a2acb25b152d3d40c188de09858c2ef572ae">8bf0a2acb25b152d3d40c188de09858c2ef572ae</a> of version <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_2">4.4.6_2</a>. See also issue <a href="https://github.com/nyaosorg/nyagos/issues/383">#383</a> and <a href="https://github.com/nyaosorg/nyagos/releases/tag/4.4.6_0">4.4.6_0</a> )</li>
 </ul>
-<h3 id="documents-1">Documents</h3>
+<h3 id="documents-2">Documents</h3>
 <ul>
 <li>docs/07-LuaFunctions_*.md: wrote about <code>nyagos.shellexecute</code> (forgotten!)</li>
 </ul>
@@ -1476,7 +1505,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <p>The second half of 2023 edition.
 The binaries of this version are built with Go 1.20.9.<br />
 They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
-<h3 id="new-features-2">New features</h3>
+<h3 id="new-features-3">New features</h3>
 <ul>
 <li>nyagos.d/suffix.lua: Enabled automatic expansion of wildcards used in parameters of commands listed in <code>%NYAGOSEXPANDWILDCARD%</code> (for example: <code>nyagos.env.NYAGOSEXPANDWILDCARD=&quot;gorename;gofmt&quot;</code> )</li>
 <li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> Add new option: <code>glob_slash</code> to enable with the option of executable <code>--glob-slash</code>, calling lua function like <code>nyagos.option.glob_slash=true</code>, or executing command <code>set -o glob_slash</code>. When it is set, <code>/</code> is used on wildcard expansion.</li>
@@ -1958,10 +1987,10 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <h3 id="changelog">Changelog</h3>
 <ul>
 <li><a href="CHANGELOG.html">4.4.x</a></li>
-<li><a href="history-4.3_en.html">4.3.x</a></li>
-<li><a href="history-4.2_en.html">4.2.x</a></li>
-<li><a href="history-4.1_en.html">4.1.x</a></li>
-<li><a href="history-4.0_en.html">4.0.x</a></li>
+<li><a href="CHANGELOG-v4.3_en.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_en.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_en.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_en.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>
