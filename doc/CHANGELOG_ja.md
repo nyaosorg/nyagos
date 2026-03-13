@@ -7,6 +7,10 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_ja.md)
 - [v4.3.\*](CHANGELOG-v4.3_ja.md)
 
+4.4.19\_0
+---------
+Mar 13, 2026
+
 ### 不具合修正
 
 - `type` コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)  

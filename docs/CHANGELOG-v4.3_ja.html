@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>NYAOS.ORG/NYAGOS - history-4.0</title>
+<title>NYAOS.ORG/NYAGOS - CHANGELOG-v4.3</title>
 <style type="text/css">
 /* light */
 .markdown-body {
@@ -1141,276 +1141,214 @@ a.permalink:hover{
 </head><body>
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
-<p>English / <a href="history-4.0_ja.html">Japanese</a></p>
-<h1 id="nyagos-409-11">NYAGOS 4.0.9_11</h1>
-<p>on Dec 12,2015</p>
+<h1 id="changelog-v43">Changelog v4.3</h1>
+<p>( <a href="./CHANGELOG-v4.3_en.html">English</a> / Japanese )</p>
+<h2 id="v433-5">v4.3.3_5</h2>
+<p>(2018.12.24)</p>
 <ul>
-<li>Build with go 1.5.2</li>
-<li>Readline: support Ctrl-C as interrupt on isearch (#98 Thx @hattya)</li>
-<li>Add suppression options (#95,#97 Thx @hattya)
+<li>(#345) subcomplete.lua が git 補完で動作しない問題を修正 (Thx! @tsuyoshicho)</li>
+<li>(#347) <code>dir 2&gt;&amp;1</code>実行後、dup元の標準出力までクローズされていた不具合を修正(Thx! @Matsuyanagi)</li>
+<li>(#348) ls 後マウスのスクロールが効きにくくなる問題に対応 (Thx! @tyochiai)
 <ul>
-<li>Add /q option to copy,move,del,erase and rmdir.</li>
-</ul>
-</li>
-<li>ls: calculate width of file size field for each directory (#94 Thx @hattya)</li>
-<li>move: be able to override files (api: MoveFileW -&gt; MoveFileExW) (#93 Thx @hattya)</li>
-<li>Fixed lua-function 'set' did not expand env-var including <code>_</code> (#92)</li>
-<li>Fixed typographical error(s)
-<ul>
-<li>Changed charactor to character in README (#90: @orthographic-pedant)</li>
-</ul>
-</li>
-<li><code>nyagos.command_not_found</code> became deprecated.
-<ul>
-<li>Removed from Document (it gets deprecated)</li>
-<li>Removed catalog.d/ezoe.lua</li>
-</ul>
-</li>
-<li>To avoid crash (#89)
-<ul>
-<li>Forbade nyagos.prompt to execute background</li>
-<li>Forbade using Lua on background or not 1st command of pipeline</li>
+<li>要 github.com/zetamatta/go-getch tagged:20181223</li>
 </ul>
 </li>
 </ul>
-<h1 id="nyagos-409-10">NYAGOS 4.0.9_10</h1>
-<p>on Sep 17,2015</p>
+<h2 id="v433-4">v4.3.3_4</h2>
+<p>(2018.12.13)</p>
 <ul>
-<li>Build with go 1.5.1</li>
-<li>Fixed #88 Ctrl-U (<code>UNIX_LINE_DISCARD</code>) did not consider scroll.</li>
-<li>Fixed #87 Querying not-starting process's errorlevel which occured crash.</li>
-<li>Do not quit and do warn only when nyagos.prompt returns NaN.</li>
-<li>Fixed file-handle created with REDIRECT was not closed.</li>
-<li>Improved make.cmd</li>
-<li>Fixed interpreter instance was not given to nyagos.prompt.</li>
-<li><code>which</code> command supports -a option</li>
-<li>Support C-w (unix-word-rubout) like nyaos (#85)</li>
-<li>Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)</li>
+<li>出力先が端末でない場合、more を type と等価に</li>
+<li>バッチ実行時に作成する踏み台の一時バッチを廃止。<code>CMD /V:ON /S /C &quot;...&quot;</code> を使うようにした</li>
+<li>(#340) 最大ヒストリ保存数を指定する <code>nyagos.histsize</code> を追加(Thx! @crile)</li>
+<li>(#343) %COMSPEC% が未定義の時、CMD.EXE を用いるようにした(Thx! @orz--)</li>
 </ul>
-<h1 id="nyagos-409-9">NYAGOS 4.0.9_9</h1>
-<p>on Sep 07,2015</p>
+<h2 id="v433-3">v4.3.3_3</h2>
+<p>(2018.10.23)</p>
 <ul>
-<li>Fixed #80 built-in commands and aliases could not return errorlevel</li>
-<li>Let nyagos.exec return %ERRORLEVEL% and error-message.</li>
-<li>Fixed #83 panic: calling <code>nyagos.exec</code> on <code>nyagos.on_command_not_found</code></li>
-<li>Fixed #82 panic: using pipeline between replacing-type-aliases.</li>
-<li>Fixed #81 No errors reported on rmdir NOT directory before prompt.</li>
+<li>(#310) copy と move の宛先でショートカットをサポート</li>
+<li>(#313 reopened) <code>git blame FILES | type | gvim - &amp;</code> で gvim が空バッファで始まってしまう問題を修正</li>
+<li>壊れたジャンクションに対する rmdir ができなかった問題を修正</li>
+<li>Luaスクリプトや外部プロセスの一部で Ctrl-C が機能しなかった問題を修正</li>
+<li>(#267) <code>type</code> や <code>more</code> で UTF16 ファイルを表示できるようにした</li>
+<li>(#336) <code>io.write</code> が -e や --lua-file オプション中で機能しない不具合を修正</li>
+<li>(#337) バッチが exit -1 で終了するとクラッシュする不具合を修正(Thx! @hogewest)</li>
 </ul>
-<h1 id="nyagos-409-8">NYAGOS 4.0.9_8</h1>
-<p>on Aug 20,2015</p>
+<h2 id="v433-2">v4.3.3_2</h2>
+<p>(2018.09.22)</p>
 <ul>
-<li>Build with go 1.5</li>
-<li>Set go-version to Lua-variable: <code>nyagos.goversion</code> and print at startup.</li>
-<li>Support to build both 32bit and 64bit executable.</li>
+<li>リダイレクトで存在するファイルを上書きする時のエラーメッセージにファイル名を付与した</li>
+<li>noclobber が設定されている時に nul へのリダイレクトを上書きエラーにしてしまう問題を修正</li>
+<li>diskused: エラーが見付かっても容量計算を続けるようにした</li>
+<li>ls: <code>-1</code> があると、<code>-l</code> オプションが動かない点を修正</li>
+<li>ls: 出力先が端末でない時、1ファイル1行で出力していなかった点を修正</li>
+<li>別名定義されていない内蔵コマンドを bash のように <code>\ls</code> と呼べるようになった</li>
+<li>for のエイリアス定義が壊れていたのを修正</li>
+<li>ファイル名以外の補完の時もパスの区切り文字が補正されてしまう問題を修正</li>
 </ul>
-<h1 id="nyagos-409-7">NYAGOS 4.0.9_7</h1>
-<p>on Jul 29,2015</p>
+<h2 id="v433-1">v4.3.3_1</h2>
+<p>(2018.08.29)</p>
 <ul>
-<li>Fixed a panic occurs when only '||' command-line typed.</li>
+<li>#330,#331 オリジナル版のfile:readの非互換な動作を修正 (Thx! @erw7)</li>
+<li>#332 io.open(&quot;w&quot;) でバッファリングしないようにした (Thx! @spiegel-im-spiegel)</li>
+<li>#333 Fix file:seek() が読み取り時に期待どおり同しなかった点を修正 (Thx! @erw7)</li>
+<li>#333 Fix file:close() の戻り値がおかしかった点を修正 (Thx! @erw7)</li>
+<li>#319 utf8.len() を実装</li>
+<li>Fix: <code>which</code> が拡張子なしのファイルも出力していた点を修正</li>
+<li><code>pwd</code> はデフォルトでは論理パスを出力するようにした</li>
+<li>インクリメンタルサーチを開始した時、表示にゴミが残る不具合を修正</li>
+<li>-lfdflags=&quot;-s -w&quot; で実行ファイルのサイズを削減した</li>
 </ul>
-<h1 id="nyagos-409-6">NYAGOS 4.0.9_6</h1>
-<p>on Jul 21,2015</p>
+<h2 id="v433-0">v4.3.3_0</h2>
+<p>(2018.08.14)</p>
 <ul>
-<li>Fixed nyagos.stat(nil) caused a panic.</li>
-<li>Fixed not all stack trace was printed when a panic was recovered.</li>
+<li>#283 Ctrl-O での補完で、パスでディレクトリを省略するようにした。</li>
+<li>#326 オプション <code>nyagos.option.tilde_expansion</code> を追加</li>
+<li>Fix: <code>nyagos.option.xxxxxx = true</code> が機能していなかった</li>
+<li>Fix #328 <code>start https://...</code> で URL をブラウザで開けなかった</li>
+<li>#327 のために --read-stdin-as-file を実装(標準入力からファイル扱いでコマンドを読み込む)</li>
+<li>シンボリックリンク先にある GUI アプリケーションの実行が失敗する問題を修正</li>
+<li>(パイプラインではない)リダイレクトがバッググラウンドで起動できなかった不具合を修正</li>
+<li>文字列を空白で分割する Lua 関数 nyagos.fields を追加</li>
+<li>#185 <code>ps</code> , <code>kill</code> コマンドを追加</li>
+<li>#329 Lua用数値型として int ではなく float64 を使うようにした</li>
 </ul>
-<h1 id="nyagos-409-5">NYAGOS 4.0.9_5</h1>
-<p>on Jul 15,2015</p>
+<h2 id="v432-0">v4.3.2_0</h2>
+<p>(2018.07.23)</p>
 <ul>
-<li>Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)</li>
-<li>Add nyagos.rawexec and nyagos.raweval</li>
-<li>Forbade to use more than one lua-command on the same pipeline to avoid crash.</li>
-<li>Forbade to run Lua background to avoid crash.</li>
-<li>Fixed #77: echo &quot;{a,b}&quot; -&gt; &quot;a b&quot; is printed.({a,b} should be printed)</li>
+<li>#319 github.com/BixData/gluabit32 で、Lua関数 <code>bit32.*</code> を全てサポート</li>
+<li>#323 io.lines() , nyagos.lines() がリダイレクトされた標準入力から読み込めない問題を修正</li>
+<li>io.write() がリダイレクトされた標準出力に出力できなかった</li>
+<li><code>io.*</code> を NYAGOS の自前バージョンに置き変えた</li>
+<li>#324 Lua の print で --no-go-colorable が効いていなかった不具合を修正 (Thx @tignear)</li>
+<li>#325 Source 文で空白を含むパスをロードできなかった不具合を修正 (Thx @tignear)</li>
+<li>オプション <code>--lua-first</code> and <code>--cmd-first</code> を追加</li>
 </ul>
-<h1 id="nyagos-409-4">NYAGOS 4.0.9_4</h1>
-<p>on Jun 24,2015</p>
+<h2 id="v431-3">v4.3.1_3</h2>
+<p>(2018.06.19)</p>
 <ul>
-<li>Fixed <code>ls (NO_MATCHING_WILDCARD)</code> worked as if <code>ls</code> with (NO-ARGUMENTS)</li>
-<li>Fixed <code>A ; B</code> worked as if <code>A &amp; B</code>.</li>
+<li>#316 %PATH% の中の長さゼロのエントリがカレントディレクトリとみなされていた不具合を修正</li>
+<li>#321 キー機能名の <code>previous_history</code> と <code>next_history</code> が未登録だった不具合を修正</li>
+<li>-h,--help オプションを追加</li>
+<li>バッチファイル組み込みのため、Luaスクリプトの @ で始まる行を無視するようにした</li>
+<li>#322 バッチファイルの引数のエンコーディングをスレッドのコードページから、コンソールのコードページへ変更した。</li>
+<li>Lua変数 <code>nyagos.option.*</code> の全てを nyagos.exe のコマンドラインオプションで設定できるようにした。</li>
 </ul>
-<h1 id="nyagos-409-3">NYAGOS 4.0.9_3</h1>
-<p>on Jun 15,2015</p>
+<h2 id="v431-2">v4.3.1_2</h2>
+<p>(2018.06.12)</p>
 <ul>
-<li>Fixed nyagos.stat did not work on reparsepoints.</li>
-<li>Fixed #74 &quot;ls -a&quot; never prints &quot;.&quot; and &quot;..&quot; (current and parent directory)</li>
-<li>Disabled ls-color when stdout is not console even if -o option exists.</li>
+<li>#320: nyagos.rawexec &amp; raweval が引数内のテーブルを展開していなかった非互換性を修正</li>
+<li>--show-version-only を指定すると --norc を自動的に有効化するようにした</li>
 </ul>
-<h1 id="nyagos-409-2">NYAGOS 4.0.9_2</h1>
-<p>on Jun 12,2015</p>
+<h2 id="v431-1">v4.3.1_1</h2>
+<p>(2018.06.11)</p>
 <ul>
-<li>Fixed the limiter of alias subsutitution was only one. Changed upto 5</li>
-<li>Fixed more than one nyagos.argsfiler could run at once on pipelines. It caused to crash the process.</li>
-</ul>
-<h1 id="nyagos-409-1">NYAGOS 4.0.9_1</h1>
-<p>on Jun 03,2015</p>
+<li>lua53.dll 向けのソースコードを削除</li>
+<li>#317: <code>use subcomplete</code> が有効で、rclone.exe が見付かった時デッドロックしていた
 <ul>
-<li>Fixed nyagos.exec() crashed when it was redirected.</li>
+<li><a href="https://github.com/yuin/gopher-lua/issues/181">https://github.com/yuin/gopher-lua/issues/181</a> も参照のこと</li>
 </ul>
-<h1 id="nyagos-409-0">NYAGOS 4.0.9_0</h1>
-<p>on Jun 02,2015</p>
+</li>
+<li>#318,#319 下記の Lua 5.3 互換関数を追加
 <ul>
-<li>Add the lua-table <code>nyagos.env</code></li>
-<li>Add the lua-hook <code>nyagos.on_command_not_found</code></li>
-<li>Add the lua-function <code>nyagos.getviewwidth</code> (Thx @nocd5)</li>
-<li>Supported Surrogate-Pair on GetKey (Thx @rururutan)</li>
-<li>Add the lua-function <code>nyagos.stat</code></li>
-<li>Fixed #72 an empty argument was inserted before SPACE &amp; REDIRECT-MARK (Thx @hogewest)</li>
-<li>Made lua-script catalog folder 'catalog.d'(not loaded automatically)</li>
-<li>Associated the suffix .py to either of IronPython or CPython automatically(Thx @hattya)</li>
+<li>bit32.band/bitor/bxor</li>
+<li>utf8.char/charpattern/codes</li>
 </ul>
-<h1 id="nyagos-408-0">NYAGOS 4.0.8_0</h1>
-<p>on May 28,2015</p>
+</li>
+</ul>
+<h2 id="v431-0">v4.3.1_0</h2>
+<p>(2018.06.03)</p>
 <ul>
-<li>Supported single-quatations like UNIX-Shell</li>
-<li>Added lua-function <code>nyagos.getkey()</code>/<code>nyagos.getalias()</code></li>
-<li>Renamed lua-function <code>nyagos.alias</code> to <code>nyagos.setalias()</code></li>
-<li>Made alias-defining-table <code>nyagos.alias</code>. (nyagos.lua)</li>
-<li>Changed the output of <code>x(&quot;COMMAND&quot;)</code> from stdout to stderr.</li>
-<li>Added <code>cdlnk.lua</code> which enables <code>cd SHORTCUT.LNK</code>.</li>
-<li>Improved <code>su</code> and <code>clone</code> to retry as <code>%COMSPEC% /c NYAGOS.EXE</code> when error occued.</li>
-<li>Improved lua-function nyagos.glob to receives more than one wildcards.</li>
-<li>Added <code>trash.lua</code> which provides <code>trash</code> command which throws files Windows' trashbox.</li>
-<li>Replaced the bundled NYOLE.DLL 0.0.0.4 to 0.0.0.5 which trash.lua requires.</li>
-<li>Enabled NYAGOS.EXE run without NYOLE.DLL (trash.lua &amp; cdlnk.lua are disabled)</li>
-<li>Replaced lua53.dll to LuaBinaries' version.</li>
-<li>Unbundled lua.exe from zip-file.</li>
-</ul>
-<h2 id="bugfix">Bugfix</h2>
+<li><code>--no-go-colorable</code> と <code>--enable-virtual-terminal-processing</code> で、Windows10 ネイティブのエスケープシーケンスをサポート</li>
+<li>#304,#312, カレントディレクトリから実行ファイルを探す時のオプションを追加
 <ul>
-<li>Fixed #66 <code>echo a&gt;a</code> makes a empty file named <code>aa</code></li>
-<li>Fixed suffix.lua problem (#69 Thx hattya)</li>
-<li>Fixed panic when nyagos.argsfilter returns empty array(#68 Thx hattya)</li>
-<li>Reset to default color after ls (#67 Thx @hattya)</li>
+<li>--look-curdir-first: %PATH% より前に探す(デフォルト:CMD.EXE互換動作)</li>
+<li>--look-curdir-last : %PATH% より後に探す(PowerShell互換動作)</li>
+<li>--look-curdir-never: %PATH% だけから実行ファイルを探す(UNIX Shells互換動作)</li>
 </ul>
-<h1 id="nyagos-407-5">NYAGOS 4.0.7_5</h1>
-<p>on May 09,2015</p>
+</li>
+<li>nyagos.prompt にプロンプトテンプレートの文字列を直接代入できるようになった。</li>
+<li>#314 rmdir がジャンクションを削除できなかった問題を修正</li>
+</ul>
+<h2 id="v430-4">v4.3.0_4</h2>
+<p>(2018.05.12)</p>
 <ul>
-<li>Fix #64 invalid cursor position after Ctrl-T typed.(Not compatible with other shells)</li>
+<li>Fix: #309 nyagos.getkey() が使えない不具合を修正 (Thx @nocd5)</li>
+<li>lnk コマンドの宛先が <code>*.lnk</code> でなかったり存在しなかった時のエラーメッセージを修正</li>
+<li>子プロセスのカーソルがオフになってしまう不具合を修正</li>
 </ul>
-<h1 id="nyagos-407-4">NYAGOS 4.0.7_4</h1>
-<p>on May 05,2015</p>
+<h2 id="v430-3">v4.3.0_3</h2>
+<p>(2018.05.09)</p>
 <ul>
-<li>Fix bug that filename-completion replacing slash all to backslash.</li>
-<li>Fix #63 ESCAPE-Key let clipboard empty-string. (Thx hokorobi)</li>
-<li>Let Ctrl-U copy erased string to clipboard.</li>
+<li>nyagos.setalias, nyagos.getalias の実装が漏れており、<code>alias { CMD=XXX}</code> が動かなくなっていた</li>
+<li>エイリアスの戻り値でテーブルが与えられた時、コマンド名として解釈すべき、要素[0]が使われていなかった不具合を修正</li>
+<li><code>doc/09-Build_*.md</code>: github からのソースダウンロード方法についてドキュメント更新</li>
 </ul>
-<h1 id="nyagos-407-3">NYAGOS 4.0.7_3</h1>
-<p>on May 05,2015</p>
+<h2 id="v430-2">v4.3.0_2</h2>
+<p>(2018.05.07)</p>
 <ul>
-<li><code>SET VAR=</code> removes environment variable <code>VAR</code> (Thx @pine613)</li>
-<li>lnk.js with one parameter shows its linked file. (#59 Thx @NSP-0123456)</li>
-<li>Support Ctrl-T (swapchar) (#62)</li>
+<li>#305: ユーザの .nyagos が二回目以降ロードされない不具合を修正(Thx! @erw7)</li>
 </ul>
-<h2 id="bugfix-1">BugFix</h2>
+<h2 id="v430-1">v4.3.0_1</h2>
+<p>(2018.05.05)</p>
 <ul>
-<li>missed a double-quatation after a percent (#57)</li>
-<li>wildcard's case was not ignored (#58)</li>
-<li>completion removed .\ (dot and shash) (#61)</li>
-<li><code>open ARGUMENT(s)</code> did not work</li>
+<li>nyagos.d/start.lua が動作していなかった不具合を修正 (エイリアス関数の rawargs パラメータが実装されていなかった)</li>
+<li>alias 関数の戻り値が評価されていなかった不具合を修正</li>
+<li>-e オプションのスクリプト向けに、arg[] に引数が代入されていなかった</li>
+<li>-e,-f オプションで、<code>getRegInt: could not find shell in Lua instance</code> が表示される不具合を修正</li>
+<li>バッチファイルが <code>exit /b</code> の値を ERRORLEVEL として返せなかった不具合を修正</li>
 </ul>
-<h1 id="nyagos-407-2">NYAGOS 4.0.7_2</h1>
-<p>on Apr 18,2015</p>
+<h2 id="v430-0">v4.3.0_0</h2>
+<p>(2018.05.03)</p>
 <ul>
-<li>Fix:on completion, / was always replaced to \ .(Thx @nocd5)</li>
-<li>Fix:nyagos.shellexecute() did not report some errors.</li>
-<li>To use COM on Lua scripts, include and use <a href="https://github.com/zetamatta/nyole">NYOLE.DLL</a>.</li>
+<li>シンボリックリンクの先を参照するオプション <code>ls -L</code> を追加</li>
 </ul>
-<h1 id="nyagos-407-1">NYAGOS 4.0.7_1</h1>
-<p>on Apr 13,2015</p>
+<h2 id="v43-beta2">v4.3_beta2</h2>
+<p>(2018.05.01)</p>
 <ul>
-<li>Set arg[..] in nyagos -e &quot;LUA-CODE&quot;.</li>
-</ul>
-<h2 id="bugfix-2">Bugfix</h2>
+<li>C-o を押すと Enter か Escape が押されるまでハングしたように見える不具合を修正
 <ul>
-<li>In nyagos -f &quot;LUA-FILE&quot;, arg[i]'s elements were shifted.</li>
+<li>(ライブラリを修正: <a href="https://github.com/zetamatta/go-box/commit/322b2318471f1ad3ce99a3531118b7095cdf3842">go-box</a>)</li>
 </ul>
-<h1 id="nyagos-407-0">NYAGOS 4.0.7_0</h1>
-<p>on Apr 15,2015</p>
+</li>
+<li>chcp が動作しない不具合を修正 (同コマンドは画面幅取得のため別名定義していた)</li>
+</ul>
+<h2 id="v43-beta">v4.3_beta</h2>
+<p>(2018.04.30)</p>
 <ul>
-<li>Support incremental-search(C-r)</li>
-<li>Add option -e &quot;LUA-CODE&quot; to nyagos.exe</li>
-<li>Set executable's property the version-number</li>
-<li>Change error-message when files do not exists like bash.</li>
-</ul>
-<h1 id="nyagos-406-0">NYAGOS 4.0.6_0</h1>
-<p>on Mar 19,2015</p>
+<li><strong>lua53.dll のかわりに Gopher-Lua を採用</strong> #300
 <ul>
-<li>Add built-in command: pushd/popd/dirs</li>
-<li>Add the method boxprint(),firstword(),lastword() to nyagos.bindkey's first argument</li>
-<li>Update Document about uninstalling</li>
-<li>Add <code>nyagos.completion_hook</code></li>
-<li>Sub-command completion for git, Subversion and Mercurial.</li>
+<li>旧来の lua53.dll 版 nyagos.exe は <code>cd mains ; go build</code> でビルド可能</li>
+<li>Lua無し版 nyagos.exe を <code>cd ngs ; go build</code> でビルド可能</li>
 </ul>
-<h2 id="bugfix-3">Bugfix</h2>
-<ul>
-<li>Completion failed when 0001 is typed where 0001.txt and &quot;0001 copy.txt&quot; were.</li>
+</li>
+<li><code>nyagos.option.cleanup_buffer</code> を追加(デフォルトは false)。true の場合、一行入力の前にコンソールバッファをクリアする</li>
+<li><code>set -o OPTION_NAME</code> と <code>set +o OPTION_NAME</code> を新設(<code>nyagos.option.OPTION_NAME=</code> on Lua と等価)</li>
+<li>コンソール出力をバッファリングするようにした ( go-colorable and bufio.Writer )</li>
 </ul>
-<h1 id="nyagos-405-0">NYAGOS 4.0.5_0</h1>
-<p>on Feb 07,2015</p>
-<ul>
-<li>cd -N (N:digit): move the N-th previous directory.</li>
-<li>cd -h , cd ? : print current directory history.</li>
-<li>pwd -N (N:digit): print the N-th previous directory.</li>
-<li>%CD% , %ERRORLEVEL% are able to be completed.</li>
-</ul>
-<h2 id="bugfix-4">Bugfix</h2>
-<ul>
-<li>Lua-function 'include' didn't report error</li>
-<li>Command-name completion printed same-name in diffent directories.</li>
-<li>ReadLine sometimes left trash at replacing string</li>
-<li>Could not complete path including ./ #45</li>
-<li>Could not broken symbolic link with DEL #44</li>
-<li>Files contains '&amp;' was not enclosed with &quot;..&quot; at completion.</li>
-</ul>
-<h2 id="trivial-fix">Trivial fix</h2>
-<ul>
-<li>make.cmd: add echo off a lot</li>
-<li>Let make.cmd on the top directory without arguments copy EXE top</li>
-</ul>
-<h1 id="nyagos-404-0">NYAGOS 4.0.4_0</h1>
-<p>on Jan 19,2015</p>
-<ul>
-<li>Support Lua 5.3</li>
-</ul>
-<h1 id="nyagos-403-2">NYAGOS 4.0.3_2</h1>
-<p>on Jan 18,2015</p>
-<ul>
-<li>Command-name completion supports alias and built-in commands.</li>
-</ul>
-<h2 id="bugfix-5">BugFix</h2>
-<ul>
-<li><code>pwd</code> did not print correct UNC-Path (#37)</li>
-<li><code>nyagos.gethistory( large-value )</code> crashes nyagos (#38 @1)</li>
-<li><code>%APPDATA%/NYAOS_ORG/nyagos.history</code> did not be updated. (#39 @1)</li>
-<li>Crashed when <code>%APPDATA%/NYAOS_ORG/nyagos.history</code> did not exists or is empty.x (#40 @1)</li>
-<li>On French keyboard, keys shifted with AltGr could not be input. (#41)</li>
-</ul>
-<p>@1 Probably these bugs appeared only on snapshot-build.</p>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
-<h3 id="contents">Contents</h3>
+<h3 id="%E7%9B%AE%E6%AC%A1">目次</h3>
 <ol>
-<li><a href="./index.html">Top</a></li>
-<li><a href="01-Install_en.html">Install</a></li>
-<li><a href="02-Options_en.html">Options</a></li>
-<li><a href="03-Readline_en.html">Command Line Editing</a></li>
-<li><a href="04-Commands_en.html">Built-in commands</a></li>
-<li><a href="05-Startup_en.html">What is done on the Startup</a></li>
-<li><a href="06-Substitution_en.html">Substitution</a></li>
-<li><a href="07-LuaFunctions_en.html">Lua functions extenteded by NYAGOS</a></li>
-<li><a href="08-Uninstall_en.html">Uninstall</a></li>
-<li><a href="09-Build_en.html">How To build</a></li>
-<li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+<li><a href="./index_ja.html">Top</a></li>
+<li><a href="01-Install_ja.html">インストール</a></li>
+<li><a href="02-Options_ja.html">起動オプション</a></li>
+<li><a href="03-Readline_ja.html">コマンドライン編集</a></li>
+<li><a href="04-Commands_ja.html">内蔵コマンド</a></li>
+<li><a href="05-Startup_ja.html">起動処理</a></li>
+<li><a href="06-Substitution_ja.html">コマンドライン置換</a></li>
+<li><a href="07-LuaFunctions_ja.html">Lua拡張</a></li>
+<li><a href="08-Uninstall_ja.html">アンインストール</a></li>
+<li><a href="09-Build_ja.html">ビルド方法</a></li>
+<li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
 </ol>
-<p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
-<h3 id="changelog">Changelog</h3>
+<p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
+<h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
-<li><a href="CHANGELOG.html">4.4.x</a></li>
-<li><a href="history-4.3_en.html">4.3.x</a></li>
-<li><a href="history-4.2_en.html">4.2.x</a></li>
-<li><a href="history-4.1_en.html">4.1.x</a></li>
-<li><a href="history-4.0_en.html">4.0.x</a></li>
+<li><a href="CHANGELOG_ja.html">4.4.x</a></li>
+<li><a href="CHANGELOG-v4.3_ja.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_ja.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_ja.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_ja.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>

@@ -1184,21 +1184,30 @@ completion list.</p>
 to be refered and assigned.</p>
 <h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code></h3>
 <p>It splits TEXT with white-spaces and returns them as table of strings.</p>
-<h3 id="errorlevelerrormessage--nyagosexeccommand"><code>errorlevel,errormessage = nyagos.exec(&quot;COMMAND&quot;)</code></h3>
-<h3 id="errorlevelerrormessage--nyagosexecexenameparam1param2"><code>errorlevel,errormessage = nyagos.exec{&quot;EXENAME&quot;,&quot;PARAM1&quot;,&quot;PARAM2&quot;,...}</code></h3>
-<p>It executes &quot;COMMAND&quot; as shell command. It can call not only external commands,
-but also nyagos built-in commands. When it calls a batchfile, nyagos imports
-their changes of enviroment variables.</p>
-<p>It returns the integer-value for %ERRORLEVEL% and the error-message.
-With no error, they are 0 and nil.</p>
+<h3 id="nyagosexec">nyagos.exec</h3>
+<p>Executes a command. Both external commands and nyagos built-in commands can be called.</p>
+<p>When a batch file is executed, any changes to environment variables made inside the batch file are reflected in the caller.</p>
+<p>If an error occurs, the return values are the integer value that should be stored in <code>%ERRORLEVEL%</code> and an error message.
+If no error occurs, <code>(0,nil)</code> is returned.</p>
+<h4 id="form-1-nyagosexeccommand-line-string">Form 1: <code>nyagos.exec(&quot;command line string&quot;)</code></h4>
+<p>Executes the given string <strong>as a command line exactly as written</strong>.
+Spaces, quotation marks, and other syntax are interpreted using the same rules as a normal shell command line.</p>
+<p>If the command name or arguments contain spaces, the caller must write the appropriate quoting.</p>
+<p>Example: <code>nyagos.exec('&quot;C:\\Program Files\\foo\\bar.exe&quot; arg1 arg2')</code></p>
+<h4 id="form-2-nyagosexecexenamearg1arg2">Form 2: <code>nyagos.exec{&quot;EXENAME&quot;,&quot;ARG1&quot;,&quot;ARG2&quot;...}</code></h4>
+<p>Each element of the table is treated <strong>as the command name and its arguments</strong>.</p>
+<p>Arguments containing spaces are passed correctly without requiring manual quoting.</p>
+<p>Example: <code>nyagos.exec{&quot;C:\\Program Files\\foo\\bar.exe&quot;,&quot;arg1&quot;,&quot;arg2&quot;}</code></p>
 <h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2"><code>errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)</code></h3>
 <h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2-1"><code>errorlevel,errormessage = nyagos.rawexec{'COMMAND-NAME','ARG-1','ARG-2'...}</code></h3>
 <p>It executes &quot;COMMAND-NAME&quot; with ARGs. COMMAND-NAME is not interpreted as
 a built-in command nor an alias. The difference with os.execute is that
 the errormessage is written with utf8.</p>
 <h3 id="output--nyagosevalcommand"><code>OUTPUT = nyagos.eval(&quot;COMMAND&quot;)</code></h3>
-<p>It executes &quot;COMMAND&quot; and set its standard output into the lua-variable OUTPUT.
-When error occures, OUTPUT is set <code>nil</code>.</p>
+<h3 id="output--nyagosevalncommand"><code>OUTPUT = nyagos.evaln(&quot;COMMAND&quot;)</code></h3>
+<p>Executes &quot;COMMAND&quot; and sets its standard output to the Lua variable OUTPUT.
+<code>eval</code> strips trailing CRLF from the output, while <code>evaln</code> returns the output as-is.
+If an error occurs, OUTPUT is set to <code>nil</code>.</p>
 <h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2"><code>OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)</code></h3>
 <h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2-1"><code>OUTPUT,ERR = nyagos.raweval{'COMMAND-NAME','ARG-1','ARG-2'...}</code></h3>
 <p>It executes &quot;COMMAND-NAME&quot; with ARGs and returns commands' standard-output.
@@ -1512,10 +1521,10 @@ end
 <h3 id="changelog">Changelog</h3>
 <ul>
 <li><a href="CHANGELOG.html">4.4.x</a></li>
-<li><a href="history-4.3_en.html">4.3.x</a></li>
-<li><a href="history-4.2_en.html">4.2.x</a></li>
-<li><a href="history-4.1_en.html">4.1.x</a></li>
-<li><a href="history-4.0_en.html">4.0.x</a></li>
+<li><a href="CHANGELOG-v4.3_en.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_en.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_en.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_en.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>

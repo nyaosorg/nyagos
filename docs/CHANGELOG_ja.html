@@ -1144,14 +1144,57 @@ a.permalink:hover{
 <h1 id="changelog">Changelog</h1>
 <p>( <a href="CHANGELOG.html">English</a> / <strong>Japanese</strong> )</p>
 <ul>
+<li><a href="CHANGELOG-v4.0_ja.html">v4.0.*</a></li>
+<li><a href="CHANGELOG-v4.1_ja.html">v4.1.*</a></li>
+<li><a href="CHANGELOG-v4.2_ja.html">v4.2.*</a></li>
+<li><a href="CHANGELOG-v4.3_ja.html">v4.3.*</a></li>
+</ul>
+<h2 id="4419-0">4.4.19_0</h2>
+<p>Mar 13, 2026</p>
+<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3">不具合修正</h3>
+<ul>
+<li><code>type</code> コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)<br />
+(標準入力から読み取ると、Ctrl-C による SIGINT が遅延し、type ではなく、次のコマンドを中断させてしまうことが多いため)</li>
+</ul>
+<h3 id="%E4%BB%95%E6%A7%98%E5%A4%89%E6%9B%B4">仕様変更</h3>
+<ul>
+<li>
+<p>入力予測機能で英大文字・小文字を区別しないようにした (<a href="https://github.com/nyaosorg/go-readline-ny/pull/20">go-readline-ny#20</a>, #476, #477, thanks to @emisjerry)</p>
+</li>
+<li>
+<p><code>Esc</code>キーの扱いを見直し、「入力内容のクリア」ではなくプリフィックスキーとして処理するように変更した。(#483, #485)</p>
+<ul>
+<li>上矢印キーを表す <code>\x1B[A</code> などのキーシーケンスが端末の仕様により分割されて入力された場合でも、正しく動作するようになった。</li>
+<li><code>Esc</code> の入力が <code>Alt</code> シフトと等価となった。</li>
+</ul>
+</li>
+<li>
+<p><code>Esc</code>+<code>Left</code>  を <code>Esc</code>+<code>b</code>, <code>Alt</code>+<code>b</code> と等価にした。</p>
+</li>
+<li>
+<p><code>Esc</code>+<code>Right</code> を <code>Esc</code>+<code>f</code>, <code>Alt</code>+<code>f</code> と等価にした。</p>
+</li>
+<li>
+<p>これまで次の単語の先頭への移動だった Alt + f の挙動を本家の readline に合わせ、現在または次の単語の末尾へ移動するように修正した。</p>
+</li>
+<li>
+<p><code>Alt</code>/<code>Esc</code>+<code>Backspace</code>, <code>ESC</code>+<code>Ctrl</code>+<code>w</code> で、カーソル左の単語を削除するようにした。</p>
+</li>
+<li>
+<p><code>Alt</code>+<code>d</code> で、カーソルから右直近の単語末尾までを削除するようにした。</p>
+</li>
+</ul>
+<h3 id="lua">Lua</h3>
+<ul>
 <li>
 <p>readline の次回プロンプトに挿入する初期テキストを設定する <code>nyagos.setnextline(STR)</code> を実装 (#458, #466, thanks to @emisjerry)</p>
 </li>
 <li>
-<p><code>nyagos.d/catalog/complete-jj.lua</code> (#473, #474, Thanks to @tsuyoshicho)</p>
+<p><code>nyagos.d/catalog/complete-jj.lua</code> (#473, #474, #499, Thanks to @tsuyoshicho)</p>
 <ul>
-<li><code>jj</code> のサブコマンド補完をv0.35 ベースに更新</li>
+<li><code>jj</code> のサブコマンド補完をv0.39 ベースに更新</li>
 <li>改行コードが LF になっていたので、CRLF となるよう、生成スクリプト make-complete-jj.lua を修正</li>
+<li><code>make update-complete-jj</code> から complete-jj.lua を更新できるようにした</li>
 </ul>
 </li>
 <li>
@@ -1162,9 +1205,6 @@ a.permalink:hover{
 <li>カーソルが行末の時は予測候補確定、さもなければカーソル一文字分移動(<code>FORWARD_CHAR_OR_ACCEPT_PREDICT</code>)</li>
 </ul>
 <p>なお、右矢印キー、Ctrl-F はデフォルトで <code>FORWARD_CHAR_OR_ACCEPT_PREDICT</code> とした。</p>
-</li>
-<li>
-<p>入力予測機能で英大文字・小文字を区別しないようにした (<a href="https://github.com/nyaosorg/go-readline-ny/pull/20">go-readline-ny#20</a>, #476, #477, thanks to @emisjerry)</p>
 </li>
 <li>
 <p>nyagos.d 以下の Lua スクリプトを再び自動ロード対象とした。(#469, #478)
@@ -1181,39 +1221,28 @@ runall(&quot;~/scriptdir1;~/scriptdir2&quot;)
 </code></pre>
 </li>
 <li>
-<p>go-readline-ny をv1.13.0 から<a href="https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.14.1">v1.14.1</a> へ、go-ttyadapter を v0.1.0 から<a href="https://github.com/nyaosorg/go-ttyadapter/releases/tag/v0.3.0">v0.3.0</a> へ(#483)、go-box を v3.0.0 から <a href="https://github.com/nyaosorg/go-box/releases/tag/v3.1.1">v3.1.1</a> へ更新した (#485)</p>
+<p><code>nyagos.eval</code> の出力末尾の CRLF を削除しないバージョン <code>nyagos.evaln</code> を追加 (#495)</p>
+</li>
+</ul>
+<h3 id="documents">Documents</h3>
 <ul>
-<li><code>Esc</code>キーの扱いを見直し、「入力内容のクリア」ではなくプリフィックスキーとして処理するように変更した。これにより
+<li>変更履歴を記録するファイルを変更
 <ul>
-<li>上矢印キーを表す <code>\x1B[A</code> などのキーシーケンスが端末の仕様により分割されて入力された場合でも、正しく動作するようになった。</li>
-<li><code>Esc</code> の入力が <code>Alt</code> シフトと等価となった。</li>
+<li><code>release_note_en.md</code> → <code>CHANGELOG.md</code></li>
+<li><code>release_note_ja.md</code> → <code>CHANGELOG_ja.md</code>  (#494)</li>
+<li><code>history-*.md</code> → <code>CHANGELOG-v*.md</code> (#496)</li>
 </ul>
 </li>
-<li><code>Esc</code>+<code>Left</code>  を <code>Esc</code>+<code>b</code>, <code>Alt</code>+<code>b</code> と等価にした。</li>
-<li><code>Esc</code>+<code>Right</code> を <code>Esc</code>+<code>f</code>, <code>Alt</code>+<code>f</code> と等価にした。</li>
-<li>これまで次の単語の先頭への移動だった Alt + f の挙動を本家の readline に合わせ、現在または次の単語の末尾へ移動するように修正した。</li>
-<li><code>Alt</code>/<code>Esc</code>+<code>Backspace</code>, <code>ESC</code>+<code>Ctrl</code>+<code>w</code> で、カーソル左の単語を削除するようにした。</li>
-<li><code>Alt</code>+<code>d</code> で、カーソルから右直近の単語末尾までを削除するようにした。</li>
 </ul>
-</li>
-<li>
-<p><code>type</code> コマンドの仕様を CMD.exe 同様、第一引数必須とした。 (#489,#490)<br />
-(標準入力から読み取ると、Ctrl-C による SIGINT が遅延し、type ではなく、次のコマンドを中断させてしまうことが多いため)</p>
-</li>
-<li>
-<p>Lua 拡張関数への Context 渡しを LState 経由からレジストリ経由に変更した。これにより、Ctrl-C 中断時に Lua インタプリタが冗長なスタックトレースを表示する問題を解消した。(#492)</p>
-</li>
-<li>
-<p>GNU Make なしでビルドした場合に、バージョン文字列が空になってしまう問題を修正
-今後、バージョンアップ時に <code>make bump</code> を実行する (#493)</p>
-</li>
-<li>
-<p>変更履歴を記録するファイルを <code>release_note_en.md</code>, <code>release_note_ja.md</code> から <code>CHANGELOG.md</code>, <code>CHANGELOG_ja.md</code> へ改名 (#494)</p>
-</li>
+<h3 id="internal-changes">Internal changes</h3>
+<ul>
+<li>GNU Make なしでビルドした場合に、バージョン文字列が空になってしまう問題を修正
+今後、バージョンアップ時に <code>make bump</code> を実行する (#493)</li>
+<li>Lua 拡張関数への Context 渡しを LState 経由からレジストリ経由に変更した。これにより、Ctrl-C 中断時に Lua インタプリタが冗長なスタックトレースを表示する問題を解消した。(#492)</li>
 </ul>
 <h2 id="4418-1">4.4.18_1</h2>
 <p>Nov 23, 2025</p>
-<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3">不具合修正</h3>
+<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3-1">不具合修正</h3>
 <ul>
 <li>Lua関数 <code>io.open(..., &quot;w&quot;)</code> でファイルをオープンした時、ファイルが truncate されていなかった不具合を修正 (#471, #472 Thanks to @emisjerry)</li>
 </ul>
@@ -1429,7 +1458,7 @@ end
 </ul>
 </li>
 </ul>
-<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3-1">不具合修正</h3>
+<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3-2">不具合修正</h3>
 <ul>
 <li>SKK関連
 <ul>
@@ -1481,7 +1510,7 @@ end
 <li><a href="https://ja.wikipedia.org/wiki/SKK">SKK</a> (Simple Kana Kanji conversion program) サポート - <a href="https://github.com/nyaosorg/nyagos/blob/master/docs/10-SetupSKK_ja.md">設定方法</a></li>
 <li>適切なUTF8文字列でない時は ANSI文字列とみなして UTF8変換を試みる関数 <code>nyagos.atou_if_needed</code> を追加</li>
 </ul>
-<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3-2">不具合修正</h3>
+<h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3-3">不具合修正</h3>
 <ul>
 <li><a href="https://github.com/nyaosorg/nyagos/issues/432">#432</a> <code>set -o glob</code> 時、二重引用符内の<code>*</code>,<code>?</code> がワイルドカードとして展開されていた(本来されるべきではない)</li>
 <li>Linux版で逆クォートがエラーになって機能しない不具合を修正 (Lua関数 atou が常に &quot;not supopported&quot; を返していたので、引数と同じ値を戻すようにした)</li>
@@ -1955,10 +1984,10 @@ end
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="CHANGELOG_ja.html">4.4.x</a></li>
-<li><a href="history-4.3_ja.html">4.3.x</a></li>
-<li><a href="history-4.2_ja.html">4.2.x</a></li>
-<li><a href="history-4.1_ja.html">4.1.x</a></li>
-<li><a href="history-4.0_ja.html">4.0.x</a></li>
+<li><a href="CHANGELOG-v4.3_ja.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_ja.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_ja.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_ja.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>

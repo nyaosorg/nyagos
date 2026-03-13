@@ -1183,12 +1183,15 @@ share[] はユーザが自由に使用可能ですが、全てのインスタン
 <p>環境変数にリンクしています。参照・変更が可能です。</p>
 <h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code></h3>
 <p>TEXT を空白で分割して、文字列のテーブルとして返します</p>
-<h3 id="errorlevelerrormessage--nyagosexec%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89"><code>errorlevel,errormessage = nyagos.exec(&quot;シェルコマンド&quot;)</code></h3>
-<h3 id="errorlevelerrormessage--nyagosexecexenameparam1param2"><code>errorlevel,errormessage = nyagos.exec{&quot;EXENAME&quot;,&quot;PARAM1&quot;,&quot;PARAM2&quot;...}</code></h3>
-<p>シェルコマンドを実行します。外部コマンドだけでなく、nyagos内蔵コマンドも
-呼び出せます。バッチファイルを呼び出した時、環境変数の変更も取り込めます。</p>
-<p>エラーが発生した時、戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージ
-が入ります。エラーが無い時は (0,nil) が戻ります。</p>
+<h3 id="nyagosexec">nyagos.exec</h3>
+<p>コマンドを実行します。外部コマンドだけでなく、nyagos 内蔵コマンドも呼び出すことができます。バッチファイルを呼び出した場合、その中で行われた環境変数の変更も呼び出し元に反映されます。</p>
+<p>エラーが発生した時、戻り値は %ERRORLEVEL% に格納すべき整数値とエラーメッセージが入ります。エラーが無い時は (0,nil) が戻ります。</p>
+<h4 id="%E5%BD%A2%E5%BC%8F1-nyagosexec%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%A9%E3%82%A4%E3%83%B3%E6%96%87%E5%AD%97%E5%88%97">形式1: <code>nyagos.exec(&quot;コマンドライン文字列&quot;)</code></h4>
+<p>1つの文字列を <strong>コマンドライン文字列としてそのまま実行</strong>します。空白・引用符などの解釈は通常のシェルのコマンドラインと同じルールに従います。コマンド名や引数に空白が含まれる場合は、ユーザー自身で引用符などを適切に記述する必要があります。</p>
+<p>例: <code>nyagos.exec('&quot;C:\\Program Files\\foo\\bar.exe&quot; arg1 arg2')</code></p>
+<h4 id="%E5%BD%A2%E5%BC%8F2-nyagosexec%E5%AE%9F%E8%A1%8C%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02">形式2: <code>nyagos.exec{&quot;実行ファイル名&quot;,&quot;引数1&quot;,&quot;引数2&quot;...}</code></h4>
+<p>テーブルの各要素を <strong>コマンド名および引数として個別に指定</strong>します。空白を含む引数であっても自動的に適切な形で渡されます。</p>
+<p>例: <code>nyagos.exec{&quot;C:\\Program Files\\foo\\bar.exe&quot;,&quot;arg1&quot;,&quot;arg2&quot;}</code></p>
 <h3 id="errorlevelerrormessage--nyagosrawexec%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6"><code>errorlevel,errormessage = nyagos.rawexec(&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…)</code></h3>
 <h3 id="errorlevelerrormessage--nyagosrawexec%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6-1"><code>errorlevel,errormessage = nyagos.rawexec{&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…}</code></h3>
 <p>外部コマンドを実行します。OSの API を呼んでいるだけなので、nyagos 内蔵コマンド
@@ -1197,7 +1200,9 @@ share[] はユーザが自由に使用可能ですが、全てのインスタン
 エラーが無い時は (0,nil) が戻ります。
 (os.execute との違いは引数が UTF8 と解釈される点です)</p>
 <h3 id="nyagoseval%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89"><code>nyagos.eval(&quot;シェルコマンド&quot;)</code></h3>
+<h3 id="nyagosevaln%E3%82%B7%E3%82%A7%E3%83%AB%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89"><code>nyagos.evaln(&quot;シェルコマンド&quot;)</code></h3>
 <p>nyagos.exec と同じですが、標準出力を取り込んで、戻り値として返します。
+eval は出力末尾の CRLF を削除しますが、evaln はそのまま返します。
 実行に失敗した場合などは nil が戻ります。</p>
 <h3 id="outputerr--nyagosraweval%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6"><code>OUTPUT,ERR = nyagos.raweval(&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…)</code></h3>
 <h3 id="outputerr--nyagosraweval%E5%A4%96%E9%83%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E5%90%8D%E5%BC%95%E6%95%B01%E5%BC%95%E6%95%B02%E2%80%A6-1"><code>OUTPUT,ERR = nyagos.raweval{&quot;外部コマンド名&quot;,&quot;引数1&quot;,&quot;引数2&quot;…}</code></h3>
@@ -1530,10 +1535,10 @@ end
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
 <ul>
 <li><a href="CHANGELOG_ja.html">4.4.x</a></li>
-<li><a href="history-4.3_ja.html">4.3.x</a></li>
-<li><a href="history-4.2_ja.html">4.2.x</a></li>
-<li><a href="history-4.1_ja.html">4.1.x</a></li>
-<li><a href="history-4.0_ja.html">4.0.x</a></li>
+<li><a href="CHANGELOG-v4.3_ja.html">4.3.x</a></li>
+<li><a href="CHANGELOG-v4.2_ja.html">4.2.x</a></li>
+<li><a href="CHANGELOG-v4.1_ja.html">4.1.x</a></li>
+<li><a href="CHANGELOG-v4.0_ja.html">4.0.x</a></li>
 </ul>
 </div><!-- "sidebar" -->
 </body></html>
