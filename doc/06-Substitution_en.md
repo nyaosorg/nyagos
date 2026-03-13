@@ -32,7 +32,7 @@ These suffix are available.
 
 * `%u+XXXX%` are replaced to Unicode charactor (XXXX is hexadecimal number.)
 
-### Command Substitution (nyagos.d\backquote.lua)
+### Command Substitution ((embed)\backquote.lua)
 
     `COMMAND`
   OR
@@ -40,7 +40,7 @@ These suffix are available.
 
 is replaced to what COMMAND print to standard output.
 
-### Brace Expansion (nyagos.d\brace.lua)
+### Brace Expansion ((embed)\brace.lua)
 
     echo a{b,c,d}e
 
@@ -48,7 +48,7 @@ is replaced to
 
     echo abe ace ade
 
-### Inserting Interpreter-name (nyagos.d\suffix.lua)
+### Inserting Interpreter-name ((embed)\suffix.lua)
 
 - `FOO.pl  ...` is replaced to `perl   FOO.pl ...`
 - `FOO.py  ...` is replaced to `ipy FOO.py ...` , `py FOO.py` or `python FOO.py ...` (inserted the first found interpreter's name)

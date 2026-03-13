@@ -392,7 +392,7 @@ Create OLEObject. OLEOBJECTs have methods and property.
 ### `INTEGER_FOR_OLE = nyagos.to_ole_integer(10)`
 
 Convert a float number to integer which can be used as the parameter
-to OLE-Object only. This function is made for `nyagos.d/trash.lua`.
+to OLE-Object only. This function is made for `(embed)/trash.lua`.
 
 ### `nyagos.option.glob`
 
