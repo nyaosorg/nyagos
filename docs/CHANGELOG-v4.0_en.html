@@ -1,5 +1,5 @@
 <!DOCTYPE html><html><head>
-<title>NYAOS.ORG/NYAGOS - 07-LuaFunctions</title>
+<title>NYAOS.ORG/NYAGOS - CHANGELOG-v4.0</title>
 <style type="text/css">
 /* light */
 .markdown-body {
@@ -1141,366 +1141,253 @@ a.permalink:hover{
 </head><body>
 <div class="main markdown-body">
 <h1 id="nyagos---the-nihongo-yet-another-going-shell">NYAGOS - The Nihongo Yet Another GOing Shell</h1>
-<p>English / <a href="./07-LuaFunctions_ja.html">Japanese</a></p>
-<h2 id="lua-functions-extenteded-by-nyagos">Lua functions extenteded by NYAGOS</h2>
-<h3 id="nyagosaliasname--replaced-string"><code>nyagos.alias.NAME = &quot;REPLACED-STRING&quot;</code></h3>
-<p>It defines an alias. These macros are available on &quot;REPLACE-STRING&quot;.</p>
+<h1 id="changelog-v40">Changelog v4.0</h1>
+<p>( English / <a href="CHANGELOG-v4.0_ja.html">Japanese</a> )</p>
+<h2 id="v409-11">v4.0.9_11</h2>
+<p>Dec 12, 2015</p>
 <ul>
-<li><code>$1</code>,<code>$2</code>,<code>$3</code> ... the number's argument (not removed quotations)</li>
-<li><code>$*</code> ... all arguments (not removed quotations)</li>
-<li><code>$~1</code>,<code>$~2</code>,<code>$~3</code> ... the number's argument (removed quotations)</li>
-<li><code>$~*</code> ... all arguments (removed quotations)</li>
-</ul>
-<h3 id="nyagosaliasname--functionargsend"><code>nyagos.alias.NAME = function(ARGS)...end</code></h3>
-<p>It assigns the function to the command-name <code>&quot;NAME&quot;</code>.
-<code>ARGS</code> is the table:</p>
-<pre><code>{
-    [1]=1stArgument,
-    [2]=2ndArgument,
-    [3]=3rdArgument,
-        :
-    [&quot;rawargs&quot;]={
-        [1]=1stArgument(not quotatations removed),
-        [2]=2ndArgument(not quotatations removed),
-        [3]=3rdArgument(not quotatations removed),
-            :
-    }
-}
-</code></pre>
-<p>When an error occures, the function should return
-the number(integer) for %ERRORLEVEL% and error-message.
-(No 'return' equals 'return 0,nil')</p>
-<p>When the return-value is a string(or string-table), nyagos.exe
-executes the string(-table) as a new commandline.</p>
-<p>Aliases run on the other Lua-instance and can not access variables
-assigned on .nyagos but <code>share[]</code>. You can use share[] as you like.
-Only the member of the table <code>share[]</code> are shared on all Lua-instances
-of nyagos.</p>
-<h3 id="nyagoscompletion-hidden--bool"><code>nyagos.completion_hidden = (bool)</code></h3>
-<p>If it is set true, on filename completion, hidden files are also included
-completion list.</p>
-<h3 id="nyagosenvname"><code>nyagos.env.NAME</code></h3>
-<p>It is linked to the the environment variable, which are able
-to be refered and assigned.</p>
-<h3 id="nyagosfieldstext"><code>nyagos.fields(TEXT)</code></h3>
-<p>It splits TEXT with white-spaces and returns them as table of strings.</p>
-<h3 id="nyagosexec">nyagos.exec</h3>
-<p>Executes a command. Both external commands and nyagos built-in commands can be called.</p>
-<p>When a batch file is executed, any changes to environment variables made inside the batch file are reflected in the caller.</p>
-<p>If an error occurs, the return values are the integer value that should be stored in <code>%ERRORLEVEL%</code> and an error message.
-If no error occurs, <code>(0,nil)</code> is returned.</p>
-<h4 id="form-1-nyagosexeccommand-line-string">Form 1: <code>nyagos.exec(&quot;command line string&quot;)</code></h4>
-<p>Executes the given string <strong>as a command line exactly as written</strong>.
-Spaces, quotation marks, and other syntax are interpreted using the same rules as a normal shell command line.</p>
-<p>If the command name or arguments contain spaces, the caller must write the appropriate quoting.</p>
-<p>Example: <code>nyagos.exec('&quot;C:\\Program Files\\foo\\bar.exe&quot; arg1 arg2')</code></p>
-<h4 id="form-2-nyagosexecexenamearg1arg2">Form 2: <code>nyagos.exec{&quot;EXENAME&quot;,&quot;ARG1&quot;,&quot;ARG2&quot;...}</code></h4>
-<p>Each element of the table is treated <strong>as the command name and its arguments</strong>.</p>
-<p>Arguments containing spaces are passed correctly without requiring manual quoting.</p>
-<p>Example: <code>nyagos.exec{&quot;C:\\Program Files\\foo\\bar.exe&quot;,&quot;arg1&quot;,&quot;arg2&quot;}</code></p>
-<h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2"><code>errorlevel,errormessage = nyagos.rawexec('COMMAND-NAME','ARG-1','ARG-2'...)</code></h3>
-<h3 id="errorlevelerrormessage--nyagosrawexeccommand-namearg-1arg-2-1"><code>errorlevel,errormessage = nyagos.rawexec{'COMMAND-NAME','ARG-1','ARG-2'...}</code></h3>
-<p>It executes &quot;COMMAND-NAME&quot; with ARGs. COMMAND-NAME is not interpreted as
-a built-in command nor an alias. The difference with os.execute is that
-the errormessage is written with utf8.</p>
-<h3 id="output--nyagosevalcommand"><code>OUTPUT = nyagos.eval(&quot;COMMAND&quot;)</code></h3>
-<h3 id="output--nyagosevalncommand"><code>OUTPUT = nyagos.evaln(&quot;COMMAND&quot;)</code></h3>
-<p>Executes &quot;COMMAND&quot; and sets its standard output to the Lua variable OUTPUT.
-<code>eval</code> strips trailing CRLF from the output, while <code>evaln</code> returns the output as-is.
-If an error occurs, OUTPUT is set to <code>nil</code>.</p>
-<h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2"><code>OUTPUT,ERR = nyagos.raweval('COMMAND-NAME','ARG-1','ARG-2'...)</code></h3>
-<h3 id="outputerr--nyagosrawevalcommand-namearg-1arg-2-1"><code>OUTPUT,ERR = nyagos.raweval{'COMMAND-NAME','ARG-1','ARG-2'...}</code></h3>
-<p>It executes &quot;COMMAND-NAME&quot; with ARGs and returns commands' standard-output.
-COMMAND-NAME is not intepreted as a built-in command nor an alias.</p>
-<h3 id="wd--nyagosgetwd"><code>WD = nyagos.getwd()</code></h3>
-<p>Get current working directory.</p>
-<h3 id="nyagoschdirdirectory"><code>nyagos.chdir('DIRECTORY')</code></h3>
-<p>Set new current working directory.</p>
-<h3 id="nyagoswritetext"><code>nyagos.write(&quot;TEXT&quot;)</code></h3>
-<p>It output &quot;TEXT&quot; to the standard output with UTF8.</p>
-<h3 id="nyagoswriterrtext"><code>nyagos.writerr(&quot;TEXT&quot;)</code></h3>
-<p>It output &quot;TEXT&quot; to the standard error with UTF8.</p>
-<h3 id="ansistring--nyagosutoautf8string"><code>ANSISTRING = nyagos.utoa(UTF8STRING)</code></h3>
-<p>It converts UTF8 string to the current code page multibyte string.</p>
-<h3 id="utf8string--nyagosatouansistring"><code>UTF8STRING = nyagos.atou(ANSISTRING)</code></h3>
-<p>It converts the current codepage multibyte string to UTF8 string.</p>
-<h3 id="utf8string--nyagosatou-if-neededstring"><code>UTF8STRING = nyagos.atou_if_needed(STRING)</code></h3>
-<p>If STRING is not a valid UTF8 string, try convert it
-as the current codepage multibyte string to UTF8 string.</p>
-<h3 id="files--nyagosglobwildcard-pattern1wildcard-pattern2"><code>FILES = nyagos.glob(&quot;WILDCARD-PATTERN1&quot;,&quot;WILDCARD-PATTERN2&quot;...)</code></h3>
-<p>It returns the table which includes files matching the wildcard pattern(s).</p>
-<h3 id="path--nyagospathjoinpathtowhere"><code>path = nyagos.pathjoin('path','to','where'...)</code></h3>
-<p>It makes parts of path-string join. It expands %ENVNAME% and ~/</p>
-<h3 id="path--nyagosdirnamecpathtowhere"><code>path = nyagos.dirname('C:\\path\\to\\where')</code></h3>
-<p>It returns the directory-part of each argument.
-The sample code returns <code>C:\\path\\to</code>.</p>
-<h3 id="nyagosenvaddenvnamepath"><code>nyagos.envadd('ENVNAME','PATH'...)</code></h3>
-<p><code>nyagos.envadd(&quot;PATH&quot;,&quot;C:\\path\\to&quot;)</code> equals to
-<code>set PATH=%PATH%;C:\path\to</code> except when %PATH%
-already contains <code>C:\path\to</code> or <code>C:\path\to</code>
-does not exist.</p>
-<p>For example:</p>
-<pre><code>nyagos.envadd(&quot;PATH&quot;,
-    &quot;C:\\go\\bin&quot;,
-    &quot;C:\\TDM-GCC-64\\bin&quot;,
-    &quot;%ProgramFiles%\\Git\\bin&quot;,
-    &quot;%ProgramFiles%\\Git\\cmd&quot;,
-    &quot;%ProgramFiles(x86)%\\Git\\bin&quot;,
-    &quot;%ProgramFiles(x86)%\\Git\\cmd&quot;,
-    &quot;%ProgramFiles%\\Subversion\\bin&quot;,
-    &quot;%ProgramFiles(x86)%\\Subversion\\bin&quot;,
-    &quot;%VBOX_MSI_INSTALL_PATH%&quot;,
-    &quot;~\\Share\\bin&quot;,
-    &quot;~\\Share\\cmds&quot;)
-</code></pre>
-<h3 id="nyagosenvdelenvnamepattern"><code>nyagos.envdel('ENVNAME','PATTERN')</code></h3>
-<p>It removes the field which contains PATTERN
-from the environment variable pointed by ENVNAME.</p>
-<p>For example:</p>
-<pre><code>nyagos.envdel(&quot;PATH&quot;,
-    &quot;Oracle&quot;,&quot;Lenovo&quot;,&quot;Skype&quot;,&quot;SQL Server&quot;,
-    &quot;TypeScript&quot;,&quot;WindowsApps&quot;,
-    &quot;Wbem&quot;,&quot;dotnet&quot;)
-</code></pre>
-<h3 id="nyagosbindkeykeynamefuncname"><code>nyagos.bindkey(&quot;KEYNAME&quot;,&quot;FUNCNAME&quot;)</code></h3>
-<h3 id="nyagoskeykeyname--funcname"><code>nyagos.key[&quot;KEYNAME&quot;] = &quot;FUNCNAME&quot;</code></h3>
-<h3 id="nyagoskeykeyname--funcname-1"><code>nyagos.key.KEYNAME = &quot;FUNCNAME&quot;</code></h3>
-<p>KEYNAME are:</p>
-<pre><code>    &quot;C_A&quot; &quot;C_B&quot; ... &quot;C_Z&quot; &quot;M_A&quot; &quot;M_B&quot; ... &quot;M_Z&quot;
-    &quot;F1&quot; &quot;F2&quot; ...&quot;F24&quot;
-    &quot;BACKSPACE&quot; &quot;CTRL&quot; &quot;DEL&quot; &quot;DOWN&quot; &quot;END&quot;
-    &quot;ENTER&quot; &quot;ESCAPE&quot; &quot;HOME&quot; &quot;LEFT&quot; &quot;RIGHT&quot; &quot;SHIFT&quot; &quot;UP&quot;
-    &quot;C_BREAK&quot; &quot;CAPSLOCK&quot; &quot;PAGEUP&quot;, &quot;PAGEDOWN&quot; &quot;PAUSE&quot;
-    &quot;C_HOME&quot; &quot;C_END&quot; &quot;C_PAGEUP&quot; &quot;C_PAGEDOWN&quot;
-</code></pre>
-<p>FUNCNAME are:</p>
-<pre><code>    &quot;BACKWARD_DELETE_CHAR&quot; &quot;BACKWARD_CHAR&quot; &quot;CLEAR_SCREEN&quot; &quot;DELETE_CHAR&quot;
-    &quot;DELETE_OR_ABORT&quot; &quot;ACCEPT_LINE&quot; &quot;KILL_LINE&quot; &quot;UNIX_LINE_DISCARD&quot;
-    &quot;FORWARD_CHAR&quot; &quot;BEGINNING_OF_LINE&quot; &quot;PASS&quot; &quot;YANK&quot; &quot;KILL_WHOLE_LINE&quot;
-    &quot;END_OF_LINE&quot; &quot;COMPLETE&quot; &quot;PREVIOUS_HISTORY&quot; &quot;NEXT_HISTORY&quot; &quot;INTR&quot;
-    &quot;ISEARCH_BACKWARD&quot; &quot;REPAINT_ON_NEWLINE&quot;
-</code></pre>
-<p>If it succeeded, it returns true only. Failed, it returns nil and error-message.
-Cases are ignores and, the character '-' is same as '_'.</p>
-<h3 id="nyagosbindkeykeynamefunctionthisend"><code>nyagos.bindkey(&quot;KEYNAME&quot;,function(this)...end)</code></h3>
-<h3 id="nyagoskeykeyname--functionthisend"><code>nyagos.key.KEYNAME = function(this)...end</code></h3>
-<h3 id="nyagoskeykeyname--functionthisend-1"><code>nyagos.key[&quot;KEYNAME&quot;] = function(this)...end</code></h3>
-<p>When the key is pressed, call the function.</p>
-<p><code>this</code> is the table which have these members.</p>
+<li>Build with go 1.5.2</li>
+<li>Readline: support Ctrl-C as interrupt on isearch (#98 Thx @hattya)</li>
+<li>Add suppression options (#95,#97 Thx @hattya)
 <ul>
-<li><code>this.pos</code> ... cursor position counted with bytes (==1 when beginning of line)</li>
-<li><code>this.text</code> ... all text represented with utf8</li>
-<li><code>this:call(&quot;FUNCNAME&quot;)</code> ... call function like <code>this:call(&quot;BACKWARD_DELETE_CHAR&quot;)</code></li>
-<li><code>this:insert(&quot;TEXT&quot;)</code> ... insert TEXT at the cursor position.</li>
-<li><code>this:firstword()</code> ... get the first word(=command-name) on the command-line.</li>
-<li><code>this:lastword()</code> ... get the last word and its position on the command-line.</li>
-<li><code>this:boxprint({...})</code> ... listing table values like completion-list.</li>
-<li><code>this:replacefrom(POS,&quot;TEXT&quot;)</code> ... replace TEXT between POS and cursor.</li>
-</ul>
-<p>The return value of function is used as below</p>
-<ul>
-<li>When it is a string, it is inserted into cursor position.</li>
-<li>When it is <code>true</code>, accept line as same as Enter is pressed.</li>
-<li>When it is <code>false</code>, drop line as same as Ctrl-C is pressed.</li>
-<li>When it is <code>nil</code>, it is ignored.</li>
-</ul>
-<h3 id="nyagosfilter--functioncmdline--end"><code>nyagos.filter = function(cmdline) ... end</code></h3>
-<p><code>nyagos.filter</code> can modify user input command-line.
-If it returns string, NYAGOS.exe replace the command-line-string it.</p>
-<h3 id="nyagosargsfilter--functionargs--end"><code>nyagos.argsfilter = function(args) ... end</code></h3>
-<p><code>nyagos.argsfilter</code> is like <code>nyaos.filter</code>, but its argument are
-not a string but a table as string array which has each command
-arguments.</p>
-<h3 id="s--nyagosprompttemplate"><code>s = nyagos.prompt(template)</code></h3>
-<p><code>nyagos.prompt</code> should be assigned the function which creates and
-returns the string for prompt.
-( Until v4.4.13, <code>nyagos.prompt</code> is expected to output the prompt string
-directly and return the width of prompt-string )</p>
-<p>You can swap the prompt-function as below.</p>
-<pre><code>nyagos.prompt = function(this)
-    local title = &quot;NYAGOS - &quot;.. nyagos.getwd():gsub('\\','/')
-    return nyagos.default_prompt('$e[40;36;1m'..this..'$e[37;1m',title)
-end
-</code></pre>
-<p><code>nyagos.default_prompt</code> is the default prompt function which can
-change the title of the terminal-window with the second parameter.</p>
-<h3 id="nyagosgethistoryn-and-nyagoshistoryn"><code>nyagos.gethistory(N)</code> and <code>nyagos.history[N]</code></h3>
-<p>Get the n-th command-line history. When N &lt; 0, last (-N)-th history.</p>
-<h3 id="nyagosgethistory-and-nyagoshistory"><code>nyagos.gethistory()</code> and <code>#nyagos.history</code></h3>
-<p>Get the count of the command-line history.</p>
-<h3 id="nyagoshistsize"><code>nyagos.histsize</code></h3>
-<p>The max number of entries of history to save to disk.</p>
-<h3 id="nyagosaccesspathmode"><code>nyagos.access(PATH,MODE)</code></h3>
-<p>Returns the boolean value whether the PATH can be access with MODE.
-It equals the access function of the programming language C.</p>
-<h3 id="result--nyagosbox-choices-"><code>RESULT = nyagos.box({ CHOICES... })</code></h3>
-<p>Returns the choice which user select with cursor-keys</p>
-<h3 id="nyagoscomplete-forcommand--functionargs--end"><code>nyagos.complete_for[&quot;COMMAND&quot;] = function(args) ... end</code></h3>
-<p>This is the tiny hook for completion per command.</p>
-<p>The function is called when the first word is <code>COMMAND</code> and
-<code>args</code> is set the array contains the words which exist before the cursor.</p>
-<p>Sample: go's sub command completion</p>
-<pre><code>nyagos.complete_for.go = function(args)
-    if #args == 2 then
-        return {
-            &quot;build&quot;, &quot;clean&quot;, &quot;doc&quot;, &quot;env&quot;, &quot;fix&quot;, &quot;fmt&quot;, &quot;generate&quot;,
-            &quot;get&quot;, &quot;install&quot;, &quot;list&quot;, &quot;mod&quot;, &quot;run&quot;, &quot;test&quot;, &quot;tool&quot;,
-            &quot;version&quot;, &quot;vet&quot;
-        }
-    end
-    return nil
-end
-</code></pre>
-<p>The function can return not matching words. <code>nyagos.exe</code> removes them.
-When nil is returned, <code>nyagos.exe</code> completes the word as a filename.</p>
-<h3 id="nyagoscompletion-hook--functionc--end"><code>nyagos.completion_hook = function(c) ... end</code></h3>
-<p>This is the Hook for completion. It should be assigned a function.
-The argument <code>c</code> is the table which has these members.</p>
-<pre><code>c.list[1] .. c.list[#c.list] - command/filename completion result
-c.shownlist[1] .. c.shownlist[#c.shownlist] - text for list-up (Option)
-c.word - original word without double-quotations.
-c.rawword - original word which may has double-quotations.
-c.pos - position word exists.
-c.text - all command-line text.
-c.field - array of the text splited c.text with space.
-c.left - string before cursor
-</code></pre>
-<p><code>nyagos.completion_hook</code> should return updated list(table) or <code>nil</code>.
-Returning nil equals to returning c.list with no change.</p>
-<h3 id="nyagoscompletion-slash--true-or-false"><code>nyagos.completion_slash = true OR false</code></h3>
-<p>When it is assigned true, filename-completion uses a slash as the
-path-seperator as default. Otherwise it uses backslash.</p>
-<h3 id="nyagoson-command-not-found--functionargs--end"><code>nyagos.on_command_not_found = function(args) ... end</code></h3>
-<p>It is called when the command which user typed is not found.
-The command-name and parameters are set to args[0]...args[#args].
-If the function returns nil or false, nyagos.exe prints errors of
-usual.</p>
-<p>Since the function runs the other Lua-instance, accesss to variables
-assigned on .nyagos have the same restriction with aliases.</p>
-<h3 id="nyagosgetkey"><code>nyagos.getkey()</code></h3>
-<p>It returns three values : typed key's UNICODE,SCANCODE and SHIFT-Status.</p>
-<h3 id="widthheightnyagosgetviewwidth"><code>WIDTH,HEIGHT=nyagos.getviewwidth()</code></h3>
-<p>It returns the width and height of the terminal.</p>
-<h3 id="nyagossetnextlinecmdline"><code>nyagos.setnextline(CMDLINE)</code></h3>
-<p>It sets the initial text <code>CMDLINE</code> for the next readline prompt.</p>
-<h3 id="stat--nyagosstatfilename"><code>STAT = nyagos.stat(FILENAME)</code></h3>
-<p>It returns the file's information.
-If the file exists, the table STAT has these members.</p>
-<pre><code>STAT.name
-STAT.isdir (is set true when the file is directory, otherwise false)
-STAT.size  (bytes)
-STAT.mtime.year
-STAT.mtime.month
-STAT.mtime.day
-STAT.mtime.hour
-STAT.mtime.minute
-STAT.mtime.second
-</code></pre>
-<p>If the file does not exist, STAT is nil.</p>
-<h3 id="nyagosopenpathmode"><code>nyagos.open(PATH,MODE)</code></h3>
-<p>Same as io.open but PATH must be written in UTF8.</p>
-<h3 id="nyagosloadfilepath"><code>nyagos.loadfile(PATH)</code></h3>
-<p>Same as loadfile on root-namespace but PATH must be written in UTF8.</p>
-<h3 id="nyagoslinespath"><code>nyagos.lines(PATH)</code></h3>
-<p>Same as io.lines but PATH must be written in UTF8.</p>
-<pre><code>for text in nyagos.lines(PATH) do ... end
-</code></pre>
-<p><code>text</code> is bytearray as same as io.lines().</p>
-<h3 id="oleobject--nyagoscreate-objectservernametypename"><code>OLEOBJECT = nyagos.create_object('SERVERNAME.TYPENAME')</code></h3>
-<p>Create OLEObject. OLEOBJECTs have methods and property.</p>
-<ul>
-<li>Method
-<ul>
-<li><code>OLEOBJECT:METHOD(PARAMETERS)</code>.</li>
+<li>Add /q option to copy,move,del,erase and rmdir.</li>
 </ul>
 </li>
-<li>Property
+<li>ls: calculate width of file size field for each directory (#94 Thx @hattya)</li>
+<li>move: be able to override files (api: MoveFileW -&gt; MoveFileExW) (#93 Thx @hattya)</li>
+<li>Fixed lua-function 'set' did not expand env-var including <code>_</code> (#92)</li>
+<li>Fixed typographical error(s)
 <ul>
-<li><code>value = OLEOBJECT:_get('PROPERTYNAME')</code></li>
-<li><code>OLEOBJECT:_set('PROPERTYNAME',value)</code></li>
+<li>Changed charactor to character in README (#90: @orthographic-pedant)</li>
 </ul>
 </li>
-<li>Others
+<li><code>nyagos.command_not_found</code> became deprecated.
 <ul>
-<li><code>OLEOBJECT:_iter() returns an enumerator of the collection.</code></li>
-<li><code>OLEOBJECT:_release() releases the COM-instance.</code></li>
+<li>Removed from Document (it gets deprecated)</li>
+<li>Removed catalog.d/ezoe.lua</li>
+</ul>
+</li>
+<li>To avoid crash (#89)
+<ul>
+<li>Forbade nyagos.prompt to execute background</li>
+<li>Forbade using Lua on background or not 1st command of pipeline</li>
 </ul>
 </li>
 </ul>
-<h3 id="integer-for-ole--nyagosto-ole-integer10"><code>INTEGER_FOR_OLE = nyagos.to_ole_integer(10)</code></h3>
-<p>Convert a float number to integer which can be used as the parameter
-to OLE-Object only. This function is made for <code>nyagos.d/trash.lua</code>.</p>
-<h3 id="nyagosoptionglob"><code>nyagos.option.glob</code></h3>
-<p>If it is true , enables the wildcard expansion on external commands also.</p>
-<h3 id="nyagosoptionnoclobber"><code>nyagos.option.noclobber</code></h3>
-<p>If it is true , overwriting the existing file by redirect is forbidden.</p>
-<p>The redirect marks <code>&gt;|</code> and <code>&gt;!</code> can overwrite a file whenever
-nyagos.option.noclobber is true.</p>
-<h3 id="nyagosoptionusesource"><code>nyagos.option.usesource</code></h3>
-<p>If it is true(=default), batchfiles can change the environment variable of
-nyagos. False, you have to use <code>source BATCHFILE</code> to read the changes of
-the environment variables from batchfiles.</p>
-<h3 id="nyagosoptioncleaup-buffer"><code>nyagos.option.cleaup_buffer</code></h3>
-<p>When it is true, clean up console input buffer before readline.</p>
-<h3 id="nyagosoptionpredict-color"><code>nyagos.option.predict_color</code></h3>
-<p>It customizes the color of input prediction.</p>
-<p>e.g., <code>nyagos.option.predict_color = &quot;\027[0;31;1m&quot;</code> (red).</p>
-<h3 id="nyagosgoversion"><code>nyagos.goversion</code></h3>
-<p>Go-version string to build nyagos.exe
-(for example, &quot;go1.6&quot;)</p>
-<h3 id="nyagosgoarch"><code>nyagos.goarch</code></h3>
-<p>The string compilation architecture of nyagos.exe.
-(for example, &quot;386&quot; or &quot;amd64&quot; )</p>
-<h3 id="nyagosgoos"><code>nyagos.goos</code></h3>
-<p>The string indicating OS name (<code>windows</code> or <code>linux</code>)</p>
-<h3 id="nyagospreexechook"><code>nyagos.preexechook</code></h3>
-<p>The hook before calling commands.</p>
-<h4 id="to-register">To register:</h4>
-<pre><code>nyagos.preexechook = function(args)
-    io.write(&quot;Call &quot;)
-    for i=1,#args do
-        io.write(&quot;[&quot; .. args[i] .. &quot;]&quot;)
-    end
-    io.write(&quot;\n&quot;)
-end
-</code></pre>
-<h4 id="to-unregister">To unregister:</h4>
-<pre><code>nyagos.preexechook = nil
-</code></pre>
-<h3 id="nyagospostexechook"><code>nyagos.postexechook</code></h3>
-<p>The hook after calling commands.</p>
-<h4 id="to-register-1">To register:</h4>
-<pre><code>nyagos.postexechook = function(args)
-    io.write(&quot;Done &quot;)
-    for i=1,#args do
-        io.write(&quot;[&quot; .. args[i] .. &quot;]&quot;)
-    end
-    io.write(&quot;\n&quot;)
-end
-</code></pre>
-<h4 id="to-unregister-1">To unregister:</h4>
-<pre><code>nyagos.postexechook = nil
-</code></pre>
-<h3 id="nyagosexe"><code>nyagos.exe</code></h3>
-<p>This string variable has the value of the fullpath of nyagos.exe.</p>
-<h3 id="nyagosskk"><code>nyagos.skk</code></h3>
-<p>Setup SKK</p>
-<pre><code>nyagos.skk{
-    user=&quot;~/.go-skk-jisyo&quot; , -- user dictionary
-    &quot;~/Share/Etc/SKK-JISYO.L&quot;, -- system dictionary(1st)
-    &quot;~/Share/Etc/SKK-JISYO.emoji&quot;,-- system dictionary(2nd)
-    ctrlj=&quot;C-J&quot;, -- key to switch Japanese input mode (default:ctrl-j)
-}
-</code></pre>
-<h3 id="nyagosshellexecuteactionpathparamdirectory"><code>nyagos.shellexecute(ACTION,PATH,PARAM,DIRECTORY)</code></h3>
-<p>Start an executable as administrator-mode</p>
+<h2 id="v409-10">v4.0.9_10</h2>
+<p>Sep 17, 2015</p>
 <ul>
-<li><code>ACTION</code> … <code>&quot;runas&quot;</code>, <code>&quot;open&quot;</code>, or <code>&quot;properties&quot;</code></li>
-<li><code>PATH</code> … the path of the executable to start</li>
-<li><code>PARAM</code> … the parameter for the executable</li>
-<li><code>DIRECTORY</code> … the working directory</li>
+<li>Build with go 1.5.1</li>
+<li>Fixed #88 Ctrl-U (<code>UNIX_LINE_DISCARD</code>) did not consider scroll.</li>
+<li>Fixed #87 Querying not-starting process's errorlevel which occured crash.</li>
+<li>Do not quit and do warn only when nyagos.prompt returns NaN.</li>
+<li>Fixed file-handle created with REDIRECT was not closed.</li>
+<li>Improved make.cmd</li>
+<li>Fixed interpreter instance was not given to nyagos.prompt.</li>
+<li><code>which</code> command supports -a option</li>
+<li>Support C-w (unix-word-rubout) like nyaos (#85)</li>
+<li>Fixed wrong month in prompt 'd' (Thx @Matsuyanagi)</li>
 </ul>
-<!-- set:fenc=utf8: -->
+<h2 id="v409-9">v4.0.9_9</h2>
+<p>Sep 07, 2015</p>
+<ul>
+<li>Fixed #80 built-in commands and aliases could not return errorlevel</li>
+<li>Let nyagos.exec return %ERRORLEVEL% and error-message.</li>
+<li>Fixed #83 panic: calling <code>nyagos.exec</code> on <code>nyagos.on_command_not_found</code></li>
+<li>Fixed #82 panic: using pipeline between replacing-type-aliases.</li>
+<li>Fixed #81 No errors reported on rmdir NOT directory before prompt.</li>
+</ul>
+<h2 id="v409-8">v4.0.9_8</h2>
+<p>Aug 20, 2015</p>
+<ul>
+<li>Build with go 1.5</li>
+<li>Set go-version to Lua-variable: <code>nyagos.goversion</code> and print at startup.</li>
+<li>Support to build both 32bit and 64bit executable.</li>
+</ul>
+<h2 id="v409-7">v4.0.9_7</h2>
+<p>Jul 29, 2015</p>
+<ul>
+<li>Fixed a panic occurs when only '||' command-line typed.</li>
+</ul>
+<h2 id="v409-6">v4.0.9_6</h2>
+<p>Jul 21, 2015</p>
+<ul>
+<li>Fixed nyagos.stat(nil) caused a panic.</li>
+<li>Fixed not all stack trace was printed when a panic was recovered.</li>
+</ul>
+<h2 id="v409-5">v4.0.9_5</h2>
+<p>Jul 15, 2015</p>
+<ul>
+<li>Add ls-option -S (Sort by Size) and -h (Print size with human-readable format)</li>
+<li>Add nyagos.rawexec and nyagos.raweval</li>
+<li>Forbade to use more than one lua-command on the same pipeline to avoid crash.</li>
+<li>Forbade to run Lua background to avoid crash.</li>
+<li>Fixed #77: echo &quot;{a,b}&quot; -&gt; &quot;a b&quot; is printed.({a,b} should be printed)</li>
+</ul>
+<h2 id="v409-4">v4.0.9_4</h2>
+<p>Jun 24, 2015</p>
+<ul>
+<li>Fixed <code>ls (NO_MATCHING_WILDCARD)</code> worked as if <code>ls</code> with (NO-ARGUMENTS)</li>
+<li>Fixed <code>A ; B</code> worked as if <code>A &amp; B</code>.</li>
+</ul>
+<h2 id="v409-3">v4.0.9_3</h2>
+<p>Jun 15, 2015</p>
+<ul>
+<li>Fixed nyagos.stat did not work on reparsepoints.</li>
+<li>Fixed #74 &quot;ls -a&quot; never prints &quot;.&quot; and &quot;..&quot; (current and parent directory)</li>
+<li>Disabled ls-color when stdout is not console even if -o option exists.</li>
+</ul>
+<h2 id="v409-2">v4.0.9_2</h2>
+<p>Jun 12, 2015</p>
+<ul>
+<li>Fixed the limiter of alias subsutitution was only one. Changed upto 5</li>
+<li>Fixed more than one nyagos.argsfiler could run at once on pipelines. It caused to crash the process.</li>
+</ul>
+<h2 id="v409-1">v4.0.9_1</h2>
+<p>Jun 03, 2015</p>
+<ul>
+<li>Fixed nyagos.exec() crashed when it was redirected.</li>
+</ul>
+<h2 id="v409-0">v4.0.9_0</h2>
+<p>Jun 02, 2015</p>
+<ul>
+<li>Add the lua-table <code>nyagos.env</code></li>
+<li>Add the lua-hook <code>nyagos.on_command_not_found</code></li>
+<li>Add the lua-function <code>nyagos.getviewwidth</code> (Thx @nocd5)</li>
+<li>Supported Surrogate-Pair on GetKey (Thx @rururutan)</li>
+<li>Add the lua-function <code>nyagos.stat</code></li>
+<li>Fixed #72 an empty argument was inserted before SPACE &amp; REDIRECT-MARK (Thx @hogewest)</li>
+<li>Made lua-script catalog folder 'catalog.d'(not loaded automatically)</li>
+<li>Associated the suffix .py to either of IronPython or CPython automatically(Thx @hattya)</li>
+</ul>
+<h2 id="v408-0">v4.0.8_0</h2>
+<p>May 28, 2015</p>
+<ul>
+<li>Supported single-quatations like UNIX-Shell</li>
+<li>Added lua-function <code>nyagos.getkey()</code>/<code>nyagos.getalias()</code></li>
+<li>Renamed lua-function <code>nyagos.alias</code> to <code>nyagos.setalias()</code></li>
+<li>Made alias-defining-table <code>nyagos.alias</code>. (nyagos.lua)</li>
+<li>Changed the output of <code>x(&quot;COMMAND&quot;)</code> from stdout to stderr.</li>
+<li>Added <code>cdlnk.lua</code> which enables <code>cd SHORTCUT.LNK</code>.</li>
+<li>Improved <code>su</code> and <code>clone</code> to retry as <code>%COMSPEC% /c NYAGOS.EXE</code> when error occued.</li>
+<li>Improved lua-function nyagos.glob to receives more than one wildcards.</li>
+<li>Added <code>trash.lua</code> which provides <code>trash</code> command which throws files Windows' trashbox.</li>
+<li>Replaced the bundled NYOLE.DLL 0.0.0.4 to 0.0.0.5 which trash.lua requires.</li>
+<li>Enabled NYAGOS.EXE run without NYOLE.DLL (trash.lua &amp; cdlnk.lua are disabled)</li>
+<li>Replaced lua53.dll to LuaBinaries' version.</li>
+<li>Unbundled lua.exe from zip-file.</li>
+</ul>
+<h2 id="bugfix">Bugfix</h2>
+<ul>
+<li>Fixed #66 <code>echo a&gt;a</code> makes a empty file named <code>aa</code></li>
+<li>Fixed suffix.lua problem (#69 Thx hattya)</li>
+<li>Fixed panic when nyagos.argsfilter returns empty array(#68 Thx hattya)</li>
+<li>Reset to default color after ls (#67 Thx @hattya)</li>
+</ul>
+<h2 id="v407-5">v4.0.7_5</h2>
+<p>May 09, 2015</p>
+<ul>
+<li>Fix #64 invalid cursor position after Ctrl-T typed.(Not compatible with other shells)</li>
+</ul>
+<h2 id="v407-4">v4.0.7_4</h2>
+<p>May 05, 2015</p>
+<ul>
+<li>Fix bug that filename-completion replacing slash all to backslash.</li>
+<li>Fix #63 ESCAPE-Key let clipboard empty-string. (Thx hokorobi)</li>
+<li>Let Ctrl-U copy erased string to clipboard.</li>
+</ul>
+<h2 id="v407-3">v4.0.7_3</h2>
+<p>May 05, 2015</p>
+<ul>
+<li><code>SET VAR=</code> removes environment variable <code>VAR</code> (Thx @pine613)</li>
+<li>lnk.js with one parameter shows its linked file. (#59 Thx @NSP-0123456)</li>
+<li>Support Ctrl-T (swapchar) (#62)</li>
+</ul>
+<h2 id="bugfix-1">BugFix</h2>
+<ul>
+<li>missed a double-quatation after a percent (#57)</li>
+<li>wildcard's case was not ignored (#58)</li>
+<li>completion removed .\ (dot and shash) (#61)</li>
+<li><code>open ARGUMENT(s)</code> did not work</li>
+</ul>
+<h2 id="v407-2">v4.0.7_2</h2>
+<p>Apr 18, 2015</p>
+<ul>
+<li>Fix:on completion, / was always replaced to \ .(Thx @nocd5)</li>
+<li>Fix:nyagos.shellexecute() did not report some errors.</li>
+<li>To use COM on Lua scripts, include and use <a href="https://github.com/zetamatta/nyole">NYOLE.DLL</a>.</li>
+</ul>
+<h2 id="v407-1">v4.0.7_1</h2>
+<p>Apr 13, 2015</p>
+<ul>
+<li>Set arg[..] in nyagos -e &quot;LUA-CODE&quot;.</li>
+</ul>
+<h2 id="bugfix-2">Bugfix</h2>
+<ul>
+<li>In nyagos -f &quot;LUA-FILE&quot;, arg[i]'s elements were shifted.</li>
+</ul>
+<h2 id="v407-0">v4.0.7_0</h2>
+<p>Apr 15, 2015</p>
+<ul>
+<li>Support incremental-search(C-r)</li>
+<li>Add option -e &quot;LUA-CODE&quot; to nyagos.exe</li>
+<li>Set executable's property the version-number</li>
+<li>Change error-message when files do not exists like bash.</li>
+</ul>
+<h2 id="v406-0">v4.0.6_0</h2>
+<p>Mar 19, 2015</p>
+<ul>
+<li>Add built-in command: pushd/popd/dirs</li>
+<li>Add the method boxprint(),firstword(),lastword() to nyagos.bindkey's first argument</li>
+<li>Update Document about uninstalling</li>
+<li>Add <code>nyagos.completion_hook</code></li>
+<li>Sub-command completion for git, Subversion and Mercurial.</li>
+</ul>
+<h3 id="bugfix-3">Bugfix</h3>
+<ul>
+<li>Completion failed when 0001 is typed where 0001.txt and &quot;0001 copy.txt&quot; were.</li>
+</ul>
+<h2 id="v405-0">v4.0.5_0</h2>
+<p>Feb 07, 2015</p>
+<ul>
+<li>cd -N (N:digit): move the N-th previous directory.</li>
+<li>cd -h , cd ? : print current directory history.</li>
+<li>pwd -N (N:digit): print the N-th previous directory.</li>
+<li>%CD% , %ERRORLEVEL% are able to be completed.</li>
+</ul>
+<h3 id="bugfix-4">Bugfix</h3>
+<ul>
+<li>Lua-function 'include' didn't report error</li>
+<li>Command-name completion printed same-name in diffent directories.</li>
+<li>ReadLine sometimes left trash at replacing string</li>
+<li>Could not complete path including ./ #45</li>
+<li>Could not broken symbolic link with DEL #44</li>
+<li>Files contains '&amp;' was not enclosed with &quot;..&quot; at completion.</li>
+</ul>
+<h3 id="trivial-fix">Trivial fix</h3>
+<ul>
+<li>make.cmd: add echo off a lot</li>
+<li>Let make.cmd on the top directory without arguments copy EXE top</li>
+</ul>
+<h2 id="v404-0">v4.0.4_0</h2>
+<p>Jan 19, 2015</p>
+<ul>
+<li>Support Lua 5.3</li>
+</ul>
+<h2 id="v403-2">v4.0.3_2</h2>
+<p>Jan 18, 2015</p>
+<ul>
+<li>Command-name completion supports alias and built-in commands.</li>
+</ul>
+<h3 id="bugfix-5">BugFix</h3>
+<ul>
+<li><code>pwd</code> did not print correct UNC-Path (#37)</li>
+<li><code>nyagos.gethistory( large-value )</code> crashes nyagos (#38 @1)</li>
+<li><code>%APPDATA%/NYAOS_ORG/nyagos.history</code> did not be updated. (#39 @1)</li>
+<li>Crashed when <code>%APPDATA%/NYAOS_ORG/nyagos.history</code> did not exists or is empty.x (#40 @1)</li>
+<li>On French keyboard, keys shifted with AltGr could not be input. (#41)</li>
+</ul>
+<p>@1 Probably these bugs appeared only on snapshot-build.</p>
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
 <h3 id="contents">Contents</h3>
