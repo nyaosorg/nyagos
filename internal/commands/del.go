@@ -21,12 +21,8 @@ func cmdDel(ctx context.Context, cmd Param) (int, error) {
 	errorcount := 0
 	i := 1
 	for _, arg1 := range cmd.Args()[1:] {
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				return 0, nil
-			default:
-			}
+		if err := ctx.Err(); err != nil {
+			return 0, nil
 		}
 		if arg1 == "/q" {
 			all = true

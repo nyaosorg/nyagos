@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 )
 
-var errCtrlC = errors.New("^C")
-
 func printDu1Line(out io.Writer, name string, size int64) {
 	fmt.Fprintf(out, "%7s %s\n", formatByHumanize(size), name)
 }
@@ -49,15 +47,15 @@ func _du(path string, output func(string, int64) error, stderr io.Writer, blocks
 	for _, dir1 := range dirs {
 		fullpath := filepath.Join(path, dir1)
 		diskuse1, err := _du(fullpath, output, stderr, blocksize)
-		if err == errCtrlC {
+		if errors.Is(err, context.Canceled) {
 			return diskuse, err
 		}
 		if err == nil {
 			if err = output(fullpath, diskuse1); err == nil {
 				diskuse += diskuse1
 				continue
-			} else if err == errCtrlC {
-				return diskuse1, errCtrlC
+			} else if errors.Is(err, context.Canceled) {
+				return diskuse1, err
 			}
 		}
 		fmt.Fprintf(stderr, "%s: %s\n", fullpath, err)
@@ -68,27 +66,13 @@ func _du(path string, output func(string, int64) error, stderr io.Writer, blocks
 func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 	output := func(name string, size int64) error {
 		printDu1Line(cmd.Out(), name, size)
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				return errCtrlC
-			default:
-			}
-		}
-		return nil
+		return ctx.Err()
 	}
 	count := 0
 	for _, arg1 := range cmd.Args()[1:] {
 		if arg1 == "-s" {
 			output = func(_ string, _ int64) error {
-				if ctx != nil {
-					select {
-					case <-ctx.Done():
-						return errCtrlC
-					default:
-					}
-				}
-				return nil
+				return ctx.Err()
 			}
 			continue
 		}
@@ -96,7 +80,7 @@ func cmdDiskUsed(ctx context.Context, cmd Param) (int, error) {
 		count++
 		if err != nil {
 			fmt.Fprintf(cmd.Err(), "%s: %s\n", arg1, err)
-			if err == errCtrlC {
+			if errors.Is(err, context.Canceled) {
 				return 0, err
 			}
 			continue

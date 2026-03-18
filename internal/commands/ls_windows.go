@@ -55,17 +55,6 @@ const (
 	ansiEnd      = "\x1B[0m"
 )
 
-func chkCancel(ctx context.Context) error {
-	if ctx != nil {
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		default:
-		}
-	}
-	return nil
-}
-
 func (f fileInfoT) Name() string { return f.name }
 
 func putFlag(value, flag uint32, c string, out io.Writer) {
@@ -271,7 +260,7 @@ func lsLong(ctx context.Context, folder string, nodes []os.FileInfo, flag int, o
 	}
 	for _, finfo := range nodes {
 		lsOneLong(folder, finfo, flag, width, out)
-		if err := chkCancel(ctx); err != nil {
+		if err := ctx.Err(); err != nil {
 			return err
 		}
 	}
@@ -291,7 +280,7 @@ func lsSimple(ctx context.Context, folder string, nodes []os.FileInfo, flag int,
 			}
 		}
 		fmt.Fprintln(out)
-		if err := chkCancel(ctx); err != nil {
+		if err := ctx.Err(); err != nil {
 			return err
 		}
 	}
@@ -356,7 +345,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	_ctx, cancel := context.WithTimeout(ctx, time.Second*10)
 	var canceled error
 	findfile.Walk(wildcard, func(f *findfile.FileInfo) bool {
-		if err := chkCancel(_ctx); err != nil {
+		if err := _ctx.Err(); err != nil {
 			canceled = err
 			return false
 		}
@@ -396,7 +385,7 @@ func lsFolder(ctx context.Context, folder string, flag int, out io.Writer) error
 	}
 	if len(folders) > 0 {
 		for _, f1 := range folders {
-			if err := chkCancel(ctx); err != nil {
+			if err := ctx.Err(); err != nil {
 				return err
 			}
 			f1fullpath := nodos.Join(folder, f1)
@@ -419,7 +408,7 @@ func lsCore(ctx context.Context, paths []string, flag int, out io.Writer, errout
 	printCount := 0
 	files := make([]os.FileInfo, 0)
 	for _, name := range paths {
-		if err := chkCancel(ctx); err != nil {
+		if err := ctx.Err(); err != nil {
 			return err
 		}
 		var nameStat string

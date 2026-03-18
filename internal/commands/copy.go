@@ -162,13 +162,9 @@ func (cm copyMoveT) Run(ctx context.Context, args []string) (int, error) {
 				}
 			}
 		}
-		if ctx != nil {
-			select {
-			case <-ctx.Done():
-				fmt.Fprintln(cm.Err(), "^C")
-				return 0, nil
-			default:
-			}
+		if err := ctx.Err(); err != nil {
+			fmt.Fprintln(cm.Err(), "^C")
+			return 0, nil
 		}
 		err := cm.Action(src, dst)
 		if err != nil {

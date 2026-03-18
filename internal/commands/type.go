@@ -14,13 +14,8 @@ import (
 func cat(ctx context.Context, r io.Reader, w io.Writer) error {
 	scanner := mbcs.NewFilter(r, mbcs.ConsoleCP())
 	for scanner.Scan() {
-		if done := ctx.Done(); done != nil {
-			select {
-			case <-done:
-				return ctx.Err()
-			default:
-
-			}
+		if err := ctx.Err(); err != nil {
+			return err
 		}
 		text := scanner.Text()
 		text = strings.Replace(text, "\xEF\xBB\xBF", "", 1)

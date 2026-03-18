@@ -66,8 +66,8 @@ func listUpWithFilter(ctx context.Context, str string, ua UncCompletion, filter 
 	STR := strings.ToUpper(str)
 	var canceled error = nil
 	err := findfile.WalkContext(ctx, wildcard, func(fd *findfile.FileInfo) bool {
-		if err := checkTimeout(ctx); err != nil {
-			canceled = ctx.Err()
+		if err := ctx.Err(); err != nil {
+			canceled = err
 			return false
 		}
 		if fd.Name() == "." || fd.Name() == ".." {
