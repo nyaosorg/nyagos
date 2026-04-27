@@ -7,16 +7,15 @@ require (
 	github.com/dustin/go-humanize v1.0.1
 	github.com/go-ole/go-ole v1.3.0
 	github.com/mattn/go-colorable v0.1.14
-	github.com/mattn/go-isatty v0.0.20
-	github.com/mattn/go-runewidth v0.0.19
-	github.com/mattn/go-tty v0.0.7
+	github.com/mattn/go-isatty v0.0.22
+	github.com/mattn/go-runewidth v0.0.23
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/nyaosorg/glua-ole v0.0.0-20250402051125-b885836720e9
 	github.com/nyaosorg/go-box/v3 v3.1.1
-	github.com/nyaosorg/go-inline-animation v0.0.0-20210914120526-6dd4b5eefd20
-	github.com/nyaosorg/go-readline-ny v1.14.1
+	github.com/nyaosorg/go-inline-animation v0.3.1
+	github.com/nyaosorg/go-readline-ny v1.15.0
 	github.com/nyaosorg/go-readline-skk v0.6.2
-	github.com/nyaosorg/go-ttyadapter v0.3.0
+	github.com/nyaosorg/go-ttyadapter v0.6.0
 	github.com/nyaosorg/go-windows-commandline v0.1.0
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d
@@ -34,4 +33,5 @@ require (
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
+	github.com/mattn/go-tty/v2 v2.0.0 // indirect
 )
