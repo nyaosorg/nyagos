@@ -8,11 +8,13 @@ import (
 	"math"
 	"os"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/mattn/go-isatty"
-	"github.com/mattn/go-tty"
 
+	"github.com/nyaosorg/go-ttyadapter/tty8pe"
 	"github.com/nyaosorg/go-windows-mbcs"
+
 	"github.com/nyaosorg/nyagos/internal/nodos"
 	"github.com/nyaosorg/nyagos/internal/textwidth"
 )
@@ -30,16 +32,17 @@ func isTerminalIn(in io.Reader) bool {
 }
 
 func getkey() (rune, error) {
-	tty1, err := tty.Open()
-	if err != nil {
+	tty1 := &tty8pe.Tty{}
+	if err := tty1.Open(nil); err != nil {
 		return 0, err
 	}
 	defer tty1.Close()
 	for {
-		ch, err := tty1.ReadRune()
+		key, err := tty1.GetKey()
 		if err != nil {
 			return 0, err
 		}
+		ch, _ := utf8.DecodeRuneInString(key)
 		if ch != 0 {
 			return ch, nil
 		}
@@ -120,7 +123,8 @@ func more(r io.Reader, cmd Param) error {
 func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
 
-	tty1, err := tty.Open()
+	tty1 := &tty8pe.Tty{}
+	err := tty1.Open(nil)
 	if err != nil {
 		return 1, err
 	}

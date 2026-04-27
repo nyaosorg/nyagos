@@ -12,9 +12,9 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/mattn/go-isatty"
-	"github.com/mattn/go-tty"
 
 	"github.com/nyaosorg/go-box/v3"
 	"github.com/nyaosorg/go-ttyadapter/tty8pe"
@@ -96,16 +96,17 @@ func CmdGetwd(param *Param) []any {
 }
 
 func CmdGetKey(*Param) []any {
-	tty1, err := tty.Open()
-	if err != nil {
+	tty1 := &tty8pe.Tty{}
+	if err := tty1.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}
 	defer tty1.Close()
 	for {
-		r, err := tty1.ReadRune()
+		key, err := tty1.GetKey()
 		if err != nil {
 			return []any{nil, err.Error()}
 		}
+		r, _ := utf8.DecodeRuneInString(key)
 		if r != 0 {
 			return []any{r, 0, 0}
 		}
@@ -126,8 +127,8 @@ func CmdGetKeys(*Param) []any {
 }
 
 func CmdGetViewWidth(*Param) []any {
-	tty1, err := tty.Open()
-	if err != nil {
+	tty1 := &tty8pe.Tty{}
+	if err := tty1.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}
 	defer tty1.Close()
