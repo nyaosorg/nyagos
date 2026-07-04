@@ -7,6 +7,14 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_en.md)
 - [v4.3.\*](CHANGELOG-v4.3_en.md)
 
+- Make standalone Escape key handling configurable via the `singleescape` option. (#506, #507)  
+  To restore the CMD.EXE-style behavior where the Escape key clears the current command line, add the following to your `.nyagos` file:
+
+  ```lua
+  nyagos.option.singleescape = true
+  nyagos.key.escape = "KILL_WHOLE_LINE"
+  ```
+
 4.4.19\_0
 ---------
 Mar 13, 2026
