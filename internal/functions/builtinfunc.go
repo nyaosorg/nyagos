@@ -17,7 +17,7 @@ import (
 	"github.com/mattn/go-isatty"
 
 	"github.com/nyaosorg/go-box/v3"
-	"github.com/nyaosorg/go-ttyadapter/tty8pe"
+	"github.com/nyaosorg/go-ttyadapter/fav"
 	"github.com/nyaosorg/go-windows-findfile"
 
 	"github.com/nyaosorg/nyagos/internal/completion"
@@ -96,7 +96,7 @@ func CmdGetwd(param *Param) []any {
 }
 
 func CmdGetKey(*Param) []any {
-	tty1 := &tty8pe.Tty{}
+	tty1 := new(fav.Tty)
 	if err := tty1.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}
@@ -114,7 +114,7 @@ func CmdGetKey(*Param) []any {
 }
 
 func CmdGetKeys(*Param) []any {
-	tty := &tty8pe.Tty{}
+	tty := new(fav.Tty)
 	if err := tty.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}
@@ -127,7 +127,7 @@ func CmdGetKeys(*Param) []any {
 }
 
 func CmdGetViewWidth(*Param) []any {
-	tty1 := &tty8pe.Tty{}
+	tty1 := new(fav.Tty)
 	if err := tty1.Open(nil); err != nil {
 		return []any{nil, err.Error()}
 	}

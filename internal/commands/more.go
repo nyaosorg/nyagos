@@ -12,7 +12,7 @@ import (
 
 	"github.com/mattn/go-isatty"
 
-	"github.com/nyaosorg/go-ttyadapter/tty8pe"
+	"github.com/nyaosorg/go-ttyadapter/fav"
 	"github.com/nyaosorg/go-windows-mbcs"
 
 	"github.com/nyaosorg/nyagos/internal/nodos"
@@ -32,7 +32,7 @@ func isTerminalIn(in io.Reader) bool {
 }
 
 func getkey() (rune, error) {
-	tty1 := &tty8pe.Tty{}
+	tty1 := new(fav.Tty)
 	if err := tty1.Open(nil); err != nil {
 		return 0, err
 	}
@@ -123,7 +123,7 @@ func more(r io.Reader, cmd Param) error {
 func cmdMore(ctx context.Context, cmd Param) (int, error) {
 	count := 0
 
-	tty1 := &tty8pe.Tty{}
+	tty1 := new(fav.Tty)
 	err := tty1.Open(nil)
 	if err != nil {
 		return 1, err
