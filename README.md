@@ -23,7 +23,7 @@ NYAGOS - Nihongo Yet Another GOing Shell is a versatile command-line shell that 
     ```
   - Lua functions can be bound to keys:
     ```lua
-    nyagos.key.escape = function(this) nyagos.exec("start vim.exe") end
+    nyagos.key.f1 = function(this) nyagos.exec("start vim.exe") end
     ```
 - **History and Aliases**
   - Supports `Ctrl-P` history search and `!-style` command recall.
