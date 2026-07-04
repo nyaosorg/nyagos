@@ -29,6 +29,8 @@ type BoolFunc = ConfigFunc[bool]
 
 var OptionPredictColor = true
 
+var SingleEscape = false
+
 // Bools are the all global option list.
 var Bools = ignoreCaseSorted.MapToDictionary(map[string]Bool{
 	"completion_hidden": &BoolPtr{
@@ -86,6 +88,11 @@ var Bools = ignoreCaseSorted.MapToDictionary(map[string]Bool{
 		ptr:     &AccessClipboard,
 		usage:   "Use clipboard",
 		noUsage: "Do not use clipboard",
+	},
+	"singleescape": &BoolPtr{
+		ptr:     &SingleEscape,
+		usage:   "Recognize the Escape key by itself",
+		noUsage: "Treat Escape as a prefix key only",
 	},
 })
 
