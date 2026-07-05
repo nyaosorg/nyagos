@@ -12,6 +12,7 @@ import (
 	"github.com/mattn/go-colorable"
 
 	"github.com/nyaosorg/go-readline-ny"
+	"github.com/nyaosorg/go-readline-ny/tty8"
 	"github.com/nyaosorg/go-windows-consoleicon"
 
 	"github.com/nyaosorg/nyagos/internal/config"
@@ -63,6 +64,9 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 func (stream *CmdStreamConsole) LazySetup() {
 	if config.AccessClipboard {
 		stream.Editor.Clipboard = OSClipboard{}
+	}
+	if config.SingleEscape {
+		stream.Editor.Tty = new(tty8.Tty)
 	}
 	if _, ok := os.LookupEnv("NO_COLOR"); !ok {
 		stream.Editor.Highlight = []readline.Highlight{

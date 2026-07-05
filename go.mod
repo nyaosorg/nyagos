@@ -15,7 +15,7 @@ require (
 	github.com/nyaosorg/go-inline-animation v0.3.1
 	github.com/nyaosorg/go-readline-ny v1.15.0
 	github.com/nyaosorg/go-readline-skk v0.6.2
-	github.com/nyaosorg/go-ttyadapter v0.6.0
+	github.com/nyaosorg/go-ttyadapter v0.7.0
 	github.com/nyaosorg/go-windows-commandline v0.1.0
 	github.com/nyaosorg/go-windows-consoleicon v0.0.0-20250402034108-1f245d5b597a
 	github.com/nyaosorg/go-windows-findfile v0.0.0-20250402044541-79e3d51e584d
@@ -33,5 +33,6 @@ require (
 require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/clipperhouse/uax29/v2 v2.6.0 // indirect
-	github.com/mattn/go-tty/v2 v2.0.0 // indirect
+	github.com/mattn/go-tty v0.0.7 // indirect
+	golang.org/x/term v0.25.0 // indirect
 )

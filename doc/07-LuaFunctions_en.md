@@ -421,6 +421,17 @@ It customizes the color of input prediction.
 
 e.g., `nyagos.option.predict_color = "\027[0;31;1m"` (red).
 
+### `nyagos.option.singleescape`
+
+When set to true, NYAGOS recognizes a standalone Escape key. As a trade-off, some terminals may split escape sequences depending on input timing, causing them to be interpreted incorrectly (for example, pressing the `↑` key may occasionally insert `[A` instead of moving through the command history).
+
+To restore the CMD.EXE-style behavior where the Escape key clears the current command line, add the following to your .nyagos file:
+
+```lua
+nyagos.option.singleescape = true
+nyagos.key.escape = "KILL_WHOLE_LINE"
+```
+
 ### `nyagos.goversion`
 
 Go-version string to build nyagos.exe

@@ -436,6 +436,17 @@ true の場合、一行入力の前に入力バッファをクリアします。
 
 例: `nyagos.option.predict_color = "\027[0;31;1m"` (赤)
 
+### `nyagos.option.singleescape`
+
+true を設定すると、単独の Escape キーを認識できるようになります。そのかわり、端末によっては制御キーのシーケンスが入力タイミングによって分断され、誤って解釈されることがあります（例: `↑` キーがたまに機能せず、`[A` と入力される）。
+
+CMD.EXE のように Escape キーでコマンドラインをクリアするには、.nyagos に次のように設定します。
+
+```lua
+nyagos.option.singleescape = true
+nyagos.key.escape = "KILL_WHOLE_LINE"
+```
+
 ### `nyagos.goversion`
 
 ビルドに使用した Go のバージョン文字列が格納されます。

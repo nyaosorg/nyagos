@@ -7,6 +7,14 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_ja.md)
 - [v4.3.\*](CHANGELOG-v4.3_ja.md)
 
+- `singleescape` オプションで、単独の Escape キーを認識できるようにした (#506, #507)  
+  CMD.EXE のように Escape キーでコマンドラインをクリアするには、`.nyagos` に次のように設定します。
+
+  ```lua
+  nyagos.option.singleescape = true
+  nyagos.key.escape = "KILL_WHOLE_LINE"
+  ```
+
 4.4.19\_0
 ---------
 Mar 13, 2026
