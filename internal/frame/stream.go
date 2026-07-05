@@ -80,6 +80,13 @@ var optionPredict = config.Bool(
 	"Disable prediction on readline",
 )
 
+var optionPredictColor = config.String(
+	"predict_color",
+	"\x1B[3;22;34m",
+	"predict color",
+	"predict color",
+)
+
 func (stream *CmdStreamConsole) LazySetup() {
 	if *optionAccessClipboard {
 		stream.Editor.Clipboard = OSClipboard{}
@@ -111,7 +118,7 @@ func (stream *CmdStreamConsole) LazySetup() {
 		stream.Editor.DefaultColor = "\x1B[0;1m"
 
 		if *optionPredict {
-			stream.Editor.PredictColor = config.PredictColor
+			stream.Editor.PredictColor = [...]string{*optionPredictColor, "\x1B[0m"}
 		}
 	}
 }
