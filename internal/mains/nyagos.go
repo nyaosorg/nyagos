@@ -117,6 +117,12 @@ func warningOnly(err error) error {
 	return nil
 }
 
+var optionReadStdinAsFile = config.Bool(
+	"read_stdin_as_file",
+	false,
+	"Read commands from stdin as a file stream. Disable to edit line",
+	"Read commands from stdin as Windows Console(tty). Enable to edit line")
+
 // Run is the entry of this package.
 func Run(fsys fs.FS) error {
 	ctx := context.Background()
@@ -153,7 +159,7 @@ func Run(fsys fs.FS) error {
 	lazySetup := func() {}
 
 	var stream1 shell.Stream
-	if !config.ReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
+	if !*optionReadStdinAsFile && isatty.IsTerminal(os.Stdin.Fd()) {
 		constream := frame.NewCmdStreamConsole(
 			func(w io.Writer) (int, error) {
 				if L != nil {

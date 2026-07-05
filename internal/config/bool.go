@@ -12,89 +12,70 @@ import (
 	"github.com/nyaosorg/nyagos/internal/shell"
 )
 
-// ReadStdinAsFile is the flat to read commands from stdin as a file stream
-var ReadStdinAsFile = false
-
-var AccessClipboard = false
-
-type Bool interface {
+type boolInterface interface {
 	Usage() string
 	NoUsage() string
 	Set(value bool)
 	Get() bool
 }
 
-type BoolPtr = ConfigPtr[bool]
-type BoolFunc = ConfigFunc[bool]
-
-var OptionPredictColor = true
-
-var SingleEscape = false
+type boolPtr = ConfigPtr[bool]
+type boolFunc = ConfigFunc[bool]
 
 // Bools are the all global option list.
-var Bools = ignoreCaseSorted.MapToDictionary(map[string]Bool{
-	"completion_hidden": &BoolPtr{
+var Bools = ignoreCaseSorted.MapToDictionary(map[string]boolInterface{
+	"completion_hidden": &boolPtr{
 		ptr:     &completion.IncludeHidden,
 		usage:   "Include hidden files on completion",
 		noUsage: "Do not include hidden files on completion",
 	},
-	"completion_slash": &BoolPtr{
+	"completion_slash": &boolPtr{
 		ptr:     &completion.UseSlash,
 		usage:   "use forward slash on completion",
 		noUsage: "Do not use slash on completion",
 	},
-	"glob": &BoolPtr{
+	"glob": &boolPtr{
 		ptr:     &shell.WildCardExpansionAlways,
 		usage:   "Enable to expand wildcards",
 		noUsage: "Disable to expand wildcards",
 	},
-	"glob_slash": &BoolPtr{
+	"glob_slash": &boolPtr{
 		ptr:     &shell.GlobUseSlash,
 		usage:   "Use forward slash on wildcard expansion",
 		noUsage: "Do not Use forward slash on wildcard expansion",
 	},
-	"noclobber": &BoolPtr{
+	"noclobber": &boolPtr{
 		ptr:     &shell.NoClobber,
 		usage:   "forbide to overwrite files on redirect",
 		noUsage: "Do not forbide to overwrite files no redirect",
 	},
-	"usesource": &BoolPtr{
+	"usesource": &boolPtr{
 		ptr:     &shell.UseSourceRunBatch,
 		usage:   "allow batchfile to change environment variables of nyagos",
 		noUsage: "forbide batchfile to change environment variables of nyagos",
 	},
-	"tilde_expansion": &BoolPtr{
+	"tilde_expansion": &boolPtr{
 		ptr:     &shell.TildeExpansion,
 		usage:   "Enable Tilde Expansion",
 		noUsage: "Disable Tilde Expansion",
 	},
-	"read_stdin_as_file": &BoolPtr{
-		ptr:     &ReadStdinAsFile,
-		usage:   "Read commands from stdin as a file stream. Disable to edit line",
-		noUsage: "Read commands from stdin as Windows Console(tty). Enable to edit line",
-	},
-	"output_surrogate_pair": &BoolFunc{
+	"output_surrogate_pair": &boolFunc{
 		Setter:  readline.EnableSurrogatePair,
 		Getter:  readline.IsSurrogatePairEnabled,
 		usage:   "Output surrogate pair characters as it is",
 		noUsage: "Output surrogate pair characters like <NNNNN>",
 	},
-	"predict": &BoolPtr{
-		ptr:     &OptionPredictColor,
-		usage:   "Enable prediction on readline",
-		noUsage: "Disable prediction on readline",
-	},
-	"clipboard": &BoolPtr{
-		ptr:     &AccessClipboard,
-		usage:   "Use clipboard",
-		noUsage: "Do not use clipboard",
-	},
-	"singleescape": &BoolPtr{
-		ptr:     &SingleEscape,
-		usage:   "Recognize the Escape key by itself",
-		noUsage: "Treat Escape as a prefix key only",
-	},
 })
+
+func Bool(name string, defaultv bool, usage, noUsage string) *bool {
+	value := &boolPtr{
+		ptr:     &defaultv,
+		usage:   usage,
+		noUsage: noUsage,
+	}
+	Bools.Set(name, value)
+	return &defaultv
+}
 
 func toLuaLiteral(s string) string {
 	var buf strings.Builder
