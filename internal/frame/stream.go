@@ -61,11 +61,37 @@ func NewCmdStreamConsole(doPrompt func(io.Writer) (int, error)) *CmdStreamConsol
 	return stream
 }
 
+var optionSingleEscape = config.Bool(
+	"singleescape",
+	false,
+	"Recognize the Escape key by itself",
+	"Treat Escape as a prefix key only")
+
+var optionAccessClipboard = config.Bool(
+	"clipboard",
+	false,
+	"Use clipboard",
+	"Do not use clipboard")
+
+var optionPredict = config.Bool(
+	"predict",
+	true,
+	"Enable prediction on readline",
+	"Disable prediction on readline",
+)
+
+var optionPredictColor = config.String(
+	"predict_color",
+	"\x1B[3;22;34m",
+	"predict color",
+	"predict color",
+)
+
 func (stream *CmdStreamConsole) LazySetup() {
-	if config.AccessClipboard {
+	if *optionAccessClipboard {
 		stream.Editor.Clipboard = OSClipboard{}
 	}
-	if config.SingleEscape {
+	if *optionSingleEscape {
 		stream.Editor.Tty = new(tty8.Tty)
 	}
 	if _, ok := os.LookupEnv("NO_COLOR"); !ok {
@@ -91,8 +117,8 @@ func (stream *CmdStreamConsole) LazySetup() {
 		stream.Editor.ResetColor = "\x1B[0m"
 		stream.Editor.DefaultColor = "\x1B[0;1m"
 
-		if config.OptionPredictColor {
-			stream.Editor.PredictColor = config.PredictColor
+		if *optionPredict {
+			stream.Editor.PredictColor = [...]string{*optionPredictColor, "\x1B[0m"}
 		}
 	}
 }
