@@ -57,17 +57,28 @@ UTF8 と ANSI テキストの双方をサポートします。(自動判別)
 
 NYAGOS を終了します。
 
-#### foreach
+#### `foreach`
 
-`foreach` *VAR* *VAL1* *VAL2* ...
-    STATEMENTS
-`end`
+```
+foreach x 1 2 3 4
+    STATEMENT %x%
+end
+```
+
+は次の文と等価になります。
+
+```
+STATEMENT 1
+STATEMENT 2
+STATEMENT 3
+STATEMENT 4
+```
 
 #### `history [件数]`
 
 ヒストリ内容を表示します。件数を省略すると、最近の10件が表示されます。
 
-#### if
+#### `if`
 
 ##### inline-if
 

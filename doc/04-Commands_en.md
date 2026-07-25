@@ -50,11 +50,22 @@ While COMMAND is executed, change environment variables.
 
 Quit NYAGOS.exe.
 
-#### foreach
+#### `foreach`
 
-`foreach` *VAR* *VAL1* *VAL2* ...
-    STATEMENTS
-`end`
+```
+foreach x 1 2 3 4
+    STATEMENT %x%
+end
+```
+
+is equivalent to:
+
+```
+STATEMENT 1
+STATEMENT 2
+STATEMENT 3
+STATEMENT 4
+```
 
 #### `history [N]`
 
