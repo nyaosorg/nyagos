@@ -11,6 +11,7 @@
 9. [Uninstall](08-Uninstall_en.md)
 10. [How To build](09-Build_en.md)
 11. [How to setup SKK](10-SetupSKK_en.md)
+12. [FAQ](11-FAQ_en.md)
 
 [GitHub Repository](https://github.com/nyaosorg/nyagos)
 

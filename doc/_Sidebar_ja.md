@@ -11,6 +11,7 @@
 9. [アンインストール](08-Uninstall_ja.md)
 10. [ビルド方法](09-Build_ja.md)
 11. [SKKの設定](10-SetupSKK_ja.md)
+12. [FAQ](11-FAQ_ja.md)
 
 [GitHub レポジトリ](https://github.com/nyaosorg/nyagos)
 
