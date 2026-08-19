@@ -15,3 +15,9 @@ Escape キーはプリフィックスキーとなるため通常はキーを設�
 
     nyagos.option.singleescape = true
     nyagos.key.escape = "KILL_WHOLE_LINE"
+
+### バッチファイル内の環境変数変更を呼び出し側へ反映させなくてもよい
+
+デフォルトでは `CMD.exe` と同様に、バッチファイルを実行するとその内部で行われた環境変数やカレントディレクトリの変更が nyagos に取り込まれます。これを抑制し、`bash` などのように反映させないようにするには、`.nyagos` に次の一文を追加します。
+
+    nyagos.option.usesource = false
