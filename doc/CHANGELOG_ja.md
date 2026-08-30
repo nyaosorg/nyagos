@@ -7,6 +7,10 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_ja.md)
 - [v4.3.\*](CHANGELOG-v4.3_ja.md)
 
+4.4.20\_0
+---------
+Sep 1, 2026
+
 - `singleescape` オプションで、単独の Escape キーを認識できるようにした (#506, #507)  
   CMD.EXE のように Escape キーでコマンドラインをクリアするには、`.nyagos` に次のように設定します。
 
