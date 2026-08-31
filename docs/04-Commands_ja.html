@@ -1184,13 +1184,20 @@ CMD.EXE と違い、ドライブも同時に変更します。</p>
 <p>UTF8 と ANSI テキストの双方をサポートします。(自動判別)</p>
 <h4 id="exit"><code>exit</code></h4>
 <p>NYAGOS を終了します。</p>
-<h4 id="foreach">foreach</h4>
-<p><code>foreach</code> <em>VAR</em> <em>VAL1</em> <em>VAL2</em> ...
-STATEMENTS
-<code>end</code></p>
+<h4 id="foreach"><code>foreach</code></h4>
+<pre><code>foreach x 1 2 3 4
+    STATEMENT %x%
+end
+</code></pre>
+<p>は次の文と等価になります。</p>
+<pre><code>STATEMENT 1
+STATEMENT 2
+STATEMENT 3
+STATEMENT 4
+</code></pre>
 <h4 id="history-%E4%BB%B6%E6%95%B0"><code>history [件数]</code></h4>
 <p>ヒストリ内容を表示します。件数を省略すると、最近の10件が表示されます。</p>
-<h4 id="if">if</h4>
+<h4 id="if"><code>if</code></h4>
 <h5 id="inline-if">inline-if</h5>
 <p><code>if</code> <em>COND</em> <em>THEN-STATEMENT</em></p>
 <h5 id="block-if">block-if</h5>
@@ -1369,6 +1376,7 @@ drwxa--    0 Sep  3 2016     TDM-GCC-64/
 <li><a href="08-Uninstall_ja.html">アンインストール</a></li>
 <li><a href="09-Build_ja.html">ビルド方法</a></li>
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
+<li><a href="11-FAQ_ja.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
