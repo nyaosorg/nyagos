@@ -1145,35 +1145,49 @@ a.permalink:hover{
 <h2 id="command-line-editing">Command Line Editing</h2>
 <p>You can edit the command line with key bindings similar to UNIX shells.</p>
 <ul>
-<li><code>Backspace</code>, <code>Ctrl-H</code> : Delete the character to the left of the cursor</li>
-<li><code>Enter</code>, <code>Ctrl-M</code>     : Execute the command line</li>
-<li><code>Del</code>                 : Delete the character under the cursor</li>
-<li><code>Home</code>, <code>Ctrl-A</code>      : Move the cursor to the beginning of the line</li>
-<li><code>Left</code>, <code>Ctrl-B</code>      : Move the cursor one character to the left</li>
-<li><code>Ctrl-D</code>              : Delete the character under the cursor or exit</li>
-<li><code>End</code>, <code>Ctrl-E</code>       : Move the cursor to the end of the line</li>
-<li><code>Right</code>, <code>Ctrl-F</code>     : Move the cursor one character to the right</li>
-<li><code>Ctrl-K</code>              : Delete text from the cursor to the end of the line</li>
-<li><code>Ctrl-L</code>              : Refresh the screen</li>
-<li><code>Ctrl-U</code>              : Delete text from the beginning of the line to the cursor</li>
-<li><code>Ctrl-Y</code>              : Paste text from the clipboard</li>
-<li><code>Up</code>, <code>Ctrl-P</code>        : Recall the previous command</li>
-<li><code>Down</code>, <code>Ctrl-N</code>      : Recall the next command</li>
-<li><code>Tab</code>, <code>Ctrl-I</code>       : Complete file or command name</li>
-<li><code>Ctrl-C</code>              : Cancel the current command</li>
-<li><code>Ctrl-R</code>              : Search command history incrementally</li>
-<li><code>Ctrl-W</code>              : Delete the word before the cursor</li>
-<li><code>Ctrl-O</code>              : Insert a filename selected via cursor (requires <code>box.lua</code>)</li>
-<li><code>Ctrl-XR</code>, <code>Meta-R</code>   : Insert a history entry selected via cursor (requires <code>box.lua</code>)</li>
-<li><code>Ctrl-XG</code>, <code>Meta-G</code>   : Insert a Git revision selected via cursor (requires <code>box.lua</code>)</li>
-<li><code>Ctrl-XH</code>, <code>Meta-H</code>   : Insert a <code>CD</code>ed directory selected via cursor (requires <code>box.lua</code>)</li>
-<li><code>Ctrl-Q</code>, <code>Ctrl-V</code>    : Insert the next typed character verbatim</li>
-<li><code>Ctrl-Right</code>, <code>Meta-F</code>: Move the cursor forward by one word</li>
-<li><code>Ctrl-Left</code>, <code>Meta-B</code> : Move the cursor backward by one word</li>
-<li><code>Ctrl-_, </code>Ctrl-Z`     : Undo</li>
-<li><code>Meta-O</code>              : Expand a <code>.lnk</code> shortcut path to its target path</li>
+<li><code>Backspace</code>, <code>Ctrl-H</code> : Delete the character to the left of the cursor (<code>&quot;BACKWARD_DELETE_CHAR&quot;</code>)</li>
+<li><code>Enter</code>, <code>Ctrl-M</code>     : Execute the command line (<code>&quot;ACCEPT_LINE&quot;</code>)</li>
+<li><code>Del</code>                 : Delete the character under the cursor (<code>&quot;DELETE_CHAR&quot;</code>)</li>
+<li><code>Home</code>, <code>Ctrl-A</code>      : Move the cursor to the beginning of the line (<code>&quot;BEGINNING_OF_LINE&quot;</code>)</li>
+<li><code>Left</code>, <code>Ctrl-B</code>      : Move the cursor one character to the left (<code>&quot;BACKWARD_CHAR&quot;</code>)</li>
+<li><code>Ctrl-D</code>              : Delete the character under the cursor or exit (<code>&quot;DELETE_OR_ABORT&quot;</code>)</li>
+<li><code>End</code>, <code>Ctrl-E</code>       : Move the cursor to the end of the line <code>(&quot;END_OF_LINE&quot;)</code></li>
+<li><code>Right</code>, <code>Ctrl-F</code>     : Move the cursor one character to the right (<code>&quot;FORWARD_CHAR_OR_ACCEPT_PREDICT&quot;</code>)</li>
+<li><code>Ctrl-K</code>              : Delete text from the cursor to the end of the line (<code>&quot;KILL_LINE&quot;</code>)</li>
+<li><code>Ctrl-L</code>              : Refresh the screen (<code>&quot;CLEAR_SCREEN&quot;</code>)</li>
+<li><code>Ctrl-U</code>              : Delete text from the beginning of the line to the cursor (<code>&quot;UNIX_LINE_DISCARD&quot;</code>)</li>
+<li><code>Ctrl-Y</code>              : Paste text from the clipboard (<code>&quot;YANK&quot;</code>)</li>
+<li><code>Up</code>, <code>Ctrl-P</code>        : Recall the previous command (<code>&quot;PREVIOUS_HISTORY&quot;</code>)</li>
+<li><code>Down</code>, <code>Ctrl-N</code>      : Recall the next command (<code>&quot;NEXT_HISTORY&quot;</code>)</li>
+<li><code>Tab</code>, <code>Ctrl-I</code>       : Complete file or command name (<code>&quot;COMPLETE&quot;</code>)</li>
+<li><code>Ctrl-C</code>              : Cancel the current command (<code>&quot;INTR&quot;</code>)</li>
+<li><code>Ctrl-R</code>              : Search command history incrementally (<code>&quot;ISEARCH_BACKWARD&quot;</code>)</li>
+<li><code>Ctrl-W</code>              : Delete the word before the cursor (<code>&quot;UNIX_WORD_RUBOUT&quot;</code>)</li>
+<li><code>Ctrl-O</code>              : Insert a filename selected via cursor (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-XR</code>, <code>Meta-R</code>   : Insert a history entry selected via cursor (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-XG</code>, <code>Meta-G</code>   : Insert a Git revision selected via cursor (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-XH</code>, <code>Meta-H</code>   : Insert a <code>CD</code>ed directory selected via cursor (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-Q</code>, <code>Ctrl-V</code>    : Insert the next typed character verbatim (<code>&quot;QUOTED_INSERT&quot;</code>)</li>
+<li><code>Ctrl-Right</code>, <code>Meta-F</code>: Move the cursor forward by one word (<code>&quot;FORWARD_WORD&quot;</code>)</li>
+<li><code>Ctrl-Left</code>, <code>Meta-B</code> : Move the cursor backward by one word (<code>&quot;BACKWARD_WORD&quot;</code>)</li>
+<li><code>Ctrl-_</code>, <code>Ctrl-Z</code>    : Undo (<code>&quot;UNDO&quot;</code>)</li>
+<li><code>Meta-O</code>              : Expand a <code>.lnk</code> shortcut path to its target path (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-T</code>              : Swap the character at the cursor with the previous one (<code>&quot;SWAPCHAR&quot;</code>)</li>
+<li>(Unassigned)          : Paste the clipboard text surrounded by double quotes (<code>&quot;YANK_WITH_QUOTE&quot;</code>)</li>
+<li>(Unassigned)          : Delete the entire line (<code>&quot;KILL_WHOLE_LINE&quot;</code>)</li>
 </ul>
 <p><code>Meta</code> means either <code>Alt</code>+<code>key</code> or <code>Esc</code> followed by key.</p>
+<h3 id="customizing-key-bindings">Customizing key bindings</h3>
+<p>To change key bindings, add statements like the following to your <code>.nyagos</code> file:</p>
+<pre><code class="language-lua">-- Make Ctrl-D perform a simple delete instead of exiting the shell.
+nyagos.key.C_D = &quot;DELETE_CHAR&quot;
+</code></pre>
+<p>Since the <code>Esc</code> key is normally used as a prefix key, it cannot be assigned to a command by default. However, if you enable the <code>singleescape</code> option, you can bind a command to a standalone <code>Esc</code> key.</p>
+<p><strong>(Note: On some terminals, this may occasionally cause the Up Arrow key to be interpreted as a standalone <code>Esc</code> followed by <code>[A</code>, resulting in incorrect behavior.)</strong></p>
+<pre><code class="language-lua">nyagos.option.singleescape = true
+nyagos.key.escape = &quot;KILL_WHOLE_LINE&quot;
+</code></pre>
+<!-- set:fenc=utf8: -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
 <h3 id="contents">Contents</h3>
@@ -1189,6 +1203,7 @@ a.permalink:hover{
 <li><a href="08-Uninstall_en.html">Uninstall</a></li>
 <li><a href="09-Build_en.html">How To build</a></li>
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+<li><a href="11-FAQ_en.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
 <h3 id="changelog">Changelog</h3>

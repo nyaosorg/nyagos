@@ -7,6 +7,10 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_en.md)
 - [v4.3.\*](CHANGELOG-v4.3_en.md)
 
+4.4.20\_0
+---------
+Sep 1, 2026
+
 - Make standalone Escape key handling configurable via the `singleescape` option. (#506, #507)  
   To restore the CMD.EXE-style behavior where the Escape key clears the current command line, add the following to your `.nyagos` file:
 

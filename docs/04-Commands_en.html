@@ -1179,10 +1179,17 @@ list of %CDPATH%.</p>
 <p>While COMMAND is executed, change environment variables.</p>
 <h4 id="exit"><code>exit</code></h4>
 <p>Quit NYAGOS.exe.</p>
-<h4 id="foreach">foreach</h4>
-<p><code>foreach</code> <em>VAR</em> <em>VAL1</em> <em>VAL2</em> ...
-STATEMENTS
-<code>end</code></p>
+<h4 id="foreach"><code>foreach</code></h4>
+<pre><code>foreach x 1 2 3 4
+    STATEMENT %x%
+end
+</code></pre>
+<p>is equivalent to:</p>
+<pre><code>STATEMENT 1
+STATEMENT 2
+STATEMENT 3
+STATEMENT 4
+</code></pre>
 <h4 id="history-n"><code>history [N]</code></h4>
 <p>Display the history. No arguments, the last ten are displayed.</p>
 <h4 id="if">if</h4>
@@ -1362,6 +1369,7 @@ the environemnt variables.</li>
 <li><a href="08-Uninstall_en.html">Uninstall</a></li>
 <li><a href="09-Build_en.html">How To build</a></li>
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+<li><a href="11-FAQ_en.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
 <h3 id="changelog">Changelog</h3>

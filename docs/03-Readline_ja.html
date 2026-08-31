@@ -1145,35 +1145,48 @@ a.permalink:hover{
 <h2 id="%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%A9%E3%82%A4%E3%83%B3%E7%B7%A8%E9%9B%86">コマンドライン編集</h2>
 <p>UNIX系シェルに近いキーバインドで、コマンドラインを編集可能です。</p>
 <ul>
-<li><code>Backspace</code>, <code>Ctrl-H</code> : カーソル左の一文字を削除</li>
-<li><code>Enter</code>, <code>Ctrl-M</code>     : 入力終結</li>
-<li><code>Del</code>                 : カーソル上の一文字を削除</li>
-<li><code>Home</code>, <code>Ctrl-A</code>      : カーソルを先頭へ移動</li>
-<li><code>←</code>, <code>Ctrl-B</code>        : カーソルを一文字左へ移動</li>
-<li><code>Ctrl-D</code>              : 0文字の時は NYAGOS を終了、さもなければ <code>Del</code> と同じ</li>
-<li><code>End</code>, <code>Ctrl-E</code>       : カーソルを末尾へ移動</li>
-<li><code>→</code>, <code>Ctrl-F</code>        : カーソルを一文字右へ移動</li>
-<li><code>Ctrl-K</code>              : カーソル以降の文字を全て削除し、クリップボードへコピー</li>
-<li><code>Ctrl-L</code>              : 画面をクリアして、入力した内容を再表示</li>
-<li><code>Ctrl-U</code>              : カーソルまでの文字を全て削除し、クリップボードへコピー</li>
-<li><code>Ctrl-Y</code>              : クリップボードの内容を貼り付ける</li>
-<li><code>↑</code>, <code>Ctrl-P</code>        : ヒストリ：一つ前の入力内容を展開する</li>
-<li><code>↓</code>, <code>Ctrl-N</code>        : ヒストリ：一つ後の入力内容を展開する</li>
-<li><code>Tab</code>, <code>Ctrl-I</code>       : ファイル名・コマンド名補完</li>
-<li><code>Ctrl-C</code>              : 入力内容を破棄</li>
-<li><code>Ctrl-R</code>              : インクリメンタルサーチ</li>
-<li><code>Ctrl-W</code>              : カーソル上の単語を削除する</li>
-<li><code>Ctrl-O</code>              : カーソルで選択したファイル名を挿入する (by <code>box.lua</code>)</li>
-<li><code>Ctrl-XR</code>, <code>Meta-R</code>   : カーソルで選択したヒストリを挿入する (by <code>box.lua</code>)</li>
-<li><code>Ctrl-XG</code>, <code>Meta-G</code>   : カーソルで選択した Git Revision を挿入する (by <code>box.lua</code>)</li>
-<li><code>Ctrl-XH</code>, <code>Meta-H</code>   : カーソルで選択した過去に移動したディレクトリを挿入する (by <code>box.lua</code>)</li>
-<li><code>Ctrl-Q</code>, <code>Ctrl-V</code>    : タイプした文字をそのまま挿入する</li>
-<li><code>Ctrl-Right</code>, <code>Meta-F</code>: 次の単語先頭へ移動</li>
-<li><code>Ctrl-Left</code>, <code>Meta-B</code> : 前の単語先頭へ移動</li>
-<li><code>Ctrl-_</code>, <code>Ctrl-Z</code>    : 直前の変更を取り消す</li>
-<li><code>Meta-O</code>              : ショートカットのパスをリンク先のファイル名に置換</li>
+<li><code>Backspace</code>, <code>Ctrl-H</code> : カーソル左の一文字を削除 (<code>&quot;BACKWARD_DELETE_CHAR&quot;</code>)</li>
+<li><code>Enter</code>, <code>Ctrl-M</code>     : 入力終結 (<code>&quot;ACCEPT_LINE&quot;</code>)</li>
+<li><code>Del</code>                 : カーソル上の一文字を削除 (<code>&quot;DELETE_CHAR&quot;</code>)</li>
+<li><code>Home</code>, <code>Ctrl-A</code>      : カーソルを先頭へ移動 (<code>&quot;BEGINNING_OF_LINE&quot;</code>)</li>
+<li><code>←</code>, <code>Ctrl-B</code>        : カーソルを一文字左へ移動 (<code>&quot;BACKWARD_CHAR&quot;</code>)</li>
+<li><code>Ctrl-D</code>              : 0文字の時は NYAGOS を終了、さもなければ <code>Del</code> と同じ (<code>&quot;DELETE_OR_ABORT&quot;</code>)</li>
+<li><code>End</code>, <code>Ctrl-E</code>       : カーソルを末尾へ移動 <code>(&quot;END_OF_LINE&quot;)</code></li>
+<li><code>→</code>, <code>Ctrl-F</code>        : カーソルが行末の時は予測候補確定、さもなければカーソル一文字分移動 (<code>&quot;FORWARD_CHAR_OR_ACCEPT_PREDICT&quot;</code>)</li>
+<li><code>Ctrl-K</code>              : カーソル以降の文字を全て削除し、クリップボードへコピー (<code>&quot;KILL_LINE&quot;</code>)</li>
+<li><code>Ctrl-L</code>              : 画面をクリアして、入力した内容を再表示 (<code>&quot;CLEAR_SCREEN&quot;</code>)</li>
+<li><code>Ctrl-U</code>              : カーソルまでの文字を全て削除し、クリップボードへコピー (<code>&quot;UNIX_LINE_DISCARD&quot;</code>)</li>
+<li><code>Ctrl-Y</code>              : クリップボードの内容を貼り付ける (<code>&quot;YANK&quot;</code>)</li>
+<li><code>↑</code>, <code>Ctrl-P</code>        : ヒストリ：一つ前の入力内容を展開する (<code>&quot;PREVIOUS_HISTORY&quot;</code>)</li>
+<li><code>↓</code>, <code>Ctrl-N</code>        : ヒストリ：一つ後の入力内容を展開する (<code>&quot;NEXT_HISTORY&quot;</code>)</li>
+<li><code>Tab</code>, <code>Ctrl-I</code>       : ファイル名・コマンド名補完 (<code>&quot;COMPLETE&quot;</code>)</li>
+<li><code>Ctrl-C</code>              : 入力内容を破棄 (<code>&quot;INTR&quot;</code>)</li>
+<li><code>Ctrl-R</code>              : インクリメンタルサーチ (<code>&quot;ISEARCH_BACKWARD&quot;</code>)</li>
+<li><code>Ctrl-W</code>              : カーソル上の単語を削除する (<code>&quot;UNIX_WORD_RUBOUT&quot;</code>)</li>
+<li><code>Ctrl-O</code>              : カーソルで選択したファイル名を挿入する (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-XR</code>, <code>Meta-R</code>   : カーソルで選択したヒストリを挿入する (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-XG</code>, <code>Meta-G</code>   : カーソルで選択した Git Revision を挿入する (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-XH</code>, <code>Meta-H</code>   : カーソルで選択した過去に移動したディレクトリを挿入する (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-Q</code>, <code>Ctrl-V</code>    : タイプした文字をそのまま挿入する (<code>&quot;QUOTED_INSERT&quot;</code>)</li>
+<li><code>Ctrl-Right</code>, <code>Meta-F</code>: 次の単語先頭へ移動 (<code>&quot;FORWARD_WORD&quot;</code>)</li>
+<li><code>Ctrl-Left</code>, <code>Meta-B</code> : 前の単語先頭へ移動 (<code>&quot;BACKWARD_WORD&quot;</code>)</li>
+<li><code>Ctrl-_</code>, <code>Ctrl-Z</code>    : 直前の変更を取り消す (<code>&quot;UNDO&quot;</code>)</li>
+<li><code>Meta-O</code>              : ショートカットのパスをリンク先のファイル名に置換 (function in <code>box.lua</code>)</li>
+<li><code>Ctrl-T</code>              : カーソルとその前の文字を入れ替える (<code>&quot;SWAPCHAR&quot;</code>)</li>
+<li>(キー未設定) : 二重引用符で囲んでペーストする (<code>&quot;YANK_WITH_QUOTE&quot;</code>)</li>
+<li>(キー未設定) : 行全体を削除する (<code>&quot;KILL_WHOLE_LINE&quot;</code>)</li>
 </ul>
-<p><code>Meta</code>は<code>Alt</code>+<code>key</code>もしくは、<code>Esc</code> の後に<code>key</code>を押下することを意味します。</p>
+<p>※ <code>Meta</code>は<code>Alt</code>+<code>key</code>もしくは、<code>Esc</code> の後に<code>key</code>を押下することを意味します。</p>
+<h3 id="%E3%82%AD%E3%83%BC%E3%81%AE%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA">キーのカスタマイズ</h3>
+<p>キーバインドを変更する場合は .nyagos に次のような文を書きます</p>
+<pre><code class="language-lua">-- Ctrl-D をシェルを終了する機能のない純粋な削除にする
+nyagos.key.C_D = &quot;DELETE_CHAR&quot;
+</code></pre>
+<p>Escape キーはプリフィックスキーとなるため通常はキーを設定できませんが、singleescape という設定を true にすることで単独の Escape に機能を設定できるようになります。
+( そのかわり、一部の端末で稀に上矢印キーが Escape 単品と <code>[A</code> に分断されたり、誤動作が発生する場合があります )</p>
+<pre><code class="language-lua">nyagos.option.singleescape = true
+nyagos.key.escape = &quot;KILL_WHOLE_LINE&quot;
+</code></pre>
 <!-- set:fenc=utf8: -->
 </div><!-- "main" -->
 <div class="sidebar markdown-body">
@@ -1190,6 +1203,7 @@ a.permalink:hover{
 <li><a href="08-Uninstall_ja.html">アンインストール</a></li>
 <li><a href="09-Build_ja.html">ビルド方法</a></li>
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
+<li><a href="11-FAQ_ja.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>

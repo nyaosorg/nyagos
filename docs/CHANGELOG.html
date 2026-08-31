@@ -1149,6 +1149,17 @@ a.permalink:hover{
 <li><a href="CHANGELOG-v4.2_en.html">v4.2.*</a></li>
 <li><a href="CHANGELOG-v4.3_en.html">v4.3.*</a></li>
 </ul>
+<h2 id="4420-0">4.4.20_0</h2>
+<p>Sep 1, 2026</p>
+<ul>
+<li>
+<p>Make standalone Escape key handling configurable via the <code>singleescape</code> option. (#506, #507)<br />
+To restore the CMD.EXE-style behavior where the Escape key clears the current command line, add the following to your <code>.nyagos</code> file:</p>
+<pre><code class="language-lua">nyagos.option.singleescape = true
+nyagos.key.escape = &quot;KILL_WHOLE_LINE&quot;
+</code></pre>
+</li>
+</ul>
 <h2 id="4419-0">4.4.19_0</h2>
 <p>Mar 13, 2026</p>
 <h3 id="bug-fixes">Bug fixes</h3>
@@ -1982,6 +1993,7 @@ They support Windows 7, 8.1, 10, 11, WindowsServer 2008 or later, and Linux.</p>
 <li><a href="08-Uninstall_en.html">Uninstall</a></li>
 <li><a href="09-Build_en.html">How To build</a></li>
 <li><a href="10-SetupSKK_en.html">How to setup SKK</a></li>
+<li><a href="11-FAQ_en.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub Repository</a></p>
 <h3 id="changelog">Changelog</h3>

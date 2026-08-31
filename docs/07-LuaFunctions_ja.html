@@ -1459,6 +1459,12 @@ true の時でもファイルの上書きができます。</p>
 <h3 id="nyagosoptionpredict-color"><code>nyagos.option.predict_color</code></h3>
 <p>入力予測機能の色を設定します。</p>
 <p>例: <code>nyagos.option.predict_color = &quot;\027[0;31;1m&quot;</code> (赤)</p>
+<h3 id="nyagosoptionsingleescape"><code>nyagos.option.singleescape</code></h3>
+<p>true を設定すると、単独の Escape キーを認識できるようになります。そのかわり、端末によっては制御キーのシーケンスが入力タイミングによって分断され、誤って解釈されることがあります（例: <code>↑</code> キーがたまに機能せず、<code>[A</code> と入力される）。</p>
+<p>CMD.EXE のように Escape キーでコマンドラインをクリアするには、.nyagos に次のように設定します。</p>
+<pre><code class="language-lua">nyagos.option.singleescape = true
+nyagos.key.escape = &quot;KILL_WHOLE_LINE&quot;
+</code></pre>
 <h3 id="nyagosgoversion"><code>nyagos.goversion</code></h3>
 <p>ビルドに使用した Go のバージョン文字列が格納されます。
 (例：「go1.6」)</p>
@@ -1530,6 +1536,7 @@ end
 <li><a href="08-Uninstall_ja.html">アンインストール</a></li>
 <li><a href="09-Build_ja.html">ビルド方法</a></li>
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
+<li><a href="11-FAQ_ja.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>

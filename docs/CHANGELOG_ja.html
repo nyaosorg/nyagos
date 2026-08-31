@@ -1149,6 +1149,17 @@ a.permalink:hover{
 <li><a href="CHANGELOG-v4.2_ja.html">v4.2.*</a></li>
 <li><a href="CHANGELOG-v4.3_ja.html">v4.3.*</a></li>
 </ul>
+<h2 id="4420-0">4.4.20_0</h2>
+<p>Sep 1, 2026</p>
+<ul>
+<li>
+<p><code>singleescape</code> オプションで、単独の Escape キーを認識できるようにした (#506, #507)<br />
+CMD.EXE のように Escape キーでコマンドラインをクリアするには、<code>.nyagos</code> に次のように設定します。</p>
+<pre><code class="language-lua">nyagos.option.singleescape = true
+nyagos.key.escape = &quot;KILL_WHOLE_LINE&quot;
+</code></pre>
+</li>
+</ul>
 <h2 id="4419-0">4.4.19_0</h2>
 <p>Mar 13, 2026</p>
 <h3 id="%E4%B8%8D%E5%85%B7%E5%90%88%E4%BF%AE%E6%AD%A3">不具合修正</h3>
@@ -1979,6 +1990,7 @@ end
 <li><a href="08-Uninstall_ja.html">アンインストール</a></li>
 <li><a href="09-Build_ja.html">ビルド方法</a></li>
 <li><a href="10-SetupSKK_ja.html">SKKの設定</a></li>
+<li><a href="11-FAQ_ja.html">FAQ</a></li>
 </ol>
 <p><a href="https://github.com/nyaosorg/nyagos">GitHub レポジトリ</a></p>
 <h3 id="%E3%83%AA%E3%83%AA%E3%83%BC%E3%82%B9%E3%83%8E%E3%83%BC%E3%83%88">リリースノート</h3>
