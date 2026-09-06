@@ -1149,6 +1149,17 @@ a.permalink:hover{
 <li><a href="CHANGELOG-v4.2_en.html">v4.2.*</a></li>
 <li><a href="CHANGELOG-v4.3_en.html">v4.3.*</a></li>
 </ul>
+<h2 id="4420-1">4.4.20_1</h2>
+<p>Sep 6, 2026</p>
+<ul>
+<li>Updated go-readline-ny to <a href="https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.16.1">v1.16.1</a> to support ConEmu, fixing the following issues: (#511)
+<ul>
+<li>When the prompt contained a Variation Selector, ConEmu reserved excessive display width for the prompt (#510, <a href="https://github.com/nyaosorg/go-readline-ny/pull/42">go-readline-ny#42</a>)</li>
+<li>In ConEmu, when a prediction extended to the right edge of the screen, the starting position of the edited text could shift slightly to the left (<a href="https://github.com/nyaosorg/go-readline-ny/pull/44">go-readline-ny#44</a>)
+(The prediction display incorrectly counted some columns that should not have been considered available.)</li>
+</ul>
+</li>
+</ul>
 <h2 id="4420-0">4.4.20_0</h2>
 <p>Sep 1, 2026</p>
 <ul>
