@@ -7,6 +7,13 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_ja.md)
 - [v4.3.\*](CHANGELOG-v4.3_ja.md)
 
+---------
+
+- ConEmu 対応のため、go-readline-ny を [v1.16.1](https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.16.1) へ更新し、以下の問題を解消 (#511)
+    - プロンプトに異体字セレクタが含まれている場合、ConEmu でプロンプトの表示幅が過剰に確保される問題(#510,[go-readline-ny#42](https://github.com/nyaosorg/go-readline-ny/pull/42))
+    - ConEmu で予想入力表示が画面の右端まで使用した時、編集テキストの表示開始位置が左にずれる問題を修正 ([go-readline-ny#44](https://github.com/nyaosorg/go-readline-ny/pull/44))
+      (予想表示が利用すべきでない余裕分まで利用可能な桁数と数えていた)
+
 4.4.20\_0
 ---------
 Sep 1, 2026
