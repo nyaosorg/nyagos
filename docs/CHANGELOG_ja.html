@@ -1149,6 +1149,17 @@ a.permalink:hover{
 <li><a href="CHANGELOG-v4.2_ja.html">v4.2.*</a></li>
 <li><a href="CHANGELOG-v4.3_ja.html">v4.3.*</a></li>
 </ul>
+<h2 id="4420-1">4.4.20_1</h2>
+<p>Sep 6, 2026</p>
+<ul>
+<li>ConEmu 対応のため、go-readline-ny を <a href="https://github.com/nyaosorg/go-readline-ny/releases/tag/v1.16.1">v1.16.1</a> へ更新し、以下の問題を解消 (#511)
+<ul>
+<li>プロンプトに異体字セレクタが含まれている場合、ConEmu でプロンプトの表示幅が過剰に確保される問題(#510,<a href="https://github.com/nyaosorg/go-readline-ny/pull/42">go-readline-ny#42</a>)</li>
+<li>ConEmu で予想入力表示が画面の右端まで使用した時、編集テキストの表示開始位置が左にずれる問題を修正 (<a href="https://github.com/nyaosorg/go-readline-ny/pull/44">go-readline-ny#44</a>)
+(予想表示が利用すべきでない余裕分まで利用可能な桁数と数えていた)</li>
+</ul>
+</li>
+</ul>
 <h2 id="4420-0">4.4.20_0</h2>
 <p>Sep 1, 2026</p>
 <ul>
