@@ -207,6 +207,7 @@ Contributing
 / [HAYASHI-Masayuki](https://github.com/HAYASHI-Masayuki)
 / [naoyaikeda](https://github.com/naoyaikeda)
 / [emisjerry](https://github.com/emisjerry)
+/ [NoirHare](https://github.com/NoirHare)
 
 開発者
 ------

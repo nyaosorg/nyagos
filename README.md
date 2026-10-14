@@ -207,6 +207,7 @@ Acknowledgement
 / [HAYASHI-Masayuki](https://github.com/HAYASHI-Masayuki)
 / [naoyaikeda](https://github.com/naoyaikeda)
 / [emisjerry](https://github.com/emisjerry)
+/ [NoirHare](https://github.com/NoirHare)
 
 Author
 ------
