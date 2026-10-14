@@ -7,6 +7,13 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_ja.md)
 - [v4.3.\*](CHANGELOG-v4.3_ja.md)
 
+---------
+
+- 予想表示されている時に `End` を押下すると、カーソル位置が狂う問題を修正 (#513, #514, [go-readline-ny#46], thanks to [NoirHare])
+
+[go-readline-ny#46]: https://github.com/nyaosorg/go-readline-ny/pull/46
+[NoirHare]: https://github.com/NoirHare
+
 4.4.20\_1
 ---------
 Sep 6, 2026
