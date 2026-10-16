@@ -7,12 +7,13 @@ Changelog
 - [v4.2.\*](CHANGELOG-v4.2_en.md)
 - [v4.3.\*](CHANGELOG-v4.3_en.md)
 
+4.4.20\_2
 ---------
+Oct 16, 2026
 
-- Fix incorrect cursor positioning when pressing `End` with a prediction displayed (#513, #514, [go-readline-ny#46], thanks to [NoirHare])
+- Fix incorrect cursor positioning when pressing `End` or `Ctrl`-`E` with a prediction displayed (#513, #514, [go-readline-ny#46], thanks to @NoirHare)
 
 [go-readline-ny#46]: https://github.com/nyaosorg/go-readline-ny/pull/46
-[NoirHare]: https://github.com/NoirHare
 
 4.4.20\_1
 ---------
